@@ -19,7 +19,6 @@ describe Character do
         expect(c).to respond_to :is_hexadecimal;
         expect(c).to respond_to :is_octal;
         expect(c).to respond_to :is_string;
-        # expect(c).to respond_to :is_symbol;
     end
 
     it "finds a valid integer" do
@@ -44,9 +43,8 @@ describe Character do
         c = Character.new "2147483648";
         expect(c.is_integer).to be false;
 
-        # TODO Multiple ints in same string
-        # c = Character.new "42 42 42";
-        # expect(c.is_integer).to be false;
+        c = Character.new "42 42 42";
+        expect(c.is_integer).to be false;
 
         c = Character.new "-2147483648";
         expect(c.is_integer).to be false;
@@ -108,9 +106,8 @@ describe Character do
         c = Character.new "..1254";
         expect(c.is_float).to be false;
 
-        # TODO multiple floats in same string
-        # c = Character.new "1.1.5";
-        # expect(c.is_float).to be false;
+        c = Character.new "1.1.5";
+        expect(c.is_float).to be false;
 
         c = Character.new ".2...4";
         expect(c.is_float).to be false;
@@ -278,34 +275,19 @@ describe Character do
         expect(c.is_string).to be false;
     end
 
-    # it "finds a valid symbol" do
-    #     c = Character.new ":sym";
-    #     expect(c.is_symbol).to be true;
+    it "finds valid whitespace" do
+        c = Character.new " ";
+        expect(c.is_whitespace).to be true;
 
-    #     c = Character.new ":asgsagqsg";
-    #     expect(c.is_symbol).to be true;
-    # end
+        c = Character.new "\n";
+        expect(c.is_whitespace).to be true;
+    end
 
-    # it "finds an invalid symbol" do
-    #     c = Character.new ":"
-    #     expect(c.is_symbol).to be false;
+    it "finds invalid whitespace" do
+        c = Character.new "42";
+        expect(c.is_whitespace).to be false;
 
-    #     c = Character.new "afsfas:";
-    #     expect(c.is_symbol).to be false;
-
-    #     c = Character.new "sagqw123653561";
-    #     expect(c.is_symbol).to be false;
-
-    #     c = Character.new "125125";
-    #     expect(c.is_symbol).to be false;
-
-    #     c = Character.new "::";
-    #     expect(c.is_symbol).to be false;
-
-    #     c = Character.new "test";
-    #     expect(c.is_symbol).to be false;
-
-    #     c = Character.new ":\"\"";
-    #     expect(c.is_symbol).to be false;
-    # end
+        c = Character.new "\"asgf  \"";
+        expect(c.is_whitespace).to be false;
+    end
 end
