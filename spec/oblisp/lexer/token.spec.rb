@@ -7,6 +7,6 @@ describe Token do
 
     it "prints a string representation of the token" do
         tok = Token.new(Type::STRING, "hello");
-        expect(tok.to_s).to eq "#{tok.type} => #{tok.value}";
+        expect(tok.to_s).to eq "(#{tok.type}:#{tok.value})";
     end
 end

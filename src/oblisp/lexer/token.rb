@@ -7,6 +7,6 @@ class Token
     end
 
     def to_s
-        "#{type} => #{value}";
+        "(#{type}:#{value})";
     end
 end
