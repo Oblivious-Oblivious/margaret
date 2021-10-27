@@ -46,7 +46,8 @@ class Character
     end
 
     def is_identifier
-        !!(self.c =~ /^[_@'#'$a-zA-Z][_@'#'$a-zA-Z0-9]*$/);
+        # TODO extend to use symbols
+        !!(self.c =~ /^[_a-zA-Z][_a-zA-Z0-9]*$/);
     end
 
     def is_comment
@@ -59,6 +60,10 @@ class Character
 
     def is_super_token
         !!(self.c =~ /^super$/);
+    end
+
+    def is_structure_symbol
+        # TODO Structure symbols
     end
 
     def to_s

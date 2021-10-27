@@ -309,15 +309,6 @@ describe Character do
 
         c = Character.new "_1_";
         expect(c.is_identifier).to be true;
-        
-        c = Character.new "@test";
-        expect(c.is_identifier).to be true;
-
-        c = Character.new "#test";
-        expect(c.is_identifier).to be true;
-
-        c = Character.new "$test";
-        expect(c.is_identifier).to be true;
 
         # TODO Maybe implement this for skipping parameters
         c = Character.new "_";
@@ -399,5 +390,9 @@ describe Character do
 
         c = Character.new " super ";
         expect(c.is_super_token).to be false;
+    end
+
+    xit "finds a valid structure symbol" do
+        # TODO structure symbols
     end
 end
