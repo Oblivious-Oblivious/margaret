@@ -1,4 +1,5 @@
 module Type
+    # TODO Add all terminal type ids
     INTEGER = 1;
     BIG_INTEGER = 2;
     FLOAT = 3;

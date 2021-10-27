@@ -1,5 +1,6 @@
 describe Type do
     it "contains all literal types" do
+        # TODO Add all terminal type ids
         expect(Type::INTEGER).to eq 1;
         expect(Type::BIG_INTEGER).to eq 2;
         expect(Type::FLOAT).to eq 3;
