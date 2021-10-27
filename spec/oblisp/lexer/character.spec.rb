@@ -290,4 +290,57 @@ describe Character do
         c = Character.new "\"asgf  \"";
         expect(c.is_whitespace).to be false;
     end
+
+    it "finds a valid identifier" do
+        c = Character.new "test";
+        expect(c.is_identifier).to be true;
+
+        c = Character.new "test2";
+        expect(c.is_identifier).to be true;
+
+        c = Character.new "a0125215251";
+        expect(c.is_identifier).to be true;
+
+        c = Character.new "testtest___";
+        expect(c.is_identifier).to be true;
+
+        c = Character.new "__testtest";
+        expect(c.is_identifier).to be true;
+
+        c = Character.new "_1_";
+        expect(c.is_identifier).to be true;
+        
+        c = Character.new "@test";
+        expect(c.is_identifier).to be true;
+
+        c = Character.new "#test";
+        expect(c.is_identifier).to be true;
+
+        c = Character.new "$test";
+        expect(c.is_identifier).to be true;
+
+        # TODO Maybe implement this for skipping parameters
+        c = Character.new "_";
+        expect(c.is_identifier).to be true;
+
+        c = Character.new "__";
+        expect(c.is_identifier).to be true;
+
+        c = Character.new "___";
+        expect(c.is_identifier).to be true;
+    end
+
+    it "finds an invalid identifier" do
+        c = Character.new "124test";
+        expect(c.is_identifier).to be false;
+
+        c = Character.new "124__";
+        expect(c.is_identifier).to be false;
+
+        c = Character.new " sadqw";
+        expect(c.is_identifier).to be false;
+
+        c = Character.new "test  ";
+        expect(c.is_identifier).to be false;
+    end
 end

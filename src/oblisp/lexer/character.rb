@@ -45,6 +45,10 @@ class Character
         !!(self.c =~ /^[ \n]/);
     end
 
+    def is_identifier
+        !!(self.c =~ /^[_@'#'$a-zA-Z][_@'#'$a-zA-Z0-9]*$/);
+    end
+
     def to_s
         "#{c}";
     end
