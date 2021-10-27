@@ -343,4 +343,61 @@ describe Character do
         c = Character.new "test  ";
         expect(c.is_identifier).to be false;
     end
+
+    it "finds a valid comment" do
+        c = Character.new "//sth sth";
+        expect(c.is_comment).to be true;
+
+        c = Character.new "//";
+        expect(c.is_comment).to be true;
+    end
+
+    it "finds an invalid comment" do
+        c = Character.new "/ asfasf /";
+        expect(c.is_comment).to be false;
+
+        c = Character.new "/sad asd //";
+        expect(c.is_comment).to be false;
+
+        c = Character.new "sadasqd//";
+        expect(c.is_comment).to be false;
+    end
+
+    it "finds a valid self token" do
+        c = Character.new "self";
+        expect(c.is_self_token).to be true;
+    end
+
+    it "finds an invalid self token" do
+        c = Character.new "antythibng else";
+        expect(c.is_self_token).to be false;
+
+        c = Character.new "self ";
+        expect(c.is_self_token).to be false;
+
+        c = Character.new " self";
+        expect(c.is_self_token).to be false;
+
+        c = Character.new " self ";
+        expect(c.is_self_token).to be false;
+    end
+
+    it "finds a valid super token" do
+        c = Character.new "super";
+        expect(c.is_super_token).to be true;
+    end
+
+    it "finds an invalid super token" do
+        c = Character.new "anything else";
+        expect(c.is_super_token).to be false;
+
+        c = Character.new "super ";
+        expect(c.is_super_token).to be false;
+
+        c = Character.new " super";
+        expect(c.is_super_token).to be false;
+
+        c = Character.new " super ";
+        expect(c.is_super_token).to be false;
+    end
 end

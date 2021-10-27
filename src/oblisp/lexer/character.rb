@@ -49,6 +49,18 @@ class Character
         !!(self.c =~ /^[_@'#'$a-zA-Z][_@'#'$a-zA-Z0-9]*$/);
     end
 
+    def is_comment
+        !!(self.c =~ /^\/\/.*$/);
+    end
+
+    def is_self_token
+        !!(self.c =~ /^self$/);
+    end
+
+    def is_super_token
+        !!(self.c =~ /^super$/);
+    end
+
     def to_s
         "#{c}";
     end
