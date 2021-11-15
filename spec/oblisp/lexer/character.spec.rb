@@ -1,4 +1,16 @@
 describe Character do
+    it "adds to the character stream" do
+        c = Character.new "s";
+        c << (Character.new "o");
+        expect("#{c}").to eq "so";
+    end
+
+    it "omits the last character in the stream" do
+        c = Character.new "something";
+        new_c = c.omit_last;
+        expect("#{new_c}").to eq "somethin";
+    end
+
     it "stores a single character" do
         c = Character.new 'r';
         expect("#{c}").to eq 'r';

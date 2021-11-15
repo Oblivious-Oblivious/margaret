@@ -5,6 +5,14 @@ class Character
         @c = c;
     end
 
+    def <<(other)
+        @c = "#{@c}#{other.c}";
+    end
+
+    def omit_last
+        Character.new "#{@c[0...-1]}";
+    end
+
     def is_integer
         return false if self.c.to_i > 2147483647 or self.c.to_i < -2147483647;
         !!(self.c =~ /^[-]?[1-9][0-9]*$/);
