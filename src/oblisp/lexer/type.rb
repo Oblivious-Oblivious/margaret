@@ -1,19 +1,28 @@
 module Type
-    # TODO Add all terminal type ids
-    INTEGER = 1;
-    BIG_INTEGER = 2;
-    FLOAT = 3;
-    BIG_FLOAT = 4;
+    LEFT_PAREN = 1;
+    RIGHT_PAREN = 2;
+    COLON = 3;
 
-    BINARY = 11;
-    HEXADECIMAL = 12;
-    OCTAL = 13;
+    COMMA = 11;
+    ROCKET = 21;
+    ARROW = 31;
+    PIPE = 41;
+    LEFT_CURLY = 42;
+    RIGHT_CURLY = 43;
 
-    STRING = 21;
-    SYMBOL = 22;
+    INTEGER = 101;
+    BIG_INTEGER = 102;
+    FLOAT = 103;
+    BIG_FLOAT = 104;
 
-    BLOCK = 41;
-    ARRAY = 42;
-    HASH = 43;
-    NEW_OBJECT = 44;
+    BINARY = 111;
+    HEXADECIMAL = 112;
+    OCTAL = 113;
+
+    STRING = 121;
+
+    IDENTIFIER = 201;
+
+    SELF = 1033;
+    SUPER = 3301;
 end
