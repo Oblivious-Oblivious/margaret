@@ -7,6 +7,7 @@ describe Type do
 
     it "contains literal syntax types" do
         expect(Type::COMMA).to eq 11;
+        expect(Type::DOT).to eq 12;
         expect(Type::ROCKET).to eq 21;
         expect(Type::ARROW).to eq 31;
         expect(Type::PIPE).to eq 41;

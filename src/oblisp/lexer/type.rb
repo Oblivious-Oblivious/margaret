@@ -4,6 +4,7 @@ module Type
     COLON = 3;
 
     COMMA = 11;
+    DOT = 12;
     ROCKET = 21;
     ARROW = 31;
     PIPE = 41;
