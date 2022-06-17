@@ -1,26 +1,17 @@
 module Type
-    LEFT_PAREN = 1;
-    RIGHT_PAREN = 2;
-    COLON = 3;
+    SYMBOL = 1;
+    SYNTAX_SYMBOL = 2;
 
-    COMMA = 11;
-    DOT = 12;
-    ROCKET = 21;
-    ARROW = 31;
-    PIPE = 41;
-    LEFT_CURLY = 42;
-    RIGHT_CURLY = 43;
+    INTEGER = 11;
+    BIG_INTEGER = 12;
+    FLOAT = 13;
+    BIG_FLOAT = 14;
 
-    INTEGER = 101;
-    BIG_INTEGER = 102;
-    FLOAT = 103;
-    BIG_FLOAT = 104;
+    BINARY = 101;
+    HEXADECIMAL = 102;
+    OCTAL = 103;
 
-    BINARY = 111;
-    HEXADECIMAL = 112;
-    OCTAL = 113;
-
-    STRING = 121;
+    STRING = 111;
 
     IDENTIFIER = 201;
 
