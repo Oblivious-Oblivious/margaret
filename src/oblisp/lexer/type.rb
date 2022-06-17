@@ -1,4 +1,6 @@
 module Type
+    EOF = 0;
+    
     SYMBOL = 1;
     SYNTAX_SYMBOL = 2;
 

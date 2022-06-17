@@ -1,4 +1,8 @@
 describe Type do
+    it "contains an EOF syntax symbol" do
+        expect(Type::EOF).to eq 0;
+    end
+
     it "contains normal and syntax symbols" do
         expect(Type::SYMBOL).to eq 1;
         expect(Type::SYNTAX_SYMBOL).to eq 2;
