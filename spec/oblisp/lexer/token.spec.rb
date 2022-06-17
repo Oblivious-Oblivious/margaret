@@ -1,12 +1,13 @@
 describe Token do
     it "has a type and a value" do
-        tok = Token.new(Type::INTEGER, 42);
-        expect(tok.type).to eq Type::INTEGER;
+        tok = Token.new(42, Type::INTEGER, 125);
         expect(tok.value).to eq 42;
+        expect(tok.type).to eq Type::INTEGER;
+        expect(tok.line_number).to eq 125;
     end
 
     it "prints a string representation of the token" do
-        tok = Token.new(Type::STRING, "hello");
-        expect(tok.to_s).to eq "(#{tok.type}:#{tok.value})";
+        tok = Token.new("hello", Type::STRING, 10);
+        expect(tok.to_s).to eq "(\"#{tok.value}\" #{tok.type} #{tok.line_number})";
     end
 end

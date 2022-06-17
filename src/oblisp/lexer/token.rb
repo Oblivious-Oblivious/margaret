@@ -1,12 +1,13 @@
 class Token
-    attr_reader :type, :value;
+    attr_reader :value, :type, :line_number;
 
-    def initialize(type, value)
-        @type = type;
+    def initialize(value, type, line_number)
         @value = value;
+        @type = type;
+        @line_number = line_number;
     end
 
     def to_s
-        "(#{type}:#{value})";
+        "(\"#{value}\" #{type} #{line_number})";
     end
 end
