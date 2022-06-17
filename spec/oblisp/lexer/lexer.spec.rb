@@ -207,5 +207,20 @@ describe Lexer do
 
             l.print_token_table;
         end
+
+        it "traverses through the token table" do
+            l = Lexer.new "file.obl", "(self puts.)";
+            tokens = l.make_tokens;
+            expect(tokens.size).to eq 5;
+            expect(l.next_token.value).to eq "(";
+            expect(l.next_token.value).to eq "self"
+            expect(l.next_token.value).to eq "puts";
+            expect(l.next_token.value).to eq ".";
+            expect(l.next_token.value).to eq ")";
+            expect(l.next_token.value).to eq "eof";
+            expect(l.prev_token.value).to eq ")";
+            expect(l.prev_token.value).to eq ".";
+            expect(l.prev_token.value).to eq "puts";
+        end
     end
 end
