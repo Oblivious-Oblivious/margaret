@@ -3,9 +3,7 @@ module Type
     SYNTAX_SYMBOL = 2;
 
     INTEGER = 11;
-    BIG_INTEGER = 12;
-    FLOAT = 13;
-    BIG_FLOAT = 14;
+    FLOAT = 12;
 
     BINARY = 101;
     HEXADECIMAL = 102;

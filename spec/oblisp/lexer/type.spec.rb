@@ -6,9 +6,7 @@ describe Type do
 
     it "contains all terminal literal types" do
         expect(Type::INTEGER).to eq 11;
-        expect(Type::BIG_INTEGER).to eq 12;
-        expect(Type::FLOAT).to eq 13;
-        expect(Type::BIG_FLOAT).to eq 14;
+        expect(Type::FLOAT).to eq 12;
 
         expect(Type::BINARY).to eq 101;
         expect(Type::HEXADECIMAL).to eq 102;
