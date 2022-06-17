@@ -10,6 +10,10 @@ module RegexMatchers
         "a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z",
         "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"
     ];
+    BINARY = ["0","1"];
+    HEXADECIMAL = NUMBER + ["A","a","B","b","C","c","D","d","E","e","F","f"];
+    OCTAL = ["0","1","2","3","4","5","6","7"];
+
     SYMBOL = ["+","-","*","/","\\","~","<",">","=","@","%","|","&","?","!","^","_",",","`",";","$","`"];
     SYNTAX_SYMBOL = ["(",")","[","]","{","}",":","."];
     QUOTE = ["\"","'"];
@@ -89,45 +93,69 @@ class Lexer
                     if c.matches(RegexMatchers::NEWLINE)
                         self.lineno += 1;
                     elsif c == nil
-                        return self.error("unterminated # comment");
+                        return self.error "unterminated # comment";
                     end
                 end
-            elsif c.matches(RegexMatchers::NUMBER) and c != '0'
-                actual_type = Type::INTEGER;
+            elsif c.matches(RegexMatchers::NUMBER)
                 final_number = c;
-                c = next_character;
-                while c != nil and c.matches(RegexMatchers::NUMBER)
-                    final_number << c;
+                if c == '0'
                     c = next_character;
-                end
-
-                if c == '.'
-                    final_number << c;
+                    if c == '.'
+                        final_number << c;
+                        c = next_character;
+                        while c != nil and c.matches(RegexMatchers::NUMBER)
+                            final_number << c;
+                            c = next_character;
+                        end
+                        token_table << (Token.new final_number, Type::FLOAT, lineno);
+                    elsif c == 'b' or c == 'B'
+                        final_number << c.downcase;
+                        c = next_character;
+                        while c != nil and c.matches(RegexMatchers::BINARY)
+                            final_number << c;
+                            c = next_character;
+                        end
+                        token_table << (Token.new final_number, Type::BINARY, lineno);
+                    elsif c == 'x' or c == 'X'
+                        final_number << c.downcase;
+                        c = next_character;
+                        while c != nil and c.matches(RegexMatchers::HEXADECIMAL)
+                            final_number << c;
+                            c = next_character;
+                        end
+                        token_table << (Token.new final_number, Type::HEXADECIMAL, lineno);
+                    elsif c == 'o' or c == 'O'
+                        final_number << c.downcase;
+                        c = next_character;
+                        while c != nil and c.matches(RegexMatchers::OCTAL)
+                            final_number << c;
+                            c = next_character;
+                        end
+                        token_table << (Token.new final_number, Type::OCTAL, lineno);
+                    else
+                        return self.error "expected fraction part after numeric literal";
+                    end
+                else
+                    actual_type = Type::INTEGER;
+                    final_number = c;
                     c = next_character;
                     while c != nil and c.matches(RegexMatchers::NUMBER)
                         final_number << c;
                         c = next_character;
                     end
-                    actual_type = Type::FLOAT;
-                end
-                c = prev_character;
-                token_table << (Token.new final_number, actual_type, lineno);
-            elsif c == '0'
-                final_float = c;
-                c = next_character;
-                if c != '.'
-                    return self.error("unexpected fraction part after numeric literal");
-                else
-                    final_float << c;
-                    c = next_character;
-                    while c != nil and c.matches(RegexMatchers::NUMBER)
-                        final_float << c;
-                        c = next_character;
-                    end
-                end
-                c = prev_character;
-                token_table << (Token.new final_float, Type::FLOAT, lineno);
 
+                    if c == '.'
+                        final_number << c;
+                        c = next_character;
+                        while c != nil and c.matches(RegexMatchers::NUMBER)
+                            final_number << c;
+                            c = next_character;
+                        end
+                        actual_type = Type::FLOAT;
+                    end
+                    c = prev_character;
+                    token_table << (Token.new final_number, actual_type, lineno);
+                end
             elsif c.matches(RegexMatchers::SYMBOL)
                 token_table << (Token.new c, Type::SYMBOL, lineno);
             elsif c.matches(RegexMatchers::SYNTAX_SYMBOL)
@@ -150,6 +178,20 @@ class Lexer
                 else
                     token_table << (Token.new final_identifier, Type::IDENTIFIER, lineno);
                 end
+            elsif c.matches(RegexMatchers::QUOTE)
+                final_string = c;
+                c = next_character;
+                while not c.matches(RegexMatchers::QUOTE)
+                    final_string << c;
+                    c = next_character;
+                    if c.matches(RegexMatchers::NEWLINE)
+                        self.lineno += 1;
+                    elsif c == nil
+                        return self.error "unterminated string literal";
+                    end
+                end
+                final_string << c;
+                token_table << (Token.new final_string, Type::STRING, lineno);
             end
         end
 

@@ -112,9 +112,6 @@ describe Lexer do
             tokens = l.make_tokens;
         end
 
-        # xit "tokenizes big integers" do
-        # end
-
         it "tokenizes floats" do
             l = Lexer.new "file.obl", "(42.7 msg.)".chars;
             tokens = l.make_tokens;
@@ -142,21 +139,36 @@ describe Lexer do
             expect(tokens[3].value).to eq ".";
         end
 
-        # xit "tokenizes big floats" do
-        # end
+        it "tokenizes binary literals" do
+            l = Lexer.new "file.obl", "(0b1010 + 0B0100)".chars;
+            tokens = l.make_tokens;
+            expect(tokens[1].value).to eq "0b1010";
+            expect(tokens[3].value).to eq "0b0100";
+        end
 
-        # xit "tokenizes binary literals" do
-            # TODO Works with 'b' and 'B'
-        # end
+        it "tokenizes hexadecimal literals" do
+            l = Lexer.new "file.obl", "(0xfeed42 + 0Xbeef41)".chars;
+            tokens = l.make_tokens;
+            expect(tokens[1].value).to eq "0xfeed42";
+            expect(tokens[3].value).to eq "0xbeef41";
+        end
 
-        # xit "tokenizes hexadecimal literals" do
-        # end
+        it "tokenizes octal literals" do
+            l = Lexer.new "file.obl", "(0o752 + 0O52)".chars;
+            tokens = l.make_tokens;
+            expect(tokens[1].value).to eq "0o752";
+            expect(tokens[3].value).to eq "0o52";
+        end
 
-        # xit "tokenizes octal literals" do
-        # end
+        it "tokenizes string literals" do
+            l = Lexer.new "file.obl", "(\"hello\" puts.)";
+            token = l.make_tokens;
+            expect(token[1].value).to eq "\"hello\"";
 
-        # xit "tokenizes string literals" do
-        # end
+            l = Lexer.new "file.obl", "(\"multi\nline\nstring\" puts.)";
+            token = l.make_tokens;
+            expect(token[1].value).to eq "\"multi\nline\nstring\"";
+        end
 
         it "tokenizes identifiers" do
             l = Lexer.new "file.obl", "(42 factorial.\nx = (2 times: 3)\n3 plus: 4)".chars;
@@ -166,6 +178,12 @@ describe Lexer do
             expect(tokens[4].value).to eq "x";
             expect(tokens[8].value).to eq "times";
             expect(tokens[13].value).to eq "plus";
+        end
+
+        it "tokenizes identifiers with symbols" do
+            l = Lexer.new "file.obl", "((1 2 3) includes?: 3)".chars;
+            tokens = l.make_tokens;
+            expect(tokens[6].value).to eq "includes?";
         end
 
         it "tokenizes the `self` keyword" do
