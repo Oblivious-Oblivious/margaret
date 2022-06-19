@@ -10,4 +10,10 @@ describe Token do
         tok = Token.new("hello", Type::STRING, 10);
         expect(tok.to_s).to eq "(\"#{tok.value}\" #{tok.type} #{tok.line_number})";
     end
+
+    it "has an equals message" do
+        tok = Token.new("hello", Type::STRING, 10);
+        expect(tok == "hello").to be true;
+        expect(tok == "not hello").to be false;
+    end
 end

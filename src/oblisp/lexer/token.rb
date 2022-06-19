@@ -10,4 +10,8 @@ class Token
     def to_s
         "(\"#{value}\" #{type} #{line_number})";
     end
+
+    def ==(other_value)
+        value == other_value;
+    end
 end
