@@ -14,8 +14,8 @@ module RegexMatchers
     HEXADECIMAL = NUMBER + ["A","a","B","b","C","c","D","d","E","e","F","f"];
     OCTAL = ["0","1","2","3","4","5","6","7"];
 
-    SYMBOL = ["+","-","*","/","\\","~","<",">","=","@","%","|","&","?","!","^","_",",","`",";","$","`"];
-    SYNTAX_SYMBOL = ["(",")","[","]","{","}",":","."];
+    SYMBOL = ["+","-","*","/","\\","~","<",">","=","@","%","|","&","?","!","^",",","`",";","$","`"];
+    SYNTAX_SYMBOL = ["(",")","[","]","{","}",":",".", "_"];
     QUOTE = ["\"","'"];
 
     KEYWORDS = ["self","super"];
@@ -157,14 +157,10 @@ class Lexer
                     c = prev_character;
                     token_table << (Token.new final_number, actual_type, lineno);
                 end
-            elsif c.matches(RegexMatchers::SYMBOL)
-                token_table << (Token.new c, Type::SYMBOL, lineno);
-            elsif c.matches(RegexMatchers::SYNTAX_SYMBOL)
-                token_table << (Token.new c, Type::SYNTAX_SYMBOL, lineno);
-            elsif c.matches(RegexMatchers::LETTER)
+            elsif c.matches(RegexMatchers::LETTER) or c == '_'
                 final_identifier = c;
                 c = next_character;
-                while c != nil and (c.matches(RegexMatchers::NUMBER) or c.matches(RegexMatchers::SYMBOL) or c.matches(RegexMatchers::LETTER))
+                while c != nil and (c.matches(RegexMatchers::NUMBER) or c == '_' or c.matches(RegexMatchers::LETTER))
                     final_identifier << c;
                     c = next_character;
                 end
@@ -179,6 +175,10 @@ class Lexer
                 else
                     token_table << (Token.new final_identifier, Type::IDENTIFIER, lineno);
                 end
+            elsif c.matches(RegexMatchers::SYMBOL)
+                token_table << (Token.new c, Type::SYMBOL, lineno);
+            elsif c.matches(RegexMatchers::SYNTAX_SYMBOL)
+                token_table << (Token.new c, Type::SYNTAX_SYMBOL, lineno);
             elsif c.matches(RegexMatchers::QUOTE)
                 final_string = c;
                 c = next_character;

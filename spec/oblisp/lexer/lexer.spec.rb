@@ -180,10 +180,10 @@ describe Lexer do
             expect(tokens[13].value).to eq "plus";
         end
 
-        it "tokenizes identifiers with symbols" do
-            l = Lexer.new "file.obl", "((1 2 3) includes?: 3)".chars;
+        it "tokenizes identifiers starting with an underscore" do
+            l = Lexer.new "file.obl", "((1 2 3) __msg.)".chars;
             tokens = l.make_tokens;
-            expect(tokens[6].value).to eq "includes?";
+            expect(tokens[6].value).to eq "__msg";
         end
 
         it "tokenizes the `self` keyword" do
