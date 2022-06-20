@@ -95,5 +95,10 @@ class Parser
     end
 
     def literal
+        if next_token.type == Type::INTEGER
+            # TODO
+        else
+            prev_token;
+        end
     end
 end

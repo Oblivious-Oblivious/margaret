@@ -88,4 +88,13 @@ describe Parser do
         error("(()", "missing closing parenthesis on list");
         error("())", "reached end of program");
     end
+
+    it "parses infinite lists of lists" do
+        parse("(42)");
+        parse("(42 43 44)");
+        parse("(42 () 43 ())");
+        parse("(42 (43) 44 ())");
+        parse("(() () () ())");
+        parse("((((()))))");
+    end
 end
