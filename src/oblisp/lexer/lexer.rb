@@ -116,6 +116,7 @@ class Lexer
                             final_number << c;
                             c = next_character;
                         end
+                        c = prev_character;
                         token_table << (Token.new final_number, Type::BINARY, lineno);
                     elsif c == 'x' or c == 'X'
                         final_number << c.downcase;
@@ -124,6 +125,7 @@ class Lexer
                             final_number << c;
                             c = next_character;
                         end
+                        c = prev_character;
                         token_table << (Token.new final_number, Type::HEXADECIMAL, lineno);
                     elsif c == 'o' or c == 'O'
                         final_number << c.downcase;
@@ -132,6 +134,7 @@ class Lexer
                             final_number << c;
                             c = next_character;
                         end
+                        c = prev_character;
                         token_table << (Token.new final_number, Type::OCTAL, lineno);
                     else
                         return self.error "expected fraction part after numeric literal";

@@ -142,22 +142,31 @@ describe Lexer do
         it "tokenizes binary literals" do
             l = Lexer.new "file.obl", "(0b1010 + 0B0100)".chars;
             tokens = l.make_tokens;
+            expect(tokens[0].value).to eq "(";
             expect(tokens[1].value).to eq "0b1010";
+            expect(tokens[2].value).to eq "+";
             expect(tokens[3].value).to eq "0b0100";
+            expect(tokens[4].value).to eq ")";
         end
 
         it "tokenizes hexadecimal literals" do
             l = Lexer.new "file.obl", "(0xfeed42 + 0Xbeef41)".chars;
             tokens = l.make_tokens;
+            expect(tokens[0].value).to eq "(";
             expect(tokens[1].value).to eq "0xfeed42";
+            expect(tokens[2].value).to eq "+";
             expect(tokens[3].value).to eq "0xbeef41";
+            expect(tokens[4].value).to eq ")";
         end
 
         it "tokenizes octal literals" do
             l = Lexer.new "file.obl", "(0o752 + 0O52)".chars;
             tokens = l.make_tokens;
+            expect(tokens[0].value).to eq "(";
             expect(tokens[1].value).to eq "0o752";
+            expect(tokens[2].value).to eq "+";
             expect(tokens[3].value).to eq "0o52";
+            expect(tokens[4].value).to eq ")";
         end
 
         it "tokenizes string literals" do
