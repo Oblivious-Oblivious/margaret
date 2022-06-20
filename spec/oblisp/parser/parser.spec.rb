@@ -97,4 +97,91 @@ describe Parser do
         parse("(() () () ())");
         parse("((((()))))");
     end
+
+    it "parses self and super" do
+        parse("(self)");
+        parse("(super)");
+        parse("(self self self)");
+        parse("(self super self)");
+        parse("(self 42 super (10) ((self) (super 42)))");
+    end
+
+    it "parses identifiers" do
+        parse("(s (42) self)");
+        parse("(ident 42 another)");
+        parse("(stuff? ident2)");
+    end
+
+    it "parses unary messages" do
+        parse("(42 puts)");
+        parse("(obj puts)");
+        parse("(obj puts 42 incr)");
+    end
+
+    it "parses binary messages" do
+        parse("(2 + 3)");
+        parse("(2 * 5)");
+        parse("(a + b)");
+    end
+
+    it "parses keyword messages" do
+        parse("(list put: 42 at: 5)");
+        parse("(
+            (list = List new)
+            (list put: 42 at: 5)
+            (x = list get: 2)
+            (x puts)
+        )");
+    end
+
+    it "parses integer literals" do
+        parse("(42)");
+        parse("(41 42 43)");
+        parse("(41 (42) 43)");
+        parse("(41 (42) 43)");
+        # TODO
+        parse("(-41 -42)");
+        parse("(42 - 41)");
+    end
+
+    it "parses binary literals" do
+        parse("(
+            (x = 0b0101 + 0b1011)
+            (x to_int puts)
+        )");
+    end
+
+    it "parses hexadecimal literals" do
+        parse("(x = 0xbeef to_bin to_int puts)");
+        parse("(0xbeef - 0xabb2)");
+    end
+
+    it "parses octal literals" do
+        parse("(x = 0o751 to_hex to_bin to_int puts)");
+        parse("(0O541 + 0o777)");
+    end
+
+    it "parses string literals" do
+        parse("(\"hello\" puts)");
+    end
+
+    it "parses tuple literals" do
+        parse("([])");
+        parse("([41 42])");
+        parse("([42 \"str\" var])");
+        error("([)", "missing closing bracket on tuple");
+        error("(])", "missing closing parenthesis on list");
+    end
+
+    it "parses hash literals" do
+        # TODO
+        parse("({a: 1, b: 2, c: 3})");
+        parse("({:a => 1 :b => 2 :c => 3})");
+        parse("({:a => (self a) :b => (super b) :c => 3})");
+        parse("({'k1' => 'v1' 'k2' => 'v2' 'k3' => 'v3'})");
+    end
+
+    it "parses symbol literals" do
+        parse("(:a :b :c)");
+    end
 end

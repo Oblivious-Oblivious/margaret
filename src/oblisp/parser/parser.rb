@@ -67,7 +67,8 @@ class Parser
         if peek_token == "("
             list;
             translation_unit;
-        elsif peek_token != ")" and peek_token != "eof"
+        # TODO Fix grammar ambiguity
+        elsif peek_token != ")" and peek_token != "]" and peek_token != "}" and peek_token != "eof"
             expression;
             translation_unit;
         else
@@ -89,16 +90,246 @@ class Parser
     end
 
     def object
+        current_token = peek_token;
+        if current_token == peek_token
+            identifier;
+        end
+        if current_token == peek_token
+            terminal_SELF;
+        end
+        if current_token == peek_token
+            terminal_SUPER
+        end
     end
 
     def message
+        current_token = peek_token;
+        if current_token == peek_token
+            unary_message;
+        end
+        if current_token == peek_token
+            binary_message;
+        end
+        if current_token == peek_token
+            keyword_message;
+        end
+    end
+
+    def unary_message
+        unary_selector;
+    end
+
+    def unary_selector
+        identifier;
+    end
+
+    def binary_message
+        current_token = peek_token;
+        binary_selector;
+        if current_token != peek_token
+            translation_unit;
+        end
+    end
+
+    def binary_selector
+        terminal_MESSAGE_SYMBOL;
+    end
+
+    def keyword_message
+        keyword_list;
+    end
+
+    def keyword_list
+        identifier;
+        if peek_token == ":"
+            next_token;
+            translation_unit;
+            keyword_list;
+        end
     end
 
     def literal
-        if next_token.type == Type::INTEGER
-            # TODO
+        current_token = peek_token;
+        if current_token == peek_token
+            base_ten_literal;
+        end
+        if current_token == peek_token
+            alternate_base_literal;
+        end
+        if current_token == peek_token
+            string_literal;
+        end
+        if current_token == peek_token
+            tuple_literal;
+        end
+        if current_token == peek_token
+            hash_literal;
+        end
+        if current_token == peek_token
+            symbol_literal;
+        end
+    end
+
+    def base_ten_literal
+        sign;
+        positive_base_ten_literal;
+    end
+
+    def sign
+        if peek_token == '+' or peek_token == '-'
+            next_token;
+        end
+    end
+
+    def positive_base_ten_literal
+        if peek_token.type == Type::INTEGER
+            next_token;
+            # TODO integer
+        elsif peek_token.type == Type::FLOAT
+            next_token;
+            # TODO float
+        end
+    end
+
+    def alternate_base_literal
+        if peek_token.type == Type::BINARY
+            next_token;
+            # TODO binary
+        end
+        if peek_token.type == Type::HEXADECIMAL
+            next_token;
+            # TODO hexadecimal
+        end
+        if peek_token.type == Type::OCTAL
+             next_token;
+            # TODO octal
+        end
+    end
+    
+    def string_literal
+        if peek_token.type == Type::STRING
+            next_token;
+            # TODO string
+        end
+    end
+
+    def tuple_literal
+        if peek_token == "["
+            next_token;
+            tuple_items;
+            if next_token == "]"
+                # TODO tuple
+            else
+                error "missing closing bracket on tuple";
+            end
+        end
+    end
+    
+    def tuple_items
+        current_token = peek_token;
+        translation_unit;
+        if current_token != peek_token
+            tuple_items;
+        end
+    end
+
+    def hash_literal
+        if peek_token == "{"
+            next_token;
+            hash_list;
+            if next_token == "}"
+                # TODO hash
+            else
+                error "missing closing curly brace on hash";
+            end
+        end
+    end
+
+    def hash_list
+        current_token = peek_token;
+        hash;
+        if current_token != peek_token
+            hash_list;
+        end
+    end
+
+    def hash
+        if peek_token.type == Type::IDENTIFIER
+            identifier;
+            if next_token == ":"
+                translation_unit;
+            else
+                error "json style keys should be denoted by colons";
+            end
+        elsif peek_token == ":"
+            symbol_literal;
+            if next_token == "="
+                if next_token == ">"
+                    translation_unit;
+                else
+                    error "hash keys should be denoted by arrow symbols";
+                end
+            else
+                error "hash keys should be denoted by arrow symbols";
+            end
+        elsif peek_token.type == Type::STRING
+            string_literal;
+            if next_token == "="
+                if next_token == ">"
+                    translation_unit;
+                else
+                    error "hash keys should be denoted by arrow symbols";
+                end
+            else
+                error "hash keys should be denoted by arrow symbols";
+            end
         else
-            prev_token;
+        end
+    end
+
+    def symbol_literal
+        if peek_token == ":"
+            next_token;
+            identifier;
+        end
+    end
+
+    def identifier
+        current_token = peek_token;
+        terminal_ID;
+
+        if current_token != peek_token
+            terminal_IDENTIFIER_SYMBOL;
+        end
+    end
+
+    def terminal_SELF
+        if peek_token.type == Type::SELF
+            next_token;
+        end
+    end
+
+    def terminal_SUPER
+        if peek_token.type == Type::SUPER
+            next_token;
+        end
+    end
+
+    def terminal_ID
+        if peek_token.type == Type::IDENTIFIER
+            next_token;
+        end
+    end
+
+    def terminal_MESSAGE_SYMBOL
+        if peek_token.type == Type::MESSAGE_SYMBOL
+            next_token;
+        end
+    end
+
+    def terminal_IDENTIFIER_SYMBOL
+        if peek_token == "?" or peek_token == "!"
+            next_token;
         end
     end
 end
