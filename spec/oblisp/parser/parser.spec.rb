@@ -75,4 +75,17 @@ describe Parser do
         rescue Exception => e
         end
     end
+
+    it "parses an empty list as a first unit" do
+        parse("()");
+        error("(", "missing closing parenthesis on list");
+        error(")", "missing opening parenthesis on list");
+        error("()stuff", "reached end of program");
+    end
+
+    it "parses multiple lists as translation units" do
+        parse("(())");
+        error("(()", "missing closing parenthesis on list");
+        error("())", "reached end of program");
+    end
 end

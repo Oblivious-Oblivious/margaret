@@ -41,5 +41,59 @@ class Parser
     end
 
     def first_unit
+        list;
+
+        if next_token == "eof"
+            # TODO
+        else
+            error "reached end of program";
+        end
+    end
+
+    def list
+        if next_token == "("
+            translation_unit;
+            if next_token == ")"
+                # TODO
+            else
+                error "missing closing parenthesis on list";
+            end
+        else
+            error "missing opening parenthesis on list";
+        end
+    end
+
+    def translation_unit
+        if peek_token == "("
+            list;
+            translation_unit;
+        elsif peek_token != ")" and peek_token != "eof"
+            expression;
+            translation_unit;
+        else
+            # TODO
+        end
+    end
+
+    def expression
+        current_token = peek_token;
+        if current_token == peek_token
+            object;
+        end
+        if current_token == peek_token
+            message;
+        end
+        if current_token == peek_token
+            literal;
+        end
+    end
+
+    def object
+    end
+
+    def message
+    end
+
+    def literal
     end
 end
