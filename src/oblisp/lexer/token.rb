@@ -11,7 +11,11 @@ class Token
         "(\"#{value}\" #{type} #{line_number})";
     end
 
-    def ==(other_value)
-        value == other_value;
+    def ==(other)
+        if other.is_a? String
+            value == other;
+        elsif other.is_a? Token
+            value == other.value && type == other.type && line_number == other.line_number;
+        end
     end
 end

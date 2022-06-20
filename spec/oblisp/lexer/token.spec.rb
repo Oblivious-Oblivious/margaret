@@ -11,9 +11,15 @@ describe Token do
         expect(tok.to_s).to eq "(\"#{tok.value}\" #{tok.type} #{tok.line_number})";
     end
 
-    it "has an equals message" do
+    it "has an equals message for values" do
         tok = Token.new("hello", Type::STRING, 10);
         expect(tok == "hello").to be true;
         expect(tok == "not hello").to be false;
+    end
+
+    it "has an equals message for objects" do
+        tok1 = Token.new("hello", Type::STRING, 10);
+        tok2 = Token.new("hello", Type::STRING, 10);
+        expect(tok1).to eq tok2;
     end
 end
