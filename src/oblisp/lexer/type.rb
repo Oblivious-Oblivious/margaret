@@ -1,7 +1,7 @@
 module Type
     EOF = 0;
     
-    SYMBOL = 1;
+    MESSAGE_SYMBOL = 1;
     SYNTAX_SYMBOL = 2;
 
     INTEGER = 11;

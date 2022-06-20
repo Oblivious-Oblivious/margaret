@@ -3,8 +3,8 @@ describe Type do
         expect(Type::EOF).to eq 0;
     end
 
-    it "contains normal and syntax symbols" do
-        expect(Type::SYMBOL).to eq 1;
+    it "contains message normal and syntax symbols" do
+        expect(Type::MESSAGE_SYMBOL).to eq 1;
         expect(Type::SYNTAX_SYMBOL).to eq 2;
     end
 

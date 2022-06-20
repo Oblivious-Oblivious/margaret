@@ -64,7 +64,7 @@ describe Lexer do
             expect("#".matches(RegexMatchers::COMMENT)).to be true;
             expect("9".matches(RegexMatchers::NUMBER)).to be true;
             expect("k".matches(RegexMatchers::LETTER)).to be true;
-            expect("?".matches(RegexMatchers::SYMBOL)).to be true;
+            expect("?".matches(RegexMatchers::MESSAGE_SYMBOL)).to be true;
             expect("'".matches(RegexMatchers::QUOTE)).to be true;
             expect("self".matches(RegexMatchers::KEYWORDS)).to be true;
             expect("super".matches(RegexMatchers::KEYWORDS)).to be true;

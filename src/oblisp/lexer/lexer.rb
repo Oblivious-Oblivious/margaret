@@ -14,7 +14,7 @@ module RegexMatchers
     HEXADECIMAL = NUMBER + ["A","a","B","b","C","c","D","d","E","e","F","f"];
     OCTAL = ["0","1","2","3","4","5","6","7"];
 
-    SYMBOL = ["+","-","*","/","\\","~","<",">","=","@","%","|","&","?","!","^",",","`",";","$","`"];
+    MESSAGE_SYMBOL = ["+","-","*","/","\\","~","<",">","=","@","%","|","&","?","!","^",",","`",";","$","`"];
     SYNTAX_SYMBOL = ["(",")","[","]","{","}",":",".", "_"];
     QUOTE = ["\"","'"];
 
@@ -175,8 +175,8 @@ class Lexer
                 else
                     token_table << (Token.new final_identifier, Type::IDENTIFIER, lineno);
                 end
-            elsif c.matches(RegexMatchers::SYMBOL)
-                token_table << (Token.new c, Type::SYMBOL, lineno);
+            elsif c.matches(RegexMatchers::MESSAGE_SYMBOL)
+                token_table << (Token.new c, Type::MESSAGE_SYMBOL, lineno);
             elsif c.matches(RegexMatchers::SYNTAX_SYMBOL)
                 token_table << (Token.new c, Type::SYNTAX_SYMBOL, lineno);
             elsif c.matches(RegexMatchers::QUOTE)
