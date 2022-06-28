@@ -1,8 +1,8 @@
 require_relative "./type"
 
 module RegexMatchers
-    WHITESPACE = [" ","\t","\r","\f"];
-    NEWLINE = ["\n"];
+    WHITESPACE = [" ","\t","\f"];
+    NEWLINE = ["\r", "\n"];
     COMMENT = ["#"];
 
     NUMBER = ["0","1","2","3","4","5","6","7","8","9"];
