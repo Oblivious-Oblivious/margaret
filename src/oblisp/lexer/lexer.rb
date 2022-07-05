@@ -3,7 +3,6 @@ require_relative "./type"
 module RegexMatchers
     WHITESPACE = [" ","\t","\f"];
     NEWLINE = ["\r", "\n"];
-    COMMENT = ["#"];
 
     NUMBER = ["0","1","2","3","4","5","6","7","8","9"];
     LETTER = [
@@ -86,17 +85,6 @@ class Lexer
             elsif c.matches(RegexMatchers::NEWLINE)
                 self.lineno += 1;
             elsif c.matches(RegexMatchers::WHITESPACE)
-                next;
-            elsif c.matches(RegexMatchers::COMMENT)
-                c = next_character;
-                while not c.matches(RegexMatchers::COMMENT)
-                    c = next_character;
-                    if c.matches(RegexMatchers::NEWLINE)
-                        self.lineno += 1;
-                    elsif c == nil
-                        return self.error "unterminated # comment";
-                    end
-                end
             elsif c.matches(RegexMatchers::NUMBER)
                 final_number = c;
                 if c == '0'
