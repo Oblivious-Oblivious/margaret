@@ -1,4 +1,4 @@
-require_relative "./type"
+require_relative "../tokens/type";
 
 module RegexMatchers
     WHITESPACE = [" ","\t","\f"];

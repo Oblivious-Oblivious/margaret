@@ -8,8 +8,8 @@ require "#{Dir.pwd}/spec/oblisp/lexer/file_loader.spec.rb";
 require "#{Dir.pwd}/spec/oblisp/lexer/lexer.spec.rb";
 
 # tokens
-require "#{Dir.pwd}/spec/oblisp/lexer/token.spec.rb";
-require "#{Dir.pwd}/spec/oblisp/lexer/type.spec.rb";
+require "#{Dir.pwd}/spec/oblisp/tokens/token.spec.rb";
+require "#{Dir.pwd}/spec/oblisp/tokens/type.spec.rb";
 
 # parser
 require "#{Dir.pwd}/spec/oblisp/parser/parser.spec.rb"
