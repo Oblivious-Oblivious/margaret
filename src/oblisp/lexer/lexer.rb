@@ -181,7 +181,8 @@ class Lexer
             if c == nil
                 break;
             elsif c.matches(RegexMatchers::NEWLINE)
-                self.lineno += 1;
+                # TODO Test out windows `\r\n`
+                @lineno += 1;
             elsif c.matches(RegexMatchers::WHITESPACE)
             elsif c.matches(RegexMatchers::NUMBER)
                 token_table << tokenize_number(c);
