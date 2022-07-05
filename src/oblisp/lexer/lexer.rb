@@ -78,6 +78,101 @@ class Lexer
         print ")";
     end
 
+    def tokenize_integer(c)
+        final_number = "";
+        loop do
+            final_number << c;
+            c = peek_character;
+            break if c == nil or not c.matches(RegexMatchers::NUMBER);
+            c = next_character;
+        end
+        Token.new final_number, Type::INTEGER, lineno;
+    end
+
+    def tokenize_integer_or_float(c)
+        int_token = tokenize_integer(c);
+
+        c = peek_character;
+        if c == '.'
+            tokenize_number_special(int_token.value, RegexMatchers::NUMBER, Type::FLOAT);
+        else
+            int_token;
+        end
+    end
+
+    def tokenize_number_special(final_number, matcher, type)
+        c = next_character;
+        loop do
+            final_number << c;
+            c = peek_character;
+            break if c == nil or not c.matches(matcher)
+            c = next_character;
+        end
+        Token.new final_number, type, lineno;
+    end
+
+    def tokenize_number(c)
+        final_number = c;
+        if c == '0'
+            c = next_character;
+            final_number << c.downcase;
+            if c == '.'
+                tokenize_number_special(final_number, RegexMatchers::NUMBER, Type::FLOAT);
+            elsif c == 'b' or c == 'B'
+                tokenize_number_special(final_number, RegexMatchers::BINARY, Type::BINARY);
+            elsif c == 'x' or c == 'X'
+                tokenize_number_special(final_number, RegexMatchers::HEXADECIMAL, Type::HEXADECIMAL);
+            elsif c == 'o' or c == 'O'
+                tokenize_number_special(final_number, RegexMatchers::OCTAL, Type::OCTAL);
+            else
+                error "expected fraction part after numeric literal";
+            end
+        else
+            tokenize_integer_or_float(c);
+        end
+    end
+
+    def check_for_keyword(final_identifier)
+        if final_identifier.matches(RegexMatchers::KEYWORDS)
+            if final_identifier == "self"
+                Token.new final_identifier, Type::SELF, lineno;
+            else
+                Token.new final_identifier, Type::SUPER, lineno;
+            end
+        else
+            Token.new final_identifier, Type::IDENTIFIER, lineno;
+        end
+    end
+
+    def tokenize_identifier(c)
+        final_identifier = "";
+
+        loop do
+            final_identifier << c;
+            c = peek_character;
+            break if c == nil or not (c.matches(RegexMatchers::NUMBER) or c == '_' or c.matches(RegexMatchers::LETTER))
+            c = next_character;
+        end
+
+        check_for_keyword(final_identifier);
+    end
+
+    def tokenize_string(c)
+        final_string = c;
+        c = next_character;
+        while not c.matches(RegexMatchers::QUOTE)
+            final_string << c;
+            c = next_character;
+            if c.matches(RegexMatchers::NEWLINE)
+                @lineno += 1;
+            elsif c == nil
+                return error "unterminated string literal";
+            end
+        end
+        final_string << c;
+        Token.new final_string, Type::STRING, lineno;
+    end
+
     def make_tokens
         token_table = [];
 
@@ -89,104 +184,15 @@ class Lexer
                 self.lineno += 1;
             elsif c.matches(RegexMatchers::WHITESPACE)
             elsif c.matches(RegexMatchers::NUMBER)
-                final_number = c;
-                if c == '0'
-                    c = next_character;
-                    if c == '.'
-                        final_number << c;
-                        c = next_character;
-                        while c != nil and c.matches(RegexMatchers::NUMBER)
-                            final_number << c;
-                            c = next_character;
-                        end
-                        token_table << (Token.new final_number, Type::FLOAT, lineno);
-                    elsif c == 'b' or c == 'B'
-                        final_number << c.downcase;
-                        c = next_character;
-                        while c != nil and c.matches(RegexMatchers::BINARY)
-                            final_number << c;
-                            c = next_character;
-                        end
-                        c = prev_character;
-                        token_table << (Token.new final_number, Type::BINARY, lineno);
-                    elsif c == 'x' or c == 'X'
-                        final_number << c.downcase;
-                        c = next_character;
-                        while c != nil and c.matches(RegexMatchers::HEXADECIMAL)
-                            final_number << c;
-                            c = next_character;
-                        end
-                        c = prev_character;
-                        token_table << (Token.new final_number, Type::HEXADECIMAL, lineno);
-                    elsif c == 'o' or c == 'O'
-                        final_number << c.downcase;
-                        c = next_character;
-                        while c != nil and c.matches(RegexMatchers::OCTAL)
-                            final_number << c;
-                            c = next_character;
-                        end
-                        c = prev_character;
-                        token_table << (Token.new final_number, Type::OCTAL, lineno);
-                    else
-                        return self.error "expected fraction part after numeric literal";
-                    end
-                else
-                    actual_type = Type::INTEGER;
-                    final_number = c;
-                    c = next_character;
-                    while c != nil and c.matches(RegexMatchers::NUMBER)
-                        final_number << c;
-                        c = next_character;
-                    end
-
-                    if c == '.'
-                        final_number << c;
-                        c = next_character;
-                        while c != nil and c.matches(RegexMatchers::NUMBER)
-                            final_number << c;
-                            c = next_character;
-                        end
-                        actual_type = Type::FLOAT;
-                    end
-                    c = prev_character;
-                    token_table << (Token.new final_number, actual_type, lineno);
-                end
+                token_table << tokenize_number(c);
             elsif c.matches(RegexMatchers::LETTER) or c == '_'
-                final_identifier = c;
-                c = next_character;
-                while c != nil and (c.matches(RegexMatchers::NUMBER) or c == '_' or c.matches(RegexMatchers::LETTER))
-                    final_identifier << c;
-                    c = next_character;
-                end
-                c = prev_character;
-
-                if final_identifier.matches(RegexMatchers::KEYWORDS)
-                    if final_identifier == "self"
-                        token_table << (Token.new final_identifier, Type::SELF, lineno);
-                    else
-                        token_table << (Token.new final_identifier, Type::SUPER, lineno);
-                    end
-                else
-                    token_table << (Token.new final_identifier, Type::IDENTIFIER, lineno);
-                end
+                token_table << tokenize_identifier(c);
             elsif c.matches(RegexMatchers::MESSAGE_SYMBOL)
                 token_table << (Token.new c, Type::MESSAGE_SYMBOL, lineno);
             elsif c.matches(RegexMatchers::SYNTAX_SYMBOL)
                 token_table << (Token.new c, Type::SYNTAX_SYMBOL, lineno);
             elsif c.matches(RegexMatchers::QUOTE)
-                final_string = c;
-                c = next_character;
-                while not c.matches(RegexMatchers::QUOTE)
-                    final_string << c;
-                    c = next_character;
-                    if c.matches(RegexMatchers::NEWLINE)
-                        self.lineno += 1;
-                    elsif c == nil
-                        return self.error "unterminated string literal";
-                    end
-                end
-                final_string << c;
-                token_table << (Token.new final_string, Type::STRING, lineno);
+                token_table << tokenize_string(c);
             end
         end
 
