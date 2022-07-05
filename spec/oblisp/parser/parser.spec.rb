@@ -173,7 +173,7 @@ describe Parser do
         parse("({a: 1, b: 2, c: 3})");
         parse("({:a => 1 :b => 2 :c => 3})");
         parse("({:a => (self a) :b => (super b) :c => 3})");
-        parse(%Q{({"k1 => "v1" "k2" => "v2" "k3" => "v3"})});
+        parse(%Q{({"k1" => "v1" "k2" => "v2" "k3" => "v3"})});
     end
 
     it "parses symbol literals" do
