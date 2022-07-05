@@ -201,13 +201,11 @@ class Lexer
         end
     end
 
-    def prev_token
-        self.current_token_pos -= 1;
-
-        if self.current_token_pos == -1
-            Token.new "eof", "", lineno;
+    def peek_token
+        if token_pos+1 >= token_table.size
+            Token.new "eof", Type::EOF, lineno;
         else
-            token_table[current_token_pos];
+            token_table[token_pos+1];
         end
     end
 end
