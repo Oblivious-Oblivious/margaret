@@ -36,13 +36,13 @@ class String
 end
 
 class Lexer
-    attr_accessor :filename, :text, :pos, :current_token_pos, :lineno, :token_table;
+    attr_accessor :filename, :text, :pos, :token_pos, :lineno, :token_table;
 
     def initialize(filename, text)
         @filename = filename;
         @text = text;
         @pos = -1;
-        @current_token_pos = -1;
+        @token_pos = -1;
         @lineno = 1;
     end
 
@@ -52,7 +52,7 @@ class Lexer
     end
 
     def next_character
-        self.pos += 1;
+        @pos += 1;
 
         if pos < text.size
             text[pos];
@@ -62,7 +62,7 @@ class Lexer
     end
 
     def prev_character
-        self.pos -= 1;
+        @pos -= 1;
         text[pos];
     end
 
@@ -204,12 +204,12 @@ class Lexer
     end
 
     def next_token
-        self.current_token_pos += 1;
+        @token_pos += 1;
 
-        if current_token_pos >= token_table.size
-            Token.new "eof", "", lineno;
+        if token_pos >= token_table.size
+            Token.new "eof", Type::EOF, lineno;
         else
-            token_table[current_token_pos];
+            token_table[token_pos];
         end
     end
 
