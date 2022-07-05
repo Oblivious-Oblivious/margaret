@@ -2,7 +2,7 @@ def parse(code)
     l = Lexer.new "file.obl", code.chars;
     l.make_tokens;
     p = Parser.new l;
-    expect(p.analyse_syntax).to eq "Compilation #{'successful'.green()}";
+    expect(p.analyse_syntax).to eq %Q{Compilation #{"successful".green()}};
 end
 
 def error(code, error_message)
@@ -157,13 +157,13 @@ describe Parser do
     end
 
     it "parses string literals" do
-        parse("(\"hello\" puts)");
+        parse(%Q{("hello" puts)});
     end
 
     it "parses tuple literals" do
         parse("([])");
         parse("([41 42])");
-        parse("([42 \"str\" var])");
+        parse(%Q{([42 "str" var])});
         error("([)", "missing closing bracket on tuple");
         error("(])", "missing closing parenthesis on list");
     end
@@ -173,7 +173,7 @@ describe Parser do
         parse("({a: 1, b: 2, c: 3})");
         parse("({:a => 1 :b => 2 :c => 3})");
         parse("({:a => (self a) :b => (super b) :c => 3})");
-        parse("({'k1' => 'v1' 'k2' => 'v2' 'k3' => 'v3'})");
+        parse(%Q{({"k1 => "v1" "k2" => "v2" "k3" => "v3"})});
     end
 
     it "parses symbol literals" do
