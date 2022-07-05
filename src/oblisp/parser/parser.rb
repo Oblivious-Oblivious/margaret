@@ -14,11 +14,10 @@ class Parser
     end
 
     def peek_token
-        peek = lexer.next_token;
-        lexer.prev_token;
+        @token = lexer.peek_token;
         # print "peeked #{peek} at ";
         # p caller[0].scan(/\d+/).first;
-        peek;
+        # @token;
     end
 
     def error(message)
