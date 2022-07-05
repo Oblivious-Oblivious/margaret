@@ -1,18 +1,19 @@
 # oblisp
 
-TODO: Write a description here
+TODO Complete
+Write a description here
 
 ## Installation
 
-#TODO Write installation instructions
+Write installation instructions
 
 ## Usage
 
-TODO: Write usage instructions here
+Write usage instructions here
 
 ## Development
 
-TODO: Write development instructions here
+Write development instructions here
 
 ## Contributing
 
