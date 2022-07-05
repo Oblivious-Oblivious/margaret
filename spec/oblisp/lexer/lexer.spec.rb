@@ -44,18 +44,6 @@ describe Lexer do
         end
     end
 
-    context "#prev_character" do
-        it "goes back to a previous character in the list" do
-            l = Lexer.new "file.obl", "(42 factorial)".chars;
-
-            c = l.next_character;
-            c = l.next_character;
-            c = l.next_character;
-
-            expect(c).to eq "2";
-        end
-    end
-
     context "#peek_character" do
         it "peeks the next character from the list" do
             l = Lexer.new "file.obl", "(42 factorial)".chars;
