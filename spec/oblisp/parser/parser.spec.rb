@@ -39,11 +39,6 @@ describe Parser do
         expect(p.next_token.value).to eq ".";
         expect(p.next_token.value).to eq ")";
         expect(p.next_token.value).to eq "eof";
-        expect(p.prev_token.value).to eq ")";
-        expect(p.prev_token.value).to eq ".";
-        expect(p.prev_token.value).to eq "factorial";
-        expect(p.prev_token.value).to eq "42";
-        expect(p.prev_token.value).to eq "(";
     end
 
     it "peeks on top of the token table" do

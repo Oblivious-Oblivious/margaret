@@ -13,13 +13,6 @@ class Parser
         # @token;
     end
 
-    def prev_token
-        # print "undid #{@token} at ";
-        @token = lexer.prev_token;
-        # p caller[0].scan(/\d+/).first;
-        # @token;
-    end
-
     def peek_token
         peek = lexer.next_token;
         lexer.prev_token;
