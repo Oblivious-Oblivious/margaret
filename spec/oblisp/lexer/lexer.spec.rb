@@ -63,7 +63,10 @@ describe Lexer do
             expect("\n".matches(RegexMatchers::NEWLINE)).to be true;
             expect("9".matches(RegexMatchers::NUMBER)).to be true;
             expect("k".matches(RegexMatchers::LETTER)).to be true;
-            expect("?".matches(RegexMatchers::MESSAGE_SYMBOL)).to be true;
+            expect("+".matches(RegexMatchers::MESSAGE_SYMBOL)).to be true;
+            expect("?".matches(RegexMatchers::ID_SYMBOL)).to be true;
+            expect("!".matches(RegexMatchers::ID_SYMBOL)).to be true;
+            expect("{".matches(RegexMatchers::SYNTAX_SYMBOL)).to be true;
             expect("'".matches(RegexMatchers::QUOTE)).to be true;
             expect("self".matches(RegexMatchers::KEYWORDS)).to be true;
             expect("super".matches(RegexMatchers::KEYWORDS)).to be true;
@@ -85,10 +88,10 @@ describe Lexer do
         end
 
         it "tokenizes symbols" do
-            l = Lexer.new "file.obl", "(!@$%^&*)".chars;
+            l = Lexer.new "file.obl", "(@$%^&*)".chars;
             tokens = l.make_tokens;
-            expect(tokens.size).to eq 9;
-            expect(tokens[3].value).to eq "$";
+            expect(tokens.size).to eq 8;
+            expect(tokens[3].value).to eq "%";
         end
 
         it "tokenizes integers" do

@@ -5,7 +5,8 @@ describe Type do
 
     it "contains message normal and syntax symbols" do
         expect(Type::MESSAGE_SYMBOL).to eq 1;
-        expect(Type::SYNTAX_SYMBOL).to eq 2;
+        expect(Type::ID_SYMBOL).to eq 2;
+        expect(Type::SYNTAX_SYMBOL).to eq 3;
     end
 
     it "contains all terminal literal types" do
