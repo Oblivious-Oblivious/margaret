@@ -60,9 +60,12 @@ class Lexer
         end
     end
 
-    def prev_character
-        @pos -= 1;
-        text[pos];
+    def peek_character
+        if pos+1 < text.size
+            text[pos+1];
+        else
+            nil;
+        end
     end
 
     def print_token_table

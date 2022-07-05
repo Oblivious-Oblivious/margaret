@@ -51,9 +51,8 @@ describe Lexer do
             c = l.next_character;
             c = l.next_character;
             c = l.next_character;
-            c = l.prev_character;
 
-            expect(c).to eq "4";
+            expect(c).to eq "2";
         end
     end
 
