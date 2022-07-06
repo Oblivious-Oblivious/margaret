@@ -17,11 +17,11 @@ describe Parser do
         l = Lexer.new "file.obl", "(42 factorial)".chars;
         l.make_tokens;
         p = Parser.new l;
-        expect(p.next_token.value).to eq "(";
-        expect(p.next_token.value).to eq "42";
-        expect(p.next_token.value).to eq "factorial";
-        expect(p.next_token.value).to eq ")";
-        expect(p.next_token.value).to eq "eof";
+        expect(p.consume_next.value).to eq "(";
+        expect(p.consume_next.value).to eq "42";
+        expect(p.consume_next.value).to eq "factorial";
+        expect(p.consume_next.value).to eq ")";
+        expect(p.consume_next.value).to eq "eof";
     end
 
     it "peeks on top of the token table" do
@@ -46,7 +46,7 @@ describe Parser do
         l = Lexer.new "file.obl", "(42 factorial)".chars;
         l.make_tokens;
         p = Parser.new l;
-        p.next_token;
+        p.consume_next;
 
         begin
             p.error "This is a random syntax error";
