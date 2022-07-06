@@ -102,6 +102,11 @@ class Lexer
     end
 
     def tokenize_number_special(final_number, matcher, type)
+        # Fraction part
+        c = next_character;
+        final_number << c.downcase;
+
+        # Rest of number
         c = next_character;
         loop do
             final_number << c;
@@ -115,8 +120,7 @@ class Lexer
     def tokenize_number(c)
         final_number = c;
         if c == '0'
-            c = next_character;
-            final_number << c.downcase;
+            c = peek_character;
             if c == '.'
                 tokenize_number_special(final_number, RegexMatchers::NUMBER, Type::FLOAT);
             elsif c == 'b' or c == 'B'
@@ -126,7 +130,7 @@ class Lexer
             elsif c == 'o' or c == 'O'
                 tokenize_number_special(final_number, RegexMatchers::OCTAL, Type::OCTAL);
             else
-                error "expected fraction part after numeric literal";
+                Token.new "0", Type::INTEGER, lineno;
             end
         else
             tokenize_integer_or_float(c);

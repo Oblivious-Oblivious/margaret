@@ -103,6 +103,15 @@ describe Lexer do
             expect(tokens[1].line_number).to eq 1;
         end
 
+        it "tokenizes zero" do
+            l = Lexer.new "file.obl", "(0 is_zero?)".chars;
+            tokens = l.make_tokens;
+
+            expect(tokens[1].value).to eq "0";
+            expect(tokens[1].type).to eq Type::INTEGER;
+            expect(tokens[1].line_number).to eq 1;
+        end
+
         it "draws an error when trying to tokenize an integer starting with 0" do
             l = Lexer.new "file.obl", "(042 msg)".chars;
             tokens = l.make_tokens;
