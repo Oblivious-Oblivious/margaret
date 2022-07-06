@@ -3,38 +3,38 @@ require "rspec/autorun";
 # All source files
 Dir["#{Dir.pwd}/src/oblisp/**/*.rb"].each { |f| require f };
 
-# lexer
-require "#{Dir.pwd}/spec/oblisp/lexer/file_loader.spec.rb";
-require "#{Dir.pwd}/spec/oblisp/lexer/lexer.spec.rb";
+# oblisp
+require_relative "oblisp/version.spec.rb";
 
-# tokens
-require "#{Dir.pwd}/spec/oblisp/tokens/token.spec.rb";
-require "#{Dir.pwd}/spec/oblisp/tokens/type.spec.rb";
+# lexer
+require_relative "oblisp/lexer/file_loader.spec.rb";
+require_relative "oblisp/lexer/lexer.spec.rb";
 
 # parser
-require "#{Dir.pwd}/spec/oblisp/parser/parser.spec.rb"
-require "#{Dir.pwd}/spec/oblisp/parser/arithmetic.spec.rb"
-require "#{Dir.pwd}/spec/oblisp/parser/assignments.spec.rb"
-require "#{Dir.pwd}/spec/oblisp/parser/bitwise.spec.rb"
-require "#{Dir.pwd}/spec/oblisp/parser/blocks.spec.rb"
-require "#{Dir.pwd}/spec/oblisp/parser/booleans.spec.rb"
-require "#{Dir.pwd}/spec/oblisp/parser/characters.spec.rb"
-require "#{Dir.pwd}/spec/oblisp/parser/classes.spec.rb"
-require "#{Dir.pwd}/spec/oblisp/parser/conditionals.spec.rb"
-require "#{Dir.pwd}/spec/oblisp/parser/constants.spec.rb"
-require "#{Dir.pwd}/spec/oblisp/parser/conversions.spec.rb"
-require "#{Dir.pwd}/spec/oblisp/parser/date_time.spec.rb"
-require "#{Dir.pwd}/spec/oblisp/parser/hashes.spec.rb"
-require "#{Dir.pwd}/spec/oblisp/parser/identifiers.spec.rb"
-require "#{Dir.pwd}/spec/oblisp/parser/intervals.spec.rb"
-require "#{Dir.pwd}/spec/oblisp/parser/iterations.spec.rb"
-require "#{Dir.pwd}/spec/oblisp/parser/lists.spec.rb"
-require "#{Dir.pwd}/spec/oblisp/parser/messages.spec.rb"
-require "#{Dir.pwd}/spec/oblisp/parser/meta_evaluation.spec.rb"
-require "#{Dir.pwd}/spec/oblisp/parser/numeric.spec.rb"
-require "#{Dir.pwd}/spec/oblisp/parser/strings.spec.rb"
-require "#{Dir.pwd}/spec/oblisp/parser/symbols.spec.rb"
-require "#{Dir.pwd}/spec/oblisp/parser/tuples.spec.rb"
+require_relative "oblisp/parser/parser.spec.rb"
+require_relative "oblisp/parser/arithmetic.spec.rb"
+require_relative "oblisp/parser/assignments.spec.rb"
+require_relative "oblisp/parser/bitwise.spec.rb"
+require_relative "oblisp/parser/blocks.spec.rb"
+require_relative "oblisp/parser/booleans.spec.rb"
+require_relative "oblisp/parser/characters.spec.rb"
+require_relative "oblisp/parser/classes.spec.rb"
+require_relative "oblisp/parser/conditionals.spec.rb"
+require_relative "oblisp/parser/constants.spec.rb"
+require_relative "oblisp/parser/conversions.spec.rb"
+require_relative "oblisp/parser/date_time.spec.rb"
+require_relative "oblisp/parser/hashes.spec.rb"
+require_relative "oblisp/parser/identifiers.spec.rb"
+require_relative "oblisp/parser/intervals.spec.rb"
+require_relative "oblisp/parser/iterations.spec.rb"
+require_relative "oblisp/parser/lists.spec.rb"
+require_relative "oblisp/parser/messages.spec.rb"
+require_relative "oblisp/parser/meta_evaluation.spec.rb"
+require_relative "oblisp/parser/numeric.spec.rb"
+require_relative "oblisp/parser/strings.spec.rb"
+require_relative "oblisp/parser/symbols.spec.rb"
+require_relative "oblisp/parser/tuples.spec.rb"
 
-# oblisp
-require "#{Dir.pwd}/spec/oblisp/version.spec.rb";
+# tokens
+require_relative "oblisp/tokens/token.spec.rb";
+require_relative "oblisp/tokens/type.spec.rb";
