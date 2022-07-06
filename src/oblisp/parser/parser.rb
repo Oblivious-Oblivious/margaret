@@ -6,7 +6,7 @@ class Parser
         @token = nil;
     end
 
-    def next_token
+    def consume_next
         @token = lexer.next_token;
         # print "consumed #{@token} at ";
         # p caller[0].scan(/\d+/).first;
@@ -35,18 +35,18 @@ class Parser
     def first_unit
         list;
 
-        if next_token == "eof"
             # TODO first_unit
+        if consume_next == "eof"
         else
             error "reached end of program";
         end
     end
 
     def list
-        if next_token == "("
             translation_unit;
-            if next_token == ")"
                 # TODO list
+        if consume_next == "("
+            if consume_next == ")"
             else
                 error "missing closing parenthesis on list";
             end
@@ -139,7 +139,7 @@ class Parser
     def keyword_list
         terminal_IDENTIFIER;
         if peek_token == ":"
-            next_token;
+            consume_next;
             translation_unit;
             keyword_list;
         end
@@ -176,47 +176,47 @@ class Parser
 
     def sign
         if peek_token == '+' or peek_token == '-'
-            next_token;
+            consume_next;
         end
     end
 
     def positive_base_ten_literal
         if peek_token.type == Type::INTEGER
-            next_token;
+            consume_next;
             # TODO integer
         elsif peek_token.type == Type::FLOAT
-            next_token;
+            consume_next;
             # TODO float
         end
     end
 
     def alternate_base_literal
         if peek_token.type == Type::BINARY
-            next_token;
+            consume_next;
             # TODO binary
         end
         if peek_token.type == Type::HEXADECIMAL
-            next_token;
+            consume_next;
             # TODO hexadecimal
         end
         if peek_token.type == Type::OCTAL
-             next_token;
+             consume_next;
             # TODO octal
         end
     end
     
     def string_literal
         if peek_token.type == Type::STRING
-            next_token;
+            consume_next;
             # TODO string
         end
     end
 
     def tuple_literal
         if peek_token == "["
-            next_token;
+            consume_next;
             tuple_items;
-            if next_token == "]"
+            if consume_next == "]"
                 # TODO tuple
             else
                 error "missing closing bracket on tuple";
@@ -234,9 +234,9 @@ class Parser
 
     def hash_literal
         if peek_token == "{"
-            next_token;
+            consume_next;
             hash_list;
-            if next_token == "}"
+            if consume_next == "}"
                 # TODO hash
             else
                 error "missing closing curly brace on hash";
@@ -255,15 +255,15 @@ class Parser
     def hash
         if peek_token.type == Type::IDENTIFIER
             terminal_IDENTIFIER;
-            if next_token == ":"
+            if consume_next == ":"
                 translation_unit;
             else
                 error "json style keys should be denoted by colons";
             end
         elsif peek_token == ":"
             symbol_literal;
-            if next_token == "="
-                if next_token == ">"
+            if consume_next == "="
+                if consume_next == ">"
                     translation_unit;
                 else
                     error "hash keys should be denoted by arrow symbols";
@@ -273,8 +273,8 @@ class Parser
             end
         elsif peek_token.type == Type::STRING
             string_literal;
-            if next_token == "="
-                if next_token == ">"
+            if consume_next == "="
+                if consume_next == ">"
                     translation_unit;
                 else
                     error "hash keys should be denoted by arrow symbols";
@@ -288,44 +288,44 @@ class Parser
 
     def symbol_literal
         if peek_token == ":"
-            next_token;
+            consume_next;
             terminal_IDENTIFIER;
         end
     end
 
     def terminal_SELF
         if peek_token.type == Type::SELF
-            next_token;
+            consume_next;
         end
     end
 
     def terminal_SUPER
         if peek_token.type == Type::SUPER
-            next_token;
+            consume_next;
         end
     end
 
     def terminal_IDENTIFIER
         if peek_token.type == Type::IDENTIFIER
-            next_token;
+            consume_next;
         end
     end
 
     def terminal_MESSAGE_SYMBOL
         if peek_token.type == Type::MESSAGE_SYMBOL
-            next_token;
+            consume_next;
         end
     end
 
     def terminal_IDENTIFIER_SYMBOL
         if peek_token.type == Type::ID_SYMBOL
-            next_token;
+            consume_next;
         end
     end
 
     def terminal_SEMICOLON
         if peek_token == ";"
-            next_token;
+            consume_next;
         end
     end
 end
