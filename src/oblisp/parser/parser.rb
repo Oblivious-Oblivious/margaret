@@ -36,7 +36,7 @@ class Parser
         list;
 
         if next_token == "eof"
-            # TODO
+            # TODO first_unit
         else
             error "reached end of program";
         end
@@ -46,7 +46,7 @@ class Parser
         if next_token == "("
             translation_unit;
             if next_token == ")"
-                # TODO
+                # TODO list
             else
                 error "missing closing parenthesis on list";
             end
@@ -64,7 +64,7 @@ class Parser
             expression;
             translation_unit;
         else
-            # TODO
+            # TODO translation_unit
         end
     end
 
