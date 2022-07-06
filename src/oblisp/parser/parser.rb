@@ -71,10 +71,10 @@ class Parser
     def expression
         current_token = peek_token;
         if current_token == peek_token
-            object;
+            message;
         end
         if current_token == peek_token
-            message;
+            object;
         end
         if current_token == peek_token
             literal;
