@@ -143,6 +143,8 @@ class Parser
             translation_unit;
             keyword_list;
         end
+
+        terminal_SEMICOLON;
     end
 
     def literal
@@ -320,6 +322,9 @@ class Parser
             next_token;
         end
     end
+
+    def terminal_SEMICOLON
+        if peek_token == ";"
             next_token;
         end
     end
