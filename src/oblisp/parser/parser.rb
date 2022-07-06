@@ -112,7 +112,12 @@ class Parser
     end
 
     def unary_selector
-        identifier;
+        current_token = peek_token;
+        terminal_IDENTIFIER;
+
+        if current_token != peek_token
+            terminal_IDENTIFIER_SYMBOL;
+        end
     end
 
     def binary_message
@@ -311,7 +316,10 @@ class Parser
     end
 
     def terminal_IDENTIFIER_SYMBOL
-        if peek_token == "?" or peek_token == "!"
+        if peek_token.type == Type::ID_SYMBOL
+            next_token;
+        end
+    end
             next_token;
         end
     end
