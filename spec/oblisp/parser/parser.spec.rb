@@ -51,6 +51,7 @@ describe Parser do
         begin
             p.error "This is a random syntax error";
         rescue Exception => e
+            expect(e.message).to eq "This is a random syntax error";
         end
     end
 end
