@@ -84,7 +84,7 @@ class Parser
     def object
         current_token = peek_token;
         if current_token == peek_token
-            identifier;
+            terminal_IDENTIFIER;
         end
         if current_token == peek_token
             terminal_SELF;
@@ -132,7 +132,7 @@ class Parser
     end
 
     def keyword_list
-        identifier;
+        terminal_IDENTIFIER;
         if peek_token == ":"
             next_token;
             translation_unit;
@@ -247,7 +247,7 @@ class Parser
 
     def hash
         if peek_token.type == Type::IDENTIFIER
-            identifier;
+            terminal_IDENTIFIER;
             if next_token == ":"
                 translation_unit;
             else
@@ -282,16 +282,7 @@ class Parser
     def symbol_literal
         if peek_token == ":"
             next_token;
-            identifier;
-        end
-    end
-
-    def identifier
-        current_token = peek_token;
-        terminal_ID;
-
-        if current_token != peek_token
-            terminal_IDENTIFIER_SYMBOL;
+            terminal_IDENTIFIER;
         end
     end
 
@@ -307,7 +298,7 @@ class Parser
         end
     end
 
-    def terminal_ID
+    def terminal_IDENTIFIER
         if peek_token.type == Type::IDENTIFIER
             next_token;
         end
