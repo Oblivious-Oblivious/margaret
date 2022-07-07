@@ -49,7 +49,7 @@ class Parser
     def list
         terminal_LITERAL_BACKQUOTE;
         if consume_next == "("
-            translation_unit;
+            translation_unit_list;
             if consume_next == ")"
                 # TODO list
             else
@@ -60,35 +60,58 @@ class Parser
         end
     end
 
-    def translation_unit
-        terminal_LITERAL_BACKQUOTE;
-        if peek_token == "("
-            list;
+    def translation_unit_list
+        current_position = token_table_pos;
+        translation_unit;
+        while current_position != token_table_pos
+            current_position = token_table_pos;
             translation_unit;
+        end
+    end
+
+    def translation_unit
+        if peek_token == "`" or peek_token == "("
+            list;
         # TODO Fix grammar ambiguity
         elsif peek_token != ")" and peek_token != "]" and peek_token != "}" and peek_token != "eof"
-            expression;
-            translation_unit;
+            statement;
         else
             # TODO translation_unit
         end
     end
 
-    def expression
+    def statement
+        assignment_message;
+        expression_list;
+    end
+
+    def assignment_message
         current_position = token_table_pos;
-        if current_position == token_table_pos
-            message;
-        end
-        if current_position == token_table_pos
-            object;
-        end
-        if current_position == token_table_pos
-            literal;
+        terminal_IDENTIFIER;
+        if current_position != token_table_pos;
+            terminal_EQUALS;
         end
     end
 
-    def object
+    def expression_list
         current_position = token_table_pos;
+        expression;
+        while current_position != token_table_pos
+            current_position = token_table_pos;
+            expression;
+        end
+    end
+
+    def expression
+        operand;
+        message_list;
+    end
+
+    def operand
+        current_position = token_table_pos;
+        if current_position == token_table_pos
+            literal;
+        end
         if current_position == token_table_pos
             terminal_IDENTIFIER;
         end
@@ -97,6 +120,15 @@ class Parser
         end
         if current_position == token_table_pos
             terminal_SUPER
+        end
+    end
+
+    def message_list
+        current_position = token_table_pos;
+        message;
+        while current_position != token_table_pos;
+            current_position = token_table_pos;
+            message;
         end
     end
 
@@ -231,7 +263,7 @@ class Parser
     
     def tuple_items
         current_position = token_table_pos;
-        translation_unit;
+        translation_unit_list;
         if current_position != token_table_pos;
             tuple_items;
         end
@@ -261,7 +293,7 @@ class Parser
         if peek_token.type == Type::IDENTIFIER
             terminal_IDENTIFIER;
             if consume_next == ":"
-                translation_unit;
+                translation_unit_list;
             else
                 error "json style keys should be denoted by colons";
             end
@@ -269,14 +301,14 @@ class Parser
             symbol_literal;
             # TODO Turn this into a regular binary message for symbols and strings
             if consume_next == "=>"
-                translation_unit;
+                translation_unit_list;
             else
                 error "hash keys should be denoted by arrow symbols";
             end
         elsif peek_token.type == Type::STRING
             string_literal;
             if consume_next == "=>"
-                translation_unit;
+                translation_unit_list;
             else
                 error "hash keys should be denoted by arrow symbols";
             end
@@ -329,6 +361,12 @@ class Parser
 
     def terminal_SEMICOLON
         if peek_token == ";"
+            consume_next;
+        end
+    end
+
+    def terminal_EQUALS
+        if peek_token == "="
             consume_next;
         end
     end
