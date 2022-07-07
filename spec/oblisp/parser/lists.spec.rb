@@ -11,6 +11,9 @@ describe Parser do
 
         it "parses multiple lists as translation units" do
             parse("(())");
+            parse("((()))");
+            parse("(() () () ())");
+            parse("((()) ())");
             error("(()", "missing closing parenthesis on list");
             error("())", "reached end of program");
         end
@@ -20,7 +23,6 @@ describe Parser do
             parse("(42 43 44)");
             parse("(42 () 43 ())");
             parse("(42 (43) 44 ())");
-            parse("(() () () ())");
             parse("((((()))))");
         end
         
