@@ -26,6 +26,7 @@ class Parser
 
     def error(message)
         raise StandardError.new message;
+        # TODO Track line numbers to each error
         # TODO Gather a list of errors and output after parsing all code
         # puts "#{lexer.filename}:#{token.line_number}: #{'error'.red} #{message}";
         # puts "Compilation #{'failed'.red}";
