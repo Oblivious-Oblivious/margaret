@@ -20,6 +20,10 @@ class Parser
         # @token;
     end
 
+    def token_table_pos
+        lexer.token_pos;
+    end
+
     def error(message)
         raise StandardError.new message;
         # TODO Gather a list of errors and output after parsing all code
@@ -71,40 +75,40 @@ class Parser
     end
 
     def expression
-        current_token = peek_token;
-        if current_token == peek_token
+        current_position = token_table_pos;
+        if current_position == token_table_pos
             message;
         end
-        if current_token == peek_token
+        if current_position == token_table_pos
             object;
         end
-        if current_token == peek_token
+        if current_position == token_table_pos
             literal;
         end
     end
 
     def object
-        current_token = peek_token;
-        if current_token == peek_token
+        current_position = token_table_pos;
+        if current_position == token_table_pos
             terminal_IDENTIFIER;
         end
-        if current_token == peek_token
+        if current_position == token_table_pos
             terminal_SELF;
         end
-        if current_token == peek_token
+        if current_position == token_table_pos
             terminal_SUPER
         end
     end
 
     def message
-        current_token = peek_token;
-        if current_token == peek_token
+        current_position = token_table_pos;
+        if current_position == token_table_pos
             unary_message;
         end
-        if current_token == peek_token
+        if current_position == token_table_pos
             binary_message;
         end
-        if current_token == peek_token
+        if current_position == token_table_pos
             keyword_message;
         end
     end
@@ -114,18 +118,18 @@ class Parser
     end
 
     def unary_selector
-        current_token = peek_token;
+        current_position = token_table_pos;
         terminal_IDENTIFIER;
 
-        if current_token != peek_token
+        if current_position != token_table_pos;
             terminal_IDENTIFIER_SYMBOL;
         end
     end
 
     def binary_message
-        current_token = peek_token;
+        current_position = token_table_pos;
         binary_selector;
-        if current_token != peek_token
+        if current_position != token_table_pos;
             translation_unit;
         end
     end
@@ -149,23 +153,23 @@ class Parser
     end
 
     def literal
-        current_token = peek_token;
-        if current_token == peek_token
+        current_position = token_table_pos;
+        if current_position == token_table_pos
             base_ten_literal;
         end
-        if current_token == peek_token
+        if current_position == token_table_pos
             alternate_base_literal;
         end
-        if current_token == peek_token
+        if current_position == token_table_pos
             string_literal;
         end
-        if current_token == peek_token
+        if current_position == token_table_pos
             tuple_literal;
         end
-        if current_token == peek_token
+        if current_position == token_table_pos
             hash_literal;
         end
-        if current_token == peek_token
+        if current_position == token_table_pos
             symbol_literal;
         end
     end
@@ -226,9 +230,9 @@ class Parser
     end
     
     def tuple_items
-        current_token = peek_token;
+        current_position = token_table_pos;
         translation_unit;
-        if current_token != peek_token
+        if current_position != token_table_pos;
             tuple_items;
         end
     end
@@ -246,9 +250,9 @@ class Parser
     end
 
     def hash_list
-        current_token = peek_token;
+        current_position = token_table_pos;
         hash;
-        if current_token != peek_token
+        if current_position != token_table_pos;
             hash_list;
         end
     end
