@@ -201,14 +201,8 @@ class Parser
     end
 
     def base_ten_literal
-        sign;
+        terminal_SIGN;
         positive_base_ten_literal;
-    end
-
-    def sign
-        if peek_token == '+' or peek_token == '-'
-            consume_next;
-        end
     end
 
     def positive_base_ten_literal
@@ -327,6 +321,12 @@ class Parser
 
     def terminal_IDENTIFIER_SYMBOL
         if peek_token.type == Type::ID_SYMBOL
+            consume_next;
+        end
+    end
+
+    def terminal_SIGN
+        if peek_token == '+' or peek_token == '-'
             consume_next;
         end
     end
