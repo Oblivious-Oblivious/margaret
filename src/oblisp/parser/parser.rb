@@ -155,7 +155,7 @@ class Parser
         current_position = token_table_pos;
         binary_selector;
         if current_position != token_table_pos;
-            translation_unit;
+            translation_unit_list;
         end
     end
 
@@ -172,7 +172,7 @@ class Parser
         terminal_IDENTIFIER;
         while peek_token == ":"
             consume_next;
-            translation_unit;
+            translation_unit_list;
             terminal_IDENTIFIER;
         end
     end
