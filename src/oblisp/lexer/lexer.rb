@@ -162,6 +162,19 @@ class Lexer
         check_for_keyword(final_identifier);
     end
 
+    def tokenize_message_symbol(c)
+        final_symbol = "";
+
+        loop do
+            final_symbol << c;
+            c = peek_character;
+            break if c == nil or not (c.matches(RegexMatchers::MESSAGE_SYMBOL))
+            c = next_character;
+        end
+
+        Token.new final_symbol, Type::MESSAGE_SYMBOL, lineno;
+    end
+
     def tokenize_string(c)
         final_string = c;
         c = next_character;
@@ -194,7 +207,7 @@ class Lexer
             elsif c.matches(RegexMatchers::LETTER) or c == '_'
                 token_table << tokenize_identifier(c);
             elsif c.matches(RegexMatchers::MESSAGE_SYMBOL)
-                token_table << (Token.new c, Type::MESSAGE_SYMBOL, lineno);
+                token_table << tokenize_message_symbol(c);
             elsif c.matches(RegexMatchers::ID_SYMBOL)
                 token_table << (Token.new c, Type::ID_SYMBOL, lineno);
             elsif c.matches(RegexMatchers::SYNTAX_SYMBOL)

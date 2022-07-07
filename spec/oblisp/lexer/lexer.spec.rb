@@ -88,7 +88,7 @@ describe Lexer do
         end
 
         it "tokenizes symbols" do
-            l = Lexer.new "file.obl", "(@$%^&*)".chars;
+            l = Lexer.new "file.obl", "(@ $ % ^ & *)".chars;
             tokens = l.make_tokens;
             expect(tokens.size).to eq 8;
             expect(tokens[3].value).to eq "%";

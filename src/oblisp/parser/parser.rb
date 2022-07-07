@@ -264,23 +264,15 @@ class Parser
             end
         elsif peek_token == ":"
             symbol_literal;
-            if consume_next == "="
-                if consume_next == ">"
-                    translation_unit;
-                else
-                    error "hash keys should be denoted by arrow symbols";
-                end
+            if consume_next == "=>"
+                translation_unit;
             else
                 error "hash keys should be denoted by arrow symbols";
             end
         elsif peek_token.type == Type::STRING
             string_literal;
-            if consume_next == "="
-                if consume_next == ">"
-                    translation_unit;
-                else
-                    error "hash keys should be denoted by arrow symbols";
-                end
+            if consume_next == "=>"
+                translation_unit;
             else
                 error "hash keys should be denoted by arrow symbols";
             end
