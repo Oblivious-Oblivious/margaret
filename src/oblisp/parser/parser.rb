@@ -77,11 +77,8 @@ class Parser
     end
 
     def assignment_message
-        current_position = token_table_pos;
         terminal_IDENTIFIER;
-        if current_position != token_table_pos;
-            terminal_EQUALS;
-        end
+        terminal_EQUALS;
     end
 
     def expression_list
@@ -141,12 +138,8 @@ class Parser
     end
 
     def unary_selector
-        current_position = token_table_pos;
         terminal_IDENTIFIER;
-
-        if current_position != token_table_pos;
-            terminal_IDENTIFIER_SYMBOL;
-        end
+        terminal_IDENTIFIER_SYMBOL;
     end
 
     def binary_message
