@@ -140,10 +140,10 @@ class Parser
 
     def keyword_list
         terminal_IDENTIFIER;
-        if peek_token == ":"
+        while peek_token == ":"
             consume_next;
             translation_unit;
-            keyword_list;
+            terminal_IDENTIFIER;
         end
 
         terminal_SEMICOLON;
