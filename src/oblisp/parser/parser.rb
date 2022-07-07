@@ -109,6 +109,7 @@ class Parser
     end
 
     def operand
+        # TODO Make sure operand rule emits one production only
         current_position = token_table_pos;
         if current_position == token_table_pos
             literal;
