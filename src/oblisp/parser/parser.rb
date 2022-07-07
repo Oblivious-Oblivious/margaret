@@ -45,6 +45,7 @@ class Parser
     def list
             translation_unit;
                 # TODO list
+        terminal_LITERAL_BACKQUOTE;
         if consume_next == "("
             if consume_next == ")"
             else
@@ -56,6 +57,7 @@ class Parser
     end
 
     def translation_unit
+        terminal_LITERAL_BACKQUOTE;
         if peek_token == "("
             list;
             translation_unit;
@@ -290,6 +292,12 @@ class Parser
         if peek_token == ":"
             consume_next;
             terminal_IDENTIFIER;
+        end
+    end
+
+    def terminal_LITERAL_BACKQUOTE
+        if peek_token == "`"
+            consume_next;
         end
     end
 

@@ -19,6 +19,7 @@ require_relative "oblisp/parser/blocks.spec.rb";
 require_relative "oblisp/parser/booleans.spec.rb";
 require_relative "oblisp/parser/characters.spec.rb";
 require_relative "oblisp/parser/classes.spec.rb";
+require_relative "oblisp/parser/code_as_data.spec.rb";
 require_relative "oblisp/parser/conditionals.spec.rb";
 require_relative "oblisp/parser/constants.spec.rb";
 require_relative "oblisp/parser/conversions.spec.rb";
