@@ -136,6 +136,7 @@ class Parser
 
     def keyword_message
         keyword_list;
+        terminal_SEMICOLON;
     end
 
     def keyword_list
@@ -145,8 +146,6 @@ class Parser
             translation_unit;
             terminal_IDENTIFIER;
         end
-
-        terminal_SEMICOLON;
     end
 
     def literal
