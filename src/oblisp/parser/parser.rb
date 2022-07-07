@@ -56,11 +56,10 @@ class Parser
     end
 
     def translation_unit_list
-        current_position = token_table_pos;
-        translation_unit;
-        while current_position != token_table_pos
+        loop do
             current_position = token_table_pos;
             translation_unit;
+            break if current_position == token_table_pos;
         end
     end
 
@@ -88,11 +87,10 @@ class Parser
     end
 
     def expression_list
-        current_position = token_table_pos;
-        expression;
-        while current_position != token_table_pos
+        loop do
             current_position = token_table_pos;
             expression;
+            break if current_position == token_table_pos;
         end
     end
 
@@ -119,11 +117,10 @@ class Parser
     end
 
     def message_list
-        current_position = token_table_pos;
-        message;
-        while current_position != token_table_pos;
+        loop do
             current_position = token_table_pos;
             message;
+            break if current_position == token_table_pos;
         end
     end
 
@@ -249,10 +246,10 @@ class Parser
     end
     
     def tuple_items
-        current_position = token_table_pos;
-        translation_unit_list;
-        if current_position != token_table_pos;
-            tuple_items;
+        loop do
+            current_position = token_table_pos;
+            translation_unit_list;
+            break if current_position == token_table_pos;
         end
     end
 
@@ -265,10 +262,10 @@ class Parser
     end
 
     def hash_list
-        current_position = token_table_pos;
-        hash;
-        if current_position != token_table_pos;
-            hash_list;
+        loop do
+            current_position = token_table_pos;
+            hash;
+            break if current_position == token_table_pos;
         end
     end
 
