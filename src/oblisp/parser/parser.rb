@@ -24,6 +24,12 @@ class Parser
         lexer.token_pos;
     end
 
+    def ensure_consumption(token, error_message)
+        if consume_next != token
+            error error_message;
+        end
+    end
+
     def error(message)
         raise StandardError.new message;
         # TODO Track line numbers to each error
@@ -39,26 +45,14 @@ class Parser
 
     def first_unit
         list;
-
-        # TODO first_unit
-        if consume_next == "eof"
-        else
-            error "reached end of program";
-        end
+        ensure_consumption "eof", "reached end of program";
     end
 
     def list
         terminal_LITERAL_BACKQUOTE;
-        if consume_next == "("
-            translation_unit_list;
-            if consume_next == ")"
-                # TODO list
-            else
-                error "missing closing parenthesis on list";
-            end
-        else
-            error "missing opening parenthesis on list";
-        end
+        ensure_consumption "(", "missing opening parenthesis on list";        
+        translation_unit_list;
+        ensure_consumption ")", "missing closing parenthesis on list";
     end
 
     def translation_unit_list
@@ -77,7 +71,6 @@ class Parser
         elsif peek_token != ")" and peek_token != "]" and peek_token != "}" and peek_token != "eof"
             statement;
         else
-            # TODO translation_unit
         end
     end
 
@@ -135,6 +128,7 @@ class Parser
     end
 
     def message
+        # TODO Make sure operand rule emits one production only
         current_position = token_table_pos;
         if current_position == token_table_pos
             unary_message;
@@ -187,6 +181,7 @@ class Parser
     end
 
     def literal
+        # TODO Make sure operand rule emits one production only
         current_position = token_table_pos;
         if current_position == token_table_pos
             base_ten_literal;
@@ -222,32 +217,26 @@ class Parser
     def positive_base_ten_literal
         if peek_token.type == Type::INTEGER
             consume_next;
-            # TODO integer
         elsif peek_token.type == Type::FLOAT
             consume_next;
-            # TODO float
         end
     end
 
     def alternate_base_literal
         if peek_token.type == Type::BINARY
             consume_next;
-            # TODO binary
         end
         if peek_token.type == Type::HEXADECIMAL
             consume_next;
-            # TODO hexadecimal
         end
         if peek_token.type == Type::OCTAL
              consume_next;
-            # TODO octal
         end
     end
     
     def string_literal
         if peek_token.type == Type::STRING
             consume_next;
-            # TODO string
         end
     end
 
@@ -255,11 +244,7 @@ class Parser
         if peek_token == "["
             consume_next;
             tuple_items;
-            if consume_next == "]"
-                # TODO tuple
-            else
-                error "missing closing bracket on tuple";
-            end
+            ensure_consumption "]", "missing closing bracket on tuple";
         end
     end
     
@@ -275,11 +260,7 @@ class Parser
         if peek_token == "{"
             consume_next;
             hash_list;
-            if consume_next == "}"
-                # TODO hash
-            else
-                error "missing closing curly brace on hash";
-            end
+            ensure_consumption "}", "missing closing curly brace on hash";
         end
     end
 
@@ -292,29 +273,21 @@ class Parser
     end
 
     def hash
+        # TODO Turn this into a regular binary message for symbols and strings
         if peek_token.type == Type::IDENTIFIER
             terminal_IDENTIFIER;
-            if consume_next == ":"
-                translation_unit_list;
-            else
-                error "json style keys should be denoted by colons";
-            end
+            ensure_consumption ":", "json style keys should be denoted by colons";
+            translation_unit_list;
         elsif peek_token == ":"
             symbol_literal;
-            # TODO Turn this into a regular binary message for symbols and strings
-            if consume_next == "=>"
-                translation_unit_list;
-            else
-                error "hash keys should be denoted by arrow symbols";
-            end
+            ensure_consumption "=>", "hash keys should be denoted by arrow symbols";
+            translation_unit_list;
         elsif peek_token.type == Type::STRING
             string_literal;
-            if consume_next == "=>"
-                translation_unit_list;
-            else
-                error "hash keys should be denoted by arrow symbols";
-            end
+            ensure_consumption "=>", "hash keys should be denoted by arrow symbols";
+            translation_unit_list;
         else
+            # TODO empty hash
         end
     end
 
