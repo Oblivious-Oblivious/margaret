@@ -66,10 +66,8 @@ class Parser
     def translation_unit
         if peek_token == "`" or peek_token == "("
             list;
-        # TODO Fix grammar ambiguity
-        elsif peek_token != ")" and peek_token != "]" and peek_token != "}" and peek_token != "eof"
-            statement;
         else
+            statement;
         end
     end
 
