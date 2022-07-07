@@ -37,7 +37,7 @@ describe Parser do
             parse("(x = arr index_of: 3 if_absent: -1)");
             parse("(x = arr occurrences_of: 3)");
             parse("(arr each: [(a) (a puts)])");
-            parse("(b = arr conform: [(a), ((a >= 1) && (a <= 4))])");
+            parse("(b = arr conform: [(a) ((a >= 1) && (a <= 4))])");
             parse("(x = arr select: [(a) (a > 2)])");
             parse("(x = arr reject: [(a) (a < 2)])");
             parse("(x = arr collect: [(a) (a + a)])");
