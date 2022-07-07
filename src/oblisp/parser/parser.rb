@@ -35,7 +35,7 @@ class Parser
     def first_unit
         list;
 
-            # TODO first_unit
+        # TODO first_unit
         if consume_next == "eof"
         else
             error "reached end of program";
@@ -43,11 +43,11 @@ class Parser
     end
 
     def list
-            translation_unit;
-                # TODO list
         terminal_LITERAL_BACKQUOTE;
         if consume_next == "("
+            translation_unit;
             if consume_next == ")"
+                # TODO list
             else
                 error "missing closing parenthesis on list";
             end
@@ -264,6 +264,7 @@ class Parser
             end
         elsif peek_token == ":"
             symbol_literal;
+            # TODO Turn this into a regular binary message for symbols and strings
             if consume_next == "=>"
                 translation_unit;
             else
