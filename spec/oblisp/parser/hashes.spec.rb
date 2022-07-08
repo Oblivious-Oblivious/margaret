@@ -3,7 +3,6 @@ require_relative "_parser_helpers";
 describe Parser do
     context "on associations hashes" do
         it "parses hash literals" do
-            # TODO hash literals
             parse("({})");
             parse("({a: {}, b: {}})");
             parse("({a: 1, b: 2, c: 3})");
