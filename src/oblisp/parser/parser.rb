@@ -1,8 +1,13 @@
+require_relative "../ast/ASTFactory";
+
+AST_TYPE = "s-expressions";
+
 class Parser
-    attr_accessor :lexer;
+    attr_accessor :lexer, :ast;
 
     def initialize(lexer)
         @lexer = lexer;
+        @ast = ASTFactory.new.generate AST_TYPE;
     end
 
     def consume_next
@@ -279,38 +284,43 @@ class Parser
 
     def terminal_SELF
         if peek_token.type == Type::SELF
-            consume_next;
+            ast.terminal_SELF consume_next;
         end
     end
 
     def terminal_SUPER
         if peek_token.type == Type::SUPER
-            consume_next;
+            ast.terminal_SUPER consume_next;
+        end
+    end
+
     def terminal_STRING
         if peek_token.type == Type::STRING
+            ast.terminal_STRING consume_next;
         end
     end
 
     def terminal_IDENTIFIER
         if peek_token.type == Type::IDENTIFIER
-            consume_next;
+            ast.terminal_IDENTIFIER consume_next;
         end
     end
 
     def terminal_MESSAGE_SYMBOL
         if peek_token.type == Type::MESSAGE_SYMBOL
-            consume_next;
+            ast.terminal_MESSAGE_SYMBOL consume_next;
         end
     end
 
     def terminal_IDENTIFIER_SYMBOL
         if peek_token.type == Type::ID_SYMBOL
-            consume_next;
+            ast.terminal_IDENTIFIER_SYMBOL consume_next;
         end
     end
 
     def terminal_SIGN
         if peek_token == '+' or peek_token == '-'
+            ast.terminal_SIGN consume_next;
         end
     end
 
