@@ -5,8 +5,7 @@ describe Parser do
         it "parses integer literals" do
             parse("(0)");
             parse("(0 0 0)");
-            # TODO infinite recursion
-            # parse("(.7)");
+            parse("(.7)");
             parse("(42)");
             parse("(41 42 43)");
             parse("(41 (42) 43)");
