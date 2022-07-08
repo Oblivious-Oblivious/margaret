@@ -1,20 +1,19 @@
 class Parser
-    attr_accessor :lexer, :token;
+    attr_accessor :lexer;
 
     def initialize(lexer)
         @lexer = lexer;
-        @token = nil;
     end
 
     def consume_next
-        @token = lexer.next_token;
+        lexer.next_token;
         # print "consumed #{@token} at ";
         # p caller[0].scan(/\d+/).first;
         # @token;
     end
 
     def peek_token
-        @token = lexer.peek_token;
+        lexer.peek_token;
         # print "peeked #{peek} at ";
         # p caller[0].scan(/\d+/).first;
         # @token;

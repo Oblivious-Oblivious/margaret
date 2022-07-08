@@ -7,12 +7,6 @@ describe Parser do
         expect(p).to be_kind_of Parser;
     end
 
-    it "has a nil token when initially creating the parser" do
-        l = Lexer.new "file.obl", "(42 factorial)".chars;
-        p = Parser.new l;
-        expect(p.token).to be nil;
-    end
-
     it "traverses through the token table" do
         l = Lexer.new "file.obl", "(42 factorial)".chars;
         l.make_tokens;
