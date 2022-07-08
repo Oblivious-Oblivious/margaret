@@ -211,14 +211,12 @@ class Parser
             consume_next;
         end
         if peek_token.type == Type::OCTAL
-             consume_next;
+            consume_next;
         end
     end
     
     def string_literal
-        if peek_token.type == Type::STRING
-            consume_next;
-        end
+        terminal_STRING;
     end
 
     def tuple_literal
@@ -279,12 +277,6 @@ class Parser
         end
     end
 
-    def terminal_LITERAL_BACKQUOTE
-        if peek_token == "`"
-            consume_next;
-        end
-    end
-
     def terminal_SELF
         if peek_token.type == Type::SELF
             consume_next;
@@ -294,6 +286,8 @@ class Parser
     def terminal_SUPER
         if peek_token.type == Type::SUPER
             consume_next;
+    def terminal_STRING
+        if peek_token.type == Type::STRING
         end
     end
 
@@ -317,6 +311,11 @@ class Parser
 
     def terminal_SIGN
         if peek_token == '+' or peek_token == '-'
+        end
+    end
+
+    def terminal_LITERAL_BACKQUOTE
+        if peek_token == "`"
             consume_next;
         end
     end
