@@ -12,6 +12,7 @@ describe Parser do
         end
         
         it "parses associations" do
+            # TODO Association objects
             parse("(x = :a => 100)");
             parse("(y = x key)");
             parse("(y = x value)");
