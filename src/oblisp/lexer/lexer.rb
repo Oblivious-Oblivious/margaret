@@ -231,6 +231,16 @@ class Lexer
         end
     end
 
+    def prev_token
+        @token_pos -= 1;
+
+        if token_pos == -1
+            Token.new "eof", Type::EOF, lineno;
+        else
+            token_table[token_pos];
+        end
+    end
+
     def peek_token
         if token_pos+1 >= token_table.size
             Token.new "eof", Type::EOF, lineno;
