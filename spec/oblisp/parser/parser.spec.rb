@@ -29,13 +29,6 @@ describe Parser do
         expect(p.peek_token.value).to eq "(";
     end
 
-    it "analyses the syntax returning a successful compilation message" do
-        l = Lexer.new "file.obl", "()".chars;
-        l.make_tokens;
-        p = Parser.new l;
-        p.analyse_syntax;
-    end
-
     it "has an error message for syntax errors" do
         l = Lexer.new "file.obl", "(42 factorial)".chars;
         l.make_tokens;
