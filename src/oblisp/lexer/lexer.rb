@@ -137,13 +137,17 @@ class Lexer
         end
     end
 
+    def tokenize_keyword(final_identifier)
+        if final_identifier == "self"
+            Token.new final_identifier, Type::SELF, lineno;
+        else
+            Token.new final_identifier, Type::SUPER, lineno;
+        end
+    end
+
     def check_for_keyword(final_identifier)
         if final_identifier.matches(RegexMatchers::KEYWORDS)
-            if final_identifier == "self"
-                Token.new final_identifier, Type::SELF, lineno;
-            else
-                Token.new final_identifier, Type::SUPER, lineno;
-            end
+            tokenize_keyword(final_identifier);
         else
             Token.new final_identifier, Type::IDENTIFIER, lineno;
         end
