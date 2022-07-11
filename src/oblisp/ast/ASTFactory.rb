@@ -134,17 +134,16 @@ class SExpression < ASTInterface
 
     def tuple_literal(item_list)
         res = "(new Tuple (";
-        (0...item_list.size-1).each do |i|
-            res << item_list[i] << " ";
+
+        if item_list.size > 0
+            (0...item_list.size-1).each do |i|
+                res << item_list[i] << " ";
+            end
+            res << item_list[item_list.size-1];
         end
-        res << item_list[item_list.size-1] << "))";
+
+        res << "))";
         res;
-        # res = "(new Tuple (";
-        # item_list.each do |item|
-        #     res << item;
-        # end
-        # res << "))";
-        # res;
     end
 
     def hash_literal(association_list)

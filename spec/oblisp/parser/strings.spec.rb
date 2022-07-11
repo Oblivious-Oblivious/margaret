@@ -16,10 +16,10 @@ describe Parser do
             # parse("(s at: 1 put: 'a'; at: 2 put: 'b'; at: 3 put: 'c')");
             # parse("(s with: 'a'; with: 'b'; with: 'c'; with: 'd')");
 
+            parse("(s each_char: [(a) (a puts)])", "(each_char: s (new Tuple ((a) (puts a))))");
             # TODO
-            # parse("(s each_char: [(a) (a puts)])");
             # parse("(b = s conform: [(a) (a >= 'a') && (a <= 'z')])");
-            # parse("(x = s select: [(a) (a > 'a')])");
+            parse("(x = s select: [(a) (a > 'a')])", "(= x (select: s (new Tuple ((a) (> a 'a')))))");
             parse("(x = s to_list)", "(= x (to_list s))");
             parse("(x = s to_symbol)", "(= x (to_symbol s))");
             parse(%Q{(x = "abcd" to_byte_array)}, %Q{(= x (to_byte_array "abcd"))});

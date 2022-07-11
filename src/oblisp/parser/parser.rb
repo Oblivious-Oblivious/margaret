@@ -441,7 +441,8 @@ class Parser
         if current_position == token_table_pos
             res = terminal_SUPER
         end
-        if current_position == token_table_pos and peek_token != ")"
+        # TODO Refactor
+        if current_position == token_table_pos and peek_token != ")" and peek_token != "]" and peek_token != "}"
             res = list;
         end
         res;
@@ -490,16 +491,9 @@ class Parser
     def tuple_literal
         if peek_token == "["
             consume_next;
-            tuple_items;
+            __items = translation_unit_list;
             ensure_consumption "]", "missing closing bracket on tuple";
-        end
-    end
-    
-    def tuple_items
-        loop do
-            current_position = token_table_pos;
-            translation_unit_list;
-            break if current_position == token_table_pos;
+            ast.tuple_literal __items;
         end
     end
 
