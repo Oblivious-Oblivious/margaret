@@ -172,9 +172,9 @@ class Parser
         elsif chain and chain.size > 0
             res = "";
             right_sides = [];
-            number_of_nestings = chain[-1];
-            # print "NUMBER OF NESTINGS: "; pp number_of_nestings
-            (0...number_of_nestings).each do |i|
+            number_of_nests = chain[-1];
+            # print "NUMBER OF NESTINGS: "; pp number_of_nests
+            (0...number_of_nests).each do |i|
                 msg = chain[i][0];
                 # print "MSG: "; pp msg;
                 right = chain[i][1];
@@ -191,15 +191,15 @@ class Parser
                 res << "#{msg} (";
             end
             right_sides.reverse!;
-            msg = chain[number_of_nestings][0];
-            right = chain[number_of_nestings][1];
+            msg = chain[number_of_nests][0];
+            right = chain[number_of_nests][1];
             if right == ""
                 res << "#{msg} #{left}";
             else
                 res << "#{msg} #{left} #{right}";
             end
 
-            number_of_nestings.times do |i|
+            number_of_nests.times do |i|
                 res << ")" << right_sides[i];
             end
 
@@ -222,8 +222,11 @@ class Parser
                 puts "KEYWORD MESSAGE";
                 rest_key = keyword_message;
                 res = rest_key;
-                number_of_nestings = 0;
-                pp [*res, number_of_nestings];
+                number_of_nests = 0;
+
+                if res.size > 0
+                    [*res, number_of_nests];
+                end
             else
                 puts "UNARY MESSAGE";
                 rest_un = unary_message_chain;
@@ -231,7 +234,7 @@ class Parser
                 rest_key = keyword_message;
 
                 res = [];
-                number_of_nestings = 0;
+                number_of_nests = 0;
                 if rest_un.size > 0
                     (0...rest_un.size-1).each do |i|
                         msg = rest_un[i][0];
@@ -241,7 +244,7 @@ class Parser
                     msg = rest_un[rest_un.size-1][0];
                     right = rest_un[rest_un.size-1][1];
                     res << [msg, right];
-                    number_of_nestings += rest_un.size-1;
+                    number_of_nests += rest_un.size-1;
                 end
 
                 if rest_bin.size > 0
@@ -253,17 +256,19 @@ class Parser
                     msg = rest_bin[rest_bin.size-1][0];
                     right = rest_bin[rest_bin.size-1][1];
                     res << [msg, right];
-                    number_of_nestings += rest_bin.size-1;
+                    number_of_nests += rest_bin.size-1;
                 end
 
                 if rest_key[1].size > 0
                     msg = rest_key[0];
                     args = rest_key[1];
                     res = [[msg, args.join(" ")]] + res;
-                    number_of_nestings += 1;
+                    number_of_nests += 1;
                 end
 
-                pp [*res, number_of_nestings];
+                if res.size > 0
+                    [*res, number_of_nests];
+                end
             end
         elsif peek_token.type == Type::MESSAGE_SYMBOL
             puts "BINARY MESSAGE";
@@ -271,7 +276,7 @@ class Parser
             rest_key = keyword_message;
 
             res = [];
-            number_of_nestings = 0;
+            number_of_nests = 0;
             if rest_bin.size > 0
                 (0...rest_bin.size-1).each do |i|
                     msg = rest_bin[i][0];
@@ -281,17 +286,19 @@ class Parser
                 msg = rest_bin[rest_bin.size-1][0];
                 right = rest_bin[rest_bin.size-1][1];
                 res << [msg, right];
-                number_of_nestings += rest_bin.size-1;
+                number_of_nests += rest_bin.size-1;
             end
 
             if rest_key[1].size > 0
                 msg = rest_key[0];
                 args = rest_key[1];
                 res = [[msg, args.join(" ")]] + res;
-                number_of_nestings += 1;
+                number_of_nests += 1;
             end
 
-            pp [*res, number_of_nestings];
+            if res.size > 0
+                [*res, number_of_nests];
+            end
         end
     end
 
