@@ -44,27 +44,36 @@ class Parser
 
     def analyse_syntax
         first_unit;
-        "Compilation #{'successful'.green()}";
     end
 
     def first_unit
-        list;
+        result = list;
         ensure_consumption "eof", "reached end of program";
+        result;
     end
 
     def list
-        terminal_LITERAL_BACKQUOTE;
+        is_quoted = terminal_LITERAL_BACKQUOTE;
         ensure_consumption "(", "missing opening parenthesis on list";        
-        translation_unit_list;
+        __units = translation_unit_list;
         ensure_consumption ")", "missing closing parenthesis on list";
+
+        if is_quoted
+            ast.quoted_list __units;
+        else
+            ast.list __units;
+        end
     end
 
     def translation_unit_list
+        __units = [];
         loop do
             current_position = token_table_pos;
-            translation_unit;
+            unit = translation_unit;
             break if current_position == token_table_pos;
+            __units << unit;
         end
+        __units;
     end
 
     def translation_unit
@@ -100,6 +109,7 @@ class Parser
 
     def operand
         # TODO Make sure operand rule emits one production only
+    def statement
         current_position = token_table_pos;
         if current_position == token_table_pos
             literal;
@@ -112,28 +122,203 @@ class Parser
         end
         if current_position == token_table_pos
             terminal_SUPER
+        optional_assignment_list = assignment_message_list;
+        expr = expression;
+
+        # print "OPTIONAL ASS: "; pp optional_assignment_list;
+        # print "EXPRESS: "; pp expression;
+
+        res = "";
+        if current_position != token_table_pos
+            res << "#{optional_assignment_list[0]}";
+            (1...optional_assignment_list.size).each do |i|
+                res << "(" << optional_assignment_list[i];
+            end
+
+            if res == "" and expr[0] == "(" and expr[-1] == ")"
+                # TODO Removes parentheses when it is a lone expression
+                res << expr[1...-1];
+            else
+                res << expr;
+            end
+
+            (optional_assignment_list.size-1).times do
+                res << ")";
+            end
         end
+
+        res;
     end
 
-    def message_list
+    def assignment_message_list
+        __assign_list = [];
         loop do
             current_position = token_table_pos;
-            message;
+            assign = assignment_message;
             break if current_position == token_table_pos;
+            __assign_list << assign;
+        end
+        # print "ASSIGN LIST: "; pp __assign_list;
+        __assign_list;
+    end
+    
+    def assignment_message
+        current_position = token_table_pos;
+        id = terminal_IDENTIFIER;
+
+        if current_position != token_table_pos
+            current_position = token_table_pos;
+            terminal_EQUALS;
+            if current_position != token_table_pos
+                # TODO ast
+                # ast.assignment_message id;
+                "= #{id} ";
+            else
+                resume_prev;
+            end
         end
     end
 
-    def message
-        # TODO Make sure operand rule emits one production only
-        current_position = token_table_pos;
-        if current_position == token_table_pos
-            unary_message;
+    def expression
+        left = operand;
+        # print "LEFT: "; pp left;
+        chain = message_chain;
+        # print "COMPLETE: "; pp chain;
+        if chain and chain[0].is_a? String
+            res = "";
+
+            key = chain[0];
+            args = chain[1];
+
+            res << key << " " << left << " ";
+            (0...args.size-1).each do |i|
+                res << args[i] << " ";
+            end
+            res << args[args.size-1];
+            "(" + res + ")";
+        elsif chain and chain.size > 0
+            res = "";
+            right_sides = [];
+            number_of_nestings = chain[-1];
+            # print "NUMBER OF NESTINGS: "; pp number_of_nestings
+            (0...number_of_nestings).each do |i|
+                msg = chain[i][0];
+                # print "MSG: "; pp msg;
+                right = chain[i][1];
+                # print "RIGHT: "; pp right;
+                if right == ""
+                    right_sides << right;
+                else
+                    right_sides << " " + right;
+                end
+
+                # TODO Cascaded
+                # __cascaded_list = cascaded_message_list;
+
+                res << "#{msg} (";
+            end
+            right_sides.reverse!;
+            msg = chain[number_of_nestings][0];
+            right = chain[number_of_nestings][1];
+            if right == ""
+                res << "#{msg} #{left}";
+            else
+                res << "#{msg} #{left} #{right}";
+            end
+
+            number_of_nestings.times do |i|
+                res << ")" << right_sides[i];
+            end
+
+            "(" + res + ")";
+        elsif left != nil
+            left;
         end
-        if current_position == token_table_pos
-            binary_message;
-        end
-        if current_position == token_table_pos
-            keyword_message;
+    end
+
+    #   IDENTIFIER     -> 1
+    # | MESSAGE_SYMBOL -> 2
+    # | IDENTIFIER ':' -> 3
+    def message_chain
+        if peek_token.type == Type::IDENTIFIER
+            _id = consume_next;
+            lookahead = consume_next;
+            resume_prev;
+            resume_prev;
+            if lookahead == ":"
+                puts "KEYWORD MESSAGE";
+                rest_key = keyword_message;
+                res = rest_key;
+                number_of_nestings = 0;
+                pp [*res, number_of_nestings];
+            else
+                puts "UNARY MESSAGE";
+                rest_un = unary_message_chain;
+                rest_bin = binary_message_chain;
+                rest_key = keyword_message;
+
+                res = [];
+                number_of_nestings = 0;
+                if rest_un.size > 0
+                    (0...rest_un.size-1).each do |i|
+                        msg = rest_un[i][0];
+                        right = rest_un[i][1];
+                        res << [msg, right];
+                    end
+                    msg = rest_un[rest_un.size-1][0];
+                    right = rest_un[rest_un.size-1][1];
+                    res << [msg, right];
+                    number_of_nestings += rest_un.size-1;
+                end
+
+                if rest_bin.size > 0
+                    (0...rest_bin.size-1).each do |i|
+                        msg = rest_bin[i][0];
+                        right = rest_bin[i][1];
+                        res << [msg, right];
+                    end
+                    msg = rest_bin[rest_bin.size-1][0];
+                    right = rest_bin[rest_bin.size-1][1];
+                    res << [msg, right];
+                    number_of_nestings += rest_bin.size-1;
+                end
+
+                if rest_key[1].size > 0
+                    msg = rest_key[0];
+                    args = rest_key[1];
+                    res = [[msg, args.join(" ")]] + res;
+                    number_of_nestings += 1;
+                end
+
+                pp [*res, number_of_nestings];
+            end
+        elsif peek_token.type == Type::MESSAGE_SYMBOL
+            puts "BINARY MESSAGE";
+            rest_bin = binary_message_chain;
+            rest_key = keyword_message;
+
+            res = [];
+            number_of_nestings = 0;
+            if rest_bin.size > 0
+                (0...rest_bin.size-1).each do |i|
+                    msg = rest_bin[i][0];
+                    right = rest_bin[i][1];
+                    res << [msg, right];
+                end
+                msg = rest_bin[rest_bin.size-1][0];
+                right = rest_bin[rest_bin.size-1][1];
+                res << [msg, right];
+                number_of_nestings += rest_bin.size-1;
+            end
+
+            if rest_key[1].size > 0
+                msg = rest_key[0];
+                args = rest_key[1];
+                res = [[msg, args.join(" ")]] + res;
+                number_of_nestings += 1;
+            end
+
+            pp [*res, number_of_nestings];
         end
     end
 
@@ -142,82 +327,178 @@ class Parser
     end
 
     def unary_selector
-        terminal_IDENTIFIER;
-        terminal_IDENTIFIER_SYMBOL;
+        id = terminal_IDENTIFIER;
+        optional_symbol = terminal_IDENTIFIER_SYMBOL;
+
+        if peek_token != ":"
+            msg = "#{id}#{optional_symbol}";
+            right = "";
+
+            if msg != ""
+                [msg, right];
+            else
+                [];
+            end
+        else
+            # TODO Resumes from binary operator
+            resume_prev;
+            [];
+        end
+    end
+
+    def unary_message_chain
+        __unary_chain = [];
+        loop do
+            msg = unary_message;
+            # TODO null object pattern
+            if msg == []
+                break;
+            elsif msg[-1] == ":"
+                resume_prev;
+                break;
+            end
+            __unary_chain << msg;
+        end
+        __unary_chain.reverse!;
+    end
+
+    def binary_message_chain
+        __binary_chain = [];
+        loop do
+            msg = binary_message;
+            # TODO null object pattern
+            break if msg == [];
+            __binary_chain << msg;
+        end
+        __binary_chain.reverse!;
     end
 
     def binary_message
-        current_position = token_table_pos;
-        binary_selector;
-        if current_position != token_table_pos;
-            translation_unit_list;
+        msg = binary_selector;
+        right = binary_operand;
+        if msg != nil and right != nil
+            [msg, right];
+        else
+            [];
         end
     end
 
     def binary_selector
-        terminal_MESSAGE_SYMBOL;
+            terminal_MESSAGE_SYMBOL;
+    end
+
+    def binary_operand
+        res = operand;
+        if res != nil
+            rest_un = unary_message_chain;
+            rest_un.each do |un|
+                res << un << " ";
+            end
+            res;
+        end
     end
 
     def keyword_message
-        keyword_list;
-        terminal_SEMICOLON;
+        __segment_list = keyword_segment_list;
+        [__segment_list[0].join(""), __segment_list[1]];
     end
 
-    def keyword_list
-        terminal_IDENTIFIER;
-        while peek_token == ":"
-            consume_next;
-            translation_unit_list;
-            terminal_IDENTIFIER;
+    def keyword_segment_list
+        __keyword_list = [];
+        __argument_list = [];
+        loop do
+            segment = keyword_segment;
+            break if segment == nil;
+            __keyword_list << segment[0];
+            __argument_list << segment[1];
         end
+        [__keyword_list, __argument_list];
+    end
+
+    def keyword_segment
+        key = keyword;
+        arg = keyword_argument;
+
+        if key != nil and arg != nil
+            [key, arg];
+        end
+    end
+
+    def keyword
+        id = terminal_IDENTIFIER;
+        if id != nil
+            optional_symbol = terminal_IDENTIFIER_SYMBOL;
+            consume_next;
+            "#{id}#{optional_symbol}:";
+        end
+    end
+
+    def keyword_argument
+        res = binary_operand;
+        
+        if res != nil
+            rest_bin = binary_message_chain;
+            rest_bin.each do |bin|
+                res << bin << " ";
+            end
+            res;
+        end
+    end
+    def operand
+        current_position = token_table_pos;
+        res = nil;
+        if current_position == token_table_pos
+            res = literal;
+        end
+        if current_position == token_table_pos
+            res = terminal_IDENTIFIER;
+        end
+        if current_position == token_table_pos
+            res = terminal_SELF;
+        end
+        if current_position == token_table_pos
+            res = terminal_SUPER
+        end
+        if current_position == token_table_pos and peek_token != ")"
+            res = list;
+        end
+        res;
     end
 
     def literal
-        # TODO Make sure operand rule emits one production only
+        res = nil;
         current_position = token_table_pos;
         if current_position == token_table_pos
-            base_ten_literal;
+            res = base_ten_literal;
         end
         if current_position == token_table_pos
-            alternate_base_literal;
+            res = alternate_base_literal;
         end
         if current_position == token_table_pos
-            string_literal;
+            res = string_literal;
         end
         if current_position == token_table_pos
-            tuple_literal;
+            res = tuple_literal;
         end
         if current_position == token_table_pos
-            hash_literal;
+            res = hash_literal;
         end
         if current_position == token_table_pos
-            symbol_literal;
+            res = symbol_literal;
         end
+        res;
     end
 
     def base_ten_literal
-        terminal_SIGN;
-        positive_base_ten_literal;
+        ast.base_ten_literal terminal_SIGN, positive_base_ten_literal;
     end
 
     def positive_base_ten_literal
-        if peek_token.type == Type::INTEGER
-            consume_next;
-        elsif peek_token.type == Type::FLOAT
-            consume_next;
-        end
+        terminal_POSITIVE_BASE_TEN_NUMBER;
     end
 
     def alternate_base_literal
-        if peek_token.type == Type::BINARY
-            consume_next;
-        end
-        if peek_token.type == Type::HEXADECIMAL
-            consume_next;
-        end
-        if peek_token.type == Type::OCTAL
-            consume_next;
-        end
+        terminal_ALTERNATE_BASE_NUMBER;
     end
     
     def string_literal
@@ -278,7 +559,7 @@ class Parser
     def symbol_literal
         if peek_token == ":"
             consume_next;
-            terminal_IDENTIFIER;
+            ast.symbol_literal terminal_IDENTIFIER;
         end
     end
 
@@ -291,6 +572,18 @@ class Parser
     def terminal_SUPER
         if peek_token.type == Type::SUPER
             ast.terminal_SUPER consume_next;
+        end
+    end
+
+    def terminal_POSITIVE_BASE_TEN_NUMBER
+        if [Type::INTEGER, Type::FLOAT].include? peek_token.type
+            ast.terminal_POSITIVE_BASE_TEN_NUMBER consume_next;
+        end
+    end
+
+    def terminal_ALTERNATE_BASE_NUMBER
+        if [Type::BINARY, Type::HEXADECIMAL, Type::OCTAL].include? peek_token.type
+            ast.terminal_ALTERNATE_BASE_NUMBER consume_next;
         end
     end
 
