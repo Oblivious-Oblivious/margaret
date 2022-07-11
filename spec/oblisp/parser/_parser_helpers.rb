@@ -1,4 +1,4 @@
-def parse(code, expected_result="Compilation #{'successful'.green()}")
+def parse(code, expected_result=nil)
     l = Lexer.new "file.obl", code.chars;
     l.make_tokens;
     p = Parser.new l;

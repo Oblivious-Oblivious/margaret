@@ -7,24 +7,25 @@ describe Parser do
         end
 
         it "parses metaclass messages" do
-            parse("(x = String name)");
-            parse("(x = String category)");
-            parse("(x = String description)");
-            parse("(x = String kind_of_subclass)");
-            parse("(x = String definition)");
-            parse("(x = String field_names)");
-            parse("(x = String all_field_names)");
-            # parse("(x = String all_instance_vars_names)");
-            # parse("(x = String class_instance_vars_names)");
-            parse("(x = String selectors)");
-            parse("(x = String source_code_at: :message)");
-            parse(%Q{(x = String source_code_at: "message")});
-            parse("(x = String all_instances)");
-            parse("(x = String superclass)");
-            parse("(x = String all_superclasses)");
-            parse("(x = String subclasses)");
-            parse("(x = String all_subclasses)");
-            parse("(x = String number_of_instances)");
+            parse("(x = String name)", "(= x (name String))");
+            parse("(x = String category)", "(= x (category String))");
+            parse("(x = String description)", "(= x (description String))");
+            parse("(x = String kind_of_subclass)", "(= x (kind_of_subclass String))");
+            parse("(x = String definition)", "(= x (definition String))");
+            parse("(x = String field_names)", "(= x (field_names String))");
+            parse("(x = String all_field_names)", "(= x (all_field_names String))");
+            # TODO Remove
+            # parse("(x = String all_instance_vars_names)", "(= x (all_instance_vars_names String))");
+            # parse("(x = String class_instance_vars_names)", "(= x (class_instance_vars_names String))");
+            parse("(x = String selectors)", "(= x (selectors String))");
+            parse("(x = String source_code_at: :message)", %Q{(= x (source_code_at: String (new Symbol "message")))});
+            parse(%Q{(x = String source_code_at: "message")}, %Q{(= x (source_code_at: String "message"))});
+            parse("(x = String all_instances)", "(= x (all_instances String))");
+            parse("(x = String superclass)", "(= x (superclass String))");
+            parse("(x = String all_superclasses)", "(= x (all_superclasses String))");
+            parse("(x = String subclasses)", "(= x (subclasses String))");
+            parse("(x = String all_subclasses)", "(= x (all_subclasses String))");
+            parse("(x = String number_of_instances)", "(= x (number_of_instances String))");
         end
     end
 end
