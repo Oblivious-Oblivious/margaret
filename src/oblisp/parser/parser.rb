@@ -3,11 +3,12 @@ require_relative "../ast/ASTFactory";
 AST_TYPE = "s-expressions";
 
 class Parser
-    attr_accessor :lexer, :ast;
+    attr_accessor :lexer, :ast, :is_comma_message;
 
     def initialize(lexer)
         @lexer = lexer;
         @ast = ASTFactory.new.generate AST_TYPE;
+        @is_comma_message = true;
     end
 
     def consume_next
@@ -32,6 +33,10 @@ class Parser
         if consume_next != token
             error error_message;
         end
+    end
+
+    def toggle_comma_as_message_while_in_association
+        @is_comma_message = is_comma_message.!;
     end
 
     def error(message)
@@ -384,7 +389,15 @@ class Parser
     end
 
     def binary_selector
+        if peek_token == ","
+            if is_comma_message
+                terminal_MESSAGE_SYMBOL;
+            else
+                nil;
+            end
+        else
             terminal_MESSAGE_SYMBOL;
+        end
     end
 
     def binary_operand
