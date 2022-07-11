@@ -29,7 +29,7 @@ require_relative "oblisp/parser/conversions.spec.rb";
 require_relative "oblisp/parser/date_time.spec.rb";
 
 # TODO
-# require_relative "oblisp/parser/hashes.spec.rb";
+require_relative "oblisp/parser/hashes.spec.rb";
 
 require_relative "oblisp/parser/identifiers.spec.rb";
 require_relative "oblisp/parser/intervals.spec.rb";

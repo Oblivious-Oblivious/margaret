@@ -148,25 +148,32 @@ class SExpression < ASTInterface
 
     def hash_literal(association_list)
         res = "(new Hash (";
-        (0...association.size-1).each do |i|
-            res << association_list[i];
+
+        if association_list.size > 0
+            (0...association_list.size-1).each do |i|
+                res << association_list[i] << " ";
+            end
+            res << association_list[association_list.size-1];
         end
-        res << association_list[association_list.size-1] << "))";
+
+        res << "))";
         res;
-        # res = "(new Hash (";
-        # association_list.each do |assoc|
-        #     res << assoc;
-        # end
-        # res << "))";
-        # res;
     end
 
     def association(key, value)
-        "(new Association #{key} #{value})";
+        res = "(new Association #{key} ";
+        
+        (0...value.size-1).each do |i|
+            res << value[i] << " ";
+        end
+        res << value[value.size-1];
+
+        res << ")";
+        res;
     end
 
     def json_association(key, value)
-        association ":#{key}", value;
+        association(symbol_literal(key), value);
     end
 
     def symbol_literal(id)

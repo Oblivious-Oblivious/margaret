@@ -442,7 +442,7 @@ class Parser
             res = terminal_SUPER
         end
         # TODO Refactor
-        if current_position == token_table_pos and peek_token != ")" and peek_token != "]" and peek_token != "}"
+        if current_position == token_table_pos and peek_token != ")" and peek_token != "]" and peek_token != "}" and peek_token != ","
             res = list;
         end
         res;
@@ -500,35 +500,48 @@ class Parser
     def hash_literal
         if peek_token == "{"
             consume_next;
-            hash_list;
+            __list = association_list;
             ensure_consumption "}", "missing closing curly brace on hash";
+            ast.hash_literal __list;
         end
     end
 
-    def hash_list
+    def association_list
+        __list = [];
         loop do
             current_position = token_table_pos;
-            hash;
+            assoc = association;
             break if current_position == token_table_pos;
+            __list << assoc;
         end
+        __list;
     end
 
-    def hash
-        # TODO Turn this into a regular binary message for symbols and strings
+    def association
         if peek_token.type == Type::IDENTIFIER
-            terminal_IDENTIFIER;
+            key = terminal_IDENTIFIER;
             ensure_consumption ":", "json style keys should be denoted by colons";
-            translation_unit_list;
+            toggle_comma_as_message_while_in_association;
+            value = translation_unit_list;
+            toggle_comma_as_message_while_in_association;
+            ensure_consumption ",", "json style keys should be separated by commas" if peek_token != "}";
+            ast.json_association key, value;
         elsif peek_token == ":"
-            symbol_literal;
+            key = symbol_literal;
             ensure_consumption "=>", "hash keys should be denoted by arrow symbols";
-            translation_unit_list;
+            toggle_comma_as_message_while_in_association;
+            value = translation_unit_list;
+            toggle_comma_as_message_while_in_association;
+            ensure_consumption ",", "json style keys should be separated by commas" if peek_token != "}";
+            ast.association key, value;
         elsif peek_token.type == Type::STRING
-            string_literal;
+            key = string_literal;
             ensure_consumption "=>", "hash keys should be denoted by arrow symbols";
-            translation_unit_list;
-        else
-            # TODO empty hash
+            toggle_comma_as_message_while_in_association;
+            value = translation_unit_list;
+            toggle_comma_as_message_while_in_association;
+            ensure_consumption ",", "json style keys should be separated by commas" if peek_token != "}";
+            ast.association key, value;
         end
     end
 
