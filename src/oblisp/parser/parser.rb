@@ -94,43 +94,7 @@ class Parser
     end
 
     def statement
-        assignment_message;
-        expression_list;
-    end
-
-    def assignment_message
-        terminal_IDENTIFIER;
-        terminal_EQUALS;
-    end
-
-    def expression_list
-        loop do
-            current_position = token_table_pos;
-            expression;
-            break if current_position == token_table_pos;
-        end
-    end
-
-    def expression
-        operand;
-        message_list;
-    end
-
-    def operand
-        # TODO Make sure operand rule emits one production only
-    def statement
         current_position = token_table_pos;
-        if current_position == token_table_pos
-            literal;
-        end
-        if current_position == token_table_pos
-            terminal_IDENTIFIER;
-        end
-        if current_position == token_table_pos
-            terminal_SELF;
-        end
-        if current_position == token_table_pos
-            terminal_SUPER
         optional_assignment_list = assignment_message_list;
         expr = expression;
 
@@ -461,6 +425,7 @@ class Parser
             res;
         end
     end
+
     def operand
         current_position = token_table_pos;
         res = nil;
