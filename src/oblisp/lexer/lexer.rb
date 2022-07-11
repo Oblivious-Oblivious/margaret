@@ -176,7 +176,11 @@ class Lexer
             c = next_character;
         end
 
-        Token.new final_symbol, Type::MESSAGE_SYMBOL, lineno;
+        if final_symbol.matches(RegexMatchers::ID_SYMBOL)
+            Token.new final_symbol, Type::ID_SYMBOL, lineno;
+        else
+            Token.new final_symbol, Type::MESSAGE_SYMBOL, lineno;
+        end
     end
 
     def tokenize_string(c)
@@ -210,8 +214,6 @@ class Lexer
                 token_table << tokenize_number(c);
             elsif c.matches(RegexMatchers::LETTER) or c == '_'
                 token_table << tokenize_identifier(c);
-            elsif c.matches(RegexMatchers::ID_SYMBOL)
-                token_table << (Token.new c, Type::ID_SYMBOL, lineno);
             elsif c.matches(RegexMatchers::MESSAGE_SYMBOL)
                 token_table << tokenize_message_symbol(c);
             elsif c.matches(RegexMatchers::SYNTAX_SYMBOL)
