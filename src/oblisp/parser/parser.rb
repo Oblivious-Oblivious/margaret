@@ -18,6 +18,10 @@ class Parser
         # @token;
     end
 
+    def resume_prev
+        lexer.prev_token;
+    end
+
     def peek_token
         lexer.peek_token;
         # print "peeked #{peek} at ";
