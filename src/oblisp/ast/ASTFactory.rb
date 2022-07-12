@@ -160,7 +160,7 @@ class SExpression < ASTInterface
     end
 
     def association(key, value)
-        res = "(new Association #{key} ";
+        res = "(key:value: Association #{key} ";
         
         (0...value.size-1).each do |i|
             res << value[i] << " ";
