@@ -97,31 +97,30 @@ end
 class SExpression < ASTInterface
     def quoted_list(unit_list)
         res = "(__quoted__ (";
-        (0...unit_list.size-1).each do |i|
-            res << unit_list[i] << " ";
+
+        if unit_list.size > 0
+            (0...unit_list.size-1).each do |i|
+                res << unit_list[i] << " ";
+            end
+            res << unit_list[unit_list.size-1];
         end
-        res << unit_list[unit_list.size-1] << "))";
+
+        res << "))";
         res;
-        # unit_list.each do |unit|
-        #     res << unit;
-        # end
-        # res << "))";
-        # res;
     end
 
     def list(unit_list)
         res = "(";
-        (0...unit_list.size-1).each do |i|
-            res << unit_list[i] << " ";
+
+        if unit_list.size > 0
+            (0...unit_list.size-1).each do |i|
+                res << unit_list[i] << " ";
+            end
+            res << unit_list[unit_list.size-1];
         end
-        res << unit_list[unit_list.size-1] << ")";
+
+        res << ")";
         res;
-        # res = "(";
-        # unit_list.each do |unit|
-        #     res << unit;
-        # end
-        # res << ")";
-        # res;
     end
 
     def base_ten_literal(sign, number)
