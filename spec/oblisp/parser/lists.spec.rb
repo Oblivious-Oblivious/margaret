@@ -28,7 +28,7 @@ describe Parser do
         
         it "parses list messages" do
             parse("(arr = (1 2 3 4))", "(= arr (1 2 3 4))");
-            # TODO cascaded messages
+            # TODO Cascaded messages
             # parse("(arr with: 1 with: 2 with: 3)", ());
             # parse("(arr at: 1 put: 5; at: 2: put: 6)", "()");
             parse("(b = arr is_empty?)", "(= b (is_empty? arr))");

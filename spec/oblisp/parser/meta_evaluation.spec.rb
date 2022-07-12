@@ -3,7 +3,7 @@ require_relative "_parser_helpers";
 describe Parser do
     context "on meta-evaluation" do
         it "compiles and calls messages dynamically" do
-            # TODO Dynamic send
+            # NOTE Figure out dynamic send
         end
 
         it "parses metaclass messages" do

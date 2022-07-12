@@ -12,7 +12,7 @@ describe Parser do
             parse("(:ok)", %Q{(new Symbol "ok")});
             parse("(x = :Hello)", %Q{(= x (new Symbol "Hello"))});
             parse("(y = :symb)", %Q{(= y (new Symbol "symb"))});
-            # TODO Look at ruby
+            # NOTE Look at ruby
         end
     end
 end
