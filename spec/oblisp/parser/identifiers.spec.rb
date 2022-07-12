@@ -13,10 +13,8 @@ describe Parser do
         
         it "parses identifiers" do
             parse("(s (42) self)", "(s (42) self)");
-            # TODO Prob add list literals since we cannot distinguish between list items and messages
-            # TODO Quotted lists can serve as list literals
-            # parse("(ident 42 another)", "(ident 42 another)");
-            # parse("(stuff ident2)");
+            parse("(ident, 42, another)", "(, (, ident 42) another)");
+            parse("(stuff,ident2)", "(, stuff ident2)");
         end
     end
 end

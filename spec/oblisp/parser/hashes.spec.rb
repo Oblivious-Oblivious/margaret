@@ -9,6 +9,7 @@ describe Parser do
             parse("({:a => 1, :b => 2, :c => 3})", %Q{(new Hash ((key:value: Association (new Symbol "a") 1) (key:value: Association (new Symbol "b") 2) (key:value: Association (new Symbol "c") 3)))});
             parse("({:a => (self), :b => (super), :c => 3})", %Q{(new Hash ((key:value: Association (new Symbol "a") (self)) (key:value: Association (new Symbol "b") (super)) (key:value: Association (new Symbol "c") 3)))});
             parse(%Q{({"k1" => "v1", "k2" => "v2", "k3" => "v3"})}, %Q{(new Hash ((key:value: Association "k1" "v1") (key:value: Association "k2" "v2") (key:value: Association "k3" "v3")))});
+            parse("({:a => x, :b => y, :c => z})", %Q{(new Hash ((key:value: Association (new Symbol "a") x) (key:value: Association (new Symbol "b") y) (key:value: Association (new Symbol "c") z)))});
         end
         
         it "parses associations" do

@@ -4,7 +4,8 @@ describe Parser do
     context "on symbols" do
         it "parses symbol literals" do
             # TODO Check for parentheses
-            parse("(:a :b :c)", %Q{(new Symbol "a" new Symbol "b" new Symbol "c")});
+            # parse("(:a :b :c)", %Q{(new Symbol "a" new Symbol "b" new Symbol "c")});
+            parse("(:a,:b,:c)", %Q{(, (, (new Symbol "a") (new Symbol "b")) (new Symbol "c"))});
         end
 
         it "parses symbol messages" do

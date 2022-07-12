@@ -29,6 +29,7 @@ describe Parser do
         it "parses list messages" do
             parse("(arr = (1 2 3 4))", "(= arr (1 2 3 4))");
             # TODO cascaded messages
+            # parse("(arr with: 1 with: 2 with: 3)", ());
             # parse("(arr at: 1 put: 5; at: 2: put: 6)", "()");
             parse("(b = arr is_empty?)", "(= b (is_empty? arr))");
             parse("(x = arr size)", "(= x (size arr))");
@@ -52,19 +53,19 @@ describe Parser do
                 (arr each: [(a) (sum += a)])
                 (sum)
             )", "((= arr (1 2 3 4)) (= sum 0) (each: arr (new Tuple ((a) (+= sum a)))) (sum))");
-            # TODO Quotted list
-            # parse("(sum = arr inject: 0 into: [(a c) (a + c)])", "(= sum (inject:into: arr 0 (new Tuple ((a c) (+ a c)))))");
-            # parse("(sum = arr fold: 0 into: [(a c) (a + c)])");
+            parse("(sum = arr inject: 0 into: [(a, c) (a + c)])", "(= sum (inject:into: arr 0 (new Tuple ((, a c) (+ a c)))))");
+            parse("(sum = arr fold: 0 into: [(a, c) (a + c)])", "(= sum (fold:into: arr 0 (new Tuple ((, a c) (+ a c)))))");
+            # TODO Left hand side parenthesized operands
             # parse("(max = arr
             #         inject: 0
             #         into: [
-            #             (a c)
+            #             (a,c)
             #             ((a > c)
             #                 if_true: (a)
             #                 if_false: (b)
             #             )
             #         ]
-            # )");
+            # )", "(= max (inject:into: arr 0 (new Tuple ((, a c) (if_true:if_false: (> a c) (a) (b))))))");
             parse("(x = arr shuffled)", "(= x (shuffled arr))");
         end
     end
