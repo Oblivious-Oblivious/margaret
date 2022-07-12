@@ -13,8 +13,7 @@ describe Parser do
             parse("(x = Date days_in_month: 2 for_year: 1978)", "(= x (days_in_month:for_year: Date 2 1978))"); # 28 or 29
             parse("(x = Date days_in_year: 1984)", "(= x (days_in_year: Date 1984))"); # 365 or 366
             parse("(x = Date name_of_day: 1)", "(= x (name_of_day: Date 1))"); # :Monday
-            # TODO Keyword messages with id symbols
-            # parse("(x = Date is_leap_year?: 1996)", "(= x (is_leap_year?: Date 1996))"); # true or false
+            parse("(x = Date is_leap_year?: 1996)", "(= x (is_leap_year?: Date 1996))"); # true or false
             
             parse("(x = Date today weekday)", "(= x (weekday (today Date)))"); # What day is today
             parse("(x = Date today previous)", "(= x (previous (today Date)))"); # Prev day from today

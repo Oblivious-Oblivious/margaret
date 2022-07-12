@@ -34,8 +34,7 @@ describe Parser do
             parse("(b = arr is_empty?)", "(= b (is_empty? arr))");
             parse("(x = arr size)", "(= x (size arr))");
             parse("(x = arr at: 4)", "(= x (at: arr 4))");
-            # TODO Keyword messages with id symbols
-            # parse("(x = arr includes?: 3)", "(= x (includes?: arr 3))");
+            parse("(x = arr includes?: 3)", "(= x (includes?: arr 3))");
             parse("(x = arr includes: 3)", "(= x (includes: arr 3))");
             parse("(x = arr copy_from: 2 to: 4)", "(= x (copy_from:to: arr 2 4))");
             parse("(x = arr index_of: 3 if_absent: -1)", "(= x (index_of:if_absent: arr 3 (negated 1)))");

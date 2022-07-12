@@ -220,10 +220,12 @@ class Parser
     def message_chain
         if peek_token.type == Type::IDENTIFIER
             _id = consume_next;
-            lookahead = consume_next;
+            optional_id_symbol = consume_next;
+            possible_colon = consume_next;
             resume_prev;
             resume_prev;
-            if lookahead == ":"
+            resume_prev;
+            if optional_id_symbol == ":" or (optional_id_symbol.type == Type::ID_SYMBOL and possible_colon == ":")
                 puts "KEYWORD MESSAGE";
                 rest_key = keyword_message;
                 res = rest_key;
