@@ -448,7 +448,7 @@ class Parser
             res = terminal_SELF;
         end
         if current_position == token_table_pos
-            res = terminal_SUPER
+            res = terminal_SUPER;
         end
         # TODO Refactor
         if current_position == token_table_pos and peek_token != ")" and peek_token != "]" and peek_token != "}" and peek_token != "," and peek_token != "eof"
