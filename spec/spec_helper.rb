@@ -27,10 +27,7 @@ require_relative "oblisp/parser/conditionals.spec.rb";
 require_relative "oblisp/parser/constants.spec.rb";
 require_relative "oblisp/parser/conversions.spec.rb";
 require_relative "oblisp/parser/date_time.spec.rb";
-
-# TODO
 require_relative "oblisp/parser/hashes.spec.rb";
-
 require_relative "oblisp/parser/identifiers.spec.rb";
 require_relative "oblisp/parser/intervals.spec.rb";
 require_relative "oblisp/parser/iterations.spec.rb";
