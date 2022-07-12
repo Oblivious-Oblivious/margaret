@@ -3,6 +3,7 @@ require_relative "_parser_helpers";
 describe Parser do
     context "on classes" do
         it "parses generating an object with inheritance" do
+            # TODO Fix self and super interactions
             parse(%Q{
                 (
                     (Object subclass: "Point")
@@ -18,7 +19,7 @@ describe Parser do
                         message: "calc"
                         params: ()
                         method: (
-                            (self x) + (self y);
+                            (self x) + (self y)
                         )
                     )
                     (Point subclass :Point3D)
