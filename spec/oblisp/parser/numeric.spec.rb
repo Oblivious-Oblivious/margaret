@@ -8,8 +8,7 @@ describe Parser do
             parse("(42)", "(42)");
             parse("(41 42 43)", "(41 42 43)");
             parse("(41 (42) 43)", "(41 (42) 43)");
-            # TODO negative numeric ambiguity
-            # parse("(-41 -42)");
+            parse("(-41 - (-42))", "(- (negated 41) (negated 42))");
             parse("((-41) (-42))", "((negated 41) (negated 42))");
             parse("(42 - 41)", "(- 42 41)");
         end

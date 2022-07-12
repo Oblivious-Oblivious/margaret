@@ -8,6 +8,7 @@ describe Parser do
         end
 
         it "parses symbol messages" do
+            parse("(:ok)", %Q{(new Symbol "ok")});
             parse("(x = :Hello)", %Q{(= x (new Symbol "Hello"))});
             parse("(y = :symb)", %Q{(= y (new Symbol "symb"))});
             # TODO Look at ruby

@@ -17,7 +17,6 @@ describe Parser do
                     )
                     if_false: 3
             )", "(if_true:if_false: (> x 10) (if_true:if_false: (> x 5) 1 2) 3)");
-            # TODO
             parse("(obj match: (
                         [1 100]
                         [2 200]

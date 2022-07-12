@@ -109,7 +109,6 @@ class Parser
             end
 
             if res == "" and expr[0] == "(" and expr[-1] == ")"
-                # TODO Removes parentheses when it is a lone expression
                 res << expr[1...-1];
             else
                 res << expr;
@@ -320,7 +319,6 @@ class Parser
                 [];
             end
         else
-            # TODO Resumes from binary operator
             resume_prev;
             [];
         end
@@ -330,7 +328,6 @@ class Parser
         __unary_chain = [];
         loop do
             msg = unary_message;
-            # TODO null object pattern
             if msg == []
                 break;
             elsif msg[-1] == ":"
@@ -346,7 +343,6 @@ class Parser
         __binary_chain = [];
         loop do
             msg = binary_message;
-            # TODO null object pattern
             break if msg == [];
             __binary_chain << msg;
         end
@@ -449,7 +445,7 @@ class Parser
             res = terminal_SUPER
         end
         # TODO Refactor
-        if current_position == token_table_pos and peek_token != ")" and peek_token != "]" and peek_token != "}" and peek_token != ","
+        if current_position == token_table_pos and peek_token != ")" and peek_token != "]" and peek_token != "}" and peek_token != "," and peek_token != "eof"
             res = list;
         end
         res;

@@ -3,7 +3,7 @@ require_relative "_parser_helpers";
 describe Parser do
     context "on meta-evaluation" do
         it "compiles and calls messages dynamically" do
-            # TODO dynamic send
+            # TODO Dynamic send
         end
 
         it "parses metaclass messages" do
@@ -14,9 +14,6 @@ describe Parser do
             parse("(x = String definition)", "(= x (definition String))");
             parse("(x = String field_names)", "(= x (field_names String))");
             parse("(x = String all_field_names)", "(= x (all_field_names String))");
-            # TODO Remove
-            # parse("(x = String all_instance_vars_names)", "(= x (all_instance_vars_names String))");
-            # parse("(x = String class_instance_vars_names)", "(= x (class_instance_vars_names String))");
             parse("(x = String selectors)", "(= x (selectors String))");
             parse("(x = String source_code_at: :message)", %Q{(= x (source_code_at: String (new Symbol "message")))});
             parse(%Q{(x = String source_code_at: "message")}, %Q{(= x (source_code_at: String "message"))});
