@@ -63,15 +63,21 @@ class Parser
 
     def list
         is_quoted = terminal_LITERAL_BACKQUOTE;
-        ensure_consumption "(", "missing opening parenthesis on list";        
-        __units = translation_unit_list;
-        ensure_consumption ")", "missing closing parenthesis on list";
+        ensure_consumption "(", "missing opening parenthesis on list";
 
         if is_quoted
-            ast.quoted_list __units;
+            __units = [];
+            loop do
+                break if peek_token == ")"
+                unit = consume_next;
+                __units << %Q{(new Symbol "#{unit.value}")};
+            end
         else
-            ast.list __units;
+            __units = translation_unit_list;
         end
+        
+        ensure_consumption ")", "missing closing parenthesis on list";
+        ast.list __units;
     end
 
     def translation_unit_list

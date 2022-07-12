@@ -15,8 +15,7 @@ module Abstract
 end
 
 class ASTInterface; extend Abstract;
-    abstract_methods :quoted_list,
-                     :list,
+    abstract_methods :list,
                      :base_ten_literal,
                      :tuple_literal,
                      :hash_literal,
@@ -41,9 +40,6 @@ class Default < ASTInterface
     #         body: body
     #     };
     # end
-
-    def quoted_list(unit_list)
-    end
 
     def list(unit_list)
     end
@@ -95,20 +91,6 @@ class Default < ASTInterface
 end
 
 class SExpression < ASTInterface
-    def quoted_list(unit_list)
-        res = "(__quoted__ (";
-
-        if unit_list.size > 0
-            (0...unit_list.size-1).each do |i|
-                res << unit_list[i] << " ";
-            end
-            res << unit_list[unit_list.size-1];
-        end
-
-        res << "))";
-        res;
-    end
-
     def list(unit_list)
         res = "(";
 
