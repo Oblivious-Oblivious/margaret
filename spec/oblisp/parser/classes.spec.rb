@@ -22,7 +22,7 @@ describe Parser do
                             (self x) + (self y)
                         )
                     )
-                    (Point subclass :Point3D)
+                    (Point subclass: :Point3D)
                     (Point3D
                         message: :new
                         params: (:x :y :z)
