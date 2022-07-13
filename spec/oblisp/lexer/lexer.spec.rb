@@ -68,8 +68,6 @@ describe Lexer do
             expect("!".matches(RegexMatchers::ID_SYMBOL)).to be true;
             expect("{".matches(RegexMatchers::SYNTAX_SYMBOL)).to be true;
             expect("'".matches(RegexMatchers::QUOTE)).to be true;
-            expect("self".matches(RegexMatchers::KEYWORDS)).to be true;
-            expect("super".matches(RegexMatchers::KEYWORDS)).to be true;
         end
     end
 

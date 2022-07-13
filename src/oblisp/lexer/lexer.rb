@@ -17,8 +17,6 @@ module RegexMatchers
     MESSAGE_SYMBOL = ID_SYMBOL + ["+","-","*","/","\\","~","<",">","=","@","%","|","&","^",",",".","$"];
     SYNTAX_SYMBOL = ["(",")","[","]","{","}",":",";","`","_"];
     QUOTE = ["\"","'"];
-
-    KEYWORDS = ["self","super"];
 end
 
 class String
@@ -137,22 +135,6 @@ class Lexer
         end
     end
 
-    def tokenize_keyword(final_identifier)
-        if final_identifier == "self"
-            Token.new final_identifier, Type::SELF, lineno;
-        else
-            Token.new final_identifier, Type::SUPER, lineno;
-        end
-    end
-
-    def check_for_keyword(final_identifier)
-        if final_identifier.matches(RegexMatchers::KEYWORDS)
-            tokenize_keyword(final_identifier);
-        else
-            Token.new final_identifier, Type::IDENTIFIER, lineno;
-        end
-    end
-
     def tokenize_identifier(c)
         final_identifier = "";
 
@@ -163,7 +145,7 @@ class Lexer
             c = next_character;
         end
 
-        check_for_keyword(final_identifier);
+        Token.new final_identifier, Type::IDENTIFIER, lineno;
     end
 
     def tokenize_message_symbol(c)
