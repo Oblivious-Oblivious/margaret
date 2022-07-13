@@ -6,6 +6,11 @@ Dir["#{Dir.pwd}/src/oblisp/**/*.rb"].each { |f| require f };
 # oblisp
 require_relative "oblisp/version.spec.rb";
 
+# ast
+require_relative "oblisp/ast/ASTFactory.spec.rb";
+require_relative "oblisp/ast/ast_types/Default.spec.rb";
+require_relative "oblisp/ast/ast_types/SExpression.spec.rb";
+
 # lexer
 require_relative "oblisp/lexer/file_loader.spec.rb";
 require_relative "oblisp/lexer/lexer.spec.rb";
