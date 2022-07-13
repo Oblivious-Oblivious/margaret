@@ -13,9 +13,6 @@ class Parser
 
     def consume_next
         lexer.next_token;
-        # print "consumed #{@token} at ";
-        # p caller[0].scan(/\d+/).first;
-        # @token;
     end
 
     def resume_prev
@@ -24,9 +21,6 @@ class Parser
 
     def peek_token
         lexer.peek_token;
-        # print "peeked #{peek} at ";
-        # p caller[0].scan(/\d+/).first;
-        # @token;
     end
 
     def token_table_pos
@@ -58,7 +52,6 @@ class Parser
     def first_unit
         result = list;
         ensure_consumption "eof", "reached end of program";
-        puts; puts "parsed: #{result}";
         result;
     end
 
@@ -93,20 +86,13 @@ class Parser
     end
 
     def translation_unit
-        # if peek_token == "`" or peek_token == "("
-            # list;
-        # else
-            statement;
-        # end
+        statement;
     end
 
     def statement
         current_position = token_table_pos;
         optional_assignment_list = assignment_message_list;
         expr = expression;
-
-        # print "OPTIONAL ASS: "; pp optional_assignment_list;
-        # print "EXPRESS: "; pp expression;
 
         res = "";
         if current_position != token_table_pos
@@ -139,7 +125,6 @@ class Parser
             break if current_position == token_table_pos;
             __assign_list << assign;
         end
-        # print "ASSIGN LIST: "; pp __assign_list;
         __assign_list;
     end
     
@@ -174,8 +159,6 @@ class Parser
                 chain << casc;
             end
 
-            pp chain;
-
             res = "";
 
             (0...chain.size-1).each do |i|
@@ -208,12 +191,9 @@ class Parser
             res = "";
             right_sides = [];
             number_of_nests = chain[-1];
-            # print "NUMBER OF NESTINGS: "; pp number_of_nests
             (0...number_of_nests).each do |i|
                 msg = chain[i][0];
-                # print "MSG: "; pp msg;
                 right = chain[i][1];
-                # print "RIGHT: "; pp right;
                 if right == ""
                     right_sides << right;
                 else
@@ -241,9 +221,6 @@ class Parser
         end
     end
 
-    #   IDENTIFIER     -> 1
-    # | MESSAGE_SYMBOL -> 2
-    # | IDENTIFIER ':' -> 3
     def message_chain
         if peek_token.type == Type::IDENTIFIER
             _id = consume_next;
@@ -253,7 +230,6 @@ class Parser
             resume_prev;
             resume_prev;
             if optional_id_symbol == ":" or (optional_id_symbol.type == Type::ID_SYMBOL and possible_colon == ":")
-                puts "KEYWORD MESSAGE";
                 rest_key = keyword_message;
                 res = rest_key;
                 number_of_nests = 0;
@@ -262,7 +238,6 @@ class Parser
                     [*res, number_of_nests];
                 end
             else
-                puts "UNARY MESSAGE";
                 rest_un = unary_message_chain;
                 rest_bin = binary_message_chain;
                 rest_key = keyword_message;
@@ -305,7 +280,6 @@ class Parser
                 end
             end
         elsif peek_token.type == Type::MESSAGE_SYMBOL
-            puts "BINARY MESSAGE";
             rest_bin = binary_message_chain;
             rest_key = keyword_message;
 
