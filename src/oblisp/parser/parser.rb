@@ -58,6 +58,7 @@ class Parser
     def first_unit
         result = list;
         ensure_consumption "eof", "reached end of program";
+        puts; puts "parsed: #{result}";
         result;
     end
 
@@ -166,18 +167,42 @@ class Parser
         end
 
         chain = message_chain;
-        # print "COMPLETE: "; pp chain;
+        __cascaded_list = cascaded_message_list;
         if chain and chain[0].is_a? String
+            chain = [chain];
+            __cascaded_list.each do |casc|
+                chain << casc;
+            end
+
+            pp chain;
+
             res = "";
 
-            key = chain[0];
-            args = chain[1];
+            (0...chain.size-1).each do |i|
+                key = chain[i][0];
+                args = chain[i][1];
 
+                res << "(" << key << " " << left << " ";
+                (0...args.size-1).each do |i|
+                    res << args[i] << " ";
+                end
+                res << args[args.size-1] << ") ";
+            end
+            key = chain[chain.size-1][0];
+            args = chain[chain.size-1][1];
+
+            if chain.size > 1
+                res << "(";
+            end
             res << key << " " << left << " ";
             (0...args.size-1).each do |i|
                 res << args[i] << " ";
             end
             res << args[args.size-1];
+            if chain.size > 1
+                res << ")";
+            end
+
             "(" + res + ")";
         elsif chain and chain.size > 0
             res = "";
@@ -194,10 +219,7 @@ class Parser
                 else
                     right_sides << " " + right;
                 end
-
-                # TODO Cascaded
-                # __cascaded_list = cascaded_message_list;
-
+                
                 res << "#{msg} (";
             end
             right_sides.reverse!;
@@ -429,7 +451,7 @@ class Parser
         id = terminal_IDENTIFIER;
         if id != nil
             optional_symbol = terminal_IDENTIFIER_SYMBOL;
-            consume_next;
+            terminal_COLON;
             "#{id}#{optional_symbol}:";
         end
     end
@@ -444,6 +466,16 @@ class Parser
             end
             res;
         end
+    end
+
+    def cascaded_message_list
+        __casc = [];
+        loop do
+            break if peek_token != ";"
+            terminal_SEMICOLON;
+            __casc << message_chain;
+        end
+        __casc;
     end
 
     def operand
@@ -462,7 +494,7 @@ class Parser
             res = terminal_SUPER;
         end
         # TODO Refactor
-        if current_position == token_table_pos and peek_token != ")" and peek_token != "]" and peek_token != "}" and peek_token != "," and peek_token != "eof"
+        if current_position == token_table_pos and peek_token != ")" and peek_token != "]" and peek_token != "}" and peek_token != "," and peek_token != ";" and peek_token != "eof"
             res = list;
             res = " #{res} " if res != nil;
         end
@@ -635,6 +667,12 @@ class Parser
 
     def terminal_SEMICOLON
         if peek_token == ";"
+            consume_next;
+        end
+    end
+
+    def terminal_COLON
+        if peek_token == ":"
             consume_next;
         end
     end

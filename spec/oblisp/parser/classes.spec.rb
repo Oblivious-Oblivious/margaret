@@ -43,11 +43,10 @@ describe Parser do
             }, %Q{((subclass: Object "Point") (message:params:method: Point "x:y:" ("xparam" "yparam") ((= ((x Point)) xparam) (= ((y Point)) yparam))) (message:params:method: Point "calc" () (+ ((x Point)) (y Point))) (subclass: Point (new Symbol "Point3D")) (message:params:method: Point3D "new:y:z:" (new Symbol "x" new Symbol "y" new Symbol "z") ((x:y: Point (x Point3D) (y Point3D)) (= ((z Point3D)) z))) (message:params:method: Point3D "calc" () (+ ((calc Point)) (z Point3D))) (= p (new:y:z: Point3D 10 20 30)) (calc p))});
         end
 
-        xit "creates a class using specialized syntax" do
-            # TODO cascading message
+        it "creates a class using specialized syntax" do
             parse(%Q{(
-                (Object
-                    subclass: "Point"
+                (Object subclass: "Point")
+                (Point
                     message: ("new:y:" ("x" "y") (
                         ((Point x) = x)
                         ((Point y) = y)
@@ -56,8 +55,8 @@ describe Parser do
                         (Point x) + (Point y)
                     ))
                 )
-                (Point
-                    subclass: "Point3D"
+                (Point subclass: "Point3D")
+                (Point3D
                     message: ("new:y:z:" ("x" "y" "z") (
                         (Point new: (Point3D x) y: (Point3D y))
                         ((Point3D z) = z)
@@ -68,7 +67,7 @@ describe Parser do
                 )
                 (p = Point3D new: 10 y: 20 z: 30)
                 (p calc)
-            )}, "()");
+            )}, %Q{((subclass: Object "Point") ((message: Point ("new:y:" ("x" "y") ((= ((x Point)) x) (= ((y Point)) y)))) (message: Point ("calc" () (+ ((x Point)) (y Point))))) (subclass: Point "Point3D") ((message: Point3D ("new:y:z:" ("x" "y" "z") ((new:y: Point (x Point3D) (y Point3D)) (= ((z Point3D)) z)))) (message: Point3D ("calc" () (+ ((calc Point)) (z Point3D))))) (= p (new:y:z: Point3D 10 20 30)) (calc p))});
         end
     end
 end
