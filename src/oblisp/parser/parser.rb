@@ -37,6 +37,27 @@ class Parser
         @is_comma_message = is_comma_message.!;
     end
 
+    def __lookahead_for_tokens
+        t0 = consume_next;
+        t1 = consume_next;
+        t2 = consume_next;
+        resume_prev;
+        resume_prev;
+        resume_prev;
+        [t1, t2];
+    end
+
+    def __list_of_grammar_rule(&rule)
+        __list = [];
+        loop do
+            current_position = token_table_pos;
+            item = rule.call;
+            break if current_position == token_table_pos;
+            __list << item;
+        end
+        __list;
+    end
+
     def error(message)
         raise StandardError.new message;
         # TODO Track line numbers to each error
@@ -60,12 +81,7 @@ class Parser
         ensure_consumption "(", "missing opening parenthesis on list";
 
         if is_quoted
-            __units = [];
-            loop do
-                break if peek_token == ")"
-                unit = consume_next;
-                __units << %Q{(new Symbol "#{unit.value}")};
-            end
+            __units = quotted_list;
         else
             __units = translation_unit_list;
         end
@@ -74,58 +90,33 @@ class Parser
         ast.list __units;
     end
 
-    def translation_unit_list
+    def quotted_list
         __units = [];
         loop do
-            current_position = token_table_pos;
-            unit = translation_unit;
-            break if current_position == token_table_pos;
-            __units << unit;
+            break if peek_token == ")"
+            __units << ast.symbol_literal(consume_next.value);
         end
         __units;
     end
 
-    def translation_unit
-        statement;
+    def translation_unit_list
+        __list_of_grammar_rule { translation_unit };
     end
 
-    def statement
+    def translation_unit
         current_position = token_table_pos;
         optional_assignment_list = assignment_message_list;
         expr = expression;
 
-        res = "";
         if current_position != token_table_pos
-            res << "#{optional_assignment_list[0]}";
-            (1...optional_assignment_list.size).each do |i|
-                res << "(" << optional_assignment_list[i];
-            end
-
-            if expr[0] == "(" and expr[1] == "(" and expr[-1] == ")" and expr[-2] == ")"
-                res << expr[1...-1];
-            elsif res == "" and expr[0] == "(" and expr[-1] == ")"
-                res << expr[1...-1];
-            else
-                res << expr;
-            end
-
-            (optional_assignment_list.size-1).times do
-                res << ")";
-            end
+            ast.translation_unit optional_assignment_list, expr;
+        else
+            ast.empty;
         end
-
-        res;
     end
 
     def assignment_message_list
-        __assign_list = [];
-        loop do
-            current_position = token_table_pos;
-            assign = assignment_message;
-            break if current_position == token_table_pos;
-            __assign_list << assign;
-        end
-        __assign_list;
+        __list_of_grammar_rule { assignment_message };
     end
     
     def assignment_message
@@ -136,9 +127,7 @@ class Parser
             current_position = token_table_pos;
             terminal_EQUALS;
             if current_position != token_table_pos
-                # TODO ast
-                # ast.assignment_message id;
-                "= #{id} ";
+                ast.assignment_message id;
             else
                 resume_prev;
             end
@@ -146,6 +135,7 @@ class Parser
     end
 
     def expression
+        # TODO ast
         left = operand;
         if left and left[0] == " " and left[-1] == " "
             left = "(#{left[1...-1]})";
@@ -222,13 +212,28 @@ class Parser
     end
 
     def message_chain
+        def __chain_helper(rest_un)
+            res = [];
+            number_of_nests = 0;
+
+            if rest_un.size > 0
+                (0...rest_un.size-1).each do |i|
+                    msg = rest_un[i][0];
+                    right = rest_un[i][1];
+                    res << [msg, right];
+                end
+                msg = rest_un[rest_un.size-1][0];
+                right = rest_un[rest_un.size-1][1];
+                res << [msg, right];
+                number_of_nests += rest_un.size-1;
+            end
+
+            [res, number_of_nests];
+        end
+
         if peek_token.type == Type::IDENTIFIER
-            _id = consume_next;
-            optional_id_symbol = consume_next;
-            possible_colon = consume_next;
-            resume_prev;
-            resume_prev;
-            resume_prev;
+            optional_id_symbol, possible_colon = __lookahead_for_tokens;
+
             if optional_id_symbol == ":" or (optional_id_symbol.type == Type::ID_SYMBOL and possible_colon == ":")
                 rest_key = keyword_message;
                 res = rest_key;
@@ -238,36 +243,18 @@ class Parser
                     [*res, number_of_nests];
                 end
             else
-                rest_un = unary_message_chain;
-                rest_bin = binary_message_chain;
-                rest_key = keyword_message;
-
                 res = [];
                 number_of_nests = 0;
-                if rest_un.size > 0
-                    (0...rest_un.size-1).each do |i|
-                        msg = rest_un[i][0];
-                        right = rest_un[i][1];
-                        res << [msg, right];
-                    end
-                    msg = rest_un[rest_un.size-1][0];
-                    right = rest_un[rest_un.size-1][1];
-                    res << [msg, right];
-                    number_of_nests += rest_un.size-1;
-                end
 
-                if rest_bin.size > 0
-                    (0...rest_bin.size-1).each do |i|
-                        msg = rest_bin[i][0];
-                        right = rest_bin[i][1];
-                        res << [msg, right];
-                    end
-                    msg = rest_bin[rest_bin.size-1][0];
-                    right = rest_bin[rest_bin.size-1][1];
-                    res << [msg, right];
-                    number_of_nests += rest_bin.size-1;
-                end
+                unchain = __chain_helper(unary_message_chain);
+                res += unchain[0];
+                number_of_nests += unchain[1];
 
+                binchain = __chain_helper(binary_message_chain);
+                res += binchain[0];
+                number_of_nests += binchain[1];
+
+                rest_key = keyword_message;
                 if rest_key[1].size > 0
                     msg = rest_key[0];
                     args = rest_key[1];
@@ -280,23 +267,14 @@ class Parser
                 end
             end
         elsif peek_token.type == Type::MESSAGE_SYMBOL
-            rest_bin = binary_message_chain;
-            rest_key = keyword_message;
-
             res = [];
             number_of_nests = 0;
-            if rest_bin.size > 0
-                (0...rest_bin.size-1).each do |i|
-                    msg = rest_bin[i][0];
-                    right = rest_bin[i][1];
-                    res << [msg, right];
-                end
-                msg = rest_bin[rest_bin.size-1][0];
-                right = rest_bin[rest_bin.size-1][1];
-                res << [msg, right];
-                number_of_nests += rest_bin.size-1;
-            end
+            
+            binchain = __chain_helper(binary_message_chain);
+            res += binchain[0];
+            number_of_nests += binchain[1];
 
+            rest_key = keyword_message;
             if rest_key[1].size > 0
                 msg = rest_key[0];
                 args = rest_key[1];
@@ -337,62 +315,30 @@ class Parser
         __unary_chain = [];
         loop do
             msg = unary_message;
-            if msg == []
-                break;
-            elsif msg[-1] == ":"
-                resume_prev;
-                break;
-            end
+            break if msg == []
             __unary_chain << msg;
         end
         __unary_chain.reverse!;
     end
 
     def binary_message_chain
-        __binary_chain = [];
-        loop do
-            msg = binary_message;
-            break if msg == [];
-            __binary_chain << msg;
-        end
-        __binary_chain.reverse!;
+        __list_of_grammar_rule { binary_message }.reverse!;
     end
 
     def binary_message
-        msg = binary_selector;
-        right = binary_operand;
-        if msg != nil and right != nil
-            [msg, right];
-        else
-            [];
-        end
+        [binary_selector, binary_operand];
     end
 
     def binary_selector
         if peek_token == ","
-            if is_comma_message
-                terminal_MESSAGE_SYMBOL;
-            else
-                nil;
-            end
+            terminal_MESSAGE_SYMBOL if is_comma_message;
         else
             terminal_MESSAGE_SYMBOL;
         end
     end
 
     def binary_operand
-        res = operand;
-        if res != nil
-            if res and res[0] == " " and res[-1] == " "
-                res = "#{res[1...-1]}";
-            end
-
-            rest_un = unary_message_chain;
-            rest_un.each do |un|
-                res << un << " ";
-            end
-            res;
-        end
+        ast.binary_operand operand, unary_message_chain;
     end
 
     def keyword_message
@@ -413,59 +359,46 @@ class Parser
     end
 
     def keyword_segment
-        key = keyword;
-        arg = keyword_argument;
-
-        if key != nil and arg != nil
+        if (key = keyword) and (arg = keyword_argument)
             [key, arg];
         end
     end
 
     def keyword
         id = terminal_IDENTIFIER;
-        if id != nil
-            optional_symbol = terminal_IDENTIFIER_SYMBOL;
-            terminal_COLON;
-            "#{id}#{optional_symbol}:";
+        optional_symbol = terminal_IDENTIFIER_SYMBOL;
+        delim = terminal_COLON;
+
+        if id and delim
+            ast.keyword id, optional_symbol, delim;
+        else
+            ast.empty;
         end
     end
 
     def keyword_argument
-        res = binary_operand;
-        
-        if res != nil
-            rest_bin = binary_message_chain;
-            rest_bin.each do |bin|
-                res << bin << " ";
-            end
-            res;
-        end
+        ast.keyword_argument binary_operand, binary_message_chain;
     end
 
     def cascaded_message_list
         __casc = [];
         loop do
             break if peek_token != ";"
-            terminal_SEMICOLON;
+            ensure_consumption ";", "missing semicolon after cascaded message";
             __casc << message_chain;
         end
         __casc;
     end
 
     def operand
-        current_position = token_table_pos;
+        # TODO Change nullity to empty strings
         res = nil;
+        current_position = token_table_pos;
         if current_position == token_table_pos
             res = literal;
         end
         if current_position == token_table_pos
             res = terminal_IDENTIFIER;
-        end
-        if current_position == token_table_pos
-            res = terminal_SELF;
-        end
-        if current_position == token_table_pos
-            res = terminal_SUPER;
         end
         # TODO Refactor
         if current_position == token_table_pos and peek_token != ")" and peek_token != "]" and peek_token != "}" and peek_token != "," and peek_token != ";" and peek_token != "eof"
@@ -517,7 +450,7 @@ class Parser
 
     def tuple_literal
         if peek_token == "["
-            consume_next;
+            ensure_consumption "[", "missing opening bracket on tuple";
             __items = translation_unit_list;
             ensure_consumption "]", "missing closing bracket on tuple";
             ast.tuple_literal __items;
@@ -526,7 +459,7 @@ class Parser
 
     def hash_literal
         if peek_token == "{"
-            consume_next;
+            ensure_consumption "{", "missing opening curly brace on hash";
             __list = association_list;
             ensure_consumption "}", "missing closing curly brace on hash";
             ast.hash_literal __list;
@@ -534,14 +467,7 @@ class Parser
     end
 
     def association_list
-        __list = [];
-        loop do
-            current_position = token_table_pos;
-            assoc = association;
-            break if current_position == token_table_pos;
-            __list << assoc;
-        end
-        __list;
+        __list_of_grammar_rule { association };
     end
 
     def association
@@ -551,7 +477,7 @@ class Parser
             toggle_comma_as_message_while_in_association;
             value = translation_unit_list;
             toggle_comma_as_message_while_in_association;
-            ensure_consumption ",", "json style keys should be separated by commas" if peek_token != "}";
+            ensure_consumption ",", "keys should be separated by commas" if peek_token != "}";
             ast.json_association key, value;
         elsif peek_token == ":"
             key = symbol_literal;
@@ -559,7 +485,7 @@ class Parser
             toggle_comma_as_message_while_in_association;
             value = translation_unit_list;
             toggle_comma_as_message_while_in_association;
-            ensure_consumption ",", "json style keys should be separated by commas" if peek_token != "}";
+            ensure_consumption ",", "keys should be separated by commas" if peek_token != "}";
             ast.association key, value;
         elsif peek_token.type == Type::STRING
             key = string_literal;
@@ -567,7 +493,7 @@ class Parser
             toggle_comma_as_message_while_in_association;
             value = translation_unit_list;
             toggle_comma_as_message_while_in_association;
-            ensure_consumption ",", "json style keys should be separated by commas" if peek_token != "}";
+            ensure_consumption ",", "keys should be separated by commas" if peek_token != "}";
             ast.association key, value;
         end
     end
@@ -576,18 +502,6 @@ class Parser
         if peek_token == ":"
             consume_next;
             ast.symbol_literal terminal_IDENTIFIER;
-        end
-    end
-
-    def terminal_SELF
-        if peek_token.type == Type::SELF
-            ast.terminal_SELF consume_next;
-        end
-    end
-
-    def terminal_SUPER
-        if peek_token.type == Type::SUPER
-            ast.terminal_SUPER consume_next;
         end
     end
 
@@ -635,12 +549,6 @@ class Parser
 
     def terminal_LITERAL_BACKQUOTE
         if peek_token == "`"
-            consume_next;
-        end
-    end
-
-    def terminal_SEMICOLON
-        if peek_token == ";"
             consume_next;
         end
     end

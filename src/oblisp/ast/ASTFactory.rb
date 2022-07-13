@@ -15,15 +15,19 @@ module Abstract
 end
 
 class ASTInterface; extend Abstract;
-    abstract_methods :list,
+    abstract_methods :empty,
+                     :list,
+                     :translation_unit,
+                     :assignment_message,
+                     :binary_operand,
+                     :keyword,
+                     :keyword_argument,
                      :base_ten_literal,
                      :tuple_literal,
                      :hash_literal,
                      :association,
                      :json_association,
                      :symbol_literal,
-                     :terminal_SELF,
-                     :terminal_SUPER,
                      :terminal_POSITIVE_BASE_TEN_NUMBER,
                      :terminal_ALTERNATE_BASE_NUMBER,
                      :terminal_STRING,
@@ -34,14 +38,25 @@ class ASTInterface; extend Abstract;
 end
 
 class Default < ASTInterface
-    # def program(body)
-    #     {
-    #         type: "Program",
-    #         body: body
-    #     };
-    # end
+    def empty
+    end
 
     def list(unit_list)
+    end
+
+    def translation_unit(optional_assignment_list, expr)
+    end
+
+    def assignment_message(id)
+    end
+
+    def binary_operand(op, unchain)
+    end
+
+    def keyword(id, optional_symbol, delim)
+    end
+
+    def keyword_argument(binop, binchain)
     end
 
     def base_ten_literal(sign, number)
@@ -60,12 +75,6 @@ class Default < ASTInterface
     end
 
     def symbol_literal(id)
-    end
-
-    def terminal_SELF(keyword)
-    end
-
-    def terminal_SUPER(keyword)
     end
 
     def terminal_POSITIVE_BASE_TEN_NUMBER(number)
@@ -91,6 +100,10 @@ class Default < ASTInterface
 end
 
 class SExpression < ASTInterface
+    def empty
+        "";
+    end
+
     def list(unit_list)
         res = "(";
 
@@ -103,6 +116,52 @@ class SExpression < ASTInterface
 
         res << ")";
         res;
+    end
+
+    def translation_unit(optional_assignment_list, expr)
+        res = "#{optional_assignment_list[0]}";
+        (1...optional_assignment_list.size).each do |i|
+            res << "(" << optional_assignment_list[i];
+        end
+
+        if expr[0] == "(" and expr[1] == "(" and expr[-1] == ")" and expr[-2] == ")"
+            res << expr[1...-1];
+        elsif res == "" and expr[0] == "(" and expr[-1] == ")"
+            res << expr[1...-1];
+        else
+            res << expr;
+        end
+
+        (optional_assignment_list.size-1).times do
+            res << ")";
+        end
+        res;
+    end
+
+    def assignment_message(id)
+        "= #{id} ";
+    end
+
+    def binary_operand(op, unchain)
+        if op and op[0] == " " and op[-1] == " "
+            op = "#{op[1...-1]}";
+        end
+
+        unchain.each do |un|
+            op << un << " ";
+        end
+        op;
+    end
+
+    def keyword(id, optional_symbol, delim)
+        "#{id}#{optional_symbol}#{delim.value}";
+    end
+
+    def keyword_argument(binop, binchain)
+        binchain.each do |bin|
+            binop << bin << " ";
+        end
+        binop;
     end
 
     def base_ten_literal(sign, number)
@@ -159,14 +218,6 @@ class SExpression < ASTInterface
 
     def symbol_literal(id)
         %Q{(new Symbol "#{id}")};
-    end
-    
-    def terminal_SELF(keyword)
-        keyword.value;
-    end
-
-    def terminal_SUPER(keyword)
-        keyword.value;
     end
 
     def terminal_POSITIVE_BASE_TEN_NUMBER(number)
