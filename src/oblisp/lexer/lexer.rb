@@ -1,8 +1,8 @@
 require_relative "../tokens/type";
 
 module RegexMatchers
-    WHITESPACE = [" ","\t","\f"];
-    NEWLINE = ["\r","\n"];
+    WHITESPACE = [" ","\t","\f","\r"];
+    NEWLINE = ["\n"];
 
     NUMBER = ["0","1","2","3","4","5","6","7","8","9"];
     LETTER = [
@@ -189,7 +189,6 @@ class Lexer
             if c == nil
                 break;
             elsif c.matches(RegexMatchers::NEWLINE)
-                # TODO Test out windows `\r\n`
                 @lineno += 1;
             elsif c.matches(RegexMatchers::WHITESPACE)
             elsif c.matches(RegexMatchers::NUMBER)
