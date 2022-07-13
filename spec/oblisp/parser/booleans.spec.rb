@@ -13,12 +13,12 @@ describe Parser do
             parse("(b = (x >= y))", "(= b (>= x y))");
             parse("(b = (x <= y))", "(= b (<= x y))");
             parse("(b = b not)", "(= b (not b))");
-            parse("(b = (x < 5) && (y > 1))", "(= b (&& (< x 5) (> y 1)))");
-            parse("(b = (x < 5) || (y > 1))", "(= b (|| (< x 5) (> y 1)))");
-            parse("(b = (x < 5) and: (y > 1))", "(= b (and: (< x 5) (> y 1)))");
-            parse("(b = (x < 5) or: (y > 1))", "(= b (or: (< x 5) (> y 1)))");
-            parse("(b = (x < 5) eqv: (y > 1))", "(= b (eqv: (< x 5) (> y 1)))");
-            parse("(b = (x < 5) xor: (y > 1))", "(= b (xor: (< x 5) (> y 1)))");
+            parse("(b = (x < 5) && (y > 1))", "(= b (&& ((< x 5)) (> y 1)))");
+            parse("(b = (x < 5) || (y > 1))", "(= b (|| ((< x 5)) (> y 1)))");
+            parse("(b = (x < 5) and: (y > 1))", "(= b (and: ((< x 5)) (> y 1)))");
+            parse("(b = (x < 5) or: (y > 1))", "(= b (or: ((< x 5)) (> y 1)))");
+            parse("(b = (x < 5) eqv: (y > 1))", "(= b (eqv: ((< x 5)) (> y 1)))");
+            parse("(b = (x < 5) xor: (y > 1))", "(= b (xor: ((< x 5)) (> y 1)))");
             parse("(b = 5 between: 3 and: 12)", "(= b (between:and: 5 3 12))");
             parse("(b = 123 is_kind_of: Number)", "(= b (is_kind_of: 123 Number))");
             parse("(b = 123 is_member_of: SmallInteger)", "(= b (is_member_of: 123 SmallInteger))");

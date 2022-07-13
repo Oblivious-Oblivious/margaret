@@ -92,11 +92,11 @@ class Parser
     end
 
     def translation_unit
-        if peek_token == "`" or peek_token == "("
-            list;
-        else
+        # if peek_token == "`" or peek_token == "("
+            # list;
+        # else
             statement;
-        end
+        # end
     end
 
     def statement
@@ -114,7 +114,9 @@ class Parser
                 res << "(" << optional_assignment_list[i];
             end
 
-            if res == "" and expr[0] == "(" and expr[-1] == ")"
+            if expr[0] == "(" and expr[1] == "(" and expr[-1] == ")" and expr[-2] == ")"
+                res << expr[1...-1];
+            elsif res == "" and expr[0] == "(" and expr[-1] == ")"
                 res << expr[1...-1];
             else
                 res << expr;
@@ -159,7 +161,10 @@ class Parser
 
     def expression
         left = operand;
-        # print "LEFT: "; pp left;
+        if left and left[0] == " " and left[-1] == " "
+            left = "(#{left[1...-1]})";
+        end
+
         chain = message_chain;
         # print "COMPLETE: "; pp chain;
         if chain and chain[0].is_a? String
@@ -382,6 +387,10 @@ class Parser
     def binary_operand
         res = operand;
         if res != nil
+            if res and res[0] == " " and res[-1] == " "
+                res = "#{res[1...-1]}";
+            end
+
             rest_un = unary_message_chain;
             rest_un.each do |un|
                 res << un << " ";
@@ -455,6 +464,7 @@ class Parser
         # TODO Refactor
         if current_position == token_table_pos and peek_token != ")" and peek_token != "]" and peek_token != "}" and peek_token != "," and peek_token != "eof"
             res = list;
+            res = " #{res} " if res != nil;
         end
         res;
     end

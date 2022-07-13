@@ -20,8 +20,6 @@ describe Parser do
 
         it "parses hashes" do
             parse("(x = {:a => 100, :b => 200, :c => 300})", %Q{(= x (new Hash ((key:value: Association (new Symbol "a") 100) (key:value: Association (new Symbol "b") 200) (key:value: Association (new Symbol "c") 300))))});
-            # TODO Left hand side parenthesized operands
-            # parse("((x = Hash new) (x add: :a => 100; add: b => 200))");
             parse(%Q{(x at: "a" put: 3)}, %Q{(at:put: x "a" 3)});
             parse("(x is_empty?)", "(is_empty? x)");
             parse("(x size)", "(size x)");
@@ -34,7 +32,6 @@ describe Parser do
             parse("(x each_key: [(a) (a puts)])", "(each_key: x (new Tuple ((a) (puts a))))");
             parse("(x each_value: [(a) (a puts)])", "(each_value: x (new Tuple ((a) (puts a))))");
             parse("(x each: [(a) (a puts)])", "(each: x (new Tuple ((a) (puts a))))"); # Prints hash associations
-            # NOTE Hashes have list messages
         end
     end
 end

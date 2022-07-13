@@ -4,7 +4,6 @@ describe Parser do
     context "on blocks" do
         it "parses blocks" do
             parse("(x = ((x = 1) (y = 2)))", "(= x ((= x 1) (= y 2)))"); # x = 2
-            # NOTE Figure out blocks
             parse("(x = [
                     (v1,v2)
                     (

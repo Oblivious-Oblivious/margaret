@@ -17,8 +17,7 @@ describe Parser do
             # parse("(s with: 'a'; with: 'b'; with: 'c'; with: 'd')");
 
             parse("(s each_char: [(a) (a puts)])", "(each_char: s (new Tuple ((a) (puts a))))");
-            # TODO Left hand side parenthesized operands
-            # parse("(b = s conform: [(a) (a >= 'a') && (a <= 'z')])");
+            parse("(b = s conform: [(a) ((a >= 'a') && (a <= 'z'))])", "(= b (conform: s (new Tuple ((a) (&& ((>= a 'a')) (<= a 'z'))))))");
             parse("(x = s select: [(a) (a > 'a')])", "(= x (select: s (new Tuple ((a) (> a 'a')))))");
             parse("(x = s to_list)", "(= x (to_list s))");
             parse("(x = s to_symbol)", "(= x (to_symbol s))");
