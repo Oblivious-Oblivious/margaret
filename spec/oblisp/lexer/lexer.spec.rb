@@ -203,22 +203,8 @@ describe Lexer do
             expect(tokens[6].value).to eq "__msg";
         end
 
-        it "tokenizes the `self` keyword" do
-            l = Lexer.new "file.obl", "(self puts)";
-            tokens = l.make_tokens;
-            expect(tokens.size).to eq 4;
-            expect(tokens[1].value).to eq "self";
-        end
-
-        it "tokenizes the `super` keyword" do
-            l = Lexer.new "file.obl", "(super puts)";
-            tokens = l.make_tokens;
-            expect(tokens.size).to eq 4;
-            expect(tokens[1].value).to eq "super";
-        end
-
         it "prints the token table" do
-            l = Lexer.new "file.obl", "(super puts)";
+            l = Lexer.new "file.obl", "(42 factorial)";
             tokens = l.make_tokens;
             expect(tokens.size).to eq 4;
 
@@ -226,11 +212,11 @@ describe Lexer do
         end
 
         it "traverses through the token table" do
-            l = Lexer.new "file.obl", "(self puts)";
+            l = Lexer.new "file.obl", "(x puts)";
             tokens = l.make_tokens;
             expect(tokens.size).to eq 4;
             expect(l.next_token.value).to eq "(";
-            expect(l.next_token.value).to eq "self"
+            expect(l.next_token.value).to eq "x"
             expect(l.next_token.value).to eq "puts";
             expect(l.next_token.value).to eq ")";
             expect(l.next_token.value).to eq "eof";
