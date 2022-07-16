@@ -45,7 +45,7 @@ describe Parser do
 
         it "creates a class using specialized syntax" do
             parse(%Q{(
-                (Object subclass: "Point")
+                (Object subclass: :Point)
                 (Point
                     message: ("new:y:" ("x" "y") (
                         ((Point x) = x)
@@ -67,7 +67,7 @@ describe Parser do
                 )
                 (p = Point3D new: 10 y: 20 z: 30)
                 (p calc)
-            )}, %Q{((subclass: Object "Point") ((message: Point ("new:y:" ("x" "y") ((= ((x Point)) x) (= ((y Point)) y)))) (message: Point ("calc" () (+ ((x Point)) (y Point))))) (subclass: Point "Point3D") ((message: Point3D ("new:y:z:" ("x" "y" "z") ((new:y: Point (x Point3D) (y Point3D)) (= ((z Point3D)) z)))) (message: Point3D ("calc" () (+ ((calc Point)) (z Point3D))))) (= p (new:y:z: Point3D 10 20 30)) (calc p))});
+            )}, %Q{((subclass: Object (new Symbol "Point")) ((message: Point ("new:y:" ("x" "y") ((= ((x Point)) x) (= ((y Point)) y)))) (message: Point ("calc" () (+ ((x Point)) (y Point))))) (subclass: Point "Point3D") ((message: Point3D ("new:y:z:" ("x" "y" "z") ((new:y: Point (x Point3D) (y Point3D)) (= ((z Point3D)) z)))) (message: Point3D ("calc" () (+ ((calc Point)) (z Point3D))))) (= p (new:y:z: Point3D 10 20 30)) (calc p))});
         end
     end
 end
