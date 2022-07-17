@@ -39,8 +39,8 @@ class SExpression < ASTInterface
         res;
     end
 
-    def assignment_message(id)
-        "= #{id} ";
+    def assignment_message(id, eq)
+        "#{eq} #{id} ";
     end
 
     def binary_operand(op, unchain)
@@ -55,7 +55,7 @@ class SExpression < ASTInterface
     end
 
     def keyword(id, optional_symbol, delim)
-        "#{id}#{optional_symbol}#{delim.value}";
+        "#{id}#{optional_symbol}#{delim}";
     end
 
     def keyword_argument(binop, binchain)
@@ -146,6 +146,14 @@ class SExpression < ASTInterface
     end
 
     def terminal_SIGN(symb)
+        symb.value;
+    end
+
+    def terminal_EQUALS(symb)
+        symb.value;
+    end
+
+    def terminal_COLON(symb)
         symb.value;
     end
 end

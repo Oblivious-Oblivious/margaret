@@ -37,10 +37,10 @@ class Parser
     end
 
     def list
-        is_quoted = terminal_LITERAL_BACKQUOTE;
+        is_quoted = table.consume if table.peek == "`";
         table.ensure_consumption "(", "missing opening parenthesis on list";
 
-        if is_quoted
+        if is_quoted != nil
             __units = quotted_list;
         else
             __units = translation_unit_list;
@@ -84,10 +84,9 @@ class Parser
         id = terminal_IDENTIFIER;
 
         if current_position != table.token_table_pos
-            current_position = table.token_table_pos;
-            terminal_EQUALS;
-            if current_position != table.token_table_pos
-                ast.assignment_message id;
+            eq = terminal_EQUALS;
+            if eq != nil
+                ast.assignment_message id, eq;
             else
                 table.resume;
             end
@@ -333,7 +332,7 @@ class Parser
         optional_symbol = terminal_IDENTIFIER_SYMBOL;
         delim = terminal_COLON;
 
-        if id and delim
+        if id != nil and delim != nil
             ast.keyword id, optional_symbol, delim;
         else
             ast.empty;
@@ -511,21 +510,15 @@ class Parser
         end
     end
 
-    def terminal_LITERAL_BACKQUOTE
-        if table.peek == "`"
-            table.consume;
+    def terminal_EQUALS
+        if table.peek == "="
+            ast.terminal_EQUALS table.consume;
         end
     end
 
     def terminal_COLON
         if table.peek == ":"
-            table.consume;
-        end
-    end
-
-    def terminal_EQUALS
-        if table.peek == "="
-            table.consume;
+            ast.terminal_COLON table.consume;
         end
     end
 end

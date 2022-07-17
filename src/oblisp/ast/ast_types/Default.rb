@@ -10,7 +10,7 @@ class Default < ASTInterface
     def translation_unit(optional_assignment_list, expr)
     end
 
-    def assignment_message(id)
+    def assignment_message(id, eq)
     end
 
     def binary_operand(op, unchain)
@@ -59,5 +59,11 @@ class Default < ASTInterface
     end
 
     def terminal_SIGN(symb)
+    end
+
+    def terminal_EQUALS(symb)
+    end
+
+    def terminal_COLON(symb)
     end
 end

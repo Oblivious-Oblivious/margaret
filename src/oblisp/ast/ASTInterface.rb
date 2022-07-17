@@ -20,5 +20,7 @@ class ASTInterface; extend Abstract;
                      :terminal_IDENTIFIER,
                      :terminal_MESSAGE_SYMBOL,
                      :terminal_IDENTIFIER_SYMBOL,
-                     :terminal_SIGN;
+                     :terminal_SIGN,
+                     :terminal_EQUALS,
+                     :terminal_COLON;
 end
