@@ -23,9 +23,4 @@ describe Type do
     it "contains non terminal literal types" do
         expect(Type::IDENTIFIER).to eq 201;
     end
-
-    it "contains the 2 omega hype keywords of the language" do
-        expect(Type::SELF).to eq 1033;
-        expect(Type::SUPER).to eq 3301;
-    end
 end

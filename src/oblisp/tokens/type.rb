@@ -15,7 +15,4 @@ module Type
     STRING = 111;
 
     IDENTIFIER = 201;
-
-    SELF = 1033;
-    SUPER = 3301;
 end
