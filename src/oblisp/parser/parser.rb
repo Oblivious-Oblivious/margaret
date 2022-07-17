@@ -3,7 +3,7 @@ require_relative "../ast/ASTFactory";
 AST_TYPE = "s-expressions";
 
 class Parser
-    attr_accessor :table, :ast, :is_comma_message;
+    attr_accessor :table, :ast;
 
     def initialize(table)
         @table = table;
@@ -12,7 +12,7 @@ class Parser
     end
 
     def toggle_comma_as_message_while_in_association
-        @is_comma_message = is_comma_message.!;
+        @is_comma_message = @is_comma_message.!;
     end
 
     def __list_of_grammar_rule(&rule)
@@ -295,7 +295,7 @@ class Parser
 
     def binary_selector
         if table.peek == ","
-            terminal_MESSAGE_SYMBOL if is_comma_message;
+            terminal_MESSAGE_SYMBOL if @is_comma_message;
         else
             terminal_MESSAGE_SYMBOL;
         end
