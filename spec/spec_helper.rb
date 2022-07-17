@@ -43,4 +43,5 @@ require_relative "oblisp/parser/tuples.spec";
 
 # tokens
 require_relative "oblisp/tokens/token.spec";
+require_relative "oblisp/tokens/TokenTable.spec";
 require_relative "oblisp/tokens/type.spec";

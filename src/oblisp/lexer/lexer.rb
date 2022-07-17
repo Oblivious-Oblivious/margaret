@@ -34,17 +34,17 @@ class String
 end
 
 class Lexer
-    attr_accessor :filename, :text, :pos, :token_pos, :lineno, :token_table;
+    attr_accessor :filename, :text, :pos, :lineno;
 
     def initialize(filename, text)
         @filename = filename;
         @text = text;
         @pos = -1;
-        @token_pos = -1;
         @lineno = 1;
     end
 
     def error(message)
+        # TODO Extract closer to boundary
         puts "#{filename}:#{lineno}: #{'error:'.red} #{message}";
         [];
     end
@@ -65,16 +65,6 @@ class Lexer
         else
             nil;
         end
-    end
-
-    def print_token_table
-        print "(";
-
-        token_table.each do |token|
-            puts token;
-        end
-
-        print ")";
     end
 
     def tokenize_integer(c)
@@ -138,6 +128,7 @@ class Lexer
     def tokenize_identifier(c)
         final_identifier = "";
 
+        # TODO Add unicode support
         loop do
             final_identifier << c;
             c = peek_character;
@@ -204,35 +195,8 @@ class Lexer
             end
         end
 
-        @token_table = token_table;
-        token_table;
-    end
-
-    def next_token
-        @token_pos += 1;
-
-        if token_pos >= token_table.size
-            Token.new "eof", Type::EOF, lineno;
-        else
-            token_table[token_pos];
-        end
-    end
-
-    def prev_token
-        @token_pos -= 1;
-
-        if token_pos == -1
-            Token.new "eof", Type::EOF, lineno;
-        else
-            token_table[token_pos];
-        end
-    end
-
-    def peek_token
-        if token_pos+1 >= token_table.size
-            Token.new "eof", Type::EOF, lineno;
-        else
-            token_table[token_pos+1];
-        end
+        token_table << (Token.new "eof", Type::EOF, lineno);
+        
+        TokenTable.new token_table;
     end
 end
