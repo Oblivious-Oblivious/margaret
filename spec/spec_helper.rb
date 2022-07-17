@@ -12,11 +12,11 @@ require_relative "oblisp/ast/ast_types/Default.spec";
 require_relative "oblisp/ast/ast_types/SExpression.spec";
 
 # lexer
-require_relative "oblisp/lexer/file_loader.spec";
-require_relative "oblisp/lexer/lexer.spec";
+require_relative "oblisp/lexer/FileLoader.spec";
+require_relative "oblisp/lexer/Lexer.spec";
 
 # parser
-require_relative "oblisp/parser/parser.spec";
+require_relative "oblisp/parser/Parser.spec";
 require_relative "oblisp/parser/arithmetic.spec";
 require_relative "oblisp/parser/assignments.spec";
 require_relative "oblisp/parser/bitwise.spec";
@@ -42,6 +42,6 @@ require_relative "oblisp/parser/symbols.spec";
 require_relative "oblisp/parser/tuples.spec";
 
 # tokens
-require_relative "oblisp/tokens/token.spec";
+require_relative "oblisp/tokens/Token.spec";
 require_relative "oblisp/tokens/TokenTable.spec";
-require_relative "oblisp/tokens/type.spec";
+require_relative "oblisp/tokens/Type.spec";
