@@ -3,7 +3,7 @@ require_relative "_parser_helpers";
 describe Parser do
     context "on classes" do
         it "parses generating an object with inheritance" do
-            pp parse(%Q{
+            parse(%Q{
                 (
                     (Object subclass: "Point")
                     (Point
