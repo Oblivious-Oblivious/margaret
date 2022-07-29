@@ -477,6 +477,9 @@ class Parser
         if current_position == table.token_table_pos
             res = terminal_IDENTIFIER;
         end
+        if current_position == table.token_table_pos
+            res = terminal_UNQUOTED_STRING;
+        end
         res;
     end
 
@@ -495,6 +498,12 @@ class Parser
     def terminal_STRING
         if table.peek.type == Type::STRING
             ast.terminal_STRING table.consume;
+        end
+    end
+
+    def terminal_UNQUOTED_STRING
+        if table.peek.type == Type::STRING
+            ast.terminal_UNQUOTED_STRING table.consume;
         end
     end
 

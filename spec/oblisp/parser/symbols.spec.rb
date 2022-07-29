@@ -11,6 +11,7 @@ describe Parser do
             parse("(x = :Hello)", %Q{(= x (new Symbol "Hello"))});
             parse("(y = :symb)", %Q{(= y (new Symbol "symb"))});
             parse("((1 2 3) reduce: :+)", %Q{(reduce: ((1 2 3)) (new Symbol "+"))});
+            parse(%Q{(x = :"a symbol")}, %Q{(= x (new Symbol "a symbol"))});
             # NOTE Look at ruby
         end
     end

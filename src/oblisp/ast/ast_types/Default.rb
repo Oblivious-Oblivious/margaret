@@ -49,6 +49,9 @@ class Default < ASTInterface
     def terminal_STRING(value)
     end
 
+    def terminal_UNQUOTED_STRING(value)
+    end
+
     def terminal_IDENTIFIER(id)
     end
 

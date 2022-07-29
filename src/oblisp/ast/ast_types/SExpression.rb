@@ -133,6 +133,10 @@ class SExpression < ASTInterface
         value.value;
     end
 
+    def terminal_UNQUOTED_STRING(value)
+        value.value[1...-1];
+    end
+
     def terminal_IDENTIFIER(id)
         id.value;
     end
