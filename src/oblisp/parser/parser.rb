@@ -464,8 +464,20 @@ class Parser
     def symbol_literal
         if table.peek == ":"
             table.consume;
-            ast.symbol_literal terminal_IDENTIFIER;
+            ast.symbol_literal symbol_name;
         end
+    end
+
+    def symbol_name
+        res = nil;
+        current_position = table.token_table_pos;
+        if current_position == table.token_table_pos
+            res = terminal_MESSAGE_SYMBOL;
+        end
+        if current_position == table.token_table_pos
+            res = terminal_IDENTIFIER;
+        end
+        res;
     end
 
     def terminal_POSITIVE_BASE_TEN_NUMBER

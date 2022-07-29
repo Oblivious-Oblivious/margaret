@@ -10,6 +10,7 @@ describe Parser do
         it "parses symbol messages" do
             parse("(x = :Hello)", %Q{(= x (new Symbol "Hello"))});
             parse("(y = :symb)", %Q{(= y (new Symbol "symb"))});
+            parse("((1 2 3) reduce: :+)", %Q{(reduce: ((1 2 3)) (new Symbol "+"))});
             # NOTE Look at ruby
         end
     end
