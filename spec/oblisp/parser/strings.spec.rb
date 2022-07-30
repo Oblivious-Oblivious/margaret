@@ -14,9 +14,9 @@ describe Parser do
             parse("(x = s index_of: 'a' if_absent: 0)", "(= x (index_of:if_absent: s 'a' 0))");
             parse("(s at: 1 put: 'a'; at: 2 put: 'b'; at: 3 put: 'c')", "((at:put: s 1 'a') (at:put: s 2 'b') (at:put: s 3 'c'))");
             parse("(s with: 'a'; with: 'b'; with: 'c'; with: 'd')", "((with: s 'a') (with: s 'b') (with: s 'c') (with: s 'd'))");
-            parse("(s each_char: [(a) (a puts)])", "(each_char: s (new Tuple ((a) (puts a))))");
-            parse("(b = s conform: [(a) ((a >= 'a') && (a <= 'z'))])", "(= b (conform: s (new Tuple ((a) (&& ((>= a 'a')) (<= a 'z'))))))");
-            parse("(x = s select: [(a) (a > 'a')])", "(= x (select: s (new Tuple ((a) (> a 'a')))))");
+            parse("(s each_char: ((:a) (a puts)))", %Q{(each_char: s ((new Symbol "a") (puts a)))});
+            parse("(b = s conform: ((:a) ((a >= 'a') && (a <= 'z'))))", %Q{(= b (conform: s ((new Symbol "a") (&& ((>= a 'a')) (<= a 'z')))))});
+            parse("(x = s select: ((:a) (a > 'a')))", %Q{(= x (select: s ((new Symbol "a") (> a 'a'))))});
             parse("(x = s to_list)", "(= x (to_list s))");
             parse("(x = s to_symbol)", "(= x (to_symbol s))");
             parse(%Q{(x = "abcd" to_byte_array)}, %Q{(= x (to_byte_array "abcd"))});

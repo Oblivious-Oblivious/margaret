@@ -29,9 +29,9 @@ describe Parser do
             parse("(b = x includes_key: :a)", %Q{(= b (includes_key: x (new Symbol "a")))});
             parse("(x keys puts)", "(puts (keys x))");
             parse("(x values puts)", "(puts (values x))");
-            parse("(x each_key: [(a) (a puts)])", "(each_key: x (new Tuple ((a) (puts a))))");
-            parse("(x each_value: [(a) (a puts)])", "(each_value: x (new Tuple ((a) (puts a))))");
-            parse("(x each: [(a) (a puts)])", "(each: x (new Tuple ((a) (puts a))))"); # Prints hash associations
+            parse("(x each_key: ((:a) (a puts)))", %Q{(each_key: x ((new Symbol "a") (puts a)))});
+            parse("(x each_value: ((:a) (a puts)))", %Q{(each_value: x ((new Symbol "a") (puts a)))});
+            parse("(x each: ((:a) (a puts)))", %Q{(each: x ((new Symbol "a") (puts a)))}); # Prints hash associations
         end
     end
 end
