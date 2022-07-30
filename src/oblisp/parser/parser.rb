@@ -414,10 +414,22 @@ class Parser
     def tuple_literal
         if table.peek == "["
             table.ensure_consumption "[", "missing opening bracket on tuple";
-            __items = translation_unit_list;
+            __items = tuple_item_list;
             table.ensure_consumption "]", "missing closing bracket on tuple";
             ast.tuple_literal __items;
         end
+    end
+
+    def tuple_item_list
+        __list_of_grammar_rule { tuple_item };
+    end
+
+    def tuple_item
+        toggle_comma_as_message_while_in_association;
+        value = translation_unit;
+        toggle_comma_as_message_while_in_association;
+        table.ensure_consumption ",", "tuple items should be separated by commas" if table.peek != "]" and table.peek != ")";
+        value;
     end
 
     def hash_literal

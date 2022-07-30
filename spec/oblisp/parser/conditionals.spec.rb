@@ -18,9 +18,9 @@ describe Parser do
                     if_false: 3
             )", "(if_true:if_false: (> x 10) (if_true:if_false: (> x 5) 1 2) 3)");
             parse("(obj match: (
-                        [1 100]
-                        [2 200]
-                        [3 300]
+                        [1, 100]
+                        [2, 200]
+                        [3, 300]
                     )
             )", "(match: obj (new Tuple (1 100) new Tuple (2 200) new Tuple (3 300)))");
         end
