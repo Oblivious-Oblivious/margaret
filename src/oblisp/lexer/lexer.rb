@@ -192,6 +192,8 @@ class Lexer
                 token_table << (Token.new c, Type::SYNTAX_SYMBOL, lineno);
             elsif c.matches(RegexMatchers::QUOTE)
                 token_table << tokenize_string(c);
+            else
+                error "Unrecognized character";
             end
         end
 
