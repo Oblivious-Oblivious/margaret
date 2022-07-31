@@ -170,6 +170,16 @@ class Parser
         end
     end
 
+    def cascaded_message_list
+        __casc = [];
+        loop do
+            break if table.lookahead(1) != ";"
+            table.ensure_consumption ";", "missing semicolon after cascaded message";
+            __casc << message_chain;
+        end
+        __casc;
+    end
+
     def message_chain
         def __chain_helper(rest_un)
             res = [];
@@ -341,16 +351,6 @@ class Parser
 
     def keyword_argument
         ast.keyword_argument binary_operand, binary_message_chain;
-    end
-
-    def cascaded_message_list
-        __casc = [];
-        loop do
-            break if table.peek != ";"
-            table.ensure_consumption ";", "missing semicolon after cascaded message";
-            __casc << message_chain;
-        end
-        __casc;
     end
 
     def operand
