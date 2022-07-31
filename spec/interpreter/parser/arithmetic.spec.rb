@@ -11,7 +11,7 @@ describe Parser do
             parse("(x = 5.0 / 3.0)", "(= x (/ 5.0 3.0))");
             parse("(x = 5.0 // 3.0)", "(= x (// 5.0 3.0))");
             parse("(x = 5.0 rem: 3.0)", "(= x (rem: 5.0 3.0))");
-            parse("(x = -5)", "(= x (negated 5))");
+            parse("(x = -5)", "(= x -5)");
             parse("(x = 5 sign)", "(= x (sign 5))");
             parse("(x = 5 negated)", "(= x (negated 5))");
             parse("(x = 1.2 integer_part)", "(= x (integer_part 1.2))");  # 1.0
@@ -23,7 +23,7 @@ describe Parser do
             parse("(x = 5 raised_to: 2)", "(= x (raised_to: 5 2))");
             parse("(x = 5 raised_to_integer: 2)", "(= x (raised_to_integer: 5 2))");
             parse("(x = 5 exp)", "(= x (exp 5))");
-            parse("(x = -5 abs)", "(= x (abs (negated 5)))");
+            parse("(x = -5 abs)", "(= x (abs -5))");
             parse("(x = 3.99 rounded)", "(= x (rounded 3.99))");
             parse("(x = 3.99 truncated)", "(= x (truncated 3.99))");
             parse("(x = 3.99 round_to: 1)", "(= x (round_to: 3.99 1))");
@@ -31,8 +31,8 @@ describe Parser do
             parse("(x = 3.99 floor)", "(= x (floor 3.99))");
             parse("(x = 3.99 ceiling)", "(= x (ceiling 3.99))");
             parse("(x = 5 factorial)", "(= x (factorial 5))");
-            parse("(x = -5 quotient: 3)", "(= x (quotient: (negated 5) 3))");
-            parse("(x = -5 rem: 3)", "(= x (rem: (negated 5) 3))");
+            parse("(x = -5 quotient: 3)", "(= x (quotient: -5 3))");
+            parse("(x = -5 rem: 3)", "(= x (rem: -5 3))");
             parse("(x = 28 gcd: 12)", "(= x (gcd: 28 12))");
             parse("(x = 28 lcm: 12)", "(= x (lcm: 28 12))");
             parse("(x = 100 ln)", "(= x (ln 100))");

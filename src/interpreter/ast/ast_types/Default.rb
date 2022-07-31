@@ -25,6 +25,9 @@ class Default < ASTInterface
     def base_ten_literal(sign, number)
     end
 
+    def alternate_base_literal(sign, number)
+    end
+
     def tuple_literal(item_list)
     end
 

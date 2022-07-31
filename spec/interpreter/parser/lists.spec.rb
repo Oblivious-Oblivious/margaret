@@ -36,7 +36,7 @@ describe Parser do
             parse("(x = arr includes?: 3)", "(= x (includes?: arr 3))");
             parse("(x = arr includes: 3)", "(= x (includes: arr 3))");
             parse("(x = arr copy_from: 2 to: 4)", "(= x (copy_from:to: arr 2 4))");
-            parse("(x = arr index_of: 3 if_absent: -1)", "(= x (index_of:if_absent: arr 3 (negated 1)))");
+            parse("(x = arr index_of: 3 if_absent: -1)", "(= x (index_of:if_absent: arr 3 -1))");
             parse("(x = arr occurrences_of: 3)", "(= x (occurrences_of: arr 3))");
             parse("(arr each: ((:a) (a puts)))", %Q{(each: arr ((new Symbol "a") (puts a)))});
             parse("(b = arr conform: ((:a) ((a >= 1) && (a <= 4))))", %Q{(= b (conform: arr ((new Symbol "a") (&& ((>= a 1)) (<= a 4)))))});

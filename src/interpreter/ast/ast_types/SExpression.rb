@@ -66,11 +66,11 @@ class SExpression < ASTInterface
     end
 
     def base_ten_literal(sign, number)
-        if sign == "-"
-            "(negated #{number})";
-        else
-            number;
-        end
+        "#{sign}#{number}";
+    end
+
+    def alternate_base_literal(sign, number)
+        "#{sign}#{number}";
     end
 
     def tuple_literal(item_list)

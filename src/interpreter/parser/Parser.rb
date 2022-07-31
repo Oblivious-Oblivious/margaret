@@ -372,39 +372,24 @@ class Parser
     end
 
     def literal
-        res = nil;
-        current_position = table.token_table_pos;
-        if current_position == table.token_table_pos
-            res = base_ten_literal;
+        sign = "";
+        if ["+", "-"].include? table.lookahead(1).value
+            sign = terminal_SIGN;
         end
-        if current_position == table.token_table_pos
-            res = alternate_base_literal;
+
+        if [Type::INTEGER, Type::FLOAT].include?(table.lookahead(1).type)
+            base_ten_literal(sign);
+        elsif [Type::BINARY, Type::HEXADECIMAL, Type::OCTAL].include?(table.lookahead(1).type)
+            alternate_base_literal(sign);
         end
-        if current_position == table.token_table_pos
-            res = string_literal;
-        end
-        if current_position == table.token_table_pos
-            res = tuple_literal;
-        end
-        if current_position == table.token_table_pos
-            res = hash_literal;
-        end
-        if current_position == table.token_table_pos
-            res = symbol_literal;
-        end
-        res;
     end
 
-    def base_ten_literal
-        ast.base_ten_literal terminal_SIGN, positive_base_ten_literal;
+    def base_ten_literal(sign)
+        ast.base_ten_literal sign, terminal_POSITIVE_BASE_TEN_NUMBER;
     end
 
-    def positive_base_ten_literal
-        terminal_POSITIVE_BASE_TEN_NUMBER;
-    end
-
-    def alternate_base_literal
-        terminal_ALTERNATE_BASE_NUMBER;
+    def alternate_base_literal(sign)
+        ast.alternate_base_literal sign, terminal_ALTERNATE_BASE_NUMBER;
     end
     
     def string_literal

@@ -8,7 +8,7 @@ describe Parser do
             parse("(x = nil)", "(= x nil)");
 
             parse("(x = 1)", "(= x 1)");
-            parse("(x = -1)", "(= x (negated 1))");
+            parse("(x = -1)", "(= x -1)");
             parse("(x = 3.14159)", "(= x 3.14159)");
             parse("(x = 0.42)", "(= x 0.42)");
             parse("(x = 0xbeef)", "(= x 0xbeef)");

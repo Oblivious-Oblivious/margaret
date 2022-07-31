@@ -9,6 +9,7 @@ class ASTInterface; extend Abstract;
                      :keyword,
                      :keyword_argument,
                      :base_ten_literal,
+                     :alternate_base_literal,
                      :tuple_literal,
                      :hash_literal,
                      :association,
