@@ -98,12 +98,15 @@ describe Lexer do
         end
 
         it "tokenizes integers" do
-            l = Lexer.new "file.obl", "(42 msg)".chars;
-            tokens = l.make_tokens;
-
+            tokens = Lexer.new("file.obl", "(42 msg)".chars).make_tokens;
             expect(tokens.get(1).value).to eq "42";
             expect(tokens.get(1).type).to eq Type::INTEGER;
             expect(tokens.get(1).line_number).to eq 1;
+
+            tokens = Lexer.new("file.obl", "4_200".chars).make_tokens;
+            expect(tokens.get(0).value).to eq "4200";
+            tokens = Lexer.new("file.obl", "4_2_0_0".chars).make_tokens;
+            expect(tokens.get(0).value).to eq "4200";
         end
 
         it "tokenizes zero" do
@@ -121,6 +124,12 @@ describe Lexer do
         end
 
         it "tokenizes floats" do
+            l = Lexer.new "file.obl", "0.0".chars;
+            tokens = l.make_tokens;
+            expect(tokens.get(0).value).to eq "0.0";
+            expect(tokens.get(0).type).to eq Type::FLOAT;
+            expect(tokens.get(1).line_number).to eq 1;
+
             l = Lexer.new "file.obl", "(42.7 msg)".chars;
             tokens = l.make_tokens;
             expect(tokens.get(1).value).to eq "42.7";

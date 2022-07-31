@@ -63,6 +63,12 @@ class Lexer
         loop do
             final_number << c;
             c = peek_character(1);
+            if c == "_"
+                c = next_character;
+                c = next_character;
+                next;
+            end
+
             break if c == nil or not c.matches(RegexMatchers::NUMBER);
             c = next_character;
         end
@@ -88,7 +94,7 @@ class Lexer
         # Rest of number
         c = next_character;
         loop do
-            final_number << c;
+            final_number << c.downcase;
             c = peek_character(1);
             break if c == nil or not c.matches(matcher)
             c = next_character;
