@@ -381,6 +381,14 @@ class Parser
             base_ten_literal(sign);
         elsif [Type::BINARY, Type::HEXADECIMAL, Type::OCTAL].include?(table.lookahead(1).type)
             alternate_base_literal(sign);
+        elsif table.lookahead(1).type == Type::STRING
+            string_literal;
+        elsif table.lookahead(1) == "["
+            tuple_literal;
+        elsif table.lookahead(1) == "{"
+            hash_literal;
+        elsif table.lookahead(1) == ":"
+            symbol_literal;
         end
     end
 
