@@ -51,27 +51,18 @@ class Lexer
 
     def next_character
         @pos += 1;
-
-        if pos < text.size
-            text[pos];
-        else
-            nil;
-        end
+        text[pos];
     end
 
-    def peek_character
-        if pos+1 < text.size
-            text[pos+1];
-        else
-            nil;
-        end
+    def peek_character(i)
+        text[pos + i];
     end
 
     def tokenize_integer(c)
         final_number = "";
         loop do
             final_number << c;
-            c = peek_character;
+            c = peek_character(1);
             break if c == nil or not c.matches(RegexMatchers::NUMBER);
             c = next_character;
         end
@@ -81,7 +72,7 @@ class Lexer
     def tokenize_integer_or_float(c)
         int_token = tokenize_integer(c);
 
-        c = peek_character;
+        c = peek_character(1);
         if c == '.'
             tokenize_number_special(int_token.value, RegexMatchers::NUMBER, Type::FLOAT);
         else
@@ -98,7 +89,7 @@ class Lexer
         c = next_character;
         loop do
             final_number << c;
-            c = peek_character;
+            c = peek_character(1);
             break if c == nil or not c.matches(matcher)
             c = next_character;
         end
@@ -108,7 +99,7 @@ class Lexer
     def tokenize_number(c)
         final_number = c;
         if c == '0'
-            c = peek_character;
+            c = peek_character(1);
             if c == '.'
                 tokenize_number_special(final_number, RegexMatchers::NUMBER, Type::FLOAT);
             elsif c == 'b' or c == 'B'
@@ -131,7 +122,7 @@ class Lexer
         # TODO Add unicode support
         loop do
             final_identifier << c;
-            c = peek_character;
+            c = peek_character(1);
             break if c == nil or not (c.matches(RegexMatchers::NUMBER) or c == '_' or c.matches(RegexMatchers::LETTER))
             c = next_character;
         end
@@ -144,7 +135,7 @@ class Lexer
 
         loop do
             final_symbol << c;
-            c = peek_character;
+            c = peek_character(1);
             break if c == nil or not (c.matches(RegexMatchers::MESSAGE_SYMBOL))
             c = next_character;
         end

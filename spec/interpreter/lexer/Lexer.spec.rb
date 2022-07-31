@@ -48,12 +48,17 @@ describe Lexer do
         it "peeks the next character from the list" do
             l = Lexer.new "file.obl", "(42 factorial)".chars;
 
-            c = l.peek_character;
-            c = l.peek_character;
-            c = l.peek_character;
-            c = l.peek_character;
+            c1 = l.peek_character(1);
+            c2 = l.peek_character(2);
+            c3 = l.peek_character(3);
+            c4 = l.peek_character(4);
+            c5 = l.peek_character(5);
 
-            expect(c).to eq "(";
+            expect(c1).to eq "(";
+            expect(c2).to eq "4";
+            expect(c3).to eq "2";
+            expect(c4).to eq " ";
+            expect(c5).to eq "f";
         end
     end
 
