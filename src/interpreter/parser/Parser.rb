@@ -37,7 +37,7 @@ class Parser
     end
 
     def list
-        is_quoted = table.consume if table.peek == "`";
+        is_quoted = table.consume if table.lookahead(1) == "`";
         table.ensure_consumption "(", "missing opening parenthesis on list";
 
         if is_quoted != nil
@@ -53,7 +53,7 @@ class Parser
     def quotted_list
         __units = [];
         loop do
-            break if table.peek == ")"
+            break if table.lookahead(1) == ")"
             __units << ast.symbol_literal(table.consume.value);
         end
         __units;
@@ -190,7 +190,7 @@ class Parser
             [res, number_of_nests];
         end
 
-        if table.peek.type == Type::IDENTIFIER
+        if table.lookahead(1).type == Type::IDENTIFIER
             _id = table.consume;
             optional_id_symbol = table.consume;
             possible_colon = table.consume;
@@ -229,7 +229,7 @@ class Parser
                     [*res, number_of_nests];
                 end
             end
-        elsif table.peek.type == Type::MESSAGE_SYMBOL
+        elsif table.lookahead(1).type == Type::MESSAGE_SYMBOL
             res = [];
             number_of_nests = 0;
             
@@ -259,7 +259,7 @@ class Parser
         id = terminal_IDENTIFIER;
         optional_symbol = terminal_IDENTIFIER_SYMBOL;
 
-        if table.peek != ":"
+        if table.lookahead(1) != ":"
             msg = "#{id}#{optional_symbol}";
             right = "";
 
@@ -293,7 +293,7 @@ class Parser
     end
 
     def binary_selector
-        if table.peek == ","
+        if table.lookahead(1) == ","
             terminal_MESSAGE_SYMBOL if @is_comma_message;
         else
             terminal_MESSAGE_SYMBOL;
@@ -364,7 +364,7 @@ class Parser
             res = terminal_IDENTIFIER;
         end
         # TODO Refactor
-        if current_position == table.token_table_pos and table.peek != ")" and table.peek != "]" and table.peek != "}" and table.peek != "," and table.peek != ";" and table.peek != "eof"
+        if current_position == table.token_table_pos and table.lookahead(1) != ")" and table.lookahead(1) != "]" and table.lookahead(1) != "}" and table.lookahead(1) != "," and table.lookahead(1) != ";" and table.lookahead(1) != "eof"
             res = list;
             res = " #{res} " if res != nil;
         end
@@ -412,7 +412,7 @@ class Parser
     end
 
     def tuple_literal
-        if table.peek == "["
+        if table.lookahead(1) == "["
             table.ensure_consumption "[", "missing opening bracket on tuple";
             __items = tuple_item_list;
             table.ensure_consumption "]", "missing closing bracket on tuple";
@@ -428,12 +428,12 @@ class Parser
         toggle_comma_as_message_while_in_association;
         value = translation_unit;
         toggle_comma_as_message_while_in_association;
-        table.ensure_consumption ",", "tuple items should be separated by commas" if table.peek != "]" and table.peek != ")";
+        table.ensure_consumption ",", "tuple items should be separated by commas" if table.lookahead(1) != "]" and table.lookahead(1) != ")";
         value;
     end
 
     def hash_literal
-        if table.peek == "{"
+        if table.lookahead(1) == "{"
             table.ensure_consumption "{", "missing opening curly brace on hash";
             __list = association_list;
             table.ensure_consumption "}", "missing closing curly brace on hash";
@@ -446,35 +446,35 @@ class Parser
     end
 
     def association
-        if table.peek.type == Type::IDENTIFIER
+        if table.lookahead(1).type == Type::IDENTIFIER
             key = terminal_IDENTIFIER;
             table.ensure_consumption ":", "json style keys should be denoted by colons";
             toggle_comma_as_message_while_in_association;
             value = translation_unit_list;
             toggle_comma_as_message_while_in_association;
-            table.ensure_consumption ",", "keys should be separated by commas" if table.peek != "}";
+            table.ensure_consumption ",", "keys should be separated by commas" if table.lookahead(1) != "}";
             ast.json_association key, value;
-        elsif table.peek == ":"
+        elsif table.lookahead(1) == ":"
             key = symbol_literal;
             table.ensure_consumption "=>", "hash keys should be denoted by arrow symbols";
             toggle_comma_as_message_while_in_association;
             value = translation_unit_list;
             toggle_comma_as_message_while_in_association;
-            table.ensure_consumption ",", "keys should be separated by commas" if table.peek != "}";
+            table.ensure_consumption ",", "keys should be separated by commas" if table.lookahead(1) != "}";
             ast.association key, value;
-        elsif table.peek.type == Type::STRING
+        elsif table.lookahead(1).type == Type::STRING
             key = string_literal;
             table.ensure_consumption "=>", "hash keys should be denoted by arrow symbols";
             toggle_comma_as_message_while_in_association;
             value = translation_unit_list;
             toggle_comma_as_message_while_in_association;
-            table.ensure_consumption ",", "keys should be separated by commas" if table.peek != "}";
+            table.ensure_consumption ",", "keys should be separated by commas" if table.lookahead(1) != "}";
             ast.association key, value;
         end
     end
 
     def symbol_literal
-        if table.peek == ":"
+        if table.lookahead(1) == ":"
             table.consume;
             ast.symbol_literal symbol_name;
         end
@@ -496,61 +496,62 @@ class Parser
     end
 
     def terminal_POSITIVE_BASE_TEN_NUMBER
-        if [Type::INTEGER, Type::FLOAT].include? table.peek.type
+        if [Type::INTEGER, Type::FLOAT].include? table.lookahead(1).type
             ast.terminal_POSITIVE_BASE_TEN_NUMBER table.consume;
         end
     end
 
     def terminal_ALTERNATE_BASE_NUMBER
-        if [Type::BINARY, Type::HEXADECIMAL, Type::OCTAL].include? table.peek.type
+        if [Type::BINARY, Type::HEXADECIMAL, Type::OCTAL].include? table.lookahead(1).type
             ast.terminal_ALTERNATE_BASE_NUMBER table.consume;
         end
     end
 
     def terminal_STRING
-        if table.peek.type == Type::STRING
+        if table.lookahead(1).type == Type::STRING
             ast.terminal_STRING table.consume;
         end
     end
 
     def terminal_UNQUOTED_STRING
-        if table.peek.type == Type::STRING
+        if table.lookahead(1).type == Type::STRING
             ast.terminal_UNQUOTED_STRING table.consume;
         end
     end
 
     def terminal_IDENTIFIER
-        if table.peek.type == Type::IDENTIFIER
+        if table.lookahead(1).type == Type::IDENTIFIER
             ast.terminal_IDENTIFIER table.consume;
         end
     end
 
     def terminal_MESSAGE_SYMBOL
-        if table.peek.type == Type::MESSAGE_SYMBOL
+        if table.lookahead(1).type == Type::MESSAGE_SYMBOL
             ast.terminal_MESSAGE_SYMBOL table.consume;
         end
     end
 
     def terminal_IDENTIFIER_SYMBOL
-        if table.peek.type == Type::ID_SYMBOL
+        if table.lookahead(1).type == Type::ID_SYMBOL
             ast.terminal_IDENTIFIER_SYMBOL table.consume;
         end
     end
 
+    # TODO Issue a module with symbol representations for typechecking (hashmap or tokens)
     def terminal_SIGN
-        if table.peek == '+' or table.peek == '-'
+        if table.lookahead(1) == '+' or table.lookahead(1) == '-'
             ast.terminal_SIGN table.consume;
         end
     end
 
     def terminal_EQUALS
-        if table.peek == "="
+        if table.lookahead(1) == "="
             ast.terminal_EQUALS table.consume;
         end
     end
 
     def terminal_COLON
-        if table.peek == ":"
+        if table.lookahead(1) == ":"
             ast.terminal_COLON table.consume;
         end
     end

@@ -19,17 +19,19 @@ describe TokenTable do
 
     it "peeks a token at the current position on the array" do
         l = TokenTable.new @tok_arr;
-        expect(l.peek.value).to eq "a";
-        expect(l.peek.value).to eq "a";
-        expect(l.peek.value).to eq "a";
+        expect(l.lookahead 1).to eq "a";
+        expect(l.lookahead 2).to eq "+";
+        expect(l.lookahead 3).to eq "2";
+        expect(l.lookahead 4).to eq "eof";
+        expect(l.lookahead 5).to eq nil;
     end
 
     it "consumes a token and returns the value" do
         l = TokenTable.new @tok_arr;
-        expect(l.consume.value).to eq "a";
-        expect(l.consume.value).to eq "+";
-        expect(l.consume.value).to eq "2";
-        expect(l.consume.value).to eq "eof";
+        expect(l.consume).to eq "a";
+        expect(l.consume).to eq "+";
+        expect(l.consume).to eq "2";
+        expect(l.consume).to eq "eof";
 
         expect(l.consume).to eq nil;
         expect(l.consume).to eq nil;
@@ -37,14 +39,14 @@ describe TokenTable do
 
     it "resumes a previous token and returns the value" do
         l = TokenTable.new @tok_arr;
-        expect(l.consume.value).to eq "a";
-        expect(l.consume.value).to eq "+";
-        expect(l.consume.value).to eq "2";
-        expect(l.consume.value).to eq "eof";
-        expect(l.resume.value).to eq "2";
-        expect(l.resume.value).to eq "+";
-        expect(l.resume.value).to eq "a";
-        expect(l.resume.value).to eq "eof";
+        expect(l.consume).to eq "a";
+        expect(l.consume).to eq "+";
+        expect(l.consume).to eq "2";
+        expect(l.consume).to eq "eof";
+        expect(l.resume).to eq "2";
+        expect(l.resume).to eq "+";
+        expect(l.resume).to eq "a";
+        expect(l.resume).to eq "eof";
     end
 
     it "returns the current position of the list" do
@@ -62,12 +64,12 @@ describe TokenTable do
 
     it "gets a list element by index" do
         l = TokenTable.new @tok_arr;
-        expect(l.get(1).value).to eq "+";
-        expect(l.get(0).value).to eq "a";
-        expect(l.get(3).value).to eq "eof";
-        expect(l.get(2).value).to eq "2";
+        expect(l.get(1)).to eq "+";
+        expect(l.get(0)).to eq "a";
+        expect(l.get(3)).to eq "eof";
+        expect(l.get(2)).to eq "2";
 
-        expect(l.get(99).value).to eq "eof";
-        expect(l.get(42).value).to eq "eof";
+        expect(l.get(99)).to eq "eof";
+        expect(l.get(42)).to eq "eof";
     end
 end

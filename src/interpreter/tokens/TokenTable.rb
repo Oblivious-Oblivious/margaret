@@ -37,8 +37,8 @@ class TokenTable
         end
     end
 
-    def peek
-        token_list[pos + 1];
+    def lookahead(i)
+        token_list[pos + i];
     end
 
     def consume

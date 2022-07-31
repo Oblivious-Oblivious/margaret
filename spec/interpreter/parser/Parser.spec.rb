@@ -10,21 +10,21 @@ describe Parser do
     it "traverses through the token table" do
         l = Lexer.new "file.obl", "(42 factorial)".chars;
         p = Parser.new l.make_tokens;
-        expect(p.table.consume.value).to eq "(";
-        expect(p.table.consume.value).to eq "42";
-        expect(p.table.consume.value).to eq "factorial";
-        expect(p.table.consume.value).to eq ")";
-        expect(p.table.consume.value).to eq "eof";
+        expect(p.table.consume).to eq "(";
+        expect(p.table.consume).to eq "42";
+        expect(p.table.consume).to eq "factorial";
+        expect(p.table.consume).to eq ")";
+        expect(p.table.consume).to eq "eof";
     end
 
     it "peeks on top of the token table" do
         l = Lexer.new "file.obl", "(42 factorial)".chars;
         p = Parser.new l.make_tokens;
-        expect(p.table.peek.value).to eq "(";
-        expect(p.table.peek.value).to eq "(";
-        expect(p.table.peek.value).to eq "(";
-        expect(p.table.peek.value).to eq "(";
-        expect(p.table.peek.value).to eq "(";
+        expect(p.table.lookahead(1)).to eq "(";
+        expect(p.table.lookahead(1)).to eq "(";
+        expect(p.table.lookahead(1)).to eq "(";
+        expect(p.table.lookahead(1)).to eq "(";
+        expect(p.table.lookahead(1)).to eq "(";
     end
 
     it "has an error message for syntax errors" do
