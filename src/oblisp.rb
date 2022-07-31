@@ -12,32 +12,33 @@ end
 class Oblisp
     def self.SCAN(prompt)
         if line = Readline.readline(prompt, true)
-            line;
+            if line == ""
+                ['(', ')'];
+            else
+                line.chars;
+            end
         else
             nil;
         end
     end
 
-    def self.READ(str)
-        str;
+    def self.READ(chars)
+        Lexer.new("repl", chars).make_tokens;
     end
 
-    def self.EVAL(ast)
-        ast;
+    # TODO def self.EVAL(ast) -> AST traversal
+    def self.EVAL(tokens)
+        Parser.new(tokens).analyse_syntax;
     end
 
-    def self.PRINT(result)
-        puts result;
+    def self.PRINT(evaluated)
+        puts "=> #{evaluated}";
     end
 
-    def self.LOOP(&list)
-        loop { list.call; };
-    end
-
-    def self.main(type)
+    def self.repl(type)
         case type
         when TRANSLATE_TO::INTERPRETER
-            LOOP { PRINT(EVAL(READ(SCAN("$> ")))); };
+            loop { PRINT(EVAL(READ(SCAN("$> ")))); };
         when TRANSLATE_TO::STACK_VM
             puts "Stack VM";
         when TRANSLATE_TO::REGISTER_VM
@@ -48,6 +49,15 @@ class Oblisp
             puts "error";
         end
     end
+
+    def self.run_file(filename)
+        chars = FileLoader.new(filename).load;
+        tokens = READ(chars);
+        evaluated = EVAL(tokens);
+
+        puts evaluated;
+    end
 end
 
-Oblisp.main TRANSLATE_TO::INTERPRETER;
+# Oblisp.repl TRANSLATE_TO::INTERPRETER;
+Oblisp.run_file ARGV[0];
