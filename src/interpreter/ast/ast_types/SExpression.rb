@@ -121,7 +121,7 @@ class SExpression < ASTInterface
         %Q{(new Symbol "#{id}")};
     end
 
-    def terminal_POSITIVE_BASE_TEN_NUMBER(number)
+    def terminal_UNSIGNED_BASE_TEN_NUMBER(number)
         number.value;
     end
 

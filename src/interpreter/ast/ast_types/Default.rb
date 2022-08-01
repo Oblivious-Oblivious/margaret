@@ -43,7 +43,7 @@ class Default < ASTInterface
     def symbol_literal(id)
     end
 
-    def terminal_POSITIVE_BASE_TEN_NUMBER(number)
+    def terminal_UNSIGNED_BASE_TEN_NUMBER(number)
     end
 
     def terminal_ALTERNATE_BASE_NUMBER(number)

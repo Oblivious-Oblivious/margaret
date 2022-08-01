@@ -393,7 +393,7 @@ class Parser
     end
 
     def base_ten_literal(sign)
-        ast.base_ten_literal sign, terminal_POSITIVE_BASE_TEN_NUMBER;
+        ast.base_ten_literal sign, terminal_UNSIGNED_BASE_TEN_NUMBER;
     end
 
     def alternate_base_literal(sign)
@@ -488,9 +488,9 @@ class Parser
         res;
     end
 
-    def terminal_POSITIVE_BASE_TEN_NUMBER
+    def terminal_UNSIGNED_BASE_TEN_NUMBER
         if [Type::INTEGER, Type::FLOAT].include? table.lookahead(1).type
-            ast.terminal_POSITIVE_BASE_TEN_NUMBER table.consume;
+            ast.terminal_UNSIGNED_BASE_TEN_NUMBER table.consume;
         end
     end
 
