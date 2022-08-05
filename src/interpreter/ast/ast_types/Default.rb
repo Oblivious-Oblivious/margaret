@@ -34,6 +34,9 @@ class Default < ASTInterface
     def big_float_literal(sign, number)
     end
 
+    def array_literal(item_list)
+    end
+
     def tuple_literal(item_list)
     end
 
@@ -53,6 +56,12 @@ class Default < ASTInterface
     end
 
     def terminal_ALTERNATE_BASE_NUMBER(number)
+    end
+
+    def terminal_BIGINTEGER(number)
+    end
+
+    def terminal_BIGFLOAT(number)
     end
 
     def terminal_STRING(value)

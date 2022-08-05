@@ -77,47 +77,37 @@ class SExpression < ASTInterface
         %Q{(new BigInteger "#{sign}#{number[3...]}")};
     end
 
-    def tuple_literal(item_list)
-        res = "(new Tuple (";
     def big_float_literal(sign, number)
         %Q{(new BigFloat "#{sign}#{number[3...]}")};
     end
 
-        if item_list.size > 0
-            (0...item_list.size-1).each do |i|
-                res << item_list[i] << " ";
-            end
-            res << item_list[item_list.size-1];
+    def array_literal(item_list)
+        res = "";
+        item_list.each do
+            res << "(with: "
         end
-
-        res << "))";
+        res << "(new Array)";
+        item_list.each do |item|
+            res << " #{item})";
+        end
         res;
     end
 
+    def tuple_literal(item_list)
+        res = "(new Tuple ";
+        res << array_literal(item_list);
+        res << ")";
+    end
+
     def hash_literal(association_list)
-        res = "(new Hash (";
-
-        if association_list.size > 0
-            (0...association_list.size-1).each do |i|
-                res << association_list[i] << " ";
-            end
-            res << association_list[association_list.size-1];
-        end
-
-        res << "))";
+        res = "(new Hash ";
+        res << array_literal(association_list);
+        res << ")";
         res;
     end
 
     def association(key, value)
-        res = "(key:value: Association #{key} ";
-        
-        (0...value.size-1).each do |i|
-            res << value[i] << " ";
-        end
-        res << value[value.size-1];
-
-        res << ")";
-        res;
+        "(key:value: Association #{key} #{value})";
     end
 
     def json_association(key, value)

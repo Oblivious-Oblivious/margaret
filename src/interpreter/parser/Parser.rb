@@ -2,6 +2,12 @@ require_relative "../ast/ASTFactory";
 
 AST_TYPE = "s-expressions";
 
+class Array
+    def >>(item)
+        self.unshift item;
+    end
+end
+
 class Parser
     attr_accessor :table, :ast;
 
@@ -31,7 +37,7 @@ class Parser
     end
 
     def first_unit
-        result = list;
+        result = operand;
         table.ensure_consumption "eof", "reached end of program";
         result;
     end
@@ -366,7 +372,6 @@ class Parser
         # TODO Refactor
         if current_position == table.token_table_pos and table.lookahead(1) != ")" and table.lookahead(1) != "]" and table.lookahead(1) != "}" and table.lookahead(1) != "," and table.lookahead(1) != ";" and table.lookahead(1) != "eof"
             res = list;
-            res = " #{res} " if res != nil;
         end
         res;
     end
@@ -388,6 +393,8 @@ class Parser
         elsif table.lookahead(1).type == Type::STRING
             string_literal;
         elsif table.lookahead(1) == "["
+            array_literal;
+        elsif table.lookahead(1) == "#"
             tuple_literal;
         elsif table.lookahead(1) == "{"
             hash_literal;
@@ -416,62 +423,69 @@ class Parser
         terminal_STRING;
     end
 
-    def tuple_literal
-        if table.lookahead(1) == "["
-            table.ensure_consumption "[", "missing opening bracket on tuple";
-            __items = tuple_item_list;
-            table.ensure_consumption "]", "missing closing bracket on tuple";
-            ast.tuple_literal __items;
         end
     end
 
-    def tuple_item_list
-        __list_of_grammar_rule { tuple_item };
+    def array_literal
+        table.ensure_consumption "[", "missing opening bracket on array";
+        __items = __list_of_grammar_rule { array_literal_item };
+        table.ensure_consumption "]", "missing closing bracket on array";
+        ast.array_literal __items;
+    end
+
+    def array_literal_item
+        toggle_comma_as_message_while_in_association;
+        value = operand;
+        toggle_comma_as_message_while_in_association;
+        table.ensure_consumption ",", "array items should be separated by commas" if table.lookahead(1) != "]";
+        value;
+    end
+
+    def tuple_literal
+        table.ensure_consumption "#", "missing '#' symbol on tuple literal";
+        table.ensure_consumption "(", "missing opening parenthesis on tuple";
+        __items = __list_of_grammar_rule { tuple_item };
+        table.ensure_consumption ")", "missing closing parenthesis on tuple";
+        ast.tuple_literal __items;
     end
 
     def tuple_item
         toggle_comma_as_message_while_in_association;
-        value = translation_unit;
+        value = operand;
         toggle_comma_as_message_while_in_association;
-        table.ensure_consumption ",", "tuple items should be separated by commas" if table.lookahead(1) != "]" and table.lookahead(1) != ")";
+        table.ensure_consumption ",", "tuple items should be separated by commas" if table.lookahead(1) != ")";
         value;
     end
 
     def hash_literal
-        if table.lookahead(1) == "{"
-            table.ensure_consumption "{", "missing opening curly brace on hash";
-            __list = association_list;
-            table.ensure_consumption "}", "missing closing curly brace on hash";
-            ast.hash_literal __list;
-        end
-    end
-
-    def association_list
-        __list_of_grammar_rule { association };
+        table.ensure_consumption "{", "missing opening curly brace on hash";
+        __items = __list_of_grammar_rule { association };
+        table.ensure_consumption "}", "missing closing curly brace on hash";
+        ast.hash_literal __items;
     end
 
     def association
         if table.lookahead(1).type == Type::IDENTIFIER
             key = terminal_IDENTIFIER;
-            table.ensure_consumption ":", "json style keys should be denoted by colons";
+            table.ensure_consumption ":", "hash keys should be denoted by colons";
             toggle_comma_as_message_while_in_association;
-            value = translation_unit_list;
+            value = operand;
             toggle_comma_as_message_while_in_association;
             table.ensure_consumption ",", "keys should be separated by commas" if table.lookahead(1) != "}";
             ast.json_association key, value;
         elsif table.lookahead(1) == ":"
             key = symbol_literal;
-            table.ensure_consumption "=>", "hash keys should be denoted by arrow symbols";
+            table.ensure_consumption ":", "hash keys should be denoted by colons";
             toggle_comma_as_message_while_in_association;
-            value = translation_unit_list;
+            value = operand;
             toggle_comma_as_message_while_in_association;
             table.ensure_consumption ",", "keys should be separated by commas" if table.lookahead(1) != "}";
             ast.association key, value;
         elsif table.lookahead(1).type == Type::STRING
             key = string_literal;
-            table.ensure_consumption "=>", "hash keys should be denoted by arrow symbols";
+            table.ensure_consumption ":", "hash keys should be denoted by colons";
             toggle_comma_as_message_while_in_association;
-            value = translation_unit_list;
+            value = operand;
             toggle_comma_as_message_while_in_association;
             table.ensure_consumption ",", "keys should be separated by commas" if table.lookahead(1) != "}";
             ast.association key, value;

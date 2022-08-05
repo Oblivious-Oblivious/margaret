@@ -12,6 +12,7 @@ class ASTInterface; extend Abstract;
                      :alternate_base_literal,
                      :big_integer_literal,
                      :big_float_literal,
+                     :array_literal,
                      :tuple_literal,
                      :hash_literal,
                      :association,
