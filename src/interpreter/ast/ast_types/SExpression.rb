@@ -72,9 +72,16 @@ class SExpression < ASTInterface
     def alternate_base_literal(sign, number)
         "#{sign}#{number}";
     end
+    
+    def big_integer_literal(sign, number)
+        %Q{(new BigInteger "#{sign}#{number[3...]}")};
+    end
 
     def tuple_literal(item_list)
         res = "(new Tuple (";
+    def big_float_literal(sign, number)
+        %Q{(new BigFloat "#{sign}#{number[3...]}")};
+    end
 
         if item_list.size > 0
             (0...item_list.size-1).each do |i|
