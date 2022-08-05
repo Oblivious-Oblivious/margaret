@@ -146,6 +146,10 @@ class SExpression < ASTInterface
         id.value;
     end
 
+    def terminal_INSTANCE_SYMBOL(symb)
+        symb.value;
+    end
+
     def terminal_MESSAGE_SYMBOL(symb)
         symb.value;
     end

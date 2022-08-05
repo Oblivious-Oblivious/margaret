@@ -367,7 +367,7 @@ class Parser
             res = literal;
         end
         if current_position == table.token_table_pos
-            res = terminal_IDENTIFIER;
+            res = variable;
         end
         # TODO Refactor
         if current_position == table.token_table_pos and table.lookahead(1) != ")" and table.lookahead(1) != "]" and table.lookahead(1) != "}" and table.lookahead(1) != "," and table.lookahead(1) != ";" and table.lookahead(1) != "eof"
@@ -496,6 +496,10 @@ class Parser
         if table.lookahead(1) == ":"
             table.consume;
             ast.symbol_literal symbol_name;
+    def variable
+        "#{terminal_INSTANCE_SYMBOL}#{terminal_IDENTIFIER}";
+    end
+
         end
     end
 
@@ -560,6 +564,12 @@ class Parser
     def terminal_IDENTIFIER_SYMBOL
         if table.lookahead(1).type == Type::ID_SYMBOL
             ast.terminal_IDENTIFIER_SYMBOL table.consume;
+        end
+    end
+
+    def terminal_INSTANCE_SYMBOL
+        if table.lookahead(1) == "@"
+            ast.terminal_INSTANCE_SYMBOL table.consume;
         end
     end
 

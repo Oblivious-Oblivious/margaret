@@ -73,6 +73,9 @@ class Default < ASTInterface
     def terminal_IDENTIFIER(id)
     end
 
+    def terminal_INSTANCE_SYMBOL(symb)
+    end
+
     def terminal_MESSAGE_SYMBOL(symb)
     end
 

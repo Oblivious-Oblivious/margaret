@@ -25,6 +25,7 @@ class ASTInterface; extend Abstract;
                      :terminal_STRING,
                      :terminal_UNQUOTED_STRING,
                      :terminal_IDENTIFIER,
+                     :terminal_INSTANCE_SYMBOL,
                      :terminal_MESSAGE_SYMBOL,
                      :terminal_IDENTIFIER_SYMBOL,
                      :terminal_SIGN,
