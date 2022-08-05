@@ -534,11 +534,37 @@ class Parser
         "#{terminal_INSTANCE_SYMBOL}#{terminal_IDENTIFIER}";
     end
 
+    def list
+        table.ensure_consumption "(", "missing opening parenthesis on list";
+        __units = __list_of_grammar_rule { message };
+        table.ensure_consumption ")", "missing closing parenthesis on list";
+        ast.list __units;
+    end
+
+    def message
+        optional_assignment_list = __list_of_grammar_rule { assignment_message };
+        expr = expression;
+
+        if optional_assignment_list.empty?
+            ast.empty;
+        else
+            ast.translation_unit optional_assignment_list, expr;
         end
     end
 
+    def assignment_message
         current_position = table.token_table_pos;
+        id = variable;
+
+        if table.lookahead(1) == "="
+            ast.assignment_message id, terminal_EQUALS;
+        # else
+        #     table.resume;
         end
+    end
+
+    def expression
+        operand;
     end
 
     def terminal_UNSIGNED_BASE_TEN_NUMBER
