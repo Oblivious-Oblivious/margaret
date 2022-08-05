@@ -4,6 +4,12 @@ def parse(code, expected_result=nil)
     expect(p.analyse_syntax).to eq expected_result;
 end
 
+def debug(code, expected_result=nil)
+    l = Lexer.new "file.obl", code.chars;
+    p = Parser.new l.make_tokens;
+    expect(pp p.analyse_syntax).to eq expected_result;
+end
+
 def error(code, error_message)
     begin
         l = Lexer.new "file.obl", code.chars;
