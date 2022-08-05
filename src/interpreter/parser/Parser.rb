@@ -530,15 +530,12 @@ class Parser
     end
 
     def terminal_UNSIGNED_BASE_TEN_NUMBER
-        if [Type::INTEGER, Type::FLOAT].include? table.lookahead(1).type
-            ast.terminal_UNSIGNED_BASE_TEN_NUMBER table.consume;
-        end
+        ast.terminal_UNSIGNED_BASE_TEN_NUMBER table.consume;
     end
 
     def terminal_ALTERNATE_BASE_NUMBER
-        if [Type::BINARY, Type::HEXADECIMAL, Type::OCTAL].include? table.lookahead(1).type
-            ast.terminal_ALTERNATE_BASE_NUMBER table.consume;
-        end
+        ast.terminal_ALTERNATE_BASE_NUMBER table.consume;
+    end
 
     def terminal_BIGINTEGER
         ast.terminal_BIGINTEGER table.consume;
@@ -549,15 +546,11 @@ class Parser
     end
 
     def terminal_STRING
-        if table.lookahead(1).type == Type::STRING
-            ast.terminal_STRING table.consume;
-        end
+        ast.terminal_STRING table.consume;
     end
 
     def terminal_UNQUOTED_STRING
-        if table.lookahead(1).type == Type::STRING
-            ast.terminal_UNQUOTED_STRING table.consume;
-        end
+        ast.terminal_UNQUOTED_STRING table.consume;
     end
 
     def terminal_IDENTIFIER
@@ -586,15 +579,11 @@ class Parser
 
     # TODO Issue a module with symbol representations for typechecking (hashmap or tokens)
     def terminal_SIGN
-        if table.lookahead(1) == '+' or table.lookahead(1) == '-'
-            ast.terminal_SIGN table.consume;
-        end
+        ast.terminal_SIGN table.consume;
     end
 
     def terminal_EQUALS
-        if table.lookahead(1) == "="
-            ast.terminal_EQUALS table.consume;
-        end
+        ast.terminal_EQUALS table.consume;
     end
 
     def terminal_COLON
