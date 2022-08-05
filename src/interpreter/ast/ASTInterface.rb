@@ -17,6 +17,8 @@ class ASTInterface; extend Abstract;
                      :hash_literal,
                      :association,
                      :json_association,
+                     :quoted_list_literal,
+                     :block_literal,
                      :symbol_literal,
                      :terminal_UNSIGNED_BASE_TEN_NUMBER,
                      :terminal_ALTERNATE_BASE_NUMBER,

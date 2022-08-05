@@ -49,6 +49,12 @@ class Default < ASTInterface
     def json_association(key, value)
     end
 
+    def quoted_list_literal(item_list)
+    end
+
+    def block_literal(item_list)
+    end
+
     def symbol_literal(id)
     end
 

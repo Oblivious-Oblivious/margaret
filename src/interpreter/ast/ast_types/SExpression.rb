@@ -114,6 +114,16 @@ class SExpression < ASTInterface
         association(symbol_literal(key), value);
     end
 
+    def quoted_list_literal(item_list)
+        array_literal(item_list);
+    end
+
+    def block_literal(item_list)
+        res = "(new Block ";
+        res << array_literal(item_list);
+        res << ")";
+    end
+
     def symbol_literal(id)
         %Q{(new Symbol "#{id}")};
     end

@@ -56,15 +56,6 @@ class Parser
         ast.list __units;
     end
 
-    def quotted_list
-        __units = [];
-        loop do
-            break if table.lookahead(1) == ")"
-            __units << ast.symbol_literal(table.consume.value);
-        end
-        __units;
-    end
-
     def translation_unit_list
         __list_of_grammar_rule { translation_unit };
     end
@@ -400,6 +391,10 @@ class Parser
             hash_literal;
         elsif table.lookahead(1) == ":"
             symbol_literal;
+        elsif table.lookahead(1) == "`"
+            quoted_list_literal;
+        elsif table.lookahead(1) == "->"
+            block_literal;
         end
     end
 
@@ -496,6 +491,22 @@ class Parser
         if table.lookahead(1) == ":"
             table.consume;
             ast.symbol_literal symbol_name;
+    def quoted_list_literal
+        table.ensure_consumption "`", "missing '`' symbol on quoted list literal";
+        table.ensure_consumption "(", "missing opening parenthesis on quoted list literal";
+        __items = __consume_quoted_tokens;
+        table.ensure_consumption ")", "missing closing parenthesis on quoted list literal";
+        ast.quoted_list_literal __items;
+    end
+
+    def block_literal
+        table.ensure_consumption "->", "missing '->' symbol on block literal";
+        table.ensure_consumption "(", "missing opening parenthesis on block literal";
+        __items = __consume_quoted_tokens;
+        table.ensure_consumption ")", "missing closing parenthesis on block literal";
+        ast.block_literal __items;
+    end
+
     def variable
         "#{terminal_INSTANCE_SYMBOL}#{terminal_IDENTIFIER}";
     end
