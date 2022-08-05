@@ -12,6 +12,9 @@ module Type
     HEXADECIMAL = 102;
     OCTAL = 103;
 
+    BIGINTEGER = 104;
+    BIGFLOAT = 105;
+
     STRING = 111;
 
     IDENTIFIER = 201;

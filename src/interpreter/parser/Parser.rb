@@ -381,6 +381,10 @@ class Parser
             base_ten_literal(sign);
         elsif [Type::BINARY, Type::HEXADECIMAL, Type::OCTAL].include?(table.lookahead(1).type)
             alternate_base_literal(sign);
+        elsif table.lookahead(1).type == Type::BIGINTEGER
+            big_integer_literal(sign);
+        elsif table.lookahead(1).type == Type::BIGFLOAT
+            big_float_literal(sign);
         elsif table.lookahead(1).type == Type::STRING
             string_literal;
         elsif table.lookahead(1) == "["
@@ -398,6 +402,14 @@ class Parser
 
     def alternate_base_literal(sign)
         ast.alternate_base_literal sign, terminal_ALTERNATE_BASE_NUMBER;
+    end
+
+    def big_integer_literal(sign)
+        ast.big_integer_literal sign, terminal_BIGINTEGER;
+    end
+
+    def big_float_literal(sign)
+        ast.big_float_literal sign, terminal_BIGFLOAT;
     end
     
     def string_literal
@@ -498,6 +510,13 @@ class Parser
         if [Type::BINARY, Type::HEXADECIMAL, Type::OCTAL].include? table.lookahead(1).type
             ast.terminal_ALTERNATE_BASE_NUMBER table.consume;
         end
+
+    def terminal_BIGINTEGER
+        ast.terminal_BIGINTEGER table.consume;
+    end
+
+    def terminal_BIGFLOAT
+        ast.terminal_BIGFLOAT table.consume;
     end
 
     def terminal_STRING

@@ -28,6 +28,12 @@ class Default < ASTInterface
     def alternate_base_literal(sign, number)
     end
 
+    def big_integer_literal(sign, number)
+    end
+
+    def big_float_literal(sign, number)
+    end
+
     def tuple_literal(item_list)
     end
 

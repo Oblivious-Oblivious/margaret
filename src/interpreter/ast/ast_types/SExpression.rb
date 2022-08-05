@@ -129,6 +129,14 @@ class SExpression < ASTInterface
         number.value;
     end
 
+    def terminal_BIGINTEGER(number)
+        number.value;
+    end
+
+    def terminal_BIGFLOAT(number)
+        number.value;
+    end
+
     def terminal_STRING(value)
         value.value;
     end

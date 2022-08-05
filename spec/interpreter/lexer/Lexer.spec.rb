@@ -191,6 +191,30 @@ describe Lexer do
             expect(tokens.get(4).value).to eq ")";
         end
 
+        it "tokenizes big integer literals" do
+            l = Lexer.new "file.obl", "(0bi42000 + 0Bi4_200 + 0bI1)";
+            tokens = l.make_tokens;
+            expect(tokens.get(1).value).to eq "0bi42000";
+            expect(tokens.get(1).type).to eq Type::BIGINTEGER;
+            expect(tokens.get(2).value).to eq "+";
+            expect(tokens.get(3).value).to eq "0bi4200";
+            expect(tokens.get(3).type).to eq Type::BIGINTEGER;
+            expect(tokens.get(5).value).to eq "0bi1";
+            expect(tokens.get(5).type).to eq Type::BIGINTEGER;
+        end
+
+        it "tokenizes big float literals" do
+            l = Lexer.new "file.obl", "(0bf4.2001 + 0Bf42.00 + 0bF2)";
+            tokens = l.make_tokens;
+            expect(tokens.get(1).value).to eq "0bf4.2001";
+            expect(tokens.get(1).type).to eq Type::BIGFLOAT;
+            expect(tokens.get(2).value).to eq "+";
+            expect(tokens.get(3).value).to eq "0bf42.00";
+            expect(tokens.get(3).type).to eq Type::BIGFLOAT;
+            expect(tokens.get(5).value).to eq "0bf2";
+            expect(tokens.get(5).type).to eq Type::BIGFLOAT;
+        end
+
         it "tokenizes string literals" do
             l = Lexer.new "file.obl", %Q{("hello" puts)};
             token = l.make_tokens;

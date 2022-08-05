@@ -17,6 +17,9 @@ describe Type do
         expect(Type::HEXADECIMAL).to eq 102;
         expect(Type::OCTAL).to eq 103;
 
+        expect(Type::BIGINTEGER).to eq 104;
+        expect(Type::BIGFLOAT).to eq 105;
+
         expect(Type::STRING).to eq 111;
     end
 
