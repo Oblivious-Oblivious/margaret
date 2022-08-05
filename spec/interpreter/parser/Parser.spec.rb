@@ -20,11 +20,11 @@ describe Parser do
     it "peeks on top of the token table" do
         l = Lexer.new "file.obl", "(42 factorial)".chars;
         p = Parser.new l.make_tokens;
+        expect(p.table.lookahead(5)).to eq "eof";
+        expect(p.table.lookahead(2)).to eq "42";
+        expect(p.table.lookahead(3)).to eq "factorial";
         expect(p.table.lookahead(1)).to eq "(";
-        expect(p.table.lookahead(1)).to eq "(";
-        expect(p.table.lookahead(1)).to eq "(";
-        expect(p.table.lookahead(1)).to eq "(";
-        expect(p.table.lookahead(1)).to eq "(";
+        expect(p.table.lookahead(4)).to eq ")";
     end
 
     it "has an error message for syntax errors" do
