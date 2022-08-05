@@ -32,6 +32,21 @@ class Parser
         __list;
     end
 
+    def __consume_quoted_tokens
+        paren_count = 0;
+        __items = [];
+        loop do
+            break if table.lookahead(1) == ")" and paren_count == 0;
+            tok = table.consume.value;
+            paren_count += 1 if tok == "(";
+            paren_count -= 1 if tok == ")";
+            __items << ast.symbol_literal(tok);
+        end
+        __items >> ast.symbol_literal("(");
+        __items << ast.symbol_literal(")");
+        __items;
+    end
+
     def analyse_syntax
         first_unit;
     end
