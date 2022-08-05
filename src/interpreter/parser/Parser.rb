@@ -398,14 +398,14 @@ class Parser
             big_float_literal(sign);
         elsif table.lookahead(1).type == Type::STRING
             string_literal;
+        elsif table.lookahead(1) == ":"
+            symbol_literal;
         elsif table.lookahead(1) == "["
             array_literal;
         elsif table.lookahead(1) == "#"
             tuple_literal;
         elsif table.lookahead(1) == "{"
             hash_literal;
-        elsif table.lookahead(1) == ":"
-            symbol_literal;
         elsif table.lookahead(1) == "`"
             quoted_list_literal;
         elsif table.lookahead(1) == "->"
@@ -433,6 +433,18 @@ class Parser
         terminal_STRING;
     end
 
+    def symbol_literal
+        table.consume;
+        ast.symbol_literal symbol_name;
+    end
+
+    def symbol_name
+        if table.lookahead(1).type == Type::MESSAGE_SYMBOL
+            terminal_MESSAGE_SYMBOL;
+        elsif table.lookahead(1).type == Type::IDENTIFIER
+            terminal_IDENTIFIER;
+        elsif table.lookahead(1).type == Type::STRING
+            terminal_UNQUOTED_STRING;
         end
     end
 
@@ -502,10 +514,6 @@ class Parser
         end
     end
 
-    def symbol_literal
-        if table.lookahead(1) == ":"
-            table.consume;
-            ast.symbol_literal symbol_name;
     def quoted_list_literal
         table.ensure_consumption "`", "missing '`' symbol on quoted list literal";
         table.ensure_consumption "(", "missing opening parenthesis on quoted list literal";
@@ -529,19 +537,8 @@ class Parser
         end
     end
 
-    def symbol_name
-        res = nil;
         current_position = table.token_table_pos;
-        if current_position == table.token_table_pos
-            res = terminal_MESSAGE_SYMBOL;
         end
-        if current_position == table.token_table_pos
-            res = terminal_IDENTIFIER;
-        end
-        if current_position == table.token_table_pos
-            res = terminal_UNQUOTED_STRING;
-        end
-        res;
     end
 
     def terminal_UNSIGNED_BASE_TEN_NUMBER
