@@ -361,38 +361,42 @@ class Parser
         if current_position == table.token_table_pos and table.lookahead(1) != ")" and table.lookahead(1) != "]" and table.lookahead(1) != "}" and table.lookahead(1) != "," and table.lookahead(1) != ";" and table.lookahead(1) != "eof"
             res = list;
         end
-        res;
+        
+        ast.translation_unit res;
     end
 
     def literal
+        res = nil;
         sign = "";
         if ["+", "-"].include? table.lookahead(1).value
             sign = terminal_SIGN;
         end
 
         if [Type::INTEGER, Type::FLOAT].include?(table.lookahead(1).type)
-            base_ten_literal(sign);
+            res = base_ten_literal(sign);
         elsif [Type::BINARY, Type::HEXADECIMAL, Type::OCTAL].include?(table.lookahead(1).type)
-            alternate_base_literal(sign);
+            res = alternate_base_literal(sign);
         elsif table.lookahead(1).type == Type::BIGINTEGER
-            big_integer_literal(sign);
+            res = big_integer_literal(sign);
         elsif table.lookahead(1).type == Type::BIGFLOAT
-            big_float_literal(sign);
+            res = big_float_literal(sign);
         elsif table.lookahead(1).type == Type::STRING
-            string_literal;
+            res = string_literal;
         elsif table.lookahead(1) == ":"
-            symbol_literal;
+            res = symbol_literal;
         elsif table.lookahead(1) == "["
-            array_literal;
+            res = array_literal;
         elsif table.lookahead(1) == "#"
-            tuple_literal;
+            res = tuple_literal;
         elsif table.lookahead(1) == "{"
-            hash_literal;
+            res = hash_literal;
         elsif table.lookahead(1) == "`"
-            quoted_list_literal;
+            res = quoted_list_literal;
         elsif table.lookahead(1) == "->"
-            block_literal;
+            res = block_literal;
         end
+
+        ast.literal res;
     end
 
     def base_ten_literal(sign)
@@ -412,37 +416,37 @@ class Parser
     end
     
     def string_literal
-        terminal_STRING;
+        ast.string_literal terminal_STRING;
     end
 
     def symbol_literal
-        table.consume;
+        table.ensure_consumption ":", "expected ':' on symbol literal";
         ast.symbol_literal symbol_name;
     end
 
     def symbol_name
         if table.lookahead(1).type == Type::MESSAGE_SYMBOL
-            terminal_MESSAGE_SYMBOL;
+            ast.symbol_name terminal_MESSAGE_SYMBOL;
         elsif table.lookahead(1).type == Type::IDENTIFIER
-            terminal_IDENTIFIER;
+            ast.symbol_name terminal_IDENTIFIER;
         elsif table.lookahead(1).type == Type::STRING
-            terminal_UNQUOTED_STRING;
+            ast.symbol_name terminal_UNQUOTED_STRING;
         end
     end
 
     def array_literal
         table.ensure_consumption "[", "missing opening bracket on array";
-        __items = __list_of_grammar_rule { array_literal_item };
+        __items = __list_of_grammar_rule { array_item };
         table.ensure_consumption "]", "missing closing bracket on array";
         ast.array_literal __items;
     end
 
-    def array_literal_item
+    def array_item
         toggle_comma_as_message_while_in_association;
         value = translation_unit;
         toggle_comma_as_message_while_in_association;
         table.ensure_consumption ",", "array items should be separated by commas" if table.lookahead(1) != "]";
-        value;
+        ast.array_item value;
     end
 
     def tuple_literal
@@ -458,7 +462,7 @@ class Parser
         value = translation_unit;
         toggle_comma_as_message_while_in_association;
         table.ensure_consumption ",", "tuple items should be separated by commas" if table.lookahead(1) != ")";
-        value;
+        ast.tuple_item value;
     end
 
     def hash_literal
@@ -545,8 +549,6 @@ class Parser
 
         if table.lookahead(1) == "="
             ast.assignment_message id, terminal_EQUALS;
-        # else
-        #     table.resume;
         end
     end
 
