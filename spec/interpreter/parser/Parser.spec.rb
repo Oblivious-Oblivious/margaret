@@ -178,25 +178,26 @@ describe Parser do
 
     it "TEST16" do
         # TODO Blocks with parameters
-        parse("->()", %Q{(new Block (with: (with: (new Array) (new Symbol "(")) (new Symbol ")")))});
-        parse("->(2 + 3)", %Q{(new Block (with: (with: (with: (with: (with: (new Array) (new Symbol "(")) (new Symbol "2")) (new Symbol "+")) (new Symbol "3")) (new Symbol ")")))});
-        parse("->((x = 1) (y = 2) (x + y))", %Q{(new Block (with: (with: (with: (with: (with: (with: (with: (with: (with: (with: (with: (with: (with: (with: (with: (with: (with: (new Array) (new Symbol "(")) (new Symbol "(")) (new Symbol "x")) (new Symbol "=")) (new Symbol "1")) (new Symbol ")")) (new Symbol "(")) (new Symbol "y")) (new Symbol "=")) (new Symbol "2")) (new Symbol ")")) (new Symbol "(")) (new Symbol "x")) (new Symbol "+")) (new Symbol "y")) (new Symbol ")")) (new Symbol ")")))});
+        # parse("->()", %Q{(new Block (new Array) "()")});
+        # parse("->(2 + 3)", %Q{(new Block "(2 + 3)")});
+        # parse("->((x = 1) (y = 2) (x + y))", %Q{(new Block "((x = 1) (y = 2) (x + y))")});
+        # parse("->(:a, :b, (a + b))");
     end
 
     it "TEST17" do
-        parse("#()", "(new: Tuple (new Array))");
-        parse("#(1)", "(new: Tuple (with: (new Array) 1))");
-        parse("#(1, 2)", "(new: Tuple (with: (with: (new Array) 1) 2))");
-        parse(%Q{#(42, "Hello", 'x', :ok, v1, v2, [], #(), {}, (x = 1))}, %Q{(new: Tuple (with: (with: (with: (with: (with: (with: (with: (with: (with: (with: (new Array) 42) "Hello") 'x') (new: Symbol "ok")) v1) v2) (new Array)) (new: Tuple (new Array))) (new: Hash (new Array))) (= x 1)))});
+        parse("#()", "(new Tuple)");
+        parse("#(1)", "(with: (new Tuple) 1)");
+        parse("#(1, 2)", "(with: (with: (new Tuple) 1) 2)");
+        parse(%Q{#(42, "Hello", 'x', :ok, v1, v2, [], #(), {}, (x = 1))}, %Q{(with: (with: (with: (with: (with: (with: (with: (with: (with: (with: (new Tuple) 42) "Hello") 'x') (new: Symbol "ok")) v1) v2) (new Array)) (new Tuple)) (new Hash)) (= x 1))});
     end
 
     it "TEST18" do
-        parse("{}", "(new: Hash (new Array))");
-        parse("{a: 1}", %Q{(new: Hash (with: (new Array) (key:value: Association (new: Symbol "a") 1)))});
-        parse(%Q{{"a": 1, "b": 2, "c": 3}}, %Q{(new: Hash (with: (with: (with: (new Array) (key:value: Association "a" 1)) (key:value: Association "b" 2)) (key:value: Association "c" 3)))});
-        parse(%Q{{:a: 1, :b: 2, :c: 3}}, %Q{(new: Hash (with: (with: (with: (new Array) (key:value: Association (new: Symbol "a") 1)) (key:value: Association (new: Symbol "b") 2)) (key:value: Association (new: Symbol "c") 3)))});
-        parse(%Q{{a: 1, b: 2, c: 3}}, %Q{(new: Hash (with: (with: (with: (new Array) (key:value: Association (new: Symbol "a") 1)) (key:value: Association (new: Symbol "b") 2)) (key:value: Association (new: Symbol "c") 3)))});
-        parse("{x: {a: 1, b: 2}, y: {c: 3, d: 4}}", %Q{(new: Hash (with: (with: (new Array) (key:value: Association (new: Symbol "x") (new: Hash (with: (with: (new Array) (key:value: Association (new: Symbol "a") 1)) (key:value: Association (new: Symbol "b") 2))))) (key:value: Association (new: Symbol "y") (new: Hash (with: (with: (new Array) (key:value: Association (new: Symbol "c") 3)) (key:value: Association (new: Symbol "d") 4))))))});
+        parse("{}", "(new Hash)");
+        parse("{a: 1}", %Q{(with: (new Hash) (key:value: Association (new: Symbol "a") 1))});
+        parse(%Q{{"a": 1, "b": 2, "c": 3}}, %Q{(with: (with: (with: (new Hash) (key:value: Association "a" 1)) (key:value: Association "b" 2)) (key:value: Association "c" 3))});
+        parse(%Q{{:a: 1, :b: 2, :c: 3}}, %Q{(with: (with: (with: (new Hash) (key:value: Association (new: Symbol "a") 1)) (key:value: Association (new: Symbol "b") 2)) (key:value: Association (new: Symbol "c") 3))});
+        parse(%Q{{a: 1, b: 2, c: 3}}, %Q{(with: (with: (with: (new Hash) (key:value: Association (new: Symbol "a") 1)) (key:value: Association (new: Symbol "b") 2)) (key:value: Association (new: Symbol "c") 3))});
+        parse("{x: {a: 1, b: 2}, y: {c: 3, d: 4}}", %Q{(with: (with: (new Hash) (key:value: Association (new: Symbol "x") (with: (with: (new Hash) (key:value: Association (new: Symbol "a") 1)) (key:value: Association (new: Symbol "b") 2)))) (key:value: Association (new: Symbol "y") (with: (with: (new Hash) (key:value: Association (new: Symbol "c") 3)) (key:value: Association (new: Symbol "d") 4))))});
     end
 
     it "TEST19" do

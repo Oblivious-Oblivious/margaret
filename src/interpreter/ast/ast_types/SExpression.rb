@@ -81,12 +81,12 @@ class SExpression < ASTInterface
         %Q{(new: BigFloat "#{sign}#{number[3...]}")};
     end
 
-    def array_literal(item_list)
+    def array_literal(item_list, type="Array")
         res = "";
         item_list.each do
             res << "(with: "
         end
-        res << "(new Array)";
+        res << "(new #{type})";
         item_list.each do |item|
             res << " #{item})";
         end
@@ -94,16 +94,11 @@ class SExpression < ASTInterface
     end
 
     def tuple_literal(item_list)
-        res = "(new: Tuple ";
-        res << array_literal(item_list);
-        res << ")";
+        array_literal(item_list, "Tuple");
     end
 
     def hash_literal(association_list)
-        res = "(new: Hash ";
-        res << array_literal(association_list);
-        res << ")";
-        res;
+        array_literal(association_list, "Hash");
     end
 
     def association(key, value)
