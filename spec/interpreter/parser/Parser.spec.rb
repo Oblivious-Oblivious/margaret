@@ -81,10 +81,10 @@ describe Parser do
     end
 
     it "TEST6" do
-        parse("0bi42_000", %Q{(new BigInteger "42000")});
-        parse("-0bi42_000", %Q{(new BigInteger "-42000")});
-        parse("0bi42000", %Q{(new BigInteger "42000")});
-        parse("-0bi42000", %Q{(new BigInteger "-42000")});
+        parse("0bi42_000", %Q{(new: BigInteger "42000")});
+        parse("-0bi42_000", %Q{(new: BigInteger "-42000")});
+        parse("0bi42000", %Q{(new: BigInteger "42000")});
+        parse("-0bi42000", %Q{(new: BigInteger "-42000")});
     end
 
     it "TEST7" do
@@ -100,8 +100,8 @@ describe Parser do
     end
 
     it "TEST8" do
-        parse("0bf0.042", %Q{(new BigFloat "0.042")});
-        parse("-0bf0.042", %Q{(new BigFloat "-0.042")});
+        parse("0bf0.042", %Q{(new: BigFloat "0.042")});
+        parse("-0bf0.042", %Q{(new: BigFloat "-0.042")});
     end
 
     it "TEST9" do
@@ -155,18 +155,12 @@ describe Parser do
         parse(%Q{"\e"}, %Q{"\e"});
         parse(%Q{"\s"}, %Q{"\s"});
         parse(%Q{"\\"}, %Q{"\\"});
-
-        # TODO Interpolation
-        # parse(%q{"#{1 + 2} seconds"}, %Q{"3 seconds"});
     end
 
     it "TEST13" do
-        parse(":symb", %Q{(new Symbol "symb")});
-        parse(":+", %Q{(new Symbol "+")});
-        parse(%Q{:"a symbol lit"}, %Q{(new Symbol "a symbol lit")});
-
-        # TODO Interpolated symbols
-        # parse(%q{:"my symbol#{1 + 1}"}, %Q{(new Symbol "my symbol2")});
+        parse(":symb", %Q{(new: Symbol "symb")});
+        parse(":+", %Q{(new: Symbol "+")});
+        parse(%Q{:"a symbol lit"}, %Q{(new: Symbol "a symbol lit")});
     end
 
     it "TEST14" do
@@ -176,10 +170,10 @@ describe Parser do
     end
 
     it "TEST15" do
-        parse("`()", %Q{(with: (with: (new Array) (new Symbol "(")) (new Symbol ")"))});
-        parse("`(a b c)", %Q{(with: (with: (with: (with: (with: (new Array) (new Symbol "(")) (new Symbol "a")) (new Symbol "b")) (new Symbol "c")) (new Symbol ")"))});
-        parse("`(:a msg: :b)", %Q{(with: (with: (with: (with: (with: (with: (with: (with: (new Array) (new Symbol "(")) (new Symbol ":")) (new Symbol "a")) (new Symbol "msg")) (new Symbol ":")) (new Symbol ":")) (new Symbol "b")) (new Symbol ")"))});
-        parse("`(2 * (3 + 5) / 4)", %Q{(with: (with: (with: (with: (with: (with: (with: (with: (with: (with: (with: (new Array) (new Symbol "(")) (new Symbol "2")) (new Symbol "*")) (new Symbol "(")) (new Symbol "3")) (new Symbol "+")) (new Symbol "5")) (new Symbol ")")) (new Symbol "/")) (new Symbol "4")) (new Symbol ")"))});
+        parse("`()", %Q{(with: (with: (new Array) (new: Symbol "(")) (new: Symbol ")"))});
+        parse("`(a b c)", %Q{(with: (with: (with: (with: (with: (new Array) (new: Symbol "(")) (new: Symbol "a")) (new: Symbol "b")) (new: Symbol "c")) (new: Symbol ")"))});
+        parse("`(:a msg: :b)", %Q{(with: (with: (with: (with: (with: (with: (with: (with: (new Array) (new: Symbol "(")) (new: Symbol ":")) (new: Symbol "a")) (new: Symbol "msg")) (new: Symbol ":")) (new: Symbol ":")) (new: Symbol "b")) (new: Symbol ")"))});
+        parse("`(2 * (3 + 5) / 4)", %Q{(with: (with: (with: (with: (with: (with: (with: (with: (with: (with: (with: (new Array) (new: Symbol "(")) (new: Symbol "2")) (new: Symbol "*")) (new: Symbol "(")) (new: Symbol "3")) (new: Symbol "+")) (new: Symbol "5")) (new: Symbol ")")) (new: Symbol "/")) (new: Symbol "4")) (new: Symbol ")"))});
     end
 
     it "TEST16" do
@@ -190,19 +184,19 @@ describe Parser do
     end
 
     it "TEST17" do
-        parse("#()", "(new Tuple (new Array))");
-        parse("#(1)", "(new Tuple (with: (new Array) 1))");
-        parse("#(1, 2)", "(new Tuple (with: (with: (new Array) 1) 2))");
-        parse(%Q{#(42, "Hello", 'x', :ok, v1, v2, [], #(), {}, (x = 1))}, %Q{(new Tuple (with: (with: (with: (with: (with: (with: (with: (with: (with: (with: (new Array) 42) "Hello") 'x') (new Symbol "ok")) v1) v2) (new Array)) (new Tuple (new Array))) (new Hash (new Array))) (= x 1)))});
+        parse("#()", "(new: Tuple (new Array))");
+        parse("#(1)", "(new: Tuple (with: (new Array) 1))");
+        parse("#(1, 2)", "(new: Tuple (with: (with: (new Array) 1) 2))");
+        parse(%Q{#(42, "Hello", 'x', :ok, v1, v2, [], #(), {}, (x = 1))}, %Q{(new: Tuple (with: (with: (with: (with: (with: (with: (with: (with: (with: (with: (new Array) 42) "Hello") 'x') (new: Symbol "ok")) v1) v2) (new Array)) (new: Tuple (new Array))) (new: Hash (new Array))) (= x 1)))});
     end
 
     it "TEST18" do
-        parse("{}", "(new Hash (new Array))");
-        parse("{a: 1}", %Q{(new Hash (with: (new Array) (key:value: Association (new Symbol "a") 1)))});
-        parse(%Q{{"a": 1, "b": 2, "c": 3}}, %Q{(new Hash (with: (with: (with: (new Array) (key:value: Association "a" 1)) (key:value: Association "b" 2)) (key:value: Association "c" 3)))});
-        parse(%Q{{:a: 1, :b: 2, :c: 3}}, %Q{(new Hash (with: (with: (with: (new Array) (key:value: Association (new Symbol "a") 1)) (key:value: Association (new Symbol "b") 2)) (key:value: Association (new Symbol "c") 3)))});
-        parse(%Q{{a: 1, b: 2, c: 3}}, %Q{(new Hash (with: (with: (with: (new Array) (key:value: Association (new Symbol "a") 1)) (key:value: Association (new Symbol "b") 2)) (key:value: Association (new Symbol "c") 3)))});
-        parse("{x: {a: 1, b: 2}, y: {c: 3, d: 4}}", %Q{(new Hash (with: (with: (new Array) (key:value: Association (new Symbol "x") (new Hash (with: (with: (new Array) (key:value: Association (new Symbol "a") 1)) (key:value: Association (new Symbol "b") 2))))) (key:value: Association (new Symbol "y") (new Hash (with: (with: (new Array) (key:value: Association (new Symbol "c") 3)) (key:value: Association (new Symbol "d") 4))))))});
+        parse("{}", "(new: Hash (new Array))");
+        parse("{a: 1}", %Q{(new: Hash (with: (new Array) (key:value: Association (new: Symbol "a") 1)))});
+        parse(%Q{{"a": 1, "b": 2, "c": 3}}, %Q{(new: Hash (with: (with: (with: (new Array) (key:value: Association "a" 1)) (key:value: Association "b" 2)) (key:value: Association "c" 3)))});
+        parse(%Q{{:a: 1, :b: 2, :c: 3}}, %Q{(new: Hash (with: (with: (with: (new Array) (key:value: Association (new: Symbol "a") 1)) (key:value: Association (new: Symbol "b") 2)) (key:value: Association (new: Symbol "c") 3)))});
+        parse(%Q{{a: 1, b: 2, c: 3}}, %Q{(new: Hash (with: (with: (with: (new Array) (key:value: Association (new: Symbol "a") 1)) (key:value: Association (new: Symbol "b") 2)) (key:value: Association (new: Symbol "c") 3)))});
+        parse("{x: {a: 1, b: 2}, y: {c: 3, d: 4}}", %Q{(new: Hash (with: (with: (new Array) (key:value: Association (new: Symbol "x") (new: Hash (with: (with: (new Array) (key:value: Association (new: Symbol "a") 1)) (key:value: Association (new: Symbol "b") 2))))) (key:value: Association (new: Symbol "y") (new: Hash (with: (with: (new Array) (key:value: Association (new: Symbol "c") 3)) (key:value: Association (new: Symbol "d") 4))))))});
     end
 
     it "TEST19" do

@@ -74,11 +74,11 @@ class SExpression < ASTInterface
     end
     
     def big_integer_literal(sign, number)
-        %Q{(new BigInteger "#{sign}#{number[3...]}")};
+        %Q{(new: BigInteger "#{sign}#{number[3...]}")};
     end
 
     def big_float_literal(sign, number)
-        %Q{(new BigFloat "#{sign}#{number[3...]}")};
+        %Q{(new: BigFloat "#{sign}#{number[3...]}")};
     end
 
     def array_literal(item_list)
@@ -94,13 +94,13 @@ class SExpression < ASTInterface
     end
 
     def tuple_literal(item_list)
-        res = "(new Tuple ";
+        res = "(new: Tuple ";
         res << array_literal(item_list);
         res << ")";
     end
 
     def hash_literal(association_list)
-        res = "(new Hash ";
+        res = "(new: Hash ";
         res << array_literal(association_list);
         res << ")";
         res;
@@ -125,7 +125,7 @@ class SExpression < ASTInterface
     end
 
     def symbol_literal(id)
-        %Q{(new Symbol "#{id}")};
+        %Q{(new: Symbol "#{id}")};
     end
 
     def terminal_UNSIGNED_BASE_TEN_NUMBER(number)
