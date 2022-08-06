@@ -52,7 +52,7 @@ class Parser
     end
 
     def first_unit
-        result = operand;
+        result = translation_unit;
         table.ensure_consumption "eof", "reached end of program";
         ast.first_unit result;
     end
@@ -347,7 +347,7 @@ class Parser
     #     ast.keyword_argument binary_operand, binary_message_chain;
     # end
 
-    def operand
+    def translation_unit
         # TODO Change nullity to empty strings
         res = nil;
         current_position = table.token_table_pos;
@@ -439,7 +439,7 @@ class Parser
 
     def array_literal_item
         toggle_comma_as_message_while_in_association;
-        value = operand;
+        value = translation_unit;
         toggle_comma_as_message_while_in_association;
         table.ensure_consumption ",", "array items should be separated by commas" if table.lookahead(1) != "]";
         value;
@@ -455,7 +455,7 @@ class Parser
 
     def tuple_item
         toggle_comma_as_message_while_in_association;
-        value = operand;
+        value = translation_unit;
         toggle_comma_as_message_while_in_association;
         table.ensure_consumption ",", "tuple items should be separated by commas" if table.lookahead(1) != ")";
         value;
@@ -473,7 +473,7 @@ class Parser
             key = terminal_IDENTIFIER;
             table.ensure_consumption ":", "hash keys should be denoted by colons";
             toggle_comma_as_message_while_in_association;
-            value = operand;
+            value = translation_unit;
             toggle_comma_as_message_while_in_association;
             table.ensure_consumption ",", "keys should be separated by commas" if table.lookahead(1) != "}";
             ast.json_association key, value;
@@ -481,7 +481,7 @@ class Parser
             key = symbol_literal;
             table.ensure_consumption ":", "hash keys should be denoted by colons";
             toggle_comma_as_message_while_in_association;
-            value = operand;
+            value = translation_unit;
             toggle_comma_as_message_while_in_association;
             table.ensure_consumption ",", "keys should be separated by commas" if table.lookahead(1) != "}";
             ast.association key, value;
@@ -489,7 +489,7 @@ class Parser
             key = string_literal;
             table.ensure_consumption ":", "hash keys should be denoted by colons";
             toggle_comma_as_message_while_in_association;
-            value = operand;
+            value = translation_unit;
             toggle_comma_as_message_while_in_association;
             table.ensure_consumption ",", "keys should be separated by commas" if table.lookahead(1) != "}";
             ast.association key, value;
@@ -535,7 +535,7 @@ class Parser
         if optional_assignment_list.empty?
             ast.empty;
         else
-            ast.translation_unit optional_assignment_list, expr;
+            ast.message optional_assignment_list, expr;
         end
     end
 
@@ -551,7 +551,7 @@ class Parser
     end
 
     def expression
-        operand;
+        ast.expression translation_unit;
     end
 
     def terminal_UNSIGNED_BASE_TEN_NUMBER
