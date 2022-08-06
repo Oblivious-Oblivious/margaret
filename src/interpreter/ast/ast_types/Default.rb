@@ -56,6 +56,8 @@ class Default < ASTInterface
     end
 
     def symbol_literal(id)
+    def variable(optional_instance_symbol, name)
+    end
     end
 
     def terminal_UNSIGNED_BASE_TEN_NUMBER(number)

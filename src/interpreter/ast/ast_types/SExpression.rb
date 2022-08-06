@@ -121,6 +121,9 @@ class SExpression < ASTInterface
 
     def symbol_literal(id)
         %Q{(new: Symbol "#{id}")};
+    def variable(optional_instance_symbol, name)
+        "#{optional_instance_symbol}#{name}";
+    end
     end
 
     def terminal_UNSIGNED_BASE_TEN_NUMBER(number)

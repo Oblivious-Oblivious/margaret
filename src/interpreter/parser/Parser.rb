@@ -531,7 +531,12 @@ class Parser
     end
 
     def variable
-        "#{terminal_INSTANCE_SYMBOL}#{terminal_IDENTIFIER}";
+        optional_instance_symbol = "";
+        if table.lookahead(1) == "@"
+            optional_instance_symbol = terminal_INSTANCE_SYMBOL;
+        end
+
+        ast.variable optional_instance_symbol, terminal_IDENTIFIER;
     end
 
     def list
@@ -610,9 +615,7 @@ class Parser
     end
 
     def terminal_INSTANCE_SYMBOL
-        if table.lookahead(1) == "@"
-            ast.terminal_INSTANCE_SYMBOL table.consume;
-        end
+        ast.terminal_INSTANCE_SYMBOL table.consume;
     end
 
     # TODO Issue a module with symbol representations for typechecking (hashmap or tokens)

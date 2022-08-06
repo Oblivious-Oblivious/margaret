@@ -20,6 +20,7 @@ class ASTInterface; extend Abstract;
                      :quoted_list_literal,
                      :block_literal,
                      :symbol_literal,
+                     :variable,
                      :terminal_UNSIGNED_BASE_TEN_NUMBER,
                      :terminal_ALTERNATE_BASE_NUMBER,
                      :terminal_BIGINTEGER,
