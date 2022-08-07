@@ -348,8 +348,7 @@ class Parser
     # end
 
     def translation_unit
-        # TODO Change nullity to empty strings
-        res = nil;
+        res = "";
         current_position = table.token_table_pos;
         if current_position == table.token_table_pos
             res = literal;
@@ -361,16 +360,16 @@ class Parser
         if current_position == table.token_table_pos and table.lookahead(1) != ")" and table.lookahead(1) != "]" and table.lookahead(1) != "}" and table.lookahead(1) != "," and table.lookahead(1) != ";" and table.lookahead(1) != "eof"
             res = list;
         end
-        
-        ast.translation_unit res;
+
+        if res == ""
+            ast.empty;
+        else
+            ast.translation_unit res;
+        end
     end
 
     def literal
-        res = nil;
-        sign = "";
-        if ["+", "-"].include? table.lookahead(1).value
-            sign = terminal_SIGN;
-        end
+        sign = ["+", "-"].include?(table.lookahead(1).value) ? terminal_SIGN : ast.empty;
 
         if [Type::INTEGER, Type::FLOAT].include?(table.lookahead(1).type)
             res = base_ten_literal(sign);
@@ -394,6 +393,8 @@ class Parser
             res = quoted_list_literal;
         elsif table.lookahead(1) == "->"
             res = block_literal;
+        else
+            res = ast.empty;
         end
 
         ast.literal res;
@@ -431,6 +432,8 @@ class Parser
             ast.symbol_name terminal_IDENTIFIER;
         elsif table.lookahead(1).type == Type::STRING
             ast.symbol_name terminal_UNQUOTED_STRING;
+        else
+            ast.empty;
         end
     end
 
@@ -497,6 +500,8 @@ class Parser
             toggle_comma_as_message_while_in_association;
             table.ensure_consumption ",", "keys should be separated by commas" if table.lookahead(1) != "}";
             ast.association key, value;
+        else
+            ast.empty;
         end
     end
 
@@ -549,6 +554,8 @@ class Parser
 
         if table.lookahead(1) == "="
             ast.assignment_message id, terminal_EQUALS;
+        else
+            ast.empty;
         end
     end
 
@@ -583,12 +590,16 @@ class Parser
     def terminal_IDENTIFIER
         if table.lookahead(1).type == Type::IDENTIFIER
             ast.terminal_IDENTIFIER table.consume;
+        else
+            ast.empty;
         end
     end
 
     def terminal_MESSAGE_SYMBOL
         if table.lookahead(1).type == Type::MESSAGE_SYMBOL
             ast.terminal_MESSAGE_SYMBOL table.consume;
+        else
+            ast.empty;
         end
     end
 
