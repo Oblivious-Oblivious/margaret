@@ -58,7 +58,7 @@ class Default < ASTInterface
     def quoted_list_literal(item_list)
     end
 
-    def block_literal(item_list)
+    def block_literal(param_list, item_list)
     end
 
     def variable(optional_instance_symbol, name)

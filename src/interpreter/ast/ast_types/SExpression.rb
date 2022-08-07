@@ -129,8 +129,10 @@ class SExpression < ASTInterface
         array_literal(item_list);
     end
 
-    def block_literal(item_list)
-        res = "(new Block ";
+    def block_literal(param_list, item_list)
+        res = "(params:function: Block ";
+        res << array_literal(param_list);
+        res << " ";
         res << array_literal(item_list);
         res << ")";
     end

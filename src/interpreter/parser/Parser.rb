@@ -516,9 +516,19 @@ class Parser
     def block_literal
         table.ensure_consumption "->", "missing '->' symbol on block literal";
         table.ensure_consumption "(", "missing opening parenthesis on block literal";
+
+        __params = [];
+        while table.lookahead(1) == ":"
+            __params << symbol_literal;
+            table.ensure_consumption ",", "block parameters are separated by commas";
+        end
+
+        table.ensure_consumption "(", "missing opening parenthesis on function";
         __items = __consume_quoted_tokens;
+        table.ensure_consumption ")", "missing closing parenthesis on function";
+
         table.ensure_consumption ")", "missing closing parenthesis on block literal";
-        ast.block_literal __items;
+        ast.block_literal __params, __items;
     end
 
     def variable
