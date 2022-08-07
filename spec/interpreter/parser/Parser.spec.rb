@@ -177,11 +177,11 @@ describe Parser do
     end
 
     it "TEST16" do
-        # TODO Blocks with parameters
-        # parse("->()", %Q{(new Block (new Array) "()")});
-        # parse("->(2 + 3)", %Q{(new Block "(2 + 3)")});
-        # parse("->((x = 1) (y = 2) (x + y))", %Q{(new Block "((x = 1) (y = 2) (x + y))")});
-        # parse("->(:a, :b, (a + b))");
+        parse("->((42))", %Q{(params:function: Block (new Array) (with: (with: (with: (new Array) (new: Symbol "(")) (new: Symbol "42")) (new: Symbol ")")))});
+        parse("->((2 + 3))", %Q{(params:function: Block (new Array) (with: (with: (with: (with: (with: (new Array) (new: Symbol "(")) (new: Symbol "2")) (new: Symbol "+")) (new: Symbol "3")) (new: Symbol ")")))});
+        parse("->(((x = 1) (y = 2) (x + y)))", %Q{(params:function: Block (new Array) (with: (with: (with: (with: (with: (with: (with: (with: (with: (with: (with: (with: (with: (with: (with: (with: (with: (new Array) (new: Symbol "(")) (new: Symbol "(")) (new: Symbol "x")) (new: Symbol "=")) (new: Symbol "1")) (new: Symbol ")")) (new: Symbol "(")) (new: Symbol "y")) (new: Symbol "=")) (new: Symbol "2")) (new: Symbol ")")) (new: Symbol "(")) (new: Symbol "x")) (new: Symbol "+")) (new: Symbol "y")) (new: Symbol ")")) (new: Symbol ")")))});
+        parse("->(:a, :b, (a + b))", %Q{(params:function: Block (with: (with: (new Array) (new: Symbol "a")) (new: Symbol "b")) (with: (with: (with: (with: (with: (new Array) (new: Symbol "(")) (new: Symbol "a")) (new: Symbol "+")) (new: Symbol "b")) (new: Symbol ")")))});
+        parse("->(:a, (a))", %Q{(params:function: Block (with: (new Array) (new: Symbol "a")) (with: (with: (with: (new Array) (new: Symbol "(")) (new: Symbol "a")) (new: Symbol ")")))});
     end
 
     it "TEST17" do
