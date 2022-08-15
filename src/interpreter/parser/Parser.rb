@@ -348,29 +348,9 @@ class Parser
     # end
 
     def translation_unit
-        res = "";
-        current_position = table.token_table_pos;
-        if current_position == table.token_table_pos
-            res = literal;
-        end
-        if current_position == table.token_table_pos
-            res = variable;
-        end
-        # TODO Refactor
-        if current_position == table.token_table_pos and table.lookahead(1) != ")" and table.lookahead(1) != "]" and table.lookahead(1) != "}" and table.lookahead(1) != "," and table.lookahead(1) != ";" and table.lookahead(1) != "eof"
-            res = list;
-        end
-
-        if res == ""
-            ast.empty;
-        else
-            ast.translation_unit res;
-        end
-    end
-
-    def literal
+        # TODO Refactor into its own message
         sign = ["+", "-"].include?(table.lookahead(1).value) ? terminal_SIGN : ast.empty;
-
+        
         if [Type::INTEGER, Type::FLOAT].include?(table.lookahead(1).type)
             res = base_ten_literal(sign);
         elsif [Type::BINARY, Type::HEXADECIMAL, Type::OCTAL].include?(table.lookahead(1).type)
@@ -379,13 +359,17 @@ class Parser
             res = big_integer_literal(sign);
         elsif table.lookahead(1).type == Type::BIGFLOAT
             res = big_float_literal(sign);
+
         elsif table.lookahead(1).type == Type::STRING
             res = string_literal;
         elsif table.lookahead(1) == ":"
             res = symbol_literal;
+        elsif table.lookahead(1) == "@" or table.lookahead(1).type == Type::IDENTIFIER
+            res = variable;
+        
+        elsif table.lookahead(1) == "("
+            res = list;
         elsif table.lookahead(1) == "["
-            res = array_literal;
-        elsif table.lookahead(1) == "#"
             res = tuple_literal;
         elsif table.lookahead(1) == "{"
             res = hash_literal;
@@ -393,11 +377,13 @@ class Parser
             res = quoted_list_literal;
         elsif table.lookahead(1) == "->"
             res = block_literal;
-        else
-            res = ast.empty;
         end
 
-        ast.literal res;
+        if res == "+" or res == "-"
+            ast.empty;
+        else
+            ast.translation_unit res;
+        end
     end
 
     def base_ten_literal(sign)
@@ -437,26 +423,34 @@ class Parser
         end
     end
 
-    def array_literal
-        table.ensure_consumption "[", "missing opening bracket on array";
-        __items = __list_of_grammar_rule { array_item };
-        table.ensure_consumption "]", "missing closing bracket on array";
-        ast.array_literal __items;
+    def variable
+        optional_instance_symbol = "";
+        if table.lookahead(1) == "@"
+            optional_instance_symbol = terminal_INSTANCE_SYMBOL;
+        end
+
+        ast.variable optional_instance_symbol, terminal_IDENTIFIER;
     end
 
-    def array_item
-        toggle_comma_as_message_while_in_association;
-        value = translation_unit;
-        toggle_comma_as_message_while_in_association;
-        table.ensure_consumption ",", "array items should be separated by commas" if table.lookahead(1) != "]";
-        ast.array_item value;
+    def list
+        table.ensure_consumption "(", "missing opening parenthesis on list";
+        
+        __units = [];
+        loop do
+            break if table.lookahead(1) == ")" or table.lookahead(1) == "eof";
+            # __units << translation_unit;
+            __units << expression;
+            table.ensure_consumption ",", "list items should be separated by commas" if table.lookahead(1) != ")" and table.lookahead(1) != "eof";
+        end
+        
+        table.ensure_consumption ")", "missing closing parenthesis on list";
+        ast.list __units;
     end
 
     def tuple_literal
-        table.ensure_consumption "#", "missing '#' symbol on tuple literal";
-        table.ensure_consumption "(", "missing opening parenthesis on tuple";
+        table.ensure_consumption "[", "missing opening bracket on tuple";
         __items = __list_of_grammar_rule { tuple_item };
-        table.ensure_consumption ")", "missing closing parenthesis on tuple";
+        table.ensure_consumption "]", "missing closing bracket on tuple";
         ast.tuple_literal __items;
     end
 
@@ -464,7 +458,7 @@ class Parser
         toggle_comma_as_message_while_in_association;
         value = translation_unit;
         toggle_comma_as_message_while_in_association;
-        table.ensure_consumption ",", "tuple items should be separated by commas" if table.lookahead(1) != ")";
+        table.ensure_consumption ",", "tuple items should be separated by commas" if table.lookahead(1) != "]" and table.lookahead(1) != "eof";
         ast.tuple_item value;
     end
 
@@ -523,28 +517,31 @@ class Parser
             table.ensure_consumption ",", "block parameters are separated by commas";
         end
 
-        table.ensure_consumption "(", "missing opening parenthesis on function";
-        __items = __consume_quoted_tokens;
-        table.ensure_consumption ")", "missing closing parenthesis on function";
+        function = translation_unit;
 
         table.ensure_consumption ")", "missing closing parenthesis on block literal";
-        ast.block_literal __params, __items;
+        ast.block_literal __params, function;
     end
 
-    def variable
-        optional_instance_symbol = "";
-        if table.lookahead(1) == "@"
-            optional_instance_symbol = terminal_INSTANCE_SYMBOL;
+    def expression
+        optional_assignment_list = __list_of_grammar_rule { assignment_message };
+
+        res = "";
+        current_position = table.token_table_pos;
+        if current_position == table.token_table_pos
+            res = message;
         end
+        # if current_position == table.token_table_pos
+        #     res = cascaded_message;
+        # end
 
-        ast.variable optional_instance_symbol, terminal_IDENTIFIER;
+        if res == ""
+            ast.empty;
+        else
+            ast.expression optional_assignment_list, res;
+        end
     end
 
-    def list
-        table.ensure_consumption "(", "missing opening parenthesis on list";
-        __units = __list_of_grammar_rule { message };
-        table.ensure_consumption ")", "missing closing parenthesis on list";
-        ast.list __units;
     end
 
     def message
@@ -597,9 +594,29 @@ class Parser
         ast.terminal_UNQUOTED_STRING table.consume;
     end
 
+    def terminal_INSTANCE_SYMBOL
+        ast.terminal_INSTANCE_SYMBOL table.consume;
+    end
+
+    def terminal_SIGN
+        ast.terminal_SIGN table.consume;
+    end
+
+    def terminal_EQUALS
+        ast.terminal_EQUALS table.consume;
+    end
+
     def terminal_IDENTIFIER
         if table.lookahead(1).type == Type::IDENTIFIER
             ast.terminal_IDENTIFIER table.consume;
+        else
+            ast.empty;
+        end
+    end
+
+    def terminal_IDENTIFIER_SYMBOL
+        if table.lookahead(1).type == Type::ID_SYMBOL
+            ast.terminal_IDENTIFIER_SYMBOL table.consume;
         else
             ast.empty;
         end
@@ -612,29 +629,4 @@ class Parser
             ast.empty;
         end
     end
-
-    # def terminal_IDENTIFIER_SYMBOL
-    #     if table.lookahead(1).type == Type::ID_SYMBOL
-    #         ast.terminal_IDENTIFIER_SYMBOL table.consume;
-    #     end
-    # end
-
-    def terminal_INSTANCE_SYMBOL
-        ast.terminal_INSTANCE_SYMBOL table.consume;
-    end
-
-    # TODO Issue a module with symbol representations for typechecking (hashmap or tokens)
-    def terminal_SIGN
-        ast.terminal_SIGN table.consume;
-    end
-
-    def terminal_EQUALS
-        ast.terminal_EQUALS table.consume;
-    end
-
-    # def terminal_COLON
-    #     if table.lookahead(1) == ":"
-    #         ast.terminal_COLON table.consume;
-    #     end
-    # end
 end

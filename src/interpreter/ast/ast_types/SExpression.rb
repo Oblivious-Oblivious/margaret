@@ -13,10 +13,6 @@ class SExpression < ASTInterface
         unit;
     end
 
-    def literal(lit)
-        lit;
-    end
-
     # def translation_unit(optional_assignment_list, expr)
     #     res = "#{optional_assignment_list[0]}";
     #     (1...optional_assignment_list.size).each do |i|
@@ -82,59 +78,11 @@ class SExpression < ASTInterface
     end
 
     def symbol_literal(id)
-        %Q{(new: Symbol "#{id}")};
+        %Q{:"#{id}"};
     end
 
     def symbol_name(name)
         name;
-    end
-
-    def array_literal(item_list, type="Array")
-        res = "";
-        item_list.each do
-            res << "(with: "
-        end
-        res << "(new #{type})";
-        item_list.each do |item|
-            res << " #{item})";
-        end
-        res;
-    end
-
-    def array_item(item)
-        item;
-    end
-
-    def tuple_literal(item_list)
-        array_literal(item_list, "Tuple");
-    end
-
-    def tuple_item(item)
-        item;
-    end
-
-    def hash_literal(association_list)
-        array_literal(association_list, "Hash");
-    end
-
-    def association(key, value)
-        "(key:value: Association #{key} #{value})";
-    end
-
-    def json_association(key, value)
-        association(symbol_literal(key), value);
-    end
-
-    def quoted_list_literal(item_list)
-        array_literal(item_list);
-    end
-
-    def block_literal(param_list, item_list)
-        res = "(params:function: Block ";
-        res << array_literal(param_list);
-        res << " ";
-        res << array_literal(item_list);
-        res << ")";
     end
 
     def variable(optional_instance_symbol, name)
@@ -146,12 +94,58 @@ class SExpression < ASTInterface
 
         if unit_list.size > 0
             (0...unit_list.size-1).each do |i|
-                res << unit_list[i] << " ";
+                res << unit_list[i] << ", ";
             end
             res << unit_list[unit_list.size-1];
         end
 
         res << ")";
+        res;
+    end
+
+    def tuple_literal(item_list)
+        "(new Tuple #{list(item_list)})";
+    end
+
+    def tuple_item(item)
+        item;
+    end
+
+    def hash_literal(association_list)
+        "(new Hash #{list(association_list)})";
+    end
+
+    def association(key, value)
+        "#{key}: #{value}";
+    end
+
+    def json_association(key, value)
+        association(symbol_literal(key), value);
+    end
+
+    def quoted_list_literal(item_list)
+        list(item_list);
+    end
+
+    def block_literal(param_list, function)
+        res = "(params:function: Block ";
+        res << list(param_list);
+        res << " ";
+        res << function;
+        res << ")";
+    end
+
+    def variable(optional_instance_symbol, name)
+        "#{optional_instance_symbol}#{name}";
+    end
+
+        res << expr;
+
+        if optional_assignment_list.size > 0
+            (optional_assignment_list.size-1).times do
+                res << ")";
+            end
+        end
         res;
     end
 
@@ -213,9 +207,9 @@ class SExpression < ASTInterface
         symb.value;
     end
 
-    # def terminal_IDENTIFIER_SYMBOL(symb)
-    #     symb.value;
-    # end
+    def terminal_IDENTIFIER_SYMBOL(symb)
+        symb.value;
+    end
 
     def terminal_SIGN(symb)
         symb.value;
@@ -224,8 +218,4 @@ class SExpression < ASTInterface
     def terminal_EQUALS(symb)
         symb.value;
     end
-
-    # def terminal_COLON(symb)
-    #     symb.value;
-    # end
 end

@@ -4,12 +4,6 @@ class ASTInterface; extend Abstract;
     abstract_methods :empty,
                      :first_unit,
                      :translation_unit,
-                     :literal,
-                    #  :list,
-                    #  :translation_unit,
-                    #  :binary_operand,
-                    #  :keyword,
-                    #  :keyword_argument,
                      :base_ten_literal,
                      :alternate_base_literal,
                      :big_integer_literal,
@@ -17,8 +11,6 @@ class ASTInterface; extend Abstract;
                      :string_literal,
                      :symbol_literal,
                      :symbol_name,
-                     :array_literal,
-                     :array_item,
                      :tuple_literal,
                      :tuple_item,
                      :hash_literal,
@@ -28,9 +20,12 @@ class ASTInterface; extend Abstract;
                      :block_literal,
                      :variable,
                      :list,
-                     :message,
-                     :assignment_message,
                      :expression,
+                     :assignment_message,
+                     :message,
+                     :unary_message,
+
+                     :cascaded_message,
 
                      :terminal_UNSIGNED_BASE_TEN_NUMBER,
                      :terminal_ALTERNATE_BASE_NUMBER,
@@ -40,9 +35,8 @@ class ASTInterface; extend Abstract;
                      :terminal_UNQUOTED_STRING,
                      :terminal_IDENTIFIER,
                      :terminal_MESSAGE_SYMBOL,
-                    #  :terminal_IDENTIFIER_SYMBOL,
+                     :terminal_IDENTIFIER_SYMBOL,
                      :terminal_INSTANCE_SYMBOL,
                      :terminal_SIGN,
                      :terminal_EQUALS;
-                    #  :terminal_COLON;
 end

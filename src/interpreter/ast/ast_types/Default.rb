@@ -10,9 +10,6 @@ class Default < ASTInterface
     def translation_unit(unit)
     end
 
-    def literal(lit)
-    end
-
     def base_ten_literal(sign, number)
     end
 
@@ -34,12 +31,6 @@ class Default < ASTInterface
     def symbol_name(name)
     end
 
-    def array_literal(item_list, type)
-    end
-
-    def array_item(item)
-    end
-
     def tuple_literal(item_list)
     end
 
@@ -58,7 +49,7 @@ class Default < ASTInterface
     def quoted_list_literal(item_list)
     end
 
-    def block_literal(param_list, item_list)
+    def block_literal(param_list, function)
     end
 
     def variable(optional_instance_symbol, name)
@@ -104,15 +95,12 @@ class Default < ASTInterface
     def terminal_MESSAGE_SYMBOL(symb)
     end
 
-    # def terminal_IDENTIFIER_SYMBOL(symb)
-    # end
+    def terminal_IDENTIFIER_SYMBOL(symb)
+    end
 
     def terminal_SIGN(symb)
     end
 
     def terminal_EQUALS(symb)
     end
-
-    # def terminal_COLON(symb)
-    # end
 end

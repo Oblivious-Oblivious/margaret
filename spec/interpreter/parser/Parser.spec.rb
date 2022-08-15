@@ -48,6 +48,8 @@ describe Parser do
         parse("nil", "nil");
         parse("true", "true");
         parse("false", "false");
+        parse("self", "self");
+        parse("super", "super");
     end
 
     it "TEST2" do
@@ -158,46 +160,49 @@ describe Parser do
     end
 
     it "TEST13" do
-        parse(":symb", %Q{(new: Symbol "symb")});
-        parse(":+", %Q{(new: Symbol "+")});
-        parse(%Q{:"a symbol lit"}, %Q{(new: Symbol "a symbol lit")});
+        parse(":symb", %Q{:"symb"});
+        parse(":+", %Q{:"+"});
+        parse(%Q{:"a symbol lit"}, %Q{:"a symbol lit"});
     end
 
     it "TEST14" do
-        parse("[]", "(new Array)");
-        parse("[1, 2, 3]", "(with: (with: (with: (new Array) 1) 2) 3)");
-        parse("[1, 2, [10, 20, 30], 3]", "(with: (with: (with: (with: (new Array) 1) 2) (with: (with: (with: (new Array) 10) 20) 30)) 3)");
+        parse("()", "()");
+        parse("(())", "(())");
+        parse("(42)", "(42)");
+        parse("(1, 2, 3)", "(1, 2, 3)");
+        parse("(1, 2, (10, 20, 30), 3)", "(1, 2, (10, 20, 30), 3)");
     end
 
     it "TEST15" do
-        parse("`()", %Q{(with: (with: (new Array) (new: Symbol "(")) (new: Symbol ")"))});
-        parse("`(a b c)", %Q{(with: (with: (with: (with: (with: (new Array) (new: Symbol "(")) (new: Symbol "a")) (new: Symbol "b")) (new: Symbol "c")) (new: Symbol ")"))});
-        parse("`(:a msg: :b)", %Q{(with: (with: (with: (with: (with: (with: (with: (with: (new Array) (new: Symbol "(")) (new: Symbol ":")) (new: Symbol "a")) (new: Symbol "msg")) (new: Symbol ":")) (new: Symbol ":")) (new: Symbol "b")) (new: Symbol ")"))});
-        parse("`(2 * (3 + 5) / 4)", %Q{(with: (with: (with: (with: (with: (with: (with: (with: (with: (with: (with: (new Array) (new: Symbol "(")) (new: Symbol "2")) (new: Symbol "*")) (new: Symbol "(")) (new: Symbol "3")) (new: Symbol "+")) (new: Symbol "5")) (new: Symbol ")")) (new: Symbol "/")) (new: Symbol "4")) (new: Symbol ")"))});
+        parse("`()", %Q{(:"(", :")")});
+        parse("`(a b c)", %Q{(:"(", :"a", :"b", :"c", :")")});
+        parse("`(:a msg: :b)", %Q{(:"(", :":", :"a", :"msg", :":", :":", :"b", :")")});
+        parse("`(2 * (3 + 5) / 4)", %Q{(:"(", :"2", :"*", :"(", :"3", :"+", :"5", :")", :"/", :"4", :")")});
     end
 
     it "TEST16" do
-        parse("->((42))", %Q{(params:function: Block (new Array) (with: (with: (with: (new Array) (new: Symbol "(")) (new: Symbol "42")) (new: Symbol ")")))});
-        parse("->((2 + 3))", %Q{(params:function: Block (new Array) (with: (with: (with: (with: (with: (new Array) (new: Symbol "(")) (new: Symbol "2")) (new: Symbol "+")) (new: Symbol "3")) (new: Symbol ")")))});
-        parse("->(((x = 1) (y = 2) (x + y)))", %Q{(params:function: Block (new Array) (with: (with: (with: (with: (with: (with: (with: (with: (with: (with: (with: (with: (with: (with: (with: (with: (with: (new Array) (new: Symbol "(")) (new: Symbol "(")) (new: Symbol "x")) (new: Symbol "=")) (new: Symbol "1")) (new: Symbol ")")) (new: Symbol "(")) (new: Symbol "y")) (new: Symbol "=")) (new: Symbol "2")) (new: Symbol ")")) (new: Symbol "(")) (new: Symbol "x")) (new: Symbol "+")) (new: Symbol "y")) (new: Symbol ")")) (new: Symbol ")")))});
-        parse("->(:a, :b, (a + b))", %Q{(params:function: Block (with: (with: (new Array) (new: Symbol "a")) (new: Symbol "b")) (with: (with: (with: (with: (with: (new Array) (new: Symbol "(")) (new: Symbol "a")) (new: Symbol "+")) (new: Symbol "b")) (new: Symbol ")")))});
-        parse("->(:a, (a))", %Q{(params:function: Block (with: (new Array) (new: Symbol "a")) (with: (with: (with: (new Array) (new: Symbol "(")) (new: Symbol "a")) (new: Symbol ")")))});
+        parse("->(42)", "(params:function: Block () 42)");
+        parse("->(:a, (a puts))", %Q{(params:function: Block (:"a") (puts a))});
+        parse("->((2 + 3))", "(params:function: Block () (+ 2 3))");
+        parse("->((x = 1, y = 2, x + y))", "(params:function: Block () (= x 1, = y 2, + x y))");
+        parse("->(:a, :b, (a + b))", %Q{(params:function: Block (:"a", :"b") (+ a b))});
+        parse("->(:a, a)", %Q{(params:function: Block (:"a") a)});
     end
 
     it "TEST17" do
-        parse("#()", "(new Tuple)");
-        parse("#(1)", "(with: (new Tuple) 1)");
-        parse("#(1, 2)", "(with: (with: (new Tuple) 1) 2)");
-        parse(%Q{#(42, "Hello", 'x', :ok, v1, v2, [], #(), {}, (x = 1))}, %Q{(with: (with: (with: (with: (with: (with: (with: (with: (with: (with: (new Tuple) 42) "Hello") 'x') (new: Symbol "ok")) v1) v2) (new Array)) (new Tuple)) (new Hash)) (= x 1))});
+        parse("[]", "(new Tuple ())");
+        parse("[1]", "(new Tuple (1))");
+        parse("[1, 2]", "(new Tuple (1, 2))");
+        parse(%Q{[42, "Hello", 'x', :ok, v1, v2, (), [], {}, (x = 1)]}, %Q{(new Tuple (42, "Hello", 'x', :"ok", v1, v2, (), (new Tuple ()), (new Hash ()), (= x 1)))});
     end
 
     it "TEST18" do
-        parse("{}", "(new Hash)");
-        parse("{a: 1}", %Q{(with: (new Hash) (key:value: Association (new: Symbol "a") 1))});
-        parse(%Q{{"a": 1, "b": 2, "c": 3}}, %Q{(with: (with: (with: (new Hash) (key:value: Association "a" 1)) (key:value: Association "b" 2)) (key:value: Association "c" 3))});
-        parse(%Q{{:a: 1, :b: 2, :c: 3}}, %Q{(with: (with: (with: (new Hash) (key:value: Association (new: Symbol "a") 1)) (key:value: Association (new: Symbol "b") 2)) (key:value: Association (new: Symbol "c") 3))});
-        parse(%Q{{a: 1, b: 2, c: 3}}, %Q{(with: (with: (with: (new Hash) (key:value: Association (new: Symbol "a") 1)) (key:value: Association (new: Symbol "b") 2)) (key:value: Association (new: Symbol "c") 3))});
-        parse("{x: {a: 1, b: 2}, y: {c: 3, d: 4}}", %Q{(with: (with: (new Hash) (key:value: Association (new: Symbol "x") (with: (with: (new Hash) (key:value: Association (new: Symbol "a") 1)) (key:value: Association (new: Symbol "b") 2)))) (key:value: Association (new: Symbol "y") (with: (with: (new Hash) (key:value: Association (new: Symbol "c") 3)) (key:value: Association (new: Symbol "d") 4))))});
+        parse("{}", "(new Hash ())");
+        parse("{a: 1}", %Q{(new Hash (:"a": 1))});
+        parse(%Q{{"a": 1, "b": 2, "c": 3}}, %Q{(new Hash ("a": 1, "b": 2, "c": 3))});
+        parse(%Q{{:a: 1, :b: 2, :c: 3}}, %Q{(new Hash (:"a": 1, :"b": 2, :"c": 3))});
+        parse(%Q{{a: 1, b: 2, c: 3}}, %Q{(new Hash (:"a": 1, :"b": 2, :"c": 3))});
+        parse("{x: {a: 1, b: 2}, y: {c: 3, d: 4}}", %Q{(new Hash (:"x": (new Hash (:"a": 1, :"b": 2)), :"y": (new Hash (:"c": 3, :"d": 4))))});
     end
 
     it "TEST19" do
@@ -207,6 +212,22 @@ describe Parser do
     end
 
     it "TEST20" do
+        error("(", "missing closing parenthesis on list");
+        error(")", "reached end of program");
+        error("()stuff", "reached end of program");
+        error("(()", "missing closing parenthesis on list");
+        error("())", "reached end of program");
+        # TODO
+        # error("(42 43 44)", "list items should be separated by commas");
+        error("[", "missing closing bracket on tuple");
+        error("]", "reached end of program");
+        error("{", "missing closing curly brace on hash");
+        error("}", "reached end of program");
+        error("->", "missing opening parenthesis on block literal");
+        error("`", "missing opening parenthesis on quoted list literal");
+    end
+
+    it "TEST21" do
         parse("(var = 12)", "(= var 12)");
         parse("(a = b = c = d = 42)", "(= a (= b (= c (= d 42))))")
         # TODO with messages
