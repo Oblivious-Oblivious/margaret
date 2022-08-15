@@ -13,50 +13,6 @@ class SExpression < ASTInterface
         unit;
     end
 
-    # def translation_unit(optional_assignment_list, expr)
-    #     res = "#{optional_assignment_list[0]}";
-    #     (1...optional_assignment_list.size).each do |i|
-    #         res << "(" << optional_assignment_list[i];
-    #     end
-
-    #     # if expr[0] == "(" and expr[1] == "(" and expr[-1] == ")" and expr[-2] == ")"
-    #     #     res << expr[1...-1];
-    #     # if res == "" and expr[0] == "(" and expr[-1] == ")"
-    #     #     res << expr[1...-1];
-    #     # else
-    #     #     res << expr;
-    #     # end
-        
-    #     res << expr;
-
-    #     (optional_assignment_list.size-1).times do
-    #         res << ")";
-    #     end
-    #     res;
-    # end
-
-    # def binary_operand(op, unchain)
-    #     if op and op[0] == " " and op[-1] == " "
-    #         op = "#{op[1...-1]}";
-    #     end
-
-    #     unchain.each do |un|
-    #         op << un << " ";
-    #     end
-    #     op;
-    # end
-
-    # def keyword(id, optional_symbol, delim)
-    #     "#{id}#{optional_symbol}#{delim}";
-    # end
-
-    # def keyword_argument(binop, binchain)
-    #     binchain.each do |bin|
-    #         binop << bin << " ";
-    #     end
-    #     binop;
-    # end
-
     def base_ten_literal(sign, number)
         "#{sign}#{number}";
     end
@@ -135,9 +91,15 @@ class SExpression < ASTInterface
         res << ")";
     end
 
-    def variable(optional_instance_symbol, name)
-        "#{optional_instance_symbol}#{name}";
-    end
+    def expression(optional_assignment_list, expr)
+        res = "";
+        if optional_assignment_list.size > 0
+            res = "#{optional_assignment_list[0]}";
+            (1...optional_assignment_list.size).each do |i|
+                # res << " (" << optional_assignment_list[i];
+                res << "(" << optional_assignment_list[i];
+            end
+        end
 
         res << expr;
 
