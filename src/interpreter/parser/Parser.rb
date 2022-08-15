@@ -10,11 +10,6 @@ class Parser
     def initialize(table)
         @table = table;
         @ast = ASTFactory.new.generate AST_TYPE;
-        @is_comma_message = true;
-    end
-
-    def toggle_comma_as_message_while_in_association
-        @is_comma_message = @is_comma_message.!;
     end
 
     def __list_of_grammar_rule(&rule)
@@ -170,9 +165,7 @@ class Parser
     end
 
     def tuple_item
-        toggle_comma_as_message_while_in_association;
         value = translation_unit;
-        toggle_comma_as_message_while_in_association;
         table.ensure_consumption ",", "tuple items should be separated by commas" if table.lookahead(1) != "]" and table.lookahead(1) != "eof";
         ast.tuple_item value;
     end
@@ -188,25 +181,19 @@ class Parser
         if table.lookahead(1).type == Type::IDENTIFIER
             key = terminal_IDENTIFIER;
             table.ensure_consumption ":", "hash keys should be denoted by colons";
-            toggle_comma_as_message_while_in_association;
             value = translation_unit;
-            toggle_comma_as_message_while_in_association;
             table.ensure_consumption ",", "keys should be separated by commas" if table.lookahead(1) != "}";
             ast.json_association key, value;
         elsif table.lookahead(1) == ":"
             key = symbol_literal;
             table.ensure_consumption ":", "hash keys should be denoted by colons";
-            toggle_comma_as_message_while_in_association;
             value = translation_unit;
-            toggle_comma_as_message_while_in_association;
             table.ensure_consumption ",", "keys should be separated by commas" if table.lookahead(1) != "}";
             ast.association key, value;
         elsif table.lookahead(1).type == Type::STRING
             key = string_literal;
             table.ensure_consumption ":", "hash keys should be denoted by colons";
-            toggle_comma_as_message_while_in_association;
             value = translation_unit;
-            toggle_comma_as_message_while_in_association;
             table.ensure_consumption ",", "keys should be separated by commas" if table.lookahead(1) != "}";
             ast.association key, value;
         else
