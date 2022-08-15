@@ -35,8 +35,7 @@ class Parser
 
     # def cascaded_message_list
     #     __casc = [];
-    #     loop do
-    #         break if table.lookahead(1) != ";"
+    #     while table.lookahead(1) == ";"
     #         table.ensure_consumption ";", "missing semicolon after cascaded message";
     #         __casc << message_chain;
     #     end
@@ -120,20 +119,18 @@ class Parser
     end
 
     def variable
-        optional_instance_symbol = "";
         if table.lookahead(1) == "@"
-            optional_instance_symbol = terminal_INSTANCE_SYMBOL;
+            ast.variable terminal_INSTANCE_SYMBOL, terminal_IDENTIFIER;
+        else
+            ast.variable "", terminal_IDENTIFIER;
         end
-
-        ast.variable optional_instance_symbol, terminal_IDENTIFIER;
     end
 
     def list
         table.ensure_consumption "(", "missing opening parenthesis on list";
         
         __units = [];
-        loop do
-            break if table.lookahead(1) == ")" or table.lookahead(1) == "eof";
+        while table.lookahead(1) != ")" and table.lookahead(1) != "eof"
             __units << expression;
             table.ensure_consumption ",", "list items should be separated by commas" if table.lookahead(1) != ")" and table.lookahead(1) != "eof";
         end
@@ -240,6 +237,14 @@ class Parser
         end
     end
 
+    def assignment_message
+        # TODO
+        if table.lookahead(2) == "=" #or (table.lookahead(1) == "@" and table.lookahead(3) == "=")
+            id = variable;
+            ast.assignment_message id, terminal_EQUALS;
+        else
+            ast.empty;
+        end
     end
 
     def message
@@ -253,12 +258,7 @@ class Parser
         end
     end
 
-    def assignment_message
-        current_position = table.token_table_pos;
-        id = variable;
 
-        if table.lookahead(1) == "="
-            ast.assignment_message id, terminal_EQUALS;
         else
             ast.empty;
         end
