@@ -40,8 +40,7 @@ describe Parser do
     end
 
     it "TEST0" do
-        # TODO message precedence
-        # parse("(3 factorial + 4 factorial between: 10 and: 100)", "(between:and: (+ (factorial 3) (factorial 4)) 10 100)");
+        parse("3 factorial + 4 factorial between: 10 and: 100", "between:and: + factorial 3 factorial 4 10 100");
     end
 
     it "TEST1" do
@@ -83,10 +82,10 @@ describe Parser do
     end
 
     it "TEST6" do
-        parse("0bi42_000", %Q{(new: BigInteger "42000")});
-        parse("-0bi42_000", %Q{(new: BigInteger "-42000")});
-        parse("0bi42000", %Q{(new: BigInteger "42000")});
-        parse("-0bi42000", %Q{(new: BigInteger "-42000")});
+        parse("0bi42_000", %Q{new: BigInteger "42000"});
+        parse("-0bi42_000", %Q{new: BigInteger "-42000"});
+        parse("0bi42000", %Q{new: BigInteger "42000"});
+        parse("-0bi42000", %Q{new: BigInteger "-42000"});
     end
 
     it "TEST7" do
@@ -102,33 +101,28 @@ describe Parser do
     end
 
     it "TEST8" do
-        parse("0bf0.042", %Q{(new: BigFloat "0.042")});
-        parse("-0bf0.042", %Q{(new: BigFloat "-0.042")});
+        parse("0bf0.042", %Q{new: BigFloat "0.042"});
+        parse("-0bf0.042", %Q{new: BigFloat "-0.042"});
     end
 
     it "TEST9" do
-        # TODO Rational
-        # parse("(1 r)", "(r 1)");
-        # parse("(2/3r)", "");
-        # parse("(-1r)", "");
-        # parse("(-2/3r)", "");
-        # parse("(2/-3r)", "");
-        # parse("(-2/-3r)", "");
-        # parse("(+1/+3r)", "");
-        # parse("(1.2r)", "");
-        # parse("(1_1/2_2r)", "");
-        # parse("(2/4r)", "");
+        parse("1r", "r 1");
+        parse("2/3r", "/ 2 r 3");
+        parse("-1r", "r -1");
+        parse("-2/3r", "/ -2 r 3");
+        # TODO Separate `-` message on its own token (avoids `-/` or `/-`)
+        parse("2/(-3r)", "/ 2 (r -3)");
+        parse("-2/(-3r)", "/ -2 (r -3)");
+        parse("+1 / (+3r)", "/ +1 (r +3)");
+        parse("1.2r", "r 1.2");
+        parse("1_1/2_2r", "/ 11 r 22");
+        parse("2/4r", "/ 2 r 4");
     end
 
     it "TEST10" do
-        # TODO Complex
-        # parse("(1i)", "(i 1)");
-        # parse("((1i) * (1i))");
-        # parse("(12.3ri)");
-        # parse("(1i)");
-        # parse("(1i)");
-        # parse("(1i)");
-        # parse("(1i)");
+        parse("1i", "i 1");
+        parse("1i * 1i", "* i 1 i 1");
+        parse("12.3r i", "i (r 12.3)");
     end
 
     it "TEST11" do
@@ -166,6 +160,12 @@ describe Parser do
     end
 
     it "TEST14" do
+        parse("a: 3", %Q{:"a": 3});
+        parse(%Q{"a": 5}, %Q{"a": 5});
+        parse(":a: 7", %Q{:"a": 7});
+    end
+
+    it "TEST15" do
         parse("()", "()");
         parse("(())", "(())");
         parse("(42)", "(42)");
@@ -173,65 +173,132 @@ describe Parser do
         parse("(1, 2, (10, 20, 30), 3)", "(1, 2, (10, 20, 30), 3)");
     end
 
-    it "TEST15" do
+    it "TEST16" do
         parse("`()", %Q{(:"(", :")")});
         parse("`(a b c)", %Q{(:"(", :"a", :"b", :"c", :")")});
         parse("`(:a msg: :b)", %Q{(:"(", :":", :"a", :"msg", :":", :":", :"b", :")")});
         parse("`(2 * (3 + 5) / 4)", %Q{(:"(", :"2", :"*", :"(", :"3", :"+", :"5", :")", :"/", :"4", :")")});
-    end
-
-    it "TEST16" do
-        parse("->(42)", "(params:function: Block () 42)");
-        parse("->(:a, (a puts))", %Q{(params:function: Block (:"a") (puts a))});
-        parse("->((2 + 3))", "(params:function: Block () (+ 2 3))");
-        parse("->((x = 1, y = 2, x + y))", "(params:function: Block () (= x 1, = y 2, + x y))");
-        parse("->(:a, :b, (a + b))", %Q{(params:function: Block (:"a", :"b") (+ a b))});
-        parse("->(:a, a)", %Q{(params:function: Block (:"a") a)});
+        parse("`(x = 2) eval", %Q{eval (:"(", :"x", :"=", :"2", :")")});
     end
 
     it "TEST17" do
-        parse("[]", "(new Tuple ())");
-        parse("[1]", "(new Tuple (1))");
-        parse("[1, 2]", "(new Tuple (1, 2))");
-        parse(%Q{[42, "Hello", 'x', :ok, v1, v2, (), [], {}, (x = 1)]}, %Q{(new Tuple (42, "Hello", 'x', :"ok", v1, v2, (), (new Tuple ()), (new Hash ()), (= x 1)))});
+        parse("->(42)", "(params:function: Block () 42)");
+        parse("->(:a, a puts)", %Q{(params:function: Block (:"a") puts a)});
+        parse("->(2 + 3)", "(params:function: Block () + 2 3)");
+        parse("->((x = 1, y = 2, x + y))", "(params:function: Block () (= x 1, = y 2, + x y))");
+        parse("->(:a, :b, a + b)", %Q{(params:function: Block (:"a", :"b") + a b)});
+        parse("->(:a, a)", %Q{(params:function: Block (:"a") a)});
+        parse("->(x = 2) exec", "exec (params:function: Block () = x 2)");
+        parse("->(:param, param puts) value: 42", %Q{value: (params:function: Block (:"param") puts param) 42});
     end
 
     it "TEST18" do
-        parse("{}", "(new Hash ())");
-        parse("{a: 1}", %Q{(new Hash (:"a": 1))});
-        parse(%Q{{"a": 1, "b": 2, "c": 3}}, %Q{(new Hash ("a": 1, "b": 2, "c": 3))});
-        parse(%Q{{:a: 1, :b: 2, :c: 3}}, %Q{(new Hash (:"a": 1, :"b": 2, :"c": 3))});
-        parse(%Q{{a: 1, b: 2, c: 3}}, %Q{(new Hash (:"a": 1, :"b": 2, :"c": 3))});
-        parse("{x: {a: 1, b: 2}, y: {c: 3, d: 4}}", %Q{(new Hash (:"x": (new Hash (:"a": 1, :"b": 2)), :"y": (new Hash (:"c": 3, :"d": 4))))});
+        parse("[]", "new Tuple ()");
+        parse("[1]", "new Tuple (1)");
+        parse("[1, 2]", "new Tuple (1, 2)");
+        parse(%Q{[42, "Hello", 'x', :ok, v1, v2, (), [], {}, x = 1]}, %Q{new Tuple (42, "Hello", 'x', :"ok", v1, v2, (), new Tuple (), new Hash (), = x 1)});
     end
 
     it "TEST19" do
+        parse("{}", "new Hash ()");
+        parse("{a: 1}", %Q{new Hash (:"a": 1)});
+        parse(%Q{{"a": 1, "b": 2, "c": 3}}, %Q{new Hash ("a": 1, "b": 2, "c": 3)});
+        parse(%Q{{:a: 1, :b: 2, :c: 3}}, %Q{new Hash (:"a": 1, :"b": 2, :"c": 3)});
+        parse(%Q{{a: 1, b: 2, c: 3}}, %Q{new Hash (:"a": 1, :"b": 2, :"c": 3)});
+        parse("{x: {a: 1, b: 2}, y: {c: 3, d: 4}}", %Q{new Hash (:"x": new Hash (:"a": 1, :"b": 2), :"y": new Hash (:"c": 3, :"d": 4))});
+        parse("{a: 42 factorial, b: 2 + 3, c: 41 plus: 1, d: (42 incr decr, 41 incr)}", %Q{new Hash (:"a": factorial 42, :"b": + 2 3, :"c": plus: 41 1, :"d": (decr (incr 42), incr 41))});
+    end
+
+    it "TEST20" do
         parse("variable", "variable");
         parse("@instvar", "@instvar");
         parse("@x", "@x");
     end
 
-    it "TEST20" do
+    it "TEST21" do
         error("(", "missing closing parenthesis on list");
-        error(")", "reached end of program");
-        error("()stuff", "reached end of program");
+        error(")", "missing opening parenthesis on list");
         error("(()", "missing closing parenthesis on list");
         error("())", "reached end of program");
-        # TODO
-        # error("(42 43 44)", "list items should be separated by commas");
         error("[", "missing closing bracket on tuple");
-        error("]", "reached end of program");
+        error("]", "missing opening bracket on tuple");
         error("{", "missing closing curly brace on hash");
-        error("}", "reached end of program");
+        error("}", "missing opening curly brace on hash");
         error("->", "missing opening parenthesis on block literal");
         error("`", "missing opening parenthesis on quoted list literal");
     end
 
-    it "TEST21" do
-        parse("(var = 12)", "(= var 12)");
-        parse("(a = b = c = d = 42)", "(= a (= b (= c (= d 42))))")
-        # TODO with messages
-        # parse("(a = b = (c = 42) + 12)", "(= a (= b (+ (= c 42) 12)))");
-        # parse("(a = 12 + 3 * 4)", "(= a (* (+ 12 3) 4))");
+    it "TEST22" do
+        parse("var = 12", "= var 12");
+        parse("arr = ()", "= arr ()");
+        parse("@x = x", "= @x x");
+        parse("a = b", "= a b");
+        parse("a = b = c", "= a (= b c)");
+        parse("a = b = c = d = 42", "= a (= b (= c (= d 42)))");
+        parse("(a = 2, b = 3, c = a = b)", "(= a 2, = b 3, = c (= a b))");
+        parse("((a = 2), (b = 3), (c = a = b))", "((= a 2), (= b 3), (= c (= a b)))");
+        parse("a = b = (c = 42) + 12", "= a (= b + (= c 42) 12)");
+        parse("a = 12 + 3 * 4", "= a * (+ 12 3) 4");
+    end
+
+    it "TEST23" do
+        parse("42 factorial", "factorial 42");
+        parse("17 incr puts", "puts (incr 17)");
+        parse("23 one two three", "three (two (one 23))");
+        parse("@inst one two three", "three (two (one @inst))");
+        parse("42 puts", "puts 42");
+        parse("obj puts", "puts obj");
+        parse("x = (obj puts)", "= x (puts obj)");
+        parse("(obj puts, 42 incr)", "(puts obj, incr 42)");
+        parse("((obj puts), (42 incr))", "((puts obj), (incr 42))");
+        parse("42 incr incr decr decr", "decr (decr (incr (incr 42)))");
+        parse("x = 42 incr incr decr decr", "= x decr (decr (incr (incr 42)))");
+        parse("x incr!", "incr! x");
+        parse("x is_empty?", "is_empty? x");
+        parse("(42 one, 43 two, 44 three, 45, 46 four)", "(one 42, two 43, three 44, 45, four 46)");
+        parse("p1 + p2 calc puts", "+ p1 puts (calc p2)");
+        parse("(p1 + p2 calc) puts", "puts (+ p1 calc p2)");
+    end
+
+    it "TEST24" do
+        parse("2 + 3", "+ 2 3");
+        parse("2 + 3 + 4 + 5", "+ (+ (+ 2 3) 4) 5");
+        parse("2 * 5", "* 2 5");
+        parse("a + b", "+ a b");
+        parse("42 factorial + 17", "+ factorial 42 17");
+        parse("41 factorial + 42 factorial + 43 factorial", "+ (+ factorial 41 factorial 42) factorial 43");
+        parse("(41 + 1, 42 + 0, 43 - 1)", "(+ 41 1, + 42 0, - 43 1)");
+        parse("((41 + 1), (42 + 0), (43 - 1))", "((+ 41 1), (+ 42 0), (- 43 1))");
+        parse("x = a + b * 2 - 5", "= x - (* (+ a b) 2) 5");
+        parse("x << item", "<< x item");
+        parse("[1, 2, 3] ++ [4, 5]", "++ new Tuple (1, 2, 3) new Tuple (4, 5)");
+        parse("(4 + 3) * (5 + 6)", "* (+ 4 3) (+ 5 6)");
+    end
+
+    it "TEST25" do
+        parse("list put: 42 at: 5", "put:at: list 42 5");
+        parse("list put: (42 incr) at: 5", "put:at: list (incr 42) 5");
+        parse("(
+            list = List new,
+            list put: 42 at: 5,
+            x = list get: 2,
+            x puts
+        )", "(= list new List, put:at: list 42 5, = x get: list 2, puts x)");
+        parse("2 + 3 incr add: 11", "add: + 2 incr 3 11");
+        parse("(1, 2, 3) reverse!: true", "reverse!: (1, 2, 3) true");
+        parse("true then: 1 else: 2", "then:else: true 1 2");
+        parse("x ok?: true otherwise!: false", "ok?:otherwise!: x true false");
+        parse("(5 + 13) greater_than?: (11 + 2)", "greater_than?: (+ 5 13) (+ 11 2)");
+        parse("42 factorial and: (2 + 3)", "and: factorial 42 (+ 2 3)");
+        parse("(list at: 3) + (list at: 5)", "+ (at: list 3) (at: list 5)");
+    end
+
+    it "TEST26" do
+        parse("Object message: (:calc, `(@x + @y))", %Q{message: Object (:"calc", (:"(", :"@", :"x", :"+", :"@", :"y", :")"))});
+        parse("Object unary: (:calc, `(@x + @y))", %Q{unary: Object (:"calc", (:"(", :"@", :"x", :"+", :"@", :"y", :")"))});
+        parse("Object message: (:+, :other, `(@x += other x, @y += other y, self))", %Q{message: Object (:"+", :"other", (:"(", :"@", :"x", :"+=", :"other", :"x", :",", :"@", :"y", :"+=", :"other", :"y", :",", :"self", :")"))});
+        parse("Object binary: (:+, :other, `(@x += other x, @y += other y, self))", %Q{binary: Object (:"+", :"other", (:"(", :"@", :"x", :"+=", :"other", :"x", :",", :"@", :"y", :"+=", :"other", :"y", :",", :"self", :")"))});
+        parse("Object message: (x::x, y::y, `(@x = x, @y = y, self))", %Q{message: Object (:"x": :"x", :"y": :"y", (:"(", :"@", :"x", :"=", :"x", :",", :"@", :"y", :"=", :"y", :",", :"self", :")"))});
+        parse("Object keyword: (x::x, y::y, `(@x = x, @y = y, self))", %Q{keyword: Object (:"x": :"x", :"y": :"y", (:"(", :"@", :"x", :"=", :"x", :",", :"@", :"y", :"=", :"y", :",", :"self", :")"))});
     end
 end
