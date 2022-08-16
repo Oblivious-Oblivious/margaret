@@ -3,71 +3,51 @@ require_relative "_parser_helpers";
 describe Parser do
     context "on classes" do
         it "parses generating an object with inheritance" do
-            parse(%Q{
-                (
-                    (Object subclass: "Point")
-                    (Point
-                        message: "x:y:"
-                        params: ("xparam" "yparam")
-                        method: (
-                            ((Point x) = xparam)
-                            ((Point y) = yparam)
-                        )
-                    )
-                    (Point
-                        message: "calc"
-                        params: ()
-                        method: (
-                            (Point x) + (Point y)
-                        )
-                    )
-                    (Point subclass: :Point3D)
-                    (Point3D
-                        message: "new:y:z:"
-                        params: (:x :y :z)
-                        method: (
-                            (Point x: (Point3D x) y: (Point3D y))
-                            ((Point3D z) = z)
-                        )
-                    )
-                    (Point3D
-                        message: "calc"
-                        params: ()
-                        method: (
-                            (Point calc) + (Point3D z)
-                        )
-                    )
-                    (p = Point3D new: 10 y: 20 z: 30)
-                    (p calc)
-                )
-            }, %Q{((subclass: Object "Point") (message:params:method: Point "x:y:" ("xparam" "yparam") ((= ((x Point)) xparam) (= ((y Point)) yparam))) (message:params:method: Point "calc" () (+ ((x Point)) (y Point))) (subclass: Point (new Symbol "Point3D")) (message:params:method: Point3D "new:y:z:" (new Symbol "x" new Symbol "y" new Symbol "z") ((x:y: Point (x Point3D) (y Point3D)) (= ((z Point3D)) z))) (message:params:method: Point3D "calc" () (+ ((calc Point)) (z Point3D))) (= p (new:y:z: Point3D 10 20 30)) (calc p))});
-        end
-
-        it "creates a class using specialized syntax" do
             parse(%Q{(
-                (Object subclass: :Point)
-                (Point
-                    message: ("new:y:" ("x" "y") (
-                        ((Point x) = x)
-                        ((Point y) = y)
-                    ));
-                    message: ("calc" () (
-                        (Point x) + (Point y)
-                    ))
-                )
-                (Point subclass: "Point3D")
-                (Point3D
-                    message: ("new:y:z:" ("x" "y" "z") (
-                        (Point new: (Point3D x) y: (Point3D y))
-                        ((Point3D z) = z)
-                    ));
-                    message: ("calc" () (
-                        (Point calc) + (Point3D z)
-                    ))
-                )
-                (p = Point3D new: 10 y: 20 z: 30)
-                (p calc)
-            )}, %Q{((subclass: Object (new Symbol "Point")) ((message: Point ("new:y:" ("x" "y") ((= ((x Point)) x) (= ((y Point)) y)))) (message: Point ("calc" () (+ ((x Point)) (y Point))))) (subclass: Point "Point3D") ((message: Point3D ("new:y:z:" ("x" "y" "z") ((new:y: Point (x Point3D) (y Point3D)) (= ((z Point3D)) z)))) (message: Point3D ("calc" () (+ ((calc Point)) (z Point3D))))) (= p (new:y:z: Point3D 10 20 30)) (calc p))});
+                Object subclass: "Point",
+                Point attr_reader: [:x, :y],
+
+                Point message: (x::xparam, y::yparam, `(
+                    @x = xparam,
+                    @y = yparam,
+                    self
+                )),
+                Comment new: "->(:xparam, :yparam, (@x = xparam, @y = yparam, self))",
+
+                Point message: (:calc, `(@x + @y)),
+                Comment new: "->(@x + @y)",
+
+                Point message: (:+, :other, `(
+                    @x = @x + other x,
+                    @y = @y + other y,
+                    self
+                )),
+                Comment new: "->(:other, (@x = @x + other x, @y = @y + other y, self))",
+
+                Point subclass: :Point3D,
+                Point attr_reader: [:z],
+
+                Point3D message: (x::x, y::y, z::z, `(
+                    super x: @x y: @y,
+                    @z = z,
+                    self
+                )),
+
+                Point3D message: (:calc, `(super calc + @z)),
+
+                Point3D message: (:+, :other, `(
+                    super + other,
+                    @z = @z + other z,
+                    self
+                )),
+
+                p1 = Point3D x: 10 y: 20 z: 30,
+                p2 = Point3D x: 2 y: 4 z: 6,
+
+                p1 calc puts,
+                p2 calc puts,
+                (p1 + p2 calc) puts
+            )}, %Q{(subclass: Object "Point", attr_reader: Point new Tuple (:"x", :"y"), message: Point (:"x": :"xparam", :"y": :"yparam", (:"(", :"@", :"x", :"=", :"xparam", :",", :"@", :"y", :"=", :"yparam", :",", :"self", :")")), new: Comment "->(:xparam, :yparam, (@x = xparam, @y = yparam, self))", message: Point (:"calc", (:"(", :"@", :"x", :"+", :"@", :"y", :")")), new: Comment "->(@x + @y)", message: Point (:"+", :"other", (:"(", :"@", :"x", :"=", :"@", :"x", :"+", :"other", :"x", :",", :"@", :"y", :"=", :"@", :"y", :"+", :"other", :"y", :",", :"self", :")")), new: Comment "->(:other, (@x = @x + other x, @y = @y + other y, self))", subclass: Point :"Point3D", attr_reader: Point new Tuple (:"z"), message: Point3D (:"x": :"x", :"y": :"y", :"z": :"z", (:"(", :"super", :"x", :":", :"@", :"x", :"y", :":", :"@", :"y", :",", :"@", :"z", :"=", :"z", :",", :"self", :")")), message: Point3D (:"calc", (:"(", :"super", :"calc", :"+", :"@", :"z", :")")), message: Point3D (:"+", :"other", (:"(", :"super", :"+", :"other", :",", :"@", :"z", :"=", :"@", :"z", :"+", :"other", :"z", :",", :"self", :")")), = p1 x:y:z: Point3D 10 20 30, = p2 x:y:z: Point3D 2 4 6, puts (calc p1), puts (calc p2), puts (+ p1 calc p2))});
         end
     end
 end

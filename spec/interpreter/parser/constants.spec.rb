@@ -16,7 +16,7 @@ describe Parser do
             parse("(x = 0o741)", "(= x 0o741)");
 
             parse(%Q{(x = "Hello")}, %Q{(= x "Hello")});
-            parse(%Q{(x = :a_symbol)}, %Q{(= x (new Symbol "a_symbol"))});
+            parse(%Q{(x = :a_symbol)}, %Q{(= x :"a_symbol")});
         end
     end
 end

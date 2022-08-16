@@ -4,11 +4,11 @@ describe Parser do
     context "on conditionals" do
         it "parses conditional statements" do
             parse("(x > 10 + 42)", "(+ (> x 10) 42)");
-            parse("(x > 10 if_true: 42)", "(if_true: (> x 10) 42)");
-            parse("(x > 10 if_false: 41)", "(if_false: (> x 10) 41)");
+            parse("(x > 10 if_true: 42)", "(if_true: > x 10 42)");
+            parse("(x > 10 if_false: 41)", "(if_false: > x 10 41)");
             parse("(x > 10
                     if_true: 42
-                    if_false: 41)", "(if_true:if_false: (> x 10) 42 41)");
+                    if_false: 41)", "(if_true:if_false: > x 10 42 41)");
             parse("(x > 10
                     if_true: (
                         x > 5
@@ -16,13 +16,14 @@ describe Parser do
                             if_false: 2
                     )
                     if_false: 3
-            )", "(if_true:if_false: (> x 10) (if_true:if_false: (> x 5) 1 2) 3)");
+            )", "(if_true:if_false: > x 10 (if_true:if_false: > x 5 1 2) 3)");
             parse("(obj match: (
-                        [1, 100]
-                        [2, 200]
-                        [3, 300]
+                        [1, 100],
+                        [2, 200],
+                        [3, 300],
                     )
-            )", "(match: obj (new Tuple (1 100) new Tuple (2 200) new Tuple (3 300)))");
+            )", "(match: obj (new Tuple (1, 100), new Tuple (2, 200), new Tuple (3, 300)))");
+            parse(%Q{obj match: {"1": 100, "2": 200, "3": 300}}, %Q{match: obj new Hash ("1": 100, "2": 200, "3": 300)});
         end
     end
 end
