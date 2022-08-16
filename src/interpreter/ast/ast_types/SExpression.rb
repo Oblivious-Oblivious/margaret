@@ -144,10 +144,9 @@ class SExpression < ASTInterface
     end
 
     def block_literal(param_list, function)
-        res = "(params:function: Block ";
+        res = "params:function: Block ";
         res << list(param_list);
         res << " ";
         res << function;
-        res << ")";
     end
 end

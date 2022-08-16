@@ -2,6 +2,8 @@ require_relative "../ast/ASTFactory";
 
 AST_TYPE = "s-expressions";
 
+# TODO ensure comsumption conservatively as much as possible
+
 class Parser
     attr_accessor :table, :ast;
 
