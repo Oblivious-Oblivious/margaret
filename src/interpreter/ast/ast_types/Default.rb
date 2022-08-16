@@ -7,7 +7,28 @@ class Default < ASTInterface
     def first_unit(unit)
     end
 
-    def translation_unit(unit)
+    def translation_unit(optional_assignment_list, expr)
+    end
+
+    def assignment_message(id, eq)
+    end
+
+    def message(msg)
+    end
+
+    def unary_message(object, selectors)
+    end
+
+    def binary_message(object, selectors)
+    end
+
+    def keyword_message(object, selectors)
+    end
+
+    def cascaded_message
+    end
+
+    def literal(unit)
     end
 
     def base_ten_literal(sign, number)
@@ -22,6 +43,12 @@ class Default < ASTInterface
     def big_float_literal(sign, number)
     end
 
+    def association(key, value)
+    end
+
+    def json_association(key, value)
+    end
+
     def string_literal(string)
     end
 
@@ -31,76 +58,21 @@ class Default < ASTInterface
     def symbol_name(name)
     end
 
-    def tuple_literal(item_list)
-    end
-
-    def tuple_item(item)
-    end
-
-    def hash_literal(association_list)
-    end
-
-    def association(key, value)
-    end
-
-    def json_association(key, value)
-    end
-
-    def quoted_list_literal(item_list)
-    end
-
-    def block_literal(param_list, function)
-    end
-
     def variable(optional_instance_symbol, name)
     end
 
     def list(unit_list)
     end
 
-    def message(optional_assignment_list, expr)
+    def tuple_literal(item_list)
     end
 
-    def assignment_message(id, eq)
+    def hash_literal(association_list)
     end
 
-    def expression(expr)
-        expr;
+    def quoted_list_literal(item_list)
     end
 
-    def terminal_UNSIGNED_BASE_TEN_NUMBER(number)
-    end
-
-    def terminal_ALTERNATE_BASE_NUMBER(number)
-    end
-
-    def terminal_BIGINTEGER(number)
-    end
-
-    def terminal_BIGFLOAT(number)
-    end
-
-    def terminal_STRING(value)
-    end
-
-    def terminal_UNQUOTED_STRING(value)
-    end
-
-    def terminal_IDENTIFIER(id)
-    end
-
-    def terminal_INSTANCE_SYMBOL(symb)
-    end
-
-    def terminal_MESSAGE_SYMBOL(symb)
-    end
-
-    def terminal_IDENTIFIER_SYMBOL(symb)
-    end
-
-    def terminal_SIGN(symb)
-    end
-
-    def terminal_EQUALS(symb)
+    def block_literal(param_list, function)
     end
 end

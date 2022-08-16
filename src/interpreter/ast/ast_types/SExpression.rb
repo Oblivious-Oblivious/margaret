@@ -9,7 +9,71 @@ class SExpression < ASTInterface
         unit;
     end
 
-    def translation_unit(unit)
+    def translation_unit(optional_assignment_list, expr)
+        res = "";
+        if optional_assignment_list.size > 0
+            res = "#{optional_assignment_list[0]}";
+            (1...optional_assignment_list.size).each do |i|
+                res << "(" << optional_assignment_list[i];
+            end
+        end
+
+        res << expr;
+
+        if optional_assignment_list.size > 0
+            (optional_assignment_list.size-1).times do
+                res << ")";
+            end
+        end
+        res;
+    end
+
+    def assignment_message(id, eq)
+        "#{eq} #{id} ";
+    end
+
+    def message(msg)
+        msg;
+    end
+
+    def unary_message(object, selectors)
+        if selectors.size == 0
+            object;
+        else
+            "(" << selectors.pop << " " << unary_message(object, selectors) << ")";
+        end
+    end
+
+    def binary_message(object, selectors)
+        if selectors.size == 0
+            object;
+        else
+            curr = selectors.pop;
+            "(" << curr[0] << " " << binary_message(object, selectors) << " " << curr[1] << ")";
+        end
+    end
+
+    def keyword_message(object, selectors)
+        res = "";
+
+        selectors.each do |sel|
+            res << sel[0];
+        end
+
+        res << " " << object << " ";
+
+        selectors.each do |sel|
+            res << sel[1] << " ";
+        end
+
+        res[0...-1];
+    end
+
+    def cascaded_message
+        "";
+    end
+
+    def literal(unit)
         unit;
     end
 
@@ -22,11 +86,19 @@ class SExpression < ASTInterface
     end
     
     def big_integer_literal(sign, number)
-        %Q{(new: BigInteger "#{sign}#{number[3...]}")};
+        %Q{new: BigInteger "#{sign}#{number[3...]}"};
     end
 
     def big_float_literal(sign, number)
-        %Q{(new: BigFloat "#{sign}#{number[3...]}")};
+        %Q{new: BigFloat "#{sign}#{number[3...]}"};
+    end
+
+    def association(key, value)
+        "#{key}: #{value}";
+    end
+
+    def json_association(key, value)
+        association(symbol_literal(key), value);
     end
 
     def string_literal(string)
@@ -60,23 +132,11 @@ class SExpression < ASTInterface
     end
 
     def tuple_literal(item_list)
-        "(new Tuple #{list(item_list)})";
-    end
-
-    def tuple_item(item)
-        item;
+        "new Tuple #{list(item_list)}";
     end
 
     def hash_literal(association_list)
-        "(new Hash #{list(association_list)})";
-    end
-
-    def association(key, value)
-        "#{key}: #{value}";
-    end
-
-    def json_association(key, value)
-        association(symbol_literal(key), value);
+        "new Hash #{list(association_list)}";
     end
 
     def quoted_list_literal(item_list)
@@ -89,95 +149,5 @@ class SExpression < ASTInterface
         res << " ";
         res << function;
         res << ")";
-    end
-
-    def expression(optional_assignment_list, expr)
-        res = "";
-        if optional_assignment_list.size > 0
-            res = "#{optional_assignment_list[0]}";
-            (1...optional_assignment_list.size).each do |i|
-                # res << " (" << optional_assignment_list[i];
-                res << "(" << optional_assignment_list[i];
-            end
-        end
-
-        res << expr;
-
-        if optional_assignment_list.size > 0
-            (optional_assignment_list.size-1).times do
-                res << ")";
-            end
-        end
-        res;
-    end
-
-    def message(optional_assignment_list, expr)
-        res = "#{optional_assignment_list[0]}";
-        (1...optional_assignment_list.size).each do |i|
-            res << "(" << optional_assignment_list[i];
-        end
-
-        res << expr;
-
-        (optional_assignment_list.size-1).times do
-            res << ")";
-        end
-        res;
-    end
-
-    def assignment_message(id, eq)
-        "#{eq} #{id} ";
-    end
-
-    def expression(expr)
-        expr;
-    end
-
-    def terminal_UNSIGNED_BASE_TEN_NUMBER(number)
-        number.value;
-    end
-
-    def terminal_ALTERNATE_BASE_NUMBER(number)
-        number.value;
-    end
-
-    def terminal_BIGINTEGER(number)
-        number.value;
-    end
-
-    def terminal_BIGFLOAT(number)
-        number.value;
-    end
-
-    def terminal_STRING(value)
-        value.value;
-    end
-
-    def terminal_UNQUOTED_STRING(value)
-        value.value[1...-1];
-    end
-
-    def terminal_IDENTIFIER(id)
-        id.value;
-    end
-
-    def terminal_INSTANCE_SYMBOL(symb)
-        symb.value;
-    end
-
-    def terminal_MESSAGE_SYMBOL(symb)
-        symb.value;
-    end
-
-    def terminal_IDENTIFIER_SYMBOL(symb)
-        symb.value;
-    end
-
-    def terminal_SIGN(symb)
-        symb.value;
-    end
-
-    def terminal_EQUALS(symb)
-        symb.value;
     end
 end

@@ -2,8 +2,6 @@ require_relative "../ast/ASTFactory";
 
 AST_TYPE = "s-expressions";
 
-class Array; def >>(item) = self.unshift item; end
-
 class Parser
     attr_accessor :table, :ast;
 
@@ -28,197 +26,17 @@ class Parser
     end
 
     def first_unit
-        result = translation_unit;
-        table.ensure_consumption "eof", "reached end of program";
-        ast.first_unit result;
+        if table.lookahead(1) == ")";    list;          # Error opening
+        elsif table.lookahead(1) == "]"; tuple_literal; # Error opening
+        elsif table.lookahead(1) == "}"; hash_literal;  # Error opening
+        else
+            result = translation_unit;
+            table.ensure_consumption "eof", "reached end of program";
+            ast.first_unit result;
+        end
     end
-
-    # def cascaded_message_list
-    #     __casc = [];
-    #     while table.lookahead(1) == ";"
-    #         table.ensure_consumption ";", "missing semicolon after cascaded message";
-    #         __casc << message_chain;
-    #     end
-    #     __casc;
-    # end
 
     def translation_unit
-        # TODO Refactor into its own message
-        sign = ["+", "-"].include?(table.lookahead(1).value) ? terminal_SIGN : ast.empty;
-        
-        if [Type::INTEGER, Type::FLOAT].include?(table.lookahead(1).type)
-            res = base_ten_literal(sign);
-        elsif [Type::BINARY, Type::HEXADECIMAL, Type::OCTAL].include?(table.lookahead(1).type)
-            res = alternate_base_literal(sign);
-        elsif table.lookahead(1).type == Type::BIGINTEGER
-            res = big_integer_literal(sign);
-        elsif table.lookahead(1).type == Type::BIGFLOAT
-            res = big_float_literal(sign);
-
-        elsif table.lookahead(1).type == Type::STRING
-            res = string_literal;
-        elsif table.lookahead(1) == ":"
-            res = symbol_literal;
-        elsif table.lookahead(1) == "@" or table.lookahead(1).type == Type::IDENTIFIER
-            res = variable;
-        
-        elsif table.lookahead(1) == "("
-            res = list;
-        elsif table.lookahead(1) == "["
-            res = tuple_literal;
-        elsif table.lookahead(1) == "{"
-            res = hash_literal;
-        elsif table.lookahead(1) == "`"
-            res = quoted_list_literal;
-        elsif table.lookahead(1) == "->"
-            res = block_literal;
-        end
-
-        if res == "+" or res == "-"
-            ast.empty;
-        else
-            ast.translation_unit res;
-        end
-    end
-
-    def base_ten_literal(sign)
-        ast.base_ten_literal sign, terminal_UNSIGNED_BASE_TEN_NUMBER;
-    end
-
-    def alternate_base_literal(sign)
-        ast.alternate_base_literal sign, terminal_ALTERNATE_BASE_NUMBER;
-    end
-
-    def big_integer_literal(sign)
-        ast.big_integer_literal sign, terminal_BIGINTEGER;
-    end
-
-    def big_float_literal(sign)
-        ast.big_float_literal sign, terminal_BIGFLOAT;
-    end
-    
-    def string_literal
-        ast.string_literal terminal_STRING;
-    end
-
-    def symbol_literal
-        table.ensure_consumption ":", "expected ':' on symbol literal";
-        ast.symbol_literal symbol_name;
-    end
-
-    def symbol_name
-        if table.lookahead(1).type == Type::MESSAGE_SYMBOL
-            ast.symbol_name terminal_MESSAGE_SYMBOL;
-        elsif table.lookahead(1).type == Type::IDENTIFIER
-            ast.symbol_name terminal_IDENTIFIER;
-        elsif table.lookahead(1).type == Type::STRING
-            ast.symbol_name terminal_UNQUOTED_STRING;
-        else
-            ast.empty;
-        end
-    end
-
-    def variable
-        if table.lookahead(1) == "@"
-            ast.variable terminal_INSTANCE_SYMBOL, terminal_IDENTIFIER;
-        else
-            ast.variable "", terminal_IDENTIFIER;
-        end
-    end
-
-    def list
-        table.ensure_consumption "(", "missing opening parenthesis on list";
-        
-        __units = [];
-        while table.lookahead(1) != ")" and table.lookahead(1) != "eof"
-            __units << expression;
-            table.ensure_consumption ",", "list items should be separated by commas" if table.lookahead(1) != ")" and table.lookahead(1) != "eof";
-        end
-        
-        table.ensure_consumption ")", "missing closing parenthesis on list";
-        ast.list __units;
-    end
-
-    def tuple_literal
-        table.ensure_consumption "[", "missing opening bracket on tuple";
-        __items = __list_of_grammar_rule { tuple_item };
-        table.ensure_consumption "]", "missing closing bracket on tuple";
-        ast.tuple_literal __items;
-    end
-
-    def tuple_item
-        value = translation_unit;
-        table.ensure_consumption ",", "tuple items should be separated by commas" if table.lookahead(1) != "]" and table.lookahead(1) != "eof";
-        ast.tuple_item value;
-    end
-
-    def hash_literal
-        table.ensure_consumption "{", "missing opening curly brace on hash";
-        __items = __list_of_grammar_rule { association };
-        table.ensure_consumption "}", "missing closing curly brace on hash";
-        ast.hash_literal __items;
-    end
-
-    def association
-        if table.lookahead(1).type == Type::IDENTIFIER
-            key = terminal_IDENTIFIER;
-            table.ensure_consumption ":", "hash keys should be denoted by colons";
-            value = translation_unit;
-            table.ensure_consumption ",", "keys should be separated by commas" if table.lookahead(1) != "}";
-            ast.json_association key, value;
-        elsif table.lookahead(1) == ":"
-            key = symbol_literal;
-            table.ensure_consumption ":", "hash keys should be denoted by colons";
-            value = translation_unit;
-            table.ensure_consumption ",", "keys should be separated by commas" if table.lookahead(1) != "}";
-            ast.association key, value;
-        elsif table.lookahead(1).type == Type::STRING
-            key = string_literal;
-            table.ensure_consumption ":", "hash keys should be denoted by colons";
-            value = translation_unit;
-            table.ensure_consumption ",", "keys should be separated by commas" if table.lookahead(1) != "}";
-            ast.association key, value;
-        else
-            ast.empty;
-        end
-    end
-
-    def quoted_list_literal
-        table.ensure_consumption "`", "missing '`' symbol on quoted list literal";
-        table.ensure_consumption "(", "missing opening parenthesis on quoted list literal";
-
-        paren_count = 0;
-        __items = [];
-        while table.lookahead(1) != ")" or paren_count != 0
-            tok = table.consume.value;
-            paren_count += 1 if tok == "(";
-            paren_count -= 1 if tok == ")";
-            __items << ast.symbol_literal(tok);
-        end
-        __items >> ast.symbol_literal("(");
-        __items << ast.symbol_literal(")");
-
-        table.ensure_consumption ")", "missing closing parenthesis on quoted list literal";
-        ast.quoted_list_literal __items;
-    end
-
-    def block_literal
-        table.ensure_consumption "->", "missing '->' symbol on block literal";
-        table.ensure_consumption "(", "missing opening parenthesis on block literal";
-
-        __params = [];
-        while table.lookahead(1) == ":"
-            __params << symbol_literal;
-            table.ensure_consumption ",", "block parameters are separated by commas";
-        end
-
-        function = translation_unit;
-
-        table.ensure_consumption ")", "missing closing parenthesis on block literal";
-        ast.block_literal __params, function;
-    end
-
-    def expression
         optional_assignment_list = __list_of_grammar_rule { assignment_message };
 
         res = "";
@@ -233,98 +51,324 @@ class Parser
         if res == ""
             ast.empty;
         else
-            ast.expression optional_assignment_list, res;
+            ast.translation_unit optional_assignment_list, res;
         end
     end
 
     def assignment_message
-        # TODO
+        # TODO possible error in logic
         if table.lookahead(2) == "=" #or (table.lookahead(1) == "@" and table.lookahead(3) == "=")
-            id = variable;
-            ast.assignment_message id, terminal_EQUALS;
+            ast.assignment_message variable, table.consume.value;
         else
             ast.empty;
         end
     end
 
     def message
-        optional_assignment_list = __list_of_grammar_rule { assignment_message };
-        expr = expression;
+        res = keyword_message;
 
-        if optional_assignment_list.empty?
+        if res == ""
             ast.empty;
         else
-            ast.message optional_assignment_list, expr;
+            ast.message res;
         end
     end
 
+    def unary_message
+        obj = unary_object;
+        sel = unary_selector;
 
+        if sel == []
+            ast.literal obj;
         else
-            ast.empty;
+            ast.unary_message(obj, sel)[1...-1];
         end
     end
 
-    def expression
-        ast.expression translation_unit;
+    def unary_object
+        literal;
     end
 
-    def terminal_UNSIGNED_BASE_TEN_NUMBER
-        ast.terminal_UNSIGNED_BASE_TEN_NUMBER table.consume;
+    def unary_selector
+        def unary_selector_pattern
+            if table.lookahead(2) == ":" or ((table.lookahead(2) == "!" or table.lookahead(2) == "?") and table.lookahead(3) == ":")
+                "";
+            elsif table.lookahead(1).type == Type::IDENTIFIER
+                id = table.consume.value;
+                optional = "";
+                if table.lookahead(1).type == Type::ID_SYMBOL
+                    optional = table.consume.value;
+                end
+                "#{id}#{optional}";
+            end
+        end
+
+        __list_of_grammar_rule { unary_selector_pattern };
     end
 
-    def terminal_ALTERNATE_BASE_NUMBER
-        ast.terminal_ALTERNATE_BASE_NUMBER table.consume;
+    def binary_message
+        obj = binary_object;
+        sel = binary_selector;
+
+        if sel == []
+            ast.literal obj;
+        else
+            ast.binary_message(obj, sel)[1...-1];
+        end
     end
 
-    def terminal_BIGINTEGER
-        ast.terminal_BIGINTEGER table.consume;
+    def binary_object
+        unary_message;
     end
 
-    def terminal_BIGFLOAT
-        ast.terminal_BIGFLOAT table.consume;
+    def binary_selector
+        def binary_selector_pattern
+            sel = __list_of_grammar_rule {
+                if table.lookahead(1).type == Type::MESSAGE_SYMBOL
+                    table.consume.value;
+                else
+                    # TODO Simplify by returning [] on first empty
+                    ast.empty;
+                end
+            }.join;
+
+            if sel == ""
+                [];
+            else
+                [sel, unary_message];
+            end
+        end
+
+        __list_of_grammar_rule { binary_selector_pattern }.filter { |item| !item.empty? };
     end
 
-    def terminal_STRING
-        ast.terminal_STRING table.consume;
+    def keyword_message
+        obj = keyword_object;
+        sel = keyword_selector;
+
+        if sel == []
+            ast.literal obj;
+        else
+            ast.keyword_message(obj, sel);
+        end
     end
 
-    def terminal_UNQUOTED_STRING
-        ast.terminal_UNQUOTED_STRING table.consume;
+    def keyword_object
+        binary_message;
     end
 
-    def terminal_INSTANCE_SYMBOL
-        ast.terminal_INSTANCE_SYMBOL table.consume;
+    def keyword_selector
+        # TODO Simplify keyword selector
+        def keyword_selector_pattern
+            if table.lookahead(1).type == Type::IDENTIFIER
+                id = table.consume.value;
+            else
+                return [];
+            end
+
+            optional_symbol = "";
+            if table.lookahead(1).type == Type::ID_SYMBOL
+                optional_symbol = table.consume.value;
+            end
+
+            if table.lookahead(1) == ":"
+                delim = table.consume.value;
+            else
+                return [];
+            end
+
+            obj = binary_object;
+
+            if id == "" or delim == ""
+                [];
+            else
+                ["#{id}#{optional_symbol}#{delim}", obj];
+            end
+        end
+
+        __list_of_grammar_rule { keyword_selector_pattern }.filter { |item| !item.empty? };
     end
 
-    def terminal_SIGN
-        ast.terminal_SIGN table.consume;
+    def cascaded_message
+        ast.empty; # TODO
     end
 
-    def terminal_EQUALS
-        ast.terminal_EQUALS table.consume;
+    def literal
+        # TODO Refactor into its own message
+        sign = ["+", "-"].include?(table.lookahead(1).value) ? table.consume.value : ast.empty;
+        
+        if table.lookahead(1).type == Type::INTEGER
+            ast.literal base_ten_literal(sign);
+        elsif table.lookahead(1).type == Type::FLOAT
+            ast.literal base_ten_literal(sign);
+        elsif table.lookahead(1).type == Type::BINARY
+            ast.literal alternate_base_literal(sign);
+        elsif table.lookahead(1).type == Type::HEXADECIMAL
+            ast.literal alternate_base_literal(sign);
+        elsif table.lookahead(1).type == Type::OCTAL
+            ast.literal alternate_base_literal(sign);
+        elsif table.lookahead(1).type == Type::BIGINTEGER
+            ast.literal big_integer_literal(sign);
+        elsif table.lookahead(1).type == Type::BIGFLOAT
+            ast.literal big_float_literal(sign);
+        elsif (table.lookahead(1).type == Type::IDENTIFIER and table.lookahead(2) == ":") or (table.lookahead(1).type == Type::STRING and table.lookahead(2) == ":") or (table.lookahead(1) == ":" and table.lookahead(2).type == Type::IDENTIFIER and table.lookahead(3) == ":")
+            ast.literal association_literal;
+        elsif table.lookahead(1).type == Type::STRING
+            ast.literal string_literal;
+        elsif table.lookahead(1) == ":"
+            ast.literal symbol_literal;
+        elsif table.lookahead(1).type == Type::IDENTIFIER or (table.lookahead(1) == "@" and table.lookahead(2).type == Type::IDENTIFIER)
+            ast.literal variable;        
+        elsif table.lookahead(1) == "("
+            ast.literal list;
+        elsif table.lookahead(1) == "["
+            ast.literal tuple_literal;
+        elsif table.lookahead(1) == "{"
+            ast.literal hash_literal;
+        elsif table.lookahead(1) == "`"
+            ast.literal quoted_list_literal;
+        elsif table.lookahead(1) == "->"
+            ast.literal block_literal;
+        end
     end
 
-    def terminal_IDENTIFIER
+    def base_ten_literal(sign)
+        ast.base_ten_literal sign, table.consume.value;
+    end
+
+    def alternate_base_literal(sign)
+        ast.alternate_base_literal sign, table.consume.value;
+    end
+
+    def big_integer_literal(sign)
+        ast.big_integer_literal sign, table.consume.value;
+    end
+
+    def big_float_literal(sign)
+        ast.big_float_literal sign, table.consume.value;
+    end
+
+    def association_literal
         if table.lookahead(1).type == Type::IDENTIFIER
-            ast.terminal_IDENTIFIER table.consume;
+            key = table.consume.value;
+            table.ensure_consumption ":", "hash keys should be denoted by colons";
+            value = translation_unit;
+            ast.json_association key, value;
+        elsif table.lookahead(1) == ":"
+            key = symbol_literal;
+            table.ensure_consumption ":", "hash keys should be denoted by colons";
+            value = translation_unit;
+            ast.association key, value;
+        elsif table.lookahead(1).type == Type::STRING
+            key = string_literal;
+            table.ensure_consumption ":", "hash keys should be denoted by colons";
+            value = translation_unit;
+            ast.association key, value;
         else
             ast.empty;
         end
     end
-
-    def terminal_IDENTIFIER_SYMBOL
-        if table.lookahead(1).type == Type::ID_SYMBOL
-            ast.terminal_IDENTIFIER_SYMBOL table.consume;
-        else
-            ast.empty;
-        end
+    
+    def string_literal
+        ast.string_literal table.consume.value;
     end
 
-    def terminal_MESSAGE_SYMBOL
+    def symbol_literal
+        table.ensure_consumption ":", "expected ':' on symbol literal";
+        ast.symbol_literal symbol_name;
+    end
+
+    def symbol_name
         if table.lookahead(1).type == Type::MESSAGE_SYMBOL
-            ast.terminal_MESSAGE_SYMBOL table.consume;
+            ast.symbol_name table.consume.value;
+        elsif table.lookahead(1).type == Type::IDENTIFIER
+            ast.symbol_name table.consume.value;
+        elsif table.lookahead(1).type == Type::STRING
+            ast.symbol_name table.consume.value[1...-1];
         else
             ast.empty;
         end
+    end
+
+    def variable
+        if table.lookahead(1) == "@"
+            ast.variable table.consume.value, table.consume.value;
+        else
+            ast.variable "", table.consume.value;
+        end
+    end
+
+    def list
+        table.ensure_consumption "(", "missing opening parenthesis on list";
+        
+        __items = [];
+        while table.lookahead(1) != ")" and table.lookahead(1) != "eof"
+            __items << translation_unit;
+            table.ensure_consumption ",", "list items should be separated by commas" if table.lookahead(1) != ")" and table.lookahead(1) != "eof";
+        end
+        
+        table.ensure_consumption ")", "missing closing parenthesis on list";
+        ast.list __items;
+    end
+
+    def tuple_literal
+        table.ensure_consumption "[", "missing opening bracket on tuple";
+        
+        __items = [];
+        while table.lookahead(1) != "]" and table.lookahead(1) != "eof"
+            __items << translation_unit;
+            table.ensure_consumption ",", "tuple items should be separated by commas" if table.lookahead(1) != "]" and table.lookahead(1) != "eof";
+        end
+
+        table.ensure_consumption "]", "missing closing bracket on tuple";
+        ast.tuple_literal __items;
+    end
+
+    def hash_literal
+        table.ensure_consumption "{", "missing opening curly brace on hash";
+        
+        __items = [];
+        while table.lookahead(1) != "}" and table.lookahead(1) != "eof"
+            __items << association_literal;
+            table.ensure_consumption ",", "keys should be separated by commas" if table.lookahead(1) != "}" and table.lookahead(1) != "eof";
+        end
+        
+        table.ensure_consumption "}", "missing closing curly brace on hash";
+        ast.hash_literal __items;
+    end
+
+    def quoted_list_literal
+        table.ensure_consumption "`", "missing '`' symbol on quoted list literal";
+        table.ensure_consumption "(", "missing opening parenthesis on quoted list literal";
+
+        paren_count = 0;
+        __items = [];
+        while table.lookahead(1) != ")" or paren_count != 0
+            tok = table.consume.value;
+            paren_count += 1 if tok == "(";
+            paren_count -= 1 if tok == ")";
+            __items << ast.symbol_literal(tok);
+        end
+        __items.unshift ast.symbol_literal("(");
+        __items.push ast.symbol_literal(")");
+
+        table.ensure_consumption ")", "missing closing parenthesis on quoted list literal";
+        ast.quoted_list_literal __items;
+    end
+
+    def block_literal
+        table.ensure_consumption "->", "missing '->' symbol on block literal";
+        table.ensure_consumption "(", "missing opening parenthesis on block literal";
+
+        __params = [];
+        while table.lookahead(1) == ":"
+            __params << symbol_literal;
+            table.ensure_consumption ",", "block parameters are separated by commas" if table.lookahead(1) != ")" and table.lookahead(1) != "eof";
+        end
+
+        function = translation_unit;
+
+        table.ensure_consumption ")", "missing closing parenthesis on block literal";
+        ast.block_literal __params, function;
     end
 end
