@@ -13,8 +13,11 @@ class ASTInterface; extend Abstract;
                      :cascaded_message,
 
                      :literal,
-                     :base_ten_literal,
-                     :alternate_base_literal,
+                     :integer_literal,
+                     :float_literal,
+                     :binary_literal,
+                     :hexadecimal_literal,
+                     :octal_literal,
                      :big_integer_literal,
                      :big_float_literal,
                      :association,

@@ -38,26 +38,33 @@ class TokenTable
     end
 
     def lookahead(i)
-        token_list[pos + i];
+        get(pos + i);
     end
 
     def consume
         @pos += 1;
-        token_list[pos];
+        get(pos);
     end
 
-    def resume
-        @pos -= 1;
-        token_list[pos];
-    end
-
-    def ensure_consumption(token, error_message)
-        if consume != token
+    def ensure_value(value, error_message)
+        token = consume;
+        if token.value != value
             error error_message;
+        else
+            token.value;
+        end
+    end
+
+    def ensure_type(type, error_message)
+        token = consume;
+        if token.type != type
+            error error_message;
+        else
+            token.value;
         end
     end
 
     def token_table_pos
-        @pos + 1;
+        pos + 1;
     end
 end

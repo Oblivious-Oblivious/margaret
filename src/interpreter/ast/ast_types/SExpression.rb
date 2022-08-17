@@ -77,11 +77,23 @@ class SExpression < ASTInterface
         unit;
     end
 
-    def base_ten_literal(sign, number)
+    def integer_literal(sign, number)
         "#{sign}#{number}";
     end
 
-    def alternate_base_literal(sign, number)
+    def float_literal(sign, number)
+        "#{sign}#{number}";
+    end
+
+    def binary_literal(sign, number)
+        "#{sign}#{number}";
+    end
+
+    def hexadecimal_literal(sign, number)
+        "#{sign}#{number}";
+    end
+
+    def octal_literal(sign, number)
         "#{sign}#{number}";
     end
     

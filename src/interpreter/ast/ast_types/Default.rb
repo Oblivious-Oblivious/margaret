@@ -31,10 +31,19 @@ class Default < ASTInterface
     def literal(unit)
     end
 
-    def base_ten_literal(sign, number)
+    def integer_literal(sign, number)
     end
 
-    def alternate_base_literal(sign, number)
+    def float_literal(sign, number)
+    end
+
+    def binary_literal(sign, number)
+    end
+
+    def hexadecimal_literal(sign, number)
+    end
+
+    def octal_literal(sign, number)
     end
     
     def big_integer_literal(sign, number)

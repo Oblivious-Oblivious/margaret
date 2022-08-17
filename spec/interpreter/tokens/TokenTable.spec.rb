@@ -23,7 +23,7 @@ describe TokenTable do
         expect(l.lookahead 2).to eq "+";
         expect(l.lookahead 3).to eq "2";
         expect(l.lookahead 4).to eq "eof";
-        expect(l.lookahead 5).to eq nil;
+        expect(l.lookahead 5).to eq "eof";
     end
 
     it "consumes a token and returns the value" do
@@ -33,8 +33,8 @@ describe TokenTable do
         expect(l.consume).to eq "2";
         expect(l.consume).to eq "eof";
 
-        expect(l.consume).to eq nil;
-        expect(l.consume).to eq nil;
+        expect(l.consume).to eq "eof";
+        expect(l.consume).to eq "eof";
     end
 
     it "resumes a previous token and returns the value" do
@@ -43,10 +43,6 @@ describe TokenTable do
         expect(l.consume).to eq "+";
         expect(l.consume).to eq "2";
         expect(l.consume).to eq "eof";
-        expect(l.resume).to eq "2";
-        expect(l.resume).to eq "+";
-        expect(l.resume).to eq "a";
-        expect(l.resume).to eq "eof";
     end
 
     it "returns the current position of the list" do
@@ -58,8 +54,6 @@ describe TokenTable do
         expect(l.token_table_pos).to eq 2;
         l.consume;
         expect(l.token_table_pos).to eq 3;
-        l.resume;
-        expect(l.token_table_pos).to eq 2;
     end
 
     it "gets a list element by index" do
@@ -71,5 +65,13 @@ describe TokenTable do
 
         expect(l.get(99)).to eq "eof";
         expect(l.get(42)).to eq "eof";
+    end
+
+    it "ensures it consumes of a specific token type" do
+        table = TokenTable.new @tok_arr;
+        expect(table.ensure_type(Type::IDENTIFIER, "")).to eq "a";
+        expect(table.ensure_type(Type::MESSAGE_SYMBOL, "")).to eq "+";
+        expect(table.ensure_type(Type::INTEGER, "")).to eq "2";
+        expect(table.ensure_type(Type::EOF, "")).to eq "eof";
     end
 end
