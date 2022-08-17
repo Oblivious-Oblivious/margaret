@@ -4,8 +4,8 @@ describe Parser do
     context "on lists" do
         it "parses an empty list as a first unit" do
             parse("()", "()");
-            error("(", "missing closing parenthesis on list");
-            error(")", "missing opening parenthesis on list");
+            error("(", "missing closing parenthesis on list.");
+            error(")", "missing opening parenthesis on list.");
         end
 
         it "parses multiple lists as translation units" do
@@ -13,8 +13,8 @@ describe Parser do
             parse("((()))", "((()))");
             parse("((), (), (), ())", "((), (), (), ())");
             parse("((()), ())", "((()), ())");
-            error("(()", "missing closing parenthesis on list");
-            error("())", "reached end of program");
+            error("(()", "missing closing parenthesis on list.");
+            error("())", "reached end of program.");
         end
     
         it "parses infinite lists of lists" do
