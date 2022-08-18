@@ -9,7 +9,7 @@ describe Parser do
             parse("(x = Object new)", "(= x new Object)");
             parse("var = 12", "= var 12");
             parse("arr = ()", "= arr ()");
-            parse("@x = x", "= @x x");
+            parse("@x = x + 2", "= @x + x 2");
             parse("a = b", "= a b");
             parse("a = b = c", "= a (= b c)");
             parse("a = b = c = d = 42", "= a (= b (= c (= d 42)))");

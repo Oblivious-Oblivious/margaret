@@ -27,8 +27,7 @@ class Parser
 
     def translation_unit
         optional_assignment_list = [];
-        # TODO possible error in logic
-        while table.lookahead(2) == "=" #or (table.lookahead(1) == "@" and table.lookahead(3) == "=")
+        while table.lookahead(2) == "=" or (table.lookahead(1) == "@" and table.lookahead(3) == "=")
             optional_assignment_list << assignment_message;
         end
 
@@ -42,8 +41,7 @@ class Parser
     end
 
     def assignment_message
-        # TODO possible error in logic
-        if table.lookahead(2) == "=" #or (table.lookahead(1) == "@" and table.lookahead(3) == "=")
+        if table.lookahead(2) == "=" or (table.lookahead(1) == "@" and table.lookahead(3) == "=")
             ast.assignment_message variable, table.ensure_value("=", "expected `=` on assignment message.");
         else
             ast.empty;
