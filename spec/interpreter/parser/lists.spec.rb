@@ -29,6 +29,7 @@ describe Parser do
         it "parses list messages" do
             parse("(arr = (1, 2, 3, 4))", "(= arr (1, 2, 3, 4))");
             parse("arr << 1 << 2 << 3", "<< (<< (<< arr 1) 2) 3");
+            parse("arr add: 1 add: 2 add: 3", "(add: arr 1, add: arr 2, add: arr 3)");
             parse("(arr at: 1 put: 5, arr at: 2 put: 6)", "(at:put: arr 1 5, at:put: arr 2 6)");
             parse("(b = arr is_empty?)", "(= b is_empty? arr)");
             parse("(x = arr size)", "(= x size arr)");

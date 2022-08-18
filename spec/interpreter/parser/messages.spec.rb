@@ -63,6 +63,12 @@ describe Parser do
             parse("Object keyword: (x::x, y::y, `(@x = x, @y = y, self))", %Q{keyword: Object (:"x": :"x", :"y": :"y", (:"(", :"@", :"x", :"=", :"x", :",", :"@", :"y", :"=", :"y", :",", :"self", :")"))});
         end
 
+        it "chains keyword messages of exactly the same selector" do
+            parse("arr add: 1 add: 2 add: 3", "(add: arr 1, add: arr 2, add: arr 3)");
+            parse("arr add: 'a' add: 'b' at: 3", "add:add:at: arr 'a' 'b' 3");
+            parse("arr add: 'a' at: 1 add: 'b' at: 2", "add:at:add:at: arr 'a' 1 'b' 2");
+        end
+
         it "parses composit messages" do
             parse("3 factorial + 4 factorial between: 10 and: 100", "between:and: + factorial 3 factorial 4 10 100");
         end

@@ -70,19 +70,20 @@ class SExpression < ASTInterface
     end
 
     def keyword_message(object, selectors)
-        res = "";
-
-        selectors.each do |sel|
-            res << sel[0];
+        if selectors.size > 1 and selectors.all? { |sel| sel.first == selectors.first.first }
+            res = "(";
+            selectors.size.times do |i|
+                res << selectors[0][0] << " " << object << " " << selectors[i][1] << ", ";
+            end
+            res.delete_suffix!(", ");
+            res << ")";
+        else
+            res = "";
+            selectors.each { |sel| res << sel[0] };
+            res << " " << object << " ";
+            selectors.each { |sel| res << sel[1] << " " };
+            res[0...-1];
         end
-
-        res << " " << object << " ";
-
-        selectors.each do |sel|
-            res << sel[1] << " ";
-        end
-
-        res[0...-1];
     end
 
     def keyword_object(object)
