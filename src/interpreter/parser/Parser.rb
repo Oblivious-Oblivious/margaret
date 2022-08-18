@@ -10,6 +10,16 @@ class Parser
         @ast = ASTFactory.new.generate AST_TYPE;
     end
 
+    def __chain_of(&selector)
+        selectors = [];
+        loop do
+            sel = selector.call;
+            break if sel == ast.empty
+            selectors << sel;
+        end
+        selectors;
+    end
+
     def analyse_syntax
         first_unit;
     end
@@ -54,7 +64,7 @@ class Parser
 
     def unary_message
         obj = unary_object;
-        sel = unary_selector;
+        sel = __chain_of { unary_selector };
 
         if sel == []
             ast.literal obj;
@@ -64,37 +74,28 @@ class Parser
     end
 
     def unary_object
-        literal;
+        ast.unary_object literal;
     end
 
     def unary_selector
-        def unary_selector_pattern
-            if table.lookahead(2) == ":" or ((table.lookahead(2) == "!" or table.lookahead(2) == "?") and table.lookahead(3) == ":")
-                [];
-            elsif table.lookahead(1).type == Type::IDENTIFIER
-                id = table.ensure_type(Type::IDENTIFIER, "expected identifier on unary selector.");
-                optional = "";
-                if table.lookahead(1).type == Type::ID_SYMBOL
-                    optional = table.ensure_type(Type::ID_SYMBOL, "expected id symbol on unary identifier.");
-                end
-                "#{id}#{optional}";
+        if table.lookahead(2) == ":" or ((table.lookahead(2) == "!" or table.lookahead(2) == "?") and table.lookahead(3) == ":")
+            ast.empty;
+        elsif table.lookahead(1).type == Type::IDENTIFIER
+            id = table.ensure_type(Type::IDENTIFIER, "expected identifier on unary selector.");
+            if table.lookahead(1).type == Type::ID_SYMBOL
+                optional_symbol = table.ensure_type(Type::ID_SYMBOL, "expected id symbol on unary identifier.");
             else
-                [];
+                optional_symbol = "";
             end
+            ast.unary_selector id, optional_symbol;
+        else
+            ast.empty;
         end
-
-        selectors = [];
-        loop do
-            sel = unary_selector_pattern;
-            break if sel == [];
-            selectors << sel;
-        end
-        selectors;
     end
 
     def binary_message
         obj = binary_object;
-        sel = binary_selector;
+        sel = __chain_of { binary_selector };
 
         if sel == []
             ast.literal obj;
@@ -104,35 +105,25 @@ class Parser
     end
 
     def binary_object
-        unary_message;
+        ast.binary_object unary_message;
     end
 
     def binary_selector
-        def binary_selector_pattern
-            sel = "";
-            while table.lookahead(1).type == Type::MESSAGE_SYMBOL
-                sel << table.ensure_type(Type::MESSAGE_SYMBOL, "expected message symbol on binary selector.");
-            end
-
-            if sel == ""
-                [];
-            else
-                [sel, unary_message];
-            end
+        sel = "";
+        while table.lookahead(1).type == Type::MESSAGE_SYMBOL
+            sel << table.ensure_type(Type::MESSAGE_SYMBOL, "expected message symbol on binary selector.");
         end
 
-        selectors = [];
-        loop do
-            sel = binary_selector_pattern;
-            break if sel.empty?;
-            selectors << sel;
+        if sel == ""
+            ast.empty;
+        else
+            ast.binary_selector sel, unary_message;
         end
-        selectors;
     end
 
     def keyword_message
         obj = keyword_object;
-        sel = keyword_selector;
+        sel = __chain_of { keyword_selector };
 
         if sel == []
             ast.literal obj;
@@ -142,34 +133,24 @@ class Parser
     end
 
     def keyword_object
-        binary_message;
+        ast.keyword_object binary_message;
     end
 
     def keyword_selector
-        def keyword_selector_pattern
-            if table.lookahead(1).type == Type::IDENTIFIER and (table.lookahead(2) == ":" or ((table.lookahead(2) == "!" or table.lookahead(2) == "?") and table.lookahead(3) == ":"))
-                id = table.ensure_type(Type::IDENTIFIER, "expected identifier on keyword selector.");
-                if table.lookahead(1).type == Type::ID_SYMBOL
-                    optional_symbol = table.ensure_type(Type::ID_SYMBOL, "expected id symbol on keyword identifier.");
-                else
-                    optional_symbol = "";
-                end
-                delim = table.ensure_value(":", "expected `:` on keyword selector.");
-                obj = binary_object;
-
-                ["#{id}#{optional_symbol}#{delim}", obj];
+        if table.lookahead(1).type == Type::IDENTIFIER and (table.lookahead(2) == ":" or ((table.lookahead(2) == "!" or table.lookahead(2) == "?") and table.lookahead(3) == ":"))
+            id = table.ensure_type(Type::IDENTIFIER, "expected identifier on keyword selector.");
+            if table.lookahead(1).type == Type::ID_SYMBOL
+                optional_symbol = table.ensure_type(Type::ID_SYMBOL, "expected id symbol on keyword identifier.");
             else
-                [];
+                optional_symbol = "";
             end
-        end
+            delim = table.ensure_value(":", "expected `:` on keyword selector.");
+            obj = binary_message;
 
-        selectors = [];
-        loop do
-            sel = keyword_selector_pattern;
-            break if sel.empty?;
-            selectors << sel;
+            ast.keyword_selector id, optional_symbol, delim, obj;
+        else
+            ast.empty;
         end
-        selectors;
     end
 
     def literal

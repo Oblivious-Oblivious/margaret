@@ -19,10 +19,28 @@ class Default < ASTInterface
     def unary_message(object, selectors)
     end
 
+    def unary_object(object)
+    end
+
+    def unary_selector(id, optional_symbol)
+    end
+
     def binary_message(object, selectors)
     end
 
+    def binary_object(object)
+    end
+
+    def binary_selector(sel, obj)
+    end
+
     def keyword_message(object, selectors)
+    end
+
+    def keyword_object(object)
+    end
+
+    def keyword_selector(id, optional_symbol, delim, obj)
     end
 
     def literal(unit)

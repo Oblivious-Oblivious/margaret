@@ -44,6 +44,14 @@ class SExpression < ASTInterface
         end
     end
 
+    def unary_object(object)
+        object;
+    end
+
+    def unary_selector(id, optional_symbol)
+        "#{id}#{optional_symbol}";
+    end
+
     def binary_message(object, selectors)
         if selectors.empty?
             object;
@@ -51,6 +59,14 @@ class SExpression < ASTInterface
             curr = selectors.pop;
             "(" << curr[0] << " " << binary_message(object, selectors) << " " << curr[1] << ")";
         end
+    end
+
+    def binary_object(object)
+        object;
+    end
+
+    def binary_selector(sel, obj)
+        [sel, obj];
     end
 
     def keyword_message(object, selectors)
@@ -67,6 +83,14 @@ class SExpression < ASTInterface
         end
 
         res[0...-1];
+    end
+
+    def keyword_object(object)
+        object;
+    end
+
+    def keyword_selector(id, optional_symbol, delim, obj)
+        ["#{id}#{optional_symbol}#{delim}", obj];
     end
 
     def literal(unit)
