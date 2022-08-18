@@ -189,10 +189,6 @@ class Parser
         __list_of_grammar_rule { keyword_selector_pattern }.filter { |item| !item.empty? };
     end
 
-    def cascaded_message
-        ast.empty; # TODO
-    end
-
     def literal
         # TODO Refactor into its own message
         sign = ["+", "-"].include?(table.lookahead(1).value) ? table.consume.value : ast.empty;

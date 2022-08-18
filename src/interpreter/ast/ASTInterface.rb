@@ -9,9 +9,6 @@ class ASTInterface; extend Abstract;
                      :unary_message,
                      :binary_message,
                      :keyword_message,
-
-                     :cascaded_message,
-
                      :literal,
                      :integer_literal,
                      :float_literal,

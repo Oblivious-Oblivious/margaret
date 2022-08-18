@@ -25,9 +25,6 @@ class Default < ASTInterface
     def keyword_message(object, selectors)
     end
 
-    def cascaded_message
-    end
-
     def literal(unit)
     end
 

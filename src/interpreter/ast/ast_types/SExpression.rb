@@ -69,10 +69,6 @@ class SExpression < ASTInterface
         res[0...-1];
     end
 
-    def cascaded_message
-        "";
-    end
-
     def literal(unit)
         unit;
     end
