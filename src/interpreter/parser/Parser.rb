@@ -38,15 +38,7 @@ class Parser
 
     def translation_unit
         optional_assignment_list = __list_of_grammar_rule { assignment_message };
-
-        res = "";
-        current_position = table.token_table_pos;
-        if current_position == table.token_table_pos
-            res = message;
-        end
-        # if current_position == table.token_table_pos
-        #     res = cascaded_message;
-        # end
+        res = message;
 
         if res == ""
             ast.empty;
@@ -65,13 +57,7 @@ class Parser
     end
 
     def message
-        res = keyword_message;
-
-        if res == ""
-            ast.empty;
-        else
-            ast.message res;
-        end
+        ast.message keyword_message;
     end
 
     def unary_message
@@ -123,14 +109,10 @@ class Parser
 
     def binary_selector
         def binary_selector_pattern
-            sel = __list_of_grammar_rule {
-                if table.lookahead(1).type == Type::MESSAGE_SYMBOL
-                    table.ensure_type(Type::MESSAGE_SYMBOL, "expected message symbol on binary selector.");
-                else
-                    # TODO Simplify by returning [] on first empty
-                    ast.empty;
-                end
-            }.join;
+            sel = "";
+            while table.lookahead(1).type == Type::MESSAGE_SYMBOL
+                sel << table.ensure_type(Type::MESSAGE_SYMBOL, "expected message symbol on binary selector.");
+            end
 
             if sel == ""
                 [];
@@ -158,31 +140,20 @@ class Parser
     end
 
     def keyword_selector
-        # TODO Simplify keyword selector
         def keyword_selector_pattern
-            if table.lookahead(1).type == Type::IDENTIFIER
+            if table.lookahead(1).type == Type::IDENTIFIER and (table.lookahead(2) == ":" or ((table.lookahead(2) == "!" or table.lookahead(2) == "?") and table.lookahead(3) == ":"))
                 id = table.ensure_type(Type::IDENTIFIER, "expected identifier on keyword selector.");
-            else
-                return [];
-            end
-
-            optional_symbol = "";
-            if table.lookahead(1).type == Type::ID_SYMBOL
-                optional_symbol = table.ensure_type(Type::ID_SYMBOL, "expected id symbol on keyword identifier.");
-            end
-
-            if table.lookahead(1) == ":"
+                if table.lookahead(1).type == Type::ID_SYMBOL
+                    optional_symbol = table.ensure_type(Type::ID_SYMBOL, "expected id symbol on keyword identifier.");
+                else
+                    optional_symbol = "";
+                end
                 delim = table.ensure_value(":", "expected `:` on keyword selector.");
-            else
-                return [];
-            end
+                obj = binary_object;
 
-            obj = binary_object;
-
-            if id == "" or delim == ""
-                [];
-            else
                 ["#{id}#{optional_symbol}#{delim}", obj];
+            else
+                [];
             end
         end
 
