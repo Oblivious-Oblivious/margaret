@@ -152,23 +152,20 @@ class Parser
     end
 
     def literal
-        # TODO Refactor into its own message
-        sign = ["+", "-"].include?(table.lookahead(1).value) ? table.consume.value : ast.empty;
-        
-        if table.lookahead(1).type == Type::INTEGER
-            ast.literal integer_literal(sign);
-        elsif table.lookahead(1).type == Type::FLOAT
-            ast.literal float_literal(sign);
-        elsif table.lookahead(1).type == Type::BINARY
-            ast.literal binary_literal(sign);
-        elsif table.lookahead(1).type == Type::HEXADECIMAL
-            ast.literal hexadecimal_literal(sign);
-        elsif table.lookahead(1).type == Type::OCTAL
-            ast.literal octal_literal(sign);
-        elsif table.lookahead(1).type == Type::BIGINTEGER
-            ast.literal big_integer_literal(sign);
-        elsif table.lookahead(1).type == Type::BIGFLOAT
-            ast.literal big_float_literal(sign);
+        if table.lookahead(1).type == Type::INTEGER or (["+", "-"].include?(table.lookahead(1).value) and table.lookahead(2).type == Type::INTEGER)
+            ast.literal integer_literal(["+", "-"].include?(table.lookahead(1).value) ? table.consume.value : ast.empty);
+        elsif table.lookahead(1).type == Type::FLOAT or (["+", "-"].include?(table.lookahead(1).value) and table.lookahead(2).type == Type::FLOAT)
+            ast.literal float_literal(["+", "-"].include?(table.lookahead(1).value) ? table.consume.value : ast.empty);
+        elsif table.lookahead(1).type == Type::BINARY or (["+", "-"].include?(table.lookahead(1).value) and table.lookahead(2).type == Type::BINARY)
+            ast.literal binary_literal(["+", "-"].include?(table.lookahead(1).value) ? table.consume.value : ast.empty);
+        elsif table.lookahead(1).type == Type::HEXADECIMAL or (["+", "-"].include?(table.lookahead(1).value) and table.lookahead(2).type == Type::HEXADECIMAL)
+            ast.literal hexadecimal_literal(["+", "-"].include?(table.lookahead(1).value) ? table.consume.value : ast.empty);
+        elsif table.lookahead(1).type == Type::OCTAL or (["+", "-"].include?(table.lookahead(1).value) and table.lookahead(2).type == Type::OCTAL)
+            ast.literal octal_literal(["+", "-"].include?(table.lookahead(1).value) ? table.consume.value : ast.empty);
+        elsif table.lookahead(1).type == Type::BIGINTEGER or (["+", "-"].include?(table.lookahead(1).value) and table.lookahead(2).type == Type::BIGINTEGER)
+            ast.literal big_integer_literal(["+", "-"].include?(table.lookahead(1).value) ? table.consume.value : ast.empty);
+        elsif table.lookahead(1).type == Type::BIGFLOAT or (["+", "-"].include?(table.lookahead(1).value) and table.lookahead(2).type == Type::BIGFLOAT)
+            ast.literal big_float_literal(["+", "-"].include?(table.lookahead(1).value) ? table.consume.value : ast.empty);
         elsif (table.lookahead(1).type == Type::IDENTIFIER and table.lookahead(2) == ":") or (table.lookahead(1).type == Type::STRING and table.lookahead(2) == ":") or (table.lookahead(1) == ":" and table.lookahead(2).type == Type::IDENTIFIER and table.lookahead(3) == ":")
             ast.literal association_literal;
         elsif table.lookahead(1).type == Type::STRING
