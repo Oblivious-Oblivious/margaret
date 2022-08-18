@@ -1,13 +1,11 @@
 require_relative "../ast/ASTFactory";
 
-AST_TYPE = "s-expressions";
-
 class Parser
     attr_accessor :table, :ast;
 
-    def initialize(table)
+    def initialize(table, type="default")
         @table = table;
-        @ast = ASTFactory.new.generate AST_TYPE;
+        @ast = ASTFactory.new.generate type;
     end
 
     def __chain_of(&selector)
