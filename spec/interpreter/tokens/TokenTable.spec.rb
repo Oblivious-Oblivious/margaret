@@ -45,17 +45,6 @@ describe TokenTable do
         expect(l.consume).to eq "eof";
     end
 
-    it "returns the current position of the list" do
-        l = TokenTable.new @tok_arr;
-        expect(l.token_table_pos).to eq 0;
-        l.consume;
-        l.consume;
-        expect(l.token_table_pos).to eq 2;
-        expect(l.token_table_pos).to eq 2;
-        l.consume;
-        expect(l.token_table_pos).to eq 3;
-    end
-
     it "gets a list element by index" do
         l = TokenTable.new @tok_arr;
         expect(l.get(1)).to eq "+";

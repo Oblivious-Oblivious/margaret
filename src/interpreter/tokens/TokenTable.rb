@@ -63,8 +63,4 @@ class TokenTable
             token.value;
         end
     end
-
-    def token_table_pos
-        pos + 1;
-    end
 end

@@ -10,17 +10,6 @@ class Parser
         @ast = ASTFactory.new.generate AST_TYPE;
     end
 
-    def __list_of_grammar_rule(&rule)
-        __list = [];
-        loop do
-            current_position = table.token_table_pos;
-            item = rule.call;
-            break if current_position == table.token_table_pos;
-            __list << item;
-        end
-        __list;
-    end
-
     def analyse_syntax
         first_unit;
     end
@@ -37,7 +26,12 @@ class Parser
     end
 
     def translation_unit
-        optional_assignment_list = __list_of_grammar_rule { assignment_message };
+        optional_assignment_list = [];
+        # TODO possible error in logic
+        while table.lookahead(2) == "=" #or (table.lookahead(1) == "@" and table.lookahead(3) == "=")
+            optional_assignment_list << assignment_message;
+        end
+
         res = message;
 
         if res == ""
@@ -78,7 +72,7 @@ class Parser
     def unary_selector
         def unary_selector_pattern
             if table.lookahead(2) == ":" or ((table.lookahead(2) == "!" or table.lookahead(2) == "?") and table.lookahead(3) == ":")
-                "";
+                [];
             elsif table.lookahead(1).type == Type::IDENTIFIER
                 id = table.ensure_type(Type::IDENTIFIER, "expected identifier on unary selector.");
                 optional = "";
@@ -86,10 +80,18 @@ class Parser
                     optional = table.ensure_type(Type::ID_SYMBOL, "expected id symbol on unary identifier.");
                 end
                 "#{id}#{optional}";
+            else
+                [];
             end
         end
 
-        __list_of_grammar_rule { unary_selector_pattern };
+        selectors = [];
+        loop do
+            sel = unary_selector_pattern;
+            break if sel == [];
+            selectors << sel;
+        end
+        selectors;
     end
 
     def binary_message
@@ -121,7 +123,13 @@ class Parser
             end
         end
 
-        __list_of_grammar_rule { binary_selector_pattern }.filter { |item| !item.empty? };
+        selectors = [];
+        loop do
+            sel = binary_selector_pattern;
+            break if sel.empty?;
+            selectors << sel;
+        end
+        selectors;
     end
 
     def keyword_message
@@ -157,7 +165,13 @@ class Parser
             end
         end
 
-        __list_of_grammar_rule { keyword_selector_pattern }.filter { |item| !item.empty? };
+        selectors = [];
+        loop do
+            sel = keyword_selector_pattern;
+            break if sel.empty?;
+            selectors << sel;
+        end
+        selectors;
     end
 
     def literal
