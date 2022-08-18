@@ -28,7 +28,7 @@ class SExpression < ASTInterface
         res;
     end
 
-    def assignment_message(id, eq)
+    def assignment(id, eq)
         "#{eq} #{id} ";
     end
 

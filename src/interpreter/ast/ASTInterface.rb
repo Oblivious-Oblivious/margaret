@@ -4,7 +4,7 @@ class ASTInterface; extend Abstract;
     abstract_methods :empty,
                      :first_unit,
                      :translation_unit,
-                     :assignment_message,
+                     :assignment,
                      :message,
                      :unary_message,
                      :unary_object,

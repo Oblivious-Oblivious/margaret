@@ -10,7 +10,7 @@ class Default < ASTInterface
     def translation_unit(optional_assignment_list, expr)
     end
 
-    def assignment_message(id, eq)
+    def assignment(id, eq)
     end
 
     def message(msg)
