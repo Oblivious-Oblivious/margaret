@@ -37,7 +37,7 @@ class SExpression < ASTInterface
     end
 
     def unary_message(object, selectors)
-        if selectors.size == 0
+        if selectors.empty?
             object;
         else
             "(" << selectors.pop << " " << unary_message(object, selectors) << ")";
@@ -45,7 +45,7 @@ class SExpression < ASTInterface
     end
 
     def binary_message(object, selectors)
-        if selectors.size == 0
+        if selectors.empty?
             object;
         else
             curr = selectors.pop;
