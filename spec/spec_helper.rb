@@ -7,7 +7,7 @@ Dir["#{Dir.pwd}/src/interpreter/**/*.rb"].each { |f| require f };
 require_relative "interpreter/version.spec";
 
 # ast
-require_relative "interpreter/ast/Interpreter.spec";
+require_relative "interpreter/ast/Bytecode.spec";
 
 # lexer
 require_relative "interpreter/lexer/FileLoader.spec";
