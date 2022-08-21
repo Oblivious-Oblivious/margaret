@@ -67,7 +67,7 @@ class Parser
         if sel == []
             ast.literal obj;
         else
-            ast.unary_message(obj, sel)[1...-1];
+            ast.unary_message(obj, sel);
         end
     end
 
@@ -98,7 +98,7 @@ class Parser
         if sel == []
             ast.literal obj;
         else
-            ast.binary_message(obj, sel)[1...-1];
+            ast.binary_message(obj, sel);
         end
     end
 

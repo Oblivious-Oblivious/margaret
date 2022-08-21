@@ -12,7 +12,7 @@ class SExpression < ASTInterface
     def translation_unit(optional_assignment_list, expr)
         res = "";
         if optional_assignment_list.size > 0
-            res = "#{optional_assignment_list[0]}";
+            res << "#{optional_assignment_list[0]}";
             (1...optional_assignment_list.size).each do |i|
                 res << "(" << optional_assignment_list[i];
             end
@@ -37,11 +37,14 @@ class SExpression < ASTInterface
     end
 
     def unary_message(object, selectors)
-        if selectors.empty?
-            object;
-        else
-            "(" << selectors.pop << " " << unary_message(object, selectors) << ")";
+        def __unary_message_helper(object, selectors)
+            if selectors.empty?
+                object;
+            else
+                "(" << selectors.pop << " " << __unary_message_helper(object, selectors) << ")";
+            end
         end
+        __unary_message_helper(object, selectors)[1...-1];
     end
 
     def unary_object(object)
@@ -53,12 +56,15 @@ class SExpression < ASTInterface
     end
 
     def binary_message(object, selectors)
-        if selectors.empty?
-            object;
-        else
-            curr = selectors.pop;
-            "(" << curr[0] << " " << binary_message(object, selectors) << " " << curr[1] << ")";
+        def __binary_message_helper(object, selectors)
+            if selectors.empty?
+                object;
+            else
+                curr = selectors.pop;
+                "(" << curr[0] << " " << __binary_message_helper(object, selectors) << " " << curr[1] << ")";
+            end
         end
+        __binary_message_helper(object, selectors)[1...-1];
     end
 
     def binary_object(object)
