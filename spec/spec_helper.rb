@@ -13,6 +13,9 @@ require_relative "interpreter/ast/Bytecode.spec";
 require_relative "interpreter/lexer/FileLoader.spec";
 require_relative "interpreter/lexer/Lexer.spec";
 
+# opcode
+require_relative "interpreter/opcode/Opcode.spec";
+
 # parser
 require_relative "interpreter/parser/Parser.spec";
 require_relative "interpreter/parser/arithmetic.spec";

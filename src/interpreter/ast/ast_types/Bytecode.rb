@@ -2,134 +2,184 @@ require_relative "../ASTInterface";
 
 class Bytecode < ASTInterface
     def empty
-        [];
+        "";
     end
 
     def first_unit(unit)
-        ["halt"];
+        [unit, "pop"].flatten;
     end
 
     def translation_unit(optional_assignment_list, expr)
-        empty;
+        res = [];
+        optional_assignment_list.each do |opt|
+            res << opt;
+        end
+        res << expr;
+        res;
     end
 
     def assignment(id, eq)
-        empty;
+        # TODO Fix needs to be called after elements are pushed onto the stack
+        ["store", "#{id[1]}"];
     end
 
     def message(msg)
-        empty;
+        msg;
     end
 
     def unary_message(object, selectors)
-        empty;
+        res = object;
+        selectors.each do |sel|
+            res << "unary" << sel;
+        end
+        res;
     end
 
     def unary_object(object)
-        empty;
+        object;
     end
 
     def unary_selector(id, optional_symbol)
-        empty;
+        ["#{id}#{optional_symbol}"];
     end
 
     def binary_message(object, selectors)
-        empty;
+        res = object;
+        selectors.each do |sel|
+            res << sel[1] << "binary" << sel[0];
+        end
+        res;
     end
 
     def binary_object(object)
-        empty;
+        object;
     end
 
     def binary_selector(sel, obj)
-        empty;
+        [sel, obj];
     end
 
     def keyword_message(object, selectors)
-        empty;
+        if selectors.size > 1 and selectors.all? { |sel| sel.first == selectors.first.first }
+            res = [];
+            selectors.size.times { |i| res << object << selectors[i][1] << "keyword" << selectors[0][0] << "1" };
+            res << "push_variable" << "List" << "push_integer" << "#{selectors.size}" << "keyword" << "new:" << "1";
+        else
+            joined_selector = "";
+            selectors.each { |sel| joined_selector << sel[0] };
+            res = object;
+            selectors.each { |sel| res << sel[1] };
+            res << "keyword" << joined_selector << "#{selectors.size}";
+        end
     end
 
     def keyword_object(object)
-        empty;
+        object;
     end
 
     def keyword_selector(id, optional_symbol, delim, obj)
-        empty;
+        ["#{id}#{optional_symbol}#{delim}", obj];
     end
 
     def literal(unit)
-        empty;
+        unit;
     end
 
     def integer_literal(sign, number)
-        empty;
+        case "#{sign}#{number}"
+        when "0", "-0", "+0"
+            ["push_0"];
+        when "1", "+1"
+            ["push_1"];
+        when "-1"
+            ["push_minus_1"];
+        when "2", "+2"
+            ["push_2"];
+        else
+            ["push_integer", "#{sign}#{number}"];
+        end
     end
-
+    
     def float_literal(sign, number)
-        empty;
+        ["push_float", "#{sign}#{number}"];
     end
-
+    
     def binary_literal(sign, number)
-        empty;
+        ["push_binary", "#{sign}#{number}"];
     end
 
     def hexadecimal_literal(sign, number)
-        empty;
+        ["push_hexadecimal", "#{sign}#{number}"];
     end
 
     def octal_literal(sign, number)
-        empty;
+        ["push_octal", "#{sign}#{number}"];
     end
     
     def big_integer_literal(sign, number)
-        empty;
+        ["push_variable", "BigInteger", "push_string", %Q{"#{sign}#{number[3...]}"}, "keyword", "new:", "1"];
     end
 
     def big_float_literal(sign, number)
-        empty;
+        ["push_variable", "BigFloat", "push_string", %Q{"#{sign}#{number[3...]}"}, "keyword", "new:", "1"];
     end
 
     def association(key, value)
-        empty;
+        [key, value, "keyword", "key:value:", "2"];
     end
 
     def json_association(key, value)
-        empty;
+        ["push_symbol", %Q{"#{key}"}, value, "keyword", "key:value:", "2"];
     end
 
     def string_literal(string)
-        empty;
+        ["push_string", string];
     end
 
     def symbol_literal(id)
-        empty;
+        ["push_symbol", %Q{"#{id}"}];
     end
 
     def symbol_name(name)
-        empty;
+        name;
     end
 
     def variable(optional_instance_symbol, name)
-        empty;
+        if optional_instance_symbol == "@"
+            ["push_instance", name];
+        elsif name == "nil"
+            ["push_nil"];
+        elsif name == "true"
+            ["push_true"];
+        elsif name == "false"
+            ["push_false"];
+        else
+            ["push_variable", name];
+        end
     end
 
     def list(unit_list)
-        empty;
+        res = [];
+        unit_list.each do |unit|
+            res << unit;
+        end
+        res << ["push_variable", "List", integer_literal("", unit_list.size), "keyword", "new:", "1"];
+        res;
     end
 
     def tuple_literal(item_list)
-        empty;
+        ["push_variable", "Tuple", list(item_list), "keyword", "new:", "1"];
     end
 
     def hash_literal(association_list)
-        empty;
+        ["push_variable", "Hash", list(association_list), "keyword", "new:", "1"];
     end
 
     def quoted_list_literal(item_list)
-        empty;
+        list(item_list);
     end
 
     def block_literal(param_list, function)
-        empty;
+        [list(param_list), function, "keyword", "params:function:", "2"];
     end
 end
