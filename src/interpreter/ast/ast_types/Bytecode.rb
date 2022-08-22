@@ -11,16 +11,19 @@ class Bytecode < ASTInterface
 
     def translation_unit(optional_assignment_list, expr)
         res = [];
-        optional_assignment_list.each do |opt|
-            res << opt;
-        end
         res << expr;
+        while optional_assignment_list.size > 0
+            res << optional_assignment_list.pop;
+        end
         res;
     end
 
     def assignment(id, eq)
-        # TODO Fix needs to be called after elements are pushed onto the stack
-        ["store", "#{id[1]}"];
+        if id[0] == "push_instance"
+            ["store_instance", "#{id[1]}"];
+        else
+            ["store", "#{id[1]}"];
+        end
     end
 
     def message(msg)
