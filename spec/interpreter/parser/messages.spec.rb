@@ -71,6 +71,23 @@ describe Parser do
 
         it "parses composit messages" do
             parse("3 factorial + 4 factorial between: 10 and: 100", "between:and: + factorial 3 factorial 4 10 100");
+            parse("
+                (
+                    Object message: (includesPoint::point, `(
+                                            origin <= point
+                                                if_true: ->(out goto)
+                                                if_false: ->(false return),
+                                            out = Label new
+                                        )
+                                    )
+                )", %Q{(message: Object (:"includesPoint": :"point", (:"(", :"origin", :"<=", :"point", :"if_true", :":", :"->", :"(", :"out", :"goto", :")", :"if_false", :":", :"->", :"(", :"false", :"return", :")", :",", :"out", :"=", :"Label", :"new", :")")))});
+            
+            parse("(
+                origin <= point
+                    if_true: ->(out goto)
+                    if_false: ->(false return),
+                out = Label new
+            )", "(if_true:if_false: <= origin point params:function: Block () goto out params:function: Block () return false, = out new Label)");
         end
     end
 end
