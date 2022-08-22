@@ -12,43 +12,43 @@ module Opcode
         "push_binary",
         "push_hexadecimal",
         "push_octal",
-        "push_string",
         "push_symbol",
+        "push_string",
         "push_variable",
         "push_instance",
 
         "pop",
-        "popn",
+        # "popn",
 
         "store",
-        "store_local",
-        "store_global",
-        "store_upvalue",
+        # "store_local",
+        # "store_global",
+        # "store_upvalue",
         "store_instance",
     ];
 
     JUMP_CODES = [
-        "label",
+        # "label",
 
-        # 8 bit jumps
-        "jump",
-        "jump_if_zero",
-        "jump_if_not_zero",
-        "jump_if_true",
-        "jump_if_false",
+        # # 8 bit jumps
+        # "jump",
+        # "jump_if_zero",
+        # "jump_if_not_zero",
+        # "jump_if_true",
+        # "jump_if_false",
 
-        # 16 bit jumps
-        "longjump",
-        "longjump_if_zero",
-        "longjump_if_not_zero",
-        "longjump_if_true",
-        "longjump_if_false",
+        # # 16 bit jumps
+        # "longjump",
+        # "longjump_if_zero",
+        # "longjump_if_not_zero",
+        # "longjump_if_true",
+        # "longjump_if_false",
 
-        "return",
-        "return_nil",
-        "return_true",
-        "return_false",
-        "return_stack_top",
+        # "return",
+        # "return_nil",
+        # "return_true",
+        # "return_false",
+        # "return_stack_top",
     ];
 
     SEND_CODES = [

@@ -4,7 +4,7 @@ describe Opcode do
             Opcode::STACK_CODES.size +
             Opcode::JUMP_CODES.size +
             Opcode::SEND_CODES.size
-        ).to eq 42;
+        ).to eq 22;
     end
 
     it "should contain a maximum of 256 opcodes" do
