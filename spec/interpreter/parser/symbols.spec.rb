@@ -5,6 +5,8 @@ describe Parser do
         it "parses symbol literals" do
             parse(":ok", %Q{:"ok"});
             parse("(:a,:b,:c)", %Q{(:"a", :"b", :"c")});
+            parse(":++", %Q{:"++"});
+            parse(":*/-+%^&*", %Q{:"*/-+%^&*"});
         end
 
         it "parses different types of symbol literals" do
