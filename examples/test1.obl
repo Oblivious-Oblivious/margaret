@@ -1,1 +1,21 @@
-(41 + 1)
+(
+    Numeric extend: (
+        #(0) fact (1),
+        #fact (self * (self-1) fact),
+
+        #abs (
+            self < 0
+                if_true: ->(-self)
+                if_false: ->(self)
+        ),
+
+        #** a_number (
+            self raised_to: a_number
+        ),
+
+        #times: a_block (
+            remaining = self,
+            (remaining = remaining - 1) >= 0 while_true: ->(a_block value)
+        )
+    )
+)
