@@ -76,12 +76,6 @@ class Default < ASTInterface
     def string_literal(string)
     end
 
-    def symbol_literal(id)
-    end
-
-    def symbol_name(name)
-    end
-
     def variable(optional_instance_symbol, name)
     end
 

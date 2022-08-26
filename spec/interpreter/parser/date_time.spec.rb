@@ -6,10 +6,10 @@ describe Parser do
             parse("(x = Date today)", "(= x today Date)");
             parse("(x = Date day_and_time_now)", "(= x day_and_time_now Date)");
             parse(%Q{(x = Date from_string: "01/02/1999")}, %Q{(= x from_string: Date "01/02/1999")});
-            parse("(x = Date day: 6 month: :july year: 2022)", %Q{(= x day:month:year: Date 6 :"july" 2022)});
+            parse(%Q{(x = Date day: 6 month: "july" year: 2022)}, %Q{(= x day:month:year: Date 6 "july" 2022)});
             parse("(x = Date from_days: 36000)", "(= x from_days: Date 36000)");
-            parse("(x = Date day_of_week: :Monday)", %Q{(= x day_of_week: Date :"Monday")}); # 1
-            parse("(x = Date index_of_month: :March)", %Q{(= x index_of_month: Date :"March")}); # 3
+            parse(%Q{(x = Date day_of_week: "Monday")}, %Q{(= x day_of_week: Date "Monday")}); # 1
+            parse(%Q{(x = Date index_of_month: "March")}, %Q{(= x index_of_month: Date "March")}); # 3
             parse("(x = Date days_in_month: 2 for_year: 1978)", "(= x days_in_month:for_year: Date 2 1978)"); # 28 or 29
             parse("(x = Date days_in_year: 1984)", "(= x days_in_year: Date 1984)"); # 365 or 366
             parse("(x = Date name_of_day: 1)", "(= x name_of_day: Date 1)"); # :Monday

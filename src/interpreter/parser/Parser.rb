@@ -170,18 +170,14 @@ class Parser
             ast.literal association_literal;
         elsif table.lookahead(1).type == Type::STRING
             ast.literal string_literal;
-        elsif table.lookahead(1) == ":"
-            ast.literal symbol_literal;
         elsif table.lookahead(1).type == Type::IDENTIFIER or (table.lookahead(1) == "@" and table.lookahead(2).type == Type::IDENTIFIER)
-            ast.literal variable;        
+            ast.literal variable;
         elsif table.lookahead(1) == "("
             ast.literal list;
         elsif table.lookahead(1) == "["
             ast.literal tuple_literal;
         elsif table.lookahead(1) == "{"
             ast.literal hash_literal;
-        elsif table.lookahead(1) == "`"
-            ast.literal quoted_list_literal;
         elsif table.lookahead(1) == "->"
             ast.literal block_literal;
         end
@@ -221,11 +217,6 @@ class Parser
             table.ensure_value ":", "hash keys should be denoted by colons.";
             value = translation_unit;
             ast.json_association key, value;
-        elsif table.lookahead(1) == ":"
-            key = symbol_literal;
-            table.ensure_value ":", "hash keys should be denoted by colons.";
-            value = translation_unit;
-            ast.association key, value;
         elsif table.lookahead(1).type == Type::STRING
             key = string_literal;
             table.ensure_value ":", "hash keys should be denoted by colons.";
@@ -238,23 +229,6 @@ class Parser
     
     def string_literal
         ast.string_literal table.ensure_type(Type::STRING, "expected string literal.");
-    end
-
-    def symbol_literal
-        table.ensure_value ":", "expected ':' on symbol literal.";
-        ast.symbol_literal symbol_name;
-    end
-
-    def symbol_name
-        if table.lookahead(1).type == Type::MESSAGE_SYMBOL
-            ast.symbol_name table.ensure_type(Type::MESSAGE_SYMBOL, "expected message symbol as a symbol name.");
-        elsif table.lookahead(1).type == Type::IDENTIFIER
-            ast.symbol_name table.ensure_type(Type::IDENTIFIER, "expected identifier as a symbol name.");
-        elsif table.lookahead(1).type == Type::STRING
-            ast.symbol_name table.ensure_type(Type::STRING, "expected string as a symbol name.")[1...-1];
-        else
-            ast.empty;
-        end
     end
 
     def variable
@@ -304,32 +278,13 @@ class Parser
         ast.hash_literal __items;
     end
 
-    def quoted_list_literal
-        table.ensure_value "`", "missing '`' symbol on quoted list literal.";
-        table.ensure_value "(", "missing opening parenthesis on quoted list literal.";
-
-        paren_count = 0;
-        __items = [];
-        while table.lookahead(1) != ")" or paren_count != 0
-            tok = table.consume.value;
-            paren_count += 1 if tok == "(";
-            paren_count -= 1 if tok == ")";
-            __items << ast.symbol_literal(tok);
-        end
-        __items.unshift ast.symbol_literal("(");
-        __items.push ast.symbol_literal(")");
-
-        table.ensure_value ")", "missing closing parenthesis on quoted list literal.";
-        ast.quoted_list_literal __items;
-    end
-
     def block_literal
         table.ensure_value "->", "missing '->' symbol on block literal.";
         table.ensure_value "(", "missing opening parenthesis on block literal.";
 
         __params = [];
-        while table.lookahead(1) == ":"
-            __params << symbol_literal;
+        while table.lookahead(1).type == Type::STRING
+            __params << string_literal;
             table.ensure_value ",", "block parameters are separated by commas." if table.lookahead(1) != ")" and table.lookahead(1) != "eof";
         end
 

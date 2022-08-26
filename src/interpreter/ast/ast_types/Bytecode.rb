@@ -132,19 +132,11 @@ class Bytecode < ASTInterface
     end
 
     def json_association(key, value)
-        ["push_symbol", %Q{"#{key}"}, value, "keyword", "key:value:", "2"];
+        ["push_string", %Q{"#{key}"}, value, "keyword", "key:value:", "2"];
     end
 
     def string_literal(string)
         ["push_string", string];
-    end
-
-    def symbol_literal(id)
-        ["push_symbol", %Q{"#{id}"}];
-    end
-
-    def symbol_name(name)
-        name;
     end
 
     def variable(optional_instance_symbol, name)
@@ -176,10 +168,6 @@ class Bytecode < ASTInterface
 
     def hash_literal(association_list)
         ["push_variable", "Hash", list(association_list), "keyword", "new:", "1"];
-    end
-
-    def quoted_list_literal(item_list)
-        list(item_list);
     end
 
     def block_literal(param_list, function)

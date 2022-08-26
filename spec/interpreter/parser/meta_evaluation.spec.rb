@@ -15,7 +15,6 @@ describe Parser do
             parse("(x = String field_names)", "(= x field_names String)");
             parse("(x = String all_field_names)", "(= x all_field_names String)");
             parse("(x = String selectors)", "(= x selectors String)");
-            parse("(x = String source_code_at: :message)", %Q{(= x source_code_at: String :"message")});
             parse(%Q{(x = String source_code_at: "message")}, %Q{(= x source_code_at: String "message")});
             parse("(x = String all_instances)", "(= x all_instances String)");
             parse("(x = String superclass)", "(= x superclass String)");

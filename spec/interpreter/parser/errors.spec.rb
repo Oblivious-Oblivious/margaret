@@ -12,7 +12,6 @@ describe Parser do
             error("{", "missing closing curly brace on hash.");
             error("}", "missing opening curly brace on hash.");
             error("->", "missing opening parenthesis on block literal.");
-            error("`", "missing opening parenthesis on quoted list literal.");
         end
 
         it "other syntax errors" do

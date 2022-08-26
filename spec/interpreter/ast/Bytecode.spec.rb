@@ -81,19 +81,12 @@ describe Bytecode do
     end
 
     it "emits for associations" do
-        opcodes("a: 1", ["push_symbol", %Q{"a"}, "push_1", "keyword", "key:value:", "2", "pop"]);
+        opcodes("a: 1", ["push_string", %Q{"a"}, "push_1", "keyword", "key:value:", "2", "pop"]);
         opcodes(%Q{"b": 2}, ["push_string", %Q{"b"}, "push_2", "keyword", "key:value:", "2", "pop"]);
-        opcodes(":c: 3", ["push_symbol", %Q{"c"}, "push_integer", "3", "keyword", "key:value:", "2", "pop"]);
     end
 
     it "emits for strings" do
         opcodes(%Q{"string"}, ["push_string", %Q{"string"}, "pop"]);
-    end
-
-    it "emits for symbols" do
-        opcodes(":symb", ["push_symbol", %Q{"symb"}, "pop"]);
-        opcodes(":*", ["push_symbol", %Q{"*"}, "pop"]);
-        opcodes(%Q{:"a symbol"}, ["push_symbol", %Q{"a symbol"}, "pop"]);
     end
 
     it "emits for variables" do
@@ -114,7 +107,7 @@ describe Bytecode do
         opcodes("()", ["push_variable", "List", "push_0", "keyword", "new:", "1", "pop"]);
         opcodes("(1, 2, 3)", ["push_1", "push_2", "push_integer", "3", "push_variable", "List", "push_integer", "3", "keyword", "new:", "1", "pop"]);
         opcodes("(1, 2, (10, 20, 30), 3)", ["push_1", "push_2", "push_integer", "10", "push_integer", "20", "push_integer", "30", "push_variable", "List", "push_integer", "3", "keyword", "new:", "1", "push_integer", "3", "push_variable", "List", "push_integer", "4", "keyword", "new:", "1", "pop"]);
-        opcodes(%Q{(1, "2", :"3", 42.42)}, ["push_1", "push_string", %Q{"2"}, "push_symbol", %Q{"3"}, "push_float", "42.42", "push_variable", "List", "push_integer", "4", "keyword", "new:", "1", "pop"]);
+        opcodes(%Q{(1, "2", c, 42.42)}, ["push_1", "push_string", %Q{"2"}, "push_variable", "c", "push_float", "42.42", "push_variable", "List", "push_integer", "4", "keyword", "new:", "1", "pop"]);
     end
 
     it "emits for tuples" do
@@ -125,38 +118,30 @@ describe Bytecode do
 
     it "emits for hashes" do
         opcodes("{}", ["push_variable", "Hash", "push_variable", "List", "push_0", "keyword", "new:", "1", "keyword", "new:", "1", "pop"]);
-        opcodes("{a: {}, b: {}}", ["push_variable", "Hash", "push_symbol", %Q{"a"}, "push_variable", "Hash", "push_variable", "List", "push_0", "keyword", "new:", "1", "keyword", "new:", "1", "keyword", "key:value:", "2", "push_symbol", %Q{"b"}, "push_variable", "Hash", "push_variable", "List", "push_0", "keyword", "new:", "1", "keyword", "new:", "1", "keyword", "key:value:", "2", "push_variable", "List", "push_2", "keyword", "new:", "1", "keyword", "new:", "1", "pop"]);
-        opcodes("{a: 1, b: 2, c: 3}", ["push_variable", "Hash", "push_symbol", %Q{"a"}, "push_1", "keyword", "key:value:", "2", "push_symbol", %Q{"b"}, "push_2", "keyword", "key:value:", "2", "push_symbol", %Q{"c"}, "push_integer", "3", "keyword", "key:value:", "2", "push_variable", "List", "push_integer", "3", "keyword", "new:", "1", "keyword", "new:", "1", "pop"]);
+        opcodes("{a: {}, b: {}}", ["push_variable", "Hash", "push_string", %Q{"a"}, "push_variable", "Hash", "push_variable", "List", "push_0", "keyword", "new:", "1", "keyword", "new:", "1", "keyword", "key:value:", "2", "push_string", %Q{"b"}, "push_variable", "Hash", "push_variable", "List", "push_0", "keyword", "new:", "1", "keyword", "new:", "1", "keyword", "key:value:", "2", "push_variable", "List", "push_2", "keyword", "new:", "1", "keyword", "new:", "1", "pop"]);
+        opcodes("{a: 1, b: 2, c: 3}", ["push_variable", "Hash", "push_string", %Q{"a"}, "push_1", "keyword", "key:value:", "2", "push_string", %Q{"b"}, "push_2", "keyword", "key:value:", "2", "push_string", %Q{"c"}, "push_integer", "3", "keyword", "key:value:", "2", "push_variable", "List", "push_integer", "3", "keyword", "new:", "1", "keyword", "new:", "1", "pop"]);
         opcodes(%Q{{"a": 1, "b": 2, "c": 3}}, ["push_variable", "Hash", "push_string", %Q{"a"}, "push_1", "keyword", "key:value:", "2", "push_string", %Q{"b"}, "push_2", "keyword", "key:value:", "2", "push_string", %Q{"c"}, "push_integer", "3", "keyword", "key:value:", "2", "push_variable", "List", "push_integer", "3", "keyword", "new:", "1", "keyword", "new:", "1", "pop"]);
-        opcodes("{:a: 1, :b: 2, :c: 3}", ["push_variable", "Hash", "push_symbol", %Q{"a"}, "push_1", "keyword", "key:value:", "2", "push_symbol", %Q{"b"}, "push_2", "keyword", "key:value:", "2", "push_symbol", %Q{"c"}, "push_integer", "3", "keyword", "key:value:", "2", "push_variable", "List", "push_integer", "3", "keyword", "new:", "1", "keyword", "new:", "1", "pop"]);
     end
 
-    it "emits for quoted lists" do
-        opcodes("`()", ["push_symbol", %Q{"("}, "push_symbol", %Q{")"}, "push_variable", "List", "push_2", "keyword", "new:", "1", "pop"]);
-        opcodes("`(a b c)", ["push_symbol", %Q{"("}, "push_symbol", %Q{"a"}, "push_symbol", %Q{"b"}, "push_symbol", %Q{"c"}, "push_symbol", %Q{")"}, "push_variable", "List", "push_integer", "5", "keyword", "new:", "1", "pop"]);
-        opcodes("`(:a msg: :b)", ["push_symbol", %Q{"("}, "push_symbol", %Q{":"}, "push_symbol", %Q{"a"}, "push_symbol", %Q{"msg"}, "push_symbol", %Q{":"}, "push_symbol", %Q{":"}, "push_symbol", %Q{"b"}, "push_symbol", %Q{")"}, "push_variable", "List", "push_integer", "8", "keyword", "new:", "1", "pop"]);
-        opcodes("`(2 * (3 + 5) / 4)", ["push_symbol", %Q{"("}, "push_symbol", %Q{"2"}, "push_symbol", %Q{"*"}, "push_symbol", %Q{"("}, "push_symbol", %Q{"3"}, "push_symbol", %Q{"+"}, "push_symbol", %Q{"5"}, "push_symbol", %Q{")"}, "push_symbol", %Q{"/"}, "push_symbol", %Q{"4"}, "push_symbol", %Q{")"}, "push_variable", "List", "push_integer", "11", "keyword", "new:", "1", "pop"]);
-        opcodes("`(x = 2) eval", ["push_symbol", %Q{"("}, "push_symbol", %Q{"x"}, "push_symbol", %Q{"="}, "push_symbol", %Q{"2"}, "push_symbol", %Q{")"}, "push_variable", "List", "push_integer", "5", "keyword", "new:", "1", "unary", "eval", "pop"]);
-    end
-
-    it "emits for blocks" do
-        opcodes("->(x = (x = 1, y = 2))", ["push_variable", "List", "push_0", "keyword", "new:", "1", "push_1", "store", "x", "push_2", "store", "y", "push_variable", "List", "push_2", "keyword", "new:", "1", "store", "x", "keyword", "params:function:", "2", "pop"]);
-        opcodes("x = ->(
-            :v1, :v2, (
-                v1 += 1,
-                v1 += 2,
-                v1 * v2
-            )
-        )", ["push_symbol", %Q{"v1"}, "push_symbol", %Q{"v2"}, "push_variable", "List", "push_2", "keyword", "new:", "1", "push_variable", "v1", "push_1", "binary", "+=", "push_variable", "v1", "push_2", "binary", "+=", "push_variable", "v1", "push_variable", "v2", "binary", "*", "push_variable", "List", "push_integer", "3", "keyword", "new:", "1", "keyword", "params:function:", "2", "store", "x", "pop"]);
-        opcodes("->(42)", ["push_variable", "List", "push_0", "keyword", "new:", "1", "push_integer", "42", "keyword", "params:function:", "2", "pop"]);
-        opcodes("->(:a, a puts)", ["push_symbol", %Q{"a"}, "push_variable", "List", "push_1", "keyword", "new:", "1", "push_variable", "a", "unary", "puts", "keyword", "params:function:", "2", "pop"]);
-        opcodes("->(2 + 3)", ["push_variable", "List", "push_0", "keyword", "new:", "1", "push_2", "push_integer", "3", "binary", "+", "keyword", "params:function:", "2", "pop"]);
-        opcodes("->((x = 1, y = 2, x + y))", ["push_variable", "List", "push_0", "keyword", "new:", "1", "push_1", "store", "x", "push_2", "store", "y", "push_variable", "x", "push_variable", "y", "binary", "+", "push_variable", "List", "push_integer", "3", "keyword", "new:", "1", "keyword", "params:function:", "2", "pop"]);
-        opcodes("->(:a, :b, a + b)", ["push_symbol", %Q{"a"}, "push_symbol", %Q{"b"}, "push_variable", "List", "push_2", "keyword", "new:", "1", "push_variable", "a", "push_variable", "b", "binary", "+", "keyword", "params:function:", "2", "pop"]);
-        opcodes("->(:a, a)", ["push_symbol", %Q{"a"}, "push_variable", "List", "push_1", "keyword", "new:", "1", "push_variable", "a", "keyword", "params:function:", "2", "pop"]);
-        opcodes("->(x = 2) exec", ["push_variable", "List", "push_0", "keyword", "new:", "1", "push_2", "store", "x", "keyword", "params:function:", "2", "unary", "exec", "pop"]);
-        opcodes("->(:param, param puts) value: 42", ["push_symbol", %Q{"param"}, "push_variable", "List", "push_1", "keyword", "new:", "1", "push_variable", "param", "unary", "puts", "keyword", "params:function:", "2", "push_integer", "42", "keyword", "value:", "1", "pop"]);
-    end
+    # TODO blocks
+    # it "emits for blocks" do
+    #     opcodes("->(x = (x = 1, y = 2))", ["push_variable", "List", "push_0", "keyword", "new:", "1", "push_1", "store", "x", "push_2", "store", "y", "push_variable", "List", "push_2", "keyword", "new:", "1", "store", "x", "keyword", "params:function:", "2", "pop"]);
+    #     opcodes("x = ->(
+    #         :v1, :v2, (
+    #             v1 += 1,
+    #             v1 += 2,
+    #             v1 * v2
+    #         )
+    #     )", ["push_symbol", %Q{"v1"}, "push_symbol", %Q{"v2"}, "push_variable", "List", "push_2", "keyword", "new:", "1", "push_variable", "v1", "push_1", "binary", "+=", "push_variable", "v1", "push_2", "binary", "+=", "push_variable", "v1", "push_variable", "v2", "binary", "*", "push_variable", "List", "push_integer", "3", "keyword", "new:", "1", "keyword", "params:function:", "2", "store", "x", "pop"]);
+    #     opcodes("->(42)", ["push_variable", "List", "push_0", "keyword", "new:", "1", "push_integer", "42", "keyword", "params:function:", "2", "pop"]);
+    #     opcodes("->(:a, a puts)", ["push_symbol", %Q{"a"}, "push_variable", "List", "push_1", "keyword", "new:", "1", "push_variable", "a", "unary", "puts", "keyword", "params:function:", "2", "pop"]);
+    #     opcodes("->(2 + 3)", ["push_variable", "List", "push_0", "keyword", "new:", "1", "push_2", "push_integer", "3", "binary", "+", "keyword", "params:function:", "2", "pop"]);
+    #     opcodes("->((x = 1, y = 2, x + y))", ["push_variable", "List", "push_0", "keyword", "new:", "1", "push_1", "store", "x", "push_2", "store", "y", "push_variable", "x", "push_variable", "y", "binary", "+", "push_variable", "List", "push_integer", "3", "keyword", "new:", "1", "keyword", "params:function:", "2", "pop"]);
+    #     opcodes("->(:a, :b, a + b)", ["push_symbol", %Q{"a"}, "push_symbol", %Q{"b"}, "push_variable", "List", "push_2", "keyword", "new:", "1", "push_variable", "a", "push_variable", "b", "binary", "+", "keyword", "params:function:", "2", "pop"]);
+    #     opcodes("->(:a, a)", ["push_symbol", %Q{"a"}, "push_variable", "List", "push_1", "keyword", "new:", "1", "push_variable", "a", "keyword", "params:function:", "2", "pop"]);
+    #     opcodes("->(x = 2) exec", ["push_variable", "List", "push_0", "keyword", "new:", "1", "push_2", "store", "x", "keyword", "params:function:", "2", "unary", "exec", "pop"]);
+    #     opcodes("->(:param, param puts) value: 42", ["push_symbol", %Q{"param"}, "push_variable", "List", "push_1", "keyword", "new:", "1", "push_variable", "param", "unary", "puts", "keyword", "params:function:", "2", "push_integer", "42", "keyword", "value:", "1", "pop"]);
+    # end
 
     it "emits for assignment" do
         opcodes("x = 4", ["push_integer", "4", "store", "x", "pop"]);

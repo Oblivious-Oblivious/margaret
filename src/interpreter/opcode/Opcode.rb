@@ -12,7 +12,6 @@ module Opcode
         "push_binary",
         "push_hexadecimal",
         "push_octal",
-        "push_symbol",
         "push_string",
         "push_variable",
         "push_instance",

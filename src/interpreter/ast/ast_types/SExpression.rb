@@ -137,19 +137,11 @@ class SExpression < ASTInterface
     end
 
     def json_association(key, value)
-        association(symbol_literal(key), value);
+        association(%Q{"#{key}"}, value);
     end
 
     def string_literal(string)
         string;
-    end
-
-    def symbol_literal(id)
-        %Q{:"#{id}"};
-    end
-
-    def symbol_name(name)
-        name;
     end
 
     def variable(optional_instance_symbol, name)
@@ -176,10 +168,6 @@ class SExpression < ASTInterface
 
     def hash_literal(association_list)
         "new Hash #{list(association_list)}";
-    end
-
-    def quoted_list_literal(item_list)
-        list(item_list);
     end
 
     def block_literal(param_list, function)

@@ -26,12 +26,9 @@ class ASTInterface; extend Abstract;
                      :association,
                      :json_association,
                      :string_literal,
-                     :symbol_literal,
-                     :symbol_name,
                      :variable,
                      :list,
                      :tuple_literal,
                      :hash_literal,
-                     :quoted_list_literal,
                      :block_literal;
 end
