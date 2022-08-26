@@ -54,15 +54,6 @@ describe Parser do
             parse("42 factorial and: (2 + 3)", "and: factorial 42 (+ 2 3)");
             parse("(list at: 3) + (list at: 5)", "+ (at: list 3) (at: list 5)");
         end
-    
-        it "parses message definitions" do
-            parse("Object message: (:calc, `(@x + @y))", %Q{message: Object (:"calc", (:"(", :"@", :"x", :"+", :"@", :"y", :")"))});
-            parse("Object unary: (:calc, `(@x + @y))", %Q{unary: Object (:"calc", (:"(", :"@", :"x", :"+", :"@", :"y", :")"))});
-            parse("Object message: (:+, :other, `(@x += other x, @y += other y, self))", %Q{message: Object (:"+", :"other", (:"(", :"@", :"x", :"+=", :"other", :"x", :",", :"@", :"y", :"+=", :"other", :"y", :",", :"self", :")"))});
-            parse("Object binary: (:+, :other, `(@x += other x, @y += other y, self))", %Q{binary: Object (:"+", :"other", (:"(", :"@", :"x", :"+=", :"other", :"x", :",", :"@", :"y", :"+=", :"other", :"y", :",", :"self", :")"))});
-            parse("Object message: (x::x, y::y, `(@x = x, @y = y, self))", %Q{message: Object (:"x": :"x", :"y": :"y", (:"(", :"@", :"x", :"=", :"x", :",", :"@", :"y", :"=", :"y", :",", :"self", :")"))});
-            parse("Object keyword: (x::x, y::y, `(@x = x, @y = y, self))", %Q{keyword: Object (:"x": :"x", :"y": :"y", (:"(", :"@", :"x", :"=", :"x", :",", :"@", :"y", :"=", :"y", :",", :"self", :")"))});
-        end
 
         it "chains keyword messages of exactly the same selector" do
             parse("arr add: 1 add: 2 add: 3", "(add: arr 1, add: arr 2, add: arr 3)");
@@ -71,18 +62,7 @@ describe Parser do
         end
 
         it "parses composit messages" do
-            parse("3 factorial + 4 factorial between: 10 and: 100", "between:and: + factorial 3 factorial 4 10 100");
-            parse("
-                (
-                    Object message: (includesPoint::point, `(
-                                            origin <= point
-                                                if_true: ->(out goto)
-                                                if_false: ->(false return),
-                                            out = Label new
-                                        )
-                                    )
-                )", %Q{(message: Object (:"includesPoint": :"point", (:"(", :"origin", :"<=", :"point", :"if_true", :":", :"->", :"(", :"out", :"goto", :")", :"if_false", :":", :"->", :"(", :"false", :"return", :")", :",", :"out", :"=", :"Label", :"new", :")")))});
-            
+            parse("3 factorial + 4 factorial between: 10 and: 100", "between:and: + factorial 3 factorial 4 10 100");            
             parse("(
                 origin <= point
                     if_true: ->(out goto)
