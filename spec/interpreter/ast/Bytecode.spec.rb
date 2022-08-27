@@ -47,7 +47,7 @@ describe Bytecode do
         opcodes("(
             x = 0b0101 + 0b1011,
             x to_int puts,
-        )", ["push_binary", "0b0101", "push_binary", "0b1011", "binary", "+", "store", "x", "push_variable", "x", "unary", "to_int", "unary", "puts", "push_variable", "List", "push_2", "keyword", "new:", "1", "pop"]);
+        )", ["push_binary", "0b0101", "push_binary", "0b1011", "binary", "+", "store", "x", "push_variable", "x", "unary", "to_int", "unary", "puts", "push_list", "2", "pop"]);
     end
 
     it "emits for hexadecimals" do
@@ -69,20 +69,15 @@ describe Bytecode do
     end
 
     it "emits for big integers" do
-        opcodes("0bi42_000", ["push_variable", "BigInteger", "push_string", %Q{"42000"}, "keyword", "new:", "1", "pop"]);
-        opcodes("-0bi42_000", ["push_variable", "BigInteger", "push_string", %Q{"-42000"}, "keyword", "new:", "1", "pop"]);
-        opcodes("0bi42000", ["push_variable", "BigInteger", "push_string", %Q{"42000"}, "keyword", "new:", "1", "pop"]);
-        opcodes("-0bi42000", ["push_variable", "BigInteger", "push_string", %Q{"-42000"}, "keyword", "new:", "1", "pop"]);
+        opcodes("0bi42_000", ["push_big_integer", %Q{"42000"}, "pop"]);
+        opcodes("-0bi42_000", ["push_big_integer", %Q{"-42000"}, "pop"]);
+        opcodes("0bi42000", ["push_big_integer", %Q{"42000"}, "pop"]);
+        opcodes("-0bi42000", ["push_big_integer", %Q{"-42000"}, "pop"]);
     end
 
     it "emits for big floats" do
-        opcodes("0bf0.042", ["push_variable", "BigFloat", "push_string", %Q{"0.042"}, "keyword", "new:", "1", "pop"]);
-        opcodes("-0bf0.042", ["push_variable", "BigFloat", "push_string", %Q{"-0.042"}, "keyword", "new:", "1", "pop"]);
-    end
-
-    it "emits for associations" do
-        opcodes("a: 1", ["push_string", %Q{"a"}, "push_1", "keyword", "key:value:", "2", "pop"]);
-        opcodes(%Q{"b": 2}, ["push_string", %Q{"b"}, "push_2", "keyword", "key:value:", "2", "pop"]);
+        opcodes("0bf0.042", ["push_big_float", %Q{"0.042"}, "pop"]);
+        opcodes("-0bf0.042", ["push_big_float", %Q{"-0.042"}, "pop"]);
     end
 
     it "emits for strings" do
@@ -104,10 +99,10 @@ describe Bytecode do
     it "emits for lists" do
         # TODO extract grammar rule higher
         # TODO Simplify bytecode for lists, maybe have an array-list immediate for fast translation
-        opcodes("()", ["push_variable", "List", "push_0", "keyword", "new:", "1", "pop"]);
-        opcodes("(1, 2, 3)", ["push_1", "push_2", "push_integer", "3", "push_variable", "List", "push_integer", "3", "keyword", "new:", "1", "pop"]);
-        opcodes("(1, 2, (10, 20, 30), 3)", ["push_1", "push_2", "push_integer", "10", "push_integer", "20", "push_integer", "30", "push_variable", "List", "push_integer", "3", "keyword", "new:", "1", "push_integer", "3", "push_variable", "List", "push_integer", "4", "keyword", "new:", "1", "pop"]);
-        opcodes(%Q{(1, "2", c, 42.42)}, ["push_1", "push_string", %Q{"2"}, "push_variable", "c", "push_float", "42.42", "push_variable", "List", "push_integer", "4", "keyword", "new:", "1", "pop"]);
+        opcodes("()", ["push_list", "0", "pop"]);
+        opcodes("(1, 2, 3)", ["push_1", "push_2", "push_integer", "3", "push_list", "3", "pop"]);
+        opcodes("(1, 2, (10, 20, 30), 3)", ["push_1", "push_2", "push_integer", "10", "push_integer", "20", "push_integer", "30", "push_list", "3", "push_integer", "3", "push_list", "4", "pop"]);
+        opcodes(%Q{(1, "2", c, 42.42)}, ["push_1", "push_string", %Q{"2"}, "push_variable", "c", "push_float", "42.42", "push_list", "4", "pop"]);
     end
 
     it "emits for tuples" do
@@ -145,9 +140,9 @@ describe Bytecode do
     it "emits for assignment" do
         opcodes("x = 4", ["push_integer", "4", "store", "x", "pop"]);
         opcodes("x = y = z = 6", ["push_integer", "6", "store", "z", "store", "y", "store", "x", "pop"]);
-        opcodes("x = (y = 6) + 1", ["push_integer", "6", "store", "y", "push_variable", "List", "push_1", "keyword", "new:", "1", "push_1", "binary", "+", "store", "x", "pop"]);
+        opcodes("x = (y = 6) + 1", ["push_integer", "6", "store", "y", "push_list", "1", "push_1", "binary", "+", "store", "x", "pop"]);
         opcodes("@x = x + 2", ["push_variable", "x", "push_2", "binary", "+", "store_instance", "x", "pop"]);
-        opcodes("a = b = (c = 42) + 12", ["push_integer", "42", "store", "c", "push_variable", "List", "push_1", "keyword", "new:", "1", "push_integer", "12", "binary", "+", "store", "b", "store", "a", "pop"]);
+        opcodes("a = b = (c = 42) + 12", ["push_integer", "42", "store", "c", "push_list", "1", "push_integer", "12", "binary", "+", "store", "b", "store", "a", "pop"]);
     end
 
     it "emits for unary messages" do
@@ -158,15 +153,15 @@ describe Bytecode do
         opcodes("42 puts", ["push_integer", "42", "unary", "puts", "pop"]);
         opcodes("obj puts", ["push_variable", "obj", "unary", "puts", "pop"]);
         opcodes("x = obj puts", ["push_variable", "obj", "unary", "puts", "store", "x", "pop"]);
-        opcodes("(obj puts, 42 incr)", ["push_variable", "obj", "unary", "puts", "push_integer", "42", "unary", "incr", "push_variable", "List", "push_2", "keyword", "new:", "1", "pop"]);
-        opcodes("((obj puts), (42 incr))", ["push_variable", "obj", "unary", "puts", "push_variable", "List", "push_1", "keyword", "new:", "1", "push_integer", "42", "unary", "incr", "push_variable", "List", "push_1", "keyword", "new:", "1", "push_variable", "List", "push_2", "keyword", "new:", "1", "pop"]);
+        opcodes("(obj puts, 42 incr)", ["push_variable", "obj", "unary", "puts", "push_integer", "42", "unary", "incr", "push_list", "2", "pop"]);
+        opcodes("((obj puts), (42 incr))", ["push_variable", "obj", "unary", "puts", "push_list", "1", "push_integer", "42", "unary", "incr", "push_list", "1", "push_list", "2", "pop"]);
         opcodes("42 incr incr decr decr", ["push_integer", "42", "unary", "incr", "unary", "incr", "unary", "decr", "unary", "decr", "pop"]);
         opcodes("x = 42 incr incr decr decr", ["push_integer", "42", "unary", "incr", "unary", "incr", "unary", "decr", "unary", "decr", "store", "x", "pop"]);
         opcodes("x incr!", ["push_variable", "x", "unary", "incr!", "pop"]);
         opcodes("x is_empty?", ["push_variable", "x", "unary", "is_empty?", "pop"]);
-        opcodes("(42 one, 43 two, 44 three, 45, 46 four)", ["push_integer", "42", "unary", "one", "push_integer", "43", "unary", "two", "push_integer", "44", "unary", "three", "push_integer", "45", "push_integer", "46", "unary", "four", "push_variable", "List", "push_integer", "5", "keyword", "new:", "1", "pop"]);
+        opcodes("(42 one, 43 two, 44 three, 45, 46 four)", ["push_integer", "42", "unary", "one", "push_integer", "43", "unary", "two", "push_integer", "44", "unary", "three", "push_integer", "45", "push_integer", "46", "unary", "four", "push_list", "5", "pop"]);
         opcodes("p1 + p2 calc puts", ["push_variable", "p1", "push_variable", "p2", "unary", "calc", "unary", "puts", "binary", "+", "pop"]);
-        opcodes("(p1 + p2 calc) puts", ["push_variable", "p1", "push_variable", "p2", "unary", "calc", "binary", "+", "push_variable", "List", "push_1", "keyword", "new:", "1", "unary", "puts", "pop"]);
+        opcodes("(p1 + p2 calc) puts", ["push_variable", "p1", "push_variable", "p2", "unary", "calc", "binary", "+", "push_list", "1", "unary", "puts", "pop"]);
     end
 
     it "emits for binary messages" do
@@ -176,31 +171,31 @@ describe Bytecode do
         opcodes("a + b", ["push_variable", "a", "push_variable", "b", "binary", "+", "pop"]);
         opcodes("42 factorial + 17", ["push_integer", "42", "unary", "factorial", "push_integer", "17", "binary", "+", "pop"]);
         opcodes("41 factorial + 42 factorial + 43 factorial", ["push_integer", "41", "unary", "factorial", "push_integer", "42", "unary", "factorial", "binary", "+", "push_integer", "43", "unary", "factorial", "binary", "+", "pop"]);
-        opcodes("(41 + 1, 42 + 0, 43 - 1)", ["push_integer", "41", "push_1", "binary", "+", "push_integer", "42", "push_0", "binary", "+", "push_integer", "43", "push_1", "binary", "-", "push_variable", "List", "push_integer", "3", "keyword", "new:", "1", "pop"]);
-        opcodes("((41 + 1), (42 + 0), (43 - 1))", ["push_integer", "41", "push_1", "binary", "+", "push_variable", "List", "push_1", "keyword", "new:", "1", "push_integer", "42", "push_0", "binary", "+", "push_variable", "List", "push_1", "keyword", "new:", "1", "push_integer", "43", "push_1", "binary", "-", "push_variable", "List", "push_1", "keyword", "new:", "1", "push_variable", "List", "push_integer", "3", "keyword", "new:", "1", "pop"]);
+        opcodes("(41 + 1, 42 + 0, 43 - 1)", ["push_integer", "41", "push_1", "binary", "+", "push_integer", "42", "push_0", "binary", "+", "push_integer", "43", "push_1", "binary", "-", "push_list", "3", "pop"]);
+        opcodes("((41 + 1), (42 + 0), (43 - 1))", ["push_integer", "41", "push_1", "binary", "+", "push_list", "1", "push_integer", "42", "push_0", "binary", "+", "push_list", "1", "push_integer", "43", "push_1", "binary", "-", "push_list", "1", "push_list", "3", "pop"]);
         opcodes("x = a + b * 2 - 5", ["push_variable", "a", "push_variable", "b", "binary", "+", "push_2", "binary", "*", "push_integer", "5", "binary", "-", "store", "x", "pop"]);
         opcodes("x << item", ["push_variable", "x", "push_variable", "item", "binary", "<<", "pop"]);
-        opcodes("[1, 2, 3] ++ [4, 5]", ["push_variable", "Tuple", "push_1", "push_2", "push_integer", "3", "push_variable", "List", "push_integer", "3", "keyword", "new:", "1", "keyword", "new:", "1", "push_variable", "Tuple", "push_integer", "4", "push_integer", "5", "push_variable", "List", "push_2", "keyword", "new:", "1", "keyword", "new:", "1", "binary", "++", "pop"]);
-        opcodes("(4 + 3) * (5 + 6)", ["push_integer", "4", "push_integer", "3", "binary", "+", "push_variable", "List", "push_1", "keyword", "new:", "1", "push_integer", "5", "push_integer", "6", "binary", "+", "push_variable", "List", "push_1", "keyword", "new:", "1", "binary", "*", "pop"]);
+        opcodes("[1, 2, 3] ++ [4, 5]", ["push_variable", "Tuple", "push_1", "push_2", "push_integer", "3", "push_list", "3", "keyword", "new:", "1", "push_variable", "Tuple", "push_integer", "4", "push_integer", "5", "push_list", "2", "keyword", "new:", "1", "binary", "++", "pop"]);
+        opcodes("(4 + 3) * (5 + 6)", ["push_integer", "4", "push_integer", "3", "binary", "+", "push_list", "1", "push_integer", "5", "push_integer", "6", "binary", "+", "push_list", "1", "binary", "*", "pop"]);
     end
 
     it "emits for keyword messages" do
         opcodes("list put: 42 at: 5", ["push_variable", "list", "push_integer", "42", "push_integer", "5", "keyword", "put:at:", "2", "pop"]);
-        opcodes("list put: (42 incr) at: 5", ["push_variable", "list", "push_integer", "42", "unary", "incr", "push_variable", "List", "push_1", "keyword", "new:", "1", "push_integer", "5", "keyword", "put:at:", "2", "pop"]);
+        opcodes("list put: (42 incr) at: 5", ["push_variable", "list", "push_integer", "42", "unary", "incr", "push_list", "1", "push_integer", "5", "keyword", "put:at:", "2", "pop"]);
         opcodes("(
             list = List new,
             list put: 42 at: 5,
             x = list get: 2,
             x puts
-        )", ["push_variable", "List", "unary", "new", "store", "list", "push_variable", "list", "push_integer", "42", "push_integer", "5", "keyword", "put:at:", "2", "push_variable", "list", "push_2", "keyword", "get:", "1", "store", "x", "push_variable", "x", "unary", "puts", "push_variable", "List", "push_integer", "4", "keyword", "new:", "1", "pop"]);
+        )", ["push_variable", "List", "unary", "new", "store", "list", "push_variable", "list", "push_integer", "42", "push_integer", "5", "keyword", "put:at:", "2", "push_variable", "list", "push_2", "keyword", "get:", "1", "store", "x", "push_variable", "x", "unary", "puts", "push_list", "4", "pop"]);
         opcodes("2 + 3 incr add: 11", ["push_2", "push_integer", "3", "unary", "incr", "binary", "+", "push_integer", "11", "keyword", "add:", "1", "pop"]);
-        opcodes("(1, 2, 3) reverse!: true", ["push_1", "push_2", "push_integer", "3", "push_variable", "List", "push_integer", "3", "keyword", "new:", "1", "push_true", "keyword", "reverse!:", "1", "pop"]);
+        opcodes("(1, 2, 3) reverse!: true", ["push_1", "push_2", "push_integer", "3", "push_list", "3", "push_true", "keyword", "reverse!:", "1", "pop"]);
         opcodes("true then: 1 else: 2", ["push_true", "push_1", "push_2", "keyword", "then:else:", "2", "pop"]);
         opcodes("x ok?: true otherwise!: false", ["push_variable", "x", "push_true", "push_false", "keyword", "ok?:otherwise!:", "2", "pop"]);
-        opcodes("(5 + 13) greater_than?: (11 + 2)", ["push_integer", "5", "push_integer", "13", "binary", "+", "push_variable", "List", "push_1", "keyword", "new:", "1", "push_integer", "11", "push_2", "binary", "+", "push_variable", "List", "push_1", "keyword", "new:", "1", "keyword", "greater_than?:", "1", "pop"]);
-        opcodes("42 factorial and: (2 + 3)", ["push_integer", "42", "unary", "factorial", "push_2", "push_integer", "3", "binary", "+", "push_variable", "List", "push_1", "keyword", "new:", "1", "keyword", "and:", "1", "pop"]);
-        opcodes("(list at: 3) + (list at: 5)", ["push_variable", "list", "push_integer", "3", "keyword", "at:", "1", "push_variable", "List", "push_1", "keyword", "new:", "1", "push_variable", "list", "push_integer", "5", "keyword", "at:", "1", "push_variable", "List", "push_1", "keyword", "new:", "1", "binary", "+", "pop"]);
-        opcodes("arr add: 1 add: 2 add: 3", ["push_variable", "arr", "push_1", "keyword", "add:", "1", "push_variable", "arr", "push_2", "keyword", "add:", "1", "push_variable", "arr", "push_integer", "3", "keyword", "add:", "1", "push_variable", "List", "push_integer", "3", "keyword", "new:", "1", "pop"]);
+        opcodes("(5 + 13) greater_than?: (11 + 2)", ["push_integer", "5", "push_integer", "13", "binary", "+", "push_list", "1", "push_integer", "11", "push_2", "binary", "+", "push_list", "1", "keyword", "greater_than?:", "1", "pop"]);
+        opcodes("42 factorial and: (2 + 3)", ["push_integer", "42", "unary", "factorial", "push_2", "push_integer", "3", "binary", "+", "push_list", "1", "keyword", "and:", "1", "pop"]);
+        opcodes("(list at: 3) + (list at: 5)", ["push_variable", "list", "push_integer", "3", "keyword", "at:", "1", "push_list", "1", "push_variable", "list", "push_integer", "5", "keyword", "at:", "1", "push_list", "1", "binary", "+", "pop"]);
+        opcodes("arr add: 1 add: 2 add: 3", ["push_variable", "arr", "push_1", "keyword", "add:", "1", "push_variable", "arr", "push_2", "keyword", "add:", "1", "push_variable", "arr", "push_integer", "3", "keyword", "add:", "1", "push_list", "3", "pop"]);
         opcodes("arr add: 'a' add: 'b' at: 3", ["push_variable", "arr", "push_string", "'a'", "push_string", "'b'", "push_integer", "3", "keyword", "add:add:at:", "3", "pop"]);
         opcodes("arr add: 'a' at: 1 add: 'b' at: 2", ["push_variable", "arr", "push_string", "'a'", "push_1", "push_string", "'b'", "push_2", "keyword", "add:at:add:at:", "4", "pop"]);
     end

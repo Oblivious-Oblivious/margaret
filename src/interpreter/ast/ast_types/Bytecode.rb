@@ -64,9 +64,7 @@ class Bytecode < ASTInterface
 
     def keyword_message(object, selectors)
         if selectors.size > 1 and selectors.all? { |sel| sel.first == selectors.first.first }
-            res = [];
-            selectors.size.times { |i| res << object << selectors[i][1] << "keyword" << selectors[0][0] << "1" };
-            res << "push_variable" << "List" << "push_integer" << "#{selectors.size}" << "keyword" << "new:" << "1";
+            list(selectors.map { |sel| [object, sel[1], "keyword", sel[0], "1"] });
         else
             joined_selector = "";
             selectors.each { |sel| joined_selector << sel[0] };
@@ -120,11 +118,11 @@ class Bytecode < ASTInterface
     end
     
     def big_integer_literal(sign, number)
-        ["push_variable", "BigInteger", "push_string", %Q{"#{sign}#{number[3...]}"}, "keyword", "new:", "1"];
+        ["push_big_integer", %Q{"#{sign}#{number[3...]}"}];
     end
 
     def big_float_literal(sign, number)
-        ["push_variable", "BigFloat", "push_string", %Q{"#{sign}#{number[3...]}"}, "keyword", "new:", "1"];
+        ["push_big_float", %Q{"#{sign}#{number[3...]}"}];
     end
 
     def string_literal(string)
@@ -150,7 +148,7 @@ class Bytecode < ASTInterface
         unit_list.each do |unit|
             res << unit;
         end
-        res << ["push_variable", "List", integer_literal("", unit_list.size), "keyword", "new:", "1"];
+        res << ["push_list", "#{unit_list.size}"];
         res;
     end
 
