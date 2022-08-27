@@ -108,8 +108,8 @@ class Parser
 
     def binary_selector
         sel = "";
-        while table.lookahead(1).type == Type::MESSAGE_SYMBOL
-            sel << table.ensure_type(Type::MESSAGE_SYMBOL, "expected message symbol on binary selector.");
+        if table.lookahead(1).type == Type::MESSAGE_SYMBOL
+            sel = table.ensure_type(Type::MESSAGE_SYMBOL, "expected message symbol on binary selector.");
         end
 
         if sel == ""
