@@ -176,7 +176,8 @@ class Bytecode < ASTInterface
         ["push_string", %Q{"#{key}"}, value, "keyword", "key:value:", "2"];
     end
 
+    # TODO New activation window on blocks and methods
     def block_literal(param_list, function)
-        [list(param_list.map { |item| ["push_variable", item] }), function, "keyword", "params:function:", "2"];
+        ["STARTpush_block", list(param_list.map { |item| ["push_variable", item] }), function, "ENDpush_block"];
     end
 end

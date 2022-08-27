@@ -119,22 +119,22 @@ describe Bytecode do
     end
 
     it "emits for blocks" do
-        opcodes("->{x = (x = 1, y = 2)}", ["push_variable", "List", "push_0", "keyword", "new:", "1", "push_1", "store", "x", "push_2", "store", "y", "push_variable", "List", "push_2", "keyword", "new:", "1", "store", "x", "keyword", "params:function:", "2", "pop"]);
+        opcodes("->{x = (x = 1, y = 2)}", ["STARTpush_block", "push_list", "0", "push_1", "store", "x", "push_2", "store", "y", "push_list", "2", "store", "x", "ENDpush_block", "pop"]);
         opcodes("x = ->{
             v1, v2, (
                 v1 += 1,
                 v1 += 2,
                 v1 * v2
             )
-        }", ["push_variable", "v1", "push_variable", "v2", "push_variable", "List", "push_2", "keyword", "new:", "1", "push_variable", "v1", "push_1", "binary", "+=", "push_variable", "v1", "push_2", "binary", "+=", "push_variable", "v1", "push_variable", "v2", "binary", "*", "push_variable", "List", "push_integer", "3", "keyword", "new:", "1", "keyword", "params:function:", "2", "store", "x", "pop"]);
-        opcodes("->{42}", ["push_variable", "List", "push_0", "keyword", "new:", "1", "push_integer", "42", "keyword", "params:function:", "2", "pop"]);
-        opcodes("->{a | a puts}", ["push_variable", "a", "push_variable", "List", "push_1", "keyword", "new:", "1", "push_variable", "a", "unary", "puts", "keyword", "params:function:", "2", "pop"]);
-        opcodes("->{2 + 3}", ["push_variable", "List", "push_0", "keyword", "new:", "1", "push_2", "push_integer", "3", "binary", "+", "keyword", "params:function:", "2", "pop"]);
-        opcodes("->{(x = 1, y = 2, x + y)}", ["push_variable", "List", "push_0", "keyword", "new:", "1", "push_1", "store", "x", "push_2", "store", "y", "push_variable", "x", "push_variable", "y", "binary", "+", "push_variable", "List", "push_integer", "3", "keyword", "new:", "1", "keyword", "params:function:", "2", "pop"]);
-        opcodes("->{a, b | a + b}", ["push_variable", "a", "push_variable", "b", "push_variable", "List", "push_2", "keyword", "new:", "1", "push_variable", "a", "push_variable", "b", "binary", "+", "keyword", "params:function:", "2", "pop"]);
-        opcodes("->{a, a}", ["push_variable", "a", "push_variable", "List", "push_1", "keyword", "new:", "1", "push_variable", "a", "keyword", "params:function:", "2", "pop"]);
-        opcodes("->{x = 2} exec", ["push_variable", "List", "push_0", "keyword", "new:", "1", "push_2", "store", "x", "keyword", "params:function:", "2", "unary", "exec", "pop"]);
-        opcodes("->{param | param puts} value: 42", ["push_variable", "param", "push_variable", "List", "push_1", "keyword", "new:", "1", "push_variable", "param", "unary", "puts", "keyword", "params:function:", "2", "push_integer", "42", "keyword", "value:", "1", "pop"]);
+        }", ["STARTpush_block", "push_variable", "v1", "push_variable", "v2", "push_list", "2", "push_variable", "v1", "push_1", "binary", "+=", "push_variable", "v1", "push_2", "binary", "+=", "push_variable", "v1", "push_variable", "v2", "binary", "*", "push_list", "3", "ENDpush_block", "store", "x", "pop"]);
+        opcodes("->{42}", ["STARTpush_block", "push_list", "0", "push_integer", "42", "ENDpush_block", "pop"]);
+        opcodes("->{a | a puts}", ["STARTpush_block", "push_variable", "a", "push_list", "1", "push_variable", "a", "unary", "puts", "ENDpush_block", "pop"]);
+        opcodes("->{2 + 3}", ["STARTpush_block", "push_list", "0", "push_2", "push_integer", "3", "binary", "+", "ENDpush_block", "pop"]);
+        opcodes("->{(x = 1, y = 2, x + y)}", ["STARTpush_block", "push_list", "0", "push_1", "store", "x", "push_2", "store", "y", "push_variable", "x", "push_variable", "y", "binary", "+", "push_list", "3", "ENDpush_block", "pop"]);
+        opcodes("->{a, b | a + b}", ["STARTpush_block", "push_variable", "a", "push_variable", "b", "push_list", "2", "push_variable", "a", "push_variable", "b", "binary", "+", "ENDpush_block", "pop"]);
+        opcodes("->{a, a}", ["STARTpush_block", "push_variable", "a", "push_list", "1", "push_variable", "a", "ENDpush_block", "pop"]);
+        opcodes("->{x = 2} exec", ["STARTpush_block", "push_list", "0", "push_2", "store", "x", "ENDpush_block", "unary", "exec", "pop"]);
+        opcodes("->{param | param puts} value: 42", ["STARTpush_block", "push_variable", "param", "push_list", "1", "push_variable", "param", "unary", "puts", "ENDpush_block", "push_integer", "42", "keyword", "value:", "1", "pop"]);
     end
 
     it "emits for assignment" do

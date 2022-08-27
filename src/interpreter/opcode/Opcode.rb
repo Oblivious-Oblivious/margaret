@@ -22,6 +22,9 @@ module Opcode
         "push_tuple",
         "push_hash",
 
+        "STARTpush_block",
+        "ENDpush_block",
+
 
         "pop",
         # "popn",
