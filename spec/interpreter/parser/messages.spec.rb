@@ -65,8 +65,8 @@ describe Parser do
             parse("3 factorial + 4 factorial between: 10 and: 100", "between:and: + factorial 3 factorial 4 10 100");            
             parse("(
                 origin <= point
-                    if_true: ->(out goto)
-                    if_false: ->(false return),
+                    if_true: ->{ out goto }
+                    if_false: ->{ false return },
                 out = Label new
             )", "(if_true:if_false: <= origin point params:function: Block () goto out params:function: Block () return false, = out new Label)");
         end

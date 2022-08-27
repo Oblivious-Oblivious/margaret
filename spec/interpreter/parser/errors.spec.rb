@@ -11,7 +11,7 @@ describe Parser do
             error("]", "missing opening bracket on tuple.");
             error("{", "missing closing curly brace on hash.");
             error("}", "missing opening curly brace on hash.");
-            error("->", "missing opening parenthesis on block literal.");
+            error("->", "missing opening curly on block literal.");
         end
 
         it "other syntax errors" do

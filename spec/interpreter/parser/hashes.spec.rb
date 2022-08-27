@@ -28,10 +28,9 @@ describe Parser do
             parse(%Q{(b = x includes_key: "a")}, %Q{(= b includes_key: x "a")});
             parse("(x keys puts)", "(puts (keys x))");
             parse("(x values puts)", "(puts (values x))");
-            # TODO blocks
-            # parse("(x each_key: ->(:a, a puts))", %Q{(each_key: x params:function: Block (:"a") puts a)});
-            # parse("(x each_value: ->(:a, a puts))", %Q{(each_value: x params:function: Block (:"a") puts a)});
-            # parse("(x each: ->(:a, a puts))", %Q{(each: x params:function: Block (:"a") puts a)}); # Prints hash associations
+            parse("(x each_key: ->{a | a puts})", %Q{(each_key: x params:function: Block (a) puts a)});
+            parse("(x each_value: ->{a | a puts})", %Q{(each_value: x params:function: Block (a) puts a)});
+            parse("(x each: ->{a | a puts})", %Q{(each: x params:function: Block (a) puts a)}); # Prints hash associations
         end
     end
 end

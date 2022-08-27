@@ -280,17 +280,22 @@ class Parser
 
     def block_literal
         table.ensure_value "->", "missing '->' symbol on block literal.";
-        table.ensure_value "(", "missing opening parenthesis on block literal.";
+        table.ensure_value "{", "missing opening curly on block literal.";
 
         __params = [];
-        while table.lookahead(1).type == Type::STRING
-            __params << string_literal;
-            table.ensure_value ",", "block parameters are separated by commas." if table.lookahead(1) != ")" and table.lookahead(1) != "eof";
+        while table.lookahead(1).type == Type::IDENTIFIER and (table.lookahead(2) == "," or table.lookahead(2) == "|")
+            __params << table.ensure_type(Type::IDENTIFIER, "expected identifier parameter on block.");
+            if table.lookahead(1) != "}" and table.lookahead(1) != "|" and table.lookahead(1) != "eof"
+                table.ensure_value ",", "block parameters are separated by commas.";
+            end
         end
 
+        if table.lookahead(1) == "|"
+            table.ensure_value "|", "missing '|' symbol on block literal.";
+        end
         function = translation_unit;
 
-        table.ensure_value ")", "missing closing parenthesis on block literal.";
+        table.ensure_value "}", "missing closing curly on block literal.";
         ast.block_literal __params, function;
     end
 end

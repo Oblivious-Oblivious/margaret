@@ -171,6 +171,6 @@ class Bytecode < ASTInterface
     end
 
     def block_literal(param_list, function)
-        [list(param_list), function, "keyword", "params:function:", "2"];
+        [list(param_list.map { |item| ["push_variable", item] }), function, "keyword", "params:function:", "2"];
     end
 end
