@@ -30,5 +30,8 @@ class ASTInterface; extend Abstract;
                      :list,
                      :tuple_literal,
                      :hash_literal,
-                     :block_literal;
+                     :block_literal,
+                     :unary_method_definition,
+                     :binary_method_definition,
+                     :keyword_method_definition;
 end

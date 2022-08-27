@@ -180,6 +180,8 @@ class Parser
             ast.literal hash_literal;
         elsif table.lookahead(1) == "->"
             ast.literal block_literal;
+        elsif table.lookahead(1) == "#"
+            ast.literal method_definition_literal;
         end
     end
 
@@ -297,5 +299,51 @@ class Parser
 
         table.ensure_value "}", "missing closing curly on block literal.";
         ast.block_literal __params, function;
+    end
+
+    def method_definition_literal
+        table.ensure_value "#", "missing '#' on method definition.";
+
+        if table.lookahead(1).type == Type::IDENTIFIER and (table.lookahead(2) == ":" or ((table.lookahead(2) == "!" or table.lookahead(2) == "?") and table.lookahead(3) == ":"))
+            keyword_method_definition;
+        elsif table.lookahead(1).type == Type::IDENTIFIER
+            unary_method_definition;
+        elsif table.lookahead(1).type == Type::MESSAGE_SYMBOL
+            binary_method_definition;
+        end
+    end
+
+    def unary_method_definition
+        selector = table.ensure_type(Type::IDENTIFIER, "expected identifier on unary method definition.");
+        if table.lookahead(1).type == Type::ID_SYMBOL
+            selector << table.ensure_type(Type::ID_SYMBOL, "expected id symbol on unary identifier.");
+        end
+        table.ensure_value "=>", "missing '=>' on unary method definition.";
+        function = translation_unit;
+        ast.unary_method_definition selector, function;
+    end
+
+    def binary_method_definition
+        selector = table.ensure_type(Type::MESSAGE_SYMBOL, "expected message symbol on binary method definition.");
+        param = table.ensure_type(Type::IDENTIFIER, "expected one parameter on binary method definition.");
+        table.ensure_value "=>", "missing '=>' on binary method definition.";
+        function = translation_unit;
+        ast.binary_method_definition selector, param, function;
+    end
+
+    def keyword_method_definition
+        selector = [];
+        while table.lookahead(1).type == Type::IDENTIFIER
+            key = table.ensure_type(Type::IDENTIFIER, "expected identifier on keyword method selector.");
+            if table.lookahead(1).type == Type::ID_SYMBOL
+                key << table.ensure_type(Type::ID_SYMBOL, "expected id symbol on keyword method identifier.");
+            end
+            key << table.ensure_value(":", "expected `:` on keyword method definition.");
+            param = table.ensure_type(Type::IDENTIFIER, "keyword parameter");
+            selector << [key, param];
+        end
+        table.ensure_value "=>", "missing '=>' on keyword method definition.";
+        function = translation_unit;
+        ast.keyword_method_definition selector, function;
     end
 end

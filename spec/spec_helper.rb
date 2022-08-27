@@ -39,6 +39,7 @@ require_relative "interpreter/parser/iterations.spec";
 require_relative "interpreter/parser/lists.spec";
 require_relative "interpreter/parser/messages.spec";
 require_relative "interpreter/parser/meta_evaluation.spec";
+require_relative "interpreter/parser/method_definition.spec";
 require_relative "interpreter/parser/numeric.spec";
 require_relative "interpreter/parser/rational.spec";
 require_relative "interpreter/parser/strings.spec";

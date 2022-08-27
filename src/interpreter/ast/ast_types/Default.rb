@@ -88,9 +88,15 @@ class Default < ASTInterface
     def hash_literal(association_list)
     end
 
-    def quoted_list_literal(item_list)
+    def block_literal(param_list, function)
     end
 
-    def block_literal(param_list, function)
+    def unary_method_definition(selector, function)
+    end
+
+    def binary_method_definition(selector, param, function)
+    end
+
+    def keyword_method_definition(selector, function)
     end
 end
