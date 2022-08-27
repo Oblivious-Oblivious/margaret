@@ -25,6 +25,12 @@ module Opcode
         "STARTpush_block",
         "ENDpush_block",
 
+        "STARTpush_unary_method",
+        "ENDpush_unary_method",
+        "STARTpush_binary_method",
+        "ENDpush_binary_method",
+        "STARTpush_keyword_method",
+        "ENDpush_keyword_method",
 
         "pop",
         # "popn",

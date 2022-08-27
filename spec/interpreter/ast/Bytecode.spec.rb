@@ -199,4 +199,34 @@ describe Bytecode do
         opcodes("arr add: 'a' add: 'b' at: 3", ["push_variable", "arr", "push_string", "'a'", "push_string", "'b'", "push_integer", "3", "keyword", "add:add:at:", "3", "pop"]);
         opcodes("arr add: 'a' at: 1 add: 'b' at: 2", ["push_variable", "arr", "push_string", "'a'", "push_1", "push_string", "'b'", "push_2", "keyword", "add:at:add:at:", "4", "pop"]);
     end
+
+    it "emits for unary method definitions" do
+        opcodes("#incr => self + 1",   ["STARTpush_unary_method", %Q{"incr"}, "push_variable", "self", "push_1", "binary", "+", "ENDpush_unary_method", "pop"]);
+        opcodes("#  incr => self + 1", ["STARTpush_unary_method", %Q{"incr"}, "push_variable", "self", "push_1", "binary", "+", "ENDpush_unary_method", "pop"]);
+        opcodes("#is_empty? => true", ["STARTpush_unary_method", %Q{"is_empty?"}, "push_true", "ENDpush_unary_method", "pop"]);
+        # opcodes("#(0) fact => 1");
+        "
+        #(0) fact => 1,
+        #(_) fact => self * (self-1) fact
+        "
+    end
+
+    it "emits for binary method definitions" do
+        opcodes("#** a_number => self raised_to: a_number", ["STARTpush_binary_method", %Q{"**"}, "push_variable", "a_number", "push_variable", "self", "push_variable", "a_number", "keyword", "raised_to:", "1", "ENDpush_binary_method", "pop"]);
+        # opcodes("#(0) ** a_number => 0", "");
+        # opcodes("#(0) ** (0) => nil", "");
+    end
+
+    it "emits for keyword method definitions" do
+        opcodes("#add: element at: position => 42", ["STARTpush_keyword_method", %Q{"add:at:"}, "push_variable", "element", "push_variable", "position", "push_list", "2", "push_integer", "42", "ENDpush_keyword_method", "pop"]);
+        opcodes("#ok?: value1 otherwise!: value2 => 17", ["STARTpush_keyword_method", %Q{"ok?:otherwise!:"}, "push_variable", "value1", "push_variable", "value2", "push_list", "2", "push_integer", "17", "ENDpush_keyword_method", "pop"]);
+        # opcodes("#([]) add: (element) at: (position) => 17");
+        # opcodes("#([]) add: ('a') at: (0) => ['a']");
+        # opcodes("#add: ('a') at: (0) => ['a'] ++ self");
+
+        opcodes("#times: a_block => (
+            remaining = self,
+            ->{ (remaining = remaining - 1) >= 0 } while_true: ->{ a_block value }
+        )", ["STARTpush_keyword_method", %Q{"times:"}, "push_variable", "a_block", "push_list", "1", "push_variable", "self", "store", "remaining", "STARTpush_block", "push_list", "0", "push_variable", "remaining", "push_1", "binary", "-", "store", "remaining", "push_list", "1", "push_0", "binary", ">=", "ENDpush_block", "STARTpush_block", "push_list", "0", "push_variable", "a_block", "unary", "value", "ENDpush_block", "keyword", "while_true:", "1", "push_list", "2", "ENDpush_keyword_method", "pop"]);
+    end
 end

@@ -180,4 +180,18 @@ class Bytecode < ASTInterface
     def block_literal(param_list, function)
         ["STARTpush_block", list(param_list.map { |item| ["push_variable", item] }), function, "ENDpush_block"];
     end
+    
+    def unary_method_definition(selector, function)
+        ["STARTpush_unary_method", %Q{"#{selector}"}, function, "ENDpush_unary_method"];
+    end
+
+    def binary_method_definition(selector, param, function)
+        ["STARTpush_binary_method", %Q{"#{selector}"}, "push_variable", param, function, "ENDpush_binary_method"];
+    end
+    
+    def keyword_method_definition(selector, function)
+        joined_selector = "";
+        selector.each { |sel| joined_selector << sel[0] };
+        ["STARTpush_keyword_method", %Q{"#{joined_selector}"}, list(selector.map { |item| ["push_variable", item[1]] }), function, "ENDpush_keyword_method"];
+    end
 end
