@@ -153,11 +153,19 @@ class Bytecode < ASTInterface
     end
 
     def tuple_literal(item_list)
-        ["push_variable", "Tuple", list(item_list), "keyword", "new:", "1"];
+        res = [];
+        item_list.each do |item|
+            res << item;
+        end
+        res << "push_tuple" << "#{item_list.size}";
     end
 
     def hash_literal(association_list)
-        ["push_variable", "Hash", list(association_list), "keyword", "new:", "1"];
+        res = [];
+        association_list.each do |association|
+            res << association;
+        end
+        res << "push_hash" << "#{association_list.size}";
     end
 
     def association(key, value)

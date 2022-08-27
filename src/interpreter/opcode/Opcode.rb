@@ -19,6 +19,9 @@ module Opcode
         "push_instance",
         "push_list",
 
+        "push_tuple",
+        "push_hash",
+
 
         "pop",
         # "popn",

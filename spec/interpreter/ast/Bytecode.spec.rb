@@ -106,16 +106,16 @@ describe Bytecode do
     end
 
     it "emits for tuples" do
-        opcodes("[]", ["push_variable", "Tuple", "push_variable", "List", "push_0", "keyword", "new:", "1", "keyword", "new:", "1", "pop"]);
-        opcodes("[41, 42]", ["push_variable", "Tuple", "push_integer", "41", "push_integer", "42", "push_variable", "List", "push_2", "keyword", "new:", "1", "keyword", "new:", "1", "pop"]);
-        opcodes(%Q{[42, "str", var]}, ["push_variable", "Tuple", "push_integer", "42", "push_string", %Q{"str"}, "push_variable", "var", "push_variable", "List", "push_integer", "3", "keyword", "new:", "1", "keyword", "new:", "1", "pop"]);
+        opcodes("[]", ["push_tuple", "0", "pop"]);
+        opcodes("[41, 42]", ["push_integer", "41", "push_integer", "42", "push_tuple", "2", "pop"]);
+        opcodes(%Q{[42, "str", var]}, ["push_integer", "42", "push_string", %Q{"str"}, "push_variable", "var", "push_tuple", "3", "pop"]);
     end
 
     it "emits for hashes" do
-        opcodes("{}", ["push_variable", "Hash", "push_variable", "List", "push_0", "keyword", "new:", "1", "keyword", "new:", "1", "pop"]);
-        opcodes("{a: {}, b: {}}", ["push_variable", "Hash", "push_string", %Q{"a"}, "push_variable", "Hash", "push_variable", "List", "push_0", "keyword", "new:", "1", "keyword", "new:", "1", "keyword", "key:value:", "2", "push_string", %Q{"b"}, "push_variable", "Hash", "push_variable", "List", "push_0", "keyword", "new:", "1", "keyword", "new:", "1", "keyword", "key:value:", "2", "push_variable", "List", "push_2", "keyword", "new:", "1", "keyword", "new:", "1", "pop"]);
-        opcodes("{a: 1, b: 2, c: 3}", ["push_variable", "Hash", "push_string", %Q{"a"}, "push_1", "keyword", "key:value:", "2", "push_string", %Q{"b"}, "push_2", "keyword", "key:value:", "2", "push_string", %Q{"c"}, "push_integer", "3", "keyword", "key:value:", "2", "push_variable", "List", "push_integer", "3", "keyword", "new:", "1", "keyword", "new:", "1", "pop"]);
-        opcodes(%Q{{"a": 1, "b": 2, "c": 3}}, ["push_variable", "Hash", "push_string", %Q{"a"}, "push_1", "keyword", "key:value:", "2", "push_string", %Q{"b"}, "push_2", "keyword", "key:value:", "2", "push_string", %Q{"c"}, "push_integer", "3", "keyword", "key:value:", "2", "push_variable", "List", "push_integer", "3", "keyword", "new:", "1", "keyword", "new:", "1", "pop"]);
+        opcodes("{}", ["push_hash", "0", "pop"]);
+        opcodes("{a: {}, b: {}}", ["push_string", %Q{"a"}, "push_hash", "0", "keyword", "key:value:", "2", "push_string", %Q{"b"}, "push_hash", "0", "keyword", "key:value:", "2", "push_hash", "2", "pop"]);
+        opcodes("{a: 1, b: 2, c: 3}", ["push_string", %Q{"a"}, "push_1", "keyword", "key:value:", "2", "push_string", %Q{"b"}, "push_2", "keyword", "key:value:", "2", "push_string", %Q{"c"}, "push_integer", "3", "keyword", "key:value:", "2", "push_hash", "3", "pop"]);
+        opcodes(%Q{{"a": 1, "b": 2, "c": 3}}, ["push_string", %Q{"a"}, "push_1", "keyword", "key:value:", "2", "push_string", %Q{"b"}, "push_2", "keyword", "key:value:", "2", "push_string", %Q{"c"}, "push_integer", "3", "keyword", "key:value:", "2", "push_hash", "3", "pop"]);
     end
 
     it "emits for blocks" do
@@ -175,7 +175,7 @@ describe Bytecode do
         opcodes("((41 + 1), (42 + 0), (43 - 1))", ["push_integer", "41", "push_1", "binary", "+", "push_list", "1", "push_integer", "42", "push_0", "binary", "+", "push_list", "1", "push_integer", "43", "push_1", "binary", "-", "push_list", "1", "push_list", "3", "pop"]);
         opcodes("x = a + b * 2 - 5", ["push_variable", "a", "push_variable", "b", "binary", "+", "push_2", "binary", "*", "push_integer", "5", "binary", "-", "store", "x", "pop"]);
         opcodes("x << item", ["push_variable", "x", "push_variable", "item", "binary", "<<", "pop"]);
-        opcodes("[1, 2, 3] ++ [4, 5]", ["push_variable", "Tuple", "push_1", "push_2", "push_integer", "3", "push_list", "3", "keyword", "new:", "1", "push_variable", "Tuple", "push_integer", "4", "push_integer", "5", "push_list", "2", "keyword", "new:", "1", "binary", "++", "pop"]);
+        opcodes("[1, 2, 3] ++ [4, 5]", ["push_1", "push_2", "push_integer", "3", "push_tuple", "3", "push_integer", "4", "push_integer", "5", "push_tuple", "2", "binary", "++", "pop"]);
         opcodes("(4 + 3) * (5 + 6)", ["push_integer", "4", "push_integer", "3", "binary", "+", "push_list", "1", "push_integer", "5", "push_integer", "6", "binary", "+", "push_list", "1", "binary", "*", "pop"]);
     end
 
