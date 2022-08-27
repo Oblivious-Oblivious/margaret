@@ -67,12 +67,6 @@ class Default < ASTInterface
     def big_float_literal(sign, number)
     end
 
-    def association(key, value)
-    end
-
-    def json_association(key, value)
-    end
-
     def string_literal(string)
     end
 
@@ -86,6 +80,12 @@ class Default < ASTInterface
     end
 
     def hash_literal(association_list)
+    end
+
+    def association(key, value)
+    end
+
+    def json_association(key, value)
     end
 
     def block_literal(param_list, function)

@@ -166,8 +166,6 @@ class Parser
             ast.literal big_integer_literal(["+", "-"].include?(table.lookahead(1).value) ? table.consume.value : ast.empty);
         elsif table.lookahead(1).type == Type::BIGFLOAT or (["+", "-"].include?(table.lookahead(1).value) and table.lookahead(2).type == Type::BIGFLOAT)
             ast.literal big_float_literal(["+", "-"].include?(table.lookahead(1).value) ? table.consume.value : ast.empty);
-        elsif (table.lookahead(1).type == Type::IDENTIFIER and table.lookahead(2) == ":") or (table.lookahead(1).type == Type::STRING and table.lookahead(2) == ":") or (table.lookahead(1) == ":" and table.lookahead(2).type == Type::IDENTIFIER and table.lookahead(3) == ":")
-            ast.literal association_literal;
         elsif table.lookahead(1).type == Type::STRING
             ast.literal string_literal;
         elsif table.lookahead(1).type == Type::IDENTIFIER or (table.lookahead(1) == "@" and table.lookahead(2).type == Type::IDENTIFIER)
@@ -211,22 +209,6 @@ class Parser
 
     def big_float_literal(sign)
         ast.big_float_literal sign, table.ensure_type(Type::BIGFLOAT, "expected big float literal.");
-    end
-
-    def association_literal
-        if table.lookahead(1).type == Type::IDENTIFIER
-            key = table.ensure_type(Type::IDENTIFIER, "expected identifier on association literal.");
-            table.ensure_value ":", "hash keys should be denoted by colons.";
-            value = translation_unit;
-            ast.json_association key, value;
-        elsif table.lookahead(1).type == Type::STRING
-            key = string_literal;
-            table.ensure_value ":", "hash keys should be denoted by colons.";
-            value = translation_unit;
-            ast.association key, value;
-        else
-            ast.empty;
-        end
     end
     
     def string_literal
@@ -278,6 +260,22 @@ class Parser
         
         table.ensure_value "}", "missing closing curly brace on hash.";
         ast.hash_literal __items;
+    end
+
+    def association_literal
+        if table.lookahead(1).type == Type::IDENTIFIER
+            key = table.ensure_type(Type::IDENTIFIER, "expected identifier on association literal.");
+            table.ensure_value ":", "hash keys should be denoted by colons.";
+            value = translation_unit;
+            ast.json_association key, value;
+        elsif table.lookahead(1).type == Type::STRING
+            key = string_literal;
+            table.ensure_value ":", "hash keys should be denoted by colons.";
+            value = translation_unit;
+            ast.association key, value;
+        else
+            ast.empty;
+        end
     end
 
     def block_literal

@@ -127,14 +127,6 @@ class Bytecode < ASTInterface
         ["push_variable", "BigFloat", "push_string", %Q{"#{sign}#{number[3...]}"}, "keyword", "new:", "1"];
     end
 
-    def association(key, value)
-        [key, value, "keyword", "key:value:", "2"];
-    end
-
-    def json_association(key, value)
-        ["push_string", %Q{"#{key}"}, value, "keyword", "key:value:", "2"];
-    end
-
     def string_literal(string)
         ["push_string", string];
     end
@@ -168,6 +160,14 @@ class Bytecode < ASTInterface
 
     def hash_literal(association_list)
         ["push_variable", "Hash", list(association_list), "keyword", "new:", "1"];
+    end
+
+    def association(key, value)
+        [key, value, "keyword", "key:value:", "2"];
+    end
+
+    def json_association(key, value)
+        ["push_string", %Q{"#{key}"}, value, "keyword", "key:value:", "2"];
     end
 
     def block_literal(param_list, function)

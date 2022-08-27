@@ -11,12 +11,6 @@ describe Parser do
             parse("{x: {a: 1, b: 2}, y: {c: 3, d: 4}}", %Q{new Hash ("x": new Hash ("a": 1, "b": 2), "y": new Hash ("c": 3, "d": 4))});
             parse("{a: 42 factorial, b: 2 + 3, c: 41 plus: 1, d: (42 incr decr, 41 incr)}", %Q{new Hash ("a": factorial 42, "b": + 2 3, "c": plus: 41 1, "d": (decr (incr 42), incr 41))});
         end
-        
-        it "parses associations" do
-            parse(%Q{(x = Association key: "a" value: 100)}, %Q{(= x key:value: Association "a" 100)});
-            parse("(y = x key)", "(= y key x)");
-            parse("(y = x value)", "(= y value x)");
-        end
 
         it "parses hashes" do
             parse(%Q{(x at: 'a' put: 3)}, %Q{(at:put: x 'a' 3)});

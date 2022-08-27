@@ -132,14 +132,6 @@ class SExpression < ASTInterface
         %Q{new: BigFloat "#{sign}#{number[3...]}"};
     end
 
-    def association(key, value)
-        "#{key}: #{value}";
-    end
-
-    def json_association(key, value)
-        association(%Q{"#{key}"}, value);
-    end
-
     def string_literal(string)
         string;
     end
@@ -168,6 +160,14 @@ class SExpression < ASTInterface
 
     def hash_literal(association_list)
         "new Hash #{list(association_list)}";
+    end
+
+    def association(key, value)
+        "#{key}: #{value}";
+    end
+
+    def json_association(key, value)
+        association(%Q{"#{key}"}, value);
     end
 
     def block_literal(param_list, function)
