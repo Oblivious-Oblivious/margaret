@@ -132,6 +132,10 @@ class SExpression < ASTInterface
         %Q{new: BigFloat "#{sign}#{number[3...]}"};
     end
 
+    def char_literal(char)
+        char;
+    end
+
     def string_literal(string)
         string;
     end

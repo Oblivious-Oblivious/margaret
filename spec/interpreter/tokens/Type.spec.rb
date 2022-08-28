@@ -20,7 +20,8 @@ describe Type do
         expect(Type::BIGINTEGER).to eq 104;
         expect(Type::BIGFLOAT).to eq 105;
 
-        expect(Type::STRING).to eq 111;
+        expect(Type::CHAR).to eq 111;
+        expect(Type::STRING).to eq 112;
     end
 
     it "contains non terminal literal types" do

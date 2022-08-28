@@ -166,6 +166,8 @@ class Parser
             ast.literal big_integer_literal(["+", "-"].include?(table.lookahead(1).value) ? table.consume.value : ast.empty);
         elsif table.lookahead(1).type == Type::BIGFLOAT or (["+", "-"].include?(table.lookahead(1).value) and table.lookahead(2).type == Type::BIGFLOAT)
             ast.literal big_float_literal(["+", "-"].include?(table.lookahead(1).value) ? table.consume.value : ast.empty);
+        elsif table.lookahead(1).type == Type::CHAR
+            ast.literal char_literal;
         elsif table.lookahead(1).type == Type::STRING
             ast.literal string_literal;
         elsif table.lookahead(1).type == Type::IDENTIFIER or (table.lookahead(1) == "@" and table.lookahead(2).type == Type::IDENTIFIER)
@@ -209,6 +211,10 @@ class Parser
 
     def big_float_literal(sign)
         ast.big_float_literal sign, table.ensure_type(Type::BIGFLOAT, "expected big float literal.");
+    end
+
+    def char_literal
+        ast.char_literal table.ensure_type(Type::CHAR, "expected character literal.");
     end
     
     def string_literal

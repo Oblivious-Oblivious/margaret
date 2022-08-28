@@ -35,8 +35,8 @@ describe Parser do
         it "parses time" do
             parse("(x = Time now)", "(= x now Time)");
             parse("(x = Time date_and_time_now)", "(= x date_and_time_now Time)");
-            parse("(x = Time from_string: '3:47:26 pm')", "(= x from_string: Time '3:47:26 pm')");
-            parse("(x = Time from_string: '22:47:26')", "(= x from_string: Time '22:47:26')");
+            parse(%Q{(x = Time from_string: "3:47:26 pm")}, %Q{(= x from_string: Time "3:47:26 pm")});
+            parse(%Q{(x = Time from_string: "22:47:26")}, %Q{(= x from_string: Time "22:47:26")});
             parse("(x = Time from_seconds: (60 * 60 * 4))", "(= x from_seconds: Time (* (* 60 60) 4))");
             parse("(x = Time millisecond_clock_value)", "(= x millisecond_clock_value Time)"); # Since midnight ?
             parse("(x = Time total_seconds)", "(= x total_seconds Time)"); # Since beginning

@@ -15,7 +15,8 @@ module Type
     BIGINTEGER = 104;
     BIGFLOAT = 105;
 
-    STRING = 111;
+    CHAR = 111;
+    STRING = 112;
 
     IDENTIFIER = 201;
 end

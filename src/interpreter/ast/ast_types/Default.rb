@@ -67,6 +67,9 @@ class Default < ASTInterface
     def big_float_literal(sign, number)
     end
 
+    def char_literal(char)
+    end
+
     def string_literal(string)
     end
 

@@ -23,6 +23,7 @@ class ASTInterface; extend Abstract;
                      :octal_literal,
                      :big_integer_literal,
                      :big_float_literal,
+                     :char_literal,
                      :string_literal,
                      :variable,
                      :list,

@@ -14,6 +14,7 @@ module Opcode
         "push_octal",
         "push_big_integer",
         "push_big_float",
+        "push_char",
         "push_string",
         "push_variable",
         "push_instance",

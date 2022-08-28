@@ -125,6 +125,10 @@ class Bytecode < ASTInterface
         ["push_big_float", %Q{"#{sign}#{number[3...]}"}];
     end
 
+    def char_literal(char)
+        ["push_char", char];
+    end
+
     def string_literal(string)
         ["push_string", string];
     end

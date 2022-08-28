@@ -72,7 +72,8 @@ describe Lexer do
             expect("?".matches(RegexMatchers::ID_SYMBOL)).to be true;
             expect("!".matches(RegexMatchers::ID_SYMBOL)).to be true;
             expect("{".matches(RegexMatchers::SYNTAX_SYMBOL)).to be true;
-            expect("'".matches(RegexMatchers::QUOTE)).to be true;
+            expect("'".matches(RegexMatchers::SINGLE_QUOTE)).to be true;
+            expect("\"".matches(RegexMatchers::DOUBLE_QUOTE)).to be true;
         end
     end
 
@@ -213,6 +214,13 @@ describe Lexer do
             expect(tokens.get(3).type).to eq Type::BIGFLOAT;
             expect(tokens.get(5).value).to eq "0bf2";
             expect(tokens.get(5).type).to eq Type::BIGFLOAT;
+        end
+
+        it "tokenizes character literals" do
+            l = Lexer.new "file.obl", "('a' puts)";
+            tokens = l.make_tokens;
+            expect(tokens.get(1).value).to eq "'a'";
+            expect(tokens.get(1).type).to eq Type::CHAR;
         end
 
         it "tokenizes string literals" do

@@ -196,8 +196,8 @@ describe Bytecode do
         opcodes("42 factorial and: (2 + 3)", ["push_integer", "42", "unary", "factorial", "push_2", "push_integer", "3", "binary", "+", "push_list", "1", "keyword", "and:", "1", "pop"]);
         opcodes("(list at: 3) + (list at: 5)", ["push_variable", "list", "push_integer", "3", "keyword", "at:", "1", "push_list", "1", "push_variable", "list", "push_integer", "5", "keyword", "at:", "1", "push_list", "1", "binary", "+", "pop"]);
         opcodes("arr add: 1 add: 2 add: 3", ["push_variable", "arr", "push_1", "keyword", "add:", "1", "push_variable", "arr", "push_2", "keyword", "add:", "1", "push_variable", "arr", "push_integer", "3", "keyword", "add:", "1", "push_list", "3", "pop"]);
-        opcodes("arr add: 'a' add: 'b' at: 3", ["push_variable", "arr", "push_string", "'a'", "push_string", "'b'", "push_integer", "3", "keyword", "add:add:at:", "3", "pop"]);
-        opcodes("arr add: 'a' at: 1 add: 'b' at: 2", ["push_variable", "arr", "push_string", "'a'", "push_1", "push_string", "'b'", "push_2", "keyword", "add:at:add:at:", "4", "pop"]);
+        opcodes("arr add: 'a' add: 'b' at: 3", ["push_variable", "arr", "push_char", "'a'", "push_char", "'b'", "push_integer", "3", "keyword", "add:add:at:", "3", "pop"]);
+        opcodes("arr add: 'a' at: 1 add: 'b' at: 2", ["push_variable", "arr", "push_char", "'a'", "push_1", "push_char", "'b'", "push_2", "keyword", "add:at:add:at:", "4", "pop"]);
     end
 
     it "emits for unary method definitions" do

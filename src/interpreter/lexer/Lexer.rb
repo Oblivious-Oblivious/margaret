@@ -16,7 +16,8 @@ module RegexMatchers
     ID_SYMBOL = ["!","?"];
     MESSAGE_SYMBOL = ID_SYMBOL + ["+","-","*","/","\\","~","<",">","=","@","%","|","&","^",";",".","`","$"];
     SYNTAX_SYMBOL = ["_", "(",")","[","]","{","}",",",":","#"];
-    QUOTE = ["\"","'"];
+    SINGLE_QUOTE = ["'"];
+    DOUBLE_QUOTE = ["\""];
 end
 
 class String
@@ -186,10 +187,24 @@ class Lexer
         end
     end
 
+    def tokenize_character(c)
+        final_char = c;
+        char = next_character;
+        if not char.matches(RegexMatchers::SINGLE_QUOTE)
+            final_char << char;
+            quote = next_character;
+            if quote == nil
+                return error "unterminated character literal";
+            end
+        end
+        final_char << quote;
+        Token.new final_char, Type::CHAR, lineno;
+    end
+
     def tokenize_string(c)
         final_string = c;
         c = next_character;
-        while not c.matches(RegexMatchers::QUOTE)
+        while not c.matches(RegexMatchers::DOUBLE_QUOTE)
             final_string << c;
             c = next_character;
             if c.matches(RegexMatchers::NEWLINE)
@@ -220,7 +235,9 @@ class Lexer
                 token_table << tokenize_message_symbol(c);
             elsif c.matches(RegexMatchers::SYNTAX_SYMBOL)
                 token_table << (Token.new c, Type::SYNTAX_SYMBOL, lineno);
-            elsif c.matches(RegexMatchers::QUOTE)
+            elsif c.matches(RegexMatchers::SINGLE_QUOTE)
+                token_table << tokenize_character(c);
+            elsif c.matches(RegexMatchers::DOUBLE_QUOTE)
                 token_table << tokenize_string(c);
             else
                 error "Unrecognized character";
