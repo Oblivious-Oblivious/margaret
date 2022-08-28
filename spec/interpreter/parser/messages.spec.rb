@@ -68,7 +68,7 @@ describe Parser do
                     if_true: ->{ out goto }
                     if_false: ->{ false return },
                 out = Label new
-            )", "(if_true:if_false: <= origin point params:function: Block () goto out params:function: Block () return false, = out new Label)");
+            )", "(if_true:if_false: <= origin point params:function: Proc () goto out params:function: Proc () return false, = out new Label)");
         end
     end
 end
