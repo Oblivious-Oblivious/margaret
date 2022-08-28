@@ -28,7 +28,7 @@ class Oblisp
 
     # TODO def self.EVAL(ast) -> AST traversal
     def self.EVAL(tokens)
-        Parser.new(tokens).analyse_syntax;
+        Parser.new(tokens, "bytecode").analyse_syntax;
     end
 
     def self.PRINT(evaluated)
@@ -59,5 +59,5 @@ class Oblisp
     end
 end
 
-# Oblisp.repl TRANSLATE_TO::INTERPRETER;
-Oblisp.run_file ARGV[0];
+Oblisp.repl TRANSLATE_TO::INTERPRETER;
+# Oblisp.run_file ARGV[0];
