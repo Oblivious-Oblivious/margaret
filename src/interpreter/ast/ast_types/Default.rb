@@ -88,7 +88,7 @@ class Default < ASTInterface
     def json_association(key, value)
     end
 
-    def proc_literal(param_list, function)
+    def block_literal(param_list, function)
     end
 
     def unary_method_definition(selector, function)

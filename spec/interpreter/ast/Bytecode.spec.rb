@@ -118,23 +118,23 @@ describe Bytecode do
         opcodes(%Q{{"a": 1, "b": 2, "c": 3}}, ["push_string", %Q{"a"}, "push_1", "keyword", "key:value:", "2", "push_string", %Q{"b"}, "push_2", "keyword", "key:value:", "2", "push_string", %Q{"c"}, "push_integer", "3", "keyword", "key:value:", "2", "push_hash", "3", "pop"]);
     end
 
-    it "emits for procs" do
-        opcodes("->{x = (x = 1, y = 2)}", ["STARTpush_proc", "push_list", "0", "push_1", "store", "x", "push_2", "store", "y", "push_list", "2", "store", "x", "ENDpush_proc", "pop"]);
+    it "emits for blocks" do
+        opcodes("->{x = (x = 1, y = 2)}", ["STARTpush_block", "push_list", "0", "push_1", "store", "x", "push_2", "store", "y", "push_list", "2", "store", "x", "ENDpush_block", "pop"]);
         opcodes("x = ->{
             v1, v2, (
                 v1 += 1,
                 v1 += 2,
                 v1 * v2
             )
-        }", ["STARTpush_proc", "push_variable", "v1", "push_variable", "v2", "push_list", "2", "push_variable", "v1", "push_1", "binary", "+=", "push_variable", "v1", "push_2", "binary", "+=", "push_variable", "v1", "push_variable", "v2", "binary", "*", "push_list", "3", "ENDpush_proc", "store", "x", "pop"]);
-        opcodes("->{42}", ["STARTpush_proc", "push_list", "0", "push_integer", "42", "ENDpush_proc", "pop"]);
-        opcodes("->{a | a puts}", ["STARTpush_proc", "push_variable", "a", "push_list", "1", "push_variable", "a", "unary", "puts", "ENDpush_proc", "pop"]);
-        opcodes("->{2 + 3}", ["STARTpush_proc", "push_list", "0", "push_2", "push_integer", "3", "binary", "+", "ENDpush_proc", "pop"]);
-        opcodes("->{(x = 1, y = 2, x + y)}", ["STARTpush_proc", "push_list", "0", "push_1", "store", "x", "push_2", "store", "y", "push_variable", "x", "push_variable", "y", "binary", "+", "push_list", "3", "ENDpush_proc", "pop"]);
-        opcodes("->{a, b | a + b}", ["STARTpush_proc", "push_variable", "a", "push_variable", "b", "push_list", "2", "push_variable", "a", "push_variable", "b", "binary", "+", "ENDpush_proc", "pop"]);
-        opcodes("->{a, a}", ["STARTpush_proc", "push_variable", "a", "push_list", "1", "push_variable", "a", "ENDpush_proc", "pop"]);
-        opcodes("->{x = 2} exec", ["STARTpush_proc", "push_list", "0", "push_2", "store", "x", "ENDpush_proc", "unary", "exec", "pop"]);
-        opcodes("->{param | param puts} value: 42", ["STARTpush_proc", "push_variable", "param", "push_list", "1", "push_variable", "param", "unary", "puts", "ENDpush_proc", "push_integer", "42", "keyword", "value:", "1", "pop"]);
+        }", ["STARTpush_block", "push_variable", "v1", "push_variable", "v2", "push_list", "2", "push_variable", "v1", "push_1", "binary", "+=", "push_variable", "v1", "push_2", "binary", "+=", "push_variable", "v1", "push_variable", "v2", "binary", "*", "push_list", "3", "ENDpush_block", "store", "x", "pop"]);
+        opcodes("->{42}", ["STARTpush_block", "push_list", "0", "push_integer", "42", "ENDpush_block", "pop"]);
+        opcodes("->{a | a puts}", ["STARTpush_block", "push_variable", "a", "push_list", "1", "push_variable", "a", "unary", "puts", "ENDpush_block", "pop"]);
+        opcodes("->{2 + 3}", ["STARTpush_block", "push_list", "0", "push_2", "push_integer", "3", "binary", "+", "ENDpush_block", "pop"]);
+        opcodes("->{(x = 1, y = 2, x + y)}", ["STARTpush_block", "push_list", "0", "push_1", "store", "x", "push_2", "store", "y", "push_variable", "x", "push_variable", "y", "binary", "+", "push_list", "3", "ENDpush_block", "pop"]);
+        opcodes("->{a, b | a + b}", ["STARTpush_block", "push_variable", "a", "push_variable", "b", "push_list", "2", "push_variable", "a", "push_variable", "b", "binary", "+", "ENDpush_block", "pop"]);
+        opcodes("->{a, a}", ["STARTpush_block", "push_variable", "a", "push_list", "1", "push_variable", "a", "ENDpush_block", "pop"]);
+        opcodes("->{x = 2} exec", ["STARTpush_block", "push_list", "0", "push_2", "store", "x", "ENDpush_block", "unary", "exec", "pop"]);
+        opcodes("->{param | param puts} value: 42", ["STARTpush_block", "push_variable", "param", "push_list", "1", "push_variable", "param", "unary", "puts", "ENDpush_block", "push_integer", "42", "keyword", "value:", "1", "pop"]);
     end
 
     it "emits for assignment" do
@@ -227,6 +227,6 @@ describe Bytecode do
         opcodes("#times: a_block => (
             remaining = self,
             ->{ (remaining = remaining - 1) >= 0 } while_true: ->{ a_block value }
-        )", ["STARTpush_keyword_method", %Q{"times:"}, "push_variable", "a_block", "push_list", "1", "push_variable", "self", "store", "remaining", "STARTpush_proc", "push_list", "0", "push_variable", "remaining", "push_1", "binary", "-", "store", "remaining", "push_list", "1", "push_0", "binary", ">=", "ENDpush_proc", "STARTpush_proc", "push_list", "0", "push_variable", "a_block", "unary", "value", "ENDpush_proc", "keyword", "while_true:", "1", "push_list", "2", "ENDpush_keyword_method", "pop"]);
+        )", ["STARTpush_keyword_method", %Q{"times:"}, "push_variable", "a_block", "push_list", "1", "push_variable", "self", "store", "remaining", "STARTpush_block", "push_list", "0", "push_variable", "remaining", "push_1", "binary", "-", "store", "remaining", "push_list", "1", "push_0", "binary", ">=", "ENDpush_block", "STARTpush_block", "push_list", "0", "push_variable", "a_block", "unary", "value", "ENDpush_block", "keyword", "while_true:", "1", "push_list", "2", "ENDpush_keyword_method", "pop"]);
     end
 end
