@@ -196,6 +196,7 @@ class Bytecode < ASTInterface
     def keyword_method_definition(selector, function)
         joined_selector = "";
         selector.each { |sel| joined_selector << sel[0] };
-        ["STARTpush_keyword_method", %Q{"#{joined_selector}"}, list(selector.map { |item| ["push_variable", item[1]] }), function, "ENDpush_keyword_method"];
+        params = list(selector.map { |item| ["push_variable", item[1]] });
+        ["STARTpush_keyword_method", %Q{"#{joined_selector}"}, params, function, "ENDpush_keyword_method"];
     end
 end
