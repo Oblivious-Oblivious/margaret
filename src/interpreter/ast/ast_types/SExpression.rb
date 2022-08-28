@@ -170,45 +170,36 @@ class SExpression < ASTInterface
         association(%Q{"#{key}"}, value);
     end
 
-    def block_literal(param_list, function)
-        res = "params:function: Block ";
+    def proc_literal(param_list, function)
+        res = "params:function: Proc ";
         res << list(param_list);
         res << " ";
         res << function;
     end
 
     def unary_method_definition(selector, function)
-        res = "selector:block: Method ";
+        res = "selector:proc: Method ";
         res << %Q{"#{selector}"};
         res << " ";
 
-        res << "params:function: Block ";
-        res << list([]);
-        res << " ";
-        res << function;
+        res << proc_literal([], function);
     end
 
     def binary_method_definition(selector, param, function)
-        res = "selector:block: Method ";
+        res = "selector:proc: Method ";
         res << %Q{"#{selector}"};
         res << " ";
 
-        res << "params:function: Block ";
-        res << list([param]);
-        res << " ";
-        res << function;
+        res << proc_literal([param], function);
     end
 
     def keyword_method_definition(selector, function)
-        res = "selector:block: Method ";
+        res = "selector:proc: Method ";
         res << %Q{"};
         selector.each { |keyword| res << keyword[0] };
         res << %Q{"};
         res << " ";
 
-        res << "params:function: Block ";
-        res << list(selector.map { |keyword| keyword[1] });
-        res << " ";
-        res << function;
+        res << proc_literal(selector.map { |keyword| keyword[1] }, function);
     end
 end

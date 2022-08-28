@@ -177,7 +177,7 @@ class Parser
         elsif table.lookahead(1) == "{"
             ast.literal hash_literal;
         elsif table.lookahead(1) == "->"
-            ast.literal block_literal;
+            ast.literal proc_literal;
         elsif table.lookahead(1) == "#"
             ast.literal method_definition_literal;
         end
@@ -278,25 +278,25 @@ class Parser
         end
     end
 
-    def block_literal
-        table.ensure_value "->", "missing '->' symbol on block literal.";
-        table.ensure_value "{", "missing opening curly on block literal.";
+    def proc_literal
+        table.ensure_value "->", "missing '->' symbol on proc literal.";
+        table.ensure_value "{", "missing opening curly on proc literal.";
 
         __params = [];
         while table.lookahead(1).type == Type::IDENTIFIER and (table.lookahead(2) == "," or table.lookahead(2) == "|")
-            __params << table.ensure_type(Type::IDENTIFIER, "expected identifier parameter on block.");
+            __params << table.ensure_type(Type::IDENTIFIER, "expected identifier parameter on proc.");
             if table.lookahead(1) != "}" and table.lookahead(1) != "|" and table.lookahead(1) != "eof"
-                table.ensure_value ",", "block parameters are separated by commas.";
+                table.ensure_value ",", "proc parameters are separated by commas.";
             end
         end
 
         if table.lookahead(1) == "|"
-            table.ensure_value "|", "missing '|' symbol on block literal.";
+            table.ensure_value "|", "missing '|' symbol on proc literal.";
         end
         function = translation_unit;
 
-        table.ensure_value "}", "missing closing curly on block literal.";
-        ast.block_literal __params, function;
+        table.ensure_value "}", "missing closing curly on proc literal.";
+        ast.proc_literal __params, function;
     end
 
     def method_definition_literal

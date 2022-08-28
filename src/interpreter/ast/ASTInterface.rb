@@ -30,7 +30,7 @@ class ASTInterface; extend Abstract;
                      :hash_literal,
                      :association,
                      :json_association,
-                     :block_literal,
+                     :proc_literal,
                      :unary_method_definition,
                      :binary_method_definition,
                      :keyword_method_definition;
