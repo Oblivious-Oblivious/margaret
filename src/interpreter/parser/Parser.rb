@@ -50,7 +50,7 @@ class Parser
 
     def assignment
         if table.lookahead(2) == "=" or (table.lookahead(1) == "@" and table.lookahead(3) == "=")
-            ast.assignment variable, table.ensure_value("=", "expected `=` on assignment message.");
+            ast.assignment variable(""), table.ensure_value("=", "expected `=` on assignment message.");
         else
             ast.empty;
         end
@@ -152,26 +152,29 @@ class Parser
     end
 
     def literal
-        if table.lookahead(1).type == Type::INTEGER or (["+", "-"].include?(table.lookahead(1).value) and table.lookahead(2).type == Type::INTEGER)
-            ast.literal integer_literal(["+", "-"].include?(table.lookahead(1).value) ? table.consume.value : ast.empty);
-        elsif table.lookahead(1).type == Type::FLOAT or (["+", "-"].include?(table.lookahead(1).value) and table.lookahead(2).type == Type::FLOAT)
-            ast.literal float_literal(["+", "-"].include?(table.lookahead(1).value) ? table.consume.value : ast.empty);
-        elsif table.lookahead(1).type == Type::BINARY or (["+", "-"].include?(table.lookahead(1).value) and table.lookahead(2).type == Type::BINARY)
-            ast.literal binary_literal(["+", "-"].include?(table.lookahead(1).value) ? table.consume.value : ast.empty);
-        elsif table.lookahead(1).type == Type::HEXADECIMAL or (["+", "-"].include?(table.lookahead(1).value) and table.lookahead(2).type == Type::HEXADECIMAL)
-            ast.literal hexadecimal_literal(["+", "-"].include?(table.lookahead(1).value) ? table.consume.value : ast.empty);
-        elsif table.lookahead(1).type == Type::OCTAL or (["+", "-"].include?(table.lookahead(1).value) and table.lookahead(2).type == Type::OCTAL)
-            ast.literal octal_literal(["+", "-"].include?(table.lookahead(1).value) ? table.consume.value : ast.empty);
-        elsif table.lookahead(1).type == Type::BIGINTEGER or (["+", "-"].include?(table.lookahead(1).value) and table.lookahead(2).type == Type::BIGINTEGER)
-            ast.literal big_integer_literal(["+", "-"].include?(table.lookahead(1).value) ? table.consume.value : ast.empty);
-        elsif table.lookahead(1).type == Type::BIGFLOAT or (["+", "-"].include?(table.lookahead(1).value) and table.lookahead(2).type == Type::BIGFLOAT)
-            ast.literal big_float_literal(["+", "-"].include?(table.lookahead(1).value) ? table.consume.value : ast.empty);
+        # TODO Convert sign into a unary `negate` message
+        sign = ["+", "-"].include?(table.lookahead(1).value) ? table.consume.value : ast.empty;
+
+        if table.lookahead(1).type == Type::INTEGER
+            ast.literal integer_literal(sign);
+        elsif table.lookahead(1).type == Type::FLOAT
+            ast.literal float_literal(sign);
+        elsif table.lookahead(1).type == Type::BINARY
+            ast.literal binary_literal(sign);
+        elsif table.lookahead(1).type == Type::HEXADECIMAL
+            ast.literal hexadecimal_literal(sign);
+        elsif table.lookahead(1).type == Type::OCTAL
+            ast.literal octal_literal(sign);
+        elsif table.lookahead(1).type == Type::BIGINTEGER
+            ast.literal big_integer_literal(sign);
+        elsif table.lookahead(1).type == Type::BIGFLOAT
+            ast.literal big_float_literal(sign);
         elsif table.lookahead(1).type == Type::CHAR
-            ast.literal char_literal;
+            ast.literal char_literal(sign);
         elsif table.lookahead(1).type == Type::STRING
             ast.literal string_literal;
         elsif table.lookahead(1).type == Type::IDENTIFIER or (table.lookahead(1) == "@" and table.lookahead(2).type == Type::IDENTIFIER)
-            ast.literal variable;
+            ast.literal variable(sign);
         elsif table.lookahead(1) == "("
             ast.literal list;
         elsif table.lookahead(1) == "["
@@ -213,19 +216,19 @@ class Parser
         ast.big_float_literal sign, table.ensure_type(Type::BIGFLOAT, "expected big float literal.");
     end
 
-    def char_literal
-        ast.char_literal table.ensure_type(Type::CHAR, "expected character literal.");
+    def char_literal(sign)
+        ast.char_literal sign, table.ensure_type(Type::CHAR, "expected character literal.");
     end
     
     def string_literal
         ast.string_literal table.ensure_type(Type::STRING, "expected string literal.");
     end
 
-    def variable
+    def variable(sign)
         if table.lookahead(1) == "@"
-            ast.variable table.ensure_value("@", "expected `@` on instance variable declaration."), table.ensure_type(Type::IDENTIFIER, "expected identifier on variable declaration.");
+            ast.variable sign, table.ensure_value("@", "expected `@` on instance variable declaration."), table.ensure_type(Type::IDENTIFIER, "expected identifier on variable declaration.");
         else
-            ast.variable "", table.ensure_type(Type::IDENTIFIER, "expected identifier on variable declaration.");
+            ast.variable sign, "", table.ensure_type(Type::IDENTIFIER, "expected identifier on variable declaration.");
         end
     end
 

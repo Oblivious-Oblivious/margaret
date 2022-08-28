@@ -132,16 +132,16 @@ class SExpression < ASTInterface
         %Q{new: BigFloat "#{sign}#{number[3...]}"};
     end
 
-    def char_literal(char)
-        char;
+    def char_literal(sign, char)
+        "#{sign}#{char}";
     end
 
     def string_literal(string)
         string;
     end
 
-    def variable(optional_instance_symbol, name)
-        "#{optional_instance_symbol}#{name}";
+    def variable(sign, optional_instance_symbol, name)
+        "#{sign}#{optional_instance_symbol}#{name}";
     end
 
     def list(unit_list)

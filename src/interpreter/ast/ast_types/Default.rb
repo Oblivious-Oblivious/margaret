@@ -67,13 +67,13 @@ class Default < ASTInterface
     def big_float_literal(sign, number)
     end
 
-    def char_literal(char)
+    def char_literal(sign, char)
     end
 
     def string_literal(string)
     end
 
-    def variable(optional_instance_symbol, name)
+    def variable(sign, optional_instance_symbol, name)
     end
 
     def list(unit_list)

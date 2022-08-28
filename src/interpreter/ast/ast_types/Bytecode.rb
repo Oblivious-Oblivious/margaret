@@ -125,17 +125,21 @@ class Bytecode < ASTInterface
         ["push_big_float", %Q{"#{sign}#{number[3...]}"}];
     end
 
-    def char_literal(char)
-        ["push_char", char];
+    def char_literal(sign, char)
+        ["push_char", "#{sign}#{char}"];
     end
 
     def string_literal(string)
         ["push_string", string];
     end
 
-    def variable(optional_instance_symbol, name)
+    def variable(sign, optional_instance_symbol, name)
         if optional_instance_symbol == "@"
-            ["push_instance", name];
+            if sign == "-"
+                ["push_instance", name, "unary", "negate"];
+            else
+                ["push_instance", name];
+            end
         elsif name == "nil"
             ["push_nil"];
         elsif name == "true"
@@ -143,7 +147,11 @@ class Bytecode < ASTInterface
         elsif name == "false"
             ["push_false"];
         else
-            ["push_variable", name];
+            if sign == "-"
+                ["push_instance", name, "unary", "negate"];
+            else
+                ["push_variable", name];
+            end
         end
     end
 
