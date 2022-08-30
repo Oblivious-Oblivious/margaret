@@ -80,8 +80,8 @@ describe Bytecode do
         opcodes("nil", ["push_nil", "pop"]);
         opcodes("true", ["push_true", "pop"]);
         opcodes("false", ["push_false", "pop"]);
-        opcodes("self", ["push_variable", "self", "pop"]);
-        opcodes("super", ["push_variable", "super", "pop"]);
+        opcodes("self", ["push_self", "pop"]);
+        opcodes("super", ["push_super", "pop"]);
     end
 
     it "emits for lists" do
@@ -131,6 +131,8 @@ describe Bytecode do
         opcodes("x = (y = 6) + 1", ["push_integer", "6", "store", "y", "push_list", "1", "push_1", "binary", "+", "store", "x", "pop"]);
         opcodes("@x = x + 2", ["push_variable", "x", "push_2", "binary", "+", "store_instance", "x", "pop"]);
         opcodes("a = b = (c = 42) + 12", ["push_integer", "42", "store", "c", "push_list", "1", "push_integer", "12", "binary", "+", "store", "b", "store", "a", "pop"]);
+        opcodes("a = -a", ["push_variable", "a", "unary", "negate", "store", "a", "pop"]);
+        opcodes("@a = -@a", ["push_instance", "a", "unary", "negate", "store_instance", "a", "pop"]);
     end
 
     it "emits for unary messages" do
@@ -189,8 +191,8 @@ describe Bytecode do
     end
 
     it "emits for unary method definitions" do
-        opcodes("#incr => self + 1",   ["STARTpush_unary_method", %Q{"incr"}, "push_variable", "self", "push_1", "binary", "+", "ENDpush_unary_method", "pop"]);
-        opcodes("#  incr => self + 1", ["STARTpush_unary_method", %Q{"incr"}, "push_variable", "self", "push_1", "binary", "+", "ENDpush_unary_method", "pop"]);
+        opcodes("#incr => self + 1",   ["STARTpush_unary_method", %Q{"incr"}, "push_self", "push_1", "binary", "+", "ENDpush_unary_method", "pop"]);
+        opcodes("#  incr => self + 1", ["STARTpush_unary_method", %Q{"incr"}, "push_self", "push_1", "binary", "+", "ENDpush_unary_method", "pop"]);
         opcodes("#is_empty? => true", ["STARTpush_unary_method", %Q{"is_empty?"}, "push_true", "ENDpush_unary_method", "pop"]);
         # opcodes("#(0) fact => 1");
         "
@@ -200,7 +202,7 @@ describe Bytecode do
     end
 
     it "emits for binary method definitions" do
-        opcodes("#** a_number => self raised_to: a_number", ["STARTpush_binary_method", %Q{"**"}, "push_variable", "a_number", "push_variable", "self", "push_variable", "a_number", "keyword", "raised_to:", "1", "ENDpush_binary_method", "pop"]);
+        opcodes("#** a_number => self raised_to: a_number", ["STARTpush_binary_method", %Q{"**"}, "push_variable", "a_number", "push_self", "push_variable", "a_number", "keyword", "raised_to:", "1", "ENDpush_binary_method", "pop"]);
         # opcodes("#(0) ** a_number => 0", "");
         # opcodes("#(0) ** (0) => nil", "");
     end
@@ -215,6 +217,6 @@ describe Bytecode do
         opcodes("#times: a_block => (
             remaining = self,
             ->{ (remaining = remaining - 1) >= 0 } while_true: ->{ a_block value }
-        )", ["STARTpush_keyword_method", %Q{"times:"}, "push_variable", "a_block", "push_list", "1", "push_variable", "self", "store", "remaining", "STARTpush_proc", "push_list", "0", "push_variable", "remaining", "push_1", "binary", "-", "store", "remaining", "push_list", "1", "push_0", "binary", ">=", "ENDpush_proc", "STARTpush_proc", "push_list", "0", "push_variable", "a_block", "unary", "value", "ENDpush_proc", "keyword", "while_true:", "1", "push_list", "2", "ENDpush_keyword_method", "pop"]);
+        )", ["STARTpush_keyword_method", %Q{"times:"}, "push_variable", "a_block", "push_list", "1", "push_self", "store", "remaining", "STARTpush_proc", "push_list", "0", "push_variable", "remaining", "push_1", "binary", "-", "store", "remaining", "push_list", "1", "push_0", "binary", ">=", "ENDpush_proc", "STARTpush_proc", "push_list", "0", "push_variable", "a_block", "unary", "value", "ENDpush_proc", "keyword", "while_true:", "1", "push_list", "2", "ENDpush_keyword_method", "pop"]);
     end
 end
