@@ -22,13 +22,6 @@ describe Parser do
             parse("-4_200", "-4200");
         end
 
-        it "parses big integer literals" do
-            parse("0bi42_000", %Q{new: BigInteger "42000"});
-            parse("-0bi42_000", %Q{new: BigInteger "-42000"});
-            parse("0bi42000", %Q{new: BigInteger "42000"});
-            parse("-0bi42000", %Q{new: BigInteger "-42000"});
-        end
-
         it "parses float literals" do
             parse("42.0", "42.0");
             parse("-42.0", "-42.0");
@@ -41,11 +34,6 @@ describe Parser do
             # parse("1.234E1", "12.34");
         end
 
-        it "parses big float literals" do
-            parse("0bf0.042", %Q{new: BigFloat "0.042"});
-            parse("-0bf0.042", %Q{new: BigFloat "-0.042"});
-        end
-        
         it "parses binary literals" do
             parse("0b0110", "0b0110");
             parse("0B10", "0b10");

@@ -13,13 +13,6 @@ describe Type do
         expect(Type::INTEGER).to eq 11;
         expect(Type::FLOAT).to eq 12;
 
-        expect(Type::BINARY).to eq 101;
-        expect(Type::HEXADECIMAL).to eq 102;
-        expect(Type::OCTAL).to eq 103;
-
-        expect(Type::BIGINTEGER).to eq 104;
-        expect(Type::BIGFLOAT).to eq 105;
-
         expect(Type::CHAR).to eq 111;
         expect(Type::STRING).to eq 112;
     end

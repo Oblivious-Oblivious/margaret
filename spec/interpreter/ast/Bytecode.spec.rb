@@ -40,44 +40,32 @@ describe Bytecode do
     end
 
     it "emits for binaries" do
-        opcodes("0b0110", ["push_binary", "0b0110", "pop"]);
-        opcodes("0B10", ["push_binary", "0b10", "pop"]);
-        opcodes("-0b0110", ["push_binary", "-0b0110", "pop"]);
-        opcodes("-0B10", ["push_binary", "-0b10", "pop"]);
+        opcodes("0b0110", ["push_integer", "0b0110", "pop"]);
+        opcodes("0B10", ["push_integer", "0b10", "pop"]);
+        opcodes("-0b0110", ["push_integer", "-0b0110", "pop"]);
+        opcodes("-0B10", ["push_integer", "-0b10", "pop"]);
         opcodes("(
             x = 0b0101 + 0b1011,
             x to_int puts,
-        )", ["push_binary", "0b0101", "push_binary", "0b1011", "binary", "+", "store", "x", "push_variable", "x", "unary", "to_int", "unary", "puts", "push_list", "2", "pop"]);
+        )", ["push_integer", "0b0101", "push_integer", "0b1011", "binary", "+", "store", "x", "push_variable", "x", "unary", "to_int", "unary", "puts", "push_list", "2", "pop"]);
     end
 
     it "emits for hexadecimals" do
-        opcodes("0xbeef", ["push_hexadecimal", "0xbeef", "pop"]);
-        opcodes("-0xbeEf", ["push_hexadecimal", "-0xbeef", "pop"]);
-        opcodes("0X0427", ["push_hexadecimal", "0x0427", "pop"]);
-        opcodes("-0X0427", ["push_hexadecimal", "-0x0427", "pop"]);
-        opcodes("x = 0xbeef to_bin to_int puts", ["push_hexadecimal", "0xbeef", "unary", "to_bin", "unary", "to_int", "unary", "puts", "store", "x", "pop"]);
-        opcodes("0xbeef - 0xabb2", ["push_hexadecimal", "0xbeef", "push_hexadecimal", "0xabb2", "binary", "-", "pop"]);
+        opcodes("0xbeef", ["push_integer", "0xbeef", "pop"]);
+        opcodes("-0xbeEf", ["push_integer", "-0xbeef", "pop"]);
+        opcodes("0X0427", ["push_integer", "0x0427", "pop"]);
+        opcodes("-0X0427", ["push_integer", "-0x0427", "pop"]);
+        opcodes("x = 0xbeef to_bin to_int puts", ["push_integer", "0xbeef", "unary", "to_bin", "unary", "to_int", "unary", "puts", "store", "x", "pop"]);
+        opcodes("0xbeef - 0xabb2", ["push_integer", "0xbeef", "push_integer", "0xabb2", "binary", "-", "pop"]);
     end
 
     it "emits for octals" do
-        opcodes("0o741", ["push_octal", "0o741", "pop"]);
-        opcodes("-0o741", ["push_octal", "-0o741", "pop"]);
-        opcodes("0O0210", ["push_octal", "0o0210", "pop"]);
-        opcodes("-0O0210", ["push_octal", "-0o0210", "pop"]);
-        opcodes("x = 0o751 to_hex to_bin to_int puts", ["push_octal", "0o751", "unary", "to_hex", "unary", "to_bin", "unary", "to_int", "unary", "puts", "store", "x", "pop"]);
-        opcodes("0O541 + 0o777", ["push_octal", "0o541", "push_octal", "0o777", "binary", "+", "pop"]);
-    end
-
-    it "emits for big integers" do
-        opcodes("0bi42_000", ["push_big_integer", %Q{"42000"}, "pop"]);
-        opcodes("-0bi42_000", ["push_big_integer", %Q{"-42000"}, "pop"]);
-        opcodes("0bi42000", ["push_big_integer", %Q{"42000"}, "pop"]);
-        opcodes("-0bi42000", ["push_big_integer", %Q{"-42000"}, "pop"]);
-    end
-
-    it "emits for big floats" do
-        opcodes("0bf0.042", ["push_big_float", %Q{"0.042"}, "pop"]);
-        opcodes("-0bf0.042", ["push_big_float", %Q{"-0.042"}, "pop"]);
+        opcodes("0o741", ["push_integer", "0o741", "pop"]);
+        opcodes("-0o741", ["push_integer", "-0o741", "pop"]);
+        opcodes("0O0210", ["push_integer", "0o0210", "pop"]);
+        opcodes("-0O0210", ["push_integer", "-0o0210", "pop"]);
+        opcodes("x = 0o751 to_hex to_bin to_int puts", ["push_integer", "0o751", "unary", "to_hex", "unary", "to_bin", "unary", "to_int", "unary", "puts", "store", "x", "pop"]);
+        opcodes("0O541 + 0o777", ["push_integer", "0o541", "push_integer", "0o777", "binary", "+", "pop"]);
     end
 
     it "emits for strings" do

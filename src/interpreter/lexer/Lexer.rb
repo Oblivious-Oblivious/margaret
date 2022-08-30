@@ -109,27 +109,6 @@ class Lexer
         Token.new final_number, type, lineno;
     end
 
-    def tokenize_big_integer(final_number, matcher, type)
-        c = next_character; # b
-        final_number << c.downcase;
-        tokenize_number_special(final_number, matcher, type);
-    end
-
-    def tokenize_big_float(final_number, matcher, type)
-        c = next_character;
-        final_number << c.downcase;
-        c = next_character;
-        final_number << c.downcase;
-        int_token = tokenize_integer(final_number);
-
-        c = peek_character(1);
-        if c == '.'
-            tokenize_number_special(int_token.value, RegexMatchers::NUMBER, Type::BIGFLOAT);
-        else
-            Token.new int_token.value, Type::BIGFLOAT, lineno;
-        end
-    end
-
     def tokenize_number(c)
         final_number = c;
         if c == '0'
@@ -137,17 +116,11 @@ class Lexer
             if c == '.'
                 tokenize_number_special(final_number, RegexMatchers::NUMBER, Type::FLOAT);
             elsif c == 'b' or c == 'B'
-                if peek_character(2) == 'i' or peek_character(2) == 'I'
-                    tokenize_big_integer(final_number, RegexMatchers::NUMBER, Type::BIGINTEGER);
-                elsif peek_character(2) == 'f' or peek_character(2) == 'F'
-                    tokenize_big_float(final_number, RegexMatchers::NUMBER, Type::BIGFLOAT);
-                else
-                    tokenize_number_special(final_number, RegexMatchers::BINARY, Type::BINARY);
-                end
+                tokenize_number_special(final_number, RegexMatchers::BINARY, Type::INTEGER);
             elsif c == 'x' or c == 'X'
-                tokenize_number_special(final_number, RegexMatchers::HEXADECIMAL, Type::HEXADECIMAL);
+                tokenize_number_special(final_number, RegexMatchers::HEXADECIMAL, Type::INTEGER);
             elsif c == 'o' or c == 'O'
-                tokenize_number_special(final_number, RegexMatchers::OCTAL, Type::OCTAL);
+                tokenize_number_special(final_number, RegexMatchers::OCTAL, Type::INTEGER);
             else
                 Token.new "0", Type::INTEGER, lineno;
             end

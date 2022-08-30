@@ -88,41 +88,22 @@ class Bytecode < ASTInterface
 
     def integer_literal(sign, number)
         case "#{sign}#{number}"
-        when "0", "-0", "+0"
+        # TODO Refactor to work with multiple zeros
+        when "0", "-0", "+0", "0b0", "-0b0", "+0b0", "0b00", "-0b00", "+0b00", "0o0", "-0o0", "+0o0", "0o000", "-0o000", "+0o000", "0x0", "-0x0", "+0x0", "0x00", "-0x00", "+0x00"
             ["push_0"];
-        when "1", "+1"
+        when "1", "+1", "0b1", "+0b1", "0b01", "+0b01", "0o1", "+0o1", "0o001", "+0o001", "0x1", "+0x1", "0x01", "+0x01"
             ["push_1"];
-        when "-1"
+        when "-1", "-0b1", "-0b01", "-0o1", "-0o001", "-0x1", "-0x01"
             ["push_minus_1"];
-        when "2", "+2"
+        when "2", "+2", "0b2", "+0b2", "0b02", "+0b02", "0o2", "+0o2", "0o002", "+0o002", "0x2", "+0x2", "0x02", "+0x02"
             ["push_2"];
         else
             ["push_integer", "#{sign}#{number}"];
         end
     end
-    
+
     def float_literal(sign, number)
         ["push_float", "#{sign}#{number}"];
-    end
-    
-    def binary_literal(sign, number)
-        ["push_binary", "#{sign}#{number}"];
-    end
-
-    def hexadecimal_literal(sign, number)
-        ["push_hexadecimal", "#{sign}#{number}"];
-    end
-
-    def octal_literal(sign, number)
-        ["push_octal", "#{sign}#{number}"];
-    end
-    
-    def big_integer_literal(sign, number)
-        ["push_big_integer", %Q{"#{sign}#{number[3...]}"}];
-    end
-
-    def big_float_literal(sign, number)
-        ["push_big_float", %Q{"#{sign}#{number[3...]}"}];
     end
 
     def char_literal(sign, char)

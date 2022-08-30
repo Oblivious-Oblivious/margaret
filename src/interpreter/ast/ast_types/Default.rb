@@ -52,21 +52,6 @@ class Default < ASTInterface
     def float_literal(sign, number)
     end
 
-    def binary_literal(sign, number)
-    end
-
-    def hexadecimal_literal(sign, number)
-    end
-
-    def octal_literal(sign, number)
-    end
-    
-    def big_integer_literal(sign, number)
-    end
-
-    def big_float_literal(sign, number)
-    end
-
     def char_literal(sign, char)
     end
 

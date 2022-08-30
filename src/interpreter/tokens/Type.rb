@@ -8,13 +8,6 @@ module Type
     INTEGER = 11;
     FLOAT = 12;
 
-    BINARY = 101;
-    HEXADECIMAL = 102;
-    OCTAL = 103;
-
-    BIGINTEGER = 104;
-    BIGFLOAT = 105;
-
     CHAR = 111;
     STRING = 112;
 

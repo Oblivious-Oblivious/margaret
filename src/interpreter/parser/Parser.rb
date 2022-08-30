@@ -155,20 +155,11 @@ class Parser
         # TODO Convert sign into a unary `negate` message
         sign = ["+", "-"].include?(table.lookahead(1).value) ? table.consume.value : ast.empty;
 
+        # TODO Add different integer sizes
         if table.lookahead(1).type == Type::INTEGER
             ast.literal integer_literal(sign);
         elsif table.lookahead(1).type == Type::FLOAT
             ast.literal float_literal(sign);
-        elsif table.lookahead(1).type == Type::BINARY
-            ast.literal binary_literal(sign);
-        elsif table.lookahead(1).type == Type::HEXADECIMAL
-            ast.literal hexadecimal_literal(sign);
-        elsif table.lookahead(1).type == Type::OCTAL
-            ast.literal octal_literal(sign);
-        elsif table.lookahead(1).type == Type::BIGINTEGER
-            ast.literal big_integer_literal(sign);
-        elsif table.lookahead(1).type == Type::BIGFLOAT
-            ast.literal big_float_literal(sign);
         elsif table.lookahead(1).type == Type::CHAR
             ast.literal char_literal(sign);
         elsif table.lookahead(1).type == Type::STRING
@@ -196,30 +187,10 @@ class Parser
         ast.float_literal sign, table.ensure_type(Type::FLOAT, "expected float literal.");
     end
 
-    def binary_literal(sign)
-        ast.binary_literal sign, table.ensure_type(Type::BINARY, "expected binary literal.");
-    end
-
-    def hexadecimal_literal(sign)
-        ast.hexadecimal_literal sign, table.ensure_type(Type::HEXADECIMAL, "expected hexadecimal literal.");
-    end
-
-    def octal_literal(sign)
-        ast.octal_literal sign, table.ensure_type(Type::OCTAL, "expected octal literal.");
-    end
-
-    def big_integer_literal(sign)
-        ast.big_integer_literal sign, table.ensure_type(Type::BIGINTEGER, "expected big integer literal.");
-    end
-
-    def big_float_literal(sign)
-        ast.big_float_literal sign, table.ensure_type(Type::BIGFLOAT, "expected big float literal.");
-    end
-
     def char_literal(sign)
         ast.char_literal sign, table.ensure_type(Type::CHAR, "expected character literal.");
     end
-    
+
     def string_literal
         ast.string_literal table.ensure_type(Type::STRING, "expected string literal.");
     end
