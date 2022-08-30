@@ -170,6 +170,8 @@ class Parser
             ast.literal c_function_declaration;
         elsif table.lookahead(1) == "#"
             ast.literal method_definition_literal;
+        else
+            ast.empty;
         end
     end
 
