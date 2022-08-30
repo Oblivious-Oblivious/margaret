@@ -35,7 +35,7 @@ class Parser
 
     def translation_unit
         optional_assignment_list = [];
-        while table.lookahead(2) == "=" or (table.lookahead(1) == "@" and table.lookahead(3) == "=")
+        while table.lookahead(2) == "=" or (table.lookahead(1) == "@" and table.lookahead(2).type == Type::IDENTIFIER and table.lookahead(3) == "=")
             optional_assignment_list << assignment;
         end
 
@@ -49,11 +49,7 @@ class Parser
     end
 
     def assignment
-        if table.lookahead(2) == "=" or (table.lookahead(1) == "@" and table.lookahead(3) == "=")
-            ast.assignment variable(""), table.ensure_value("=", "expected `=` on assignment message.");
-        else
-            ast.empty;
-        end
+        ast.assignment variable(""), table.ensure_value("=", "expected `=` on assignment message.");
     end
 
     def message
@@ -76,7 +72,7 @@ class Parser
     end
 
     def unary_selector
-        if table.lookahead(2) == ":" or ((table.lookahead(2) == "!" or table.lookahead(2) == "?") and table.lookahead(3) == ":")
+        if table.lookahead(1).type == Type::IDENTIFIER and (table.lookahead(2) == ":" or (table.lookahead(2).type == Type::ID_SYMBOL and table.lookahead(3) == ":"))
             ast.empty;
         elsif table.lookahead(1).type == Type::IDENTIFIER
             id = table.ensure_type(Type::IDENTIFIER, "expected identifier on unary selector.");
@@ -107,15 +103,11 @@ class Parser
     end
 
     def binary_selector
-        sel = "";
         if table.lookahead(1).type == Type::MESSAGE_SYMBOL
             sel = table.ensure_type(Type::MESSAGE_SYMBOL, "expected message symbol on binary selector.");
-        end
-
-        if sel == ""
-            ast.empty;
-        else
             ast.binary_selector sel, unary_message;
+        else
+            ast.empty;
         end
     end
 
@@ -135,7 +127,7 @@ class Parser
     end
 
     def keyword_selector
-        if table.lookahead(1).type == Type::IDENTIFIER and (table.lookahead(2) == ":" or ((table.lookahead(2) == "!" or table.lookahead(2) == "?") and table.lookahead(3) == ":"))
+        if table.lookahead(1).type == Type::IDENTIFIER and (table.lookahead(2) == ":" or (table.lookahead(2).type == Type::ID_SYMBOL and table.lookahead(3) == ":"))
             id = table.ensure_type(Type::IDENTIFIER, "expected identifier on keyword selector.");
             if table.lookahead(1).type == Type::ID_SYMBOL
                 optional_symbol = table.ensure_type(Type::ID_SYMBOL, "expected id symbol on keyword identifier.");
@@ -282,7 +274,7 @@ class Parser
     def method_definition_literal
         table.ensure_value "#", "missing '#' on method definition.";
 
-        if table.lookahead(1).type == Type::IDENTIFIER and (table.lookahead(2) == ":" or ((table.lookahead(2) == "!" or table.lookahead(2) == "?") and table.lookahead(3) == ":"))
+        if table.lookahead(1).type == Type::IDENTIFIER and (table.lookahead(2) == ":" or (table.lookahead(2).type == Type::ID_SYMBOL and table.lookahead(3) == ":"))
             keyword_method_definition;
         elsif table.lookahead(1).type == Type::IDENTIFIER
             unary_method_definition;
