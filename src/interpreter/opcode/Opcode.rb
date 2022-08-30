@@ -3,6 +3,8 @@ module Opcode
         "push_nil",
         "push_true",
         "push_false",
+        "push_self",
+        "push_super",
         "push_0",
         "push_1",
         "push_minus_1",
