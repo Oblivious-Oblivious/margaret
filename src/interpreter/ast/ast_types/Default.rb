@@ -79,6 +79,9 @@ class Default < ASTInterface
     def proc_literal(param_list, function)
     end
 
+    def c_function_declaration(return_type, name, params)
+    end
+
     def unary_method_definition(selector, function)
     end
 

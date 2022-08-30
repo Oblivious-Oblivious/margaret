@@ -22,6 +22,8 @@ module Opcode
 
         "STARTpush_unary_method",
         "ENDpush_unary_method",
+        "STARTpush_function_method",
+        "ENDpush_function_method",
         "STARTpush_binary_method",
         "ENDpush_binary_method",
         "STARTpush_keyword_method",

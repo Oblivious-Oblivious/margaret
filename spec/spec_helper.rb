@@ -22,6 +22,7 @@ require_relative "interpreter/parser/arithmetic.spec";
 require_relative "interpreter/parser/assignments.spec";
 require_relative "interpreter/parser/bitwise.spec";
 require_relative "interpreter/parser/booleans.spec";
+require_relative "interpreter/parser/c_functions.spec";
 require_relative "interpreter/parser/characters.spec";
 require_relative "interpreter/parser/classes.spec";
 require_relative "interpreter/parser/code_as_data.spec";

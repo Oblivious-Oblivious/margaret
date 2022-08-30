@@ -166,6 +166,8 @@ class Parser
             ast.literal hash_literal;
         elsif table.lookahead(1) == "->"
             ast.literal proc_literal;
+        elsif table.lookahead(1) == "#" and table.lookahead(2) == "#" and table.lookahead(3) == "#"
+            ast.literal c_function_declaration;
         elsif table.lookahead(1) == "#"
             ast.literal method_definition_literal;
         end
@@ -269,6 +271,29 @@ class Parser
 
         table.ensure_value "}", "missing closing curly on proc literal.";
         ast.proc_literal __params, function;
+    end
+
+    def c_function_declaration
+        table.ensure_value "#", "missing '###' on C function declaration.";
+        table.ensure_value "#", "missing '###' on C function declaration.";
+        table.ensure_value "#", "missing '###' on C function declaration.";
+        return_type = table.ensure_type(Type::IDENTIFIER, "expected identifier on C function return type.");
+        name = table.ensure_type(Type::IDENTIFIER, "expected identifier on C function name.");
+
+        __params = [];
+        table.ensure_value "(", "missing opening parenthesis on C function declaration";
+        while table.lookahead(1).type == Type::IDENTIFIER
+            __params << [
+                table.ensure_type(Type::IDENTIFIER, "expected identifier on C function param type."),
+                table.ensure_type(Type::IDENTIFIER, "expected identifier on C function param name.")
+            ];
+            if table.lookahead(1) != ")" and table.lookahead(1) != "eof"
+                table.ensure_value ",", "C function parameters should be separated by commas.";
+            end
+        end
+        table.ensure_value ")", "missing closing parenthesis on C function declaration";
+
+        ast.c_function_declaration return_type, name, __params;
     end
 
     def method_definition_literal

@@ -27,6 +27,7 @@ class ASTInterface; extend Abstract;
                      :association,
                      :json_association,
                      :proc_literal,
+                     :c_function_declaration,
                      :unary_method_definition,
                      :binary_method_definition,
                      :keyword_method_definition;

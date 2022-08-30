@@ -173,6 +173,9 @@ class Bytecode < ASTInterface
     def proc_literal(param_list, function)
         ["STARTpush_proc", list(param_list.map { |item| ["push_variable", item] }), function, "ENDpush_proc"];
     end
+
+    def c_function_declaration(return_type, name, params)
+    end
     
     def unary_method_definition(selector, function)
         ["STARTpush_unary_method", %Q{"#{selector}"}, function, "ENDpush_unary_method"];

@@ -161,6 +161,15 @@ class SExpression < ASTInterface
         res << function;
     end
 
+    def c_function_declaration(return_type, name, params)
+        res = "name:params:return_type: CLib ";
+        res << %Q{"#{name}"};
+        res << " ";
+        res << %Q{"#{return_type}"};
+        res << " ";
+        res << list(params.map { |param| %Q{c_type:c_name: CFunParam "#{param[0]}" "#{param[1]}"} });
+    end
+
     def unary_method_definition(selector, function)
         res = "selector:proc: Method ";
         res << %Q{"#{selector}"};
