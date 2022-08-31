@@ -6,7 +6,12 @@ class Bytecode < ASTInterface
     end
 
     def first_unit(unit)
-        [unit, "pop"].flatten;
+        unit = unit.flatten;
+        if unit != []
+            unit << "pop";
+        else
+            [];
+        end
     end
 
     def translation_unit(optional_assignment_list, expr)
