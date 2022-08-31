@@ -141,7 +141,6 @@ class Parser
     end
 
     def literal
-        # TODO Convert sign into a unary `negate` message
         sign = ["+", "-"].include?(table.lookahead(1).value) ? table.consume.value : ast.empty;
 
         # TODO Add different integer sizes
