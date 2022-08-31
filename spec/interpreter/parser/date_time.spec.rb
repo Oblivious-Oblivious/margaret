@@ -29,7 +29,7 @@ describe Parser do
             parse("(x = Date today to_seconds)", "(= x to_seconds (today Date))");
             parse("(x = Date today add_days: 10)", "(= x add_days: today Date 10)");
             parse("(x = Date today subtract_days: 10)", "(= x subtract_days: today Date 10)");
-            parse("(x = Date today subtract_date: (Date today))", "(= x subtract_date: today Date (today Date))");
+            parse("(x = Date today subtract_date: Date today)", "(= x subtract_date: today Date today Date)");
         end
 
         it "parses time" do
@@ -44,8 +44,8 @@ describe Parser do
             parse("(x = Time now seconds)", "(= x seconds (now Time))"); # Seconds past current minute
             parse("(x = Time now minutes)", "(= x minutes (now Time))"); # Minutes past current hour
             parse("(x = Time now hours)", "(= x hours (now Time))"); # Hours past midnight
-            parse("(x = Time now add_time: (Time now))", "(= x add_time: now Time (now Time))");
-            parse("(x = Time now subtract_time: (Time now))", "(= x subtract_time: now Time (now Time))");
+            parse("(x = Time now add_time: Time now)", "(= x add_time: now Time now Time)");
+            parse("(x = Time now subtract_time: Time now)", "(= x subtract_time: now Time now Time)");
             parse("(x = Time now as_seconds)", "(= x as_seconds (now Time))");
         end
     end
