@@ -171,19 +171,11 @@ class Bytecode < ASTInterface
     end
 
     def tensor_literal(item_list)
-        res = [];
-        item_list.each do |item|
-            res << item;
-        end
-        res << "push_tensor" << "#{item_list.size}";
+        [item_list, "push_tensor", "#{item_list.size}"];
     end
 
     def hash_literal(association_list)
-        res = [];
-        association_list.each do |association|
-            res << association;
-        end
-        res << "push_hash" << "#{association_list.size}";
+        [association_list, "push_hash", "#{association_list.size}"];
     end
 
     def association(key, value)
