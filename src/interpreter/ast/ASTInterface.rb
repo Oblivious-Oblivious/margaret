@@ -28,7 +28,7 @@ class ASTInterface; extend Abstract;
                      :float_literal,
                      :char_literal,
                      :string_literal,
-                     :tuple_literal,
+                     :tensor_literal,
                      :hash_literal,
                      :association,
                      :json_association;

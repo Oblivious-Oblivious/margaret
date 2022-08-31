@@ -170,12 +170,12 @@ class Bytecode < ASTInterface
         ["push_string", string];
     end
 
-    def tuple_literal(item_list)
+    def tensor_literal(item_list)
         res = [];
         item_list.each do |item|
             res << item;
         end
-        res << "push_tuple" << "#{item_list.size}";
+        res << "push_tensor" << "#{item_list.size}";
     end
 
     def hash_literal(association_list)

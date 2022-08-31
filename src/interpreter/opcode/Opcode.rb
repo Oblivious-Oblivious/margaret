@@ -16,7 +16,7 @@ module Opcode
         "push_variable",
         "push_instance",
         "push_list",
-        "push_tuple",
+        "push_tensor",
         "push_hash",
 
         "STARTpush_block",

@@ -24,7 +24,7 @@ class Parser
 
     def first_unit
         if table.lookahead(1) == ")";    list;          # Error opening
-        elsif table.lookahead(1) == "]"; tuple_literal; # Error opening
+        elsif table.lookahead(1) == "]"; tensor_literal; # Error opening
         elsif table.lookahead(1) == "}"; hash_literal;  # Error opening
         else
             result = translation_unit;
@@ -280,7 +280,7 @@ class Parser
         elsif table.lookahead(1).type == Type::STRING
             ast.literal string_literal;
         elsif table.lookahead(1) == "["
-            ast.literal tuple_literal;
+            ast.literal tensor_literal;
         elsif table.lookahead(1) == "{"
             ast.literal hash_literal;
         else
@@ -304,17 +304,17 @@ class Parser
         ast.string_literal table.ensure_type(Type::STRING, "expected string literal.");
     end
 
-    def tuple_literal
-        table.ensure_value "[", "missing opening bracket on tuple.";
+    def tensor_literal
+        table.ensure_value "[", "missing opening bracket on tensor.";
         
         __items = [];
         while table.lookahead(1) != "]" and table.lookahead(1) != "eof"
             __items << translation_unit;
-            table.ensure_value ",", "tuple items should be separated by commas." if table.lookahead(1) != "]" and table.lookahead(1) != "eof";
+            table.ensure_value ",", "tensor items should be separated by commas." if table.lookahead(1) != "]" and table.lookahead(1) != "eof";
         end
 
-        table.ensure_value "]", "missing closing bracket on tuple.";
-        ast.tuple_literal __items;
+        table.ensure_value "]", "missing closing bracket on tensor.";
+        ast.tensor_literal __items;
     end
 
     def hash_literal

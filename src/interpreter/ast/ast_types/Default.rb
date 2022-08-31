@@ -82,7 +82,7 @@ class Default < ASTInterface
     def string_literal(string)
     end
 
-    def tuple_literal(item_list)
+    def tensor_literal(item_list)
     end
 
     def hash_literal(association_list)

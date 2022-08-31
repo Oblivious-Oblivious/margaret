@@ -45,7 +45,7 @@ require_relative "interpreter/parser/procs.spec";
 require_relative "interpreter/parser/rational.spec";
 require_relative "interpreter/parser/strings.spec";
 require_relative "interpreter/parser/symbols.spec";
-require_relative "interpreter/parser/tuples.spec";
+require_relative "interpreter/parser/tensors.spec";
 
 # tokens
 require_relative "interpreter/tokens/Token.spec";

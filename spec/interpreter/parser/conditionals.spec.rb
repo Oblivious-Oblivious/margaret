@@ -22,7 +22,7 @@ describe Parser do
                         [2, 200],
                         [3, 300],
                     )
-            )", "(match: obj (new Tuple (1, 100), new Tuple (2, 200), new Tuple (3, 300)))");
+            )", "(match: obj (new Tensor (1, 100), new Tensor (2, 200), new Tensor (3, 300)))");
             parse(%Q{obj match: {"1": 100, "2": 200, "3": 300}}, %Q{match: obj new Hash ("1": 100, "2": 200, "3": 300)});
         end
     end

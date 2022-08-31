@@ -184,8 +184,8 @@ class SExpression < ASTInterface
         string;
     end
 
-    def tuple_literal(item_list)
-        "new Tuple #{list(item_list)}";
+    def tensor_literal(item_list)
+        "new Tensor #{list(item_list)}";
     end
 
     def hash_literal(association_list)

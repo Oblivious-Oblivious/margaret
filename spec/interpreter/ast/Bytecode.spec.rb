@@ -93,10 +93,10 @@ describe Bytecode do
         opcodes(%Q{(1, "2", c, 42.42)}, ["push_1", "push_string", %Q{"2"}, "push_variable", "c", "push_float", "42.42", "push_list", "4", "pop"]);
     end
 
-    it "emits for tuples" do
-        opcodes("[]", ["push_tuple", "0", "pop"]);
-        opcodes("[41, 42]", ["push_integer", "41", "push_integer", "42", "push_tuple", "2", "pop"]);
-        opcodes(%Q{[42, "str", var]}, ["push_integer", "42", "push_string", %Q{"str"}, "push_variable", "var", "push_tuple", "3", "pop"]);
+    it "emits for tensors" do
+        opcodes("[]", ["push_tensor", "0", "pop"]);
+        opcodes("[41, 42]", ["push_integer", "41", "push_integer", "42", "push_tensor", "2", "pop"]);
+        opcodes(%Q{[42, "str", var]}, ["push_integer", "42", "push_string", %Q{"str"}, "push_variable", "var", "push_tensor", "3", "pop"]);
     end
 
     it "emits for hashes" do
@@ -165,7 +165,7 @@ describe Bytecode do
         opcodes("((41 + 1), (42 + 0), (43 - 1))", ["push_integer", "41", "push_1", "binary", "+", "push_list", "1", "push_integer", "42", "push_0", "binary", "+", "push_list", "1", "push_integer", "43", "push_1", "binary", "-", "push_list", "1", "push_list", "3", "pop"]);
         opcodes("x = a + b * 2 - 5", ["push_variable", "a", "push_variable", "b", "binary", "+", "push_2", "binary", "*", "push_integer", "5", "binary", "-", "store", "x", "pop"]);
         opcodes("x << item", ["push_variable", "x", "push_variable", "item", "binary", "<<", "pop"]);
-        opcodes("[1, 2, 3] ++ [4, 5]", ["push_1", "push_2", "push_integer", "3", "push_tuple", "3", "push_integer", "4", "push_integer", "5", "push_tuple", "2", "binary", "++", "pop"]);
+        opcodes("[1, 2, 3] ++ [4, 5]", ["push_1", "push_2", "push_integer", "3", "push_tensor", "3", "push_integer", "4", "push_integer", "5", "push_tensor", "2", "binary", "++", "pop"]);
         opcodes("(4 + 3) * (5 + 6)", ["push_integer", "4", "push_integer", "3", "binary", "+", "push_list", "1", "push_integer", "5", "push_integer", "6", "binary", "+", "push_list", "1", "binary", "*", "pop"]);
     end
 

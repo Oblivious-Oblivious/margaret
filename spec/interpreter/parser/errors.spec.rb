@@ -7,8 +7,8 @@ describe Parser do
             error(")", "missing opening parenthesis on list.");
             error("(()", "missing closing parenthesis on list.");
             error("())", "reached end of program.");
-            error("[", "missing closing bracket on tuple.");
-            error("]", "missing opening bracket on tuple.");
+            error("[", "missing closing bracket on tensor.");
+            error("]", "missing opening bracket on tensor.");
             error("{", "missing closing curly brace on hash.");
             error("}", "missing opening curly brace on hash.");
             error("->", "missing opening curly on proc literal.");

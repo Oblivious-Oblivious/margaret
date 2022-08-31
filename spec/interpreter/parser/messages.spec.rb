@@ -33,7 +33,7 @@ describe Parser do
             parse("x = a + b * 2 - 5", "= x - (* (+ a b) 2) 5");
             parse("x << item", "<< x item");
             parse("x <<>>+-++-- 15", "<<>>+-++-- x 15");
-            parse("[1, 2, 3] ++ [4, 5]", "++ new Tuple (1, 2, 3) new Tuple (4, 5)");
+            parse("[1, 2, 3] ++ [4, 5]", "++ new Tensor (1, 2, 3) new Tensor (4, 5)");
             parse("(4 + 3) * (5 + 6)", "* (+ 4 3) (+ 5 6)");
         end
     
