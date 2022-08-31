@@ -82,6 +82,11 @@ class Bytecode < ASTInterface
         ["#{id}#{optional_symbol}#{delim}", obj];
     end
 
+    def c_function_declaration(return_type, name, params)
+        params = list(params.map { |param| ["push_variable", "CFunParam", "push_variable", "#{param[0]}", "push_variable", "#{param[1]}", "keyword", "c_type:c_name:", "2"] });
+        ["STARTpush_c_function", "push_variable", return_type, "push_variable", name, params, "ENDpush_c_function"]
+    end
+    
     def literal(unit)
         unit;
     end

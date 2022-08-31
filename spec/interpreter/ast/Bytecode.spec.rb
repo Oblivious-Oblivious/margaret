@@ -219,4 +219,9 @@ describe Bytecode do
             ->{ (remaining = remaining - 1) >= 0 } while_true: ->{ a_block value }
         )", ["STARTpush_keyword_method", %Q{"times:"}, "push_variable", "a_block", "push_list", "1", "push_self", "store", "remaining", "STARTpush_proc", "push_list", "0", "push_variable", "remaining", "push_1", "binary", "-", "store", "remaining", "push_list", "1", "push_0", "binary", ">=", "ENDpush_proc", "STARTpush_proc", "push_list", "0", "push_variable", "a_block", "unary", "value", "ENDpush_proc", "keyword", "while_true:", "1", "push_list", "2", "ENDpush_keyword_method", "pop"]);
     end
+
+    it "emits for C function definitions" do
+        opcodes("###void f()", ["STARTpush_c_function", "push_variable", "void", "push_variable", "f", "push_list", "0", "ENDpush_c_function", "pop"]);
+        opcodes("###void f2(int a, int b)", ["STARTpush_c_function", "push_variable", "void", "push_variable", "f2", "push_variable", "CFunParam", "push_variable", "int", "push_variable", "a", "keyword", "c_type:c_name:", "2", "push_variable", "CFunParam", "push_variable", "int", "push_variable", "b", "keyword", "c_type:c_name:", "2", "push_list", "2", "ENDpush_c_function", "pop"]);
+    end
 end
