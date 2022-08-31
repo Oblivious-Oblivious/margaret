@@ -34,18 +34,15 @@ class Parser
     end
 
     def translation_unit
+        ast.translation_unit assignment_chain, message;
+    end
+
+    def assignment_chain
         optional_assignment_list = [];
-        while table.lookahead(2) == "=" or (table.lookahead(1) == "@" and table.lookahead(2).type == Type::IDENTIFIER and table.lookahead(3) == "=")
+        while (table.lookahead(1).type == Type::IDENTIFIER and table.lookahead(2) == "=") or (table.lookahead(1) == "@" and table.lookahead(2).type == Type::IDENTIFIER and table.lookahead(3) == "=")
             optional_assignment_list << assignment;
         end
-
-        res = message;
-
-        if res == ""
-            ast.empty;
-        else
-            ast.translation_unit optional_assignment_list, res;
-        end
+        optional_assignment_list;
     end
 
     def assignment
