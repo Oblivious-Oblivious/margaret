@@ -101,9 +101,9 @@ describe Bytecode do
 
     it "emits for hashes" do
         opcodes("{}", ["push_hash", "0", "pop"]);
-        opcodes("{a: {}, b: {}}", ["push_string", %Q{"a"}, "push_hash", "0", "keyword", "key:value:", "2", "push_string", %Q{"b"}, "push_hash", "0", "keyword", "key:value:", "2", "push_hash", "2", "pop"]);
-        opcodes("{a: 1, b: 2, c: 3}", ["push_string", %Q{"a"}, "push_1", "keyword", "key:value:", "2", "push_string", %Q{"b"}, "push_2", "keyword", "key:value:", "2", "push_string", %Q{"c"}, "push_integer", "3", "keyword", "key:value:", "2", "push_hash", "3", "pop"]);
-        opcodes(%Q{{"a": 1, "b": 2, "c": 3}}, ["push_string", %Q{"a"}, "push_1", "keyword", "key:value:", "2", "push_string", %Q{"b"}, "push_2", "keyword", "key:value:", "2", "push_string", %Q{"c"}, "push_integer", "3", "keyword", "key:value:", "2", "push_hash", "3", "pop"]);
+        opcodes("{a: {}, b: {}}", ["push_variable", "Association", "push_string", %Q{"a"}, "push_hash", "0", "keyword", "key:value:", "2", "push_variable", "Association", "push_string", %Q{"b"}, "push_hash", "0", "keyword", "key:value:", "2", "push_hash", "2", "pop"]);
+        opcodes("{a: 1, b: 2, c: 3}", ["push_variable", "Association", "push_string", %Q{"a"}, "push_1", "keyword", "key:value:", "2", "push_variable", "Association", "push_string", %Q{"b"}, "push_2", "keyword", "key:value:", "2", "push_variable", "Association", "push_string", %Q{"c"}, "push_integer", "3", "keyword", "key:value:", "2", "push_hash", "3", "pop"]);
+        opcodes(%Q{{"a": 1, "b": 2, "c": 3}}, ["push_variable", "Association", "push_string", %Q{"a"}, "push_1", "keyword", "key:value:", "2", "push_variable", "Association", "push_string", %Q{"b"}, "push_2", "keyword", "key:value:", "2", "push_variable", "Association", "push_string", %Q{"c"}, "push_integer", "3", "keyword", "key:value:", "2", "push_hash", "3", "pop"]);
     end
 
     it "emits for procs" do
