@@ -20,7 +20,7 @@ describe Parser do
             parse("->{ (x = 1, y = 2, x + y) }", "params:function: Proc () (= x 1, = y 2, + x y)");
             parse("->{ param | param puts }", %Q{params:function: Proc (param) puts param});
             parse("->{ a | a }", %Q{params:function: Proc (a) a});
-            parse("->{ x = 2 } exec", "exec params:function: Proc () = x 2");
+            parse("->{ x = 2 } eval", "eval params:function: Proc () = x 2");
             parse("->{ param | param puts } value: 42", %Q{value: params:function: Proc (param) puts param 42});
         end
     end
