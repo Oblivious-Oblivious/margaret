@@ -82,11 +82,62 @@ class Bytecode < ASTInterface
         ["#{id}#{optional_symbol}#{delim}", obj];
     end
 
+    def expression(unit)
+        unit;
+    end
+
+    def list(unit_list)
+        res = [];
+        unit_list.each do |unit|
+            res << unit;
+        end
+        res << ["push_list", "#{unit_list.size}"];
+        res;
+    end
+
+    def variable(optional_instance_symbol, name)
+        if name == "nil"
+            ["push_nil"];
+        elsif name == "true"
+            ["push_true"];
+        elsif name == "false"
+            ["push_false"];
+        elsif name == "self"
+            ["push_self"];
+        elsif name == "super"
+            ["push_super"];
+        elsif optional_instance_symbol == "@"
+            ["push_instance", name];
+        else
+            ["push_variable", name]
+        end
+    end
+
+    # TODO New activation window on procs and methods
+    def proc_literal(param_list, function)
+        ["STARTpush_proc", list(param_list.map { |item| ["push_variable", item] }), function, "ENDpush_proc"];
+    end
+
     def c_function_declaration(return_type, name, params)
         params = list(params.map { |param| ["push_variable", "CFunParam", "push_variable", "#{param[0]}", "push_variable", "#{param[1]}", "keyword", "c_type:c_name:", "2"] });
         ["STARTpush_c_function", "push_variable", return_type, "push_variable", name, params, "ENDpush_c_function"]
     end
     
+    def unary_method_definition(selector, function)
+        ["STARTpush_unary_method", %Q{"#{selector}"}, function, "ENDpush_unary_method"];
+    end
+
+    def binary_method_definition(selector, param, function)
+        ["STARTpush_binary_method", %Q{"#{selector}"}, "push_variable", param, function, "ENDpush_binary_method"];
+    end
+    
+    def keyword_method_definition(selector, function)
+        joined_selector = "";
+        selector.each { |sel| joined_selector << sel[0] };
+        params = list(selector.map { |item| ["push_variable", item[1]] });
+        ["STARTpush_keyword_method", %Q{"#{joined_selector}"}, params, function, "ENDpush_keyword_method"];
+    end
+
     def literal(unit)
         unit;
     end
@@ -119,33 +170,6 @@ class Bytecode < ASTInterface
         ["push_string", string];
     end
 
-    def variable(optional_instance_symbol, name)
-        if name == "nil"
-            ["push_nil"];
-        elsif name == "true"
-            ["push_true"];
-        elsif name == "false"
-            ["push_false"];
-        elsif name == "self"
-            ["push_self"];
-        elsif name == "super"
-            ["push_super"];
-        elsif optional_instance_symbol == "@"
-            ["push_instance", name];
-        else
-            ["push_variable", name]
-        end
-    end
-
-    def list(unit_list)
-        res = [];
-        unit_list.each do |unit|
-            res << unit;
-        end
-        res << ["push_list", "#{unit_list.size}"];
-        res;
-    end
-
     def tuple_literal(item_list)
         res = [];
         item_list.each do |item|
@@ -168,28 +192,5 @@ class Bytecode < ASTInterface
 
     def json_association(key, value)
         ["push_variable", "Association", "push_string", %Q{"#{key}"}, value, "keyword", "key:value:", "2"];
-    end
-
-    # TODO New activation window on procs and methods
-    def proc_literal(param_list, function)
-        ["STARTpush_proc", list(param_list.map { |item| ["push_variable", item] }), function, "ENDpush_proc"];
-    end
-
-    def c_function_declaration(return_type, name, params)
-    end
-    
-    def unary_method_definition(selector, function)
-        ["STARTpush_unary_method", %Q{"#{selector}"}, function, "ENDpush_unary_method"];
-    end
-
-    def binary_method_definition(selector, param, function)
-        ["STARTpush_binary_method", %Q{"#{selector}"}, "push_variable", param, function, "ENDpush_binary_method"];
-    end
-    
-    def keyword_method_definition(selector, function)
-        joined_selector = "";
-        selector.each { |sel| joined_selector << sel[0] };
-        params = list(selector.map { |item| ["push_variable", item[1]] });
-        ["STARTpush_keyword_method", %Q{"#{joined_selector}"}, params, function, "ENDpush_keyword_method"];
     end
 end

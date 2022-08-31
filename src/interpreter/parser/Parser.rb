@@ -58,14 +58,14 @@ class Parser
         sel = __chain_of { unary_selector };
 
         if sel == []
-            ast.literal obj;
+            ast.expression obj;
         else
             ast.unary_message(obj, sel);
         end
     end
 
     def unary_object
-        ast.unary_object literal;
+        ast.unary_object expression;
     end
 
     def unary_selector
@@ -89,7 +89,7 @@ class Parser
         sel = __chain_of { binary_selector };
 
         if sel == []
-            ast.literal obj;
+            ast.expression obj;
         else
             ast.binary_message(obj, sel);
         end
@@ -113,7 +113,7 @@ class Parser
         sel = __chain_of { keyword_selector };
 
         if sel == []
-            ast.literal obj;
+            ast.expression obj;
         else
             ast.keyword_message(obj, sel);
         end
@@ -140,58 +140,19 @@ class Parser
         end
     end
 
-    def literal
-        sign = ["+", "-"].include?(table.lookahead(1).value) ? table.consume.value : ast.empty;
-
-        # TODO Add different integer sizes
-        if table.lookahead(1).type == Type::INTEGER
-            ast.literal integer_literal(sign);
-        elsif table.lookahead(1).type == Type::FLOAT
-            ast.literal float_literal(sign);
-        elsif table.lookahead(1).type == Type::CHAR
-            ast.literal char_literal(sign);
-        elsif table.lookahead(1).type == Type::STRING
-            ast.literal string_literal;
+    def expression
+        if table.lookahead(1) == "("
+            ast.expression list;
         elsif table.lookahead(1).type == Type::IDENTIFIER or (table.lookahead(1) == "@" and table.lookahead(2).type == Type::IDENTIFIER)
-            ast.literal variable;
-        elsif table.lookahead(1) == "("
-            ast.literal list;
-        elsif table.lookahead(1) == "["
-            ast.literal tuple_literal;
-        elsif table.lookahead(1) == "{"
-            ast.literal hash_literal;
+            ast.expression variable;
         elsif table.lookahead(1) == "->"
             ast.literal proc_literal;
         elsif table.lookahead(1) == "#" and table.lookahead(2) == "#" and table.lookahead(3) == "#"
-            ast.literal c_function_declaration;
+            ast.expression c_function_declaration;
         elsif table.lookahead(1) == "#"
-            ast.literal method_definition_literal;
+            ast.expression method_definition_literal;
         else
-            ast.empty;
-        end
-    end
-
-    def integer_literal(sign)
-        ast.integer_literal sign, table.ensure_type(Type::INTEGER, "expected integer literal.");
-    end
-
-    def float_literal(sign)
-        ast.float_literal sign, table.ensure_type(Type::FLOAT, "expected float literal.");
-    end
-
-    def char_literal(sign)
-        ast.char_literal sign, table.ensure_type(Type::CHAR, "expected character literal.");
-    end
-
-    def string_literal
-        ast.string_literal table.ensure_type(Type::STRING, "expected string literal.");
-    end
-
-    def variable
-        if table.lookahead(1) == "@"
-            ast.variable table.ensure_value("@", "expected `@` on instance variable declaration."), table.ensure_type(Type::IDENTIFIER, "expected identifier on variable declaration.");
-        else
-            ast.variable "", table.ensure_type(Type::IDENTIFIER, "expected identifier on variable declaration.");
+            literal;
         end
     end
 
@@ -208,45 +169,11 @@ class Parser
         ast.list __items;
     end
 
-    def tuple_literal
-        table.ensure_value "[", "missing opening bracket on tuple.";
-        
-        __items = [];
-        while table.lookahead(1) != "]" and table.lookahead(1) != "eof"
-            __items << translation_unit;
-            table.ensure_value ",", "tuple items should be separated by commas." if table.lookahead(1) != "]" and table.lookahead(1) != "eof";
-        end
-
-        table.ensure_value "]", "missing closing bracket on tuple.";
-        ast.tuple_literal __items;
-    end
-
-    def hash_literal
-        table.ensure_value "{", "missing opening curly brace on hash.";
-        
-        __items = [];
-        while table.lookahead(1) != "}" and table.lookahead(1) != "eof"
-            __items << association_literal;
-            table.ensure_value ",", "keys should be separated by commas." if table.lookahead(1) != "}" and table.lookahead(1) != "eof";
-        end
-        
-        table.ensure_value "}", "missing closing curly brace on hash.";
-        ast.hash_literal __items;
-    end
-
-    def association_literal
-        if table.lookahead(1).type == Type::IDENTIFIER
-            key = table.ensure_type(Type::IDENTIFIER, "expected identifier on association literal.");
-            table.ensure_value ":", "hash keys should be denoted by colons.";
-            value = translation_unit;
-            ast.json_association key, value;
-        elsif table.lookahead(1).type == Type::STRING
-            key = string_literal;
-            table.ensure_value ":", "hash keys should be denoted by colons.";
-            value = translation_unit;
-            ast.association key, value;
+    def variable
+        if table.lookahead(1) == "@"
+            ast.variable table.ensure_value("@", "expected `@` on instance variable declaration."), table.ensure_type(Type::IDENTIFIER, "expected identifier on variable declaration.");
         else
-            ast.empty;
+            ast.variable "", table.ensure_type(Type::IDENTIFIER, "expected identifier on variable declaration.");
         end
     end
 
@@ -338,5 +265,84 @@ class Parser
         table.ensure_value "=>", "missing '=>' on keyword method definition.";
         function = translation_unit;
         ast.keyword_method_definition selector, function;
+    end
+
+    def literal
+        sign = ["+", "-"].include?(table.lookahead(1).value) ? table.consume.value : ast.empty;
+
+        # TODO Add different integer sizes
+        if table.lookahead(1).type == Type::INTEGER
+            ast.literal integer_literal(sign);
+        elsif table.lookahead(1).type == Type::FLOAT
+            ast.literal float_literal(sign);
+        elsif table.lookahead(1).type == Type::CHAR
+            ast.literal char_literal(sign);
+        elsif table.lookahead(1).type == Type::STRING
+            ast.literal string_literal;
+        elsif table.lookahead(1) == "["
+            ast.literal tuple_literal;
+        elsif table.lookahead(1) == "{"
+            ast.literal hash_literal;
+        else
+            ast.empty;
+        end
+    end
+
+    def integer_literal(sign)
+        ast.integer_literal sign, table.ensure_type(Type::INTEGER, "expected integer literal.");
+    end
+
+    def float_literal(sign)
+        ast.float_literal sign, table.ensure_type(Type::FLOAT, "expected float literal.");
+    end
+
+    def char_literal(sign)
+        ast.char_literal sign, table.ensure_type(Type::CHAR, "expected character literal.");
+    end
+
+    def string_literal
+        ast.string_literal table.ensure_type(Type::STRING, "expected string literal.");
+    end
+
+    def tuple_literal
+        table.ensure_value "[", "missing opening bracket on tuple.";
+        
+        __items = [];
+        while table.lookahead(1) != "]" and table.lookahead(1) != "eof"
+            __items << translation_unit;
+            table.ensure_value ",", "tuple items should be separated by commas." if table.lookahead(1) != "]" and table.lookahead(1) != "eof";
+        end
+
+        table.ensure_value "]", "missing closing bracket on tuple.";
+        ast.tuple_literal __items;
+    end
+
+    def hash_literal
+        table.ensure_value "{", "missing opening curly brace on hash.";
+        
+        __items = [];
+        while table.lookahead(1) != "}" and table.lookahead(1) != "eof"
+            __items << association_literal;
+            table.ensure_value ",", "keys should be separated by commas." if table.lookahead(1) != "}" and table.lookahead(1) != "eof";
+        end
+        
+        table.ensure_value "}", "missing closing curly brace on hash.";
+        ast.hash_literal __items;
+    end
+
+    def association_literal
+        if table.lookahead(1).type == Type::IDENTIFIER
+            key = table.ensure_type(Type::IDENTIFIER, "expected identifier on association literal.");
+            table.ensure_value ":", "hash keys should be denoted by colons.";
+            value = translation_unit;
+            ast.json_association key, value;
+        elsif table.lookahead(1).type == Type::STRING
+            key = string_literal;
+            table.ensure_value ":", "hash keys should be denoted by colons.";
+            value = translation_unit;
+            ast.association key, value;
+        else
+            ast.empty;
+        end
     end
 end

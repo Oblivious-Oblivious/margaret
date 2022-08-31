@@ -43,37 +43,13 @@ class Default < ASTInterface
     def keyword_selector(id, optional_symbol, delim, obj)
     end
 
-    def literal(unit)
-    end
-
-    def integer_literal(sign, number)
-    end
-
-    def float_literal(sign, number)
-    end
-
-    def char_literal(sign, char)
-    end
-
-    def string_literal(string)
-    end
-
-    def variable(optional_instance_symbol, name)
+    def expression(unit)
     end
 
     def list(unit_list)
     end
 
-    def tuple_literal(item_list)
-    end
-
-    def hash_literal(association_list)
-    end
-
-    def association(key, value)
-    end
-
-    def json_association(key, value)
+    def variable(optional_instance_symbol, name)
     end
 
     def proc_literal(param_list, function)
@@ -89,5 +65,32 @@ class Default < ASTInterface
     end
 
     def keyword_method_definition(selector, function)
+    end
+
+    def literal(unit)
+    end
+
+    def integer_literal(sign, number)
+    end
+
+    def float_literal(sign, number)
+    end
+
+    def char_literal(sign, char)
+    end
+
+    def string_literal(string)
+    end
+
+    def tuple_literal(item_list)
+    end
+
+    def hash_literal(association_list)
+    end
+
+    def association(key, value)
+    end
+
+    def json_association(key, value)
     end
 end

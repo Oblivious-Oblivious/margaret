@@ -100,28 +100,8 @@ class SExpression < ASTInterface
         ["#{id}#{optional_symbol}#{delim}", obj];
     end
 
-    def literal(unit)
+    def expression(unit)
         unit;
-    end
-
-    def integer_literal(sign, number)
-        "#{sign}#{number}";
-    end
-
-    def float_literal(sign, number)
-        "#{sign}#{number}";
-    end
-
-    def char_literal(sign, char)
-        "#{sign}#{char}";
-    end
-
-    def string_literal(string)
-        string;
-    end
-
-    def variable(optional_instance_symbol, name)
-        "#{optional_instance_symbol}#{name}";
     end
 
     def list(unit_list)
@@ -138,20 +118,8 @@ class SExpression < ASTInterface
         res;
     end
 
-    def tuple_literal(item_list)
-        "new Tuple #{list(item_list)}";
-    end
-
-    def hash_literal(association_list)
-        "new Hash #{list(association_list)}";
-    end
-
-    def association(key, value)
-        "#{key}: #{value}";
-    end
-
-    def json_association(key, value)
-        association(%Q{"#{key}"}, value);
+    def variable(optional_instance_symbol, name)
+        "#{optional_instance_symbol}#{name}";
     end
 
     def proc_literal(param_list, function)
@@ -194,5 +162,41 @@ class SExpression < ASTInterface
         res << " ";
 
         res << proc_literal(selector.map { |keyword| keyword[1] }, function);
+    end
+
+    def literal(unit)
+        unit;
+    end
+
+    def integer_literal(sign, number)
+        "#{sign}#{number}";
+    end
+
+    def float_literal(sign, number)
+        "#{sign}#{number}";
+    end
+
+    def char_literal(sign, char)
+        "#{sign}#{char}";
+    end
+
+    def string_literal(string)
+        string;
+    end
+
+    def tuple_literal(item_list)
+        "new Tuple #{list(item_list)}";
+    end
+
+    def hash_literal(association_list)
+        "new Hash #{list(association_list)}";
+    end
+
+    def association(key, value)
+        "#{key}: #{value}";
+    end
+
+    def json_association(key, value)
+        association(%Q{"#{key}"}, value);
     end
 end
