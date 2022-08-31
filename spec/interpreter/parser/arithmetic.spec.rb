@@ -46,9 +46,9 @@ describe Parser do
             parse("(x = 0.7 arcsin)", "(= x arcsin 0.7)");
             parse("(x = 0.7 arccos)", "(= x arccos 0.7)");
             parse("(x = 0.7 arctan)", "(= x arctan 0.7)");
-            parse("(x = (10, 20) max)", "(= x max (10, 20))");
-            parse("(x = (10, 20) min)", "(= x min (10, 20))");
-            parse("(x = (0, 100) random)", "(= x random (0, 100))");
+            parse("(x = [10, 20] max)", "(= x max [10, 20])");
+            parse("(x = [10, 20] min)", "(= x min [10, 20])");
+            parse("(x = [0, 100] random)", "(= x random [0, 100])");
 
             parse("(x = Float PI)", "(= x PI Float)");
             parse("(x = Float E)", "(= x E Float)");

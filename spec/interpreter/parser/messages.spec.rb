@@ -33,7 +33,7 @@ describe Parser do
             parse("x = a + b * 2 - 5", "= x - (* (+ a b) 2) 5");
             parse("x << item", "<< x item");
             parse("x <<>>+-++-- 15", "<<>>+-++-- x 15");
-            parse("[1, 2, 3] ++ [4, 5]", "++ new Tensor (1, 2, 3) new Tensor (4, 5)");
+            parse("[1, 2, 3] ++ [4, 5]", "++ [1, 2, 3] [4, 5]");
             parse("(4 + 3) * (5 + 6)", "* (+ 4 3) (+ 5 6)");
         end
     
@@ -68,7 +68,7 @@ describe Parser do
                     if_true: ->{ out goto }
                     if_false: ->{ false return },
                 out = Label new
-            )", "(if_true:if_false: <= origin point params:function: Proc () goto out params:function: Proc () return false, = out new Label)");
+            )", "(if_true:if_false: <= origin point params:function: Proc [] goto out params:function: Proc [] return false, = out new Label)");
         end
     end
 end

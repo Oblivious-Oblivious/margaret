@@ -3,13 +3,13 @@ require_relative "_parser_helpers";
 describe Parser do
     context "on associations hashes" do
         it "parses hash literals" do
-            parse("({})", "(new Hash ())");
-            parse("({a: {}, b: {}})", %Q{(new Hash ("a": new Hash (), "b": new Hash ()))});
-            parse("({a: 1, b: 2, c: 3})", %Q{(new Hash ("a": 1, "b": 2, "c": 3))});
-            parse(%Q{{"a": 1, "b": 2, "c": 3}}, %Q{new Hash ("a": 1, "b": 2, "c": 3)});
-            parse(%Q{({"k1": "v1", "k2": "v2", "k3": "v3"})}, %Q{(new Hash ("k1": "v1", "k2": "v2", "k3": "v3"))});
-            parse("{x: {a: 1, b: 2}, y: {c: 3, d: 4}}", %Q{new Hash ("x": new Hash ("a": 1, "b": 2), "y": new Hash ("c": 3, "d": 4))});
-            parse("{a: 42 factorial, b: 2 + 3, c: 41 plus: 1, d: (42 incr decr, 41 incr)}", %Q{new Hash ("a": factorial 42, "b": + 2 3, "c": plus: 41 1, "d": (decr (incr 42), incr 41))});
+            parse("({})", "({})");
+            parse("({a: {}, b: {}})", %Q{({"a": {}, "b": {}})});
+            parse("({a: 1, b: 2, c: 3})", %Q{({"a": 1, "b": 2, "c": 3})});
+            parse(%Q{{"a": 1, "b": 2, "c": 3}}, %Q{{"a": 1, "b": 2, "c": 3}});
+            parse(%Q{({"k1": "v1", "k2": "v2", "k3": "v3"})}, %Q{({"k1": "v1", "k2": "v2", "k3": "v3"})});
+            parse("{x: {a: 1, b: 2}, y: {c: 3, d: 4}}", %Q{{"x": {"a": 1, "b": 2}, "y": {"c": 3, "d": 4}}});
+            parse("{a: 42 factorial, b: 2 + 3, c: 41 plus: 1, d: (42 incr decr, 41 incr)}", %Q{{"a": factorial 42, "b": + 2 3, "c": plus: 41 1, "d": (decr (incr 42), incr 41)}});
         end
 
         it "parses hashes" do
@@ -22,9 +22,9 @@ describe Parser do
             parse(%Q{(b = x includes_key: "a")}, %Q{(= b includes_key: x "a")});
             parse("(x keys puts)", "(puts (keys x))");
             parse("(x values puts)", "(puts (values x))");
-            parse("(x each_key: ->{a | a puts})", %Q{(each_key: x params:function: Proc (a) puts a)});
-            parse("(x each_value: ->{a | a puts})", %Q{(each_value: x params:function: Proc (a) puts a)});
-            parse("(x each: ->{a | a puts})", %Q{(each: x params:function: Proc (a) puts a)}); # Prints hash associations
+            parse("(x each_key: ->{a | a puts})", %Q{(each_key: x params:function: Proc [a] puts a)});
+            parse("(x each_value: ->{a | a puts})", %Q{(each_value: x params:function: Proc [a] puts a)});
+            parse("(x each: ->{a | a puts})", %Q{(each: x params:function: Proc [a] puts a)}); # Prints hash associations
         end
     end
 end

@@ -16,7 +16,7 @@ class ASTInterface; extend Abstract;
                      :keyword_object,
                      :keyword_selector,
                      :expression,
-                     :list,
+                     :group,
                      :variable,
                      :literal,
                      :proc_literal,

@@ -23,9 +23,9 @@ class Parser
     end
 
     def first_unit
-        if table.lookahead(1) == ")";    list;          # Error opening
+        if table.lookahead(1) == ")";    group;          # Error opening
         elsif table.lookahead(1) == "]"; tensor_literal; # Error opening
-        elsif table.lookahead(1) == "}"; hash_literal;  # Error opening
+        elsif table.lookahead(1) == "}"; hash_literal;   # Error opening
         else
             result = translation_unit;
             table.ensure_value "eof", "reached end of program.";
@@ -142,9 +142,10 @@ class Parser
 
     def expression
         if table.lookahead(1) == "("
-            ast.expression list;
+            ast.expression group;
         elsif table.lookahead(1).type == Type::IDENTIFIER or (table.lookahead(1) == "@" and table.lookahead(2).type == Type::IDENTIFIER)
             ast.expression variable;
+        # TODO procs, methods and functions return tensors of bytecodes
         elsif table.lookahead(1) == "->"
             ast.literal proc_literal;
         elsif table.lookahead(1) == "#" and table.lookahead(2) == "#" and table.lookahead(3) == "#"
@@ -156,17 +157,17 @@ class Parser
         end
     end
 
-    def list
-        table.ensure_value "(", "missing opening parenthesis on list.";
+    def group
+        table.ensure_value "(", "missing opening parenthesis on group.";
         
         __items = [];
         while table.lookahead(1) != ")" and table.lookahead(1) != "eof"
             __items << translation_unit;
-            table.ensure_value ",", "list items should be separated by commas." if table.lookahead(1) != ")" and table.lookahead(1) != "eof";
+            table.ensure_value ",", "grouped items should be separated by commas." if table.lookahead(1) != ")" and table.lookahead(1) != "eof";
         end
         
-        table.ensure_value ")", "missing closing parenthesis on list.";
-        ast.list __items;
+        table.ensure_value ")", "missing closing parenthesis on group.";
+        ast.group __items;
     end
 
     def variable
@@ -279,6 +280,7 @@ class Parser
             ast.literal char_literal(sign);
         elsif table.lookahead(1).type == Type::STRING
             ast.literal string_literal;
+        # TODO Add regular expression literals -> /regex/
         elsif table.lookahead(1) == "["
             ast.literal tensor_literal;
         elsif table.lookahead(1) == "{"

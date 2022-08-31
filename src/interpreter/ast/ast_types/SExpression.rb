@@ -104,7 +104,7 @@ class SExpression < ASTInterface
         unit;
     end
 
-    def list(unit_list)
+    def group(unit_list)
         res = "(";
 
         if unit_list.size > 0
@@ -124,7 +124,7 @@ class SExpression < ASTInterface
 
     def proc_literal(param_list, function)
         res = "params:function: Proc ";
-        res << list(param_list);
+        res << tensor_literal(param_list);
         res << " ";
         res << function;
     end
@@ -135,7 +135,7 @@ class SExpression < ASTInterface
         res << " ";
         res << %Q{"#{return_type}"};
         res << " ";
-        res << list(params.map { |param| %Q{c_type:c_name: CFunParam "#{param[0]}" "#{param[1]}"} });
+        res << tensor_literal(params.map { |param| %Q{c_type:c_name: CFunParam "#{param[0]}" "#{param[1]}"} });
     end
 
     def unary_method_definition(selector, function)
@@ -185,11 +185,31 @@ class SExpression < ASTInterface
     end
 
     def tensor_literal(item_list)
-        "new Tensor #{list(item_list)}";
+        res = "[";
+
+        if item_list.size > 0
+            (0...item_list.size-1).each do |i|
+                res << item_list[i] << ", ";
+            end
+            res << item_list[item_list.size-1];
+        end
+
+        res << "]";
+        res;
     end
 
     def hash_literal(association_list)
-        "new Hash #{list(association_list)}";
+        res = "{";
+
+        if association_list.size > 0
+            (0...association_list.size-1).each do |i|
+                res << association_list[i] << ", ";
+            end
+            res << association_list[association_list.size-1];
+        end
+
+        res << "}";
+        res;
     end
 
     def association(key, value)

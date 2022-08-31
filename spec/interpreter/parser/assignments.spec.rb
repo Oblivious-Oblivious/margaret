@@ -8,7 +8,7 @@ describe Parser do
             parse("(x = (y = 6) + 1)", "(= x + (= y 6) 1)");
             parse("(x = Object new)", "(= x new Object)");
             parse("var = 12", "= var 12");
-            parse("arr = ()", "= arr ()");
+            parse("arr = []", "= arr []");
             parse("@x = x + 2", "= @x + x 2");
             parse("a = b", "= a b");
             parse("a = b = c", "= a (= b c)");

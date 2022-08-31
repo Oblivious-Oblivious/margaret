@@ -64,7 +64,7 @@ class Bytecode < ASTInterface
 
     def keyword_message(object, selectors)
         if selectors.size > 1 and selectors.all? { |sel| sel.first == selectors.first.first }
-            list(selectors.map { |sel| [object, sel[1], "keyword", sel[0], "1"] });
+            tensor_literal(selectors.map { |sel| [object, sel[1], "keyword", sel[0], "1"] });
         else
             joined_selector = "";
             selectors.each { |sel| joined_selector << sel[0] };
@@ -86,13 +86,8 @@ class Bytecode < ASTInterface
         unit;
     end
 
-    def list(unit_list)
-        res = [];
-        unit_list.each do |unit|
-            res << unit;
-        end
-        res << ["push_list", "#{unit_list.size}"];
-        res;
+    def group(unit_list)
+        unit_list;
     end
 
     def variable(optional_instance_symbol, name)
@@ -115,11 +110,11 @@ class Bytecode < ASTInterface
 
     # TODO New activation window on procs and methods
     def proc_literal(param_list, function)
-        ["STARTpush_proc", list(param_list.map { |item| ["push_variable", item] }), function, "ENDpush_proc"];
+        ["STARTpush_proc", tensor_literal(param_list.map { |item| ["push_variable", item] }), function, "ENDpush_proc"];
     end
 
     def c_function_declaration(return_type, name, params)
-        params = list(params.map { |param| ["push_variable", "CFunParam", "push_variable", "#{param[0]}", "push_variable", "#{param[1]}", "keyword", "c_type:c_name:", "2"] });
+        params = tensor_literal(params.map { |param| ["push_variable", "CFunParam", "push_variable", "#{param[0]}", "push_variable", "#{param[1]}", "keyword", "c_type:c_name:", "2"] });
         ["STARTpush_c_function", "push_variable", return_type, "push_variable", name, params, "ENDpush_c_function"]
     end
     
@@ -134,7 +129,7 @@ class Bytecode < ASTInterface
     def keyword_method_definition(selector, function)
         joined_selector = "";
         selector.each { |sel| joined_selector << sel[0] };
-        params = list(selector.map { |item| ["push_variable", item[1]] });
+        params = tensor_literal(selector.map { |item| ["push_variable", item[1]] });
         ["STARTpush_keyword_method", %Q{"#{joined_selector}"}, params, function, "ENDpush_keyword_method"];
     end
 

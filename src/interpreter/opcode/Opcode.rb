@@ -15,17 +15,17 @@ module Opcode
         "push_string",
         "push_variable",
         "push_instance",
-        "push_list",
         "push_tensor",
         "push_hash",
 
         "STARTpush_block",
         "ENDpush_block",
 
+        "STARTpush_c_function",
+        "ENDpush_c_function",
+
         "STARTpush_unary_method",
         "ENDpush_unary_method",
-        "STARTpush_function_method",
-        "ENDpush_function_method",
         "STARTpush_binary_method",
         "ENDpush_binary_method",
         "STARTpush_keyword_method",
