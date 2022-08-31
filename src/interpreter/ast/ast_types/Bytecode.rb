@@ -158,11 +158,11 @@ class Bytecode < ASTInterface
     end
 
     def association(key, value)
-        [key, value, "keyword", "key:value:", "2"];
+        ["push_variable", "Association", key, value, "keyword", "key:value:", "2"];
     end
 
     def json_association(key, value)
-        ["push_string", %Q{"#{key}"}, value, "keyword", "key:value:", "2"];
+        ["push_variable", "Association", "push_string", %Q{"#{key}"}, value, "keyword", "key:value:", "2"];
     end
 
     # TODO New activation window on procs and methods
