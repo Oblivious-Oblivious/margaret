@@ -120,8 +120,8 @@ class SExpression < ASTInterface
         string;
     end
 
-    def variable(sign, optional_instance_symbol, name)
-        "#{sign}#{optional_instance_symbol}#{name}";
+    def variable(optional_instance_symbol, name)
+        "#{optional_instance_symbol}#{name}";
     end
 
     def list(unit_list)

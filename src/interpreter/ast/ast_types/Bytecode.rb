@@ -114,13 +114,7 @@ class Bytecode < ASTInterface
         ["push_string", string];
     end
 
-    def variable(sign, optional_instance_symbol, name)
-        if optional_instance_symbol == "@"
-            opcode = "push_instance";
-        else
-            opcode = "push_variable";
-        end
-
+    def variable(optional_instance_symbol, name)
         if name == "nil"
             ["push_nil"];
         elsif name == "true"
@@ -131,12 +125,10 @@ class Bytecode < ASTInterface
             ["push_self"];
         elsif name == "super"
             ["push_super"];
+        elsif optional_instance_symbol == "@"
+            ["push_instance", name];
         else
-            if sign == "-"
-                [opcode, name, "unary", "negate"];
-            else
-                [opcode, name];
-            end
+            ["push_variable", name]
         end
     end
 

@@ -58,7 +58,7 @@ class Default < ASTInterface
     def string_literal(string)
     end
 
-    def variable(sign, optional_instance_symbol, name)
+    def variable(optional_instance_symbol, name)
     end
 
     def list(unit_list)

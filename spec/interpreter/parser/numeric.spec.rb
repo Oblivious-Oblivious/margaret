@@ -63,11 +63,6 @@ describe Parser do
             parse("(0O541 + 0o777)", "(+ 0o541 0o777)");
         end
 
-        it "parses negative variables" do
-            parse("-a", "-a");
-            parse("-@a", "-@a");
-        end
-
         it "parses negative characters" do
             parse("-'a'", "-'a'");
             parse("-'æ'", "-'æ'");

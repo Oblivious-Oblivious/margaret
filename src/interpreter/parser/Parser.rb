@@ -49,7 +49,7 @@ class Parser
     end
 
     def assignment
-        ast.assignment variable(""), table.ensure_value("=", "expected `=` on assignment message.");
+        ast.assignment variable, table.ensure_value("=", "expected `=` on assignment message.");
     end
 
     def message
@@ -157,7 +157,7 @@ class Parser
         elsif table.lookahead(1).type == Type::STRING
             ast.literal string_literal;
         elsif table.lookahead(1).type == Type::IDENTIFIER or (table.lookahead(1) == "@" and table.lookahead(2).type == Type::IDENTIFIER)
-            ast.literal variable(sign);
+            ast.literal variable;
         elsif table.lookahead(1) == "("
             ast.literal list;
         elsif table.lookahead(1) == "["
@@ -191,11 +191,11 @@ class Parser
         ast.string_literal table.ensure_type(Type::STRING, "expected string literal.");
     end
 
-    def variable(sign)
+    def variable
         if table.lookahead(1) == "@"
-            ast.variable sign, table.ensure_value("@", "expected `@` on instance variable declaration."), table.ensure_type(Type::IDENTIFIER, "expected identifier on variable declaration.");
+            ast.variable table.ensure_value("@", "expected `@` on instance variable declaration."), table.ensure_type(Type::IDENTIFIER, "expected identifier on variable declaration.");
         else
-            ast.variable sign, "", table.ensure_type(Type::IDENTIFIER, "expected identifier on variable declaration.");
+            ast.variable "", table.ensure_type(Type::IDENTIFIER, "expected identifier on variable declaration.");
         end
     end
 

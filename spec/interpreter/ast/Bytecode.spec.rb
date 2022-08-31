@@ -131,8 +131,8 @@ describe Bytecode do
         opcodes("x = (y = 6) + 1", ["push_integer", "6", "store", "y", "push_list", "1", "push_1", "binary", "+", "store", "x", "pop"]);
         opcodes("@x = x + 2", ["push_variable", "x", "push_2", "binary", "+", "store_instance", "x", "pop"]);
         opcodes("a = b = (c = 42) + 12", ["push_integer", "42", "store", "c", "push_list", "1", "push_integer", "12", "binary", "+", "store", "b", "store", "a", "pop"]);
-        opcodes("a = -a", ["push_variable", "a", "unary", "negate", "store", "a", "pop"]);
-        opcodes("@a = -@a", ["push_instance", "a", "unary", "negate", "store_instance", "a", "pop"]);
+        opcodes("a = a negate", ["push_variable", "a", "unary", "negate", "store", "a", "pop"]);
+        opcodes("@a = @a negate", ["push_instance", "a", "unary", "negate", "store_instance", "a", "pop"]);
     end
 
     it "emits for unary messages" do
