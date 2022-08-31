@@ -194,25 +194,25 @@ describe Bytecode do
         opcodes("#incr => self + 1",   ["STARTpush_unary_method", %Q{"incr"}, "push_self", "push_1", "binary", "+", "ENDpush_unary_method", "pop"]);
         opcodes("#  incr => self + 1", ["STARTpush_unary_method", %Q{"incr"}, "push_self", "push_1", "binary", "+", "ENDpush_unary_method", "pop"]);
         opcodes("#is_empty? => true", ["STARTpush_unary_method", %Q{"is_empty?"}, "push_true", "ENDpush_unary_method", "pop"]);
-        # opcodes("#(0) fact => 1");
+        # opcodes("# 0 fact => 1");
         "
-        #(0) fact => 1,
-        #(_) fact => self * (self-1) fact
+        # 0 fact => 1,
+        # _ fact => self * (self-1) fact
         "
     end
 
     it "emits for binary method definitions" do
         opcodes("#** a_number => self raised_to: a_number", ["STARTpush_binary_method", %Q{"**"}, "push_variable", "a_number", "push_self", "push_variable", "a_number", "keyword", "raised_to:", "1", "ENDpush_binary_method", "pop"]);
-        # opcodes("#(0) ** a_number => 0", "");
-        # opcodes("#(0) ** (0) => nil", "");
+        # opcodes("# 0 ** a_number => 0", "");
+        # opcodes("# 0 ** 0 => nil", "");
     end
 
     it "emits for keyword method definitions" do
         opcodes("#add: element at: position => 42", ["STARTpush_keyword_method", %Q{"add:at:"}, "push_variable", "element", "push_variable", "position", "push_list", "2", "push_integer", "42", "ENDpush_keyword_method", "pop"]);
         opcodes("#ok?: value1 otherwise!: value2 => 17", ["STARTpush_keyword_method", %Q{"ok?:otherwise!:"}, "push_variable", "value1", "push_variable", "value2", "push_list", "2", "push_integer", "17", "ENDpush_keyword_method", "pop"]);
-        # opcodes("#([]) add: (element) at: (position) => 17");
-        # opcodes("#([]) add: ('a') at: (0) => ['a']");
-        # opcodes("#add: ('a') at: (0) => ['a'] ++ self");
+        # opcodes("# [] add: element at: position => 17");
+        # opcodes("# [] add: 'a' at: 0 => ['a']");
+        # opcodes("#add: 'a' at: 0 => ['a'] ++ self");
 
         opcodes("#times: a_block => (
             remaining = self,
