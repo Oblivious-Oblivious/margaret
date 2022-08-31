@@ -147,7 +147,7 @@ class Parser
             ast.expression variable;
         # TODO procs, methods and functions return tensors of bytecodes
         elsif table.lookahead(1) == "->"
-            ast.literal proc_literal;
+            ast.expression proc_literal;
         elsif table.lookahead(1) == "#" and table.lookahead(2) == "#" and table.lookahead(3) == "#"
             ast.expression c_function_declaration;
         elsif table.lookahead(1) == "#"
