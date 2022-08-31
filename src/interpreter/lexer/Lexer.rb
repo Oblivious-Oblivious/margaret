@@ -200,6 +200,7 @@ class Lexer
             elsif c.matches(RegexMatchers::NEWLINE)
                 @lineno += 1;
             elsif c.matches(RegexMatchers::WHITESPACE)
+                # Skip
             elsif c.matches(RegexMatchers::NUMBER)
                 token_table << tokenize_number(c);
             elsif c.matches(RegexMatchers::LETTER) or c == '_'
