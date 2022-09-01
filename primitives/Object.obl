@@ -1,0 +1,30 @@
+-> {(
+    Object = Object subclass,
+    Object extend: (
+        #new => Primitive no: 1,
+        #not => Primitive no: 2,
+        #!= other => Primitive no: 3,
+        #== other => Primitive no: 4,
+        #object_id => Primitive no: 5,
+        #hash => Primitive no: 6,
+        #class => Primitive no: 7,
+        #inspect => Primitive no: 8,
+        #is_nil? => Primitive no: 9,
+        #pp => Primitive no: 10,
+        #puts => Primitive no: 11,
+        #print => Primitive no: 12,
+
+        #send => (),
+        #equal? => (),
+        #method_missing => (),
+        #responds_to?: msg => (),
+        #to_s => (),
+
+        #<=> other => (),
+        #=== other => (),
+
+        #methods => (),
+        #dup => (),
+        #freeze => ()
+    )
+)}

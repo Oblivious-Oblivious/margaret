@@ -1,0 +1,46 @@
+-> { argc, argv | (
+    Point = Object subclass,
+    Point attr_reader: ["x", "y"],
+    Point bind:
+        #x: xparam y: yparam => (
+            @x = xparam,
+            @y = yparam,
+            self
+        ),
+
+    Point bind:
+        #calc => @x + @y,
+    
+    Point bind:
+        #+ other => (
+            @x = @x + other x,
+            @y = @y + other y,
+            self
+        ),
+
+    Point3D = Point subclass,
+    Point3D attr_reader: ["z"],
+    Point3D bind:
+        #x: x y: y z: z => (
+            super x: @x y: @y,
+            @z = z,
+            self
+        ),
+    
+    Point3D bind:
+        #calc => super calc + @z,
+    
+    Point3D bind:
+        #+ other => (
+            super + other,
+            @z = @z + other z,
+            self
+        ),
+
+    p1 = Point3D x: 10 y: 20 z: 30,
+    p2 = Point3D x: 2 y: 4 z: 6,
+
+    p1 calc puts,
+    p2 calc puts,
+    (p1 + p2 calc) puts
+)} eval

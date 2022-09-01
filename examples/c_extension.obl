@@ -1,0 +1,17 @@
+-> {(
+    LibGMP = CLib clone,
+    LibGMP libc_link: "gmp",
+    LibGMP libc_bind: (
+        #init_set_str: rop str: str base: base => ###int __gmpz_init_set_str(mpz_t *rop, char* str, int base),
+        #cmp: op1 with: op2                    => ###int __gmpz_cmp(mpz_t *op1, mpz_t *op2)
+    ),
+
+
+    BigInt = Integer clone,
+    BigInt bind: #new: str base: base => LibGMP init_set_str: @mpz str: str base: base,
+    BigInt bind: #<=> other           => LibGMP cmp: mpz with: other,
+
+    a = BigInt new: "42" base: 10,
+    b = BigInt new: "41" base: 10,
+    (a <=> b) puts
+)} eval
