@@ -14,6 +14,8 @@ class Oblisp
         if line = Readline.readline(prompt, true)
             if line == ""
                 ['(', ')'];
+            elsif line == "<<exit>>" or line == "<<quit>>"
+                exit;
             else
                 line.chars;
             end
