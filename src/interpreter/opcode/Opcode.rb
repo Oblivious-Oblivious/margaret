@@ -1,4 +1,8 @@
 module Opcode
+    COMPILE_TIME = [
+        ""
+    ];
+
     STACK_CODES = [
         "push_nil",
         "push_true",
