@@ -22,8 +22,8 @@ Write 'postcard' for syntax
 
 ## Development
 
-- [Changelog](https://github.com/Oblivious-Oblivious/CHANGELOG.md)
-- [Contributing](https://github.com/Oblivious-Oblivious/CONTRIBUTING.md)
+- [Changelog](https://github.com/Oblivious-Oblivious/margaret/blob/master/CHANGELOG.md)
+- [Contributing](https://github.com/Oblivious-Oblivious/margaret/blob/master/CONTRIBUTING.md)
 
 ## Contributing
 
