@@ -1,5 +1,5 @@
 run:
-	ruby src/oblisp_main.rb examples/test1.obl
+	ruby src/margaret_main.rb examples/test.marg
 
 test:
 	ruby spec/spec_helper.rb

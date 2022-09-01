@@ -9,7 +9,7 @@ module TRANSLATE_TO
     MACHINE_CODE = 4;
 end
 
-class Oblisp
+class Margaret
     def self.SCAN(prompt)
         if line = Readline.readline(prompt, true)
             if line == ""
@@ -61,5 +61,5 @@ class Oblisp
     end
 end
 
-Oblisp.repl TRANSLATE_TO::INTERPRETER;
-# Oblisp.run_file ARGV[0];
+Margaret.repl TRANSLATE_TO::INTERPRETER;
+# Margaret.run_file ARGV[0];

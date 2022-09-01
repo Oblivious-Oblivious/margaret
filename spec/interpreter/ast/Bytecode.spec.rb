@@ -2,7 +2,7 @@ require_relative "_bytecode_helpers";
 
 describe Bytecode do
     it "creates a Bytecode ast type" do
-        l = Lexer.new "file.obl", "2 + 3".chars;
+        l = Lexer.new "file.marg", "2 + 3".chars;
         p = Parser.new l.make_tokens, "bytecode";
         expect(p.ast).to be_kind_of ASTInterface;
     end

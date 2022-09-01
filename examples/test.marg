@@ -1,0 +1,4 @@
+-> { argc, argv | (
+    "Hello" puts,
+    0 return
+)} eval

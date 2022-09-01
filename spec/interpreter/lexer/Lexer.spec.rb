@@ -1,13 +1,13 @@
 describe Lexer do
     it "contains the input text, lexer position and current character" do
-        l = Lexer.new "file.obl", "(42 factorial)".chars;
+        l = Lexer.new "file.marg", "(42 factorial)".chars;
         expect(l.text).to eq "(42 factorial)".chars;
         expect(l.pos).to eq -1;
     end
 
     context "#next_character" do
         it "properly advances characters in the array" do
-            l = Lexer.new "file.obl", "(42 factorial)".chars;
+            l = Lexer.new "file.marg", "(42 factorial)".chars;
 
             current_char = l.next_character;
             expect(current_char).to eq "(";
@@ -25,7 +25,7 @@ describe Lexer do
         end
 
         it "reads all characters until the list ends" do
-            l = Lexer.new "file.obl", ["1","2","3","4","5"];
+            l = Lexer.new "file.marg", ["1","2","3","4","5"];
     
             c1 = l.next_character;
             c2 = l.next_character;
@@ -46,7 +46,7 @@ describe Lexer do
 
     context "#peek_character" do
         it "peeks the next character from the list" do
-            l = Lexer.new "file.obl", "(42 factorial)".chars;
+            l = Lexer.new "file.marg", "(42 factorial)".chars;
 
             c1 = l.peek_character(1);
             c2 = l.peek_character(2);
@@ -78,40 +78,40 @@ describe Lexer do
     end
 
     it "prints error messages" do
-        l = Lexer.new "file.obl", "(42 factorial)".chars;
+        l = Lexer.new "file.marg", "(42 factorial)".chars;
         response = l.error("random exception");
         expect(response).to eq [];
     end
 
     context "#make_tokens" do
         it "correctly counts the number of lines" do
-            l = Lexer.new "file.obl", "(42 factorial\nx = 2 + 3\ny = 5)".chars;
+            l = Lexer.new "file.marg", "(42 factorial\nx = 2 + 3\ny = 5)".chars;
             l.make_tokens;
 
             expect(l.lineno).to eq 3;
         end
 
         it "tokenizes symbols" do
-            l = Lexer.new "file.obl", "(@ $ % ^ & *)".chars;
+            l = Lexer.new "file.marg", "(@ $ % ^ & *)".chars;
             tokens = l.make_tokens;
             expect(tokens.size).to eq 9;
             expect(tokens.get(3).value).to eq "%";
         end
 
         it "tokenizes integers" do
-            tokens = Lexer.new("file.obl", "(42 msg)".chars).make_tokens;
+            tokens = Lexer.new("file.marg", "(42 msg)".chars).make_tokens;
             expect(tokens.get(1).value).to eq "42";
             expect(tokens.get(1).type).to eq Type::INTEGER;
             expect(tokens.get(1).line_number).to eq 1;
 
-            tokens = Lexer.new("file.obl", "4_200".chars).make_tokens;
+            tokens = Lexer.new("file.marg", "4_200".chars).make_tokens;
             expect(tokens.get(0).value).to eq "4200";
-            tokens = Lexer.new("file.obl", "4_2_0_0".chars).make_tokens;
+            tokens = Lexer.new("file.marg", "4_2_0_0".chars).make_tokens;
             expect(tokens.get(0).value).to eq "4200";
         end
 
         it "tokenizes zero" do
-            l = Lexer.new "file.obl", "(0 is_zero?)".chars;
+            l = Lexer.new "file.marg", "(0 is_zero?)".chars;
             tokens = l.make_tokens;
 
             expect(tokens.get(1).value).to eq "0";
@@ -120,50 +120,50 @@ describe Lexer do
         end
 
         it "draws an error when trying to tokenize an integer starting with 0" do
-            l = Lexer.new "file.obl", "(042 msg)".chars;
+            l = Lexer.new "file.marg", "(042 msg)".chars;
             tokens = l.make_tokens;
         end
 
         it "tokenizes floats" do
-            l = Lexer.new "file.obl", "0.0".chars;
+            l = Lexer.new "file.marg", "0.0".chars;
             tokens = l.make_tokens;
             expect(tokens.get(0).value).to eq "0.0";
             expect(tokens.get(0).type).to eq Type::FLOAT;
             expect(tokens.get(1).line_number).to eq 1;
 
-            l = Lexer.new "file.obl", "(42.7 msg)".chars;
+            l = Lexer.new "file.marg", "(42.7 msg)".chars;
             tokens = l.make_tokens;
             expect(tokens.get(1).value).to eq "42.7";
             expect(tokens.get(1).type).to eq Type::FLOAT;
             expect(tokens.get(1).line_number).to eq 1;
 
-            l = Lexer.new "file.obl", "(0.7 msg)".chars;
+            l = Lexer.new "file.marg", "(0.7 msg)".chars;
             tokens = l.make_tokens;
             expect(tokens.get(1).value).to eq "0.7";
             expect(tokens.get(1).type).to eq Type::FLOAT;
             expect(tokens.get(1).line_number).to eq 1;
 
-            l = Lexer.new "file.obl", "(0.7+0.5+0.23)".chars;
+            l = Lexer.new "file.marg", "(0.7+0.5+0.23)".chars;
             tokens = l.make_tokens;
             expect(tokens.get(1).value).to eq "0.7";
             expect(tokens.get(2).value).to eq "+";
             expect(tokens.get(3).value).to eq "0.5";
 
-            l = Lexer.new "file.obl", "(.7 msg)".chars;
+            l = Lexer.new "file.marg", "(.7 msg)".chars;
             tokens = l.make_tokens;
             expect(tokens.get(1).value).to eq ".";
             expect(tokens.get(2).value).to eq "7";
             expect(tokens.get(3).value).to eq "msg";
             expect(tokens.get(4).value).to eq ")";
 
-            l = Lexer.new "file.obl", "(124.0 msg)".chars;
+            l = Lexer.new "file.marg", "(124.0 msg)".chars;
             tokens = l.make_tokens;
             expect(tokens.get(1).value).to eq "124.0";
             expect(tokens.get(2).value).to eq "msg";
         end
 
         it "tokenizes binary literals" do
-            l = Lexer.new "file.obl", "(0b1010 + 0B0100)".chars;
+            l = Lexer.new "file.marg", "(0b1010 + 0B0100)".chars;
             tokens = l.make_tokens;
             expect(tokens.get(0).value).to eq "(";
             expect(tokens.get(1).value).to eq "0b1010";
@@ -176,7 +176,7 @@ describe Lexer do
         end
 
         it "tokenizes hexadecimal literals" do
-            l = Lexer.new "file.obl", "(0xfeed42 + 0Xbeef41)".chars;
+            l = Lexer.new "file.marg", "(0xfeed42 + 0Xbeef41)".chars;
             tokens = l.make_tokens;
             expect(tokens.get(0).value).to eq "(";
             expect(tokens.get(1).value).to eq "0xfeed42";
@@ -189,7 +189,7 @@ describe Lexer do
         end
 
         it "tokenizes octal literals" do
-            l = Lexer.new "file.obl", "(0o752 + 0O52)".chars;
+            l = Lexer.new "file.marg", "(0o752 + 0O52)".chars;
             tokens = l.make_tokens;
             expect(tokens.get(0).value).to eq "(";
             expect(tokens.get(1).value).to eq "0o752";
@@ -202,24 +202,24 @@ describe Lexer do
         end
 
         it "tokenizes character literals" do
-            l = Lexer.new "file.obl", "('a' puts)";
+            l = Lexer.new "file.marg", "('a' puts)";
             tokens = l.make_tokens;
             expect(tokens.get(1).value).to eq "'a'";
             expect(tokens.get(1).type).to eq Type::CHAR;
         end
 
         it "tokenizes string literals" do
-            l = Lexer.new "file.obl", %Q{("hello" puts)};
+            l = Lexer.new "file.marg", %Q{("hello" puts)};
             token = l.make_tokens;
             expect(token.get(1).value).to eq %Q{"hello"};
 
-            l = Lexer.new "file.obl", %Q{("multi\nline\nstring" puts)};
+            l = Lexer.new "file.marg", %Q{("multi\nline\nstring" puts)};
             token = l.make_tokens;
             expect(token.get(1).value).to eq %Q{"multi\nline\nstring"};
         end
 
         it "tokenizes identifiers" do
-            l = Lexer.new "file.obl", "(42 factorial\nx = (2 times: 3)\n3 plus: 4)".chars;
+            l = Lexer.new "file.marg", "(42 factorial\nx = (2 times: 3)\n3 plus: 4)".chars;
             tokens = l.make_tokens;
             expect(tokens.size).to eq 17;
             expect(tokens.get(2).value).to eq "factorial";
@@ -229,13 +229,13 @@ describe Lexer do
         end
 
         it "tokenizes identifiers starting with an underscore" do
-            l = Lexer.new "file.obl", "((1 2 3) __msg)".chars;
+            l = Lexer.new "file.marg", "((1 2 3) __msg)".chars;
             tokens = l.make_tokens;
             expect(tokens.get(6).value).to eq "__msg";
         end
 
         it "prints the token table" do
-            l = Lexer.new "file.obl", "(42 factorial)";
+            l = Lexer.new "file.marg", "(42 factorial)";
             tokens = l.make_tokens;
             expect(tokens.size).to eq 5;
 

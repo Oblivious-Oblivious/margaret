@@ -3,7 +3,7 @@ require "rspec/autorun";
 # All source files
 Dir["#{Dir.pwd}/src/interpreter/**/*.rb"].each { |f| require f };
 
-# oblisp
+# margaret
 require_relative "interpreter/version.spec";
 
 # ast
