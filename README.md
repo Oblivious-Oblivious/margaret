@@ -8,7 +8,7 @@ It offers powerful literals, easy to use objects and smalltalk-like message stru
 * Every value in Margaret is treated as an object.
 * There are no reserved words and no explicit syntax apart from message sends.
 * Uses prototype based objects in the likes of Self or Javascript.
-* Uses C-like literals like char, int, float, string.
+* Uses C-style literals like char, int, float, string.
 * Implements tensors and hashes as the only built in, array-like data structures.
 * Runs on a portable, lightweight and embeddable stack based VM.
 
