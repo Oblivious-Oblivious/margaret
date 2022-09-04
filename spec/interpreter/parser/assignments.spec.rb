@@ -17,6 +17,10 @@ describe Parser do
             parse("((a = 2), (b = 3), (c = a = b))", "((= a 2), (= b 3), (= c (= a b)))");
             parse("a = b = (c = 42) + 12", "= a (= b + (= c 42) 12)");
             parse("a = 12 + 3 * 4", "= a * (+ 12 3) 4");
+
+            parse("[a, b, c] = [1, 2, 3]", "= [a, b, c] [1, 2, 3]");
+            parse("a = 3 + 4", "= a + 3 4");
+            parse("2 = 3 + 4", "+ (= 2 3) 4");
         end
     end
 end
