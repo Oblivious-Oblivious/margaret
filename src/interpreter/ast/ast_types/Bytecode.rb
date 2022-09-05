@@ -1,17 +1,5 @@
 require_relative "../ASTInterface";
 
-def bin_to_dec(bin)
-    bin.to_i(2).to_s;
-end
-
-def oct_to_dec(oct)
-    oct.to_i(8).to_s;
-end
-
-def hex_to_dec(hex)
-    hex.to_i(16).to_s;
-end
-
 class Bytecode < ASTInterface
     def empty
         "";
@@ -162,11 +150,11 @@ class Bytecode < ASTInterface
             ["push_2"];
         else
             if number[0] == "0" and number[1].downcase == "b"
-                number = bin_to_dec(number[2..]);
+                number = number[2..].to_i(2).to_s;
             elsif number[0] == "0" and number[1].downcase == "o"
-                number = oct_to_dec(number[2..]);
+                number = number[2..].to_i(8).to_s;
             elsif number[0] == "0" and number[1].downcase == "x"
-                number = hex_to_dec(number[2..]);
+                number = number[2..].to_i(16).to_s;
             end
 
             if sign == "-"
