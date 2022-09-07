@@ -31,7 +31,7 @@ class Margaret
 
     # TODO def self.EVAL(ast) -> AST traversal
     def self.EVAL(tokens)
-        Parser.new(tokens, "bytecode").analyse_syntax;
+        Parser.new(tokens).analyse_syntax;
     end
 
     def self.PRINT(evaluated)

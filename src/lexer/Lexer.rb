@@ -66,7 +66,6 @@ class Lexer
             c = peek_character(1);
             if c == "_"
                 c = next_character;
-                c = next_character;
                 next;
             end
 
@@ -98,7 +97,6 @@ class Lexer
             final_number << c.downcase;
             c = peek_character(1);
             if c == "_"
-                c = next_character;
                 c = next_character;
                 next;
             end

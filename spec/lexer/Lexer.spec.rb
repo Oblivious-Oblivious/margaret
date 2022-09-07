@@ -105,9 +105,9 @@ describe Lexer do
             expect(tokens.get(1).line_number).to eq 1;
 
             tokens = Lexer.new("file.marg", "4_200".chars).make_tokens;
-            expect(tokens.get(0).value).to eq "4200";
+            expect(tokens.get(0).value).to eq "4_200";
             tokens = Lexer.new("file.marg", "4_2_0_0".chars).make_tokens;
-            expect(tokens.get(0).value).to eq "4200";
+            expect(tokens.get(0).value).to eq "4_2_0_0";
         end
 
         it "tokenizes zero" do

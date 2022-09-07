@@ -1,6 +1,4 @@
-require_relative "../ASTInterface";
-
-class Bytecode < ASTInterface
+class Bytecode
     def empty
         "";
     end
@@ -138,6 +136,7 @@ class Bytecode < ASTInterface
     end
 
     def integer_literal(sign, number)
+        number = number.gsub(/_/, "");
         case "#{sign}#{number}"
         # TODO Refactor to work with multiple zeros
         when "0", "-0", "+0", "0b0", "-0b0", "+0b0", "0b00", "-0b00", "+0b00", "0o0", "-0o0", "+0o0", "0o000", "-0o000", "+0o000", "0x0", "-0x0", "+0x0", "0x00", "-0x00", "+0x00"
@@ -166,6 +165,7 @@ class Bytecode < ASTInterface
     end
 
     def float_literal(sign, number)
+        number = number.gsub(/_/, "");
         ["push_float", "#{sign}#{number}"];
     end
 

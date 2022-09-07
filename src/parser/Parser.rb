@@ -1,11 +1,9 @@
-require_relative "../ast/ASTFactory";
-
 class Parser
     attr_accessor :table, :ast;
 
-    def initialize(table, type="default")
+    def initialize(table)
         @table = table;
-        @ast = ASTFactory.new.generate type;
+        @ast = Bytecode.new;
     end
 
     def __chain_of(&selector)
