@@ -1,5 +1,5 @@
 run:
-	ruby src/margaret_main.rb examples/test.marg
+	ruby margaret_main.rb examples/test.marg
 
 test:
 	ruby spec/spec_helper.rb
