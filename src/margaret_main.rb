@@ -13,6 +13,7 @@ class Margaret
     def self.SCAN(prompt)
         if line = Readline.readline(prompt, true)
             if line == ""
+                Readline::HISTORY.pop;
                 ['(', ')'];
             elsif line == "<<exit>>" or line == "<<quit>>"
                 exit;
