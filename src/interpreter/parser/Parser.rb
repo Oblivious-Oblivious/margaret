@@ -291,6 +291,11 @@ class Parser
         elsif table.lookahead(1).type == Type::STRING
             ast.literal string_literal;
         # TODO Add regular expression literals -> /regex/
+        # elsif table.lookahead(1) == "/"
+        # TODO Add pair literals -> <1, 2>
+        # elsif table.lookahead(1) == "<"
+        # TODO Add binary/bitstring literals -> <<1:1, 0:1>>
+        # elsif table.lookahead(1) == "<<"
         elsif table.lookahead(1) == "["
             ast.literal tensor_literal;
         elsif table.lookahead(1) == "{"
@@ -342,6 +347,7 @@ class Parser
         ast.hash_literal __items;
     end
 
+    # TODO Add as literals, so that they may be used as possible switch arguments
     def association_literal
         if table.lookahead(1).type == Type::IDENTIFIER
             key = table.ensure_type(Type::IDENTIFIER, "expected identifier on association literal.");
