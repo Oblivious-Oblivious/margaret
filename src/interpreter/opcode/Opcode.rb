@@ -1,6 +1,13 @@
 module Opcode
     COMPILE_TIME = [
-        ""
+        "declare_variable",
+        "generate_identifier_position",
+        "add_variable_to_vector",
+        "make_variable",
+
+        "compiler_new",
+        "scope_begin",
+        "scope_end",
     ];
 
     STACK_CODES = [
