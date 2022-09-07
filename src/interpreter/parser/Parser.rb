@@ -102,7 +102,13 @@ class Parser
     def binary_selector
         if table.lookahead(1).type == Type::MESSAGE_SYMBOL
             sel = table.ensure_type(Type::MESSAGE_SYMBOL, "expected message symbol on binary selector.");
-            ast.binary_selector sel, unary_message;
+            obj = unary_message;
+
+            if obj == ""
+                ast.empty;
+            else
+                ast.binary_selector sel, obj;
+            end
         else
             ast.empty;
         end
@@ -134,7 +140,11 @@ class Parser
             delim = table.ensure_value(":", "expected `:` on keyword selector.");
             obj = binary_message;
 
-            ast.keyword_selector id, optional_symbol, delim, obj;
+            if obj == ""
+                return ast.empty;
+            else
+                ast.keyword_selector id, optional_symbol, delim, obj;
+            end
         else
             ast.empty;
         end
