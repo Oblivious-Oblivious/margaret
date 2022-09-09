@@ -5,21 +5,21 @@ describe Parser do
         end
 
         it "parses metaclass messages" do
-            parse("(x = String name)", "(= x name String)");
-            parse("(x = String category)", "(= x category String)");
-            parse("(x = String description)", "(= x description String)");
-            parse("(x = String kind_of_subclass)", "(= x kind_of_subclass String)");
-            parse("(x = String definition)", "(= x definition String)");
-            parse("(x = String field_names)", "(= x field_names String)");
-            parse("(x = String all_field_names)", "(= x all_field_names String)");
-            parse("(x = String selectors)", "(= x selectors String)");
-            parse(%Q{(x = String source_code_at: "message")}, %Q{(= x source_code_at: String "message")});
-            parse("(x = String all_instances)", "(= x all_instances String)");
-            parse("(x = String superclass)", "(= x superclass String)");
-            parse("(x = String all_superclasses)", "(= x all_superclasses String)");
-            parse("(x = String subclasses)", "(= x subclasses String)");
-            parse("(x = String all_subclasses)", "(= x all_subclasses String)");
-            parse("(x = String number_of_instances)", "(= x number_of_instances String)");
+            parse("(x = String name)", ["push_variable", "String", "unary", "name", "store", "x"]);
+            parse("(x = String category)", ["push_variable", "String", "unary", "category", "store", "x"]);
+            parse("(x = String description)", ["push_variable", "String", "unary", "description", "store", "x"]);
+            parse("(x = String kind_of_subclass)", ["push_variable", "String", "unary", "kind_of_subclass", "store", "x"]);
+            parse("(x = String definition)", ["push_variable", "String", "unary", "definition", "store", "x"]);
+            parse("(x = String field_names)", ["push_variable", "String", "unary", "field_names", "store", "x"]);
+            parse("(x = String all_field_names)", ["push_variable", "String", "unary", "all_field_names", "store", "x"]);
+            parse("(x = String selectors)", ["push_variable", "String", "unary", "selectors", "store", "x"]);
+            parse(%Q{(x = String source_code_at: "message")}, ["push_variable", "String", "push_string", %Q{"message"}, "keyword", "source_code_at:", "1", "store", "x"]);
+            parse("(x = String all_instances)", ["push_variable", "String", "unary", "all_instances", "store", "x"]);
+            parse("(x = String superclass)", ["push_variable", "String", "unary", "superclass", "store", "x"]);
+            parse("(x = String all_superclasses)", ["push_variable", "String", "unary", "all_superclasses", "store", "x"]);
+            parse("(x = String subclasses)", ["push_variable", "String", "unary", "subclasses", "store", "x"]);
+            parse("(x = String all_subclasses)", ["push_variable", "String", "unary", "all_subclasses", "store", "x"]);
+            parse("(x = String number_of_instances)", ["push_variable", "String", "unary", "number_of_instances", "store", "x"]);
         end
     end
 end
