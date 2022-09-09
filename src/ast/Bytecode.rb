@@ -20,6 +20,7 @@ class Bytecode
         if id[0] == "push_instance"
             ["store_instance", "#{id[1]}"];
         else
+            # TODO Multiple assignments do not pop 
             ["store", "#{id[1]}"];
         end
     end
@@ -62,7 +63,7 @@ class Bytecode
 
     def keyword_message(object, selectors)
         if selectors.size > 1 and selectors.all? { |sel| sel.first == selectors.first.first }
-            tensor_literal(selectors.map { |sel| [object, sel[1], "keyword", sel[0], "1"] });
+            selectors.map { |sel| [object, sel[1], "keyword", sel[0], "1"] };
         else
             joined_selector = "";
             selectors.each { |sel| joined_selector << sel[0] };
