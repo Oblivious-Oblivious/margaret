@@ -1,7 +1,7 @@
 describe Token do
     it "has a type and a value" do
-        tok = Token.new(42, Type::INTEGER, 125);
-        expect(tok.value).to eq 42;
+        tok = Token.new("42", Type::INTEGER, 125);
+        expect(tok.value).to eq "42";
         expect(tok.type).to eq Type::INTEGER;
         expect(tok.line_number).to eq 125;
     end
