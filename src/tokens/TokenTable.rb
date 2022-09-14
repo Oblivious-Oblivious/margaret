@@ -10,16 +10,6 @@ class TokenTable
         # puts "Compilation #{'failed'.red}";
     end
 
-    def display
-        print "(";
-
-        token_list.each do |token|
-            puts token;
-        end
-
-        print ")";
-    end
-
     def initialize(token_list)
         @token_list = token_list;
         @pos = -1;

@@ -233,13 +233,5 @@ describe Lexer do
             tokens = l.make_tokens;
             expect(tokens.get(6).value).to eq "__msg";
         end
-
-        it "prints the token table" do
-            l = Lexer.new "file.marg", "(42 factorial)";
-            tokens = l.make_tokens;
-            expect(tokens.size).to eq 5;
-
-            tokens.display;
-        end
     end
 end
