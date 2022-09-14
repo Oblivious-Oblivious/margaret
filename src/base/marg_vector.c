@@ -1,6 +1,6 @@
 #include "marg_vector.h"
 
-#define GROW_FACTOR 1.618
+#define MARG_VECTOR_GROW_FACTOR 1.618
 
 /**
  * @func: marg_vector_ensure_space
@@ -34,7 +34,7 @@ marg_vector *marg_vector_new(void) {
 marg_vector *marg_vector_add(marg_vector *self, void *item) {
     if(self == NULL) return self;
     if(self->alloced == self->size)
-        marg_vector_ensure_space(self, self->alloced * GROW_FACTOR);
+        marg_vector_ensure_space(self, self->alloced * MARG_VECTOR_GROW_FACTOR);
     self->items[self->size++] = item;
 
     return self;
