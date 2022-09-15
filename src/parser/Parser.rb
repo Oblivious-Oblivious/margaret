@@ -153,7 +153,6 @@ class Parser
             ast.expression group;
         elsif table.lookahead(1).type == Type::IDENTIFIER or (table.lookahead(1) == "@" and table.lookahead(2).type == Type::IDENTIFIER)
             ast.expression variable;
-        # TODO procs, methods and functions return tensors of bytecodes
         elsif table.lookahead(1) == "->"
             ast.expression proc_literal;
         elsif table.lookahead(1) == "#" and table.lookahead(2) == "#" and table.lookahead(3) == "#"
