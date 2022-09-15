@@ -6,7 +6,7 @@ OPT = -O2
 VERSION = -std=c99
 
 FLAGS = -Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic
-WARNINGS = -Wno-incompatible-pointer-types -Wno-unused-function
+WARNINGS = -Wno-unused-function
 HEADERS =
 LIBS =
 
