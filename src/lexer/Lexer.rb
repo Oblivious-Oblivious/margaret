@@ -130,7 +130,7 @@ class Lexer
     def tokenize_identifier(c)
         final_identifier = "";
 
-        # TODO Add unicode support
+        # TODO Add unicode support for identifier names (APL or Julia style)
         loop do
             final_identifier << c;
             c = peek_character(1);
