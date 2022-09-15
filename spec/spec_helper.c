@@ -5,7 +5,10 @@
 #include "base/marg_vector.spec.h"
 #include "base/marg_stack.spec.h"
 #include "base/marg_string.spec.h"
-#include "base/marg_table.spec.h"
+// #include "base/marg_table.spec.h"
+
+// lexer
+#include "lexer/FileLoader.spec.h"
 
 // tokens
 #include "tokens/Token.spec.h"
@@ -18,7 +21,9 @@ spec_suite({
     marg_vector_spec();
     marg_stack_spec();
     marg_string_spec();
-    marg_table_spec();
+    // marg_table_spec();
+
+    FileLoaderSpec();
 
     TokenSpec();
     TokenTableSpec();
