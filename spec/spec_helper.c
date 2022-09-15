@@ -71,7 +71,6 @@ spec_suite({
     marg_vector_spec();
     marg_stack_spec();
     marg_string_spec();
-    // marg_table_spec();
 
     // EvaluatorSpec();
 
