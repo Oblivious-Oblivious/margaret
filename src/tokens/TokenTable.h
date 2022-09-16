@@ -2,6 +2,7 @@
 #define __TOKEN_TABLE_H_
 
 #include <stdlib.h> /* size_t */
+#include <stdint.h> /* int64_t */
 
 #include "Token.h"
 #include "../base/marg_vector.h"
