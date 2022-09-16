@@ -47,7 +47,7 @@ class Lexer
     def error(message)
         # TODO Extract closer to boundary
         puts "#{filename}:#{lineno}: #{'error:'.red} #{message}";
-        [];
+        nil;
     end
 
     def next_character
@@ -165,7 +165,7 @@ class Lexer
             final_char << char;
             quote = next_character;
             if quote == nil
-                return error "unterminated character literal";
+                return error "unterminated character literal: `#{final_char}`";
             end
         end
         final_char << quote;
@@ -178,10 +178,10 @@ class Lexer
         while not c.matches(RegexMatchers::DOUBLE_QUOTE)
             final_string << c;
             c = next_character;
-            if c.matches(RegexMatchers::NEWLINE)
+            if c == nil
+                return error "unterminated string literal: `#{final_string}`";
+            elsif c.matches(RegexMatchers::NEWLINE)
                 @lineno += 1;
-            elsif c == nil
-                return error "unterminated string literal";
             end
         end
         final_string << c;
@@ -208,11 +208,16 @@ class Lexer
             elsif c.matches(RegexMatchers::SYNTAX_SYMBOL)
                 token_table << (Token.new c, Type::SYNTAX_SYMBOL, lineno);
             elsif c.matches(RegexMatchers::SINGLE_QUOTE)
-                token_table << tokenize_character(c);
+                tok = tokenize_character(c);
+                break if tok == nil;
+                token_table << tok;
             elsif c.matches(RegexMatchers::DOUBLE_QUOTE)
-                token_table << tokenize_string(c);
+                tok = tokenize_string(c);
+                break if tok == nil;
+                token_table << tok;
             else
-                error "Unrecognized character";
+                error "Unrecognized character: `#{c}`";
+                break;
             end
         end
 
