@@ -48,7 +48,7 @@
 
 // lexer
 #include "lexer/FileLoader.spec.h"
-// #include "lexer/Lexer.spec.h"
+#include "lexer/Lexer.spec.h"
 
 // opcode
 #include "opcode/Opcode.spec.h"
@@ -104,7 +104,7 @@ spec_suite({
     // tensors_spec();
 
     FileLoaderSpec();
-    // LexerSpec();
+    LexerSpec();
 
     OpcodeSpec();
 
