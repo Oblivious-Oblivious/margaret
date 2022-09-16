@@ -1,14 +1,8 @@
 class FileLoader
-    attr_reader :filename;
-
-    def initialize(filename)
-        @filename = filename;
-    end
-
-    def load
+    def load(filename)
         chars = [];
 
-        File.open(self.filename).each_char do |byte|
+        File.open(filename).each_char do |byte|
             chars << byte;
         end
 
