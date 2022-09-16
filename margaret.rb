@@ -25,8 +25,8 @@ class Margaret
         end
     end
 
-    def self.READ(chars)
-        Lexer.new("repl", chars).make_tokens;
+    def self.READ(chars, filename="repl")
+        Lexer.new(filename, chars).make_tokens;
     end
 
     # TODO def self.EVAL(ast) -> AST traversal
@@ -55,7 +55,7 @@ class Margaret
 
     def self.run_file(filename)
         chars = FileLoader.new(filename).load;
-        tokens = READ(chars);
+        tokens = READ(chars, filename);
         evaluated = EVAL(tokens);
 
         puts evaluated;
