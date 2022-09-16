@@ -2,7 +2,6 @@
 #define __TOKEN_TABLE_SPEC_H_
 
 #include "../../src/tokens/TokenTable.h"
-#include "../../src/tokens/Token.h"
 #include "../cSpec.h"
 
 TokenTable *t;
