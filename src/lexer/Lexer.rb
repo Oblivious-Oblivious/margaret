@@ -160,9 +160,9 @@ class Lexer
 
     def tokenize_character(c)
         final_char = c;
-        char = next_character;
-        if not char.matches(RegexMatchers::SINGLE_QUOTE)
-            final_char << char;
+        c = next_character;
+        if not c.matches(RegexMatchers::SINGLE_QUOTE)
+            final_char << c;
             quote = next_character;
             if quote == nil
                 return error "unterminated character literal: `#{final_char}`";
