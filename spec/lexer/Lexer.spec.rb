@@ -80,7 +80,7 @@ describe Lexer do
     it "prints error messages" do
         l = Lexer.new "file.marg", "(42 factorial)".chars;
         response = l.error("random exception");
-        expect(response).to eq [];
+        expect(response).to eq nil;
     end
 
     context "#make_tokens" do
