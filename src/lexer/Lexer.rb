@@ -163,12 +163,12 @@ class Lexer
         c = next_character;
         if not c.matches(RegexMatchers::SINGLE_QUOTE)
             final_char << c;
-            quote = next_character;
-            if quote == nil
+            c = next_character;
+            if c == nil
                 return error "unterminated character literal: `#{final_char}`";
             end
         end
-        final_char << quote;
+        final_char << c;
         Token.new final_char, Type::CHAR, lineno;
     end
 
