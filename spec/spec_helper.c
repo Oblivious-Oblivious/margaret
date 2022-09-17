@@ -54,7 +54,7 @@
 #include "opcode/Opcode.spec.h"
 
 // parser
-// #include "parser/Parser.spec.h"
+#include "parser/Parser.spec.h"
 
 // tokens
 #include "tokens/Token.spec.h"
@@ -108,7 +108,7 @@ spec_suite({
 
     OpcodeSpec();
 
-    // ParserSpec();
+    ParserSpec();
 
     TokenSpec();
     TokenTableSpec();
