@@ -102,7 +102,7 @@ class Parser
             sel = table.ensure_type(Type::MESSAGE_SYMBOL, "expected message symbol on binary selector.");
             obj = unary_message;
 
-            if obj == ""
+            if obj == [nil]
                 ast.empty;
             else
                 ast.binary_selector sel, obj;
@@ -138,7 +138,7 @@ class Parser
             delim = table.ensure_value(":", "expected `:` on keyword selector.");
             obj = binary_message;
 
-            if obj == ""
+            if obj == [nil]
                 return ast.empty;
             else
                 ast.keyword_selector id, optional_symbol, delim, obj;
@@ -276,7 +276,7 @@ class Parser
     end
 
     def literal
-        sign = ["+", "-"].include?(table.lookahead(1).value) ? table.consume.value : ast.empty;
+        sign = ["+", "-"].include?(table.lookahead(1).value) ? table.consume.value : "";
 
         # TODO Add different integer sizes
         if table.lookahead(1).type == Type::INTEGER

@@ -1,6 +1,6 @@
 class Bytecode
     def empty
-        "";
+        [nil];
     end
 
     def first_unit(unit)
