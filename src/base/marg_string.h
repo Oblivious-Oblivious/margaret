@@ -95,6 +95,13 @@ void marg_string_shorten(marg_string *self, size_t len);
 void marg_string_skip(marg_string *self, size_t len);
 
 /**
+ * @brief Removes all instances of `_` underscores
+ * @param self -> The string builder to use
+ * @return The edited string builder
+ */
+marg_string *marg_string_remove_underscores(marg_string *self);
+
+/**
  * @brief Return a substring of our current string without modifying the original
  * @param self -> The string builder we are using
  * @param str_position_from -> The point where we start our substring

@@ -141,6 +141,17 @@ void marg_string_skip(marg_string *self, size_t len) {
     memmove(self->str, self->str + len, self->size + 1);
 }
 
+marg_string *marg_string_remove_underscores(marg_string *self) {
+    marg_string *sb_dup = marg_string_new("");
+
+    char *sb_str = marg_string_get(self);
+    for(size_t i = 0; i < marg_string_size(self); i++)
+        if(sb_str[i] != '_')
+            marg_string_add_char(sb_dup, sb_str[i]);
+
+    return sb_dup;
+}
+
 marg_string *string_substring(marg_string *self, size_t str_position_from, size_t str_position_to) {
     marg_string *strdup = marg_string_dup(self);
     marg_string_skip(strdup, str_position_from);
