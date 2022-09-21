@@ -48,6 +48,12 @@ void *marg_vector_get(marg_vector *self, size_t index) {
     return NULL;
 }
 
+void marg_vector_set(marg_vector *self, size_t index, void *item) {
+    if(self == NULL) return;
+    if(index < self->size)
+        self->items[index] = item;
+}
+
 size_t marg_vector_size(marg_vector *self) {
     if(self == NULL) return 0;
     return self->size;

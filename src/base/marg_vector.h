@@ -42,6 +42,14 @@ marg_vector *marg_vector_add(marg_vector *self, void *item);
 void *marg_vector_get(marg_vector *self, size_t index);
 
 /**
+ * @brief Sets an element on a specific position
+ * @param self -> The vector to use
+ * @param index -> The index of the element
+ * @param item -> The item to replace with
+ */
+void marg_vector_set(marg_vector *self, size_t index, void *item);
+
+/**
  * @func: marg_vector_size
  * @brief: Get the total number of values inserted in the vector
  * @param self -> The vector to use
