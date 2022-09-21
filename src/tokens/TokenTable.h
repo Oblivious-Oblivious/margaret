@@ -5,6 +5,7 @@
 #include <stdint.h> /* int64_t */
 
 #include "Token.h"
+#include "../base/marg_string.h"
 #include "../base/marg_vector.h"
 
 typedef struct TokenTable {
@@ -61,17 +62,17 @@ Token *token_table_consume(TokenTable *self);
  * @param self -> The table to consume from
  * @param value -> The value expecting to consume
  * @param error_message -> An error message that prints in case of consumption of wrong value
- * @return char* -> The found token
+ * @return marg_string* -> The found token
  */
-char *token_table_ensure_value(TokenTable *self, char *value, char *error_message);
+marg_string *token_table_ensure_value(TokenTable *self, char *value, char *error_message);
 
 /**
  * @brief Consumes token by type
  * @param self -> The table to consume from
  * @param type -> The type expecting to consume
  * @param error_message -> An error message that prints in case of consumption of wrong type
- * @return char* 
+ * @return marg_string* 
  */
-char *token_table_ensure_type(TokenTable *self, Type type, char *error_message);
+marg_string *token_table_ensure_type(TokenTable *self, Type type, char *error_message);
 
 #endif

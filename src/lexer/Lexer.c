@@ -46,7 +46,7 @@ static Token *lexer_tokenize_integer(Lexer *self, char c) {
         c = lexer_next_character(self);
     }
 
-    return token_new(marg_string_get(final_number), TOKEN_INTEGER, self->lineno);
+    return token_new(final_number, TOKEN_INTEGER, self->lineno);
 }
 
 static Token *lexer_tokenize_number_special(Lexer *self, marg_string *final_number, const char *matcher, Type type) {
@@ -70,7 +70,7 @@ static Token *lexer_tokenize_number_special(Lexer *self, marg_string *final_numb
         c = lexer_next_character(self);
     }
 
-    return token_new(marg_string_get(final_number), type, self->lineno);
+    return token_new(final_number, type, self->lineno);
 }
 
 static Token *lexer_tokenize_integer_or_float(Lexer *self, char c) {
@@ -78,7 +78,7 @@ static Token *lexer_tokenize_integer_or_float(Lexer *self, char c) {
 
     c = lexer_peek_character(self, 1);
     if(c == '.')
-        return lexer_tokenize_number_special(self, marg_string_new(int_token->value), REGEX_NUMBER, TOKEN_FLOAT);
+        return lexer_tokenize_number_special(self, int_token->value, REGEX_NUMBER, TOKEN_FLOAT);
     else
         return int_token;
 }
@@ -98,7 +98,7 @@ static Token *lexer_tokenize_number(Lexer *self, char c) {
         else if(c == 'o' || c == 'O')
             return lexer_tokenize_number_special(self, final_number, REGEX_OCTAL, TOKEN_INTEGER);
         else
-            return token_new("0", TOKEN_INTEGER, self->lineno);
+            return token_new(marg_string_new("0"), TOKEN_INTEGER, self->lineno);
     }
     else {
         return lexer_tokenize_integer_or_float(self, c);
@@ -117,7 +117,7 @@ static Token *lexer_tokenize_identifier(Lexer *self, char c) {
         c = lexer_next_character(self);
     }
 
-    return token_new(marg_string_get(final_identifier), TOKEN_IDENTIFIER, self->lineno);
+    return token_new(final_identifier, TOKEN_IDENTIFIER, self->lineno);
 }
 
 static Token *lexer_tokenize_message_symbol(Lexer *self, char c) {
@@ -133,9 +133,9 @@ static Token *lexer_tokenize_message_symbol(Lexer *self, char c) {
 
     char maybe_id_symb = marg_string_get_char_at_index(final_symbol, 0);
     if(marg_string_size(final_symbol) == 1 || regex_matches(maybe_id_symb, REGEX_ID_SYMBOL))
-        return token_new(marg_string_get(final_symbol), TOKEN_ID_SYMBOL, self->lineno);
+        return token_new(final_symbol, TOKEN_ID_SYMBOL, self->lineno);
     else
-        return token_new(marg_string_get(final_symbol), TOKEN_MESSAGE_SYMBOL, self->lineno);
+        return token_new(final_symbol, TOKEN_MESSAGE_SYMBOL, self->lineno);
 }
 
 static Token *lexer_tokenize_character(Lexer *self, char c) {
@@ -149,7 +149,7 @@ static Token *lexer_tokenize_character(Lexer *self, char c) {
             return lexer_error(self, "unterminated character literal");
     }
     marg_string_add_char(final_char, c);
-    return token_new(marg_string_get(final_char), TOKEN_CHAR, self->lineno);
+    return token_new(final_char, TOKEN_CHAR, self->lineno);
 }
 
 static Token *lexer_tokenize_string(Lexer *self, char c) {
@@ -165,7 +165,7 @@ static Token *lexer_tokenize_string(Lexer *self, char c) {
             self->lineno++;
     }
     marg_string_add_char(final_string, c);
-    return token_new(marg_string_get(final_string), TOKEN_STRING, self->lineno);
+    return token_new(final_string, TOKEN_STRING, self->lineno);
 }
 
 TokenTable *lexer_make_tokens(Lexer *self) {
@@ -189,7 +189,7 @@ TokenTable *lexer_make_tokens(Lexer *self) {
         else if(regex_matches(c, REGEX_SYNTAX_SYMBOL)) {
             marg_string *symb = marg_string_new("");
             marg_string_add_char(symb, c);
-            token_table_add(token_table, token_new(marg_string_get(symb), TOKEN_SYNTAX_SYMBOL, self->lineno));
+            token_table_add(token_table, token_new(symb, TOKEN_SYNTAX_SYMBOL, self->lineno));
         }
         else if(regex_matches(c, REGEX_SINGLE_QUOTE)) {
             Token *tok = lexer_tokenize_character(self, c);
@@ -209,7 +209,7 @@ TokenTable *lexer_make_tokens(Lexer *self) {
         }
     }
 
-    token_table_add(token_table, token_new("eof", TOKEN_EOF, self->lineno));
+    token_table_add(token_table, token_new(marg_string_new("eof"), TOKEN_EOF, self->lineno));
 
     return token_table;
 }

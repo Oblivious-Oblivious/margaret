@@ -6,8 +6,10 @@
 
 #include "Type.h"
 
+#include "../base/marg_string.h"
+
 typedef struct Token {
-    char *value;
+    marg_string *value;
     Type type;
     size_t line_number;
 } Token;
@@ -19,7 +21,7 @@ typedef struct Token {
  * @param line_number -> The current line which the token was consumed at
  * @return Token
  */
-Token *token_new(char *value, Type type, size_t line_number);
+Token *token_new(marg_string *value, Type type, size_t line_number);
 
 /**
  * @brief Checks for equality between a token and a string value
@@ -27,7 +29,7 @@ Token *token_new(char *value, Type type, size_t line_number);
  * @param value -> Second value
  * @return A boolean
  */
-int token_equals_values(Token *tok, char *value);
+int token_equals_values(Token *tok, marg_string *value);
 
 /**
  * @brief Checks for equality between two tokens

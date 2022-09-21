@@ -83,6 +83,11 @@ void marg_string_add_char(marg_string *self, char c) {
     self->str[self->size] = '\0';
 }
 
+void marg_string_add(marg_string *self, marg_string *other) {
+    if(self == NULL || other == NULL) return;
+    marg_string_add_str(self, other->str);
+}
+
 char *marg_string_get(marg_string *self) {
     if(self == NULL) return NULL;
     return self->str;

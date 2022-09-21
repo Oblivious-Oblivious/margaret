@@ -8,9 +8,9 @@
     TODO Track line numbers to each error
     TODO Gather a list of errors and output after parsing all code
  * @param message -> The message to display
- * @return char* -> NULL pointer
+ * @return marg_string* -> NULL pointer
  */
-static char *error(char *message) {
+static marg_string *error(char *message) {
     printf("%s\n", message);
     exit(1);
     return NULL;
@@ -50,15 +50,15 @@ Token *token_table_consume(TokenTable *self) {
     return token_table_get(self, self->pos);
 }
 
-char *token_table_ensure_value(TokenTable *self, char *value, char *error_message) {
+marg_string *token_table_ensure_value(TokenTable *self, char *value, char *error_message) {
     Token *token = token_table_consume(self);
-    if(token_equals_values(token, value))
+    if(token_equals_values(token, marg_string_new(value)))
         return token->value;
     else
         return error(error_message);
 }
 
-char *token_table_ensure_type(TokenTable *self, Type type, char *error_message) {
+marg_string *token_table_ensure_type(TokenTable *self, Type type, char *error_message) {
     Token *token = token_table_consume(self);
     if(token->type == type)
         return token->value;

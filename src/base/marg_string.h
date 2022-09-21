@@ -46,6 +46,13 @@ void marg_string_add_str(marg_string *self, const char *str);
 void marg_string_add_char(marg_string *self, char c);
 
 /**
+ * @brief Adds a marg_string into self
+ * @param self -> The str builder to use
+ * @param other -> The str builder to add
+ */
+void marg_string_add(marg_string *self, marg_string *other);
+
+/**
  * @brief A pointer to the internal buffer with the builder's stirng data
  * @param self -> The string builder to use
  * @return A pointer to the internal string data
