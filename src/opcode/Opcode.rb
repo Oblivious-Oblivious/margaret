@@ -29,8 +29,8 @@ module Opcode
         "push_tensor",
         "push_hash",
 
-        "STARTpush_block",
-        "ENDpush_block",
+        "STARTpush_proc",
+        "ENDpush_proc",
 
         "STARTpush_c_function",
         "ENDpush_c_function",
