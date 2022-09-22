@@ -19,7 +19,7 @@ module(marg_vector_spec, {
         });
 
         it("creates a new vector", {
-            v = marg_vector_new();
+            v = marg_vector_new_empty();
             assert_that(v isnot NULL);
         });
 
@@ -30,13 +30,18 @@ module(marg_vector_spec, {
             assert_that_int(marg_vector_size(v) equals to 3);
         });
 
+        it("creates a new vector with initial elements", {
+            v = marg_vector_new(a, b, c);
+            assert_that_int(marg_vector_size(v) equals to 3);
+        });
+
         it("peeks the second element of the vector", {
             int *first = (int*)marg_vector_get(v, 1);
             assert_that_int(*first equals to *b);
         });
 
         it("counts the length correctly on additions", {
-            marg_vector *vv = marg_vector_new();
+            marg_vector *vv = marg_vector_new_empty();
 
             assert_that_int(marg_vector_size(vv) equals to 0);
             marg_vector_add(vv, NULL);

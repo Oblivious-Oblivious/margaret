@@ -19,7 +19,7 @@ static marg_string *error(char *message) {
 TokenTable *token_table_new(void) {
     TokenTable *t = (TokenTable*)malloc(sizeof(TokenTable));
 
-    t->token_list = marg_vector_new();
+    t->token_list = marg_vector_new_empty();
     t->pos = -1;
 
     return t;
