@@ -103,18 +103,19 @@ class Bytecode
         elsif optional_instance_symbol == "@"
             ["push_instance", name];
         else
-            ["push_variable", name]
+            ["push_variable", name];
         end
     end
 
     # TODO New activation window on procs and methods
     def proc_literal(param_list, function)
-        ["STARTpush_proc", tensor_literal(param_list.map { |item| ["push_variable", item] }), function, "ENDpush_proc"];
+        param_list = param_list.map { |item| ["push_variable", item] };
+        ["STARTpush_proc", param_list, "push_tensor", "#{param_list.size}", function, "ENDpush_proc"];
     end
 
     def c_function_declaration(return_type, name, params)
-        params = tensor_literal(params.map { |param| ["push_variable", "CFunParam", "push_variable", "#{param[0]}", "push_variable", "#{param[1]}", "keyword", "c_type:c_name:", "2"] });
-        ["STARTpush_c_function", "push_variable", return_type, "push_variable", name, params, "ENDpush_c_function"]
+        params = params.map { |param| ["push_variable", "CFunParam", "push_variable", "#{param[0]}", "push_variable", "#{param[1]}", "keyword", "c_type:c_name:", "2"] };
+        ["STARTpush_c_function", "push_variable", return_type, "push_variable", name, params, "push_tensor", "#{params.size}", "ENDpush_c_function"];
     end
     
     def unary_method_definition(selector, function)
@@ -128,8 +129,8 @@ class Bytecode
     def keyword_method_definition(selector, function)
         joined_selector = "";
         selector.each { |sel| joined_selector << sel[0] };
-        params = tensor_literal(selector.map { |item| ["push_variable", item[1]] });
-        ["STARTpush_keyword_method", %Q{"#{joined_selector}"}, params, function, "ENDpush_keyword_method"];
+        params = selector.map { |item| ["push_variable", item[1]] };
+        ["STARTpush_keyword_method", %Q{"#{joined_selector}"}, params, "push_tensor", "#{params.size}", function, "ENDpush_keyword_method"];
     end
 
     def literal(unit)
