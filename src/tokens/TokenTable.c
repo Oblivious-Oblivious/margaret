@@ -7,12 +7,12 @@
     TODO Abstract error somewhere closer to boundary
     TODO Track line numbers to each error
     TODO Gather a list of errors and output after parsing all code
+ * @param token -> The token where the error occured at
  * @param message -> The message to display
  * @return marg_string* -> NULL pointer
  */
-static marg_string *error(char *message) {
-    printf("%s\n", message);
-    exit(1);
+static marg_string *error(Token *token, char *message) {
+    fprintf(stderr, "%s:%zu: \033[1;31merror:\033[0m %s\n", "(FILE)", token->line_number, message);
     return NULL;
 }
 
@@ -55,7 +55,7 @@ marg_string *token_table_ensure_value(TokenTable *self, char *value, char *error
     if(token_equals_values(token, marg_string_new(value)))
         return token->value;
     else
-        return error(error_message);
+        return error(token, error_message);
 }
 
 marg_string *token_table_ensure_type(TokenTable *self, Type type, char *error_message) {
@@ -63,5 +63,5 @@ marg_string *token_table_ensure_type(TokenTable *self, Type type, char *error_me
     if(token->type == type)
         return token->value;
     else
-        return error(error_message);
+        return error(token, error_message);
 }
