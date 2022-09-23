@@ -181,7 +181,7 @@ describe Bytecode do
 
     it "emits for binaries" do
         parse("0b0110", ["push_integer", "6"]);
-        parse("0B10", ["push_integer", "2"]);
+        parse("0B10", ["push_2"]);
         parse("-0b0110", ["push_integer", "-6"]);
         parse("-0B10", ["push_integer", "-2"]);
         parse("(
