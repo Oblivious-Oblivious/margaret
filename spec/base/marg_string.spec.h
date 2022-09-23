@@ -30,6 +30,16 @@ module(marg_string_spec, {
             });
         });
 
+        it("removes underscores from strings", {
+            marg_string *test = marg_string_new("a_word_with_underscores");
+            test = marg_string_remove_underscores(test);
+            assert_that_charptr(marg_string_get(test) equals to "awordwithunderscores");
+
+            test = marg_string_new("42_000_000");
+            test = marg_string_remove_underscores(test);
+            assert_that_charptr(marg_string_get(test) equals to "42000000");
+        });
+
         /* TODO Write more tests */
     });
 })
