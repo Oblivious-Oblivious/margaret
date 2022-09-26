@@ -16,8 +16,8 @@ Lexer *lexer_new(char *filename, marg_string *text) {
     return self;
 }
 
-void *lexer_error(Lexer *self, char *message) {
-    fprintf(stderr, "%s:%llu: \033[1;31merror:\033[0m %s\n", self->filename, self->lineno, message);
+void *lexer_error(Lexer *self, char *message, marg_string *token) {
+    fprintf(stderr, "%s:%llu: \033[1;31merror:\033[0m %s on `%s`\n", self->filename, self->lineno, message, marg_string_get(token));
     return NULL;
 }
 
@@ -143,10 +143,12 @@ static Token *lexer_tokenize_character(Lexer *self, char c) {
     marg_string_add_char(final_char, c);
     c = lexer_next_character(self);
     if(!regex_matches(c, REGEX_SINGLE_QUOTE)) {
+    // TODO Implement UTF-8 strings
+    // while(!regex_matches(c, REGEX_SINGLE_QUOTE)) {
         marg_string_add_char(final_char, c);
         c = lexer_next_character(self);
         if(c == '\0')
-            return lexer_error(self, "unterminated character literal");
+            return lexer_error(self, "unterminated character literal", final_char);
     }
     marg_string_add_char(final_char, c);
     return token_new(final_char, TOKEN_CHAR, self->lineno);
@@ -160,7 +162,7 @@ static Token *lexer_tokenize_string(Lexer *self, char c) {
         marg_string_add_char(final_string, c);
         c = lexer_next_character(self);
         if(c == '\0')
-            return lexer_error(self, "unterminated string literal");
+            return lexer_error(self, "unterminated string literal", final_string);
         else if(regex_matches(c, REGEX_NEWLINE))
             self->lineno++;
     }
@@ -204,7 +206,9 @@ TokenTable *lexer_make_tokens(Lexer *self) {
             token_table_add(token_table, tok);
         }
         else {
-            lexer_error(self, "Unexpected character.");
+            marg_string *err = marg_string_new("");
+            marg_string_add_char(err, c);
+            lexer_error(self, "Unexpected character.", err);
             break;
         }
     }

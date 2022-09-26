@@ -12,7 +12,8 @@
  * @return marg_string* -> NULL pointer
  */
 static marg_string *error(Token *token, char *message) {
-    fprintf(stderr, "%s:%zu: \033[1;31merror:\033[0m %s\n", "(FILE)", token->line_number, message);
+    /* TODO Pass in filename */
+    fprintf(stderr, "%s:%zu: \033[1;31merror:\033[0m %s on `%s`\n", "(FILE)", token->line_number, message, marg_string_get(token->value));
     return NULL;
 }
 

@@ -89,7 +89,7 @@ module(LexerSpec, {
 
         it("prints error messages", {
             Lexer *l = lexer_new("file.marg", marg_string_new("(42 factorial)"));
-            void *response = lexer_error(l, "random exception");
+            void *response = lexer_error(l, "random exception", marg_string_new(""));
             assert_that(response is NULL);
         });
 

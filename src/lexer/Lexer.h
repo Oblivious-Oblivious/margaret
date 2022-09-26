@@ -59,9 +59,10 @@ Lexer *lexer_new(char *filename, marg_string *text);
  * @brief Reports an error to stderrr
  * @param self -> The lexer object
  * @param message -> The error message to report
+ * @param token -> The token where the error occurred at
  * @return void* -> NULL
  */
-void *lexer_error(Lexer *self, char *message);
+void *lexer_error(Lexer *self, char *message, marg_string *token);
 
 /**
  * @brief Get the next character from the input stream
