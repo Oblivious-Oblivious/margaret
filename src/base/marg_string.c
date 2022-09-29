@@ -29,8 +29,8 @@ static void marg_string_ensure_space(marg_string *self, size_t add_len) {
 marg_string *marg_string_new(char *initial_string) {
     marg_string *self = (marg_string*)malloc(sizeof(marg_string));
 
-    self->str = (char*)malloc(sizeof(char) * 32);
-    self->alloced = 32;
+    self->str = (char*)malloc(sizeof(char) * 1024);
+    self->alloced = 1024;
     self->size = 0;
     marg_string_add_str(self, initial_string);
 
