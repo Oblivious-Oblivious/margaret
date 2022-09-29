@@ -132,7 +132,7 @@ static Token *lexer_tokenize_message_symbol(Lexer *self, char c) {
     }
 
     char maybe_id_symb = marg_string_get_char_at_index(final_symbol, 0);
-    if(marg_string_size(final_symbol) == 1 || regex_matches(maybe_id_symb, REGEX_ID_SYMBOL))
+    if(marg_string_size(final_symbol) == 1 && regex_matches(maybe_id_symb, REGEX_ID_SYMBOL))
         return token_new(final_symbol, TOKEN_ID_SYMBOL, self->lineno);
     else
         return token_new(final_symbol, TOKEN_MESSAGE_SYMBOL, self->lineno);
