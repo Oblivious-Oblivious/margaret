@@ -34,7 +34,7 @@ class Bytecode
         object.each { |opcode| res << opcode };
         selectors.each do |sel|
             res << "unary";
-            sel.each { |opcode| res << opcode };
+            res << sel[0];
         end
         res;
     end
