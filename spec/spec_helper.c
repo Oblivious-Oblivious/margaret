@@ -12,7 +12,6 @@
 #include "base/marg_vector.spec.h"
 #include "base/marg_stack.spec.h"
 #include "base/marg_string.spec.h"
-// #include "base/marg_table.spec.h"
 
 // evaluator
 // #include "evaluator/Evaluator.spec.h"
