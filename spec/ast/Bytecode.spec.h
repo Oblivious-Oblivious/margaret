@@ -183,7 +183,7 @@ module(BytecodeSpec, {
 
     it("emits for binaries", {
         parse("0b0110", marg_vector_new(OP_PUSH_INTEGER, marg_string_new("6")));
-        // parse("0B10", marg_vector_new(OP_PUSH_2));
+        parse("0B10", marg_vector_new(OP_PUSH_2));
         parse("-0b0110", marg_vector_new(OP_PUSH_INTEGER, marg_string_new("-6")));
         parse("-0B10", marg_vector_new(OP_PUSH_INTEGER, marg_string_new("-2")));
         parse("( \
@@ -214,8 +214,8 @@ module(BytecodeSpec, {
     it("emits for characters", {
         parse("'a'", marg_vector_new(OP_PUSH_CHAR, marg_string_new("'a'")));
         parse("'\n'", marg_vector_new(OP_PUSH_CHAR, marg_string_new("'\n'")));
-        // parse("'œ'", marg_vector_new(OP_PUSH_CHAR, marg_string_new("'œ'")));
-        // parse("-'œ'", marg_vector_new(OP_PUSH_CHAR, marg_string_new("-'œ'")));
+        parse("'œ'", marg_vector_new(OP_PUSH_CHAR, marg_string_new("'œ'")));
+        parse("-'œ'", marg_vector_new(OP_PUSH_CHAR, marg_string_new("-'œ'")));
         parse("('a' to_uppercase)", marg_vector_new(OP_PUSH_CHAR, marg_string_new("'a'"), OP_UNARY, marg_string_new("to_uppercase")));
         parse("('B' to_ascii)", marg_vector_new(OP_PUSH_CHAR, marg_string_new("'B'"), OP_UNARY, marg_string_new("to_ascii")));
         parse("('a' <= 'b')", marg_vector_new(OP_PUSH_CHAR, marg_string_new("'a'"), OP_PUSH_CHAR, marg_string_new("'b'"), OP_BINARY, marg_string_new("<=")));
