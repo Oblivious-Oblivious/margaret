@@ -15,37 +15,37 @@
 // #include "base/marg_table.spec.h"
 
 // evaluator
-// #include "evaluator/Evaluator.spec.h"
+#include "evaluator/Evaluator.spec.h"
 
 // generic
-// #include "generic/arithmetic.spec.h"
-// #include "generic/assignments.spec.h"
-// #include "generic/bitwise.spec.h"
-// #include "generic/booleans.spec.h"
-// #include "generic/c_functions.spec.h"
-// #include "generic/characters.spec.h"
-// #include "generic/classes.spec.h"
-// #include "generic/code_as_data.spec.h"
-// #include "generic/complex.spec.h"
-// #include "generic/conditionals.spec.h"
-// #include "generic/constants.spec.h"
-// #include "generic/conversions.spec.h"
-// #include "generic/date_time.spec.h"
-// #include "generic/errors.spec.h"
-// #include "generic/groups.spec.h"
-// #include "generic/hashes.spec.h"
-// #include "generic/identifiers.spec.h"
-// #include "generic/intervals.spec.h"
-// #include "generic/iterations.spec.h"
-// #include "generic/messages.spec.h"
-// #include "generic/meta_evaluation.spec.h"
-// #include "generic/method_definition.spec.h"
-// #include "generic/numeric.spec.h"
-// #include "generic/procs.spec.h"
-// #include "generic/rational.spec.h"
-// #include "generic/strings.spec.h"
-// #include "generic/symbols.spec.h"
-// #include "generic/tensors.spec.h"
+#include "generic/arithmetic.spec.h"
+#include "generic/assignments.spec.h"
+#include "generic/bitwise.spec.h"
+#include "generic/booleans.spec.h"
+#include "generic/c_functions.spec.h"
+#include "generic/characters.spec.h"
+#include "generic/classes.spec.h"
+#include "generic/code_as_data.spec.h"
+#include "generic/complex.spec.h"
+#include "generic/conditionals.spec.h"
+#include "generic/constants.spec.h"
+#include "generic/conversions.spec.h"
+#include "generic/date_time.spec.h"
+#include "generic/errors.spec.h"
+#include "generic/groups.spec.h"
+#include "generic/hashes.spec.h"
+#include "generic/identifiers.spec.h"
+#include "generic/intervals.spec.h"
+#include "generic/iterations.spec.h"
+#include "generic/messages.spec.h"
+#include "generic/meta_evaluation.spec.h"
+#include "generic/method_definition.spec.h"
+#include "generic/numeric.spec.h"
+#include "generic/procs.spec.h"
+#include "generic/rational.spec.h"
+#include "generic/strings.spec.h"
+#include "generic/symbols.spec.h"
+#include "generic/tensors.spec.h"
 
 // lexer
 #include "lexer/FileLoader.spec.h"
@@ -74,36 +74,36 @@ spec_suite({
     marg_stack_spec();
     marg_string_spec();
 
-    // EvaluatorSpec();
+    EvaluatorSpec();
 
-    // arithmetic_spec();
-    // assignments_spec();
-    // bitwise_spec();
-    // booleans_spec();
-    // c_functions_spec();
-    // characters_spec();
-    // classes_spec();
-    // code_as_data_spec();
-    // complex_spec();
-    // conditionals_spec();
-    // constants_spec();
-    // conversions_spec();
-    // date_time_spec();
-    // errors_spec();
-    // groups_spec();
-    // hashes_spec();
-    // identifiers_spec();
-    // intervals_spec();
-    // iterations_spec();
-    // messages_spec();
-    // meta_evaluation_spec();
-    // method_definition_spec();
-    // numeric_spec();
-    // procs_spec();
-    // rational_spec();
-    // strings_spec();
-    // symbols_spec();
-    // tensors_spec();
+    arithmetic_spec();
+    assignments_spec();
+    bitwise_spec();
+    booleans_spec();
+    c_functions_spec();
+    characters_spec();
+    classes_spec();
+    code_as_data_spec();
+    complex_spec();
+    conditionals_spec();
+    constants_spec();
+    conversions_spec();
+    date_time_spec();
+    errors_spec();
+    groups_spec();
+    hashes_spec();
+    identifiers_spec();
+    intervals_spec();
+    iterations_spec();
+    messages_spec();
+    meta_evaluation_spec();
+    method_definition_spec();
+    numeric_spec();
+    procs_spec();
+    rational_spec();
+    strings_spec();
+    symbols_spec();
+    tensors_spec();
 
     FileLoaderSpec();
     LexerSpec();

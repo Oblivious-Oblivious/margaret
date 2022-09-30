@@ -10,7 +10,8 @@
 #include "../src/parser/Parser.h"
 
 #define parse(code, expected_result) do { \
-    Parser *p = parser_new(lexer_make_tokens(lexer_new("file.marg", marg_string_new(code)))); \
+    Lexer *l = lexer_new("file.marg", marg_string_new(code)); \
+    Parser *p = parser_new(lexer_make_tokens(l)); \
     marg_vector *res = parser_analyze_syntax(p); \
     size_t size_of_res = marg_vector_size(res); \
     size_t the_same_size_as_expected = marg_vector_size(expected_result); \
