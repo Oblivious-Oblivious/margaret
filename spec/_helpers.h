@@ -17,7 +17,7 @@
     \
     assert_that_int(size_of_res equals to the_same_size_as_expected); \
     \
-    if(size_of_res == the_same_size_as_expected) \
+    if(size_of_res <= the_same_size_as_expected) \
         for(size_t i = 0; i < size_of_res; i++) \
             assert_that_charptr(marg_string_get(marg_vector_get(res, i)) equals to marg_string_get(marg_vector_get(expected_result, i))); \
 } while(0)
