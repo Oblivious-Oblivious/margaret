@@ -5,7 +5,8 @@
 #include "version.spec.h"
 
 // ast
-// #include "ast/Bytecode.spec.h"
+#include "ast/alternate_to_dec.spec.h"
+#include "ast/Bytecode.spec.h"
 
 // base
 #include "base/marg_vector.spec.h"
@@ -66,7 +67,8 @@
 spec_suite({
     VersionSpec();
 
-    // BytecodeSpec();
+    DecimalConversionSpec();
+    BytecodeSpec();
 
     marg_vector_spec();
     marg_stack_spec();
