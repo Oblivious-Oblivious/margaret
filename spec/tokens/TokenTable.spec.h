@@ -7,10 +7,10 @@
 TokenTable *t;
 void token_table_spec_setup(void) {
     t = token_table_new();
-    token_table_add(t, token_new(marg_string_new("a"), TOKEN_IDENTIFIER, 1));
-    token_table_add(t, token_new(marg_string_new("+"), TOKEN_MESSAGE_SYMBOL, 1));
-    token_table_add(t, token_new(marg_string_new("2"), TOKEN_INTEGER, 1));
-    token_table_add(t, token_new(marg_string_new("eof"), TOKEN_EOF, 1));
+    token_table_add(t, token_new(marg_string_new("a"), TOKEN_IDENTIFIER, 1, "file1.marg"));
+    token_table_add(t, token_new(marg_string_new("+"), TOKEN_MESSAGE_SYMBOL, 1, "file1.marg"));
+    token_table_add(t, token_new(marg_string_new("2"), TOKEN_INTEGER, 1, "file1.marg"));
+    token_table_add(t, token_new(marg_string_new("eof"), TOKEN_EOF, 1, "file1.marg"));
 }
 
 module(TokenTableSpec, {

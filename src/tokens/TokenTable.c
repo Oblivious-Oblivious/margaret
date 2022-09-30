@@ -5,16 +5,14 @@
 /**
  * @brief
     TODO Abstract error somewhere closer to boundary
-    TODO Track line numbers to each error
     TODO Gather a list of errors and output after parsing all code
-    TODO Pass in filename
     TODO Name error messages or abstract to macros
  * @param token -> The token where the error occured at
  * @param message -> The message to display
  * @return marg_string* -> NULL pointer
  */
 static marg_string *error(Token *token, char *message) {
-    fprintf(stderr, "%s:%zu: \033[1;31merror:\033[0m %s on `%s`\n", "(FILE)", token->line_number, message, marg_string_get(token->value));
+    fprintf(stderr, "%s:%zu: \033[1;31merror:\033[0m %s  Token: \033[1;31m`%s`\033[0m\n", token->filename, token->line_number, message, marg_string_get(token->value));
     return NULL;
 }
 

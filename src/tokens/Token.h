@@ -12,6 +12,7 @@ typedef struct Token {
     marg_string *value;
     Type type;
     size_t line_number;
+    char *filename;
 } Token;
 
 /**
@@ -19,9 +20,10 @@ typedef struct Token {
  * @param value -> A string value of the token consumed
  * @param type -> A type identifier for the token
  * @param line_number -> The current line which the token was consumed at
+ * @param filename -> The current line which the token was consumed at
  * @return Token
  */
-Token *token_new(marg_string *value, Type type, size_t line_number);
+Token *token_new(marg_string *value, Type type, size_t line_number, char *filename);
 
 /**
  * @brief Checks for equality between a token and a string value
