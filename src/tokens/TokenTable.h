@@ -14,6 +14,8 @@ typedef struct TokenTable {
     int64_t pos;
 } TokenTable;
 
+void token_table_display(TokenTable *self);
+
 /**
  * @brief Allocates and initializes a new token table.
  * @return TokenTable

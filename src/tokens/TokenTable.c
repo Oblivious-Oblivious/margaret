@@ -18,6 +18,14 @@ static marg_string *error(Token *token, char *message) {
     return NULL;
 }
 
+void token_table_display(TokenTable *self) {
+    for(size_t i = 0; i < token_table_size(self); i++) {
+        Token *t = token_table_get(self, i);
+        printf("(%s,%d,%zu)\n", marg_string_get(t->value), t->type, t->line_number);
+    }
+    printf("\n");
+}
+
 TokenTable *token_table_new(void) {
     TokenTable *t = (TokenTable*)malloc(sizeof(TokenTable));
 
