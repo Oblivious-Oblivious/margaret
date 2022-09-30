@@ -14,7 +14,6 @@ static int file_loader_file_does_not_exist(FileLoader *self) {
         fclose(f);
         return 0;
     }
-    printf("File: `%s` does not exist\n", self->filepath);
     return 1;
 }
 
@@ -34,7 +33,6 @@ int file_loader_open(FileLoader *self, char *filepath) {
         return 0;
 
     if(!(self->fd = fopen(self->filepath, "r"))) {
-        printf("Error on reading file: `%s`\n", self->filepath);
         return 0;
     }
     return 1;
@@ -44,7 +42,6 @@ int file_loader_close(FileLoader *self) {
     if(self == NULL)
         return 0;
     if((fclose(self->fd))) {
-        printf("Error on closing file: `%s`\n", self->filepath);
         free(self);
         return 0;
     }
