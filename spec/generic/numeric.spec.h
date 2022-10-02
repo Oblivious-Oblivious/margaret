@@ -38,7 +38,7 @@ module(numeric_spec, {
 
     it("parses binary literals", {
         parse("0b0110", marg_vector_new(OP_PUSH_INTEGER, marg_string_new("6")));
-        parse("0B10", marg_vector_new(OP_PUSH_INTEGER, marg_string_new("2")));
+        parse("0B10", marg_vector_new(OP_PUSH_2));
         parse("-0b0110", marg_vector_new(OP_PUSH_INTEGER, marg_string_new("-6")));
         parse("-0B10", marg_vector_new(OP_PUSH_INTEGER, marg_string_new("-2")));
         parse("( \

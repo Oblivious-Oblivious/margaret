@@ -130,8 +130,9 @@ module(LexerSpec, {
             });
 
             it("draws an error when trying to tokenize an integer starting with 0", {
-                Lexer *l = lexer_new("file.marg", marg_string_new("(042 msg)"));
-                assert_that(lexer_make_tokens(l) is NULL);
+                Lexer *l = lexer_new("file.marg", marg_string_new("042 msg"));
+                TokenTable *table = lexer_make_tokens(l);
+                assert_that(token_table_get(table, 0) is NULL);
             });
 
             it("tokenizes floats", {

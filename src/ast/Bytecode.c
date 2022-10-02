@@ -328,8 +328,15 @@ marg_vector *ast_integer_literal(marg_string *sign, marg_string *number) {
         else
             return marg_vector_new(OP_PUSH_1);
     }
-    else if(marg_string_equals(number, marg_string_new("2")))
-        return marg_vector_new(OP_PUSH_2);
+    else if(
+        marg_string_equals(number, marg_string_new("2"))
+    ||  marg_string_equals(number, marg_string_new("0b10"))
+    ) {
+        if(marg_string_equals(sign, marg_string_new("-")))
+            return marg_vector_new(OP_PUSH_INTEGER, marg_string_new("-2"));
+        else
+            return marg_vector_new(OP_PUSH_2);
+    }
     else {
         if(marg_string_get_char_at_index(number, 0) == '0' && (marg_string_get_char_at_index(number, 1) == 'b' || marg_string_get_char_at_index(number, 1) == 'B')) {
             marg_string_skip(number, 2);
