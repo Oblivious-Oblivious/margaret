@@ -7,22 +7,23 @@
 #include "../base/marg_string.h"
 #include "../tokens/TokenTable.h"
 
-static const char REGEX_WHITESPACE[4] = {' ','\t','\f','\r'};
-static const char REGEX_NEWLINE[1] = {'\n'};
-static const char REGEX_NUMBER[10] = {'0','1','2','3','4','5','6','7','8','9'};
-static const char REGEX_LETTER[52] = {
+static const char REGEX_WHITESPACE[5] = {' ','\t','\f','\r','\0'};
+static const char REGEX_NEWLINE[2] = {'\n','\0'};
+static const char REGEX_NUMBER[11] = {'0','1','2','3','4','5','6','7','8','9','\0'};
+static const char REGEX_LETTER[53] = {
     'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
-    'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'
+    'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
+    '\0'
 };
-static const char REGEX_BINARY[2] = {'0','1'};
-static const char REGEX_HEXADECIMAL[22] = {'0','1','2','3','4','5','6','7','8','9','A','a','B','b','C','c','D','d','E','e','F','f'};
-static const char REGEX_OCTAL[8] = {'0','1','2','3','4','5','6','7'};
-static const char REGEX_ID_SYMBOL[2] = {'!','?'};
-static const char REGEX_MESSAGE_SYMBOL[19] = {'!','?','+','-','*','/','\\','~','<','>','=','%','|','&','^',';','.','`','$'};
+static const char REGEX_BINARY[3] = {'0','1','\0'};
+static const char REGEX_HEXADECIMAL[23] = {'0','1','2','3','4','5','6','7','8','9','A','a','B','b','C','c','D','d','E','e','F','f','\0'};
+static const char REGEX_OCTAL[9] = {'0','1','2','3','4','5','6','7','\0'};
+static const char REGEX_ID_SYMBOL[3] = {'!','?','\0'};
+static const char REGEX_MESSAGE_SYMBOL[20] = {'!','?','+','-','*','/','\\','~','<','>','=','%','|','&','^',';','.','`','$','\0'};
 /* TODO Check if `_` underscore is supposed to be a syntax symbol */
-static const char REGEX_SYNTAX_SYMBOL[11] = {'_','(',')','[',']','{','}',',',':','@','#'};
-static const char REGEX_SINGLE_QUOTE[1] = {'\''};
-static const char REGEX_DOUBLE_QUOTE[1] = {'"'};
+static const char REGEX_SYNTAX_SYMBOL[12] = {'_','(',')','[',']','{','}',',',':','@','#','\0'};
+static const char REGEX_SINGLE_QUOTE[2] = {'\'','\0'};
+static const char REGEX_DOUBLE_QUOTE[2] = {'"','\0'};
 
 /**
  * @brief Pattern matches a character in a matcher
@@ -34,7 +35,7 @@ static int regex_matches(char c, const char *matcher) {
     size_t matcher_size = strlen(matcher);
 
     for(size_t i = 0; i < matcher_size; i++)
-        if(matcher[i] == c)
+        if(matcher[i] == c && matcher[i] != '\0')
             return 1;
     return 0;
 }

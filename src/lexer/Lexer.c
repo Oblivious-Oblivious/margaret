@@ -18,6 +18,7 @@ Lexer *lexer_new(char *filename, marg_string *text) {
 
 void *lexer_error(Lexer *self, char *message, marg_string *token) {
     fprintf(stderr, "%s:%llu: \033[1;31merror:\033[0m %s on `%s`\n", self->filename, self->lineno, message, marg_string_get(token));
+    /* TODO Return a NULL token table in case of lexer error */
     return NULL;
 }
 
@@ -97,8 +98,10 @@ static Token *lexer_tokenize_number(Lexer *self, char c) {
             return lexer_tokenize_number_special(self, final_number, REGEX_HEXADECIMAL, TOKEN_INTEGER);
         else if(c == 'o' || c == 'O')
             return lexer_tokenize_number_special(self, final_number, REGEX_OCTAL, TOKEN_INTEGER);
-        else
+        else if(!regex_matches(c, REGEX_NUMBER))
             return token_new(marg_string_new("0"), TOKEN_INTEGER, self->lineno, self->filename);
+        else
+            return lexer_error(self, "invalid number format", final_number);
     }
     else {
         return lexer_tokenize_integer_or_float(self, c);
