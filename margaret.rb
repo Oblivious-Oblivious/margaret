@@ -35,7 +35,7 @@ class Margaret
         chars = FileLoader.new.load(filename);
         tokens = Lexer.new(filename, chars).make_tokens;
         bytecode = Parser.new(tokens).analyse_syntax;
-        evaluated = Evaluator.new(bytecode).run;
+        evaluated = Evaluator.new(bytecode).evaluate;
 
         puts bytecode;
         evaluated;
