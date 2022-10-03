@@ -1,0 +1,68 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "libs/readline/readline/readline.h"
+#include "libs/readline/readline/history.h"
+
+#include "src/base/marg_string.h"
+#include "src/base/marg_vector.h"
+#include "src/evaluator/Evaluator.h"
+#include "src/lexer/FileLoader.h"
+#include "src/lexer/Lexer.h"
+#include "src/parser/Parser.h"
+
+marg_string *SCAN(char *prompt) {
+    char *line = readline(prompt);
+    if(!strcmp(line, "\n")) {
+        // TODO history_pop
+        return marg_string_new("()");
+    }
+    else if(!strcmp(line, "<<exit>>") || !strcmp(line, "<<quit>>"))
+        exit(0);
+    else
+        return marg_string_new(line);
+}
+
+TokenTable *READ(marg_string *chars) {
+    return lexer_make_tokens(lexer_new("repl", chars));
+}
+
+marg_vector *EVAL(TokenTable *tokens) {
+    return parser_analyze_syntax(parser_new(tokens));
+}
+
+void PRINT(marg_vector *evaluated) {
+    printf("[");
+    size_t evaluated_size = marg_vector_size(evaluated);
+    for(size_t i = 0; i < evaluated_size-1; i++)
+        printf("%s, ", marg_string_get(marg_vector_get(evaluated, i)));
+    printf("%s]\n", marg_string_get(marg_vector_get(evaluated, evaluated_size-1)));
+}
+
+void margaret_repl(void) {
+    while(1) PRINT(EVAL(READ(SCAN("$> "))));
+}
+
+marg_string *margaret_run_file(char *filename) {
+    marg_string *chars = file_loader_load(file_loader_new(), filename);
+    Lexer *l = lexer_new(filename, chars);
+    TokenTable *tokens = lexer_make_tokens(l);
+    Parser *p = parser_new(tokens);
+    marg_vector *bytecode = parser_analyze_syntax(p);
+    Evaluator *e = evaluator_new(bytecode);
+    marg_string *evaluated = evaluator_evaluate(e);
+
+    size_t bytecode_size = marg_vector_size(bytecode);
+    for(size_t i = 0; i < bytecode_size; i++)
+        printf("%s\n", marg_string_get(marg_vector_get(bytecode, i)));
+    
+    return evaluated;
+}
+
+int main(int argc, char **argv) {
+    margaret_repl();
+    // TODO Check for user input
+    (void)argc;(void)argv;
+    // margaret_run_file(argv[1]);
+}
