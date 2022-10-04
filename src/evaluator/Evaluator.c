@@ -15,6 +15,11 @@ static void evaluator_run(Evaluator *self) {
     for(size_t ip = 0; ip < bytecodes_size; ip++) {
         marg_string *opcode = marg_vector_get(self->bytecodes, ip);
 
+        opcode_case(OP_PUSH_NIL) {}
+        opcode_case(OP_PUSH_TRUE) {}
+        opcode_case(OP_PUSH_FALSE) {}
+        opcode_case(OP_PUSH_SELF) {}
+        opcode_case(OP_PUSH_SUPER) {}
         opcode_case(OP_PUSH_0) {
             marg_stack_push(&self->stack, marg_string_new("0"));
         }
@@ -47,10 +52,31 @@ static void evaluator_run(Evaluator *self) {
             marg_string *str = marg_vector_get(self->bytecodes, ip);
             marg_stack_push(&self->stack, str);
         }
+        opcode_case(OP_PUSH_VARIABLE) {}
+        opcode_case(OP_PUSH_INSTANCE) {}
+        opcode_case(OP_PUSH_TENSOR) {}
+        opcode_case(OP_PUSH_HASH) {}
+
+        // TODO procs, methods and functions return tensors of bytecodes
+        opcode_case(OP_START_PUSH_PROC) {}
+        opcode_case(OP_END_PUSH_PROC) {}
+        opcode_case(OP_START_PUSH_C_FUNCTION) {}
+        opcode_case(OP_END_PUSH_C_FUNCTION) {}
+        opcode_case(OP_START_PUSH_UNARY_METHOD) {}
+        opcode_case(OP_END_PUSH_UNARY_METHOD) {}
+        opcode_case(OP_START_PUSH_BINARY_METHOD) {}
+        opcode_case(OP_END_PUSH_BINARY_METHOD) {}
+        opcode_case(OP_START_PUSH_KEYWORD_METHOD) {}
+        opcode_case(OP_END_PUSH_KEYWORD_METHOD) {}
 
         opcode_case(OP_POP) {
             marg_stack_pop(&self->stack);
         }
+        opcode_case(OP_STORE) {}
+        opcode_case(OP_STORE_INSTANCE) {}
+        opcode_case(OP_UNARY) {}
+        opcode_case(OP_BINARY) {}
+        opcode_case(OP_KEYWORD) {}
     }
 }
 
