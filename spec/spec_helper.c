@@ -14,7 +14,7 @@
 #include "base/marg_string.spec.h"
 
 // evaluator
-// #include "evaluator/Evaluator.spec.h"
+#include "evaluator/Evaluator.spec.h"
 
 // generic
 #include "generic/arithmetic.spec.h"
@@ -73,7 +73,7 @@ spec_suite({
     marg_stack_spec();
     marg_string_spec();
 
-    // EvaluatorSpec();
+    EvaluatorSpec();
 
     arithmetic_spec();
     assignments_spec();
