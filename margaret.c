@@ -12,32 +12,35 @@
 #include "src/lexer/Lexer.h"
 #include "src/parser/Parser.h"
 
-marg_string *SCAN(char *prompt) {
+static marg_string *SCAN(char *prompt) {
     char *line = readline(prompt);
-    if(!strcmp(line, "\n")) {
-        // TODO history_pop
+    if(!strcmp(line, ""))
         return marg_string_new("()");
-    }
     else if(!strcmp(line, "<<exit>>") || !strcmp(line, "<<quit>>"))
         exit(0);
-    else
+    else {
+        add_history(line);
         return marg_string_new(line);
+    }
 }
 
-TokenTable *READ(marg_string *chars) {
+static TokenTable *READ(marg_string *chars) {
     return lexer_make_tokens(lexer_new("repl", chars));
 }
 
-marg_vector *EVAL(TokenTable *tokens) {
+static marg_vector *EVAL(TokenTable *tokens) {
     return parser_analyze_syntax(parser_new(tokens));
 }
 
-void PRINT(marg_vector *evaluated) {
+static void PRINT(marg_vector *evaluated) {
     printf("[");
     size_t evaluated_size = marg_vector_size(evaluated);
-    for(size_t i = 0; i < evaluated_size-1; i++)
-        printf("%s, ", marg_string_get(marg_vector_get(evaluated, i)));
-    printf("%s]\n", marg_string_get(marg_vector_get(evaluated, evaluated_size-1)));
+    if(evaluated_size > 0) {
+        for(size_t i = 0; i < evaluated_size-1; i++)
+            printf("%s, ", marg_string_get(marg_vector_get(evaluated, i)));
+        printf("%s", marg_string_get(marg_vector_get(evaluated, evaluated_size-1)));
+    }
+    printf("]\n");
 }
 
 void margaret_repl(void) {
@@ -60,9 +63,11 @@ marg_string *margaret_run_file(char *filename) {
     return evaluated;
 }
 
+static void banner(void) {
+    printf("Usage: margaret <filename>");
+}
+
 int main(int argc, char **argv) {
-    margaret_repl();
-    // TODO Check for user input
-    (void)argc;(void)argv;
-    // margaret_run_file(argv[1]);
+    margaret_repl(); (void)argc;(void)argv;
+    // if(argc != 2) banner(); else margaret_run_file(argv[1]);
 }
