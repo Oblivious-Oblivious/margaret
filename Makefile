@@ -8,33 +8,26 @@ VERSION = -std=c99
 FLAGS = -Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic
 WARNINGS = -Wno-unused-function
 HEADERS =
-LIBS =
+LIBS = libs/readline/libreadline.dylib
 
 SRC = src/**/*.c
-INPUT = $(NAME).c
+INPUT = $(SRC) $(NAME).c
 OUTPUT = $(NAME)
 
 TESTINPUT = spec/$(TEST).c $(SRC)
 TESTOUTPUT = spec/$(TEST)
 
-# all: compiler
-all: run
+all: compiler
 
-run:
-	ruby margaret.rb examples/test.marg
-
-# compiler:
-# 	$(CC) $(OPT) $(VERSION) $(HEADERS) $(FLAGS) $(WARNINGS) $(REMOVE_WARN) $(LIBS) -o $(OUTPUT) $(INPUT)
-# 	@echo
-# 	./$(OUTPUT)
+compiler:
+	$(CC) $(OPT) $(VERSION) $(HEADERS) $(FLAGS) $(WARNINGS) $(REMOVE_WARN) $(LIBS) -o $(OUTPUT) $(INPUT)
+	@echo
+	./$(OUTPUT) examples/test.marg
 
 test:
 	$(CC) $(OPT) $(VERSION) $(HEADERS) $(FLAGS) $(WARNINGS) $(LIBS) -o $(TESTOUTPUT) $(TESTINPUT)
 	@echo
 	./$(TESTOUTPUT)
-
-rtest:
-	ruby spec/spec_helper.rb
 
 clean:
 	$(RM) -r $(OUTPUT) $(TESTOUTPUT)
