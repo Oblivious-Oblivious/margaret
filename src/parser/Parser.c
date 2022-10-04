@@ -89,11 +89,9 @@ marg_vector *parser_unary_selector(Parser *self) {
     }
     if(lookahead_1_type_equals(TOKEN_IDENTIFIER)) {
         marg_string *id = ensure_type(TOKEN_IDENTIFIER, "expected identifier on unary selector.");
-        marg_string *optional_symbol;
+        marg_string *optional_symbol = marg_string_new("");
         if(lookahead_1_type_equals(TOKEN_ID_SYMBOL))
             optional_symbol = ensure_type(TOKEN_ID_SYMBOL, "expected id symbol on unary identifier.");
-        else
-            optional_symbol = marg_string_new("");
         return ast_unary_selector(id, optional_symbol);
     }
     else {
@@ -149,11 +147,9 @@ marg_vector *parser_keyword_object(Parser *self) {
 marg_vector *parser_keyword_selector(Parser *self) {
     if(lookahead_1_type_equals(TOKEN_IDENTIFIER) && (lookahead_2_value_equals(":") || (lookahead_2_type_equals(TOKEN_ID_SYMBOL) && lookahead_3_value_equals(":")))) {
         marg_string *id = ensure_type(TOKEN_IDENTIFIER, "expected identifier on keyword selector.");
-        marg_string *optional_symbol = NULL;
+        marg_string *optional_symbol = marg_string_new("");
         if(lookahead_1_type_equals(TOKEN_ID_SYMBOL))
             optional_symbol = ensure_type(TOKEN_ID_SYMBOL, "expected id symbol on keyword identifier.");
-        else
-            optional_symbol = marg_string_new("");
         marg_string *delim = ensure_value(":", "expected `:` on keyword selector.");
         marg_vector *obj = parser_binary_message(self);
 
