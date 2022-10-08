@@ -127,11 +127,4 @@ void marg_vector_set(marg_vector *self, size_t index, void *item);
  */
 size_t marg_vector_size(marg_vector *self);
 
-/**
- * @func: marg_vector_free
- * @brief Frees the memory of the vector
- * @param self -> The vector to free
- */
-void marg_vector_free(marg_vector *self);
-
 #endif

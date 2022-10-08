@@ -1,7 +1,8 @@
 #include "marg_string.h"
 
+#include "../base/memory.h"
+
 #include <stdio.h>  /* printf, snprintf, vsnprintf */
-#include <stdlib.h> /* malloc, realloc, free */
 #include <string.h> /* strlen, strcmp, memmove */
 #include <stdarg.h> /* va_start, va_end, va_arg */
 
@@ -17,7 +18,7 @@ static void marg_string_ensure_space(marg_string *self, size_t add_len) {
     if(self == NULL || add_len == 0) return;
 
     /* Attempt to reallocate new memory in the items list */
-    new_str = (char*)realloc(self->str, sizeof(char*) * add_len);
+    new_str = (char*)collected_realloc(self->str, sizeof(char*) * add_len);
 
     if(new_str) {
         /* Reset the items in the new memory space */
@@ -27,9 +28,9 @@ static void marg_string_ensure_space(marg_string *self, size_t add_len) {
 }
 
 marg_string *marg_string_new(char *initial_string) {
-    marg_string *self = (marg_string*)malloc(sizeof(marg_string));
+    marg_string *self = (marg_string*)collected_malloc(sizeof(marg_string));
 
-    self->str = (char*)malloc(sizeof(char) * 1024);
+    self->str = (char*)collected_malloc(sizeof(char) * 1024);
     self->alloced = 1024;
     self->size = 0;
     marg_string_add_str(self, initial_string);
@@ -166,11 +167,4 @@ size_t marg_string_size(marg_string *self) {
 
 unsigned char marg_string_equals(marg_string *self, marg_string *other) {
     return strcmp(marg_string_get(self), marg_string_get(other)) == 0;
-}
-
-void marg_string_free(marg_string *self) {
-    if(self != NULL && self->str != NULL)
-        free(self->str);
-    if(self != NULL)
-        free(self);
 }

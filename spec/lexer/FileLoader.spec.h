@@ -57,10 +57,6 @@ module(FileLoaderSpec, {
             assert_that_int(marg_string_get_char_at_index(text, 3) equals to 't');
             assert_that_charptr(marg_string_get(text) equals to "text");
         });
-
-        it("frees a FileLoader object", {
-            file_loader_free(file_loader);
-        });
     });
 
     after({

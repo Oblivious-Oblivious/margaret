@@ -1,5 +1,7 @@
 #include "marg_vector.h"
 
+#include "../base/memory.h"
+
 #define MARG_VECTOR_GROW_FACTOR 1.618
 
 /**
@@ -14,7 +16,7 @@ static void marg_vector_ensure_space(marg_vector *self, size_t capacity) {
     if(self == NULL || capacity == 0) return;
 
     /* Attempt to reallocate new memory in the items list */
-    items = realloc(self->items, sizeof(void*) * capacity);
+    items = collected_realloc(self->items, sizeof(void*) * capacity);
 
     if(items) {
         /* Reset the items in the new memory space */
@@ -24,10 +26,10 @@ static void marg_vector_ensure_space(marg_vector *self, size_t capacity) {
 }
 
 marg_vector *__internal_marg_vector_new(size_t argc, ...) {
-    marg_vector *self = (marg_vector*)malloc(sizeof(marg_vector));
+    marg_vector *self = (marg_vector*)collected_malloc(sizeof(marg_vector));
     self->alloced = 256;
     self->size = 0;
-    self->items = (void**)malloc(sizeof(void*) * self->alloced);
+    self->items = (void**)collected_malloc(sizeof(void*) * self->alloced);
 
     va_list vars;
     va_start(vars, argc);
@@ -39,10 +41,10 @@ marg_vector *__internal_marg_vector_new(size_t argc, ...) {
 }
 
 marg_vector *marg_vector_new_empty(void) {
-    marg_vector *self = (marg_vector*)malloc(sizeof(marg_vector));
+    marg_vector *self = (marg_vector*)collected_malloc(sizeof(marg_vector));
     self->alloced = 256;
     self->size = 0;
-    self->items = (void**)malloc(sizeof(void*) * self->alloced);
+    self->items = (void**)collected_malloc(sizeof(void*) * self->alloced);
     return self;
 }
 
@@ -72,12 +74,4 @@ void marg_vector_set(marg_vector *self, size_t index, void *item) {
 size_t marg_vector_size(marg_vector *self) {
     if(self == NULL) return 0;
     return self->size;
-}
-
-void marg_vector_free(marg_vector *self) {
-    /* TODO Add a free iteration for each MargValue element */
-    if(self != NULL && self->items != NULL)
-        free(self->items);
-    if(self != NULL)
-        free(self);
 }

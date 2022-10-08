@@ -51,11 +51,6 @@ module(marg_vector_spec, {
             assert_that_int(marg_vector_size(vv) equals to 3);
         });
 
-        it("frees vector items without error", {
-            marg_vector_free(v);
-            assert_that(true is true);
-        });
-
         after({
             free(a);
             free(b);

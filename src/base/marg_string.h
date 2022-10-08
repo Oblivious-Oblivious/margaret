@@ -125,10 +125,4 @@ size_t marg_string_size(marg_string *self);
  */
 unsigned char marg_string_equals(marg_string *self, marg_string *other);
 
-/**
- * @brief Frees the memory of the string
- * @param self -> The string to free
- */
-void marg_string_free(marg_string *self);
-
 #endif

@@ -2,6 +2,8 @@
 
 #include <stdio.h> /* fprintf */
 
+#include "../base/memory.h"
+
 /**
  * @brief
     TODO Abstract error somewhere closer to boundary
@@ -25,7 +27,7 @@ void token_table_display(TokenTable *self) {
 }
 
 TokenTable *token_table_new(void) {
-    TokenTable *t = (TokenTable*)malloc(sizeof(TokenTable));
+    TokenTable *t = (TokenTable*)collected_malloc(sizeof(TokenTable));
 
     t->token_list = marg_vector_new_empty();
     t->pos = -1;

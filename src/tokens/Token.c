@@ -1,7 +1,9 @@
 #include "Token.h"
 
+#include "../base/memory.h"
+
 Token *token_new(marg_string *value, Type type, size_t line_number, char *filename) {
-    Token *t = (Token*)malloc(sizeof(Token));
+    Token *t = (Token*)collected_malloc(sizeof(Token));
 
     t->value = value;
     t->type = type;

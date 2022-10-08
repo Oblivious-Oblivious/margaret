@@ -1,6 +1,7 @@
 #include "Parser.h"
 
 #include "../ast/Bytecode.h"
+#include "../base/memory.h"
 #include "../tokens/Type.h"
 
 #include <stdio.h>
@@ -24,7 +25,7 @@
 } while(0)
 
 Parser *parser_new(TokenTable *tokens) {
-    Parser *self = (Parser*)malloc(sizeof(Parser));
+    Parser *self = (Parser*)collected_malloc(sizeof(Parser));
 
     self->table = tokens;
 

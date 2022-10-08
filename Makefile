@@ -8,7 +8,7 @@ VERSION = -std=c99
 FLAGS = -Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic
 WARNINGS = -Wno-unused-function
 HEADERS =
-LIBS = libs/readline/libreadline.dylib
+LIBS = libs/readline/libreadline.dylib libs/boehm_gc/libgc.a
 
 SRC = src/**/*.c
 INPUT = $(SRC) $(NAME).c

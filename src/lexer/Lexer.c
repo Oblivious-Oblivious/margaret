@@ -3,10 +3,11 @@
 #include <stdio.h> /* fprintf */
 #include <ctype.h> /* tolower */
 
+#include "../base/memory.h"
 #include "../tokens/Type.h"
 
 Lexer *lexer_new(char *filename, marg_string *text) {
-    Lexer *self = (Lexer*)malloc(sizeof(Lexer));
+    Lexer *self = (Lexer*)collected_malloc(sizeof(Lexer));
 
     self->filename = filename;
     self->text = text;

@@ -1,13 +1,15 @@
 #include "alternate_to_dec.h"
 
+#include "../base/memory.h"
+
 #include <stdio.h>  /* snprintf */
-#include <stdlib.h> /* uint64_t, malloc */
+#include <stdlib.h> /* uint64_t */
 #include <string.h> /* strlen */
 #include <math.h>   /* ceil, log10 */
 
 char *__int_to_str(uint64_t dec) {
     int len = (int)((ceil(log10(dec)) + 1) * sizeof(char));
-    char *res = (char*)malloc(sizeof(char) * len);
+    char *res = (char*)collected_malloc(sizeof(char) * len);
     snprintf(res, len, "%lld", dec);
     return res;
 }

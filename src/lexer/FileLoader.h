@@ -43,10 +43,4 @@ int file_loader_close(FileLoader *self);
  */
 marg_string *file_loader_load(FileLoader *self, char *filepath);
 
-/**
- * @brief Closes the file descriptor and frees any memory
- * @param self -> The FileLoader to close
- */
-void file_loader_free(FileLoader *self);
-
 #endif

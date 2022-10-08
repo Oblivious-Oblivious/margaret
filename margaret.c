@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "libs/boehm_gc/bdwgc/gc.h"
 #include "libs/readline/readline/readline.h"
 #include "libs/readline/readline/history.h"
 
@@ -68,6 +69,8 @@ static void banner(void) {
 }
 
 int main(int argc, char **argv) {
+    GC_INIT();
+
     margaret_repl(); (void)argc;(void)argv;
     // if(argc != 2) banner(); else margaret_run_file(argv[1]);
 }

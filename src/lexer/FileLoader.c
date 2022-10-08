@@ -1,7 +1,8 @@
 #include "FileLoader.h"
 
 #include <stdio.h>  /* FILE, fopen, fclose, printf */
-#include <stdlib.h> /* malloc, free */
+
+#include "../base/memory.h"
 
 /**
  * @brief Check if the path file exists in the filesystem
@@ -18,7 +19,7 @@ static int file_loader_file_does_not_exist(FileLoader *self) {
 }
 
 FileLoader *file_loader_new(void) {
-    FileLoader *self = (struct FileLoader*)malloc(sizeof(FileLoader));
+    FileLoader *self = (struct FileLoader*)collected_malloc(sizeof(FileLoader));
 
     self->filepath = NULL;
     self->fd = NULL;
@@ -42,10 +43,8 @@ int file_loader_close(FileLoader *self) {
     if(self == NULL)
         return 0;
     if((fclose(self->fd))) {
-        free(self);
         return 0;
     }
-    free(self);
     return 1;
 }
 
@@ -57,10 +56,5 @@ marg_string *file_loader_load(FileLoader *self, char *filepath) {
     while((ch = fgetc(self->fd)) != EOF)
         marg_string_add_char(result, ch);
 
-    file_loader_free(self);
     return result;
-}
-
-void file_loader_free(FileLoader *self) {
-    file_loader_close(self);
 }

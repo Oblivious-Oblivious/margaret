@@ -1,9 +1,10 @@
 #include "Evaluator.h"
 
 #include <stdlib.h> /* size_t */
+#include "../base/memory.h"
 #include "../opcode/Opcode.h"
 
-#define opcode_case(opstr) if(marg_string_equals((opcode), (opstr)))
+#define opcode_case(opstr) if(marg_string_equals(opcode, (opstr)))
 
 /**
  * @brief Runs the iterator that evaluates
@@ -81,7 +82,7 @@ static void evaluator_run(Evaluator *self) {
 }
 
 Evaluator *evaluator_new(marg_vector *bytecodes) {
-    Evaluator *self = (Evaluator*)malloc(sizeof(Evaluator));
+    Evaluator *self = (Evaluator*)collected_malloc(sizeof(Evaluator));
 
     self->stack.top = -1;
     self->bytecodes = bytecodes;
