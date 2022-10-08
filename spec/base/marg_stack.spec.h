@@ -45,6 +45,9 @@ module(marg_stack_spec, {
             marg_stack_push(&st, v2);
             int *actual2 = marg_stack_pop(&st);
             assert_that_int(*actual2 equals to 88);
+
+            free(v1);
+            free(v2);
         });
 
         it("pops `y` then `x` after pushing `x` then `y`", {
@@ -62,6 +65,10 @@ module(marg_stack_spec, {
             assert_that_int(*actual3 equals to 77);
             assert_that_int(*actual2 equals to 88);
             assert_that_int(*actual1 equals to 99);
+
+            free(v1);
+            free(v2);
+            free(v3);
         });
 
         it("peeks three elements deep", {
@@ -79,6 +86,10 @@ module(marg_stack_spec, {
             assert_that_int(*peeked equals to 88);
             peeked = marg_stack_peek(&st, 2);
             assert_that_int(*peeked equals to 99);
+
+            free(v1);
+            free(v2);
+            free(v3);
         });
     });
 })

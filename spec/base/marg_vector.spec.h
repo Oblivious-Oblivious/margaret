@@ -55,6 +55,12 @@ module(marg_vector_spec, {
             marg_vector_free(v);
             assert_that(true is true);
         });
+
+        after({
+            free(a);
+            free(b);
+            free(c);
+        });
     });
 })
 
