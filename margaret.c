@@ -71,6 +71,11 @@ static void banner(void) {
 int main(int argc, char **argv) {
     GC_INIT();
 
-    margaret_repl(); (void)argc;(void)argv;
-    // if(argc != 2) banner(); else margaret_run_file(argv[1]);
+    if(argc < 2) {
+        (void)argc;(void)argv;
+        margaret_repl();
+    }
+    else {
+        margaret_run_file(argv[1]);
+    }
 }
