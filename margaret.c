@@ -65,7 +65,7 @@ marg_string *margaret_run_file(char *filename) {
 }
 
 static void banner(void) {
-    printf("Usage: margaret <filename>");
+    printf("Usage: margaret <filename>\n");
 }
 
 int main(int argc, char **argv) {
