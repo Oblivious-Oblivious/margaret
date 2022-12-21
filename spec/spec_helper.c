@@ -46,8 +46,10 @@
 #include "generic/symbols.spec.h"
 #include "generic/tensors.spec.h"
 
+// file_loader
+#include "file_loader/FileLoader.spec.h"
+
 // lexer
-#include "lexer/FileLoader.spec.h"
 #include "lexer/Lexer.spec.h"
 
 // opcode
@@ -105,6 +107,7 @@ spec_suite({
     tensors_spec();
 
     FileLoaderSpec();
+
     LexerSpec();
 
     OpcodeSpec();
