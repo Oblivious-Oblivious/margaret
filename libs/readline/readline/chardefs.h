@@ -155,7 +155,7 @@
 #ifdef SPACE
 #undef SPACE
 #endif
-#define SPACE ' '	/* XXX - was 0x20 */
+#define SPACE ' '
 
 #ifdef ESC
 #undef ESC

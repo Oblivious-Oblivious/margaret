@@ -6,7 +6,7 @@ OPT = -O2
 VERSION = -std=c99
 
 FLAGS = -Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic
-WARNINGS = -Wno-unused-function -Wno-strict-prototypes
+WARNINGS = -Wno-unused-function -Wno-strict-prototypes -Wno-gnu-line-marker
 HEADERS =
 LIBS = libs/readline/libreadline.dylib libs/boehm_gc/libgc.a
 

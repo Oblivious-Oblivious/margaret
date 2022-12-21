@@ -26,7 +26,7 @@
 extern "C" {
 #endif
 
-#include <time.h>		/* XXX - for history timestamp code */
+#include <time.h>
 
 #  include "rlstdc.h"
 #  include "rltypedefs.h"

@@ -1,2 +1,3 @@
-/* This file is installed for backward compatibility. */
+# 1 "gc.h"
+
 #include "gc/gc.h"
