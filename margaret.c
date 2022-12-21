@@ -9,7 +9,7 @@
 #include "src/base/marg_string.h"
 #include "src/base/marg_vector.h"
 #include "src/evaluator/Evaluator.h"
-#include "src/lexer/FileLoader.h"
+#include "src/file_loader/FileLoader.h"
 #include "src/lexer/Lexer.h"
 #include "src/parser/Parser.h"
 
