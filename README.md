@@ -1,6 +1,6 @@
 # Margaret
 
-[![GPLv3 License](https://img.shields.io/badge/license-GPL%20v3-yellow.svg)](./COPYING)
+[![GPLv3 License](https://img.shields.io/badge/license-GPL%20v3-yellow.svg)](./LICENSE)
 
 Margaret is a modern programming language focused around objects and messages.
 It offers powerful literals, easy to use objects and smalltalk-like message structures.
@@ -14,11 +14,11 @@ It offers powerful literals, easy to use objects and smalltalk-like message stru
 
 ## Installation
 
-Write installation instructions
+TODO Write installation instructions
 
 ## "Postcard"
 
-Write 'postcard' for syntax
+TODO Write 'postcard' for syntax
 
 ## Development
 
