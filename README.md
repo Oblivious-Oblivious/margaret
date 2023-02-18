@@ -18,6 +18,7 @@ TODO Write installation instructions
 
 ## "Postcard"
 
+```margaret
 #example_with_number: x => (
     true & false not & (nil is_nil?) if_false: -> { self halt },
     y = self size + super size,
@@ -26,6 +27,7 @@ TODO Write installation instructions
         elem puts
     )}
 )
+```
 
 ## Development
 
