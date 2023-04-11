@@ -8,6 +8,9 @@ module(c_functions_spec, {
         parse("###void f()", marg_vector_new(OP_START_PUSH_C_FUNCTION, OP_PUSH_VARIABLE, marg_string_new("void"), OP_PUSH_VARIABLE, marg_string_new("f"), OP_PUSH_TENSOR, marg_string_new("0"), OP_END_PUSH_C_FUNCTION));
         parse("###void f2(int a, int b)", marg_vector_new(OP_START_PUSH_C_FUNCTION, OP_PUSH_VARIABLE, marg_string_new("void"), OP_PUSH_VARIABLE, marg_string_new("f2"), OP_PUSH_VARIABLE, marg_string_new("CFunParam"), OP_PUSH_VARIABLE, marg_string_new("int"), OP_PUSH_VARIABLE, marg_string_new("a"), OP_KEYWORD, marg_string_new("c_type:c_name:"), marg_string_new("2"), OP_PUSH_VARIABLE, marg_string_new("CFunParam"), OP_PUSH_VARIABLE, marg_string_new("int"), OP_PUSH_VARIABLE, marg_string_new("b"), OP_KEYWORD, marg_string_new("c_type:c_name:"), marg_string_new("2"), OP_PUSH_TENSOR, marg_string_new("2"), OP_END_PUSH_C_FUNCTION));
         // TODO Creates matchers and extensions at compile time
+
+        // TODO Read pointers as well
+        // parse("###void f3(int *a, int b, char *c)", marg_vector_new(OP_START_PUSH_C_FUNCTION, OP_PUSH_VARIABLE, marg_string_new("void"), OP_PUSH_VARIABLE, marg_string_new("f2"), OP_PUSH_VARIABLE, marg_string_new("CFunParam"), OP_PUSH_VARIABLE, marg_string_new("int"), OP_PUSH_VARIABLE, marg_string_new("a"), OP_KEYWORD, marg_string_new("c_type:c_name:"), marg_string_new("2"), OP_PUSH_VARIABLE, marg_string_new("CFunParam"), OP_PUSH_VARIABLE, marg_string_new("int"), OP_PUSH_VARIABLE, marg_string_new("b"), OP_KEYWORD, marg_string_new("c_type:c_name:"), marg_string_new("2"), OP_PUSH_TENSOR, marg_string_new("2"), OP_END_PUSH_C_FUNCTION));
     });
 })
 
