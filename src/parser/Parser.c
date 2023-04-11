@@ -307,7 +307,7 @@ marg_vector *parser_literal(Parser *self) {
         return ast_literal(parser_string_literal(self));
     // TODO Add regular expression literals -> /regex/
     // else if(lookahead_1_value_equals("/"))
-    // TODO Add pair literals -> <1, 2>
+    // TODO Add tuple literals -> <1, 2>
     // else if(lookahead_1_value_equals("<"))
     // TODO Add binary/bitstring literals -> <<1:1, 0:1>>
     // else if(lookahead_1_value_equals("<<"))
