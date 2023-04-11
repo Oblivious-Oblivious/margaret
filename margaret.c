@@ -48,11 +48,11 @@ static void PRINT(marg_vector *evaluated) {
     printf("]\n");
 }
 
-void margaret_repl(void) {
+static void margaret_repl(void) {
     while(1) PRINT(EVAL(READ(SCAN("$> "))));
 }
 
-marg_string *margaret_run_file(char *filename) {
+static marg_string *margaret_run_file(char *filename) {
     marg_string *chars = file_loader_load(file_loader_new(), filename);
     Lexer *l = lexer_new(filename, chars);
     TokenTable *tokens = lexer_make_tokens(l);
