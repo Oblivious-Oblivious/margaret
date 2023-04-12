@@ -20,5 +20,3 @@
 🟩 -> {a | a + 1} -> (Proc new)
 🟩 #put element at: position => () -> (Method new)
 🟩 ###void fun(double a, int *b) -> (CFunction new)
-
-🟥 [/a|b*], [/([A-Z])\w+] -> (Regex new)

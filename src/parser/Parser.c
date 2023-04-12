@@ -313,18 +313,19 @@ marg_vector *parser_literal(Parser *self) {
         return ast_literal(parser_char_literal(self, sign));
     else if(lookahead_1_type_equals(TOKEN_STRING))
         return ast_literal(parser_string_literal(self));
-    // TODO Add regular expression literals -> /regex/
-    // else if(lookahead_1_value_equals("/"))
-    // TODO Add binary/bitstring literals -> <<1:1, 0:1>>
-    // else if(lookahead_1_value_equals("<<"))
     else if(lookahead_1_value_equals("[")) {
         if(lookahead_2_value_equals("<"))
             return ast_literal(parser_tuple_literal(self));
         else
             return ast_literal(parser_tensor_literal(self));
     }
-    else if(lookahead_1_value_equals("{"))
-        return ast_literal(parser_hash_literal(self));
+    else if(lookahead_1_value_equals("{")) {
+        // TODO Add binary/bitstring literals -> <1:1, 0:1>
+        // if(lookahead_2_value_equals("<"))
+            // return ast_literal(parser_bitstring_literal(self));
+        // else
+            return ast_literal(parser_hash_literal(self));
+    }
     else
         return ast_empty();
 }
