@@ -1,7 +1,7 @@
 ## (✗) ver. pre-release
 -----------------------
     🟥 Add visual literals of trees, graphs and matrices (2-dimentional data representation).
-    🟩 Make comments part of the language (Comment new: "...").
+    🟥 Make comments part of the language (Comment new: "...").
     🟥 Use comments for docs or TODO graphs.
     🟥 Make comments dynamic and persistent on code files.
     🟥 Add primitives for `while_true` to avoid endless recursion.
@@ -14,10 +14,10 @@
     🟥 Use custom syntax structures for break and continue. -> `list iterate: -> { elem | elem puts } exit_on: -> { elem | elem == 42 }`
     ---------------------------
     🟥 Add functional features:
-    🟥 <a, b, c> = <:hello, "world", 42> (TUPLES)
+    🟥 [<a, b, c] = [<"hello", "world", 42] (TUPLES)
     🟥 [a, b, c] = [1, 2, 3]
-    🟥 <car, cdr> = [1, 2, 3] # car = 1, cdr = [2, 3]
-    🟥 l = [1,2,3], <<list, 4>, 5> compact!. # [1,2,3,4,5]
+    🟥 [<car, cdr] = [1, 2, 3] # car = 1, cdr = [2, 3]
+    🟥 l = [1,2,3], [<[<list, 4], 5] compact!. # [1,2,3,4,5]
     🟥 hash = {a: 1, b: 2}, hash = hash ++ {c: 3}. #{a: 1, b: 2, c: 3}
     🟥 Numeric bind: # 0 fact => 1
        Numeric bind: # _ fact => self * (self - 1) fact
