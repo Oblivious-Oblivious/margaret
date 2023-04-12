@@ -1,15 +1,18 @@
-## (✗) ver. pre-release
------------------------
+## (✗) ver. 0.2.0
+-----------------
     🟥 Add visual literals of trees, graphs and matrices (2-dimentional data representation).
-    🟥 Make comments part of the language (Comment new: "...").
     🟥 Use comments for docs or TODO graphs.
+    🟥 Use crystal-lang C extensions to bind native values to margaret ones. C code should be exported as a static library and the exposed API should be declared in code.
+    🟥 Add string interpolation and formatting with `#{..}` or similar.
+
+## (✗) ver. 0.1.0
+-----------------
+    🟥 Make comments part of the language (Comment new: "...").
     🟥 Make comments dynamic and persistent on code files.
     🟥 Add primitives for `while_true` to avoid endless recursion.
     🟥 Add a switch matcher -> `obj match: [[1, 100], [2, 200], [3, 300],]`.
     🟥 Make bang (!) messages denote persistant changes in object state.
     🟥 Add a `message then: unit1 else: unit2`.
-    🟥 Use crystal-lang C extensions to bind native values to margaret ones. C code should be exported as a static library and the exposed API should be declared in code.
-    🟥 Add string interpolation and formatting with `#{..}` or similar.
     🟥 Add complex numbers `(0+2i)`, and rational numbers `(1/2r)` -> unary messages.
     🟥 Use custom syntax structures for break and continue. -> `list iterate: -> { elem | elem puts } exit_on: -> { elem | elem == 42 }`
     ---------------------------
