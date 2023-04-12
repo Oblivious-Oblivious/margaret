@@ -4,7 +4,7 @@
 #include "../_helpers.h"
 
 module(tuples_spec, {
-    it("parses tensor literals", {
+    it("parses tuple literals", {
         parse("[<]", marg_vector_new(OP_PUSH_TUPLE, marg_string_new("0")));
         parse("([<])", marg_vector_new(OP_PUSH_TUPLE, marg_string_new("0")));
         parse("[<[<], [<]]", marg_vector_new(OP_PUSH_TUPLE, marg_string_new("0"), OP_PUSH_TUPLE, marg_string_new("0"), OP_PUSH_TUPLE, marg_string_new("2")));
