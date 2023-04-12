@@ -248,6 +248,13 @@ module(BytecodeSpec, {
         parse("{a: 1, b: 2, c: 3}", marg_vector_new(OP_PUSH_VARIABLE, marg_string_new("Association"), OP_PUSH_STRING, marg_string_new("\"a\""), OP_PUSH_1, OP_KEYWORD, marg_string_new("key:value:"), marg_string_new("2"), OP_PUSH_VARIABLE, marg_string_new("Association"), OP_PUSH_STRING, marg_string_new("\"b\""), OP_PUSH_2, OP_KEYWORD, marg_string_new("key:value:"), marg_string_new("2"), OP_PUSH_VARIABLE, marg_string_new("Association"), OP_PUSH_STRING, marg_string_new("\"c\""), OP_PUSH_INTEGER, marg_string_new("3"), OP_KEYWORD, marg_string_new("key:value:"), marg_string_new("2"), OP_PUSH_HASH, marg_string_new("3")));
         parse("{\"a\": 1, \"b\": 2, \"c\": 3}", marg_vector_new(OP_PUSH_VARIABLE, marg_string_new("Association"), OP_PUSH_STRING, marg_string_new("\"a\""), OP_PUSH_1, OP_KEYWORD, marg_string_new("key:value:"), marg_string_new("2"), OP_PUSH_VARIABLE, marg_string_new("Association"), OP_PUSH_STRING, marg_string_new("\"b\""), OP_PUSH_2, OP_KEYWORD, marg_string_new("key:value:"), marg_string_new("2"), OP_PUSH_VARIABLE, marg_string_new("Association"), OP_PUSH_STRING, marg_string_new("\"c\""), OP_PUSH_INTEGER, marg_string_new("3"), OP_KEYWORD, marg_string_new("key:value:"), marg_string_new("2"), OP_PUSH_HASH, marg_string_new("3")));
     });
+
+    it("emits for bitstrings", {
+        parse("{<}", marg_vector_new(OP_PUSH_BITSTRING, marg_string_new("0")));
+        parse("({<})", marg_vector_new(OP_PUSH_BITSTRING, marg_string_new("0")));
+        parse("{<{<}, {<}}", marg_vector_new(OP_PUSH_VARIABLE, marg_string_new("Bit"), OP_PUSH_BITSTRING, marg_string_new("0"), OP_KEYWORD, marg_string_new("value:"), marg_string_new("1"), OP_PUSH_VARIABLE, marg_string_new("Bit"), OP_PUSH_BITSTRING, marg_string_new("0"), OP_KEYWORD, marg_string_new("value:"), marg_string_new("1"), OP_PUSH_BITSTRING, marg_string_new("2")));
+        parse("{<41, 42}", marg_vector_new(OP_PUSH_VARIABLE, marg_string_new("Bit"), OP_PUSH_INTEGER, marg_string_new("41"), OP_KEYWORD, marg_string_new("value:"), marg_string_new("1"), OP_PUSH_VARIABLE, marg_string_new("Bit"), OP_PUSH_INTEGER, marg_string_new("42"), OP_KEYWORD, marg_string_new("value:"), marg_string_new("1"), OP_PUSH_BITSTRING, marg_string_new("2")));
+    });
 })
 
 #endif
