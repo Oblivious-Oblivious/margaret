@@ -15,7 +15,7 @@
 🟩 [42, "Hello", 'x'] -> (Tensor new)
 🟩 {"a": 1, b: 2} -> (Hash new)
 🟩 [< 1, 2] -> (Tuple new)
-🟥 {< 1:1, 0:1} -> (Bitstring new)
+🟩 {< 1:1, 0:1} -> (Bitstring new)
 
 🟩 -> {a | a + 1} -> (Proc new)
 🟩 #put element at: position => () -> (Method new)

@@ -20,6 +20,7 @@
 #include "generic/arithmetic.spec.h"
 #include "generic/assignments.spec.h"
 #include "generic/bitwise.spec.h"
+#include "generic/bitstrings.spec.h"
 #include "generic/booleans.spec.h"
 #include "generic/c_functions.spec.h"
 #include "generic/characters.spec.h"
@@ -81,6 +82,7 @@ spec_suite({
     arithmetic_spec();
     assignments_spec();
     bitwise_spec();
+    bitstrings_spec();
     booleans_spec();
     c_functions_spec();
     characters_spec();

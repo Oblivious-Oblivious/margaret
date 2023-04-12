@@ -422,6 +422,25 @@ marg_vector *ast_tensor_literal(marg_vector *item_list) {
     return res;
 }
 
+marg_vector *ast_bitstring_literal(marg_vector *item_list) {
+    marg_vector *res =marg_vector_new_empty();
+    size_t item_list_size = marg_vector_size(item_list);
+
+    for(size_t i = 0; i < item_list_size; i++) {
+        marg_vector *item = marg_vector_get(item_list, i);
+        size_t item_size = marg_vector_size(item);
+        for(size_t j = 0; j < item_size; j++)
+            marg_vector_add(res, marg_vector_get(item, j));
+    }
+
+    marg_vector_add(res, OP_PUSH_BITSTRING);
+    char size_ptr[32];
+    snprintf(size_ptr, sizeof(size_ptr), "%zu", marg_vector_size(item_list));
+    marg_string *size = marg_string_new(size_ptr);
+    marg_vector_add(res, size);
+    return res;
+}
+
 marg_vector *ast_hash_literal(marg_vector *association_list) {
     marg_vector *res =marg_vector_new_empty();
 
@@ -438,6 +457,40 @@ marg_vector *ast_hash_literal(marg_vector *association_list) {
     snprintf(size_ptr, sizeof(size_ptr), "%zu", marg_vector_size(association_list));
     marg_string *size = marg_string_new(size_ptr);
     marg_vector_add(res, size);
+    return res;
+}
+
+marg_vector *ast_bit_literal(marg_vector *bit) {
+    marg_vector *res = marg_vector_new_empty();
+    marg_vector_add(res, OP_PUSH_VARIABLE);
+    marg_vector_add(res, marg_string_new("Bit"));
+
+    size_t bit_length = marg_vector_size(bit);
+    for(size_t i = 0; i < bit_length; i++)
+        marg_vector_add(res, marg_vector_get(bit, i));
+
+    marg_vector_add(res, OP_KEYWORD);
+    marg_vector_add(res, marg_string_new("value:"));
+    marg_vector_add(res, marg_string_new("1"));
+    return res;
+}
+
+marg_vector *ast_bit_size_literal(marg_vector *bit, marg_vector *size) {
+    marg_vector *res = marg_vector_new_empty();
+    marg_vector_add(res, OP_PUSH_VARIABLE);
+    marg_vector_add(res, marg_string_new("Bit"));
+
+    size_t bit_length = marg_vector_size(bit);
+    for(size_t i = 0; i < bit_length; i++)
+        marg_vector_add(res, marg_vector_get(bit, i));
+
+    size_t size_length = marg_vector_size(size);
+    for(size_t i = 0; i < size_length; i++)
+        marg_vector_add(res, marg_vector_get(size, i));
+    
+    marg_vector_add(res, OP_KEYWORD);
+    marg_vector_add(res, marg_string_new("value:size:"));
+    marg_vector_add(res, marg_string_new("2"));
     return res;
 }
 

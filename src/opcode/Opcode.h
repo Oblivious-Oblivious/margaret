@@ -30,6 +30,7 @@
 #define OP_PUSH_INSTANCE                 marg_string_new("PUSH_INSTANCE")
 #define OP_PUSH_TENSOR                   marg_string_new("PUSH_TENSOR")
 #define OP_PUSH_TUPLE                    marg_string_new("PUSH_TUPLE")
+#define OP_PUSH_BITSTRING                marg_string_new("PUSH_BITSTRING")
 #define OP_PUSH_HASH                     marg_string_new("PUSH_HASH")
 
 #define OP_START_PUSH_PROC               marg_string_new("START_PUSH_PROC")

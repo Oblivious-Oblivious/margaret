@@ -320,10 +320,9 @@ marg_vector *parser_literal(Parser *self) {
             return ast_literal(parser_tensor_literal(self));
     }
     else if(lookahead_1_value_equals("{")) {
-        // TODO Add binary/bitstring literals -> <1:1, 0:1>
-        // if(lookahead_2_value_equals("<"))
-            // return ast_literal(parser_bitstring_literal(self));
-        // else
+        if(lookahead_2_value_equals("<"))
+            return ast_literal(parser_bitstring_literal(self));
+        else
             return ast_literal(parser_hash_literal(self));
     }
     else
@@ -375,6 +374,21 @@ marg_vector *parser_tensor_literal(Parser *self) {
     return ast_tensor_literal(__items);
 }
 
+marg_vector *parser_bitstring_literal(Parser *self) {
+    ensure_value("{", "missing opening curly brace on bitstring");
+    ensure_value("<", "missing opening tag on bitstring");
+
+    marg_vector *__items = marg_vector_new_empty();
+    while(!lookahead_1_value_equals("}") && !lookahead_1_value_equals("eof")) {
+        marg_vector_add(__items, parser_bit_literal(self));
+        if(!lookahead_1_value_equals("}") && !lookahead_1_value_equals("eof"))
+            ensure_value(",", "keys should be separated by commas.");
+    }
+
+    ensure_value("}", "missing closing curly brace on bitstring.");
+    return ast_bitstring_literal(__items);
+}
+
 marg_vector *parser_hash_literal(Parser *self) {
     ensure_value("{", "missing opening curly brace on hash.");
 
@@ -387,6 +401,23 @@ marg_vector *parser_hash_literal(Parser *self) {
 
     ensure_value("}", "missing closing curly brace on hash.");
     return ast_hash_literal(__items);
+}
+
+marg_vector *parser_bit_literal(Parser *self) {
+    marg_vector *bit = NULL;
+    if(lookahead_1_type_equals(TOKEN_IDENTIFIER))
+        bit = parser_variable(self);
+    else
+        bit = parser_literal(self);
+
+    if(lookahead_1_value_equals(":") && lookahead_2_type_equals(TOKEN_INTEGER)) {
+        ensure_value(":", "bit size should be denoted by colons on bitstrings.");
+        marg_vector *size = parser_integer_literal(self, marg_string_new("+"));
+        return ast_bit_size_literal(bit, size);
+    }
+    else {
+        return ast_bit_literal(bit);
+    }
 }
 
 marg_vector *parser_association_literal(Parser *self) {
