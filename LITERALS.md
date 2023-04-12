@@ -18,5 +18,5 @@
 🟩 {< 1:1, 0:1} -> (Bitstring new)
 
 🟩 -> {a | a + 1} -> (Proc new)
-🟩 #put element at: position => () -> (Method new)
+🟩 #put: element at: position => () -> (Method new)
 🟩 ###void fun(double a, int *b) -> (CFunction new)
