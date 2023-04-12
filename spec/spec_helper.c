@@ -45,6 +45,7 @@
 #include "generic/strings.spec.h"
 #include "generic/symbols.spec.h"
 #include "generic/tensors.spec.h"
+#include "generic/tuples.spec.h"
 
 // file_loader
 #include "file_loader/FileLoader.spec.h"
@@ -105,6 +106,7 @@ spec_suite({
     strings_spec();
     symbols_spec();
     tensors_spec();
+    tuples_spec();
 
     FileLoaderSpec();
 
