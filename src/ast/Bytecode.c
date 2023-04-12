@@ -384,6 +384,25 @@ marg_vector *ast_string_literal(marg_string *string) {
     return marg_vector_new(OP_PUSH_STRING, string);
 }
 
+marg_vector *ast_tuple_literal(marg_vector *item_list) {
+    marg_vector *res = marg_vector_new_empty();
+
+    size_t item_list_size = marg_vector_size(item_list);
+    for(size_t i = 0; i < item_list_size; i++) {
+        marg_vector *item = marg_vector_get(item_list, i);
+        size_t item_size = marg_vector_size(item);
+        for(size_t j = 0; j < item_size; j++)
+            marg_vector_add(res, marg_vector_get(item, j));
+    }
+
+    marg_vector_add(res, OP_PUSH_TUPLE);
+    char size_ptr[32];
+    snprintf(size_ptr, sizeof(size_ptr), "%zu", marg_vector_size(item_list));
+    marg_string *size = marg_string_new(size_ptr);
+    marg_vector_add(res, size);
+    return res;
+}
+
 marg_vector *ast_tensor_literal(marg_vector *item_list) {
     marg_vector *res = marg_vector_new_empty();
 

@@ -315,12 +315,14 @@ marg_vector *parser_literal(Parser *self) {
         return ast_literal(parser_string_literal(self));
     // TODO Add regular expression literals -> /regex/
     // else if(lookahead_1_value_equals("/"))
-    // TODO Add tuple literals -> <1, 2>
-    // else if(lookahead_1_value_equals("<"))
     // TODO Add binary/bitstring literals -> <<1:1, 0:1>>
     // else if(lookahead_1_value_equals("<<"))
-    else if(lookahead_1_value_equals("["))
-        return ast_literal(parser_tensor_literal(self));
+    else if(lookahead_1_value_equals("[")) {
+        if(lookahead_2_value_equals("<"))
+            return ast_literal(parser_tuple_literal(self));
+        else
+            return ast_literal(parser_tensor_literal(self));
+    }
     else if(lookahead_1_value_equals("{"))
         return ast_literal(parser_hash_literal(self));
     else
@@ -341,6 +343,21 @@ marg_vector *parser_char_literal(Parser *self, marg_string *sign) {
 
 marg_vector *parser_string_literal(Parser *self) {
     return ast_string_literal(ensure_type(TOKEN_STRING, "expected string literal."));
+}
+
+marg_vector *parser_tuple_literal(Parser *self) {
+    ensure_value("[", "missing opening bracket on tuple.");
+    ensure_value("<", "missing opening tag on tuple.");
+
+    marg_vector *__items = marg_vector_new_empty();
+    while(!lookahead_1_value_equals("]") && !lookahead_1_value_equals("eof")) {
+        marg_vector_add(__items, parser_translation_unit(self));
+        if(!lookahead_1_value_equals("]") && !lookahead_1_value_equals("eof"))
+            ensure_value(",", "tuple items should be separated by commas.");
+    }
+
+    ensure_value("]", "missing closing bracket on tuple.");
+    return ast_tuple_literal(__items);
 }
 
 marg_vector *parser_tensor_literal(Parser *self) {

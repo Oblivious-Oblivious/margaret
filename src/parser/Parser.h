@@ -54,6 +54,7 @@ marg_vector *parser_integer_literal(Parser *self, marg_string *sign);
 marg_vector *parser_float_literal(Parser *self, marg_string *sign);
 marg_vector *parser_char_literal(Parser *self, marg_string *sign);
 marg_vector *parser_string_literal(Parser *self);
+marg_vector *parser_tuple_literal(Parser *self);
 marg_vector *parser_tensor_literal(Parser *self);
 marg_vector *parser_hash_literal(Parser *self);
 marg_vector *parser_association_literal(Parser *self);

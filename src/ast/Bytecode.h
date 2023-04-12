@@ -36,6 +36,7 @@ marg_vector *ast_integer_literal(marg_string *sign, marg_string *number);
 marg_vector *ast_float_literal(marg_string *sign, marg_string *number);
 marg_vector *ast_char_literal(marg_string *sign, marg_string *c);
 marg_vector *ast_string_literal(marg_string *string);
+marg_vector *ast_tuple_literal(marg_vector *item_list);
 marg_vector *ast_tensor_literal(marg_vector *item_list);
 marg_vector *ast_hash_literal(marg_vector *association_list);
 marg_vector *ast_association(marg_vector *key, marg_vector *value);

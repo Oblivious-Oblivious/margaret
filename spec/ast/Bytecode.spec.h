@@ -235,6 +235,13 @@ module(BytecodeSpec, {
         parse("[41,42,43,44,45]", marg_vector_new(OP_PUSH_INTEGER, marg_string_new("41"), OP_PUSH_INTEGER, marg_string_new("42"), OP_PUSH_INTEGER, marg_string_new("43"), OP_PUSH_INTEGER, marg_string_new("44"), OP_PUSH_INTEGER, marg_string_new("45"), OP_PUSH_TENSOR, marg_string_new("5")));
     });
 
+    it("emits for tuples", {
+        parse("[<]", marg_vector_new(OP_PUSH_TUPLE, marg_string_new("0")));
+        parse("[<41, 42]", marg_vector_new(OP_PUSH_INTEGER, marg_string_new("41"), OP_PUSH_INTEGER, marg_string_new("42"), OP_PUSH_TUPLE, marg_string_new("2")));
+        parse("[<42, \"str\", var]", marg_vector_new(OP_PUSH_INTEGER, marg_string_new("42"), OP_PUSH_STRING, marg_string_new("\"str\""), OP_PUSH_VARIABLE, marg_string_new("var"), OP_PUSH_TUPLE, marg_string_new("3")));
+        parse("[<41,42,43,44,45]", marg_vector_new(OP_PUSH_INTEGER, marg_string_new("41"), OP_PUSH_INTEGER, marg_string_new("42"), OP_PUSH_INTEGER, marg_string_new("43"), OP_PUSH_INTEGER, marg_string_new("44"), OP_PUSH_INTEGER, marg_string_new("45"), OP_PUSH_TUPLE, marg_string_new("5")));
+    });
+
     it("emits for hashes", {
         parse("{}", marg_vector_new(OP_PUSH_HASH, marg_string_new("0")));
         parse("{a: {}, b: {}}", marg_vector_new(OP_PUSH_VARIABLE, marg_string_new("Association"), OP_PUSH_STRING, marg_string_new("\"a\""), OP_PUSH_HASH, marg_string_new("0"), OP_KEYWORD, marg_string_new("key:value:"), marg_string_new("2"), OP_PUSH_VARIABLE, marg_string_new("Association"), OP_PUSH_STRING, marg_string_new("\"b\""), OP_PUSH_HASH, marg_string_new("0"), OP_KEYWORD, marg_string_new("key:value:"), marg_string_new("2"), OP_PUSH_HASH, marg_string_new("2")));
