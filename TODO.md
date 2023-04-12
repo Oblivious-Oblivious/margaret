@@ -18,9 +18,8 @@
     ---------------------------
     🟥 Add functional features:
     🟥 [<a, b, c] = [<"hello", "world", 42] (TUPLES)
-    🟥 [a, b, c] = [1, 2, 3]
     🟥 [<car, cdr] = [1, 2, 3] # car = 1, cdr = [2, 3]
-    🟥 l = [1,2,3], [<[<list, 4], 5] compact!. # [1,2,3,4,5]
+    🟥 l = [1,2,3], [[list, 4], 5] compact!. # [1,2,3,4,5]
     🟥 hash = {a: 1, b: 2}, hash = hash ++ {c: 3}. #{a: 1, b: 2, c: 3}
     🟥 Numeric bind: # 0 fact => 1
        Numeric bind: # _ fact => self * (self - 1) fact
