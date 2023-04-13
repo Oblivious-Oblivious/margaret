@@ -29,11 +29,10 @@ module(numeric_spec, {
         parse("-42.0", marg_vector_new(OP_PUSH_FLOAT, marg_string_new("-42.0")));
         parse("986513.00056129", marg_vector_new(OP_PUSH_FLOAT, marg_string_new("986513.00056129")));
         parse("-986513.00056129", marg_vector_new(OP_PUSH_FLOAT, marg_string_new("-986513.00056129")));
-        // TODO `E` floats
-        // parse("1234e-2"), marg_string_new("12.34");
-        // parse("1234E-2"), marg_string_new("12.34");
-        // parse("1.234e1"), marg_string_new("12.34");
-        // parse("1.234E1"), marg_string_new("12.34");
+        parse("1234 e: -2", marg_vector_new(OP_PUSH_INTEGER, marg_string_new("1234"), OP_PUSH_INTEGER, marg_string_new("-2"), OP_KEYWORD, marg_string_new("e:"), marg_string_new("1")));
+        parse("1234 E: -2", marg_vector_new(OP_PUSH_INTEGER, marg_string_new("1234"), OP_PUSH_INTEGER, marg_string_new("-2"), OP_KEYWORD, marg_string_new("E:"), marg_string_new("1")));
+        parse("1.234 e: 1", marg_vector_new(OP_PUSH_FLOAT, marg_string_new("1.234"), OP_PUSH_1, OP_KEYWORD, marg_string_new("e:"), marg_string_new("1")));
+        parse("1.234 E: 1", marg_vector_new(OP_PUSH_FLOAT, marg_string_new("1.234"), OP_PUSH_1, OP_KEYWORD, marg_string_new("E:"), marg_string_new("1")));
     });
 
     it("parses binary literals", {
