@@ -292,10 +292,7 @@ marg_vector *ast_binary_method_definition(marg_vector *multimethod_object_defaul
 
     if(marg_string_equals(marg_vector_get(param, 0), OP_PUSH_METHOD_PARAMETER)) {
         marg_vector_add(res, OP_PUSH_METHOD_PARAMETER);
-        marg_string *param_str = marg_string_new("\"");
-        marg_string_add(param_str, marg_vector_get(param, 1));
-        marg_string_add_str(param_str, "\"");
-        marg_vector_add(res, param_str);
+        marg_vector_add(res, marg_vector_get(param, 1));
     }
     else {
         size_t param_size = marg_vector_size(param);
@@ -346,10 +343,7 @@ marg_vector *ast_keyword_method_definition(marg_vector *multimethod_object_defau
         if(marg_string_equals(marg_vector_get(param, 0), OP_PUSH_METHOD_PARAMETER)) {
             number_of_formal_params++;
             marg_vector_add(res, OP_PUSH_METHOD_PARAMETER);
-            marg_string *param_name = marg_string_new("\"");
-            marg_string_add(param_name, marg_vector_get(param, 1));
-            marg_string_add_str(param_name, "\"");
-            marg_vector_add(res, param_name);
+            marg_vector_add(res, marg_vector_get(param, 1));
         }
         else {
             size_t param_size = marg_vector_size(param);

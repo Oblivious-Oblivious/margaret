@@ -146,7 +146,7 @@ module(method_definition_spec, {
             OP_UNARY, marg_string_new("binary"), \
             OP_PUSH_0, \
             OP_PUSH_STRING, marg_string_new("\"**\""), \
-            OP_PUSH_METHOD_PARAMETER, marg_string_new("\"a_number\""), \
+            OP_PUSH_METHOD_PARAMETER, marg_string_new("a_number"), \
             OP_START_PUSH_PROC, \
                 OP_PUSH_SELF, \
                 OP_PUSH_VARIABLE, marg_string_new("a_number"), \
@@ -162,7 +162,7 @@ module(method_definition_spec, {
             OP_UNARY, marg_string_new("binary"), \
             OP_PUSH_ANY_OBJECT, \
             OP_PUSH_STRING, marg_string_new("\"**\""), \
-            OP_PUSH_METHOD_PARAMETER, marg_string_new("\"a_number\""), \
+            OP_PUSH_METHOD_PARAMETER, marg_string_new("a_number"), \
             OP_START_PUSH_PROC, \
                 OP_PUSH_SELF, \
                 OP_PUSH_VARIABLE, marg_string_new("a_number"), \
@@ -182,8 +182,8 @@ module(method_definition_spec, {
             OP_UNARY, marg_string_new("keyword"), \
             OP_PUSH_ANY_OBJECT, \
             OP_PUSH_STRING, marg_string_new("\"add:at:\""), \
-            OP_PUSH_METHOD_PARAMETER, marg_string_new("\"element\""), \
-            OP_PUSH_METHOD_PARAMETER, marg_string_new("\"position\""), \
+            OP_PUSH_METHOD_PARAMETER, marg_string_new("element"), \
+            OP_PUSH_METHOD_PARAMETER, marg_string_new("position"), \
             OP_PUSH_TENSOR, marg_string_new("2"), \
             OP_START_PUSH_PROC, \
                 OP_PUSH_SELF, \
@@ -250,8 +250,8 @@ module(method_definition_spec, {
             OP_UNARY, marg_string_new("keyword"), \
             OP_PUSH_ANY_OBJECT, \
             OP_PUSH_STRING, marg_string_new("\"ok?:otherwise!:\""), \
-            OP_PUSH_METHOD_PARAMETER, marg_string_new("\"value1\""), \
-            OP_PUSH_METHOD_PARAMETER, marg_string_new("\"value2\""), \
+            OP_PUSH_METHOD_PARAMETER, marg_string_new("value1"), \
+            OP_PUSH_METHOD_PARAMETER, marg_string_new("value2"), \
             OP_PUSH_TENSOR, marg_string_new("2"), \
             OP_START_PUSH_PROC, \
                 OP_PUSH_SELF,
@@ -269,8 +269,8 @@ module(method_definition_spec, {
             OP_UNARY, marg_string_new("keyword"), \
             OP_PUSH_TENSOR, marg_string_new("0"), \
             OP_PUSH_STRING, marg_string_new("\"add:at:\""), \
-            OP_PUSH_METHOD_PARAMETER, marg_string_new("\"element\""), \
-            OP_PUSH_METHOD_PARAMETER, marg_string_new("\"position\""), \
+            OP_PUSH_METHOD_PARAMETER, marg_string_new("element"), \
+            OP_PUSH_METHOD_PARAMETER, marg_string_new("position"), \
             OP_PUSH_TENSOR, marg_string_new("2"), \
             OP_START_PUSH_PROC, \
                 OP_PUSH_SELF, \
@@ -332,7 +332,7 @@ module(method_definition_spec, {
             OP_UNARY, marg_string_new("keyword"), \
             OP_PUSH_ANY_OBJECT, \
             OP_PUSH_STRING, marg_string_new("\"times:\""), \
-            OP_PUSH_METHOD_PARAMETER, marg_string_new("\"a_block\""), \
+            OP_PUSH_METHOD_PARAMETER, marg_string_new("a_block"), \
             OP_PUSH_TENSOR, marg_string_new("1"), \
             OP_START_PUSH_PROC, \
                 OP_PUSH_SELF, \
