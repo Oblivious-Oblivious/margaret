@@ -108,7 +108,7 @@ marg_string *marg_string_remove_underscores(marg_string *self);
  * @param str_position_to -> The point where we end our substring
  * @return A substring of a copy of the original string
  */
-marg_string *string_substring(marg_string *self, size_t str_position_from, size_t str_position_to);
+marg_string *marg_string_substring(marg_string *self, size_t str_position_from, size_t str_position_to);
 
 /**
  * @brief The size of the string contained in the builder

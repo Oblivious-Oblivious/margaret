@@ -153,7 +153,7 @@ marg_string *marg_string_remove_underscores(marg_string *self) {
     return sb_dup;
 }
 
-marg_string *string_substring(marg_string *self, size_t str_position_from, size_t str_position_to) {
+marg_string *marg_string_substring(marg_string *self, size_t str_position_from, size_t str_position_to) {
     marg_string *strdup = marg_string_dup(self);
     marg_string_skip(strdup, str_position_from);
     marg_string_shorten(strdup, str_position_to - str_position_from + 1);
