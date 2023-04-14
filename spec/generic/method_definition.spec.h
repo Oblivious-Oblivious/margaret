@@ -95,9 +95,84 @@ module(method_definition_spec, {
     });
 
     it("parses binary methods", {
-        parse("#** a_number => self raised_to: a_number", marg_vector_new(OP_START_PUSH_BINARY_METHOD, marg_string_new("\"**\""), OP_PUSH_VARIABLE, marg_string_new("a_number"), OP_PUSH_SELF, OP_PUSH_VARIABLE, marg_string_new("a_number"), OP_KEYWORD, marg_string_new("raised_to:"), marg_string_new("1"), OP_END_PUSH_BINARY_METHOD));
-        // parse("# 0 ** a_number => 0", "");
-        // parse("# 0 ** 0 => nil", "");
+        // Method binary object: 0 message: "**" param: 0 method: -> { self | nil }
+        parse("# 0 ** 0 => nil", marg_vector_new( \
+            OP_PUSH_VARIABLE, marg_string_new("Method"), \
+            OP_UNARY, marg_string_new("binary"), \
+            OP_PUSH_0, \
+            OP_PUSH_STRING, marg_string_new("\"**\""), \
+            OP_PUSH_0, \
+            OP_START_PUSH_PROC, \
+                OP_PUSH_SELF, \
+                OP_PUSH_TENSOR, marg_string_new("1"), \
+                OP_PUSH_NIL, \
+            OP_END_PUSH_PROC, \
+            OP_KEYWORD, marg_string_new("object:message:param:method:"), marg_string_new("4") \
+        ));
+
+        // Method binary object: 0 message: "**" param: _ method: -> { self | 0 }
+        parse("# 0 ** _ => 0", marg_vector_new( \
+            OP_PUSH_VARIABLE, marg_string_new("Method"), \
+            OP_UNARY, marg_string_new("binary"), \
+            OP_PUSH_0, \
+            OP_PUSH_STRING, marg_string_new("\"**\""), \
+            OP_PUSH_ANY_OBJECT, \
+            OP_START_PUSH_PROC, \
+                OP_PUSH_SELF, \
+                OP_PUSH_TENSOR, marg_string_new("1"), \
+                OP_PUSH_0, \
+            OP_END_PUSH_PROC, \
+            OP_KEYWORD, marg_string_new("object:message:param:method:"), marg_string_new("4") \
+        ));
+
+        // Method binary object: _ message: "**" param: 0 method: -> { self | 1 }
+        parse("# _ ** 0 => 1", marg_vector_new( \
+            OP_PUSH_VARIABLE, marg_string_new("Method"), \
+            OP_UNARY, marg_string_new("binary"), \
+            OP_PUSH_ANY_OBJECT, \
+            OP_PUSH_STRING, marg_string_new("\"**\""), \
+            OP_PUSH_0,
+            OP_START_PUSH_PROC, \
+                OP_PUSH_SELF, \
+                OP_PUSH_TENSOR, marg_string_new("1"), \
+                OP_PUSH_1, \
+            OP_END_PUSH_PROC, \
+            OP_KEYWORD, marg_string_new("object:message:param:method:"), marg_string_new("4") \
+        ));
+
+        // Method binary object: 0 message: "**" param: a_number method: -> { self, a_number | 0 }
+        parse("# 0 ** a_number => 0", marg_vector_new( \
+            OP_PUSH_VARIABLE, marg_string_new("Method"), \
+            OP_UNARY, marg_string_new("binary"), \
+            OP_PUSH_0, \
+            OP_PUSH_STRING, marg_string_new("\"**\""), \
+            OP_PUSH_METHOD_PARAMETER, marg_string_new("\"a_number\""), \
+            OP_START_PUSH_PROC, \
+                OP_PUSH_SELF, \
+                OP_PUSH_VARIABLE, marg_string_new("a_number"), \
+                OP_PUSH_TENSOR, marg_string_new("2"), \
+                OP_PUSH_0, \
+            OP_END_PUSH_PROC, \
+            OP_KEYWORD, marg_string_new("object:message:param:method:"), marg_string_new("4") \
+        ));
+
+        // Method binary object: _ message: "**" param: a_number method: -> { self, a_number | self raised_to: a_number }
+        parse("# ** a_number => self raised_to: a_number", marg_vector_new( \
+            OP_PUSH_VARIABLE, marg_string_new("Method"), \
+            OP_UNARY, marg_string_new("binary"), \
+            OP_PUSH_ANY_OBJECT, \
+            OP_PUSH_STRING, marg_string_new("\"**\""), \
+            OP_PUSH_METHOD_PARAMETER, marg_string_new("\"a_number\""), \
+            OP_START_PUSH_PROC, \
+                OP_PUSH_SELF, \
+                OP_PUSH_VARIABLE, marg_string_new("a_number"), \
+                OP_PUSH_TENSOR, marg_string_new("2"), \
+                OP_PUSH_SELF, \
+                OP_PUSH_VARIABLE, marg_string_new("a_number"), \
+                OP_KEYWORD, marg_string_new("raised_to:"), marg_string_new("1"), \
+            OP_END_PUSH_PROC, \
+            OP_KEYWORD, marg_string_new("object:message:param:method:"), marg_string_new("4") \
+        ));
     });
 
     it("parses keyword methods", {

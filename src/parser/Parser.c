@@ -293,7 +293,23 @@ marg_vector *parser_unary_method_definition(Parser *self, marg_vector *multimeth
 
 marg_vector *parser_binary_method_definition(Parser *self, marg_vector *multimethod_object_default_value) {
     marg_string *selector = ensure_type(TOKEN_MESSAGE_SYMBOL, "expected message symbol on binary method definition.");
-    marg_string *param = ensure_type(TOKEN_IDENTIFIER, "expected one parameter on binary method definition.");
+
+    marg_vector *param = NULL;
+    if(lookahead_1_type_equals(TOKEN_IDENTIFIER)) {
+        if(lookahead_1_value_equals("_")) {
+            ensure_value("_", "missing '_' on multimethod default parameter");
+            // TODO Turn into an AST node
+            param = marg_vector_new(OP_PUSH_ANY_OBJECT);
+        }
+        else {
+            // TODO Turn into an AST node
+            param = marg_vector_new(OP_PUSH_METHOD_PARAMETER, ensure_type(TOKEN_IDENTIFIER, "expected one parameter on binary method definition."));
+        }
+    }
+    else {
+        param = parser_literal(self);
+    }
+
     ensure_value("=>", "missing '=>' on binary method definition.");
     marg_vector *function = parser_translation_unit(self);
     return ast_binary_method_definition(multimethod_object_default_value, selector, param, function);
