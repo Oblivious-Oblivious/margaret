@@ -27,9 +27,9 @@ marg_vector *ast_group(marg_vector *unit_list);
 marg_vector *ast_variable(marg_string *optional_instance_symbol, marg_string *name);
 marg_vector *ast_proc_literal(marg_vector *param_list, marg_vector *function);
 marg_vector *ast_c_function_declaration(marg_string *return_type, marg_string *name, marg_vector *params);
-marg_vector *ast_unary_method_definition(marg_string *selector, marg_vector *function);
-marg_vector *ast_binary_method_definition(marg_string *selector, marg_string *param, marg_vector *function);
-marg_vector *ast_keyword_method_definition(marg_vector *selector, marg_vector *function);
+marg_vector *ast_unary_method_definition(marg_vector *multimethod_object_default_value, marg_string *selector, marg_vector *function);
+marg_vector *ast_binary_method_definition(marg_vector *multimethod_object_default_value, marg_string *selector, marg_vector *param, marg_vector *function);
+marg_vector *ast_keyword_method_definition(marg_vector *multimethod_object_default_value, marg_string *selector, marg_vector *params, marg_vector *function);
 
 marg_vector *ast_literal(marg_vector *unit);
 marg_vector *ast_integer_literal(marg_string *sign, marg_string *number);

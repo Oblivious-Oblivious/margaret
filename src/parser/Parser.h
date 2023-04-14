@@ -45,9 +45,9 @@ marg_vector *parser_variable(Parser *self);
 marg_vector *parser_proc_literal(Parser *self);
 marg_vector *parser_c_function_declaration(Parser *self);
 marg_vector *parser_method_definition_literal(Parser *self);
-marg_vector *parser_unary_method_definition(Parser *self);
-marg_vector *parser_binary_method_definition(Parser *self);
-marg_vector *parser_keyword_method_definition(Parser *self);
+marg_vector *parser_unary_method_definition(Parser *self, marg_vector *multimethod_object_default_value);
+marg_vector *parser_binary_method_definition(Parser *self, marg_vector *multimethod_object_default_value);
+marg_vector *parser_keyword_method_definition(Parser *self, marg_vector *multimethod_object_default_value);
 
 marg_vector *parser_literal(Parser *self);
 marg_vector *parser_integer_literal(Parser *self, marg_string *sign);

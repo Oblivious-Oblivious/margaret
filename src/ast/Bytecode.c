@@ -249,7 +249,7 @@ marg_vector *ast_c_function_declaration(marg_string *return_type, marg_string *n
     return res;
 }
 
-marg_vector *ast_unary_method_definition(marg_string *selector, marg_vector *function) {
+marg_vector *ast_unary_method_definition(marg_vector *multimethod_object_default_value, marg_string *selector, marg_vector *function) {
     marg_string *selector_name = marg_string_new("\"");
     marg_string_add(selector_name, selector);
     marg_string_add_str(selector_name, "\"");
@@ -264,7 +264,7 @@ marg_vector *ast_unary_method_definition(marg_string *selector, marg_vector *fun
     return res;
 }
 
-marg_vector *ast_binary_method_definition(marg_string *selector, marg_string *param, marg_vector *function) {
+marg_vector *ast_binary_method_definition(marg_vector *multimethod_object_default_value, marg_string *selector, marg_vector *param, marg_vector *function) {
     marg_string *selector_name = marg_string_new("\"");
     marg_string_add(selector_name, selector);
     marg_string_add_str(selector_name, "\"");
@@ -279,11 +279,11 @@ marg_vector *ast_binary_method_definition(marg_string *selector, marg_string *pa
     return res;
 }
 
-marg_vector *ast_keyword_method_definition(marg_vector *selector, marg_vector *function) {
     marg_string *joined_selector = marg_string_new("");
     size_t selector_size = marg_vector_size(selector);
     for(size_t i = 0; i < marg_vector_size(selector); i++)
         marg_string_add(joined_selector, marg_vector_get(marg_vector_get(selector, i), 0));
+marg_vector *ast_keyword_method_definition(marg_vector *multimethod_object_default_value, marg_string *selector, marg_vector *params, marg_vector *function) {
     marg_string *selector_name = marg_string_new("\"");
     marg_string_add(selector_name, joined_selector);
     marg_string_add_str(selector_name, "\"");

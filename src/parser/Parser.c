@@ -260,35 +260,36 @@ marg_vector *parser_c_function_declaration(Parser *self) {
 marg_vector *parser_method_definition_literal(Parser *self) {
     ensure_value("#", "missing '#' on method definition.");
 
+    marg_vector *multimethod_object_default_value = NULL;
     if(lookahead_1_type_equals(TOKEN_IDENTIFIER) && (lookahead_2_value_equals(":") || (lookahead_2_type_equals(TOKEN_ID_SYMBOL) && lookahead_3_value_equals(":"))))
-        return parser_keyword_method_definition(self);
+        return parser_keyword_method_definition(self, multimethod_object_default_value);
     else if(lookahead_1_type_equals(TOKEN_IDENTIFIER))
-        return parser_unary_method_definition(self);
+        return parser_unary_method_definition(self, multimethod_object_default_value);
     else if(lookahead_1_type_equals(TOKEN_MESSAGE_SYMBOL))
-        return parser_binary_method_definition(self);
+        return parser_binary_method_definition(self, multimethod_object_default_value);
     else
         return ast_empty();
 }
 
-marg_vector *parser_unary_method_definition(Parser *self) {
+marg_vector *parser_unary_method_definition(Parser *self, marg_vector *multimethod_object_default_value) {
     marg_string *selector = ensure_type(TOKEN_IDENTIFIER, "expected identifier on unary method definition.");
     if(lookahead_1_type_equals(TOKEN_ID_SYMBOL))
         marg_string_add(selector, ensure_type(TOKEN_ID_SYMBOL, "expected id symbol on unary identifier."));
     ensure_value("=>", "missing '=>' on unary method definition.");
     marg_vector *function = parser_translation_unit(self);
-    return ast_unary_method_definition(selector, function);
+    return ast_unary_method_definition(multimethod_object_default_value, selector, function);
 }
 
-marg_vector *parser_binary_method_definition(Parser *self) {
+marg_vector *parser_binary_method_definition(Parser *self, marg_vector *multimethod_object_default_value) {
     marg_string *selector = ensure_type(TOKEN_MESSAGE_SYMBOL, "expected message symbol on binary method definition.");
     marg_string *param = ensure_type(TOKEN_IDENTIFIER, "expected one parameter on binary method definition.");
     ensure_value("=>", "missing '=>' on binary method definition.");
     marg_vector *function = parser_translation_unit(self);
-    return ast_binary_method_definition(selector, param, function);
+    return ast_binary_method_definition(multimethod_object_default_value, selector, param, function);
 }
 
-marg_vector *parser_keyword_method_definition(Parser *self) {
     marg_vector *selector = marg_vector_new_empty();
+marg_vector *parser_keyword_method_definition(Parser *self, marg_vector *multimethod_object_default_value) {
     while(lookahead_1_type_equals(TOKEN_IDENTIFIER)) {
         marg_string *key = ensure_type(TOKEN_IDENTIFIER, "expected identifier on keyword method selector.");
         if(lookahead_1_type_equals(TOKEN_ID_SYMBOL))
@@ -300,15 +301,15 @@ marg_vector *parser_keyword_method_definition(Parser *self) {
     }
     ensure_value("=>", "missing '=>' on keyword method definition.");
     marg_vector *function = parser_translation_unit(self);
-    return ast_keyword_method_definition(selector, function);
+    return ast_keyword_method_definition(multimethod_object_default_value, selector, params, function);
 }
 
 marg_vector *parser_literal(Parser *self) {
     marg_string *sign = marg_string_new("");
     if(lookahead_1_value_equals("+"))
-        sign = ensure_value("+", "expected `+` on literal.");
+        sign = ensure_value("+", "expected '+' on literal.");
     else if(lookahead_1_value_equals("-"))
-        sign = ensure_value("-", "expected `-` on literal.");
+        sign = ensure_value("-", "expected '-' on literal.");
 
     // TODO Add different integer sizes
     if(lookahead_1_type_equals(TOKEN_INTEGER))
