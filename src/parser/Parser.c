@@ -7,11 +7,17 @@
 #include <stdio.h>
 
 #define lookahead_1_value_equals(token) token_equals_values(token_table_lookahead(self->table, 1), marg_string_new((token)))
+#define lookahead_1_value_not_equals(token) !token_equals_values(token_table_lookahead(self->table, 1), marg_string_new((token)))
 #define lookahead_2_value_equals(token) token_equals_values(token_table_lookahead(self->table, 2), marg_string_new((token)))
+#define lookahead_2_value_not_equals(token) !token_equals_values(token_table_lookahead(self->table, 2), marg_string_new((token)))
 #define lookahead_3_value_equals(token) token_equals_values(token_table_lookahead(self->table, 3), marg_string_new((token)))
+#define lookahead_3_value_not_equals(token) !token_equals_values(token_table_lookahead(self->table, 3), marg_string_new((token)))
 #define lookahead_1_type_equals(expected_type) token_table_lookahead(self->table, 1)->type == (expected_type)
+#define lookahead_1_type_not_equals(expected_type) token_table_lookahead(self->table, 1)->type != (expected_type)
 #define lookahead_2_type_equals(expected_type) token_table_lookahead(self->table, 2)->type == (expected_type)
+#define lookahead_2_type_not_equals(expected_type) token_table_lookahead(self->table, 2)->type != (expected_type)
 #define lookahead_3_type_equals(expected_type) token_table_lookahead(self->table, 3)->type == (expected_type)
+#define lookahead_3_type_not_equals(expected_type) token_table_lookahead(self->table, 3)->type != (expected_type)
 
 #define ensure_value(value, msg) token_table_ensure_value(self->table, (value), (msg))
 #define ensure_type(type, msg) token_table_ensure_type(self->table, (type), (msg))
