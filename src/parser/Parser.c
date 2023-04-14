@@ -261,6 +261,17 @@ marg_vector *parser_method_definition_literal(Parser *self) {
     ensure_value("#", "missing '#' on method definition.");
 
     marg_vector *multimethod_object_default_value = NULL;
+    if(lookahead_1_type_not_equals(TOKEN_IDENTIFIER)
+    && lookahead_1_type_not_equals(TOKEN_MESSAGE_SYMBOL)) {
+        multimethod_object_default_value = parser_literal(self);
+    }
+    else {
+        if(lookahead_1_value_equals("_"))
+            ensure_value("_", "missing '_' on multimethod default value");
+        // TODO Turn into an AST node
+        multimethod_object_default_value = marg_vector_new(OP_PUSH_ANY_OBJECT);
+    }
+
     if(lookahead_1_type_equals(TOKEN_IDENTIFIER) && (lookahead_2_value_equals(":") || (lookahead_2_type_equals(TOKEN_ID_SYMBOL) && lookahead_3_value_equals(":"))))
         return parser_keyword_method_definition(self, multimethod_object_default_value);
     else if(lookahead_1_type_equals(TOKEN_IDENTIFIER))
