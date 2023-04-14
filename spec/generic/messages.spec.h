@@ -59,8 +59,8 @@ module(messages_spec, {
 
     it("chains keyword messages of exactly the same selector", {
         parse("arr add: 1 add: 2 add: 3", marg_vector_new(OP_PUSH_VARIABLE, marg_string_new("arr"), OP_PUSH_1, OP_KEYWORD, marg_string_new("add:"), marg_string_new("1"), OP_PUSH_VARIABLE, marg_string_new("arr"), OP_PUSH_2, OP_KEYWORD, marg_string_new("add:"), marg_string_new("1"), OP_PUSH_VARIABLE, marg_string_new("arr"), OP_PUSH_INTEGER, marg_string_new("3"), OP_KEYWORD, marg_string_new("add:"), marg_string_new("1")));
-        parse("arr add: 'a' add: 'b' at: 3", marg_vector_new(OP_PUSH_VARIABLE, marg_string_new("arr"), OP_PUSH_CHAR, marg_string_new("'a'"), OP_PUSH_CHAR, marg_string_new("'b'"), OP_PUSH_INTEGER, marg_string_new("3"), OP_KEYWORD, marg_string_new("add:add:at:"), marg_string_new("3")));
-        parse("arr add: 'a' at: 1 add: 'b' at: 2", marg_vector_new(OP_PUSH_VARIABLE, marg_string_new("arr"), OP_PUSH_CHAR, marg_string_new("'a'"), OP_PUSH_1, OP_PUSH_CHAR, marg_string_new("'b'"), OP_PUSH_2, OP_KEYWORD, marg_string_new("add:at:add:at:"), marg_string_new("4")));
+        parse("arr add: 'a' add: 'b' at: 3", marg_vector_new(OP_PUSH_VARIABLE, marg_string_new("arr"), OP_PUSH_CHAR, marg_string_new("a"), OP_PUSH_CHAR, marg_string_new("b"), OP_PUSH_INTEGER, marg_string_new("3"), OP_KEYWORD, marg_string_new("add:add:at:"), marg_string_new("3")));
+        parse("arr add: 'a' at: 1 add: 'b' at: 2", marg_vector_new(OP_PUSH_VARIABLE, marg_string_new("arr"), OP_PUSH_CHAR, marg_string_new("a"), OP_PUSH_1, OP_PUSH_CHAR, marg_string_new("b"), OP_PUSH_2, OP_KEYWORD, marg_string_new("add:at:add:at:"), marg_string_new("4")));
     });
 
     it("parses composit messages", {

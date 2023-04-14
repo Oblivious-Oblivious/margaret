@@ -17,7 +17,7 @@ module(constants_spec, {
         parse("(x = 0b0101)", marg_vector_new(OP_PUSH_INTEGER, marg_string_new("5"), OP_STORE, marg_string_new("x")));
         parse("(x = 0o741)", marg_vector_new(OP_PUSH_INTEGER, marg_string_new("481"), OP_STORE, marg_string_new("x")));
 
-        parse("(x = \"Hello\")", marg_vector_new(OP_PUSH_STRING, marg_string_new("\"Hello\""), OP_STORE, marg_string_new("x")));
+        parse("(x = \"Hello\")", marg_vector_new(OP_PUSH_STRING, marg_string_new("Hello"), OP_STORE, marg_string_new("x")));
     });
 })
 

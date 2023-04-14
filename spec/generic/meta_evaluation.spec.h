@@ -17,7 +17,7 @@ module(meta_evaluation_spec, {
         parse("(x = String field_names)", marg_vector_new(OP_PUSH_VARIABLE, marg_string_new("String"), OP_UNARY, marg_string_new("field_names"), OP_STORE, marg_string_new("x")));
         parse("(x = String all_field_names)", marg_vector_new(OP_PUSH_VARIABLE, marg_string_new("String"), OP_UNARY, marg_string_new("all_field_names"), OP_STORE, marg_string_new("x")));
         parse("(x = String selectors)", marg_vector_new(OP_PUSH_VARIABLE, marg_string_new("String"), OP_UNARY, marg_string_new("selectors"), OP_STORE, marg_string_new("x")));
-        parse("(x = String source_code_at: \"message\")", marg_vector_new(OP_PUSH_VARIABLE, marg_string_new("String"), OP_PUSH_STRING, marg_string_new("\"message\""), OP_KEYWORD, marg_string_new("source_code_at:"), marg_string_new("1"), OP_STORE, marg_string_new("x")));
+        parse("(x = String source_code_at: \"message\")", marg_vector_new(OP_PUSH_VARIABLE, marg_string_new("String"), OP_PUSH_STRING, marg_string_new("message"), OP_KEYWORD, marg_string_new("source_code_at:"), marg_string_new("1"), OP_STORE, marg_string_new("x")));
         parse("(x = String all_instances)", marg_vector_new(OP_PUSH_VARIABLE, marg_string_new("String"), OP_UNARY, marg_string_new("all_instances"), OP_STORE, marg_string_new("x")));
         parse("(x = String superclass)", marg_vector_new(OP_PUSH_VARIABLE, marg_string_new("String"), OP_UNARY, marg_string_new("superclass"), OP_STORE, marg_string_new("x")));
         parse("(x = String all_superclasses)", marg_vector_new(OP_PUSH_VARIABLE, marg_string_new("String"), OP_UNARY, marg_string_new("all_superclasses"), OP_STORE, marg_string_new("x")));

@@ -51,15 +51,15 @@ module(classes_spec, {
             OP_UNARY, marg_string_new("subclass"), \
             OP_STORE, marg_string_new("Point"), \
             OP_PUSH_VARIABLE, marg_string_new("Point"), \
-            OP_PUSH_STRING, marg_string_new("\"x\""), \
-            OP_PUSH_STRING, marg_string_new("\"y\""), \
+            OP_PUSH_STRING, marg_string_new("x"), \
+            OP_PUSH_STRING, marg_string_new("y"), \
             OP_PUSH_TENSOR, marg_string_new("2"), \
             OP_KEYWORD, marg_string_new("attr_reader:"), marg_string_new("1"), \
             OP_PUSH_VARIABLE, marg_string_new("Point"), \
             OP_PUSH_VARIABLE, marg_string_new("Method"), \
             OP_UNARY, marg_string_new("keyword"), \
             OP_PUSH_ANY_OBJECT, \
-            OP_PUSH_STRING, marg_string_new("\"x:y:\""), \
+            OP_PUSH_STRING, marg_string_new("x:y:"), \
             OP_PUSH_METHOD_PARAMETER, marg_string_new("xparam"), \
             OP_PUSH_METHOD_PARAMETER, marg_string_new("yparam"), \
             OP_PUSH_TENSOR, marg_string_new("2"), \
@@ -80,7 +80,7 @@ module(classes_spec, {
             OP_PUSH_VARIABLE, marg_string_new("Method"), \
             OP_UNARY, marg_string_new("unary"), \
             OP_PUSH_ANY_OBJECT, \
-            OP_PUSH_STRING, marg_string_new("\"calc\""), \
+            OP_PUSH_STRING, marg_string_new("calc"), \
             OP_START_PUSH_PROC,
                 OP_PUSH_SELF, \
                 OP_PUSH_TENSOR, marg_string_new("1"), \
@@ -94,7 +94,7 @@ module(classes_spec, {
             OP_PUSH_VARIABLE, marg_string_new("Method"), \
             OP_UNARY, marg_string_new("binary"), \
             OP_PUSH_ANY_OBJECT, \
-            OP_PUSH_STRING, marg_string_new("\"+\""), \
+            OP_PUSH_STRING, marg_string_new("+"), \
             OP_PUSH_METHOD_PARAMETER, marg_string_new("other"), \
             OP_START_PUSH_PROC, \
                 OP_PUSH_SELF, \
@@ -118,14 +118,14 @@ module(classes_spec, {
             OP_UNARY, marg_string_new("subclass"), \
             OP_STORE, marg_string_new("Point3D"), \
             OP_PUSH_VARIABLE, marg_string_new("Point"), \
-            OP_PUSH_STRING, marg_string_new("\"z\""), \
+            OP_PUSH_STRING, marg_string_new("z"), \
             OP_PUSH_TENSOR, marg_string_new("1"), \
             OP_KEYWORD, marg_string_new("attr_reader:"), marg_string_new("1"), \
             OP_PUSH_VARIABLE, marg_string_new("Point3D"), \
             OP_PUSH_VARIABLE, marg_string_new("Method"), \
             OP_UNARY, marg_string_new("keyword"), \
             OP_PUSH_ANY_OBJECT, \
-            OP_PUSH_STRING, marg_string_new("\"x:y:z:\""), \
+            OP_PUSH_STRING, marg_string_new("x:y:z:"), \
             OP_PUSH_METHOD_PARAMETER, marg_string_new("x"), \
             OP_PUSH_METHOD_PARAMETER, marg_string_new("y"), \
             OP_PUSH_METHOD_PARAMETER, marg_string_new("z"), \
@@ -150,7 +150,7 @@ module(classes_spec, {
             OP_PUSH_VARIABLE, marg_string_new("Method"), \
             OP_UNARY, marg_string_new("unary"), \
             OP_PUSH_ANY_OBJECT, \
-            OP_PUSH_STRING, marg_string_new("\"calc\""), \
+            OP_PUSH_STRING, marg_string_new("calc"), \
             OP_START_PUSH_PROC,
                 OP_PUSH_SELF, \
                 OP_PUSH_TENSOR, marg_string_new("1"), \
@@ -165,7 +165,7 @@ module(classes_spec, {
             OP_PUSH_VARIABLE, marg_string_new("Method"), \
             OP_UNARY, marg_string_new("binary"), \
             OP_PUSH_ANY_OBJECT, \
-            OP_PUSH_STRING, marg_string_new("\"+\""), \
+            OP_PUSH_STRING, marg_string_new("+"), \
             OP_PUSH_METHOD_PARAMETER, marg_string_new("other"), \
             OP_START_PUSH_PROC, \
                 OP_PUSH_SELF, \

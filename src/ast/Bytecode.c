@@ -258,10 +258,7 @@ marg_vector *ast_unary_method_definition(marg_vector *multimethod_object_default
         marg_vector_add(res, marg_vector_get(multimethod_object_default_value, i));
 
     marg_vector_add(res, OP_PUSH_STRING);
-    marg_string *selector_name = marg_string_new("\"");
-    marg_string_add(selector_name, selector);
-    marg_string_add_str(selector_name, "\"");
-    marg_vector_add(res, selector_name);
+    marg_vector_add(res, selector);
 
     marg_vector_add(res, OP_START_PUSH_PROC);
     marg_vector_add(res, OP_PUSH_SELF);
@@ -286,10 +283,7 @@ marg_vector *ast_binary_method_definition(marg_vector *multimethod_object_defaul
         marg_vector_add(res, marg_vector_get(multimethod_object_default_value, i));
 
     marg_vector_add(res, OP_PUSH_STRING);
-    marg_string *selector_name = marg_string_new("\"");
-    marg_string_add(selector_name, selector);
-    marg_string_add_str(selector_name, "\"");
-    marg_vector_add(res, selector_name);
+    marg_vector_add(res, selector);
 
     if(marg_string_equals(marg_vector_get(param, 0), OP_PUSH_METHOD_PARAMETER)) {
         marg_vector_add(res, OP_PUSH_METHOD_PARAMETER);
@@ -332,10 +326,7 @@ marg_vector *ast_keyword_method_definition(marg_vector *multimethod_object_defau
         marg_vector_add(res, marg_vector_get(multimethod_object_default_value, i));
 
     marg_vector_add(res, OP_PUSH_STRING);
-    marg_string *selector_name = marg_string_new("\"");
-    marg_string_add(selector_name, selector);
-    marg_string_add_str(selector_name, "\"");
-    marg_vector_add(res, selector_name);
+    marg_vector_add(res, selector);
 
     size_t params_size = marg_vector_size(params);
     size_t number_of_formal_params = 1;
@@ -455,12 +446,16 @@ marg_vector *ast_float_literal(marg_string *sign, marg_string *number) {
 marg_vector *ast_char_literal(marg_string *sign, marg_string *c) {
     marg_string *character = marg_string_new("");
     marg_string_add(character, sign);
+    marg_string_skip(c, 1);
+    marg_string_shorten(c, marg_string_size(c)-1);
     marg_string_add(character, c);
 
     return marg_vector_new(OP_PUSH_CHAR, character);
 }
 
 marg_vector *ast_string_literal(marg_string *string) {
+    marg_string_skip(string, 1);
+    marg_string_shorten(string, marg_string_size(string)-1);
     return marg_vector_new(OP_PUSH_STRING, string);
 }
 
@@ -598,10 +593,7 @@ marg_vector *ast_json_association(marg_string *key, marg_vector *value) {
     marg_vector_add(res, OP_PUSH_VARIABLE);
     marg_vector_add(res, marg_string_new("Association"));
     marg_vector_add(res, OP_PUSH_STRING);
-    marg_string *key_name = marg_string_new("\"");
-    marg_string_add(key_name, key);
-    marg_string_add_str(key_name, "\"");
-    marg_vector_add(res, key_name);
+    marg_vector_add(res, key);
 
     size_t value_size = marg_vector_size(value);
     for(size_t i = 0; i < value_size; i++)
