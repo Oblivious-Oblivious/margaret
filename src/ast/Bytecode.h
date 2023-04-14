@@ -23,6 +23,7 @@ marg_vector *ast_keyword_object(marg_vector *object);
 marg_vector *ast_keyword_selector(marg_string *id, marg_string *optional_symbol, marg_string *delim, marg_vector *obj);
 
 marg_vector *ast_expression(marg_vector *unit);
+marg_vector *ast_margaret_object(void);
 marg_vector *ast_group(marg_vector *unit_list);
 marg_vector *ast_variable(marg_string *optional_instance_symbol, marg_string *name);
 marg_vector *ast_proc_literal(marg_vector *param_list, marg_vector *function);

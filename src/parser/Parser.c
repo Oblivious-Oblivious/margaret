@@ -173,6 +173,8 @@ marg_vector *parser_keyword_selector(Parser *self) {
 marg_vector *parser_expression(Parser *self) {
     if(lookahead_1_value_equals("("))
         return ast_expression(parser_group(self));
+    else if(lookahead_1_type_equals(TOKEN_IDENTIFIER) && (lookahead_2_value_equals(":") || (lookahead_2_type_equals(TOKEN_ID_SYMBOL) && lookahead_3_value_equals(":"))))
+        return ast_margaret_object();
     else if(lookahead_1_type_equals(TOKEN_IDENTIFIER) || (lookahead_1_value_equals("@") && lookahead_2_type_equals(TOKEN_IDENTIFIER)))
         return ast_expression(parser_variable(self));
     else if(lookahead_1_value_equals("{")

@@ -37,6 +37,7 @@
 #include "generic/identifiers.spec.h"
 #include "generic/intervals.spec.h"
 #include "generic/iterations.spec.h"
+#include "generic/margaret_messages.spec.h"
 #include "generic/messages.spec.h"
 #include "generic/meta_evaluation.spec.h"
 #include "generic/method_definition.spec.h"
@@ -99,6 +100,7 @@ spec_suite({
     identifiers_spec();
     intervals_spec();
     iterations_spec();
+    margaret_messages_spec();
     messages_spec();
     meta_evaluation_spec();
     method_definition_spec();

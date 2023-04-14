@@ -170,6 +170,10 @@ marg_vector *ast_expression(marg_vector *unit) {
     return unit;
 }
 
+marg_vector *ast_margaret_object(void) {
+    return marg_vector_new(OP_PUSH_VARIABLE, marg_string_new("Margaret"));
+}
+
 marg_vector *ast_group(marg_vector *unit_list) {
     marg_vector *res = marg_vector_new_empty();
 
