@@ -176,16 +176,188 @@ module(method_definition_spec, {
     });
 
     it("parses keyword methods", {
-        parse("#add: element at: position => 42", marg_vector_new(OP_START_PUSH_KEYWORD_METHOD, marg_string_new("\"add:at:\""), OP_PUSH_VARIABLE, marg_string_new("element"), OP_PUSH_VARIABLE, marg_string_new("position"), OP_PUSH_TENSOR, marg_string_new("2"), OP_PUSH_INTEGER, marg_string_new("42"), OP_END_PUSH_KEYWORD_METHOD));
-        parse("#ok?: value1 otherwise!: value2 => 17", marg_vector_new(OP_START_PUSH_KEYWORD_METHOD, marg_string_new("\"ok?:otherwise!:\""), OP_PUSH_VARIABLE, marg_string_new("value1"), OP_PUSH_VARIABLE, marg_string_new("value2"), OP_PUSH_TENSOR, marg_string_new("2"), OP_PUSH_INTEGER, marg_string_new("17"), OP_END_PUSH_KEYWORD_METHOD));
-        // parse("# [] add: element at: position => 17");
-        // parse("# [] add: 'a' at: 0 => ['a']");
-        // parse("#add: 'a' at: 0 => ['a'] ++ self");
+        // Method keyword object: _ message: "add:at:" params: ["element", "position"] method: -> { self, element, position | 42 }
+        parse("#add: element at: position => 42", marg_vector_new( \
+            OP_PUSH_VARIABLE, marg_string_new("Method"), \
+            OP_UNARY, marg_string_new("keyword"), \
+            OP_PUSH_ANY_OBJECT, \
+            OP_PUSH_STRING, marg_string_new("\"add:at:\""), \
+            OP_PUSH_METHOD_PARAMETER, marg_string_new("\"element\""), \
+            OP_PUSH_METHOD_PARAMETER, marg_string_new("\"position\""), \
+            OP_PUSH_TENSOR, marg_string_new("2"), \
+            OP_START_PUSH_PROC, \
+                OP_PUSH_SELF, \
+                OP_PUSH_VARIABLE, marg_string_new("element"), \
+                OP_PUSH_VARIABLE, marg_string_new("position"), \
+                OP_PUSH_TENSOR, marg_string_new("3"), \
+                OP_PUSH_INTEGER, marg_string_new("42"), \
+            OP_END_PUSH_PROC, \
+            OP_KEYWORD, marg_string_new("object:message:params:method:"), marg_string_new("4") \
+        ));
 
+        // Method keyword object: _ message: "new:" params: ["2"] method: -> { self | 1 }
+        parse("# _ new: 2 => 1", marg_vector_new( \
+            OP_PUSH_VARIABLE, marg_string_new("Method"), \
+            OP_UNARY, marg_string_new("keyword"), \
+            OP_PUSH_ANY_OBJECT, \
+            OP_PUSH_STRING, marg_string_new("\"new:\""), \
+            OP_PUSH_2, \
+            OP_PUSH_TENSOR, marg_string_new("1"), \
+            OP_START_PUSH_PROC, \
+                OP_PUSH_SELF, \
+                OP_PUSH_TENSOR, marg_string_new("1"), \
+                OP_PUSH_1,
+            OP_END_PUSH_PROC, \
+            OP_KEYWORD, marg_string_new("object:message:params:method:"), marg_string_new("4") \
+        ));
+
+        // Method keyword object: 1 message: "add:" params: ["2"] method: -> { self | 3 }
+        parse("# 1 add: 2 => 3", marg_vector_new( \
+            OP_PUSH_VARIABLE, marg_string_new("Method"), \
+            OP_UNARY, marg_string_new("keyword"), \
+            OP_PUSH_1, \
+            OP_PUSH_STRING, marg_string_new("\"add:\""), \
+            OP_PUSH_2, \
+            OP_PUSH_TENSOR, marg_string_new("1"), \
+            OP_START_PUSH_PROC, \
+                OP_PUSH_SELF, \
+                OP_PUSH_TENSOR, marg_string_new("1"), \
+                OP_PUSH_INTEGER, marg_string_new("3"),
+            OP_END_PUSH_PROC, \
+            OP_KEYWORD, marg_string_new("object:message:params:method:"), marg_string_new("4") \
+        ));
+
+        // Method keyword object: 1 message: "one:" params: [_, _] method: -> { self | 42 }
+        parse("# 1 one: _ two: _ => 42", marg_vector_new( \
+            OP_PUSH_VARIABLE, marg_string_new("Method"), \
+            OP_UNARY, marg_string_new("keyword"), \
+            OP_PUSH_1, \
+            OP_PUSH_STRING, marg_string_new("\"one:two:\""), \
+            OP_PUSH_ANY_OBJECT, \
+            OP_PUSH_ANY_OBJECT, \
+            OP_PUSH_TENSOR, marg_string_new("2"), \
+            OP_START_PUSH_PROC, \
+                OP_PUSH_SELF, \
+                OP_PUSH_TENSOR, marg_string_new("1"), \
+                OP_PUSH_INTEGER, marg_string_new("42"),
+            OP_END_PUSH_PROC, \
+            OP_KEYWORD, marg_string_new("object:message:params:method:"), marg_string_new("4") \
+        ));
+
+        // Method keyword object: _ message: "ok?:otherwise!:" params: ["value1", "value2"] method: -> { self, value1, value2 | 17 }
+        parse("#ok?: value1 otherwise!: value2 => 17", marg_vector_new( \
+            OP_PUSH_VARIABLE, marg_string_new("Method"), \
+            OP_UNARY, marg_string_new("keyword"), \
+            OP_PUSH_ANY_OBJECT, \
+            OP_PUSH_STRING, marg_string_new("\"ok?:otherwise!:\""), \
+            OP_PUSH_METHOD_PARAMETER, marg_string_new("\"value1\""), \
+            OP_PUSH_METHOD_PARAMETER, marg_string_new("\"value2\""), \
+            OP_PUSH_TENSOR, marg_string_new("2"), \
+            OP_START_PUSH_PROC, \
+                OP_PUSH_SELF,
+                OP_PUSH_VARIABLE, marg_string_new("value1"),
+                OP_PUSH_VARIABLE, marg_string_new("value2"),
+                OP_PUSH_TENSOR, marg_string_new("3"),
+                OP_PUSH_INTEGER, marg_string_new("17"), \
+            OP_END_PUSH_PROC, \
+            OP_KEYWORD, marg_string_new("object:message:params:method:"), marg_string_new("4") \
+        ));
+
+        // Method keyword object: [] message: "add:at:" params: ["element", "position"] method: -> { self, element, position | 17 }
+        parse("# [] add: element at: position => 17", marg_vector_new( \
+            OP_PUSH_VARIABLE, marg_string_new("Method"), \
+            OP_UNARY, marg_string_new("keyword"), \
+            OP_PUSH_TENSOR, marg_string_new("0"), \
+            OP_PUSH_STRING, marg_string_new("\"add:at:\""), \
+            OP_PUSH_METHOD_PARAMETER, marg_string_new("\"element\""), \
+            OP_PUSH_METHOD_PARAMETER, marg_string_new("\"position\""), \
+            OP_PUSH_TENSOR, marg_string_new("2"), \
+            OP_START_PUSH_PROC, \
+                OP_PUSH_SELF, \
+                OP_PUSH_VARIABLE, marg_string_new("element"), \
+                OP_PUSH_VARIABLE, marg_string_new("position"), \
+                OP_PUSH_TENSOR, marg_string_new("3"), \
+                OP_PUSH_INTEGER, marg_string_new("17"), \
+            OP_END_PUSH_PROC, \
+            OP_KEYWORD, marg_string_new("object:message:params:method:"), marg_string_new("4") \
+        ));
+
+        // Method keyword object: [] message: "add:at:" params: ['a', 0] method: -> { self | ['a'] }
+        parse("# [] add: 'a' at: 0 => ['a']", marg_vector_new( \
+            OP_PUSH_VARIABLE, marg_string_new("Method"), \
+            OP_UNARY, marg_string_new("keyword"), \
+            OP_PUSH_TENSOR, marg_string_new("0"), \
+            OP_PUSH_STRING, marg_string_new("\"add:at:\""), \
+            OP_PUSH_CHAR, marg_string_new("'a'"), \
+            OP_PUSH_0,
+            OP_PUSH_TENSOR, marg_string_new("2"), \
+            OP_START_PUSH_PROC, \
+                OP_PUSH_SELF, \
+                OP_PUSH_TENSOR, marg_string_new("1"), \
+                OP_PUSH_CHAR, marg_string_new("'a'"), \
+                OP_PUSH_TENSOR, marg_string_new("1"), \
+            OP_END_PUSH_PROC, \
+            OP_KEYWORD, marg_string_new("object:message:params:method:"), marg_string_new("4") \
+        ));
+
+        // Method keyword object: _ message: "add:at:" params: ['a', 0]
+        parse("#add: 'a' at: 0 => ['a'] ++ self", marg_vector_new( \
+            OP_PUSH_VARIABLE, marg_string_new("Method"), \
+            OP_UNARY, marg_string_new("keyword"), \
+            OP_PUSH_ANY_OBJECT, \
+            OP_PUSH_STRING, marg_string_new("\"add:at:\""), \
+            OP_PUSH_CHAR, marg_string_new("'a'"), \
+            OP_PUSH_0,
+            OP_PUSH_TENSOR, marg_string_new("2"), \
+            OP_START_PUSH_PROC, \
+                OP_PUSH_SELF, \
+                OP_PUSH_TENSOR, marg_string_new("1"), \
+                OP_PUSH_CHAR, marg_string_new("'a'"), \
+                OP_PUSH_TENSOR, marg_string_new("1"), \
+                OP_PUSH_SELF, \
+                OP_BINARY, marg_string_new("++"), \
+            OP_END_PUSH_PROC, \
+            OP_KEYWORD, marg_string_new("object:message:params:method:"), marg_string_new("4") \
+        ));
+
+        // Method keyword object: _ message: "times:" params: ["a_block"] method: -> { self, a_block | (
+        //     remaining = self,
+        //     -> { (remaining = remaining - 1) >= 0 } while_true: -> { a_block value }
+        // ) }
         parse("#times: a_block => ( \
             remaining = self, \
             ->{ (remaining = remaining - 1) >= 0 } while_true: ->{ a_block value } \
-        )", marg_vector_new(OP_START_PUSH_KEYWORD_METHOD, marg_string_new("\"times:\""), OP_PUSH_VARIABLE, marg_string_new("a_block"), OP_PUSH_TENSOR, marg_string_new("1"), OP_PUSH_SELF, OP_STORE, marg_string_new("remaining"), OP_START_PUSH_PROC, OP_PUSH_TENSOR, marg_string_new("0"), OP_PUSH_VARIABLE, marg_string_new("remaining"), OP_PUSH_1, OP_BINARY, marg_string_new("-"), OP_STORE, marg_string_new("remaining"), OP_PUSH_0, OP_BINARY, marg_string_new(">="), OP_END_PUSH_PROC, OP_START_PUSH_PROC, OP_PUSH_TENSOR, marg_string_new("0"), OP_PUSH_VARIABLE, marg_string_new("a_block"), OP_UNARY, marg_string_new("value"), OP_END_PUSH_PROC, OP_KEYWORD, marg_string_new("while_true:"), marg_string_new("1"), OP_END_PUSH_KEYWORD_METHOD));
+        )", marg_vector_new( \
+            OP_PUSH_VARIABLE, marg_string_new("Method"), \
+            OP_UNARY, marg_string_new("keyword"), \
+            OP_PUSH_ANY_OBJECT, \
+            OP_PUSH_STRING, marg_string_new("\"times:\""), \
+            OP_PUSH_METHOD_PARAMETER, marg_string_new("\"a_block\""), \
+            OP_PUSH_TENSOR, marg_string_new("1"), \
+            OP_START_PUSH_PROC, \
+                OP_PUSH_SELF, \
+                OP_PUSH_VARIABLE, marg_string_new("a_block"), \
+                OP_PUSH_TENSOR, marg_string_new("2"), \
+                OP_PUSH_SELF, \
+                OP_STORE, marg_string_new("remaining"), \
+                OP_START_PUSH_PROC, \
+                    OP_PUSH_TENSOR, marg_string_new("0"), \
+                    OP_PUSH_VARIABLE, marg_string_new("remaining"), \
+                    OP_PUSH_1, \
+                    OP_BINARY, marg_string_new("-"), \
+                    OP_STORE, marg_string_new("remaining"), \
+                    OP_PUSH_0, \
+                    OP_BINARY, marg_string_new(">="), \
+                OP_END_PUSH_PROC, \
+                OP_START_PUSH_PROC, \
+                    OP_PUSH_TENSOR, marg_string_new("0"), \
+                    OP_PUSH_VARIABLE, marg_string_new("a_block"), \
+                    OP_UNARY, marg_string_new("value"), \
+                OP_END_PUSH_PROC, \
+                OP_KEYWORD, marg_string_new("while_true:"), marg_string_new("1"), \
+            OP_END_PUSH_PROC, \
+            OP_KEYWORD, marg_string_new("object:message:params:method:"), marg_string_new("4") \
+        ));
     });
 })
 

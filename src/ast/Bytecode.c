@@ -326,33 +326,63 @@ marg_vector *ast_binary_method_definition(marg_vector *multimethod_object_defaul
     return res;
 }
 
-    marg_string *joined_selector = marg_string_new("");
-    size_t selector_size = marg_vector_size(selector);
-    for(size_t i = 0; i < marg_vector_size(selector); i++)
-        marg_string_add(joined_selector, marg_vector_get(marg_vector_get(selector, i), 0));
 marg_vector *ast_keyword_method_definition(marg_vector *multimethod_object_default_value, marg_string *selector, marg_vector *params, marg_vector *function) {
+    marg_vector *res = marg_vector_new(OP_PUSH_VARIABLE, marg_string_new("Method"), OP_UNARY, marg_string_new("keyword"));
+
+    size_t multimethod_object_default_value_size = marg_vector_size(multimethod_object_default_value);
+    for(size_t i = 0; i < multimethod_object_default_value_size; i++)
+        marg_vector_add(res, marg_vector_get(multimethod_object_default_value, i));
+
+    marg_vector_add(res, OP_PUSH_STRING);
     marg_string *selector_name = marg_string_new("\"");
-    marg_string_add(selector_name, joined_selector);
+    marg_string_add(selector_name, selector);
     marg_string_add_str(selector_name, "\"");
+    marg_vector_add(res, selector_name);
 
-    marg_vector *res = marg_vector_new(OP_START_PUSH_KEYWORD_METHOD, selector_name);
-
-    for(size_t i = 0; i < selector_size; i++) {
-        marg_vector_add(res, OP_PUSH_VARIABLE);
-        marg_vector_add(res, marg_vector_get(marg_vector_get(selector, i), 1));
+    size_t params_size = marg_vector_size(params);
+    size_t number_of_formal_params = 1;
+    for(size_t i = 0; i < params_size; i++) {
+        marg_vector *param = marg_vector_get(params, i);
+        if(marg_string_equals(marg_vector_get(param, 0), OP_PUSH_METHOD_PARAMETER)) {
+            number_of_formal_params++;
+            marg_vector_add(res, OP_PUSH_METHOD_PARAMETER);
+            marg_string *param_name = marg_string_new("\"");
+            marg_string_add(param_name, marg_vector_get(param, 1));
+            marg_string_add_str(param_name, "\"");
+            marg_vector_add(res, param_name);
+        }
+        else {
+            size_t param_size = marg_vector_size(param);
+            for(size_t i = 0; i < param_size; i++)
+                marg_vector_add(res, marg_vector_get(param, i));
+        }
     }
-
     marg_vector_add(res, OP_PUSH_TENSOR);
-    char size_ptr[32];
-    snprintf(size_ptr, sizeof(size_ptr), "%zu", marg_vector_size(selector));
-    marg_string *size = marg_string_new(size_ptr);
-    marg_vector_add(res, size);
+    char params_size_str[32];
+    snprintf(params_size_str, sizeof(params_size_str), "%zu", params_size);
+    marg_vector_add(res, marg_string_new(params_size_str));
 
+    marg_vector_add(res, OP_START_PUSH_PROC);
+    marg_vector_add(res, OP_PUSH_SELF);
+    for(size_t i = 0; i < params_size; i++) {
+        marg_vector *param = marg_vector_get(params, i);
+        if(marg_string_equals(marg_vector_get(param, 0), OP_PUSH_METHOD_PARAMETER)) {
+            marg_vector_add(res, OP_PUSH_VARIABLE);
+            marg_vector_add(res, marg_vector_get(param, 1));
+        }
+    }
+    marg_vector_add(res, OP_PUSH_TENSOR);
+    char number_of_formal_params_str[32];
+    snprintf(number_of_formal_params_str, sizeof(number_of_formal_params_str), "%zu", number_of_formal_params);
+    marg_vector_add(res, marg_string_new(number_of_formal_params_str));
     size_t function_size = marg_vector_size(function);
     for(size_t i = 0; i < function_size; i++)
         marg_vector_add(res, marg_vector_get(function, i));
+    marg_vector_add(res, OP_END_PUSH_PROC);
+    marg_vector_add(res, OP_KEYWORD);
+    marg_vector_add(res, marg_string_new("object:message:params:method:"));
+    marg_vector_add(res, marg_string_new("4"));
 
-    marg_vector_add(res, OP_END_PUSH_KEYWORD_METHOD);
     return res;
 }
 

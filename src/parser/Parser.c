@@ -315,16 +315,30 @@ marg_vector *parser_binary_method_definition(Parser *self, marg_vector *multimet
     return ast_binary_method_definition(multimethod_object_default_value, selector, param, function);
 }
 
-    marg_vector *selector = marg_vector_new_empty();
 marg_vector *parser_keyword_method_definition(Parser *self, marg_vector *multimethod_object_default_value) {
+    marg_string *selector = marg_string_new("");
+    marg_vector *params = marg_vector_new_empty();
     while(lookahead_1_type_equals(TOKEN_IDENTIFIER)) {
         marg_string *key = ensure_type(TOKEN_IDENTIFIER, "expected identifier on keyword method selector.");
         if(lookahead_1_type_equals(TOKEN_ID_SYMBOL))
             marg_string_add(key, ensure_type(TOKEN_ID_SYMBOL, "expected id symbol on keyword method identifier."));
-        marg_string_add(key, ensure_value(":", "expected `:` on keyword method definition."));
-        marg_string *param = ensure_type(TOKEN_IDENTIFIER, "expected keyword parameter");
-        marg_vector *keyparam = marg_vector_new(key, param);
-        marg_vector_add(selector, keyparam);
+        marg_string_add(key, ensure_value(":", "expected ':' on keyword method definition."));
+        marg_string_add(selector, key);
+
+        if(lookahead_1_type_equals(TOKEN_IDENTIFIER)) {
+            if(lookahead_1_value_equals("_")) {
+                ensure_value("_", "missing '_' on multimethod default parameter");
+                // TODO Turn into an AST node
+                marg_vector_add(params, marg_vector_new(OP_PUSH_ANY_OBJECT));
+            }
+            else {
+                // TODO Turn into an AST node
+                marg_vector_add(params, marg_vector_new(OP_PUSH_METHOD_PARAMETER, ensure_type(TOKEN_IDENTIFIER, "expected keyword parameter.")));
+            }
+        }
+        else {
+            marg_vector_add(params, parser_literal(self));
+        }
     }
     ensure_value("=>", "missing '=>' on keyword method definition.");
     marg_vector *function = parser_translation_unit(self);
