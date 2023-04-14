@@ -67,7 +67,7 @@ marg_vector *parser_assignment_chain(Parser *self) {
 
 marg_vector *parser_assignment(Parser *self) {
     marg_vector *var = parser_variable(self);
-    ensure_value("=", "expected `=` on assignment message.");
+    ensure_value("=", "expected '=' on assignment message.");
     return ast_assignment(var);
 }
 
@@ -157,7 +157,7 @@ marg_vector *parser_keyword_selector(Parser *self) {
         marg_string *optional_symbol = marg_string_new("");
         if(lookahead_1_type_equals(TOKEN_ID_SYMBOL))
             optional_symbol = ensure_type(TOKEN_ID_SYMBOL, "expected id symbol on keyword identifier.");
-        marg_string *delim = ensure_value(":", "expected `:` on keyword selector.");
+        marg_string *delim = ensure_value(":", "expected ':' on keyword selector.");
         marg_vector *obj = parser_binary_message(self);
 
         if(marg_vector_size(obj) == 1 && marg_vector_get(obj, 0) == NULL)
@@ -202,7 +202,7 @@ marg_vector *parser_group(Parser *self) {
 
 marg_vector *parser_variable(Parser *self) {
     if(lookahead_1_value_equals("@"))
-        return ast_variable(ensure_value("@", "expected `@` on instance variable declaration."), ensure_type(TOKEN_IDENTIFIER, "expected identifier on variable declaration."));
+        return ast_variable(ensure_value("@", "expected '@' on instance variable declaration."), ensure_type(TOKEN_IDENTIFIER, "expected identifier on variable declaration."));
     else
         return ast_variable(marg_string_new(""), ensure_type(TOKEN_IDENTIFIER, "expected identifier on variable declaration."));
 }
@@ -232,20 +232,20 @@ marg_vector *parser_c_function_declaration(Parser *self) {
     ensure_value("#", "missing '###' on C function declaration.");
     marg_string *return_type = ensure_type(TOKEN_IDENTIFIER, "expected identifier on C function return type.");
     while(lookahead_1_type_equals(TOKEN_MESSAGE_SYMBOL))
-        marg_string_add(return_type, ensure_type(TOKEN_MESSAGE_SYMBOL, "expected `*` symbols when C functions returns a pointer."));
+        marg_string_add(return_type, ensure_type(TOKEN_MESSAGE_SYMBOL, "expected '*' symbols when C functions returns a pointer."));
     marg_string *name = ensure_type(TOKEN_IDENTIFIER, "expected identifier on C function name.");
 
     marg_vector *__params = marg_vector_new_empty();
     ensure_value("(", "missing opening parenthesis on C function declaration");
     while(lookahead_1_type_equals(TOKEN_IDENTIFIER)) {
         if(lookahead_1_value_equals("void") && lookahead_2_value_equals(")")) {
-            ensure_value("void", "expected `void`");
+            ensure_value("void", "expected 'void'");
             break;
         }
 
         marg_string *param_type = ensure_type(TOKEN_IDENTIFIER, "expected identifier on C function param type.");
         while(lookahead_1_type_equals(TOKEN_MESSAGE_SYMBOL))
-            marg_string_add(param_type, ensure_type(TOKEN_MESSAGE_SYMBOL, "expected `*` symbol for C parameter pointer."));
+            marg_string_add(param_type, ensure_type(TOKEN_MESSAGE_SYMBOL, "expected '*' symbol for C parameter pointer."));
         marg_string *param_name = ensure_type(TOKEN_IDENTIFIER, "expected identifier on C function param name.");
         marg_vector *param = marg_vector_new(param_type, param_name);
         marg_vector_add(__params, param);
