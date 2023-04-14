@@ -1,4 +1,4 @@
--> {(
+{(
     Value = Object clone,
     Value extend: (
         #== other => false,

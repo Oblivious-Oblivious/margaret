@@ -1,4 +1,4 @@
--> {(
+{(
     LibGMP = CLib clone,
     LibGMP libc_link: "gmp",
     LibGMP libc_bind: (

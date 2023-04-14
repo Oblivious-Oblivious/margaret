@@ -1,4 +1,4 @@
--> {(
+{(
     True = Object subclass,
     True extend: (
         #& a_boolean => a_boolean,

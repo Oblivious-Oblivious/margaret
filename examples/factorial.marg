@@ -1,4 +1,4 @@
--> { argc, argv | (
+{ argc, argv | (
     Numeric bind: # 0 fact => 1,
     Numeric bind: # _ fact => self * (self-1) fact,
 

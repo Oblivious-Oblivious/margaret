@@ -1,4 +1,4 @@
--> {(
+{(
     Nil = Object subclass,
     Nil extend: (
         #& an_object => false,
@@ -8,7 +8,6 @@
         #inspect => "nil",
         #is_nil? => true,
 
-        #to_a => (),
         #to_c => '',
         #to_f => 0.0,
         #to_h => {},
