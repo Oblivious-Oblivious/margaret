@@ -14,7 +14,7 @@
     🟥 Make bang (!) messages denote persistant changes in object state.
     🟥 Add a `message then: unit1 else: unit2`.
     🟥 Add complex numbers `(0+2i)`, and rational numbers `(1/2r)` -> unary messages.
-    🟥 Use custom syntax structures for break and continue. -> `list iterate: -> { elem | elem puts } exit_on: -> { elem | elem == 42 }`
+    🟥 Use custom syntax structures for break and continue. -> `list iterate: { elem | elem puts } exit_on: { elem | elem == 42 }`
     ---------------------------
     🟥 Add functional features:
     🟥 [<a, b, c] = [<"hello", "world", 42] (TUPLES)

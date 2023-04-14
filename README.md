@@ -20,9 +20,9 @@ TODO Write installation instructions
 
 ```margaret
 #example_with_number: x => (
-    true & false not & (nil is_nil?) if_false: -> { self halt },
+    true & false not & (nil is_nil?) if_false: { self halt },
     y = self size + super size,
-    ['a', "a", 1, 1.0, {"k1": 42, k2: 43}] each: -> { elem | (
+    ['a', "a", 1, 1.0, {"k1": 42, k2: 43}] each: { elem | (
         elem class name puts,
         " " puts
     )},
