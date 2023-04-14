@@ -59,8 +59,8 @@ module(method_definition_spec, {
             OP_KEYWORD, marg_string_new("object:message:method:"), marg_string_new("3") \
         ));
 
-        // Method unary object: 0 message: "fact" method: -> { self | 1 }
-        // Method unary object: _ message: "fact" method: -> { self | self * (self - 1) fact }
+        // Method unary object: 0 message: "fact" method: { self | 1 }
+        // Method unary object: _ message: "fact" method: { self | self * (self - 1) fact }
         parse("( \
             # 0 fact => 1, \
             # _ fact => self * (self-1) fact \
@@ -95,7 +95,7 @@ module(method_definition_spec, {
     });
 
     it("parses binary methods", {
-        // Method binary object: 0 message: "**" param: 0 method: -> { self | nil }
+        // Method binary object: 0 message: "**" param: 0 method: { self | nil }
         parse("# 0 ** 0 => nil", marg_vector_new( \
             OP_PUSH_VARIABLE, marg_string_new("Method"), \
             OP_UNARY, marg_string_new("binary"), \
@@ -110,7 +110,7 @@ module(method_definition_spec, {
             OP_KEYWORD, marg_string_new("object:message:param:method:"), marg_string_new("4") \
         ));
 
-        // Method binary object: 0 message: "**" param: _ method: -> { self | 0 }
+        // Method binary object: 0 message: "**" param: _ method: { self | 0 }
         parse("# 0 ** _ => 0", marg_vector_new( \
             OP_PUSH_VARIABLE, marg_string_new("Method"), \
             OP_UNARY, marg_string_new("binary"), \
@@ -125,7 +125,7 @@ module(method_definition_spec, {
             OP_KEYWORD, marg_string_new("object:message:param:method:"), marg_string_new("4") \
         ));
 
-        // Method binary object: _ message: "**" param: 0 method: -> { self | 1 }
+        // Method binary object: _ message: "**" param: 0 method: { self | 1 }
         parse("# _ ** 0 => 1", marg_vector_new( \
             OP_PUSH_VARIABLE, marg_string_new("Method"), \
             OP_UNARY, marg_string_new("binary"), \
@@ -140,7 +140,7 @@ module(method_definition_spec, {
             OP_KEYWORD, marg_string_new("object:message:param:method:"), marg_string_new("4") \
         ));
 
-        // Method binary object: 0 message: "**" param: a_number method: -> { self, a_number | 0 }
+        // Method binary object: 0 message: "**" param: a_number method: { self, a_number | 0 }
         parse("# 0 ** a_number => 0", marg_vector_new( \
             OP_PUSH_VARIABLE, marg_string_new("Method"), \
             OP_UNARY, marg_string_new("binary"), \
@@ -156,7 +156,7 @@ module(method_definition_spec, {
             OP_KEYWORD, marg_string_new("object:message:param:method:"), marg_string_new("4") \
         ));
 
-        // Method binary object: _ message: "**" param: a_number method: -> { self, a_number | self raised_to: a_number }
+        // Method binary object: _ message: "**" param: a_number method: { self, a_number | self raised_to: a_number }
         parse("# ** a_number => self raised_to: a_number", marg_vector_new( \
             OP_PUSH_VARIABLE, marg_string_new("Method"), \
             OP_UNARY, marg_string_new("binary"), \
@@ -176,7 +176,7 @@ module(method_definition_spec, {
     });
 
     it("parses keyword methods", {
-        // Method keyword object: _ message: "add:at:" params: ["element", "position"] method: -> { self, element, position | 42 }
+        // Method keyword object: _ message: "add:at:" params: ["element", "position"] method: { self, element, position | 42 }
         parse("#add: element at: position => 42", marg_vector_new( \
             OP_PUSH_VARIABLE, marg_string_new("Method"), \
             OP_UNARY, marg_string_new("keyword"), \
@@ -195,7 +195,7 @@ module(method_definition_spec, {
             OP_KEYWORD, marg_string_new("object:message:params:method:"), marg_string_new("4") \
         ));
 
-        // Method keyword object: _ message: "new:" params: ["2"] method: -> { self | 1 }
+        // Method keyword object: _ message: "new:" params: ["2"] method: { self | 1 }
         parse("# _ new: 2 => 1", marg_vector_new( \
             OP_PUSH_VARIABLE, marg_string_new("Method"), \
             OP_UNARY, marg_string_new("keyword"), \
@@ -211,7 +211,7 @@ module(method_definition_spec, {
             OP_KEYWORD, marg_string_new("object:message:params:method:"), marg_string_new("4") \
         ));
 
-        // Method keyword object: 1 message: "add:" params: ["2"] method: -> { self | 3 }
+        // Method keyword object: 1 message: "add:" params: ["2"] method: { self | 3 }
         parse("# 1 add: 2 => 3", marg_vector_new( \
             OP_PUSH_VARIABLE, marg_string_new("Method"), \
             OP_UNARY, marg_string_new("keyword"), \
@@ -227,7 +227,7 @@ module(method_definition_spec, {
             OP_KEYWORD, marg_string_new("object:message:params:method:"), marg_string_new("4") \
         ));
 
-        // Method keyword object: 1 message: "one:" params: [_, _] method: -> { self | 42 }
+        // Method keyword object: 1 message: "one:" params: [_, _] method: { self | 42 }
         parse("# 1 one: _ two: _ => 42", marg_vector_new( \
             OP_PUSH_VARIABLE, marg_string_new("Method"), \
             OP_UNARY, marg_string_new("keyword"), \
@@ -244,7 +244,7 @@ module(method_definition_spec, {
             OP_KEYWORD, marg_string_new("object:message:params:method:"), marg_string_new("4") \
         ));
 
-        // Method keyword object: _ message: "ok?:otherwise!:" params: ["value1", "value2"] method: -> { self, value1, value2 | 17 }
+        // Method keyword object: _ message: "ok?:otherwise!:" params: ["value1", "value2"] method: { self, value1, value2 | 17 }
         parse("#ok?: value1 otherwise!: value2 => 17", marg_vector_new( \
             OP_PUSH_VARIABLE, marg_string_new("Method"), \
             OP_UNARY, marg_string_new("keyword"), \
@@ -263,7 +263,7 @@ module(method_definition_spec, {
             OP_KEYWORD, marg_string_new("object:message:params:method:"), marg_string_new("4") \
         ));
 
-        // Method keyword object: [] message: "add:at:" params: ["element", "position"] method: -> { self, element, position | 17 }
+        // Method keyword object: [] message: "add:at:" params: ["element", "position"] method: { self, element, position | 17 }
         parse("# [] add: element at: position => 17", marg_vector_new( \
             OP_PUSH_VARIABLE, marg_string_new("Method"), \
             OP_UNARY, marg_string_new("keyword"), \
@@ -282,7 +282,7 @@ module(method_definition_spec, {
             OP_KEYWORD, marg_string_new("object:message:params:method:"), marg_string_new("4") \
         ));
 
-        // Method keyword object: [] message: "add:at:" params: ['a', 0] method: -> { self | ['a'] }
+        // Method keyword object: [] message: "add:at:" params: ['a', 0] method: { self | ['a'] }
         parse("# [] add: 'a' at: 0 => ['a']", marg_vector_new( \
             OP_PUSH_VARIABLE, marg_string_new("Method"), \
             OP_UNARY, marg_string_new("keyword"), \
@@ -320,13 +320,13 @@ module(method_definition_spec, {
             OP_KEYWORD, marg_string_new("object:message:params:method:"), marg_string_new("4") \
         ));
 
-        // Method keyword object: _ message: "times:" params: ["a_block"] method: -> { self, a_block | (
+        // Method keyword object: _ message: "times:" params: ["a_block"] method: { self, a_block | (
         //     remaining = self,
-        //     -> { (remaining = remaining - 1) >= 0 } while_true: -> { a_block value }
+        //     { (remaining = remaining - 1) >= 0 } while_true: { a_block value }
         // ) }
         parse("#times: a_block => ( \
             remaining = self, \
-            ->{ (remaining = remaining - 1) >= 0 } while_true: ->{ a_block value } \
+            { (remaining = remaining - 1) >= 0 } while_true: { a_block value } \
         )", marg_vector_new( \
             OP_PUSH_VARIABLE, marg_string_new("Method"), \
             OP_UNARY, marg_string_new("keyword"), \

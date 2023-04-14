@@ -218,7 +218,8 @@ marg_vector *ast_proc_literal(marg_vector *param_list, marg_vector *function) {
 
     size_t function_size = marg_vector_size(function);
     for(size_t i = 0; i < function_size; i++)
-        marg_vector_add(res, marg_vector_get(function, i));
+        if(marg_vector_get(function, i) != NULL)
+            marg_vector_add(res, marg_vector_get(function, i));
 
     marg_vector_add(res, OP_END_PUSH_PROC);
     return res;

@@ -175,8 +175,13 @@ marg_vector *parser_expression(Parser *self) {
         return ast_expression(parser_group(self));
     else if(lookahead_1_type_equals(TOKEN_IDENTIFIER) || (lookahead_1_value_equals("@") && lookahead_2_type_equals(TOKEN_IDENTIFIER)))
         return ast_expression(parser_variable(self));
-    else if(lookahead_1_value_equals("->"))
+    else if(lookahead_1_value_equals("{")
+         && lookahead_2_value_not_equals("<")
+         && lookahead_2_value_not_equals(":")
+         && lookahead_3_value_not_equals(":")
+         && lookahead_2_value_not_equals("}")) {
         return ast_expression(parser_proc_literal(self));
+    }
     else if(lookahead_1_value_equals("#") && lookahead_2_value_equals("#") && lookahead_3_value_equals("#"))
         return ast_expression(parser_c_function_declaration(self));
     else if(lookahead_1_value_equals("#"))
@@ -208,7 +213,6 @@ marg_vector *parser_variable(Parser *self) {
 }
 
 marg_vector *parser_proc_literal(Parser *self) {
-    ensure_value("->", "missing '->' symbol on proc literal.");
     ensure_value("{", "missing opening curly on proc literal.");
 
     marg_vector *__params = marg_vector_new_empty();

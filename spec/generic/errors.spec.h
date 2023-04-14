@@ -13,7 +13,6 @@ module(errors_spec, {
         error("]", "missing opening bracket on tensor.");
         error("{", "missing closing curly brace on hash.");
         error("}", "missing opening curly brace on hash.");
-        error("->", "missing opening curly on proc literal.");
     });
 
     it("other syntax errors", {

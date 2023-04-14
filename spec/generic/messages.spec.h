@@ -67,8 +67,8 @@ module(messages_spec, {
         parse("3 factorial + 4 factorial between: 10 and: 100", marg_vector_new(OP_PUSH_INTEGER, marg_string_new("3"), OP_UNARY, marg_string_new("factorial"), OP_PUSH_INTEGER, marg_string_new("4"), OP_UNARY, marg_string_new("factorial"), OP_BINARY, marg_string_new("+"), OP_PUSH_INTEGER, marg_string_new("10"), OP_PUSH_INTEGER, marg_string_new("100"), OP_KEYWORD, marg_string_new("between:and:"), marg_string_new("2")));
         parse("( \
             origin <= point \
-                if_true: ->{ out goto } \
-                if_false: ->{ false return }, \
+                if_true: { out goto } \
+                if_false: { false return }, \
             out = Label new \
         )", marg_vector_new(OP_PUSH_VARIABLE, marg_string_new("origin"), OP_PUSH_VARIABLE, marg_string_new("point"), OP_BINARY, marg_string_new("<="), OP_START_PUSH_PROC, OP_PUSH_TENSOR, marg_string_new("0"), OP_PUSH_VARIABLE, marg_string_new("out"), OP_UNARY, marg_string_new("goto"), OP_END_PUSH_PROC, OP_START_PUSH_PROC, OP_PUSH_TENSOR, marg_string_new("0"), OP_PUSH_FALSE, OP_UNARY, marg_string_new("return"), OP_END_PUSH_PROC, OP_KEYWORD, marg_string_new("if_true:if_false:"), marg_string_new("2"), OP_PUSH_VARIABLE, marg_string_new("Label"), OP_UNARY, marg_string_new("new"), OP_STORE, marg_string_new("out")));
     });
