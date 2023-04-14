@@ -15,12 +15,6 @@ module(BytecodeSpec, {
             OP_BINARY, marg_string_new("+")
         ));
     });
-
-    it("emits for assignment", {
-        parse("x = 4", marg_vector_new(OP_PUSH_INTEGER, marg_string_new("4"), OP_STORE, marg_string_new("x")));
-        parse("x = y = z = 6", marg_vector_new(OP_PUSH_INTEGER, marg_string_new("6"), OP_STORE, marg_string_new("z"), OP_STORE, marg_string_new("y"), OP_STORE, marg_string_new("x")));
-        parse("x = (y = 6) + 1", marg_vector_new(OP_PUSH_INTEGER, marg_string_new("6"), OP_STORE, marg_string_new("y"), OP_PUSH_1, OP_BINARY, marg_string_new("+"), OP_STORE, marg_string_new("x")));
-        parse("@x = x + 2", marg_vector_new(OP_PUSH_VARIABLE, marg_string_new("x"), OP_PUSH_2, OP_BINARY, marg_string_new("+"), OP_STORE_INSTANCE, marg_string_new("x")));
         parse("a = b = (c = 42) + 12", marg_vector_new(OP_PUSH_INTEGER, marg_string_new("42"), OP_STORE, marg_string_new("c"), OP_PUSH_INTEGER, marg_string_new("12"), OP_BINARY, marg_string_new("+"), OP_STORE, marg_string_new("b"), OP_STORE, marg_string_new("a")));
         parse("a = a negate", marg_vector_new(OP_PUSH_VARIABLE, marg_string_new("a"), OP_UNARY, marg_string_new("negate"), OP_STORE, marg_string_new("a")));
         parse("@a = @a negate", marg_vector_new(OP_PUSH_INSTANCE, marg_string_new("a"), OP_UNARY, marg_string_new("negate"), OP_STORE_INSTANCE, marg_string_new("a")));

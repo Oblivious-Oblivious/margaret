@@ -5,14 +5,93 @@
 
 module(method_definition_spec, {
     it("parses unary methods", {
-        parse("#incr => self + 1",   marg_vector_new(OP_START_PUSH_UNARY_METHOD, marg_string_new("\"incr\""), OP_PUSH_SELF, OP_PUSH_1, OP_BINARY, marg_string_new("+"), OP_END_PUSH_UNARY_METHOD));
-        parse("#  incr => self + 1", marg_vector_new(OP_START_PUSH_UNARY_METHOD, marg_string_new("\"incr\""), OP_PUSH_SELF, OP_PUSH_1, OP_BINARY, marg_string_new("+"), OP_END_PUSH_UNARY_METHOD));
-        parse("#is_empty? => true", marg_vector_new(OP_START_PUSH_UNARY_METHOD, marg_string_new("\"is_empty?\""), OP_PUSH_TRUE, OP_END_PUSH_UNARY_METHOD));
-        // TODO prolog-like multimethod polymorphism
-        // parse("#0 fact => 1");
+        parse("#incr => self + 1", marg_vector_new( \
+            OP_PUSH_VARIABLE, marg_string_new("Method"), \
+            OP_UNARY, marg_string_new("unary"), \
+            OP_PUSH_ANY_OBJECT, \
+            OP_PUSH_STRING, marg_string_new("\"incr\""), \
+            OP_START_PUSH_PROC,
+                OP_PUSH_SELF, \
+                OP_PUSH_TENSOR, marg_string_new("1"), \
+                OP_PUSH_SELF, \
+                OP_PUSH_1, \
+                OP_BINARY, marg_string_new("+"), \
+            OP_END_PUSH_PROC, \
+            OP_KEYWORD, marg_string_new("object:message:method:"), marg_string_new("3") \
+        ));
+        parse("#  incr => self + 1", marg_vector_new( \
+            OP_PUSH_VARIABLE, marg_string_new("Method"), \
+            OP_UNARY, marg_string_new("unary"), \
+            OP_PUSH_ANY_OBJECT, \
+            OP_PUSH_STRING, marg_string_new("\"incr\""), \
+            OP_START_PUSH_PROC,
+                OP_PUSH_SELF, \
+                OP_PUSH_TENSOR, marg_string_new("1"), \
+                OP_PUSH_SELF, \
+                OP_PUSH_1, \
+                OP_BINARY, marg_string_new("+"), \
+            OP_END_PUSH_PROC, \
+            OP_KEYWORD, marg_string_new("object:message:method:"), marg_string_new("3") \
+        ));
+        parse("#is_empty? => true", marg_vector_new( \
+            OP_PUSH_VARIABLE, marg_string_new("Method"), \
+            OP_UNARY, marg_string_new("unary"), \
+            OP_PUSH_ANY_OBJECT, \
+            OP_PUSH_STRING, marg_string_new("\"is_empty?\""), \
+            OP_START_PUSH_PROC,
+                OP_PUSH_SELF, \
+                OP_PUSH_TENSOR, marg_string_new("1"), \
+                OP_PUSH_TRUE, \
+            OP_END_PUSH_PROC, \
+            OP_KEYWORD, marg_string_new("object:message:method:"), marg_string_new("3") \
+        ));
 
-        // # 0 fact => 1,
-        // # _ fact => self * (self-1) fact
+        parse("# 0 fact => 1", marg_vector_new( \
+            OP_PUSH_VARIABLE, marg_string_new("Method"), \
+            OP_UNARY, marg_string_new("unary"), \
+            OP_PUSH_0, \
+            OP_PUSH_STRING, marg_string_new("\"fact\""), \
+            OP_START_PUSH_PROC, \
+                OP_PUSH_SELF, \
+                OP_PUSH_TENSOR, marg_string_new("1"), \
+                OP_PUSH_1, \
+            OP_END_PUSH_PROC, \
+            OP_KEYWORD, marg_string_new("object:message:method:"), marg_string_new("3") \
+        ));
+
+        // Method unary object: 0 message: "fact" method: -> { self | 1 }
+        // Method unary object: _ message: "fact" method: -> { self | self * (self - 1) fact }
+        parse("( \
+            # 0 fact => 1, \
+            # _ fact => self * (self-1) fact \
+        )", marg_vector_new( \
+            OP_PUSH_VARIABLE, marg_string_new("Method"), \
+            OP_UNARY, marg_string_new("unary"), \
+            OP_PUSH_0, \
+            OP_PUSH_STRING, marg_string_new("\"fact\""), \
+            OP_START_PUSH_PROC, \
+                OP_PUSH_SELF, \
+                OP_PUSH_TENSOR, marg_string_new("1"), \
+                OP_PUSH_1, \
+            OP_END_PUSH_PROC, \
+            OP_KEYWORD, marg_string_new("object:message:method:"), marg_string_new("3"), \
+            \
+            OP_PUSH_VARIABLE, marg_string_new("Method"), \
+            OP_UNARY, marg_string_new("unary"), \
+            OP_PUSH_ANY_OBJECT, \
+            OP_PUSH_STRING, marg_string_new("\"fact\""), \
+            OP_START_PUSH_PROC, \
+                OP_PUSH_SELF, \
+                OP_PUSH_TENSOR, marg_string_new("1"), \
+                OP_PUSH_SELF, \
+                OP_PUSH_SELF, \
+                OP_PUSH_1, \
+                OP_BINARY, marg_string_new("-"), \
+                OP_UNARY, marg_string_new("fact"), \
+                OP_BINARY, marg_string_new("*"), \
+            OP_END_PUSH_PROC, \
+            OP_KEYWORD, marg_string_new("object:message:method:"), marg_string_new("3") \
+        ));
     });
 
     it("parses binary methods", {

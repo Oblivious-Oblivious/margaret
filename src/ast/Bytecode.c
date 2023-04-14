@@ -250,17 +250,30 @@ marg_vector *ast_c_function_declaration(marg_string *return_type, marg_string *n
 }
 
 marg_vector *ast_unary_method_definition(marg_vector *multimethod_object_default_value, marg_string *selector, marg_vector *function) {
+    marg_vector *res = marg_vector_new(OP_PUSH_VARIABLE, marg_string_new("Method"), OP_UNARY, marg_string_new("unary"));
+
+    size_t multimethod_object_default_value_size = marg_vector_size(multimethod_object_default_value);
+    for(size_t i = 0; i < multimethod_object_default_value_size; i++)
+        marg_vector_add(res, marg_vector_get(multimethod_object_default_value, i));
+
+    marg_vector_add(res, OP_PUSH_STRING);
     marg_string *selector_name = marg_string_new("\"");
     marg_string_add(selector_name, selector);
     marg_string_add_str(selector_name, "\"");
+    marg_vector_add(res, selector_name);
 
-    marg_vector *res = marg_vector_new(OP_START_PUSH_UNARY_METHOD, selector_name);
-
+    marg_vector_add(res, OP_START_PUSH_PROC);
+    marg_vector_add(res, OP_PUSH_SELF);
+    marg_vector_add(res, OP_PUSH_TENSOR);
+    marg_vector_add(res, marg_string_new("1"));
     size_t function_size = marg_vector_size(function);
     for(size_t i = 0; i < function_size; i++)
         marg_vector_add(res, marg_vector_get(function, i));
-    
-    marg_vector_add(res, OP_END_PUSH_UNARY_METHOD);
+    marg_vector_add(res, OP_END_PUSH_PROC);
+    marg_vector_add(res, OP_KEYWORD);
+    marg_vector_add(res, marg_string_new("object:message:method:"));
+    marg_vector_add(res, marg_string_new("3"));
+
     return res;
 }
 
