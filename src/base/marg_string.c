@@ -39,7 +39,7 @@ marg_string *marg_string_new(char *initial_string) {
 }
 
 void marg_string_addf(marg_string *self, const char *f, ...) {
-    /* TODO -> Bounds checks for format string */
+    /* TODO Bounds checks for format string */
     signed int result = 0;
     char buf[16384];
     va_list args;

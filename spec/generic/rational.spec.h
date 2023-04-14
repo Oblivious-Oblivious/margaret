@@ -19,7 +19,7 @@ module(rational_spec, {
     });
 
     it("parses rational literal messages", {
-        // TODO rational messages
+        // TODO
     });
 })
 
