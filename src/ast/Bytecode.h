@@ -30,6 +30,8 @@ marg_vector *ast_c_function_declaration(marg_string *return_type, marg_string *n
 marg_vector *ast_unary_method_definition(marg_vector *multimethod_object_default_value, marg_string *selector, marg_vector *function);
 marg_vector *ast_binary_method_definition(marg_vector *multimethod_object_default_value, marg_string *selector, marg_vector *param, marg_vector *function);
 marg_vector *ast_keyword_method_definition(marg_vector *multimethod_object_default_value, marg_string *selector, marg_vector *params, marg_vector *function);
+marg_vector *ast_any_object(void);
+marg_vector *ast_method_parameter(marg_string *param_name);
 
 marg_vector *ast_literal(marg_vector *unit);
 marg_vector *ast_integer_literal(marg_string *sign, marg_string *number);

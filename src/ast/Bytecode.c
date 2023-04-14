@@ -380,6 +380,14 @@ marg_vector *ast_keyword_method_definition(marg_vector *multimethod_object_defau
     return res;
 }
 
+marg_vector *ast_any_object(void) {
+    return marg_vector_new(OP_PUSH_ANY_OBJECT);
+}
+
+marg_vector *ast_method_parameter(marg_string *param_name) {
+    return marg_vector_new(OP_PUSH_METHOD_PARAMETER, param_name);
+}
+
 marg_vector *ast_literal(marg_vector *unit) {
     return unit;
 }

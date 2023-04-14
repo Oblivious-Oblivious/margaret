@@ -268,8 +268,7 @@ marg_vector *parser_method_definition_literal(Parser *self) {
     else {
         if(lookahead_1_value_equals("_"))
             ensure_value("_", "missing '_' on multimethod default value");
-        // TODO Turn into an AST node
-        multimethod_object_default_value = marg_vector_new(OP_PUSH_ANY_OBJECT);
+        multimethod_object_default_value = parser_any_object();
     }
 
     if(lookahead_1_type_equals(TOKEN_IDENTIFIER) && (lookahead_2_value_equals(":") || (lookahead_2_type_equals(TOKEN_ID_SYMBOL) && lookahead_3_value_equals(":"))))
@@ -298,12 +297,10 @@ marg_vector *parser_binary_method_definition(Parser *self, marg_vector *multimet
     if(lookahead_1_type_equals(TOKEN_IDENTIFIER)) {
         if(lookahead_1_value_equals("_")) {
             ensure_value("_", "missing '_' on multimethod default parameter");
-            // TODO Turn into an AST node
-            param = marg_vector_new(OP_PUSH_ANY_OBJECT);
+            param = parser_any_object();
         }
         else {
-            // TODO Turn into an AST node
-            param = marg_vector_new(OP_PUSH_METHOD_PARAMETER, ensure_type(TOKEN_IDENTIFIER, "expected one parameter on binary method definition."));
+            param = parser_method_parameter(ensure_type(TOKEN_IDENTIFIER, "expected one parameter on binary method definition."));
         }
     }
     else {
@@ -328,12 +325,10 @@ marg_vector *parser_keyword_method_definition(Parser *self, marg_vector *multime
         if(lookahead_1_type_equals(TOKEN_IDENTIFIER)) {
             if(lookahead_1_value_equals("_")) {
                 ensure_value("_", "missing '_' on multimethod default parameter");
-                // TODO Turn into an AST node
-                marg_vector_add(params, marg_vector_new(OP_PUSH_ANY_OBJECT));
+                marg_vector_add(params, parser_any_object());
             }
             else {
-                // TODO Turn into an AST node
-                marg_vector_add(params, marg_vector_new(OP_PUSH_METHOD_PARAMETER, ensure_type(TOKEN_IDENTIFIER, "expected keyword parameter.")));
+                marg_vector_add(params, parser_method_parameter(ensure_type(TOKEN_IDENTIFIER, "expected keyword parameter.")));
             }
         }
         else {
@@ -343,6 +338,14 @@ marg_vector *parser_keyword_method_definition(Parser *self, marg_vector *multime
     ensure_value("=>", "missing '=>' on keyword method definition.");
     marg_vector *function = parser_translation_unit(self);
     return ast_keyword_method_definition(multimethod_object_default_value, selector, params, function);
+}
+
+marg_vector *parser_any_object(void) {
+    return ast_any_object();
+}
+
+marg_vector *parser_method_parameter(marg_string *param_name) {
+    return ast_method_parameter(param_name);
 }
 
 marg_vector *parser_literal(Parser *self) {
