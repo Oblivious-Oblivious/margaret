@@ -33,18 +33,13 @@
 #define OP_PUSH_BITSTRING                marg_string_new("PUSH_BITSTRING")
 #define OP_PUSH_HASH                     marg_string_new("PUSH_HASH")
 
+#define OP_PUSH_ANY_OBJECT               marg_string_new("PUSH_ANY_OBJECT")
+#define OP_PUSH_METHOD_PARAMETER         marg_string_new("OP_PUSH_METHOD_PARAMETER")
+
 #define OP_START_PUSH_PROC               marg_string_new("START_PUSH_PROC")
 #define OP_END_PUSH_PROC                 marg_string_new("END_PUSH_PROC")
-
 #define OP_START_PUSH_C_FUNCTION         marg_string_new("START_PUSH_C_FUNCTION")
 #define OP_END_PUSH_C_FUNCTION           marg_string_new("END_PUSH_C_FUNCTION")
-
-#define OP_START_PUSH_UNARY_METHOD       marg_string_new("START_PUSH_UNARY_METHOD")
-#define OP_END_PUSH_UNARY_METHOD         marg_string_new("END_PUSH_UNARY_METHOD")
-#define OP_START_PUSH_BINARY_METHOD      marg_string_new("START_PUSH_BINARY_METHOD")
-#define OP_END_PUSH_BINARY_METHOD        marg_string_new("END_PUSH_BINARY_METHOD")
-#define OP_START_PUSH_KEYWORD_METHOD     marg_string_new("START_PUSH_KEYWORD_METHOD")
-#define OP_END_PUSH_KEYWORD_METHOD       marg_string_new("END_PUSH_KEYWORD_METHOD")
 
 #define OP_POP                           marg_string_new("POP")
 // #define OP_POPN                          marg_string_new("POPN")

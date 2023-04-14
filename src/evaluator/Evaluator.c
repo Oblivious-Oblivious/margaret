@@ -63,12 +63,6 @@ static void evaluator_run(Evaluator *self) {
         opcode_case(OP_END_PUSH_PROC) {}
         opcode_case(OP_START_PUSH_C_FUNCTION) {}
         opcode_case(OP_END_PUSH_C_FUNCTION) {}
-        opcode_case(OP_START_PUSH_UNARY_METHOD) {}
-        opcode_case(OP_END_PUSH_UNARY_METHOD) {}
-        opcode_case(OP_START_PUSH_BINARY_METHOD) {}
-        opcode_case(OP_END_PUSH_BINARY_METHOD) {}
-        opcode_case(OP_START_PUSH_KEYWORD_METHOD) {}
-        opcode_case(OP_END_PUSH_KEYWORD_METHOD) {}
 
         opcode_case(OP_POP) {
             marg_stack_pop(&self->stack);
