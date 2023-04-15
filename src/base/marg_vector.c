@@ -27,7 +27,7 @@ static void marg_vector_ensure_space(marg_vector *self, size_t capacity) {
 
 marg_vector *__internal_marg_vector_new(size_t argc, ...) {
     marg_vector *self = (marg_vector*)collected_malloc(sizeof(marg_vector));
-    self->alloced = 256;
+    self->alloced = 512;
     self->size = 0;
     self->items = (void**)collected_malloc(sizeof(void*) * self->alloced);
 
@@ -42,7 +42,7 @@ marg_vector *__internal_marg_vector_new(size_t argc, ...) {
 
 marg_vector *marg_vector_new_empty(void) {
     marg_vector *self = (marg_vector*)collected_malloc(sizeof(marg_vector));
-    self->alloced = 256;
+    self->alloced = 512;
     self->size = 0;
     self->items = (void**)collected_malloc(sizeof(void*) * self->alloced);
     return self;
