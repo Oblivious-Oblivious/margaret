@@ -6,7 +6,7 @@
 
 // ast
 #include "ast/alternate_to_dec.spec.h"
-#include "ast/Bytecode.spec.h"
+#include "ast/FormalMessagesBytecode.spec.h"
 
 // base
 #include "base/marg_vector.spec.h"
@@ -56,7 +56,7 @@
 #include "lexer/Lexer.spec.h"
 
 // opcode
-#include "opcode/Opcode.spec.h"
+#include "opcode/formal_messages_opcodes.spec.h"
 
 // parser
 #include "parser/Parser.spec.h"
@@ -72,7 +72,7 @@ spec_suite({
     VersionSpec();
 
     DecimalConversionSpec();
-    BytecodeSpec();
+    FormalMessagesBytecodeSpec();
 
     marg_vector_spec();
     marg_stack_spec();
@@ -116,7 +116,7 @@ spec_suite({
 
     LexerSpec();
 
-    OpcodeSpec();
+    formal_messages_opcodes_spec();
 
     ParserSpec();
 
