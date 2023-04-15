@@ -1,9 +1,9 @@
-#ifndef __BYTECODE_H_
-#define __BYTECODE_H_
+#ifndef __FORMAL_MESSAGES_BYTECODE_H_
+#define __FORMAL_MESSAGES_BYTECODE_H_
 
 #include "../base/marg_string.h"
 #include "../base/marg_vector.h"
-#include "../opcode/Opcode.h"
+#include "../opcode/formal_messages_opcodes.h"
 
 marg_vector *ast_empty(void);
 

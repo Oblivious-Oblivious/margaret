@@ -2,7 +2,7 @@
 
 #include <stdlib.h> /* size_t */
 #include "../base/memory.h"
-#include "../opcode/Opcode.h"
+#include "../opcode/formal_messages_opcodes.h"
 
 #define opcode_case(opstr) if(marg_string_equals(opcode, (opstr)))
 

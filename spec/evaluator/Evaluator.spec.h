@@ -1,7 +1,7 @@
 #ifndef __EVALUATOR_SPEC_H_
 #define __EVALUATOR_SPEC_H_
 
-#include "../../src/ast/Bytecode.h"
+#include "../../src/ast/FormalMessagesBytecode.h"
 #include "../../src/evaluator/Evaluator.h"
 #include "../../src/lexer/Lexer.h"
 #include "../../src/parser/Parser.h"
