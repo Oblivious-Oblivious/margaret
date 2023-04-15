@@ -52,3 +52,6 @@ dkms.conf
 
 # Macos Specifics
 .DS_Store
+
+# Papers
+paper/references
