@@ -77,8 +77,8 @@
 spec_suite({
     VersionSpec();
 
+    alternate_to_dec_spec();
     file_loader_spec();
-    DecimalConversionSpec();
     marg_vector_spec();
     marg_stack_spec();
     marg_string_spec();

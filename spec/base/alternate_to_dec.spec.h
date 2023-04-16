@@ -4,7 +4,7 @@
 #include "../cSpec.h"
 #include "../../src/base/alternate_to_dec.h"
 
-module(DecimalConversionSpec, {
+module(alternate_to_dec_spec, {
     it("converts from binary to decimal", {
         char *bin = bin_to_dec("101010");
         assert_that_charptr(bin equals to "42");
