@@ -13,6 +13,7 @@
 #include "src/evaluator/Evaluator.h"
 #include "src/file_loader/FileLoader.h"
 #include "src/lexer/Lexer.h"
+#include "src/opcode/Chunk.h"
 #include "src/parser/Parser.h"
 
 static marg_string *SCAN(char *prompt) {
@@ -31,11 +32,29 @@ static TokenTable *READ(marg_string *chars) {
     return lexer_make_tokens(lexer_new("repl", chars));
 }
 
-static marg_vector *EVAL(TokenTable *tokens) {
+static marg_vector *FORMALIZE(TokenTable *tokens) {
     return parser_analyze_syntax(parser_new(tokens));
 }
 
-static void PRINT(marg_vector *evaluated) {
+static Chunk *EMIT(marg_vector *formal_messages_bytecode) {
+    (void)formal_messages_bytecode;
+    return chunk_new();
+}
+
+static Chunk *OPTIMIZE(Chunk *evaluated_bytecode) {
+    return evaluated_bytecode;
+}
+
+static marg_string *EVAL(Chunk *bytecode) {
+    (void)bytecode;
+    return marg_string_new("0");
+}
+
+static void PRINT(marg_string *evaluated) {
+    printf("%s\n", marg_string_get(evaluated));
+}
+
+static void PRINT_FORMAL(marg_vector *evaluated) {
     printf("[");
     size_t evaluated_size = marg_vector_size(evaluated);
     if(evaluated_size > 0) {
@@ -47,23 +66,20 @@ static void PRINT(marg_vector *evaluated) {
 }
 
 static void margaret_repl(void) {
-    while(1) PRINT(EVAL(READ(SCAN("$> "))));
+    // while(1) PRINT(EVAL(OPTIMIZE(EMIT(FORMALIZE(READ(SCAN("$> ")))))));
+    while(1) PRINT_FORMAL(FORMALIZE(READ(SCAN("$> "))));
 }
 
-static marg_string *margaret_run_file(char *filename) {
+static void margaret_run_file(char *filename) {
     marg_string *chars = file_loader_load(file_loader_new(), filename);
     Lexer *l = lexer_new(filename, chars);
     TokenTable *tokens = lexer_make_tokens(l);
     Parser *p = parser_new(tokens);
-    marg_vector *bytecode = parser_analyze_syntax(p);
-    Evaluator *e = evaluator_new(bytecode);
-    marg_string *evaluated = evaluator_evaluate(e);
+    marg_vector *formal_messages_bytecode = parser_analyze_syntax(p);
 
-    size_t bytecode_size = marg_vector_size(bytecode);
-    for(size_t i = 0; i < bytecode_size; i++)
-        printf("%s\n", marg_string_get(marg_vector_get(bytecode, i)));
-    
-    return evaluated;
+    size_t formal_messages_bytecode_size = marg_vector_size(formal_messages_bytecode);
+    for(size_t i = 0; i < formal_messages_bytecode_size; i++)
+        printf("%s\n", marg_string_get(marg_vector_get(formal_messages_bytecode, i)));
 }
 
 static void banner(void) {
