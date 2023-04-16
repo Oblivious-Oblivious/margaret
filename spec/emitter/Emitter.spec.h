@@ -6,6 +6,7 @@
 #include "../_helpers.h"
 
 module(EmitterSpec, {
+    // TODO Test for a `postcard` type mini program that includes every single feature
 })
 
 #endif
