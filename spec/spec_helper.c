@@ -9,6 +9,7 @@
 #include "base/marg_vector.spec.h"
 #include "base/marg_stack.spec.h"
 #include "base/marg_string.spec.h"
+#include "base/memory.spec.h"
 
 // bytecode
 #include "bytecode/FormalMessages.spec.h"
@@ -82,6 +83,7 @@ spec_suite({
     marg_vector_spec();
     marg_stack_spec();
     marg_string_spec();
+    memory_spec();
 
     FormalMessagesSpec();
     
