@@ -8,11 +8,11 @@
 #include "libs/readline/readline/readline.h"
 #include "libs/readline/readline/history.h"
 
+#include "src/base/file_loader.h"
 #include "src/base/marg_string.h"
 #include "src/base/marg_vector.h"
 #include "src/emitter/Emitter.h"
 #include "src/evaluator/Evaluator.h"
-#include "src/file_loader/FileLoader.h"
 #include "src/lexer/Lexer.h"
 #include "src/opcode/Chunk.h"
 #include "src/optimizer/Optimizer.h"

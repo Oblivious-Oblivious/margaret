@@ -6,6 +6,7 @@
 
 // base
 #include "base/alternate_to_dec.spec.h"
+#include "base/file_loader.spec.h"
 #include "base/marg_vector.spec.h"
 #include "base/marg_stack.spec.h"
 #include "base/marg_string.spec.h"
@@ -53,8 +54,6 @@
 #include "generic/tensors.spec.h"
 #include "generic/tuples.spec.h"
 
-// file_loader
-#include "file_loader/FileLoader.spec.h"
 
 // lexer
 #include "lexer/Lexer.spec.h"
@@ -78,6 +77,7 @@
 spec_suite({
     VersionSpec();
 
+    file_loader_spec();
     DecimalConversionSpec();
     marg_vector_spec();
     marg_stack_spec();
@@ -122,7 +122,6 @@ spec_suite({
     tensors_spec();
     tuples_spec();
 
-    FileLoaderSpec();
 
     LexerSpec();
 

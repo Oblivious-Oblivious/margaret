@@ -1,4 +1,4 @@
-#include "FileLoader.h"
+#include "file_loader.h"
 
 #include <stdio.h>  /* FILE, fopen, fclose, printf */
 
@@ -8,7 +8,7 @@
  * @brief Check if the path file exists in the filesystem
  * @return true if it does not exist
  */
-static int file_loader_file_does_not_exist(FileLoader *self) {
+static int file_loader_file_does_not_exist(file_loader *self) {
     /* Try to open for reading */
     FILE *f;
     if((f = fopen(self->filepath, "r"))) {
@@ -18,8 +18,8 @@ static int file_loader_file_does_not_exist(FileLoader *self) {
     return 1;
 }
 
-FileLoader *file_loader_new(void) {
-    FileLoader *self = (struct FileLoader*)collected_malloc(sizeof(FileLoader));
+file_loader *file_loader_new(void) {
+    file_loader *self = (struct file_loader*)collected_malloc(sizeof(file_loader));
 
     self->filepath = NULL;
     self->fd = NULL;
@@ -27,7 +27,7 @@ FileLoader *file_loader_new(void) {
     return self;
 }
 
-int file_loader_open(FileLoader *self, char *filepath) {
+int file_loader_open(file_loader *self, char *filepath) {
     self->filepath = filepath;
 
     if(file_loader_file_does_not_exist(self))
@@ -39,7 +39,7 @@ int file_loader_open(FileLoader *self, char *filepath) {
     return 1;
 }
 
-int file_loader_close(FileLoader *self) {
+int file_loader_close(file_loader *self) {
     if(self == NULL)
         return 0;
     if((fclose(self->fd))) {
@@ -48,7 +48,7 @@ int file_loader_close(FileLoader *self) {
     return 1;
 }
 
-marg_string *file_loader_load(FileLoader *self, char *filepath) {
+marg_string *file_loader_load(file_loader *self, char *filepath) {
     file_loader_open(self, filepath);
     marg_string *result = marg_string_new("");
 

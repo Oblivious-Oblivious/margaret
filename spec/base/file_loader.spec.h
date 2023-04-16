@@ -1,20 +1,20 @@
 #ifndef __FILE_LOADER_SPEC_H_
 #define __FILE_LOADER_SPEC_H_
 
-#include "../../src/file_loader/FileLoader.h"
+#include "../../src/base/file_loader.h"
 #include "../cSpec.h"
 
-FileLoader *file_loader;
+file_loader *loader;
 void setup_file_loader(void) {
-    file_loader = file_loader_new();
+    loader = file_loader_new();
 }
 
-module(FileLoaderSpec, {
+module(file_loader_spec, {
     before_each(&setup_file_loader);
 
     describe("File Loader", {
-        it("creates a FileLoader object", {
-            FileLoader *fl = file_loader_new();
+        it("creates a file_loader object", {
+            file_loader *fl = file_loader_new();
             assert_that(fl isnot NULL);
         });
 
@@ -22,7 +22,7 @@ module(FileLoaderSpec, {
             FILE *fd = fopen("new_file.txt", "w");
 
             it("reads file: `new_file.txt`", {
-                int actual = file_loader_open(file_loader, "new_file.txt");
+                int actual = file_loader_open(loader, "new_file.txt");
                 assert_that(actual is true);
             });
 
@@ -31,16 +31,16 @@ module(FileLoaderSpec, {
 
         context("on opening an non existent file", {
             it("fails to read a file that is not yet created", {
-                int actual = file_loader_open(file_loader, "this_filename_does_not_exist");
+                int actual = file_loader_open(loader, "this_filename_does_not_exist");
                 assert_that(actual is false);
             });
         });
 
         context("on closing a file loader", {
             it("opens a file and successfully closes the buffer", {
-                file_loader_open(file_loader, "new_file.txt");
+                file_loader_open(loader, "new_file.txt");
 
-                int actual = file_loader_close(file_loader);
+                int actual = file_loader_close(loader);
                 assert_that(actual is true);
             });
         });
@@ -50,7 +50,7 @@ module(FileLoaderSpec, {
             fprintf(fd, "%s", "text");
             fclose(fd);
 
-            marg_string *text = file_loader_load(file_loader, "test.marg");
+            marg_string *text = file_loader_load(loader, "test.marg");
             assert_that_int(marg_string_get_char_at_index(text, 0) equals to 't');
             assert_that_int(marg_string_get_char_at_index(text, 1) equals to 'e');
             assert_that_int(marg_string_get_char_at_index(text, 2) equals to 'x');
