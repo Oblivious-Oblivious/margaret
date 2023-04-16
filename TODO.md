@@ -16,6 +16,7 @@
 -----------------
     🟥 Make comments part of the language (Comment new: "...").
     🟥 Make comments dynamic and persistent on code files.
+    🟥 Procs, methods and functions return tensors of bytecodes.
     🟥 Add primitives for `while_true` to avoid endless recursion.
     🟥 Add a switch matcher -> `obj match: [[1, 100], [2, 200], [3, 300],]`.
     🟥 Make bang (!) messages denote persistant changes in object state.
