@@ -13,6 +13,9 @@
 // bytecode
 #include "bytecode/FormalMessages.spec.h"
 
+// emitter
+#include "emitter/Emitter.spec.h"
+
 // evaluator
 #include "evaluator/Evaluator.spec.h"
 
@@ -56,7 +59,11 @@
 #include "lexer/Lexer.spec.h"
 
 // opcode
+#include "opcode/Chunk.spec.h"
 #include "opcode/Opcodes.spec.h"
+
+// optimizer
+#include "optimizer/Optimizer.spec.h"
 
 // parser
 #include "parser/Parser.spec.h"
@@ -77,6 +84,8 @@ spec_suite({
     marg_string_spec();
 
     FormalMessagesSpec();
+    
+    EmitterSpec();
 
     EvaluatorSpec();
 
@@ -116,7 +125,10 @@ spec_suite({
 
     LexerSpec();
 
+    ChunkSpec();
     OpcodesSpec();
+
+    OptimizerSpec();
 
     ParserSpec();
 

@@ -10,10 +10,12 @@
 
 #include "src/base/marg_string.h"
 #include "src/base/marg_vector.h"
+#include "src/emitter/Emitter.h"
 #include "src/evaluator/Evaluator.h"
 #include "src/file_loader/FileLoader.h"
 #include "src/lexer/Lexer.h"
 #include "src/opcode/Chunk.h"
+#include "src/optimizer/Optimizer.h"
 #include "src/parser/Parser.h"
 
 static marg_string *SCAN(char *prompt) {
@@ -37,17 +39,15 @@ static marg_vector *FORMALIZE(TokenTable *tokens) {
 }
 
 static Chunk *EMIT(marg_vector *formal_messages_bytecode) {
-    (void)formal_messages_bytecode;
-    return chunk_new();
+    return emitter_emit(emitter_new(formal_messages_bytecode));
 }
 
 static Chunk *OPTIMIZE(Chunk *evaluated_bytecode) {
-    return evaluated_bytecode;
+    return optimizer_optimize(optimizer_new(evaluated_bytecode));
 }
 
 static marg_string *EVAL(Chunk *bytecode) {
-    (void)bytecode;
-    return marg_string_new("0");
+    return evaluator_evaluate(evaluator_new(bytecode));
 }
 
 static void PRINT(marg_string *evaluated) {
@@ -66,8 +66,8 @@ static void PRINT_FORMAL(marg_vector *evaluated) {
 }
 
 static void margaret_repl(void) {
-    // while(1) PRINT(EVAL(OPTIMIZE(EMIT(FORMALIZE(READ(SCAN("$> ")))))));
-    while(1) PRINT_FORMAL(FORMALIZE(READ(SCAN("$> "))));
+    while(1) PRINT(EVAL(OPTIMIZE(EMIT(FORMALIZE(READ(SCAN("$> ")))))));
+    // while(1) PRINT_FORMAL(FORMALIZE(READ(SCAN("$> "))));
 }
 
 static void margaret_run_file(char *filename) {
