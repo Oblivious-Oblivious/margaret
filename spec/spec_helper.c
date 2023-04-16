@@ -4,14 +4,14 @@
 // margaret
 #include "version.spec.h"
 
-// ast
-#include "ast/alternate_to_dec.spec.h"
-#include "ast/FormalMessagesBytecode.spec.h"
-
 // base
+#include "base/alternate_to_dec.spec.h"
 #include "base/marg_vector.spec.h"
 #include "base/marg_stack.spec.h"
 #include "base/marg_string.spec.h"
+
+// bytecode
+#include "bytecode/FormalMessages.spec.h"
 
 // evaluator
 #include "evaluator/Evaluator.spec.h"
@@ -56,7 +56,7 @@
 #include "lexer/Lexer.spec.h"
 
 // opcode
-#include "opcode/formal_messages_opcodes.spec.h"
+#include "opcode/Opcodes.spec.h"
 
 // parser
 #include "parser/Parser.spec.h"
@@ -72,11 +72,11 @@ spec_suite({
     VersionSpec();
 
     DecimalConversionSpec();
-    FormalMessagesBytecodeSpec();
-
     marg_vector_spec();
     marg_stack_spec();
     marg_string_spec();
+
+    FormalMessagesSpec();
 
     EvaluatorSpec();
 
@@ -116,7 +116,7 @@ spec_suite({
 
     LexerSpec();
 
-    formal_messages_opcodes_spec();
+    OpcodesSpec();
 
     ParserSpec();
 

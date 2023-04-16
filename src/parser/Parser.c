@@ -1,6 +1,6 @@
 #include "Parser.h"
 
-#include "../ast/FormalMessagesBytecode.h"
+#include "../bytecode/FormalMessages.h"
 #include "../base/memory.h"
 #include "../tokens/Type.h"
 

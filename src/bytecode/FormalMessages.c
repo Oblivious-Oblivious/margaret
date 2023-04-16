@@ -1,7 +1,7 @@
-#include "FormalMessagesBytecode.h"
+#include "FormalMessages.h"
 
 #include <stdio.h> /* snprintf */
-#include "alternate_to_dec.h"
+#include "../base/alternate_to_dec.h"
 
 // TODO Possibly work with tokens instead of MargValues
 
