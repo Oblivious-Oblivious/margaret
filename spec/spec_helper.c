@@ -12,7 +12,7 @@
 #include "base/memory.spec.h"
 
 // bytecode
-#include "bytecode/FormalMessages.spec.h"
+#include "bytecode/FormalAST.spec.h"
 
 // emitter
 #include "emitter/Emitter.spec.h"
@@ -84,8 +84,8 @@ spec_suite({
     marg_string_spec();
     memory_spec();
 
-    FormalMessagesSpec();
-    
+    FormalASTSpec();
+
     EmitterSpec();
 
     EvaluatorSpec();
