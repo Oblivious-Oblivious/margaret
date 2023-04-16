@@ -5,6 +5,12 @@
     🟥 Use crystal-lang C extensions to bind native values to margaret ones. C code should be exported as a static library and the exposed API should be declared in code.
     🟥 Add string interpolation and formatting with `#{..}` or similar.
     🟥 Optimize repeating bytecodes that offer no state change outside the loop
+    🟥 Add syntax for using user defined inferred objects -> Inferred start_using: MyObject, one: 1 two: 2   -> (MyObject one: 1 two: 2) Inferred stop_using: MyObject
+       Possibly MyObject can inherit from Margaret to not lose predefined marg messages
+       FormalMessages step can always infer `Margaret` because at runtime it can replace the correct object using the inheritance structures.
+       `one:two:` can be sent to MyObject, but `if:then:` can be sent to Margaret.
+       `Margaret` uses delegation pattern: maintains a priority queue of objects with priority based on inheritance, first sends message to all children and to itself at last.
+       e.g. for `MyObject2 < MyObject1 < Margaret`, we send `one:two:` to MyObject2, it fowards it to parents and finally to Margaret, which responds or sends `method_missing`.
 
 ## (✗) ver. 0.1.0
 -----------------
