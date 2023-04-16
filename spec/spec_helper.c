@@ -54,6 +54,8 @@
 #include "generic/tensors.spec.h"
 #include "generic/tuples.spec.h"
 
+// inspector
+#include "inspector/Inspector.spec.h"
 
 // lexer
 #include "lexer/Lexer.spec.h"
@@ -122,6 +124,7 @@ spec_suite({
     tensors_spec();
     tuples_spec();
 
+    InspectorSpec();
 
     LexerSpec();
 

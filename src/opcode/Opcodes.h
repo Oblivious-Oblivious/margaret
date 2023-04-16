@@ -48,6 +48,11 @@
 #define FM_KEYWORD           marg_string_new("KEYWORD")
 
 // ------ Emmited Opcodes ------
+#define OP_RETURN                           0x00
+#define OP_NIL                              0x01
+#define OP_TRUE                             0x02
+#define OP_FALSE                            0x03
+
 // #define OP_DECLARE_VARIABLE              marg_string_new("DECLARE_VARIABLE")
 // #define OP_GENERATE_IDENTIFIER_POSITION  marg_string_new("GENERATE_IDENTIFIER_POSITION")
 // #define OP_ADD_VARIABLE_TO_VECTOR        marg_string_new("ADD_VARIABLE_TO_VECTOR")
