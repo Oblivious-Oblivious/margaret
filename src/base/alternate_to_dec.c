@@ -7,7 +7,7 @@
 #include <string.h> /* strlen */
 #include <math.h>   /* ceil, log10 */
 
-char *__int_to_str(uint64_t dec) {
+static char *__int_to_str(uint64_t dec) {
     int len = (int)((ceil(log10(dec)) + 1) * sizeof(char));
     char *res = (char*)collected_malloc(sizeof(char) * len);
     snprintf(res, len, "%lld", dec);

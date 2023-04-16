@@ -2,7 +2,7 @@
 #define __ALTERNATE_TO_DEC_SPEC_H_
 
 #include "../cSpec.h"
-#include "../../src/ast/alternate_to_dec.h"
+#include "../../src/base/alternate_to_dec.h"
 
 module(DecimalConversionSpec, {
     it("converts from binary to decimal", {
