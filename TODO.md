@@ -35,6 +35,7 @@
         # _ ** 0 => 1,
         # ** other => self raised_to: other,
     ]
+    🟥 Typecheck default parameters on multimethods!!
     ---------------------------
     🟥 Compile time bytecodes
         Stored along with runtime ones.
