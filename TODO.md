@@ -4,6 +4,7 @@
     🟥 Use comments for docs or TODO graphs.
     🟥 Use crystal-lang C extensions to bind native values to margaret ones. C code should be exported as a static library and the exposed API should be declared in code.
     🟥 Add string interpolation and formatting with `#{..}` or similar.
+    🟥 Optimize repeating bytecodes that offer no state change outside the loop
 
 ## (✗) ver. 0.1.0
 -----------------
