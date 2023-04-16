@@ -6,7 +6,7 @@
 #include "../src/base/marg_string.h"
 #include "../src/base/marg_vector.h"
 #include "../src/lexer/Lexer.h"
-#include "../src/opcode/formal_messages_opcodes.h"
+#include "../src/opcode/Opcodes.h"
 #include "../src/parser/Parser.h"
 
 #define parse(code, expected_result) do { \
