@@ -38,10 +38,10 @@ marg_vector *ast_translation_unit(marg_vector *optional_assignment_list, marg_ve
 }
 
 marg_vector *ast_assignment(marg_vector *id) {
-    if(marg_string_equals(marg_vector_get(id, 0), OP_INSTANCE))
-        return marg_vector_new(OP_STORE_INSTANCE, marg_vector_get(id, 1));
+    if(marg_string_equals(marg_vector_get(id, 0), FM_INSTANCE))
+        return marg_vector_new(FM_STORE_INSTANCE, marg_vector_get(id, 1));
     else
-        return marg_vector_new(OP_STORE, marg_vector_get(id, 1));
+        return marg_vector_new(FM_STORE, marg_vector_get(id, 1));
 }
 
 marg_vector *ast_message(marg_vector *msg) {
@@ -57,7 +57,7 @@ marg_vector *ast_unary_message(marg_vector *object, marg_vector *selectors) {
 
     size_t selectors_size = marg_vector_size(selectors);
     for(size_t i = 0; i < selectors_size; i++) {
-        marg_vector_add(res, OP_UNARY);
+        marg_vector_add(res, FM_UNARY);
         marg_vector_add(res, marg_vector_get(marg_vector_get(selectors, i), 0));
     }
     return res;
@@ -87,7 +87,7 @@ marg_vector *ast_binary_message(marg_vector *object, marg_vector *selectors) {
         for(size_t j = 0; j < item_size; j++)
             marg_vector_add(res, marg_vector_get(item, j));
 
-        marg_vector_add(res, OP_BINARY);
+        marg_vector_add(res, FM_BINARY);
         marg_vector_add(res, marg_vector_get(marg_vector_get(selectors, i), 0));
     }
     return res;
@@ -118,7 +118,7 @@ marg_vector *ast_keyword_message(marg_vector *object, marg_vector *selectors) {
             for(size_t j = 0; j < sel1_size; j++)
                 marg_vector_add(res, marg_vector_get(sel1, j));
 
-            marg_vector_add(res, OP_KEYWORD);
+            marg_vector_add(res, FM_KEYWORD);
             marg_vector_add(res, sel0);
             marg_vector_add(res, marg_string_new("1"));
         }
@@ -143,7 +143,7 @@ marg_vector *ast_keyword_message(marg_vector *object, marg_vector *selectors) {
                 marg_vector_add(res, marg_vector_get(sel1, i));
         }
  
-        marg_vector_add(res, OP_KEYWORD);
+        marg_vector_add(res, FM_KEYWORD);
         marg_vector_add(res, joined_selector);
         char size_ptr[32];
         snprintf(size_ptr, sizeof(size_ptr), "%zu", marg_vector_size(selectors));
@@ -171,7 +171,7 @@ marg_vector *ast_expression(marg_vector *unit) {
 }
 
 marg_vector *ast_margaret_object(void) {
-    return marg_vector_new(OP_VARIABLE, marg_string_new("Margaret"));
+    return marg_vector_new(FM_VARIABLE, marg_string_new("Margaret"));
 }
 
 marg_vector *ast_group(marg_vector *unit_list) {
@@ -190,31 +190,31 @@ marg_vector *ast_group(marg_vector *unit_list) {
 
 marg_vector *ast_variable(marg_string *optional_instance_symbol, marg_string *name) {
     if(marg_string_equals(name, marg_string_new("nil")))
-        return marg_vector_new(OP_NIL);
+        return marg_vector_new(FM_NIL);
     else if(marg_string_equals(name, marg_string_new("true")))
-        return marg_vector_new(OP_TRUE);
+        return marg_vector_new(FM_TRUE);
     else if(marg_string_equals(name, marg_string_new("false")))
-        return marg_vector_new(OP_FALSE);
+        return marg_vector_new(FM_FALSE);
     else if(marg_string_equals(name, marg_string_new("self")))
-        return marg_vector_new(OP_SELF);
+        return marg_vector_new(FM_SELF);
     else if(marg_string_equals(name, marg_string_new("super")))
-        return marg_vector_new(OP_SUPER);
+        return marg_vector_new(FM_SUPER);
     else if(marg_string_equals(optional_instance_symbol, marg_string_new("@")))
-        return marg_vector_new(OP_INSTANCE, name);
+        return marg_vector_new(FM_INSTANCE, name);
     else
-        return marg_vector_new(OP_VARIABLE, name);
+        return marg_vector_new(FM_VARIABLE, name);
 }
 
 marg_vector *ast_proc_literal(marg_vector *param_list, marg_vector *function) {
-    marg_vector *res = marg_vector_new(OP_START_PROC);
+    marg_vector *res = marg_vector_new(FM_START_PROC);
 
     size_t param_list_size = marg_vector_size(param_list);
     for(size_t i = 0; i < param_list_size; i++) {
-        marg_vector_add(res, OP_VARIABLE);
+        marg_vector_add(res, FM_VARIABLE);
         marg_vector_add(res, marg_vector_get(param_list, i));
     }
 
-    marg_vector_add(res, OP_TENSOR);
+    marg_vector_add(res, FM_TENSOR);
     char size_ptr[32];
     snprintf(size_ptr, sizeof(size_ptr), "%zu", marg_vector_size(param_list));
     marg_string *size = marg_string_new(size_ptr);
@@ -225,54 +225,54 @@ marg_vector *ast_proc_literal(marg_vector *param_list, marg_vector *function) {
         if(marg_vector_get(function, i) != NULL)
             marg_vector_add(res, marg_vector_get(function, i));
 
-    marg_vector_add(res, OP_END_PROC);
+    marg_vector_add(res, FM_END_PROC);
     return res;
 }
 
 marg_vector *ast_c_function_declaration(marg_string *return_type, marg_string *name, marg_vector *params) {
-    marg_vector *res = marg_vector_new(OP_START_C_FUNCTION, OP_VARIABLE, return_type, OP_VARIABLE, name);
+    marg_vector *res = marg_vector_new(FM_START_C_FUNCTION, FM_VARIABLE, return_type, FM_VARIABLE, name);
 
     size_t params_size = marg_vector_size(params);
     for(size_t i = 0; i < params_size; i++) {
-        marg_vector_add(res, OP_VARIABLE);
+        marg_vector_add(res, FM_VARIABLE);
         marg_vector_add(res, marg_string_new("CFunParam"));
-        marg_vector_add(res, OP_VARIABLE);
+        marg_vector_add(res, FM_VARIABLE);
         marg_vector_add(res, marg_vector_get(marg_vector_get(params, i), 0));
-        marg_vector_add(res, OP_VARIABLE);
+        marg_vector_add(res, FM_VARIABLE);
         marg_vector_add(res, marg_vector_get(marg_vector_get(params, i), 1));
-        marg_vector_add(res, OP_KEYWORD);
+        marg_vector_add(res, FM_KEYWORD);
         marg_vector_add(res, marg_string_new("c_type:c_name:"));
         marg_vector_add(res, marg_string_new("2"));
     }
 
-    marg_vector_add(res, OP_TENSOR);
+    marg_vector_add(res, FM_TENSOR);
     char size_ptr[32];
     snprintf(size_ptr, sizeof(size_ptr), "%zu", marg_vector_size(params));
     marg_string *size = marg_string_new(size_ptr);
     marg_vector_add(res, size);
-    marg_vector_add(res, OP_END_C_FUNCTION);
+    marg_vector_add(res, FM_END_C_FUNCTION);
     return res;
 }
 
 marg_vector *ast_unary_method_definition(marg_vector *multimethod_object_default_value, marg_string *selector, marg_vector *function) {
-    marg_vector *res = marg_vector_new(OP_VARIABLE, marg_string_new("Method"), OP_UNARY, marg_string_new("unary"));
+    marg_vector *res = marg_vector_new(FM_VARIABLE, marg_string_new("Method"), FM_UNARY, marg_string_new("unary"));
 
     size_t multimethod_object_default_value_size = marg_vector_size(multimethod_object_default_value);
     for(size_t i = 0; i < multimethod_object_default_value_size; i++)
         marg_vector_add(res, marg_vector_get(multimethod_object_default_value, i));
 
-    marg_vector_add(res, OP_STRING);
+    marg_vector_add(res, FM_STRING);
     marg_vector_add(res, selector);
 
-    marg_vector_add(res, OP_START_PROC);
-    marg_vector_add(res, OP_SELF);
-    marg_vector_add(res, OP_TENSOR);
+    marg_vector_add(res, FM_START_PROC);
+    marg_vector_add(res, FM_SELF);
+    marg_vector_add(res, FM_TENSOR);
     marg_vector_add(res, marg_string_new("1"));
     size_t function_size = marg_vector_size(function);
     for(size_t i = 0; i < function_size; i++)
         marg_vector_add(res, marg_vector_get(function, i));
-    marg_vector_add(res, OP_END_PROC);
-    marg_vector_add(res, OP_KEYWORD);
+    marg_vector_add(res, FM_END_PROC);
+    marg_vector_add(res, FM_KEYWORD);
     marg_vector_add(res, marg_string_new("object:message:method:"));
     marg_vector_add(res, marg_string_new("3"));
 
@@ -280,17 +280,17 @@ marg_vector *ast_unary_method_definition(marg_vector *multimethod_object_default
 }
 
 marg_vector *ast_binary_method_definition(marg_vector *multimethod_object_default_value, marg_string *selector, marg_vector *param, marg_vector *function) {
-    marg_vector *res = marg_vector_new(OP_VARIABLE, marg_string_new("Method"), OP_UNARY, marg_string_new("binary"));
+    marg_vector *res = marg_vector_new(FM_VARIABLE, marg_string_new("Method"), FM_UNARY, marg_string_new("binary"));
 
     size_t multimethod_object_default_value_size = marg_vector_size(multimethod_object_default_value);
     for(size_t i = 0; i < multimethod_object_default_value_size; i++)
         marg_vector_add(res, marg_vector_get(multimethod_object_default_value, i));
 
-    marg_vector_add(res, OP_STRING);
+    marg_vector_add(res, FM_STRING);
     marg_vector_add(res, selector);
 
-    if(marg_string_equals(marg_vector_get(param, 0), OP_METHOD_PARAMETER)) {
-        marg_vector_add(res, OP_METHOD_PARAMETER);
+    if(marg_string_equals(marg_vector_get(param, 0), FM_METHOD_PARAMETER)) {
+        marg_vector_add(res, FM_METHOD_PARAMETER);
         marg_vector_add(res, marg_vector_get(param, 1));
     }
     else {
@@ -299,23 +299,23 @@ marg_vector *ast_binary_method_definition(marg_vector *multimethod_object_defaul
             marg_vector_add(res, marg_vector_get(param, i));
     }
 
-    marg_vector_add(res, OP_START_PROC);
-    marg_vector_add(res, OP_SELF);
-    if(marg_string_equals(marg_vector_get(param, 0), OP_METHOD_PARAMETER)) {
-        marg_vector_add(res, OP_VARIABLE);
+    marg_vector_add(res, FM_START_PROC);
+    marg_vector_add(res, FM_SELF);
+    if(marg_string_equals(marg_vector_get(param, 0), FM_METHOD_PARAMETER)) {
+        marg_vector_add(res, FM_VARIABLE);
         marg_vector_add(res, marg_vector_get(param, 1));
-        marg_vector_add(res, OP_TENSOR);
+        marg_vector_add(res, FM_TENSOR);
         marg_vector_add(res, marg_string_new("2"));
     }
     else {
-        marg_vector_add(res, OP_TENSOR);
+        marg_vector_add(res, FM_TENSOR);
         marg_vector_add(res, marg_string_new("1"));
     }
     size_t function_size = marg_vector_size(function);
     for(size_t i = 0; i < function_size; i++)
         marg_vector_add(res, marg_vector_get(function, i));
-    marg_vector_add(res, OP_END_PROC);
-    marg_vector_add(res, OP_KEYWORD);
+    marg_vector_add(res, FM_END_PROC);
+    marg_vector_add(res, FM_KEYWORD);
     marg_vector_add(res, marg_string_new("object:message:param:method:"));
     marg_vector_add(res, marg_string_new("4"));
 
@@ -323,22 +323,22 @@ marg_vector *ast_binary_method_definition(marg_vector *multimethod_object_defaul
 }
 
 marg_vector *ast_keyword_method_definition(marg_vector *multimethod_object_default_value, marg_string *selector, marg_vector *params, marg_vector *function) {
-    marg_vector *res = marg_vector_new(OP_VARIABLE, marg_string_new("Method"), OP_UNARY, marg_string_new("keyword"));
+    marg_vector *res = marg_vector_new(FM_VARIABLE, marg_string_new("Method"), FM_UNARY, marg_string_new("keyword"));
 
     size_t multimethod_object_default_value_size = marg_vector_size(multimethod_object_default_value);
     for(size_t i = 0; i < multimethod_object_default_value_size; i++)
         marg_vector_add(res, marg_vector_get(multimethod_object_default_value, i));
 
-    marg_vector_add(res, OP_STRING);
+    marg_vector_add(res, FM_STRING);
     marg_vector_add(res, selector);
 
     size_t params_size = marg_vector_size(params);
     size_t number_of_formal_params = 1;
     for(size_t i = 0; i < params_size; i++) {
         marg_vector *param = marg_vector_get(params, i);
-        if(marg_string_equals(marg_vector_get(param, 0), OP_METHOD_PARAMETER)) {
+        if(marg_string_equals(marg_vector_get(param, 0), FM_METHOD_PARAMETER)) {
             number_of_formal_params++;
-            marg_vector_add(res, OP_METHOD_PARAMETER);
+            marg_vector_add(res, FM_METHOD_PARAMETER);
             marg_vector_add(res, marg_vector_get(param, 1));
         }
         else {
@@ -347,29 +347,29 @@ marg_vector *ast_keyword_method_definition(marg_vector *multimethod_object_defau
                 marg_vector_add(res, marg_vector_get(param, i));
         }
     }
-    marg_vector_add(res, OP_TENSOR);
+    marg_vector_add(res, FM_TENSOR);
     char params_size_str[32];
     snprintf(params_size_str, sizeof(params_size_str), "%zu", params_size);
     marg_vector_add(res, marg_string_new(params_size_str));
 
-    marg_vector_add(res, OP_START_PROC);
-    marg_vector_add(res, OP_SELF);
+    marg_vector_add(res, FM_START_PROC);
+    marg_vector_add(res, FM_SELF);
     for(size_t i = 0; i < params_size; i++) {
         marg_vector *param = marg_vector_get(params, i);
-        if(marg_string_equals(marg_vector_get(param, 0), OP_METHOD_PARAMETER)) {
-            marg_vector_add(res, OP_VARIABLE);
+        if(marg_string_equals(marg_vector_get(param, 0), FM_METHOD_PARAMETER)) {
+            marg_vector_add(res, FM_VARIABLE);
             marg_vector_add(res, marg_vector_get(param, 1));
         }
     }
-    marg_vector_add(res, OP_TENSOR);
+    marg_vector_add(res, FM_TENSOR);
     char number_of_formal_params_str[32];
     snprintf(number_of_formal_params_str, sizeof(number_of_formal_params_str), "%zu", number_of_formal_params);
     marg_vector_add(res, marg_string_new(number_of_formal_params_str));
     size_t function_size = marg_vector_size(function);
     for(size_t i = 0; i < function_size; i++)
         marg_vector_add(res, marg_vector_get(function, i));
-    marg_vector_add(res, OP_END_PROC);
-    marg_vector_add(res, OP_KEYWORD);
+    marg_vector_add(res, FM_END_PROC);
+    marg_vector_add(res, FM_KEYWORD);
     marg_vector_add(res, marg_string_new("object:message:params:method:"));
     marg_vector_add(res, marg_string_new("4"));
 
@@ -377,22 +377,22 @@ marg_vector *ast_keyword_method_definition(marg_vector *multimethod_object_defau
 }
 
 marg_vector *ast_any_object(void) {
-    return marg_vector_new(OP_ANY_OBJECT);
+    return marg_vector_new(FM_ANY_OBJECT);
 }
 
 marg_vector *ast_method_parameter(marg_string *param_name) {
     if(marg_string_equals(param_name, marg_string_new("nil")))
-        return marg_vector_new(OP_NIL);
+        return marg_vector_new(FM_NIL);
     else if(marg_string_equals(param_name, marg_string_new("true")))
-        return marg_vector_new(OP_TRUE);
+        return marg_vector_new(FM_TRUE);
     else if(marg_string_equals(param_name, marg_string_new("false")))
-        return marg_vector_new(OP_FALSE);
+        return marg_vector_new(FM_FALSE);
     else if(marg_string_equals(param_name, marg_string_new("self")))
-        return marg_vector_new(OP_SELF);
+        return marg_vector_new(FM_SELF);
     else if(marg_string_equals(param_name, marg_string_new("super")))
-        return marg_vector_new(OP_SUPER);
+        return marg_vector_new(FM_SUPER);
     else
-        return marg_vector_new(OP_METHOD_PARAMETER, param_name);
+        return marg_vector_new(FM_METHOD_PARAMETER, param_name);
 }
 
 marg_vector *ast_literal(marg_vector *unit) {
@@ -407,21 +407,21 @@ marg_vector *ast_integer_literal(marg_string *sign, marg_string *number) {
     // "2", "+2", "0b10", "+0b10", "0b010", "+0b010", "0o2", "+0o2", "0o002", "+0o002", "0x2", "+0x2", "0x02", "+0x02"
     number = marg_string_remove_underscores(number);
     if(marg_string_equals(number, marg_string_new("0")))
-        return marg_vector_new(OP_0);
+        return marg_vector_new(FM_0);
     else if(marg_string_equals(number, marg_string_new("1"))) {
         if(marg_string_equals(sign, marg_string_new("-")))
-            return marg_vector_new(OP_MINUS_1);
+            return marg_vector_new(FM_MINUS_1);
         else
-            return marg_vector_new(OP_1);
+            return marg_vector_new(FM_1);
     }
     else if(
         marg_string_equals(number, marg_string_new("2"))
     ||  marg_string_equals(number, marg_string_new("0b10"))
     ) {
         if(marg_string_equals(sign, marg_string_new("-")))
-            return marg_vector_new(OP_INTEGER, marg_string_new("-2"));
+            return marg_vector_new(FM_INTEGER, marg_string_new("-2"));
         else
-            return marg_vector_new(OP_2);
+            return marg_vector_new(FM_2);
     }
     else {
         if(marg_string_get_char_at_index(number, 0) == '0' && (marg_string_get_char_at_index(number, 1) == 'b' || marg_string_get_char_at_index(number, 1) == 'B')) {
@@ -442,10 +442,10 @@ marg_vector *ast_integer_literal(marg_string *sign, marg_string *number) {
             marg_string_add(inum, sign);
             marg_string_add(inum, number);
 
-            return marg_vector_new(OP_INTEGER, inum);
+            return marg_vector_new(FM_INTEGER, inum);
         }
         else {
-            return marg_vector_new(OP_INTEGER, number);
+            return marg_vector_new(FM_INTEGER, number);
         }
     }
 }
@@ -455,7 +455,7 @@ marg_vector *ast_float_literal(marg_string *sign, marg_string *number) {
     marg_string_add(f, sign);
     marg_string_add(f, marg_string_remove_underscores(number));
 
-    return marg_vector_new(OP_FLOAT, f);
+    return marg_vector_new(FM_FLOAT, f);
 }
 
 marg_vector *ast_char_literal(marg_string *sign, marg_string *c) {
@@ -465,13 +465,13 @@ marg_vector *ast_char_literal(marg_string *sign, marg_string *c) {
     marg_string_shorten(c, marg_string_size(c)-1);
     marg_string_add(character, c);
 
-    return marg_vector_new(OP_CHAR, character);
+    return marg_vector_new(FM_CHAR, character);
 }
 
 marg_vector *ast_string_literal(marg_string *string) {
     marg_string_skip(string, 1);
     marg_string_shorten(string, marg_string_size(string)-1);
-    return marg_vector_new(OP_STRING, string);
+    return marg_vector_new(FM_STRING, string);
 }
 
 marg_vector *ast_tuple_literal(marg_vector *item_list) {
@@ -485,7 +485,7 @@ marg_vector *ast_tuple_literal(marg_vector *item_list) {
             marg_vector_add(res, marg_vector_get(item, j));
     }
 
-    marg_vector_add(res, OP_TUPLE);
+    marg_vector_add(res, FM_TUPLE);
     char size_ptr[32];
     snprintf(size_ptr, sizeof(size_ptr), "%zu", marg_vector_size(item_list));
     marg_string *size = marg_string_new(size_ptr);
@@ -504,7 +504,7 @@ marg_vector *ast_tensor_literal(marg_vector *item_list) {
             marg_vector_add(res, marg_vector_get(item, j));
     }
 
-    marg_vector_add(res, OP_TENSOR);
+    marg_vector_add(res, FM_TENSOR);
     char size_ptr[32];
     snprintf(size_ptr, sizeof(size_ptr), "%zu", marg_vector_size(item_list));
     marg_string *size = marg_string_new(size_ptr);
@@ -523,7 +523,7 @@ marg_vector *ast_bitstring_literal(marg_vector *item_list) {
             marg_vector_add(res, marg_vector_get(item, j));
     }
 
-    marg_vector_add(res, OP_BITSTRING);
+    marg_vector_add(res, FM_BITSTRING);
     char size_ptr[32];
     snprintf(size_ptr, sizeof(size_ptr), "%zu", marg_vector_size(item_list));
     marg_string *size = marg_string_new(size_ptr);
@@ -542,7 +542,7 @@ marg_vector *ast_hash_literal(marg_vector *association_list) {
             marg_vector_add(res, marg_vector_get(item, j));
     }
     
-    marg_vector_add(res, OP_HASH);
+    marg_vector_add(res, FM_HASH);
     char size_ptr[32];
     snprintf(size_ptr, sizeof(size_ptr), "%zu", marg_vector_size(association_list));
     marg_string *size = marg_string_new(size_ptr);
@@ -552,14 +552,14 @@ marg_vector *ast_hash_literal(marg_vector *association_list) {
 
 marg_vector *ast_bit_literal(marg_vector *bit) {
     marg_vector *res = marg_vector_new_empty();
-    marg_vector_add(res, OP_VARIABLE);
+    marg_vector_add(res, FM_VARIABLE);
     marg_vector_add(res, marg_string_new("Bit"));
 
     size_t bit_length = marg_vector_size(bit);
     for(size_t i = 0; i < bit_length; i++)
         marg_vector_add(res, marg_vector_get(bit, i));
 
-    marg_vector_add(res, OP_KEYWORD);
+    marg_vector_add(res, FM_KEYWORD);
     marg_vector_add(res, marg_string_new("value:"));
     marg_vector_add(res, marg_string_new("1"));
     return res;
@@ -567,7 +567,7 @@ marg_vector *ast_bit_literal(marg_vector *bit) {
 
 marg_vector *ast_bit_size_literal(marg_vector *bit, marg_vector *size) {
     marg_vector *res = marg_vector_new_empty();
-    marg_vector_add(res, OP_VARIABLE);
+    marg_vector_add(res, FM_VARIABLE);
     marg_vector_add(res, marg_string_new("Bit"));
 
     size_t bit_length = marg_vector_size(bit);
@@ -578,7 +578,7 @@ marg_vector *ast_bit_size_literal(marg_vector *bit, marg_vector *size) {
     for(size_t i = 0; i < size_length; i++)
         marg_vector_add(res, marg_vector_get(size, i));
     
-    marg_vector_add(res, OP_KEYWORD);
+    marg_vector_add(res, FM_KEYWORD);
     marg_vector_add(res, marg_string_new("value:size:"));
     marg_vector_add(res, marg_string_new("2"));
     return res;
@@ -586,7 +586,7 @@ marg_vector *ast_bit_size_literal(marg_vector *bit, marg_vector *size) {
 
 marg_vector *ast_association(marg_vector *key, marg_vector *value) {
     marg_vector *res = marg_vector_new_empty();
-    marg_vector_add(res, OP_VARIABLE);
+    marg_vector_add(res, FM_VARIABLE);
     marg_vector_add(res, marg_string_new("Association"));
 
     size_t key_size = marg_vector_size(key);
@@ -597,7 +597,7 @@ marg_vector *ast_association(marg_vector *key, marg_vector *value) {
     for(size_t i = 0; i < value_size; i++)
         marg_vector_add(res, marg_vector_get(value, i));
     
-    marg_vector_add(res, OP_KEYWORD);
+    marg_vector_add(res, FM_KEYWORD);
     marg_vector_add(res, marg_string_new("key:value:"));
     marg_vector_add(res, marg_string_new("2"));
     return res;
@@ -605,16 +605,16 @@ marg_vector *ast_association(marg_vector *key, marg_vector *value) {
 
 marg_vector *ast_json_association(marg_string *key, marg_vector *value) {
     marg_vector *res = marg_vector_new_empty();
-    marg_vector_add(res, OP_VARIABLE);
+    marg_vector_add(res, FM_VARIABLE);
     marg_vector_add(res, marg_string_new("Association"));
-    marg_vector_add(res, OP_STRING);
+    marg_vector_add(res, FM_STRING);
     marg_vector_add(res, key);
 
     size_t value_size = marg_vector_size(value);
     for(size_t i = 0; i < value_size; i++)
         marg_vector_add(res, marg_vector_get(value, i));
 
-    marg_vector_add(res, OP_KEYWORD);
+    marg_vector_add(res, FM_KEYWORD);
     marg_vector_add(res, marg_string_new("key:value:"));
     marg_vector_add(res, marg_string_new("2"));
     return res;
