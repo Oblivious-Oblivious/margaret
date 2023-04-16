@@ -381,7 +381,18 @@ marg_vector *ast_any_object(void) {
 }
 
 marg_vector *ast_method_parameter(marg_string *param_name) {
-    return marg_vector_new(OP_METHOD_PARAMETER, param_name);
+    if(marg_string_equals(param_name, marg_string_new("nil")))
+        return marg_vector_new(OP_NIL);
+    else if(marg_string_equals(param_name, marg_string_new("true")))
+        return marg_vector_new(OP_TRUE);
+    else if(marg_string_equals(param_name, marg_string_new("false")))
+        return marg_vector_new(OP_FALSE);
+    else if(marg_string_equals(param_name, marg_string_new("self")))
+        return marg_vector_new(OP_SELF);
+    else if(marg_string_equals(param_name, marg_string_new("super")))
+        return marg_vector_new(OP_SUPER);
+    else
+        return marg_vector_new(OP_METHOD_PARAMETER, param_name);
 }
 
 marg_vector *ast_literal(marg_vector *unit) {

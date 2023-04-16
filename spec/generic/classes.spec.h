@@ -9,32 +9,34 @@ module(classes_spec, {
             Point = Object subclass, \
             Point attr_reader: [\"x\", \"y\"], \
             \
-            Point message: #x: xparam y: yparam => ( \
+            Point bind: #x: xparam y: yparam => ( \
                 @x = xparam, \
                 @y = yparam, \
                 self \
             ), \
             \
-            Point message: #calc => @x + @y, \
+            Point bind: #calc => @x + @y, \
             \
-            Point message: #+ other => ( \
-                @x = @x + other x, \
-                @y = @y + other y, \
-                self \
-            ), \
-            \
+            Point multibind: [ \
+                # + nil => self, \
+                # + other => ( \
+                    @x = @x + other x, \
+                    @y = @y + other y, \
+                    self \
+                ) \
+            ], \
             Point3D = Point subclass, \
             Point attr_reader: [\"z\"], \
             \
-            Point3D message: #x: x y: y z: z => ( \
+            Point3D bind: #x: x y: y z: z => ( \
                 super x: @x y: @y, \
                 @z = z, \
                 self \
             ), \
             \
-            Point3D message: #calc => super calc + @z, \
+            Point3D bind: #calc => super calc + @z, \
             \
-            Point3D message: #+ other => ( \
+            Point3D bind: #+ other => ( \
                 super + other, \
                 @z = @z + other z, \
                 self \
@@ -75,7 +77,7 @@ module(classes_spec, {
                 OP_SELF, \
             OP_END_PROC, \
             OP_KEYWORD, marg_string_new("object:message:params:method:"), marg_string_new("4"), \
-            OP_KEYWORD, marg_string_new("message:"), marg_string_new("1"), \
+            OP_KEYWORD, marg_string_new("bind:"), marg_string_new("1"), \
             OP_VARIABLE, marg_string_new("Point"), \
             OP_VARIABLE, marg_string_new("Method"), \
             OP_UNARY, marg_string_new("unary"), \
@@ -89,8 +91,19 @@ module(classes_spec, {
                 OP_BINARY, marg_string_new("+"), \
             OP_END_PROC, \
             OP_KEYWORD, marg_string_new("object:message:method:"), marg_string_new("3"), \
-            OP_KEYWORD, marg_string_new("message:"), marg_string_new("1"), \
+            OP_KEYWORD, marg_string_new("bind:"), marg_string_new("1"), \
             OP_VARIABLE, marg_string_new("Point"), \
+            OP_VARIABLE, marg_string_new("Method"), \
+            OP_UNARY, marg_string_new("binary"), \
+            OP_ANY_OBJECT, \
+            OP_STRING, marg_string_new("+"), \
+            OP_NIL, \
+            OP_START_PROC, \
+                OP_SELF, \
+                OP_TENSOR, marg_string_new("1"), \
+                OP_SELF, \
+            OP_END_PROC, \
+            OP_KEYWORD, marg_string_new("object:message:param:method:"), marg_string_new("4"), \
             OP_VARIABLE, marg_string_new("Method"), \
             OP_UNARY, marg_string_new("binary"), \
             OP_ANY_OBJECT, \
@@ -113,7 +126,8 @@ module(classes_spec, {
                 OP_SELF, \
             OP_END_PROC, \
             OP_KEYWORD, marg_string_new("object:message:param:method:"), marg_string_new("4"), \
-            OP_KEYWORD, marg_string_new("message:"), marg_string_new("1"), \
+            OP_TENSOR, marg_string_new("2"),
+            OP_KEYWORD, marg_string_new("multibind:"), marg_string_new("1"), \
             OP_VARIABLE, marg_string_new("Point"), \
             OP_UNARY, marg_string_new("subclass"), \
             OP_STORE, marg_string_new("Point3D"), \
@@ -145,7 +159,7 @@ module(classes_spec, {
                 OP_SELF, \
             OP_END_PROC, \
             OP_KEYWORD, marg_string_new("object:message:params:method:"), marg_string_new("4"), \
-            OP_KEYWORD, marg_string_new("message:"), marg_string_new("1"), \
+            OP_KEYWORD, marg_string_new("bind:"), marg_string_new("1"), \
             OP_VARIABLE, marg_string_new("Point3D"), \
             OP_VARIABLE, marg_string_new("Method"), \
             OP_UNARY, marg_string_new("unary"), \
@@ -160,7 +174,7 @@ module(classes_spec, {
                 OP_BINARY, marg_string_new("+"), \
             OP_END_PROC, \
             OP_KEYWORD, marg_string_new("object:message:method:"), marg_string_new("3"), \
-            OP_KEYWORD, marg_string_new("message:"), marg_string_new("1"), \
+            OP_KEYWORD, marg_string_new("bind:"), marg_string_new("1"), \
             OP_VARIABLE, marg_string_new("Point3D"), \
             OP_VARIABLE, marg_string_new("Method"), \
             OP_UNARY, marg_string_new("binary"), \
@@ -182,7 +196,7 @@ module(classes_spec, {
                 OP_SELF, \
             OP_END_PROC, \
             OP_KEYWORD, marg_string_new("object:message:param:method:"), marg_string_new("4"), \
-            OP_KEYWORD, marg_string_new("message:"), marg_string_new("1"), \
+            OP_KEYWORD, marg_string_new("bind:"), marg_string_new("1"), \
             OP_VARIABLE, marg_string_new("Point3D"), \
             OP_INTEGER, marg_string_new("10"), \
             OP_INTEGER, marg_string_new("20"), \
