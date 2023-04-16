@@ -13,7 +13,7 @@ typedef struct Emitter {
 
 /**
  * @brief Initializes a new emitter
- * @param bytecode -> Receives FormalMessagesBytecode
+ * @param bytecode -> Receives formal bytecode
  * @return Emitter* -> The Emitter object
  */
 Emitter *emitter_new(marg_vector *bytecode);

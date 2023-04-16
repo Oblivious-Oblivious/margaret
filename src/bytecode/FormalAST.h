@@ -1,5 +1,5 @@
-#ifndef __FORMAL_MESSAGES_H_
-#define __FORMAL_MESSAGES_H_
+#ifndef __FORMAL_AST_H_
+#define __FORMAL_AST_H_
 
 #include "../base/marg_string.h"
 #include "../base/marg_vector.h"

@@ -1,4 +1,4 @@
-#include "FormalMessages.h"
+#include "FormalAST.h"
 
 #include <stdio.h> /* snprintf */
 #include "../base/alternate_to_dec.h"
