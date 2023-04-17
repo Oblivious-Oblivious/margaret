@@ -2,5 +2,4 @@
 * text=auto
 
 *.c linguist-language=C
-*.spec.h linguist-language=C
-
+*.h linguist-language=C
