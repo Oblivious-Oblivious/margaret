@@ -13,6 +13,7 @@
 #include "src/base/marg_vector.h"
 #include "src/emitter/Emitter.h"
 #include "src/evaluator/Evaluator.h"
+#include "src/inspector/Inspector.h"
 #include "src/lexer/Lexer.h"
 #include "src/optimizer/Optimizer.h"
 #include "src/parser/Parser.h"
@@ -81,6 +82,7 @@ static void margaret_run_file(char *filename) {
     Chunk *optimized_bytecode = OPTIMIZE(bytecode);
     marg_string *evaluation_result = EVAL(optimized_bytecode);
 
+    // inspect_chunk(bytecode);
     PRINT_FORMAL(formal_bytecode);
 
     (void)evaluation_result;
