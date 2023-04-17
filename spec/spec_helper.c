@@ -61,6 +61,7 @@
 #include "lexer/Lexer.spec.h"
 
 // opcode
+#include "opcode/MargValue.spec.h"
 
 // optimizer
 #include "optimizer/Optimizer.spec.h"
@@ -127,6 +128,7 @@ spec_suite({
 
     LexerSpec();
 
+    MargValueSpec();
 
     OptimizerSpec();
 
