@@ -4,6 +4,7 @@
     🟥 Use comments for docs or TODO graphs.
     🟥 Use crystal-lang C extensions to bind native values to margaret ones. C code should be exported as a static library and the exposed API should be declared in code.
     🟥 Add string interpolation and formatting with `#{..}` or similar.
+    🟥 Add cascaded messages.
     🟥 Optimize repeating bytecodes that offer no state change outside the loop
     🟥 Add syntax for using user defined inferred objects -> Inferred start_using: MyObject, one: 1 two: 2   -> (MyObject one: 1 two: 2) Inferred stop_using: MyObject
        Possibly MyObject can inherit from Margaret to not lose predefined marg messages
