@@ -25,7 +25,7 @@ static size_t instruction_offset_1(marg_vector *res, const char *name, Chunk *ch
 
     marg_string *disassembled_instruction = marg_string_new("");
     write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
-    marg_string_addf(disassembled_instruction, "%02x          ", opcode);
+    marg_string_addf(disassembled_instruction, "%02x                  ", opcode);
     marg_string_addf(disassembled_instruction, "%s", name);
     marg_vector_add(res, disassembled_instruction);
 
@@ -38,13 +38,34 @@ static size_t instruction_offset_2(marg_vector *res, const char *name, Chunk *ch
 
     marg_string *disassembled_instruction = marg_string_new("");
     write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
-    marg_string_addf(disassembled_instruction, "%02x %02x       ", opcode, constant);
+    marg_string_addf(disassembled_instruction, "%02x %02x               ", opcode, constant);
     marg_string_addf(disassembled_instruction, "%-16s %d (", name, constant);
     marg_string_add(disassembled_instruction, marg_value_format(chunk_get_constant(chunk, constant)));
     marg_string_add_str(disassembled_instruction, ")");
     marg_vector_add(res, disassembled_instruction);
 
     return offset + 2;
+}
+
+static size_t instruction_offset_5(marg_vector *res, const char *name, Chunk *chunk, size_t offset) {
+    uint8_t opcode = chunk_get(chunk, offset);
+    uint8_t bytes[4] = {
+        chunk_get(chunk, offset + 1),
+        chunk_get(chunk, offset + 2),
+        chunk_get(chunk, offset + 3),
+        chunk_get(chunk, offset + 4),
+    };
+    uint32_t constant = bytes_to_long_constant(bytes);
+
+    marg_string *disassembled_instruction = marg_string_new("");
+    write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
+    marg_string_addf(disassembled_instruction, "%02x %02x %02x %02x %02x      ", opcode, chunk_get(chunk, offset + 1), bytes[1], bytes[2], bytes[3]);
+    marg_string_addf(disassembled_instruction, "%-16s %d (", name, constant);
+    marg_string_add(disassembled_instruction, marg_value_format(chunk_get_constant(chunk, constant)));
+    marg_string_add_str(disassembled_instruction, ")");
+    marg_vector_add(res, disassembled_instruction);
+
+    return offset + 5;
 }
 
 size_t inspect_instruction(marg_vector *res, Chunk *chunk, size_t offset) {
@@ -54,6 +75,8 @@ size_t inspect_instruction(marg_vector *res, Chunk *chunk, size_t offset) {
             return instruction_offset_1(res, "RETURN", chunk, offset);
         case OP_CONSTANT:
             return instruction_offset_2(res, "CONSTANT", chunk, offset);
+        case OP_LONG_CONSTANT:
+            return instruction_offset_5(res, "LONG_CONSTANT", chunk, offset);
         case OP_NIL:
             return instruction_offset_1(res, "NIL", chunk, offset);
         case OP_TRUE:

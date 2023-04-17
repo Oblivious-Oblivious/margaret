@@ -74,6 +74,15 @@ marg_vector *__internal_marg_vector_new(size_t argc, ...) {
 }
 
 uint8_t chunk_add_constant(Chunk *chunk, MargValue value) {
+    if(chunk->constants == NULL) chunk->constants = value_vector_new_empty();
+
+    value_vector_add(chunk->constants, value);
+    return value_vector_size(chunk->constants) - 1;
+}
+
+uint32_t chunk_add_long_constant(Chunk *chunk, MargValue value) {
+    if(chunk->constants == NULL) chunk->constants = value_vector_new_empty();
+
     value_vector_add(chunk->constants, value);
     return value_vector_size(chunk->constants) - 1;
 }

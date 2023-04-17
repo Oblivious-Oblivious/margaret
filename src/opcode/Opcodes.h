@@ -54,6 +54,7 @@
 #define OP_FALSE                            0x03
 
 #define OP_CONSTANT                         0x04
+#define OP_LONG_CONSTANT                    0x05
 
 // #define OP_DECLARE_VARIABLE              marg_string_new("DECLARE_VARIABLE")
 // #define OP_GENERATE_IDENTIFIER_POSITION  marg_string_new("GENERATE_IDENTIFIER_POSITION")
