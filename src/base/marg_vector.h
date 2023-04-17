@@ -165,8 +165,8 @@
     size_t typename##_size(structname *self);
 
 MARG_VECTOR_DECLARE(marg_vector, marg_vector, void*)
-MARG_VECTOR_DECLARE(Chunk, chunk, uint8_t)
 MARG_VECTOR_DECLARE(ValueVector, value_vector, MargValue)
+MARG_VECTOR_DECLARE(Chunk, chunk, uint8_t)
 
 #define marg_vector_new(...) __internal_marg_vector_new(MARG_VECTOR_PP_NARG(__VA_ARGS__), __VA_ARGS__)
 
