@@ -24,11 +24,28 @@ static size_t simple_instruction(marg_vector *res, const char *name, Chunk *chun
     return offset + 1;
 }
 
+static int constant_instruction(marg_vector *res, const char *name, Chunk *chunk, int offset) {
+    uint8_t opcode = chunk_get(chunk, offset);
+    uint8_t constant = chunk_get(chunk, offset + 1);
+
+    marg_string *disassembled_instruction = marg_string_new("");
+    marg_string_addf(disassembled_instruction, "%04zx    ", offset);
+    marg_string_addf(disassembled_instruction, "%02x %02x       ", opcode, constant);
+    marg_string_addf(disassembled_instruction, "%-16s %d (", name, constant);
+    marg_string_add(disassembled_instruction, marg_value_format(chunk_get_constant(chunk, constant)));
+    marg_string_add_str(disassembled_instruction, ")");
+    marg_vector_add(res, disassembled_instruction);
+
+    return offset + 2;
+}
+
 size_t inspect_instruction(marg_vector *res, Chunk *chunk, size_t offset) {
     uint8_t instruction = chunk_get(chunk, offset);
     switch(instruction) {
         case OP_RETURN:
             return simple_instruction(res, "RETURN", chunk, offset);
+        case OP_CONSTANT:
+            return constant_instruction(res, "CONSTANT", chunk, offset);
         case OP_NIL:
             return simple_instruction(res, "NIL", chunk, offset);
         case OP_TRUE:
