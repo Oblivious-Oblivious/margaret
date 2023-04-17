@@ -1,7 +1,6 @@
 # Auto detect text files and perform LF normalization
 * text=auto
 
-*.h linguist-language=C
 *.c linguist-language=C
 *.spec.h linguist-language=C
 
