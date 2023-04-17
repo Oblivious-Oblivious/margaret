@@ -131,6 +131,7 @@
         size_t alloced; \
         size_t size; \
         \
+        size_t *lines; \
         struct ValueVector *constants; \
     } structname; \
     \
@@ -184,7 +185,7 @@ marg_vector *__internal_marg_vector_new(size_t argc, ...);
  * @param value -> MargValue
  * @return size_t -> The index the constant was appended to
  */
-size_t chunk_add_constant(Chunk *chunk, MargValue value);
+uint8_t chunk_add_constant(Chunk *chunk, MargValue value);
 // long chunk_add_long_constant(Chunk *chunk, MargValue value);
 
 /**
@@ -195,5 +196,14 @@ size_t chunk_add_constant(Chunk *chunk, MargValue value);
  * @return MargValue -> The value of the constant
  */
 MargValue chunk_get_constant(Chunk *chunk, size_t index);
+
+/**
+ * @brief Helper for adding an opcode and the
+    line in code it was translated from
+ * @param chunk -> Current chunk
+ * @param byte -> The opcode to add
+ * @param line -> Line number
+ */
+void chunk_add_with_line(Chunk *chunk, uint8_t byte, size_t line);
 
 #endif

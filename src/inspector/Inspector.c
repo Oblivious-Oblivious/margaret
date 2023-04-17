@@ -4,6 +4,14 @@
 
 #include "../opcode/Opcodes.h"
 
+static void write_offset_and_line_number_on(marg_string *disassembled_instruction, Chunk *chunk, size_t offset) {
+    marg_string_addf(disassembled_instruction, "%04zx    ", offset);
+    if(offset > 0 && chunk->lines[offset] == chunk->lines[offset - 1])
+        marg_string_add_str(disassembled_instruction, "     |      ");
+    else
+        marg_string_addf(disassembled_instruction, "%6zu      ", chunk->lines[offset]);
+}
+
 /**
  * @brief Disassembles a simple instruction (offset size: 1)
  * @param res -> Adds log information to the res vector
@@ -12,11 +20,11 @@
  * @param offset -> Current offset
  * @return size_t -> Newly calculated offset
  */
-static size_t simple_instruction(marg_vector *res, const char *name, Chunk *chunk, int offset) {
+static size_t simple_instruction(marg_vector *res, const char *name, Chunk *chunk, size_t offset) {
     uint8_t opcode = chunk_get(chunk, offset);
 
     marg_string *disassembled_instruction = marg_string_new("");
-    marg_string_addf(disassembled_instruction, "%04zx    ", offset);
+    write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
     marg_string_addf(disassembled_instruction, "%02x          ", opcode);
     marg_string_addf(disassembled_instruction, "%s", name);
     marg_vector_add(res, disassembled_instruction);
@@ -24,12 +32,13 @@ static size_t simple_instruction(marg_vector *res, const char *name, Chunk *chun
     return offset + 1;
 }
 
-static int constant_instruction(marg_vector *res, const char *name, Chunk *chunk, int offset) {
+/** offset size: 2 */
+static size_t constant_instruction(marg_vector *res, const char *name, Chunk *chunk, size_t offset) {
     uint8_t opcode = chunk_get(chunk, offset);
     uint8_t constant = chunk_get(chunk, offset + 1);
 
     marg_string *disassembled_instruction = marg_string_new("");
-    marg_string_addf(disassembled_instruction, "%04zx    ", offset);
+    write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
     marg_string_addf(disassembled_instruction, "%02x %02x       ", opcode, constant);
     marg_string_addf(disassembled_instruction, "%-16s %d (", name, constant);
     marg_string_add(disassembled_instruction, marg_value_format(chunk_get_constant(chunk, constant)));
