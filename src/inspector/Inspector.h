@@ -3,8 +3,6 @@
 
 #include "../base/marg_vector.h"
 
-#include "../opcode/Chunk.h"
-
 /**
  * @brief Inspects an instruction inside of a chunk
  * @param res -> Adds log information to the res vector

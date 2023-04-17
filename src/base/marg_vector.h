@@ -3,6 +3,9 @@
 
 #include <stdlib.h>
 #include <stdarg.h> /* va_start, va_end, va_list, va_arg */
+#include <stdint.h> /* uint8_t */
+
+#include "../opcode/MargValue.h"
 
 #define MARG_VECTOR_PP_256TH_ARG( \
     _1, _2, _3, _4, _5, _6, _7, _8, _9,_10, \
@@ -116,59 +119,60 @@
 #define MARG_VECTOR_PP_NARG(...) \
     MARG_VECTOR_PP_NARG_(__VA_ARGS__,MARG_VECTOR_PP_RSEQ_N())
 
-/**
- * @struct: marg_vector
- * @brief: Defines a vector data structure
- * @param items -> A void pointer array that contains the heterogenous elements of the vector
- * @param alloced -> The total capacity of the vector
- * @param size -> The total number of values
- */
-typedef struct marg_vector {
-    void **items;
-    size_t alloced;
-    size_t size;
-} marg_vector;
+#define MARG_VECTOR_DECLARE(structname, typename, type) \
+    /**
+     * @brief: Defines a vector data structure
+     * @param items -> A void pointer array that contains the heterogenous elements of the vector
+     * @param alloced -> The total capacity of the vector
+     * @param size -> The total number of values
+     */ \
+    typedef struct structname { \
+        type *items; \
+        size_t alloced; \
+        size_t size; \
+    } structname; \
+    \
+    /**
+     * @brief Creates a new empty vector
+     * @return typename*
+     */ \
+    structname *typename##_new_empty(void); \
+    \
+    /**
+     * @brief: Adds a new element in the vector
+     * @param v -> The vector to use
+     * @param item -> The item to add
+     * @return The modified vector
+     */ \
+    structname *typename##_add(structname *self, type item); \
+    \
+    /**
+     * @brief: Get the value of a specific vector index
+     * @param self -> The vector to use
+     * @param index -> The index to get the value of
+     * @return The value
+     */ \
+    type typename##_get(structname *self, size_t index); \
+    \
+    /**
+     * @brief: Get the total number of values inserted in the vector
+     * @param self -> The vector to use
+     * @return: The number of items in the vector
+     */ \
+    size_t typename##_size(structname *self);
+
+MARG_VECTOR_DECLARE(marg_vector, marg_vector, void*)
+MARG_VECTOR_DECLARE(Chunk, chunk, uint8_t)
+// MARG_VECTOR_DECLARE(ValueVector, value_vector, MargValue)
+
+#define marg_vector_new(...) __internal_marg_vector_new(MARG_VECTOR_PP_NARG(__VA_ARGS__), __VA_ARGS__)
 
 /**
- * @func: marg_vector_new
  * @brief: Initializes a vector data structure
  * @param argc -> The number of arguments provided by the automation macro
  * @param ... -> Initialization arguments
  * @return: The newly created vector
  */
 marg_vector *__internal_marg_vector_new(size_t argc, ...);
-#define marg_vector_new(...) __internal_marg_vector_new(MARG_VECTOR_PP_NARG(__VA_ARGS__), __VA_ARGS__)
-
-/**
- * @brief Creates a new empty vector
- * @return marg_vector*
- */
-marg_vector *marg_vector_new_empty(void);
-
-/**
- * @func: marg_vector_add
- * @brief: Adds a new element in the vector
- * @param v -> The vector to use
- * @param item -> The item to add
- * @return The modified vector
- */
-marg_vector *marg_vector_add(marg_vector *self, void *item);
-
-/**
- * @func: marg_vector_get
- * @brief: Get the value of a specific vector index
- * @param self -> The vector to use
- * @param index -> The index to get the value of
- * @return The value
- */
-void *marg_vector_get(marg_vector *self, size_t index);
-
-/**
- * @func: marg_vector_size
- * @brief: Get the total number of values inserted in the vector
- * @param self -> The vector to use
- * @return: The number of items in the vector
- */
-size_t marg_vector_size(marg_vector *self);
 
 #endif

@@ -2,7 +2,7 @@
 #define __OPTIMIZER_H_
 
 #include "../base/marg_stack.h"
-#include "../opcode/Chunk.h"
+#include "../base/marg_vector.h"
 
 typedef struct Optimizer {
     marg_stack stack;

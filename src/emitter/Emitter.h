@@ -4,8 +4,6 @@
 #include "../base/marg_stack.h"
 #include "../base/marg_vector.h"
 
-#include "../opcode/Chunk.h"
-
 typedef struct Emitter {
     marg_stack stack;
     marg_vector *bytecode;

@@ -9,7 +9,7 @@
 module(InspectorSpec, {
     // TODO Test for a `postcard` type mini program that includes every single feature
     it("prints a list of emmitted opcodes", {
-        Chunk *bytecode = chunk_new();
+        Chunk *bytecode = chunk_new_empty();
         chunk_add(bytecode, OP_NIL);
         chunk_add(bytecode, OP_NIL);
         chunk_add(bytecode, OP_TRUE);

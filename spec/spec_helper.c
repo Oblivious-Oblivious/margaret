@@ -61,7 +61,6 @@
 #include "lexer/Lexer.spec.h"
 
 // opcode
-#include "opcode/Chunk.spec.h"
 
 // optimizer
 #include "optimizer/Optimizer.spec.h"
@@ -128,7 +127,6 @@ spec_suite({
 
     LexerSpec();
 
-    ChunkSpec();
 
     OptimizerSpec();
 

@@ -14,7 +14,6 @@
 #include "src/emitter/Emitter.h"
 #include "src/evaluator/Evaluator.h"
 #include "src/lexer/Lexer.h"
-#include "src/opcode/Chunk.h"
 #include "src/optimizer/Optimizer.h"
 #include "src/parser/Parser.h"
 

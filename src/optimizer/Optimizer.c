@@ -22,5 +22,5 @@ Chunk *optimizer_optimize(Optimizer *self) {
         opcode_case(0x0) {}
     }
 
-    return chunk_new();
+    return chunk_new_empty();
 }

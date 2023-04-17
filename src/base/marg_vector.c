@@ -4,26 +4,60 @@
 
 #define MARG_VECTOR_GROW_FACTOR 1.618
 
-/**
- * @func: marg_vector_ensure_space
- * @desc: Ensure there is enough space for our values in the vector
- * @param self -> The vector to use
- * @param capacity -> The new capacity to set
- **/
-static void marg_vector_ensure_space(marg_vector *self, size_t capacity) {
-    void **items = NULL;
-
-    if(self == NULL || capacity == 0) return;
-
-    /* Attempt to reallocate new memory in the items list */
-    items = collected_realloc(self->items, sizeof(void*) * capacity);
-
-    if(items) {
-        /* Reset the items in the new memory space */
-        self->items = items;
-        self->alloced = capacity;
+#define MARG_VECTOR_DEFINE(structname, typename, type) \
+    /**
+     * @desc: Ensure there is enough space for our values in the vector
+     * @param self -> The vector to use
+     * @param capacity -> The new capacity to set
+     **/ \
+    static void typename##_ensure_space(structname *self, size_t capacity) { \
+        type *items = NULL; \
+        \
+        if(self == NULL || capacity == 0) return; \
+        \
+        /* Attempt to reallocate new memory in the items list */ \
+        items = collected_realloc(self->items, sizeof(type) * capacity); \
+        \
+        if(items) { \
+            /* Reset the items in the new memory space */ \
+            self->items = items; \
+            self->alloced = capacity; \
+        } \
+    } \
+    \
+    structname *typename##_new_empty(void) { \
+        structname *self = (structname*)collected_malloc(sizeof(structname)); \
+        self->alloced = 512; \
+        self->size = 0; \
+        self->items = (type*)collected_malloc(sizeof(type) * self->alloced); \
+        return self; \
+    } \
+    \
+    structname *typename##_add(structname *self, type item) { \
+        if(self == NULL) return self; \
+        if(self->alloced == self->size) \
+            typename##_ensure_space(self, self->alloced * MARG_VECTOR_GROW_FACTOR); \
+        self->items[self->size++] = item; \
+        \
+        return self; \
+    } \
+    \
+    type typename##_get(structname *self, size_t index) { \
+        if(self == NULL) return 0; \
+        if(index < self->size) \
+            return self->items[index]; \
+        \
+        return 0; \
+    } \
+    \
+    size_t typename##_size(structname *self) { \
+        if(self == NULL) return 0; \
+        return self->size; \
     }
-}
+
+MARG_VECTOR_DEFINE(marg_vector, marg_vector, void*)
+MARG_VECTOR_DEFINE(Chunk, chunk, uint8_t)
+// MARG_VECTOR_DEFINE(ValueVector, value_vector, MargValue)
 
 marg_vector *__internal_marg_vector_new(size_t argc, ...) {
     marg_vector *self = (marg_vector*)collected_malloc(sizeof(marg_vector));
@@ -38,34 +72,4 @@ marg_vector *__internal_marg_vector_new(size_t argc, ...) {
     va_end(vars);
 
     return self;
-}
-
-marg_vector *marg_vector_new_empty(void) {
-    marg_vector *self = (marg_vector*)collected_malloc(sizeof(marg_vector));
-    self->alloced = 512;
-    self->size = 0;
-    self->items = (void**)collected_malloc(sizeof(void*) * self->alloced);
-    return self;
-}
-
-marg_vector *marg_vector_add(marg_vector *self, void *item) {
-    if(self == NULL) return self;
-    if(self->alloced == self->size)
-        marg_vector_ensure_space(self, self->alloced * MARG_VECTOR_GROW_FACTOR);
-    self->items[self->size++] = item;
-
-    return self;
-}
-
-void *marg_vector_get(marg_vector *self, size_t index) {
-    if(self == NULL) return NULL;
-    if(index < self->size)
-        return self->items[index];
-
-    return NULL;
-}
-
-size_t marg_vector_size(marg_vector *self) {
-    if(self == NULL) return 0;
-    return self->size;
 }

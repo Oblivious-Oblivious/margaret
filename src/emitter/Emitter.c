@@ -2,6 +2,8 @@
 
 #include "../opcode/Opcodes.h"
 
+#include "../base/memory.h"
+
 #define opcode_case(opstr) if(marg_string_equals(opcode, (opstr)))
 
 Emitter *emitter_new(marg_vector *bytecode) {
@@ -14,7 +16,7 @@ Emitter *emitter_new(marg_vector *bytecode) {
 }
 
 Chunk *emitter_emit(Emitter *self) {
-    Chunk *bytecode = chunk_new();
+    Chunk *bytecode = chunk_new_empty();
 
     size_t bytecode_size = marg_vector_size(self->bytecode);
     for(size_t ip = 0; ip < bytecode_size; ip++) {
