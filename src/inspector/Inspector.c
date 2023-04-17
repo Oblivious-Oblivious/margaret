@@ -27,13 +27,13 @@ static size_t simple_instruction(marg_vector *res, const char *name, Chunk *chun
 size_t inspect_instruction(marg_vector *res, Chunk *chunk, size_t offset) {
     uint8_t instruction = chunk_get(chunk, offset);
     switch(instruction) {
-        case(OP_RETURN):
+        case OP_RETURN:
             return simple_instruction(res, "RETURN", chunk, offset);
-        case(OP_NIL):
+        case OP_NIL:
             return simple_instruction(res, "NIL", chunk, offset);
-        case(OP_TRUE):
+        case OP_TRUE:
             return simple_instruction(res, "TRUE", chunk, offset);
-        case(OP_FALSE):
+        case OP_FALSE:
             return simple_instruction(res, "FALSE", chunk, offset);
         default: {
             marg_string *unknown_opcode = marg_string_new("");
