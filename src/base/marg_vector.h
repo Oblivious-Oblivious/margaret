@@ -130,6 +130,8 @@
         type *items; \
         size_t alloced; \
         size_t size; \
+        \
+        struct ValueVector *constants; \
     } structname; \
     \
     /**
@@ -163,7 +165,7 @@
 
 MARG_VECTOR_DECLARE(marg_vector, marg_vector, void*)
 MARG_VECTOR_DECLARE(Chunk, chunk, uint8_t)
-// MARG_VECTOR_DECLARE(ValueVector, value_vector, MargValue)
+MARG_VECTOR_DECLARE(ValueVector, value_vector, MargValue)
 
 #define marg_vector_new(...) __internal_marg_vector_new(MARG_VECTOR_PP_NARG(__VA_ARGS__), __VA_ARGS__)
 
@@ -174,5 +176,24 @@ MARG_VECTOR_DECLARE(Chunk, chunk, uint8_t)
  * @return: The newly created vector
  */
 marg_vector *__internal_marg_vector_new(size_t argc, ...);
+
+/**
+ * @brief Helper for adding a constant
+    inside the value vector of a chunk
+ * @param chunk -> Current chunk
+ * @param value -> MargValue
+ * @return size_t -> The index the constant was appended to
+ */
+size_t chunk_add_constant(Chunk *chunk, MargValue value);
+// long chunk_add_long_constant(Chunk *chunk, MargValue value);
+
+/**
+ * @brief Helper for retrieving a constant from the
+    value vector of a chunk using index
+ * @param chunk -> Current chunk
+ * @param index -> Index of the constant
+ * @return MargValue -> The value of the constant
+ */
+MargValue chunk_get_constant(Chunk *chunk, size_t index);
 
 #endif

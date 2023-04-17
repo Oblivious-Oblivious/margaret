@@ -30,6 +30,11 @@
         self->alloced = 512; \
         self->size = 0; \
         self->items = (type*)collected_malloc(sizeof(type) * self->alloced); \
+    \
+        self->constants = (ValueVector*)collected_malloc(sizeof(ValueVector) * self->alloced); \
+        self->constants->alloced = self->alloced; \
+        self->constants->size = self->size; \
+        self->constants->items = (MargValue*)collected_malloc(sizeof(MargValue) * self->constants->alloced); \
         return self; \
     } \
     \
@@ -57,13 +62,18 @@
 
 MARG_VECTOR_DEFINE(marg_vector, marg_vector, void*)
 MARG_VECTOR_DEFINE(Chunk, chunk, uint8_t)
-// MARG_VECTOR_DEFINE(ValueVector, value_vector, MargValue)
+MARG_VECTOR_DEFINE(ValueVector, value_vector, MargValue)
 
 marg_vector *__internal_marg_vector_new(size_t argc, ...) {
     marg_vector *self = (marg_vector*)collected_malloc(sizeof(marg_vector));
     self->alloced = 512;
     self->size = 0;
     self->items = (void**)collected_malloc(sizeof(void*) * self->alloced);
+    \
+    self->constants = (ValueVector*)collected_malloc(sizeof(ValueVector) * self->alloced); \
+    self->constants->alloced = self->alloced; \
+    self->constants->size = self->size; \
+    self->constants->items = (MargValue*)collected_malloc(sizeof(MargValue) * self->constants->alloced); \
 
     va_list vars;
     va_start(vars, argc);
@@ -72,4 +82,13 @@ marg_vector *__internal_marg_vector_new(size_t argc, ...) {
     va_end(vars);
 
     return self;
+}
+
+size_t chunk_add_constant(Chunk *chunk, MargValue value) {
+    value_vector_add(chunk->constants, value);
+    return value_vector_size(chunk->constants) - 1;
+}
+
+MargValue chunk_get_constant(Chunk *chunk, size_t index) {
+    return chunk->constants->items[index];
 }
