@@ -13,14 +13,14 @@ static void write_offset_and_line_number_on(marg_string *disassembled_instructio
 }
 
 /**
- * @brief Disassembles a simple instruction (offset size: 1)
+ * @brief Disassembles a simple instruction
  * @param res -> Adds log information to the res vector
  * @param name -> Name of opcode
  * @param chunk -> Current chunk
  * @param offset -> Current offset
  * @return size_t -> Newly calculated offset
  */
-static size_t simple_instruction(marg_vector *res, const char *name, Chunk *chunk, size_t offset) {
+static size_t instruction_offset_1(marg_vector *res, const char *name, Chunk *chunk, size_t offset) {
     uint8_t opcode = chunk_get(chunk, offset);
 
     marg_string *disassembled_instruction = marg_string_new("");
@@ -32,8 +32,7 @@ static size_t simple_instruction(marg_vector *res, const char *name, Chunk *chun
     return offset + 1;
 }
 
-/** offset size: 2 */
-static size_t constant_instruction(marg_vector *res, const char *name, Chunk *chunk, size_t offset) {
+static size_t instruction_offset_2(marg_vector *res, const char *name, Chunk *chunk, size_t offset) {
     uint8_t opcode = chunk_get(chunk, offset);
     uint8_t constant = chunk_get(chunk, offset + 1);
 
@@ -52,15 +51,15 @@ size_t inspect_instruction(marg_vector *res, Chunk *chunk, size_t offset) {
     uint8_t instruction = chunk_get(chunk, offset);
     switch(instruction) {
         case OP_RETURN:
-            return simple_instruction(res, "RETURN", chunk, offset);
+            return instruction_offset_1(res, "RETURN", chunk, offset);
         case OP_CONSTANT:
-            return constant_instruction(res, "CONSTANT", chunk, offset);
+            return instruction_offset_2(res, "CONSTANT", chunk, offset);
         case OP_NIL:
-            return simple_instruction(res, "NIL", chunk, offset);
+            return instruction_offset_1(res, "NIL", chunk, offset);
         case OP_TRUE:
-            return simple_instruction(res, "TRUE", chunk, offset);
+            return instruction_offset_1(res, "TRUE", chunk, offset);
         case OP_FALSE:
-            return simple_instruction(res, "FALSE", chunk, offset);
+            return instruction_offset_1(res, "FALSE", chunk, offset);
         default: {
             marg_string *unknown_opcode = marg_string_new("");
             marg_string_addf(unknown_opcode, "Unknown opcode %d", instruction);
