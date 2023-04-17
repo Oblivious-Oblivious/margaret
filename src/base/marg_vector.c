@@ -11,18 +11,12 @@
      * @param capacity -> The new capacity to set
      **/ \
     static void typename##_ensure_space(structname *self, size_t capacity) { \
-        type *items = NULL; \
-        \
         if(self == NULL || capacity == 0) return; \
         \
         /* Attempt to reallocate new memory in the items list */ \
-        items = collected_realloc(self->items, sizeof(type) * capacity); \
-        \
-        if(items) { \
-            /* Reset the items in the new memory space */ \
-            self->items = items; \
-            self->alloced = capacity; \
-        } \
+        self->alloced = capacity; \
+        self->items = (type*)collected_realloc(self->items, sizeof(type) * self->alloced); \
+        self->lines = (size_t*)collected_realloc(self->lines, sizeof(size_t) * self->alloced); \
     } \
     \
     structname *typename##_new_empty(void) { \
@@ -31,11 +25,8 @@
         self->size = 0; \
         self->items = (type*)collected_malloc(sizeof(type) * self->alloced); \
         self->lines = (size_t*)collected_malloc(sizeof(size_t) * self->alloced); \
+        self->constants = NULL; \
         \
-        self->constants = (ValueVector*)collected_malloc(sizeof(ValueVector) * self->alloced); \
-        self->constants->alloced = self->alloced; \
-        self->constants->size = self->size; \
-        self->constants->items = (MargValue*)collected_malloc(sizeof(MargValue) * self->constants->alloced); \
         return self; \
     } \
     \
@@ -62,8 +53,8 @@
     }
 
 MARG_VECTOR_DEFINE(marg_vector, marg_vector, void*)
-MARG_VECTOR_DEFINE(Chunk, chunk, uint8_t)
 MARG_VECTOR_DEFINE(ValueVector, value_vector, MargValue)
+MARG_VECTOR_DEFINE(Chunk, chunk, uint8_t)
 
 marg_vector *__internal_marg_vector_new(size_t argc, ...) {
     marg_vector *self = (marg_vector*)collected_malloc(sizeof(marg_vector));
@@ -71,11 +62,7 @@ marg_vector *__internal_marg_vector_new(size_t argc, ...) {
     self->size = 0;
     self->items = (void**)collected_malloc(sizeof(void*) * self->alloced);
     self->lines = (size_t*)collected_malloc(sizeof(size_t) * self->alloced);
-
-    self->constants = (ValueVector*)collected_malloc(sizeof(ValueVector) * self->alloced);
-    self->constants->alloced = self->alloced;
-    self->constants->size = self->size;
-    self->constants->items = (MargValue*)collected_malloc(sizeof(MargValue) * self->constants->alloced);
+    self->constants = NULL;
 
     va_list vars;
     va_start(vars, argc);
