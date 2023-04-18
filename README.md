@@ -9,7 +9,7 @@ It offers powerful literals, easy to use objects and smalltalk-like message stru
 * There are no reserved words and no explicit syntax apart from message sends.
 * Uses prototype based objects in the likes of Self or Javascript.
 * Uses C-style literals like char, int, float, string.
-* Implements tensors and hashes as the only built in, array-like data structures.
+* Implements tensors, hashes, tuples as modern built-in data structures.
 * Runs on a portable, lightweight and embeddable stack based VM.
 
 ## Installation
@@ -19,15 +19,16 @@ TODO Write installation instructions
 ## "Postcard"
 
 ```margaret
-#example_with_number: x => (
-    true & false not & (nil is_nil?) if_false: { self halt },
-    y = self size + super size,
-    ['a', "a", 1, 1.0, {"k1": 42, k2: 43}] each: { elem | (
-        elem class name puts,
-        " " puts
+(Margaret bind: #ultimate_answer: x => (
+    true && false not && (nil is_nil?) if_false: { exit: 0 },
+    y = self methods size + super class to_s length * 42,
+    ['a', "a", 42, 42.2, 0b0110, 0xbeef, 0o741,
+     {"k1": 42, k2: 43}, [< 1, 2], {< 1:1, 0:1}] each: { elem | (
+        elem class puts,
     )},
-    x < y
-)
+    if: { x < y } then: { x } else: { y },
+),
+(ultimate_answer: 42) puts)
 ```
 
 ## Development
