@@ -42,20 +42,20 @@ static marg_vector *FORMALIZE(TokenTable *tokens) {
     return parser_analyze_syntax(parser_new(tokens));
 }
 
-static Chunk *EMIT(marg_vector *formal_bytecode) {
-    return emitter_emit(emitter_new(formal_bytecode));
+static VM *EMIT(marg_vector *formal_bytecode) {
+    return emitter_emit(formal_bytecode);
 }
 
-static Chunk *OPTIMIZE(Chunk *evaluated_bytecode) {
-    return optimizer_optimize(optimizer_new(evaluated_bytecode));
+static VM *OPTIMIZE(VM *vm) {
+    return optimizer_optimize(vm);
 }
 
-static marg_string *EVAL(Chunk *bytecode) {
-    return evaluator_evaluate(evaluator_new(bytecode));
+static MargValue EVAL(VM *vm) {
+    return evaluator_evaluate(vm);
 }
 
-static void PRINT(marg_string *evaluated) {
-    printf("%s\n", marg_string_get(evaluated));
+static void PRINT(MargValue evaluated) {
+    printf("%g\n", evaluated);
 }
 
 static void PRINT_FORMAL(marg_vector *formal_bytecode) {
@@ -78,15 +78,14 @@ static void margaret_run_file(char *filename) {
     marg_string *chars = LOAD(filename);
     TokenTable *tokens = READ(chars);
     marg_vector *formal_bytecode = FORMALIZE(tokens);
-    Chunk *bytecode = EMIT(formal_bytecode);
-    Chunk *optimized_bytecode = OPTIMIZE(bytecode);
-    marg_string *evaluation_result = EVAL(optimized_bytecode);
+    VM *vm = EMIT(formal_bytecode);
 
-    // inspect_chunk(bytecode);
-    PRINT_FORMAL(formal_bytecode);
+    vm = OPTIMIZE(vm);
 
-    (void)evaluation_result;
-    // PRINT(evaluation_result);
+    MargValue evaluation_result = EVAL(vm);
+    PRINT(evaluation_result);
+
+    inspect_and_print_vm_bytecode(vm);
 }
 
 static void banner(void) {
