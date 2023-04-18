@@ -2,7 +2,7 @@ NAME = margaret
 TEST = spec_helper
 
 CC = clang
-OPT = -O2
+OPT = -O3
 VERSION = -std=c99
 
 FLAGS = -Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic
