@@ -1,26 +1,21 @@
 #include "Optimizer.h"
 
-#include "../base/memory.h"
+#include "../opcode/Opcodes.h"
 
-#define opcode_case(opstr) if(opcode == opstr)
+VM *optimizer_optimize(VM *self) {
+    self->ip = self->bytecode->items;
 
-Optimizer *optimizer_new(Chunk *bytecode) {
-    Optimizer *self = (Optimizer*)collected_malloc(sizeof(Optimizer));
-
-    self->stack.top = -1;
-    self->bytecode = bytecode;
-
-    return self;
-}
-
-Chunk *optimizer_optimize(Optimizer *self) {
-    size_t bytecode_size = chunk_size(self->bytecode);
-    for(size_t ip = 0; ip < bytecode_size; ip++) {
-        uint8_t opcode = chunk_get(self->bytecode, ip);
-
-        // TODO Use actual opcodes
-        opcode_case(0x0) {}
+    // TODO Branch table, computed goto
+    while(1) {
+        uint8_t instruction;
+        switch(instruction = READ_BYTE()) {
+            case OP_CONSTANT: {}
+            case OP_LONG_CONSTANT: {}
+            case OP_RETURN: {
+                return self;
+            }
+        }
     }
 
-    return chunk_new_empty();
+    return self;
 }

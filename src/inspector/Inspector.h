@@ -1,21 +1,20 @@
 #ifndef __INSPECTOR_H_
 #define __INSPECTOR_H_
 
-#include "../base/marg_vector.h"
-
-/**
- * @brief Inspects an instruction inside of a chunk
- * @param res -> Adds log information to the res vector
- * @param chunk -> The chunk from which bytecodes are to be inspected
- * @param offset -> The current offset of the bytecode in the array
- * @return size_t -> The newly calculated offset
- */
-size_t inspect_instruction(marg_vector *res, Chunk *chunk, size_t offset);
+#include "../vm/vm.h"
 
 /**
  * @brief Disassembles a bytecode chunk and inspects the content
- * @param chunk -> The chunk to be disassembled
+ * @param vm -> The vm to be disassembled
+ * @return marg_vector* -> The list of disassembled
+    instructions as marg_strings (for testing)
  */
-marg_vector *inspect_chunk(Chunk *chunk);
+marg_vector *inspect_vm_bytecode(VM *vm);
+
+/**
+ * @brief Prints without returning inspection results
+ * @param vm -> The vm to be disassembled
+ */
+void inspect_and_print_vm_bytecode(VM *vm);
 
 #endif

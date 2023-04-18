@@ -2,34 +2,38 @@
 
 #include "../opcode/Opcodes.h"
 
-#include "../base/memory.h"
+#define opcode_case(opstr) else if(marg_string_equals(opcode, (opstr)))
 
-#define opcode_case(opstr) if(marg_string_equals(opcode, (opstr)))
+VM *emitter_emit(marg_vector *formal_bytecode) {
+    VM *vm = vm_new();
 
-Emitter *emitter_new(marg_vector *bytecode) {
-    Emitter *self = (Emitter*)collected_malloc(sizeof(Emitter));
-
-    self->stack.top = -1;
-    self->bytecode = bytecode;
-
-    return self;
-}
-
-Chunk *emitter_emit(Emitter *self) {
-    Chunk *bytecode = chunk_new_empty();
-
-    size_t bytecode_size = marg_vector_size(self->bytecode);
+    size_t bytecode_size = marg_vector_size(formal_bytecode);
     for(size_t ip = 0; ip < bytecode_size; ip++) {
-        marg_string *opcode = marg_vector_get(self->bytecode, ip);
+        marg_string *opcode = marg_vector_get(formal_bytecode, ip);
 
-        opcode_case(FM_NIL) {}
+        if(marg_string_equals(opcode, FM_NIL)) {}
         opcode_case(FM_TRUE) {}
         opcode_case(FM_FALSE) {}
 
         opcode_case(FM_SELF) {}
         opcode_case(FM_SUPER) {}
 
-        opcode_case(FM_0) {}
+        opcode_case(FM_0) {
+            if(value_vector_size(vm->bytecode->constants) < 256) {
+                chunk_add_with_line(vm->bytecode, OP_CONSTANT, 123);
+                uint8_t constant = chunk_add_constant(vm->bytecode, 0);
+                chunk_add_with_line(vm->bytecode, constant, 123);
+            }
+            else {
+                chunk_add_with_line(vm->bytecode, OP_LONG_CONSTANT, 123);
+                uint32_t long_constant = chunk_add_long_constant(vm->bytecode, 0);
+                uint8_t *constant_in_bytes = long_constant_to_bytes(long_constant);
+                chunk_add_with_line(vm->bytecode, constant_in_bytes[0], 123);
+                chunk_add_with_line(vm->bytecode, constant_in_bytes[1], 123);
+                chunk_add_with_line(vm->bytecode, constant_in_bytes[2], 123);
+                chunk_add_with_line(vm->bytecode, constant_in_bytes[3], 123);
+            }
+        }
         opcode_case(FM_1) {}
         opcode_case(FM_MINUS_1) {}
         opcode_case(FM_2) {}
@@ -66,5 +70,6 @@ Chunk *emitter_emit(Emitter *self) {
         opcode_case(FM_KEYWORD) {}
     }
 
-    return bytecode;
+    chunk_add_with_line(vm->bytecode, OP_RETURN, 123);
+    return vm;
 }

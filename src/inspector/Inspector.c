@@ -1,5 +1,7 @@
 #include "Inspector.h"
 
+#include <stdio.h>
+
 #include "../base/marg_string.h"
 
 #include "../opcode/Opcodes.h"
@@ -68,7 +70,14 @@ static size_t instruction_offset_5(marg_vector *res, const char *name, Chunk *ch
     return offset + 5;
 }
 
-size_t inspect_instruction(marg_vector *res, Chunk *chunk, size_t offset) {
+/**
+ * @brief Inspects an instruction inside of a chunk
+ * @param res -> Adds log information to the res vector
+ * @param chunk -> The chunk from which bytecodes are to be inspected
+ * @param offset -> The current offset of the bytecode in the array
+ * @return size_t -> The newly calculated offset
+ */
+static size_t inspect_instruction(marg_vector *res, Chunk *chunk, size_t offset) {
     uint8_t instruction = chunk_get(chunk, offset);
     switch(instruction) {
         case OP_RETURN:
@@ -92,12 +101,20 @@ size_t inspect_instruction(marg_vector *res, Chunk *chunk, size_t offset) {
     }
 }
 
-marg_vector *inspect_chunk(Chunk *chunk) {
+marg_vector *inspect_vm_bytecode(VM *vm) {
     marg_vector *res = marg_vector_new_empty();
 
-    size_t number_of_bytecodes = chunk_size(chunk);
+    size_t number_of_bytecodes = chunk_size(vm->bytecode);
     for(size_t offset = 0; offset < number_of_bytecodes;)
-        offset = inspect_instruction(res, chunk, offset);
+        offset = inspect_instruction(res, vm->bytecode, offset);
 
     return res;
+}
+
+void inspect_and_print_vm_bytecode(VM *vm) {
+    marg_vector *disassembled = inspect_vm_bytecode(vm);
+
+    size_t disassembled_size = marg_vector_size(disassembled);
+    for(size_t i = 0; i < disassembled_size; i++)
+        printf("%s\n", marg_string_get(marg_vector_get(disassembled, i)));
 }

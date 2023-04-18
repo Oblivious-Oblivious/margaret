@@ -1,27 +1,13 @@
 #ifndef __OPTIMIZER_H_
 #define __OPTIMIZER_H_
 
-#include "../base/marg_stack.h"
-#include "../base/marg_vector.h"
-
-typedef struct Optimizer {
-    marg_stack stack;
-    Chunk *bytecode;
-} Optimizer;
+#include "../vm/vm.h"
 
 /**
- * @brief Initializes a new optimizer
- * @param bytecode -> Receives emitted bytecode chunks
- * @return Optimizer* -> The Optimizer object
+ * @brief Optimizes bytecodes by directly changing vm data
+ * @param self -> VM
+ * @return VM* -> VM
  */
-Optimizer *optimizer_new(Chunk *bytecode);
-
-/**
- * @brief Runs the iterator that transforms
-    into scoped emitted bytecode
- * @param self -> The Emitter object
- * @return Chunk* -> The new intermediate bytecode
- */
-Chunk *optimizer_optimize(Optimizer *self);
+VM *optimizer_optimize(VM *self);
 
 #endif

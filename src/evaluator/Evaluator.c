@@ -1,40 +1,36 @@
 #include "Evaluator.h"
 
-#include "../base/memory.h"
+#include <stdio.h>
 
-#define opcode_case(opstr) if(opcode == opstr)
+#include "../opcode/Opcodes.h"
 
 /**
  * @brief Runs the iterator that evaluates
     the result of the generated opcodes
- * @param self -> The Evaluator object
+ * @param self -> result enum
  */
-static void evaluator_run(Evaluator *self) {
-    size_t bytecodes_size = chunk_size(self->bytecode);
-    for(size_t ip = 0; ip < bytecodes_size; ip++) {
-        uint8_t opcode = chunk_get(self->bytecode, ip);
-
-        // TODO Use actual opcodes
-        opcode_case(0x0) {}
+static EvaluatorResult evaluator_run(VM *self) {
+    // TODO Branch table, computed goto
+    while(1) {
+        uint8_t instruction;
+        switch(instruction = READ_BYTE()) {
+            case OP_CONSTANT: {
+                MargValue constant = READ_CONSTANT();
+                STACK_PUSH(self, constant);
+                break;
+            }
+            case OP_LONG_CONSTANT: {}
+            case OP_RETURN: {
+                return EVALUATOR_OK;
+            }
+        }
     }
 }
 
-Evaluator *evaluator_new(Chunk *bytecode) {
-    Evaluator *self = (Evaluator*)collected_malloc(sizeof(Evaluator));
+MargValue evaluator_evaluate(VM *self) {
+    self->ip = self->bytecode->items;
+    EvaluatorResult result = evaluator_run(self);
+    (void)result;
 
-    // self->stack.top = -1;
-    self->bytecode = bytecode;
-
-    return self;
-}
-
-marg_string *evaluator_evaluate(Evaluator *self) {
-    evaluator_run(self);
-
-    // if(marg_stack_is_empty(&self->stack)) {
-    //     return marg_string_new("nil");
-    // }
-    // else
-    //     return marg_stack_peek(&self->stack, 0);
-    return marg_string_new("nil");
+    return STACK_PEEK(self);
 }
