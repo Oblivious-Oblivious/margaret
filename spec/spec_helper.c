@@ -8,7 +8,6 @@
 #include "base/alternate_to_dec.spec.h"
 #include "base/file_loader.spec.h"
 #include "base/marg_vector.spec.h"
-#include "base/marg_stack.spec.h"
 #include "base/marg_string.spec.h"
 #include "base/memory.spec.h"
 
@@ -74,6 +73,9 @@
 #include "tokens/TokenTable.spec.h"
 #include "tokens/Type.spec.h"
 
+// vm
+#include "vm/vm.spec.h"
+
 #include "cSpec.h"
 
 spec_suite({
@@ -82,7 +84,6 @@ spec_suite({
     alternate_to_dec_spec();
     file_loader_spec();
     marg_vector_spec();
-    marg_stack_spec();
     marg_string_spec();
     memory_spec();
 
@@ -137,6 +138,8 @@ spec_suite({
     TokenSpec();
     TokenTableSpec();
     TypeSpec();
+
+    VmSpec();
 })
 
 int main(void) {
