@@ -208,6 +208,7 @@ marg_vector *parser_group(Parser *self) {
 }
 
 marg_vector *parser_variable(Parser *self) {
+    // TODO Add global variables (AND REMEMBER TO UPDATE PLACES CHECKING FOR `@` TO ALSO CHECK FOR `$`)
     if(lookahead_1_value_equals("@"))
         return ast_variable(ensure_value("@", "expected '@' on instance variable declaration."), ensure_type(TOKEN_IDENTIFIER, "expected identifier on variable declaration."));
     else
