@@ -7,6 +7,7 @@
 // base
 #include "base/alternate_to_dec.spec.h"
 #include "base/file_loader.spec.h"
+#include "base/marg_boolean.spec.h"
 #include "base/marg_vector.spec.h"
 #include "base/marg_string.spec.h"
 #include "base/memory.spec.h"
@@ -83,6 +84,7 @@ spec_suite({
 
     alternate_to_dec_spec();
     file_loader_spec();
+    marg_boolean_spec();
     marg_vector_spec();
     marg_string_spec();
     memory_spec();
