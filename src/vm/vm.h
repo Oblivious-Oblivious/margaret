@@ -20,6 +20,9 @@ typedef struct VM {
     MargValue *stack_top;
 } VM;
 
+/** @brief Better assurances for inlining */
+#define inline __inline__
+
 inline void STACK_RESET(VM *self) {
     self->stack_top = self->stack;
 }
