@@ -406,47 +406,29 @@ marg_vector *ast_integer_literal(marg_string *sign, marg_string *number) {
     // "-1", "-0b1", "-0b01", "-0o1", "-0o001", "-0x1", "-0x01"
     // "2", "+2", "0b10", "+0b10", "0b010", "+0b010", "0o2", "+0o2", "0o002", "+0o002", "0x2", "+0x2", "0x02", "+0x02"
     number = marg_string_remove_underscores(number);
-    if(marg_string_equals(number, marg_string_new("0")))
-        return marg_vector_new(FM_0);
-    else if(marg_string_equals(number, marg_string_new("1"))) {
-        if(marg_string_equals(sign, marg_string_new("-")))
-            return marg_vector_new(FM_MINUS_1);
-        else
-            return marg_vector_new(FM_1);
+
+    if(marg_string_get_char_at_index(number, 0) == '0' && (marg_string_get_char_at_index(number, 1) == 'b' || marg_string_get_char_at_index(number, 1) == 'B')) {
+        marg_string_skip(number, 2);
+        number = marg_string_new(bin_to_dec(marg_string_get(number)));
     }
-    else if(
-        marg_string_equals(number, marg_string_new("2"))
-    ||  marg_string_equals(number, marg_string_new("0b10"))
-    ) {
-        if(marg_string_equals(sign, marg_string_new("-")))
-            return marg_vector_new(FM_INTEGER, marg_string_new("-2"));
-        else
-            return marg_vector_new(FM_2);
+    else if(marg_string_get_char_at_index(number, 0) == '0' && (marg_string_get_char_at_index(number, 1) == 'o' || marg_string_get_char_at_index(number, 1) == 'O')) {
+        marg_string_skip(number, 2);
+        number = marg_string_new(oct_to_dec(marg_string_get(number)));
+    }
+    else if(marg_string_get_char_at_index(number, 0) == '0' && (marg_string_get_char_at_index(number, 1) == 'x' || marg_string_get_char_at_index(number, 1) == 'X')) {
+        marg_string_skip(number, 2);
+        number = marg_string_new(hex_to_dec(marg_string_get(number)));
+    }
+
+    if(marg_string_equals(sign, marg_string_new("-"))) {
+        marg_string *inum = marg_string_new("");
+        marg_string_add(inum, sign);
+        marg_string_add(inum, number);
+
+        return marg_vector_new(FM_INTEGER, inum);
     }
     else {
-        if(marg_string_get_char_at_index(number, 0) == '0' && (marg_string_get_char_at_index(number, 1) == 'b' || marg_string_get_char_at_index(number, 1) == 'B')) {
-            marg_string_skip(number, 2);
-            number = marg_string_new(bin_to_dec(marg_string_get(number)));
-        }
-        else if(marg_string_get_char_at_index(number, 0) == '0' && (marg_string_get_char_at_index(number, 1) == 'o' || marg_string_get_char_at_index(number, 1) == 'O')) {
-            marg_string_skip(number, 2);
-            number = marg_string_new(oct_to_dec(marg_string_get(number)));
-        }
-        else if(marg_string_get_char_at_index(number, 0) == '0' && (marg_string_get_char_at_index(number, 1) == 'x' || marg_string_get_char_at_index(number, 1) == 'X')) {
-            marg_string_skip(number, 2);
-            number = marg_string_new(hex_to_dec(marg_string_get(number)));
-        }
-
-        if(marg_string_equals(sign, marg_string_new("-"))) {
-            marg_string *inum = marg_string_new("");
-            marg_string_add(inum, sign);
-            marg_string_add(inum, number);
-
-            return marg_vector_new(FM_INTEGER, inum);
-        }
-        else {
-            return marg_vector_new(FM_INTEGER, number);
-        }
+        return marg_vector_new(FM_INTEGER, number);
     }
 }
 
@@ -513,7 +495,7 @@ marg_vector *ast_tensor_literal(marg_vector *item_list) {
 }
 
 marg_vector *ast_bitstring_literal(marg_vector *item_list) {
-    marg_vector *res =marg_vector_new_empty();
+    marg_vector *res = marg_vector_new_empty();
     size_t item_list_size = marg_vector_size(item_list);
 
     for(size_t i = 0; i < item_list_size; i++) {

@@ -204,7 +204,7 @@ module(classes_spec, {
             FM_KEYWORD, marg_string_new("x:y:z:"), marg_string_new("3"), \
             FM_STORE, marg_string_new("p1"), \
             FM_VARIABLE, marg_string_new("Point3D"), \
-            FM_2, \
+            FM_INTEGER, marg_string_new("2"), \
             FM_INTEGER, marg_string_new("4"), \
             FM_INTEGER, marg_string_new("6"), \
             FM_KEYWORD, marg_string_new("x:y:z:"), marg_string_new("3"), \

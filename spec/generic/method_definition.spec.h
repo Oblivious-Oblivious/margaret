@@ -14,7 +14,7 @@ module(method_definition_spec, {
                 FM_SELF, \
                 FM_TENSOR, marg_string_new("1"), \
                 FM_SELF, \
-                FM_1, \
+                FM_INTEGER, marg_string_new("1"), \
                 FM_BINARY, marg_string_new("+"), \
             FM_END_PROC, \
             FM_KEYWORD, marg_string_new("object:message:method:"), marg_string_new("3") \
@@ -28,7 +28,7 @@ module(method_definition_spec, {
                 FM_SELF, \
                 FM_TENSOR, marg_string_new("1"), \
                 FM_SELF, \
-                FM_1, \
+                FM_INTEGER, marg_string_new("1"), \
                 FM_BINARY, marg_string_new("+"), \
             FM_END_PROC, \
             FM_KEYWORD, marg_string_new("object:message:method:"), marg_string_new("3") \
@@ -49,12 +49,12 @@ module(method_definition_spec, {
         parse("# 0 fact => 1", marg_vector_new( \
             FM_VARIABLE, marg_string_new("Method"), \
             FM_UNARY, marg_string_new("unary"), \
-            FM_0, \
+            FM_INTEGER, marg_string_new("0"), \
             FM_STRING, marg_string_new("fact"), \
             FM_START_PROC, \
                 FM_SELF, \
                 FM_TENSOR, marg_string_new("1"), \
-                FM_1, \
+                FM_INTEGER, marg_string_new("1"), \
             FM_END_PROC, \
             FM_KEYWORD, marg_string_new("object:message:method:"), marg_string_new("3") \
         ));
@@ -67,12 +67,12 @@ module(method_definition_spec, {
         )", marg_vector_new( \
             FM_VARIABLE, marg_string_new("Method"), \
             FM_UNARY, marg_string_new("unary"), \
-            FM_0, \
+            FM_INTEGER, marg_string_new("0"), \
             FM_STRING, marg_string_new("fact"), \
             FM_START_PROC, \
                 FM_SELF, \
                 FM_TENSOR, marg_string_new("1"), \
-                FM_1, \
+                FM_INTEGER, marg_string_new("1"), \
             FM_END_PROC, \
             FM_KEYWORD, marg_string_new("object:message:method:"), marg_string_new("3"), \
             \
@@ -85,7 +85,7 @@ module(method_definition_spec, {
                 FM_TENSOR, marg_string_new("1"), \
                 FM_SELF, \
                 FM_SELF, \
-                FM_1, \
+                FM_INTEGER, marg_string_new("1"), \
                 FM_BINARY, marg_string_new("-"), \
                 FM_UNARY, marg_string_new("fact"), \
                 FM_BINARY, marg_string_new("*"), \
@@ -99,9 +99,9 @@ module(method_definition_spec, {
         parse("# 0 ** 0 => nil", marg_vector_new( \
             FM_VARIABLE, marg_string_new("Method"), \
             FM_UNARY, marg_string_new("binary"), \
-            FM_0, \
+            FM_INTEGER, marg_string_new("0"), \
             FM_STRING, marg_string_new("**"), \
-            FM_0, \
+            FM_INTEGER, marg_string_new("0"), \
             FM_START_PROC, \
                 FM_SELF, \
                 FM_TENSOR, marg_string_new("1"), \
@@ -114,13 +114,13 @@ module(method_definition_spec, {
         parse("# 0 ** _ => 0", marg_vector_new( \
             FM_VARIABLE, marg_string_new("Method"), \
             FM_UNARY, marg_string_new("binary"), \
-            FM_0, \
+            FM_INTEGER, marg_string_new("0"), \
             FM_STRING, marg_string_new("**"), \
             FM_ANY_OBJECT, \
             FM_START_PROC, \
                 FM_SELF, \
                 FM_TENSOR, marg_string_new("1"), \
-                FM_0, \
+                FM_INTEGER, marg_string_new("0"), \
             FM_END_PROC, \
             FM_KEYWORD, marg_string_new("object:message:param:method:"), marg_string_new("4") \
         ));
@@ -131,11 +131,11 @@ module(method_definition_spec, {
             FM_UNARY, marg_string_new("binary"), \
             FM_ANY_OBJECT, \
             FM_STRING, marg_string_new("**"), \
-            FM_0,
+            FM_INTEGER, marg_string_new("0"),
             FM_START_PROC, \
                 FM_SELF, \
                 FM_TENSOR, marg_string_new("1"), \
-                FM_1, \
+                FM_INTEGER, marg_string_new("1"), \
             FM_END_PROC, \
             FM_KEYWORD, marg_string_new("object:message:param:method:"), marg_string_new("4") \
         ));
@@ -144,14 +144,14 @@ module(method_definition_spec, {
         parse("# 0 ** a_number => 0", marg_vector_new( \
             FM_VARIABLE, marg_string_new("Method"), \
             FM_UNARY, marg_string_new("binary"), \
-            FM_0, \
+            FM_INTEGER, marg_string_new("0"), \
             FM_STRING, marg_string_new("**"), \
             FM_METHOD_PARAMETER, marg_string_new("a_number"), \
             FM_START_PROC, \
                 FM_SELF, \
                 FM_VARIABLE, marg_string_new("a_number"), \
                 FM_TENSOR, marg_string_new("2"), \
-                FM_0, \
+                FM_INTEGER, marg_string_new("0"), \
             FM_END_PROC, \
             FM_KEYWORD, marg_string_new("object:message:param:method:"), marg_string_new("4") \
         ));
@@ -176,7 +176,7 @@ module(method_definition_spec, {
     });
 
     it("parses keyword methods", {
-        // Method keyword object: _ message: "add:at:" params: ["element", "position"] method: { self, element, position | 42 }
+        // Method keyword object: _ message: "add:at:" params: [element, position] method: { self, element, position | 42 }
         parse("#add: element at: position => 42", marg_vector_new( \
             FM_VARIABLE, marg_string_new("Method"), \
             FM_UNARY, marg_string_new("keyword"), \
@@ -195,29 +195,45 @@ module(method_definition_spec, {
             FM_KEYWORD, marg_string_new("object:message:params:method:"), marg_string_new("4") \
         ));
 
-        // Method keyword object: _ message: "new:" params: ["2"] method: { self | 1 }
+        // Method keyword object: _ message: "new:" params: [2] method: { self | 1 }
         parse("# _ new: 2 => 1", marg_vector_new( \
             FM_VARIABLE, marg_string_new("Method"), \
             FM_UNARY, marg_string_new("keyword"), \
             FM_ANY_OBJECT, \
             FM_STRING, marg_string_new("new:"), \
-            FM_2, \
+            FM_INTEGER, marg_string_new("2"), \
             FM_TENSOR, marg_string_new("1"), \
             FM_START_PROC, \
                 FM_SELF, \
                 FM_TENSOR, marg_string_new("1"), \
-                FM_1,
+                FM_INTEGER, marg_string_new("1"),
             FM_END_PROC, \
             FM_KEYWORD, marg_string_new("object:message:params:method:"), marg_string_new("4") \
         ));
 
-        // Method keyword object: 1 message: "add:" params: ["2"] method: { self | 3 }
+        // Method keyword object: 1 message: "add:" params: [nil] method: { self | nil }
+        parse("# 1 add: nil => nil", marg_vector_new( \
+            FM_VARIABLE, marg_string_new("Method"), \
+            FM_UNARY, marg_string_new("keyword"), \
+            FM_INTEGER, marg_string_new("1"), \
+            FM_STRING, marg_string_new("add:"), \
+            FM_NIL, \
+            FM_TENSOR, marg_string_new("1"), \
+            FM_START_PROC, \
+                FM_SELF, \
+                FM_TENSOR, marg_string_new("1"), \
+                FM_NIL, \
+            FM_END_PROC, \
+            FM_KEYWORD, marg_string_new("object:message:params:method:"), marg_string_new("4") \
+        ));
+
+        // Method keyword object: 1 message: "add:" params: [2] method: { self | 3 }
         parse("# 1 add: 2 => 3", marg_vector_new( \
             FM_VARIABLE, marg_string_new("Method"), \
             FM_UNARY, marg_string_new("keyword"), \
-            FM_1, \
+            FM_INTEGER, marg_string_new("1"), \
             FM_STRING, marg_string_new("add:"), \
-            FM_2, \
+            FM_INTEGER, marg_string_new("2"), \
             FM_TENSOR, marg_string_new("1"), \
             FM_START_PROC, \
                 FM_SELF, \
@@ -231,7 +247,7 @@ module(method_definition_spec, {
         parse("# 1 one: _ two: _ => 42", marg_vector_new( \
             FM_VARIABLE, marg_string_new("Method"), \
             FM_UNARY, marg_string_new("keyword"), \
-            FM_1, \
+            FM_INTEGER, marg_string_new("1"), \
             FM_STRING, marg_string_new("one:two:"), \
             FM_ANY_OBJECT, \
             FM_ANY_OBJECT, \
@@ -244,7 +260,7 @@ module(method_definition_spec, {
             FM_KEYWORD, marg_string_new("object:message:params:method:"), marg_string_new("4") \
         ));
 
-        // Method keyword object: _ message: "ok?:otherwise!:" params: ["value1", "value2"] method: { self, value1, value2 | 17 }
+        // Method keyword object: _ message: "ok?:otherwise!:" params: [value1, value2] method: { self, value1, value2 | 17 }
         parse("#ok?: value1 otherwise!: value2 => 17", marg_vector_new( \
             FM_VARIABLE, marg_string_new("Method"), \
             FM_UNARY, marg_string_new("keyword"), \
@@ -254,7 +270,7 @@ module(method_definition_spec, {
             FM_METHOD_PARAMETER, marg_string_new("value2"), \
             FM_TENSOR, marg_string_new("2"), \
             FM_START_PROC, \
-                FM_SELF,
+                FM_SELF, \
                 FM_VARIABLE, marg_string_new("value1"),
                 FM_VARIABLE, marg_string_new("value2"),
                 FM_TENSOR, marg_string_new("3"),
@@ -289,7 +305,7 @@ module(method_definition_spec, {
             FM_TENSOR, marg_string_new("0"), \
             FM_STRING, marg_string_new("add:at:"), \
             FM_CHAR, marg_string_new("a"), \
-            FM_0,
+            FM_INTEGER, marg_string_new("0"),
             FM_TENSOR, marg_string_new("2"), \
             FM_START_PROC, \
                 FM_SELF, \
@@ -307,7 +323,7 @@ module(method_definition_spec, {
             FM_ANY_OBJECT, \
             FM_STRING, marg_string_new("add:at:"), \
             FM_CHAR, marg_string_new("a"), \
-            FM_0,
+            FM_INTEGER, marg_string_new("0"),
             FM_TENSOR, marg_string_new("2"), \
             FM_START_PROC, \
                 FM_SELF, \
@@ -343,10 +359,10 @@ module(method_definition_spec, {
                 FM_START_PROC, \
                     FM_TENSOR, marg_string_new("0"), \
                     FM_VARIABLE, marg_string_new("remaining"), \
-                    FM_1, \
+                    FM_INTEGER, marg_string_new("1"), \
                     FM_BINARY, marg_string_new("-"), \
                     FM_STORE, marg_string_new("remaining"), \
-                    FM_0, \
+                    FM_INTEGER, marg_string_new("0"), \
                     FM_BINARY, marg_string_new(">="), \
                 FM_END_PROC, \
                 FM_START_PROC, \

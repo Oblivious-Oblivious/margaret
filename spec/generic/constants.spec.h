@@ -9,8 +9,8 @@ module(constants_spec, {
         parse("(b = false)", marg_vector_new(FM_FALSE, FM_STORE, marg_string_new("b")));
         parse("(x = nil)", marg_vector_new(FM_NIL, FM_STORE, marg_string_new("x")));
 
-        parse("(x = 1)", marg_vector_new(FM_1, FM_STORE, marg_string_new("x")));
-        parse("(x = -1)", marg_vector_new(FM_MINUS_1, FM_STORE, marg_string_new("x")));
+        parse("(x = 1)", marg_vector_new(FM_INTEGER, marg_string_new("1"), FM_STORE, marg_string_new("x")));
+        parse("(x = -1)", marg_vector_new(FM_INTEGER, marg_string_new("-1"), FM_STORE, marg_string_new("x")));
         parse("(x = 3.14159)", marg_vector_new(FM_FLOAT, marg_string_new("3.14159"), FM_STORE, marg_string_new("x")));
         parse("(x = 0.42)", marg_vector_new(FM_FLOAT, marg_string_new("0.42"), FM_STORE, marg_string_new("x")));
         parse("(x = 0xbeef)", marg_vector_new(FM_INTEGER, marg_string_new("48879"), FM_STORE, marg_string_new("x")));

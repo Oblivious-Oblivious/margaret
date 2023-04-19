@@ -5,8 +5,8 @@
 
 module(complex_spec, {
     it("parses complex literals", {
-        parse("1i", marg_vector_new(FM_1, FM_UNARY, marg_string_new("i")));
-        parse("1i * 1i", marg_vector_new(FM_1, FM_UNARY, marg_string_new("i"), FM_1, FM_UNARY, marg_string_new("i"), FM_BINARY, marg_string_new("*")));
+        parse("1i", marg_vector_new(FM_INTEGER, marg_string_new("1"), FM_UNARY, marg_string_new("i")));
+        parse("1i * 1i", marg_vector_new(FM_INTEGER, marg_string_new("1"), FM_UNARY, marg_string_new("i"), FM_INTEGER, marg_string_new("1"), FM_UNARY, marg_string_new("i"), FM_BINARY, marg_string_new("*")));
         parse("12.3r i", marg_vector_new(FM_FLOAT, marg_string_new("12.3"), FM_UNARY, marg_string_new("r"), FM_UNARY, marg_string_new("i")));
     });
 

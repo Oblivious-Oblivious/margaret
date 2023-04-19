@@ -4,20 +4,18 @@
 #include "../base/marg_string.h"
 
 // ------ Formal Messages Opcodes ------
+#define FM_VARIABLE          marg_string_new("VARIABLE")
+#define FM_INSTANCE          marg_string_new("INSTANCE")
+
+#define FM_STORE             marg_string_new("STORE")
+#define FM_STORE_INSTANCE    marg_string_new("STORE_INSTANCE")
+
 #define FM_NIL               marg_string_new("NIL")
 #define FM_TRUE              marg_string_new("TRUE")
 #define FM_FALSE             marg_string_new("FALSE")
 
 #define FM_SELF              marg_string_new("SELF")
 #define FM_SUPER             marg_string_new("SUPER")
-
-#define FM_0                 marg_string_new("0")
-#define FM_1                 marg_string_new("1")
-#define FM_MINUS_1           marg_string_new("MINUS_1")
-#define FM_2                 marg_string_new("2")
-
-#define FM_VARIABLE          marg_string_new("VARIABLE")
-#define FM_INSTANCE          marg_string_new("INSTANCE")
 
 #define FM_INTEGER           marg_string_new("INTEGER")
 #define FM_FLOAT             marg_string_new("FLOAT")
@@ -36,25 +34,32 @@
 #define FM_START_C_FUNCTION  marg_string_new("START_C_FUNCTION")
 #define FM_END_C_FUNCTION    marg_string_new("END_C_FUNCTION")
 
-#define FM_STORE             marg_string_new("STORE")
-#define FM_STORE_INSTANCE    marg_string_new("STORE_INSTANCE")
-
-#define FM_METHOD_UNARY      marg_string_new("METHOD_UNARY")
-#define FM_METHOD_BINARY     marg_string_new("METHOD_BINARY")
-#define FM_METHOD_KEYWORD    marg_string_new("METHOD_KEYWORD")
-
 #define FM_UNARY             marg_string_new("UNARY")
 #define FM_BINARY            marg_string_new("BINARY")
 #define FM_KEYWORD           marg_string_new("KEYWORD")
 
 // ------ Emmited Opcodes ------
 #define OP_RETURN                           0x00
+
 #define OP_NIL                              0x01
 #define OP_TRUE                             0x02
 #define OP_FALSE                            0x03
 
 #define OP_CONSTANT                         0x04
 #define OP_LONG_CONSTANT                    0x05
+
+// #define OP_SELF                             0xff
+// #define OP_SUPER                            0xff
+
+// #define OP_0                                0xff
+// #define OP_1                                0xff
+// #define OP_MINUS_1                          0xff
+// #define OP_2                                0xff
+
+// #define FM_METHOD_UNARY                     0xff
+// #define FM_METHOD_BINARY                    0xff
+// #define FM_METHOD_KEYWORD                   0xff
+
 
 // #define OP_DECLARE_VARIABLE              marg_string_new("DECLARE_VARIABLE")
 // #define OP_GENERATE_IDENTIFIER_POSITION  marg_string_new("GENERATE_IDENTIFIER_POSITION")

@@ -5,8 +5,8 @@
 
 module(numeric_spec, {
     it("parses numeric expressions", {
-        parse("(0)", marg_vector_new(FM_0));
-        parse("(0,0,0)", marg_vector_new(FM_0, FM_0, FM_0));
+        parse("(0)", marg_vector_new(FM_INTEGER, marg_string_new("0")));
+        parse("(0,0,0)", marg_vector_new(FM_INTEGER, marg_string_new("0"), FM_INTEGER, marg_string_new("0"), FM_INTEGER, marg_string_new("0")));
         parse("(42)", marg_vector_new(FM_INTEGER, marg_string_new("42")));
         parse("(41, 42, 43)", marg_vector_new(FM_INTEGER, marg_string_new("41"), FM_INTEGER, marg_string_new("42"), FM_INTEGER, marg_string_new("43")));
         parse("(41, (42), 43)", marg_vector_new(FM_INTEGER, marg_string_new("41"), FM_INTEGER, marg_string_new("42"), FM_INTEGER, marg_string_new("43")));
@@ -31,13 +31,13 @@ module(numeric_spec, {
         parse("-986513.00056129", marg_vector_new(FM_FLOAT, marg_string_new("-986513.00056129")));
         parse("1234 e: -2", marg_vector_new(FM_INTEGER, marg_string_new("1234"), FM_INTEGER, marg_string_new("-2"), FM_KEYWORD, marg_string_new("e:"), marg_string_new("1")));
         parse("1234 E: -2", marg_vector_new(FM_INTEGER, marg_string_new("1234"), FM_INTEGER, marg_string_new("-2"), FM_KEYWORD, marg_string_new("E:"), marg_string_new("1")));
-        parse("1.234 e: 1", marg_vector_new(FM_FLOAT, marg_string_new("1.234"), FM_1, FM_KEYWORD, marg_string_new("e:"), marg_string_new("1")));
-        parse("1.234 E: 1", marg_vector_new(FM_FLOAT, marg_string_new("1.234"), FM_1, FM_KEYWORD, marg_string_new("E:"), marg_string_new("1")));
+        parse("1.234 e: 1", marg_vector_new(FM_FLOAT, marg_string_new("1.234"), FM_INTEGER, marg_string_new("1"), FM_KEYWORD, marg_string_new("e:"), marg_string_new("1")));
+        parse("1.234 E: 1", marg_vector_new(FM_FLOAT, marg_string_new("1.234"), FM_INTEGER, marg_string_new("1"), FM_KEYWORD, marg_string_new("E:"), marg_string_new("1")));
     });
 
     it("parses binary literals", {
         parse("0b0110", marg_vector_new(FM_INTEGER, marg_string_new("6")));
-        parse("0B10", marg_vector_new(FM_2));
+        parse("0B10", marg_vector_new(FM_INTEGER, marg_string_new("2")));
         parse("-0b0110", marg_vector_new(FM_INTEGER, marg_string_new("-6")));
         parse("-0B10", marg_vector_new(FM_INTEGER, marg_string_new("-2")));
         parse("( \
