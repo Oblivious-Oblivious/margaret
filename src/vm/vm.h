@@ -33,7 +33,7 @@ inline MargValue STACK_POP(VM *self) {
 }
 
 inline MargValue STACK_PEEK(VM *self) {
-    return *self->stack_top;
+    return *(self->stack_top - 1);
 }
 
 #define READ_BYTE() (*self->ip++)
