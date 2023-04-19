@@ -14,12 +14,26 @@ static EvaluatorResult evaluator_run(VM *self) {
     while(1) {
         uint8_t instruction;
         switch(instruction = READ_BYTE()) {
+            case OP_NIL: {
+                STACK_PUSH(self, MARG_NIL);
+                break;
+            }
+            case OP_TRUE: {
+                STACK_PUSH(self, MARG_BOOL(true));
+                break;
+            }
+            case OP_FALSE: {
+                STACK_PUSH(self, MARG_BOOL(false));
+                break;
+            }
+
             case OP_CONSTANT: {
                 MargValue constant = READ_CONSTANT();
                 STACK_PUSH(self, constant);
                 break;
             }
             case OP_LONG_CONSTANT: {}
+
             case OP_RETURN: {
                 return EVALUATOR_OK;
             }

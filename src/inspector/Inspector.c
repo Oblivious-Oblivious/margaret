@@ -82,16 +82,19 @@ static size_t inspect_instruction(marg_vector *res, Chunk *chunk, size_t offset)
     switch(instruction) {
         case OP_RETURN:
             return instruction_offset_1(res, "RETURN", chunk, offset);
-        case OP_CONSTANT:
-            return instruction_offset_2(res, "CONSTANT", chunk, offset);
-        case OP_LONG_CONSTANT:
-            return instruction_offset_5(res, "LONG_CONSTANT", chunk, offset);
+
         case OP_NIL:
             return instruction_offset_1(res, "NIL", chunk, offset);
         case OP_TRUE:
             return instruction_offset_1(res, "TRUE", chunk, offset);
         case OP_FALSE:
             return instruction_offset_1(res, "FALSE", chunk, offset);
+
+        case OP_CONSTANT:
+            return instruction_offset_2(res, "CONSTANT", chunk, offset);
+        case OP_LONG_CONSTANT:
+            return instruction_offset_5(res, "LONG_CONSTANT", chunk, offset);
+
         default: {
             marg_string *unknown_opcode = marg_string_new("");
             marg_string_addf(unknown_opcode, "Unknown opcode %d", instruction);

@@ -17,9 +17,15 @@ VM *emitter_emit(marg_vector *formal_bytecode) {
         opcode_case(FM_STORE) {}
         opcode_case(FM_STORE_INSTANCE) {}
 
-        opcode_case(FM_NIL) {}
-        opcode_case(FM_TRUE) {}
-        opcode_case(FM_FALSE) {}
+        opcode_case(FM_NIL) {
+            chunk_add_with_line(vm->bytecode, OP_NIL, 123);
+        }
+        opcode_case(FM_TRUE) {
+            chunk_add_with_line(vm->bytecode, OP_TRUE, 123);
+        }
+        opcode_case(FM_FALSE) {
+            chunk_add_with_line(vm->bytecode, OP_FALSE, 123);
+        }
 
         opcode_case(FM_SELF) {}
         opcode_case(FM_SUPER) {}
