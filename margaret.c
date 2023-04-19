@@ -86,6 +86,7 @@ static void margaret_run_file(char *filename) {
     marg_string *chars = LOAD(filename);
     TokenTable *tokens = READ(chars);
     marg_vector *formal_bytecode = FORMALIZE(tokens);
+    PRINT_FORMAL(formal_bytecode);
     VM *vm = EMIT(formal_bytecode);
 
     vm = OPTIMIZE(vm);
