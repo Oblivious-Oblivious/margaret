@@ -53,7 +53,7 @@ static MargValue EVAL(VM *vm) {
 }
 
 static void PRINT(MargValue evaluated) {
-    printf("%g\n", evaluated);
+    printf("%g\n", AS_NUMBER(evaluated));
 }
 
 static void PRINT_FORMAL(marg_vector *formal_bytecode) {

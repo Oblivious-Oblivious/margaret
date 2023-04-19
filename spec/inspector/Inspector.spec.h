@@ -16,13 +16,13 @@ module(InspectorSpec, {
         VM *vm = vm_new();
         Chunk *bytecode = vm->bytecode;
 
-        uint8_t constant = chunk_add_constant(bytecode, 0.7);
+        uint8_t constant = chunk_add_constant(bytecode, MARG_NUMBER(0.7));
         chunk_add_with_line(bytecode, OP_CONSTANT, 123);
         chunk_add_with_line(bytecode, constant, 123);
-        constant = chunk_add_constant(bytecode, 0.8);
+        constant = chunk_add_constant(bytecode, MARG_NUMBER(0.8));
         chunk_add_with_line(bytecode, OP_CONSTANT, 123);
         chunk_add_with_line(bytecode, constant, 123);
-        constant = chunk_add_constant(bytecode, 0.9);
+        constant = chunk_add_constant(bytecode, MARG_NUMBER(0.9));
         chunk_add_with_line(bytecode, OP_CONSTANT, 123);
         chunk_add_with_line(bytecode, constant, 123);
         chunk_add_with_line(bytecode, OP_RETURN, 123);
@@ -39,7 +39,7 @@ module(InspectorSpec, {
         Chunk *bytecode = vm->bytecode;
 
         for(int i = 0; i <= 4000; i++) {
-            uint32_t long_constant = chunk_add_long_constant(bytecode, 42.42);
+            uint32_t long_constant = chunk_add_long_constant(bytecode, MARG_NUMBER(42.42));
             chunk_add_with_line(bytecode, OP_LONG_CONSTANT, 123);
             uint8_t *constant_in_bytes = long_constant_to_bytes(long_constant);
             chunk_add_with_line(bytecode, constant_in_bytes[0], 123);

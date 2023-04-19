@@ -29,14 +29,14 @@ VM *emitter_emit(marg_vector *formal_bytecode) {
                 chunk_add_with_line(vm->bytecode, OP_CONSTANT, 123);
                 marg_string *integer_str = marg_vector_get(formal_bytecode, ++ip);
                 long long constant = (long long)atoi(marg_string_get(integer_str));
-                uint8_t constant_index = chunk_add_constant(vm->bytecode, constant);
+                uint8_t constant_index = chunk_add_constant(vm->bytecode, MARG_NUMBER(constant));
                 chunk_add_with_line(vm->bytecode, constant_index, 123);
             }
             else {
                 chunk_add_with_line(vm->bytecode, OP_LONG_CONSTANT, 123);
                 marg_string *integer_str = marg_vector_get(formal_bytecode, ++ip);
                 long long long_constant = (long long)atoi(marg_string_get(integer_str));
-                uint32_t long_constant_index = chunk_add_long_constant(vm->bytecode, long_constant);
+                uint32_t long_constant_index = chunk_add_long_constant(vm->bytecode, MARG_NUMBER(long_constant));
                 uint8_t *constant_in_bytes = long_constant_to_bytes(long_constant_index);
                 chunk_add_with_line(vm->bytecode, constant_in_bytes[0], 123);
                 chunk_add_with_line(vm->bytecode, constant_in_bytes[1], 123);
