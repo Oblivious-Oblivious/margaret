@@ -367,8 +367,6 @@ vector *parser_literal(Parser *self) {
         return ast_literal(parser_integer_literal(self, sign));
     else if(lookahead_1_type_equals(TOKEN_FLOAT))
         return ast_literal(parser_float_literal(self, sign));
-    else if(lookahead_1_type_equals(TOKEN_CHAR))
-        return ast_literal(parser_char_literal(self, sign));
     else if(lookahead_1_type_equals(TOKEN_STRING))
         return ast_literal(parser_string_literal(self));
     // TODO Look at combining tuples and bitstrings with syntax
@@ -395,10 +393,6 @@ vector *parser_integer_literal(Parser *self, string *sign) {
 
 vector *parser_float_literal(Parser *self, string *sign) {
     return ast_float_literal(sign, ensure_type(TOKEN_FLOAT, "expected float literal."));
-}
-
-vector *parser_char_literal(Parser *self, string *sign) {
-    return ast_char_literal(sign, ensure_type(TOKEN_CHAR, "expected character literal."));
 }
 
 vector *parser_string_literal(Parser *self) {

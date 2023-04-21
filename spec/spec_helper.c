@@ -28,7 +28,6 @@
 #include "generic/bitstrings.spec.h"
 #include "generic/booleans.spec.h"
 #include "generic/c_functions.spec.h"
-#include "generic/characters.spec.h"
 #include "generic/classes.spec.h"
 #include "generic/code_as_data.spec.h"
 #include "generic/complex.spec.h"
@@ -103,7 +102,6 @@ spec_suite({
     bitstrings_spec();
     booleans_spec();
     c_functions_spec();
-    characters_spec();
     classes_spec();
     code_as_data_spec();
     complex_spec();

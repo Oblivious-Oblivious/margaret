@@ -37,7 +37,6 @@ vector *ast_method_parameter(string *param_name);
 vector *ast_literal(vector *unit);
 vector *ast_integer_literal(string *sign, string *number);
 vector *ast_float_literal(string *sign, string *number);
-vector *ast_char_literal(string *sign, string *c);
 vector *ast_string_literal(string *string);
 vector *ast_tuple_literal(vector *item_list);
 vector *ast_tensor_literal(vector *item_list);

@@ -10,7 +10,7 @@ module(conversions_spec, {
         parse("(x = 3 to_float)", vector_new(FM_INTEGER, string_new("3"), FM_UNARY, string_new("to_float"), FM_STORE, string_new("x")));
         parse("(x = 65 to_char)", vector_new(FM_INTEGER, string_new("65"), FM_UNARY, string_new("to_char"), FM_STORE, string_new("x")));
         parse("(x = \"A\" to_ascii)", vector_new(FM_STRING, string_new("A"), FM_UNARY, string_new("to_ascii"), FM_STORE, string_new("x")));
-        parse("(x = 'b' to_ascii)", vector_new(FM_CHAR, string_new("b"), FM_UNARY, string_new("to_ascii"), FM_STORE, string_new("x")));
+        parse("(x = 'b' to_ascii)", vector_new(FM_STRING, string_new("b"), FM_UNARY, string_new("to_ascii"), FM_STORE, string_new("x")));
     });
 })
 

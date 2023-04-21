@@ -59,8 +59,8 @@ module(messages_spec, {
 
     it("chains keyword messages of exactly the same selector", {
         parse("arr add: 1 add: 2 add: 3", vector_new(FM_VARIABLE, string_new("arr"), FM_INTEGER, string_new("1"), FM_KEYWORD, string_new("add:"), string_new("1"), FM_VARIABLE, string_new("arr"), FM_INTEGER, string_new("2"), FM_KEYWORD, string_new("add:"), string_new("1"), FM_VARIABLE, string_new("arr"), FM_INTEGER, string_new("3"), FM_KEYWORD, string_new("add:"), string_new("1")));
-        parse("arr add: 'a' add: 'b' at: 3", vector_new(FM_VARIABLE, string_new("arr"), FM_CHAR, string_new("a"), FM_CHAR, string_new("b"), FM_INTEGER, string_new("3"), FM_KEYWORD, string_new("add:add:at:"), string_new("3")));
-        parse("arr add: 'a' at: 1 add: 'b' at: 2", vector_new(FM_VARIABLE, string_new("arr"), FM_CHAR, string_new("a"), FM_INTEGER, string_new("1"), FM_CHAR, string_new("b"), FM_INTEGER, string_new("2"), FM_KEYWORD, string_new("add:at:add:at:"), string_new("4")));
+        parse("arr add: 'a' add: 'b' at: 3", vector_new(FM_VARIABLE, string_new("arr"), FM_STRING, string_new("a"), FM_STRING, string_new("b"), FM_INTEGER, string_new("3"), FM_KEYWORD, string_new("add:add:at:"), string_new("3")));
+        parse("arr add: 'a' at: 1 add: 'b' at: 2", vector_new(FM_VARIABLE, string_new("arr"), FM_STRING, string_new("a"), FM_INTEGER, string_new("1"), FM_STRING, string_new("b"), FM_INTEGER, string_new("2"), FM_KEYWORD, string_new("add:at:add:at:"), string_new("4")));
     });
 
     it("parses composit messages", {

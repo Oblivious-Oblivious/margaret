@@ -217,7 +217,7 @@ module(LexerSpec, {
                 Lexer *l = lexer_new("file.marg", string_new("('a' puts)"));
                 TokenTable *tokens = lexer_make_tokens(l);
                 assert_that_charptr(string_get(token_table_get(tokens, 1)->value) equals to "'a'");
-                assert_that_int(token_table_get(tokens, 1)->type equals to TOKEN_CHAR);
+                assert_that_int(token_table_get(tokens, 1)->type equals to TOKEN_STRING);
             });
 
             it("tokenizes string literals", {

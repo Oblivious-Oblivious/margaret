@@ -9,7 +9,6 @@
 
 🟩 42.0, -42.42 -> (Float new)
 
-🟩 'a', '\n', 'ﾀ' -> (Char new)
 🟩 "foo\tbar" -> (String new)
 
 🟩 [42, "Hello", 'x'] -> (Tensor new)

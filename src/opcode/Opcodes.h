@@ -19,8 +19,9 @@
 
 #define FM_INTEGER           string_new("INTEGER")
 #define FM_FLOAT             string_new("FLOAT")
-#define FM_CHAR              string_new("CHAR")
+
 #define FM_STRING            string_new("STRING")
+
 #define FM_TENSOR            string_new("TENSOR")
 #define FM_TUPLE             string_new("TUPLE")
 #define FM_BITSTRING         string_new("BITSTRING")

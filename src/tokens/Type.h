@@ -11,8 +11,7 @@ typedef enum Type {
     TOKEN_INTEGER = 11,
     TOKEN_FLOAT = 12,
 
-    TOKEN_CHAR = 111,
-    TOKEN_STRING = 112,
+    TOKEN_STRING = 111,
 
     TOKEN_IDENTIFIER = 201,
 } Type;

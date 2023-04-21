@@ -304,13 +304,13 @@ module(method_definition_spec, {
             FM_UNARY, string_new("keyword"), \
             FM_TENSOR, string_new("0"), \
             FM_STRING, string_new("add:at:"), \
-            FM_CHAR, string_new("a"), \
+            FM_STRING, string_new("a"), \
             FM_INTEGER, string_new("0"),
             FM_TENSOR, string_new("2"), \
             FM_START_PROC, \
                 FM_SELF, \
                 FM_TENSOR, string_new("1"), \
-                FM_CHAR, string_new("a"), \
+                FM_STRING, string_new("a"), \
                 FM_TENSOR, string_new("1"), \
             FM_END_PROC, \
             FM_KEYWORD, string_new("object:message:params:method:"), string_new("4") \
@@ -322,13 +322,13 @@ module(method_definition_spec, {
             FM_UNARY, string_new("keyword"), \
             FM_ANY_OBJECT, \
             FM_STRING, string_new("add:at:"), \
-            FM_CHAR, string_new("a"), \
+            FM_STRING, string_new("a"), \
             FM_INTEGER, string_new("0"),
             FM_TENSOR, string_new("2"), \
             FM_START_PROC, \
                 FM_SELF, \
                 FM_TENSOR, string_new("1"), \
-                FM_CHAR, string_new("a"), \
+                FM_STRING, string_new("a"), \
                 FM_TENSOR, string_new("1"), \
                 FM_SELF, \
                 FM_BINARY, string_new("++"), \

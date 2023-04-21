@@ -2,7 +2,7 @@
 (Margaret bind: #ultimate_answer: x => (
     true && false not && (nil is_nil?) if_false: { exit: 0 },
     y = self methods size + super class to_s length * 42,
-    ['a', "a", 42, 42.2, 0b0110, 0xbeef, 0o741,
+    ["str", 42, 42.2, 0b0110, 0xbeef, 0o741,
      {"k1": 42, k2: 43}, [< 1, 2], {< 1:1, 0:1}] each: { elem | (
         elem class puts,
     )},

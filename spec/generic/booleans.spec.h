@@ -34,8 +34,8 @@ module(booleans_spec, {
         parse("(b = x is_integer?)", vector_new(FM_VARIABLE, string_new("x"), FM_UNARY, string_new("is_integer?"), FM_STORE, string_new("b")));
         parse("(b = x is_float?)", vector_new(FM_VARIABLE, string_new("x"), FM_UNARY, string_new("is_float?"), FM_STORE, string_new("b")));
         parse("(b = x is_number?)", vector_new(FM_VARIABLE, string_new("x"), FM_UNARY, string_new("is_number?"), FM_STORE, string_new("b")));
-        parse("(b = 'a' is_uppercase?)", vector_new(FM_CHAR, string_new("a"), FM_UNARY, string_new("is_uppercase?"), FM_STORE, string_new("b")));
-        parse("(b = 'a' is_lowercase?)", vector_new(FM_CHAR, string_new("a"), FM_UNARY, string_new("is_lowercase?"), FM_STORE, string_new("b")));
+        parse("(b = 'a' is_uppercase?)", vector_new(FM_STRING, string_new("a"), FM_UNARY, string_new("is_uppercase?"), FM_STORE, string_new("b")));
+        parse("(b = 'a' is_lowercase?)", vector_new(FM_STRING, string_new("a"), FM_UNARY, string_new("is_lowercase?"), FM_STORE, string_new("b")));
     });
 })
 

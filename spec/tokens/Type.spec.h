@@ -19,8 +19,7 @@ module(TypeSpec, {
         assert_that_int(TOKEN_INTEGER equals to 11);
         assert_that_int(TOKEN_FLOAT equals to 12);
 
-        assert_that_int(TOKEN_CHAR equals to 111);
-        assert_that_int(TOKEN_STRING equals to 112);
+        assert_that_int(TOKEN_STRING equals to 111);
     });
 
     it("contains non terminal literal types", {

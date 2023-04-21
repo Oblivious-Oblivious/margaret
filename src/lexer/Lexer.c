@@ -134,7 +134,7 @@ static Token *lexer_tokenize_message_symbol(Lexer *self, char c) {
             break;
         c = lexer_next_character(self);
     }
-
+    // TODO Implement UTF-8 strings
     char maybe_id_symb = string_get_char_at_index(final_symbol, 0);
     if(string_size(final_symbol) == 1 && regex_matches(maybe_id_symb, REGEX_ID_SYMBOL))
         return token_new(final_symbol, TOKEN_ID_SYMBOL, self->lineno, self->filename);
@@ -142,27 +142,11 @@ static Token *lexer_tokenize_message_symbol(Lexer *self, char c) {
         return token_new(final_symbol, TOKEN_MESSAGE_SYMBOL, self->lineno, self->filename);
 }
 
-static Token *lexer_tokenize_character(Lexer *self, char c) {
-    string *final_char = string_new("");
-    string_add_char(final_char, c);
-    c = lexer_next_character(self);
-    if(!regex_matches(c, REGEX_SINGLE_QUOTE)) {
-    // TODO Implement UTF-8 strings
-    // while(!regex_matches(c, REGEX_SINGLE_QUOTE)) {
-        string_add_char(final_char, c);
-        c = lexer_next_character(self);
-        if(c == '\0')
-            return lexer_error(self, "unterminated character literal", final_char);
-    }
-    string_add_char(final_char, c);
-    return token_new(final_char, TOKEN_CHAR, self->lineno, self->filename);
-}
-
 static Token *lexer_tokenize_string(Lexer *self, char c) {
     string *final_string = string_new("");
     string_add_char(final_string, c);
     c = lexer_next_character(self);
-    while(!regex_matches(c, REGEX_DOUBLE_QUOTE)) {
+    while(!regex_matches(c, REGEX_SINGLE_QUOTE) && !regex_matches(c, REGEX_DOUBLE_QUOTE)) {
         string_add_char(final_string, c);
         c = lexer_next_character(self);
         if(c == '\0')
@@ -197,13 +181,7 @@ TokenTable *lexer_make_tokens(Lexer *self) {
             string_add_char(symb, c);
             token_table_add(token_table, token_new(symb, TOKEN_SYNTAX_SYMBOL, self->lineno, self->filename));
         }
-        else if(regex_matches(c, REGEX_SINGLE_QUOTE)) {
-            Token *tok = lexer_tokenize_character(self, c);
-            if(tok == NULL)
-                break;
-            token_table_add(token_table, tok);
-        }
-        else if(regex_matches(c, REGEX_DOUBLE_QUOTE)) {
+        else if(regex_matches(c, REGEX_SINGLE_QUOTE) || regex_matches(c, REGEX_DOUBLE_QUOTE)) {
             Token *tok = lexer_tokenize_string(self, c);
             if(tok == NULL)
                 break;

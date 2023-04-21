@@ -15,7 +15,7 @@ module(hashes_spec, {
     });
 
     it("parses hashes", {
-        parse("(x at: 'a' put: 3)", vector_new(FM_VARIABLE, string_new("x"), FM_CHAR, string_new("a"), FM_INTEGER, string_new("3"), FM_KEYWORD, string_new("at:put:"), string_new("2")));
+        parse("(x at: 'a' put: 3)", vector_new(FM_VARIABLE, string_new("x"), FM_STRING, string_new("a"), FM_INTEGER, string_new("3"), FM_KEYWORD, string_new("at:put:"), string_new("2")));
         parse("(x is_empty?)", vector_new(FM_VARIABLE, string_new("x"), FM_UNARY, string_new("is_empty?")));
         parse("(x size)", vector_new(FM_VARIABLE, string_new("x"), FM_UNARY, string_new("size")));
         parse("(x at: \"a\" if_absent: \"\")", vector_new(FM_VARIABLE, string_new("x"), FM_STRING, string_new("a"), FM_STRING, string_new(""), FM_KEYWORD, string_new("at:if_absent:"), string_new("2")));

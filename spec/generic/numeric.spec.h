@@ -65,8 +65,8 @@ module(numeric_spec, {
     });
 
     it("parses negative characters", {
-        parse("-'a'", vector_new(FM_CHAR, string_new("-a")));
-        parse("-'æ'", vector_new(FM_CHAR, string_new("-æ")));
+        parse("-'a'", vector_new(FM_STRING, string_new("a")));
+        parse("-'æ'", vector_new(FM_STRING, string_new("æ")));
     });
 })
 

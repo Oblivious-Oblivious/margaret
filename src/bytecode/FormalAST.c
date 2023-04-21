@@ -440,16 +440,6 @@ vector *ast_float_literal(string *sign, string *number) {
     return vector_new(FM_FLOAT, f);
 }
 
-vector *ast_char_literal(string *sign, string *c) {
-    string *character = string_new("");
-    string_add(character, sign);
-    string_skip(c, 1);
-    string_shorten(c, string_size(c)-1);
-    string_add(character, c);
-
-    return vector_new(FM_CHAR, character);
-}
-
 vector *ast_string_literal(string *string) {
     string_skip(string, 1);
     string_shorten(string, string_size(string)-1);

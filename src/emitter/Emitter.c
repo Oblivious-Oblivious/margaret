@@ -63,7 +63,6 @@ VM *emitter_emit(vector *formal_bytecode) {
             EMIT_CONSTANT(constant);
         }
 
-        opcode_case(FM_CHAR) {}
         opcode_case(FM_STRING) {
             string *constant_str = vector_get(formal_bytecode, ++ip);
             char *chars = string_get(constant_str);
