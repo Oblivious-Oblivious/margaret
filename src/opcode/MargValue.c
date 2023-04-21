@@ -18,6 +18,8 @@ marg_string *marg_value_format(MargValue self) {
         else
             marg_string_addf(res, "%g", num);
     }
+    else if(IS_STRING(self))
+        marg_string_addf(res, "\"%s\"", AS_CSTRING(self));
     return res;
 }
 

@@ -5,6 +5,7 @@
 #include "../base/marg_boolean.h"
 
 #include "MargObject.h"
+#include "MargString.h"
 
 typedef uint64_t MargValue;
 
@@ -40,13 +41,21 @@ static inline MargValue num_to_value(double num) {
 #define MARG_TRUE                ((MargValue)(uint64_t)(QNAN | TAG_TRUE))
 #define MARG_BOOL(b)             ((b) ? MARG_TRUE : MARG_FALSE)
 #define MARG_NUMBER(num)         num_to_value(num)
+#define MARG_OBJ(obj)            (MargValue)(SIGN_BIT | QNAN | (uint64_t)(uintptr_t)(obj))
 
 #define AS_BOOL(value)           ((value) == MARG_TRUE)
 #define AS_NUMBER(value)         value_to_num(value)
+#define AS_OBJ(value)            ((Obj*)(uintptr_t)((value) & ~(SIGN_BIT | QNAN)))
+#define AS_STRING(value)         ((ObjString*)AS_OBJ(value))
+#define AS_CSTRING(value)        (((ObjString*)AS_OBJ(value))->chars)
+
+#define OBJ_TYPE(value)          (AS_OBJ(value)->type)
 
 #define IS_NIL(value)            ((value) == MARG_NIL)
 #define IS_BOOL(value)           (((value) | 1) == MARG_TRUE)
 #define IS_NUMBER(value)         (((value) & QNAN) != QNAN)
+#define IS_OBJ(value)            (((value) & (QNAN | SIGN_BIT)) == (QNAN | SIGN_BIT))
+#define IS_STRING(value)         IS_OBJ(value) && OBJ_TYPE(value) == OBJ_STRING
 
 /**
  * @brief Formats a marg value using QNAN boxing

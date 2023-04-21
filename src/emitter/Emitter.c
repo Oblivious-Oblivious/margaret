@@ -54,7 +54,13 @@ VM *emitter_emit(marg_vector *formal_bytecode) {
         }
         opcode_case(FM_FLOAT) {}
         opcode_case(FM_CHAR) {}
-        opcode_case(FM_STRING) {}
+        opcode_case(FM_STRING) {
+            marg_string *constant_str = marg_vector_get(formal_bytecode, ++ip);
+            char *chars = marg_string_get(constant_str);
+            size_t size = marg_string_size(constant_str);
+            MargValue constant = MARG_OBJ(obj_string_copy(chars, size));
+            EMIT_CONSTANT(constant);
+        }
         opcode_case(FM_TENSOR) {}
         opcode_case(FM_TUPLE) {}
         opcode_case(FM_HASH) {}
