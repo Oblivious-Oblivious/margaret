@@ -1,5 +1,6 @@
-#ifndef __MARG_STRING_H_
-#define __MARG_STRING_H_
+// TODO Rename
+#ifndef __STRING_H_
+#define __STRING_H_
 
 #include <stdlib.h> /* size_t */
 
