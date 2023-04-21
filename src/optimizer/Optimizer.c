@@ -14,6 +14,7 @@ VM *optimizer_optimize(VM *self) {
             case OP_RETURN: {
                 return self;
             }
+            default: {}
         }
     }
 
