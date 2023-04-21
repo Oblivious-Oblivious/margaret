@@ -2,8 +2,8 @@
 
 #include "../base/memory.h"
 
-Obj* obj_allocate(size_t size, ObjType type) {
-    Obj *object = (Obj*)collected_malloc(sizeof(Obj) * size);
+MargObject *marg_object_allocate(size_t size, MargObjectType type) {
+    MargObject *object = (MargObject*)collected_malloc(sizeof(MargObject) * size);
 
     object->type = type;
 

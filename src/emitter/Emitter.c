@@ -67,7 +67,7 @@ VM *emitter_emit(vector *formal_bytecode) {
             string *constant_str = vector_get(formal_bytecode, ++ip);
             char *chars = string_get(constant_str);
             size_t size = string_size(constant_str);
-            MargValue constant = MARG_OBJ(obj_string_copy(chars, size));
+            MargValue constant = MARG_OBJECT(marg_string_copy(chars, size));
             EMIT_CONSTANT(constant);
         }
 

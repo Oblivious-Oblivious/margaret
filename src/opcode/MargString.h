@@ -5,12 +5,12 @@
 
 #include "MargObject.h"
 
-struct ObjString {
-    Obj obj;
+struct MargString {
+    MargObject obj;
     size_t size;
     char *chars;
 };
 
-ObjString *obj_string_copy(char *chars, size_t size);
+MargString *marg_string_copy(char *chars, size_t size);
 
 #endif

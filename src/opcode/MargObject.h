@@ -3,17 +3,17 @@
 
 #include <stdlib.h> /* size_t */
 
-typedef struct Obj Obj;
-typedef struct ObjString ObjString;
+typedef struct MargObject MargObject;
+typedef struct MargString MargString;
 
 typedef enum {
-    OBJ_STRING,
-} ObjType;
+    MARG_STRING,
+} MargObjectType;
 
-struct Obj {
-    ObjType type;
+struct MargObject {
+    MargObjectType type;
 };
 
-Obj* obj_allocate(size_t size, ObjType type);
+MargObject *marg_object_allocate(size_t size, MargObjectType type);
 
 #endif

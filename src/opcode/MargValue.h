@@ -41,21 +41,21 @@ static inline MargValue num_to_value(long double num) {
 #define MARG_TRUE                ((MargValue)(uint64_t)(QNAN | TAG_TRUE))
 #define MARG_BOOL(b)             ((b) ? MARG_TRUE : MARG_FALSE)
 #define MARG_NUMBER(num)         num_to_value(num)
-#define MARG_OBJ(obj)            (MargValue)(SIGN_BIT | QNAN | (uint64_t)(uintptr_t)(obj))
+#define MARG_OBJECT(obj)         (MargValue)(SIGN_BIT | QNAN | (uint64_t)(uintptr_t)(obj))
 
 #define AS_BOOL(value)           ((value) == MARG_TRUE)
 #define AS_NUMBER(value)         value_to_num(value)
-#define AS_OBJ(value)            ((Obj*)(uintptr_t)((value) & ~(SIGN_BIT | QNAN)))
-#define AS_STRING(value)         ((ObjString*)AS_OBJ(value))
-#define AS_CSTRING(value)        (((ObjString*)AS_OBJ(value))->chars)
+#define AS_OBJECT(value)         ((MargObject*)(uintptr_t)((value) & ~(SIGN_BIT | QNAN)))
+#define AS_STRING(value)         ((MargString*)AS_OBJECT(value))
+#define AS_CSTRING(value)        (((MargString*)AS_OBJECT(value))->chars)
 
-#define OBJ_TYPE(value)          (AS_OBJ(value)->type)
+#define OBJECT_TYPE(value)       (AS_OBJECT(value)->type)
 
 #define IS_NIL(value)            ((value) == MARG_NIL)
 #define IS_BOOL(value)           (((value) | 1) == MARG_TRUE)
 #define IS_NUMBER(value)         (((value) & QNAN) != QNAN)
-#define IS_OBJ(value)            (((value) & (QNAN | SIGN_BIT)) == (QNAN | SIGN_BIT))
-#define IS_STRING(value)         IS_OBJ(value) && OBJ_TYPE(value) == OBJ_STRING
+#define IS_OBJECT(value)         (((value) & (QNAN | SIGN_BIT)) == (QNAN | SIGN_BIT))
+#define IS_STRING(value)         IS_OBJECT(value) && OBJECT_TYPE(value) == MARG_STRING
 
 /**
  * @brief Formats a marg value using QNAN boxing
