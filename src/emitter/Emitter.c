@@ -1,5 +1,7 @@
 #include "Emitter.h"
 
+#include <string.h> /* strtoll, strtold */
+
 #include "../opcode/Opcodes.h"
 
 #define opcode_case(opstr) else if(string_equals(opcode, (opstr)))
@@ -47,12 +49,19 @@ VM *emitter_emit(vector *formal_bytecode) {
         opcode_case(FM_SELF) {}
         opcode_case(FM_SUPER) {}
 
+        // TODO Distinguish normal number from big numbers
         opcode_case(FM_INTEGER) {
+            char *end;
+            string *constant_str = vector_get(formal_bytecode, ++ip);
+            MargValue constant = MARG_NUMBER(strtoll(string_get(constant_str), &end, 10));
+            EMIT_CONSTANT(constant);
+        }
             string *constant_str = vector_get(formal_bytecode, ++ip);
             MargValue constant = MARG_NUMBER((long long)atoi(string_get(constant_str)));
             EMIT_CONSTANT(constant);
         }
         opcode_case(FM_FLOAT) {}
+
         opcode_case(FM_CHAR) {}
         opcode_case(FM_STRING) {
             string *constant_str = vector_get(formal_bytecode, ++ip);
@@ -61,6 +70,7 @@ VM *emitter_emit(vector *formal_bytecode) {
             MargValue constant = MARG_OBJ(obj_string_copy(chars, size));
             EMIT_CONSTANT(constant);
         }
+
         opcode_case(FM_TENSOR) {}
         opcode_case(FM_TUPLE) {}
         opcode_case(FM_HASH) {}
