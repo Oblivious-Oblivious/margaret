@@ -56,11 +56,12 @@ VM *emitter_emit(vector *formal_bytecode) {
             MargValue constant = MARG_NUMBER(strtoll(string_get(constant_str), &end, 10));
             EMIT_CONSTANT(constant);
         }
+        opcode_case(FM_FLOAT) {
+            char *end;
             string *constant_str = vector_get(formal_bytecode, ++ip);
-            MargValue constant = MARG_NUMBER((long long)atoi(string_get(constant_str)));
+            MargValue constant = MARG_NUMBER(strtold(string_get(constant_str), &end));
             EMIT_CONSTANT(constant);
         }
-        opcode_case(FM_FLOAT) {}
 
         opcode_case(FM_CHAR) {}
         opcode_case(FM_STRING) {

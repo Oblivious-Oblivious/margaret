@@ -1,6 +1,7 @@
 #include "MargValue.h"
 
 #include <math.h>   /* floor */
+#include <float.h>  /* LDBL_DIG */
 
 #include "../base/memory.h"
 
@@ -16,7 +17,7 @@ string *marg_value_format(MargValue self) {
         if(floor(num) == num)
             string_addf(res, "%lld", (long long)(num));
         else
-            string_addf(res, "%g", num);
+            string_addf(res, "%.*Lg", LDBL_DIG, num);
     }
     else if(IS_STRING(self))
         string_addf(res, "\"%s\"", AS_CSTRING(self));
