@@ -4,7 +4,7 @@
 #include <stdint.h> /* int64_t, uint64_t */
 #include <string.h> /* strlen */
 
-#include "../base/marg_string.h"
+#include "../base/string.h"
 #include "../tokens/TokenTable.h"
 
 static const char REGEX_WHITESPACE[5] = {' ','\t','\f','\r','\0'};
@@ -41,7 +41,7 @@ static int regex_matches(char c, const char *matcher) {
 
 typedef struct Lexer {
     char *filename;
-    marg_string *text;
+    string *text;
     /* TODO Abstract into generic size */
     int64_t pos;
     uint64_t lineno;
@@ -53,7 +53,7 @@ typedef struct Lexer {
  * @param text -> The text we read
  * @return Lexer*
  */
-Lexer *lexer_new(char *filename, marg_string *text);
+Lexer *lexer_new(char *filename, string *text);
 
 /**
  * @brief Reports an error to stderrr
@@ -62,7 +62,7 @@ Lexer *lexer_new(char *filename, marg_string *text);
  * @param token -> The token where the error occurred at
  * @return void* -> NULL
  */
-void *lexer_error(Lexer *self, char *message, marg_string *token);
+void *lexer_error(Lexer *self, char *message, string *token);
 
 /**
  * @brief Get the next character from the input stream

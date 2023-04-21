@@ -1,5 +1,5 @@
-#ifndef __MARG_BOOLEAN_H_
-#define __MARG_BOOLEAN_H_
+#ifndef __BOOLEAN_H_
+#define __BOOLEAN_H_
 
 /** @param bool -> A 'big' enough size to hold both 1 and 0 **/
 #ifndef bool

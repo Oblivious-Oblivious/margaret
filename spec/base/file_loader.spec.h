@@ -50,12 +50,12 @@ module(file_loader_spec, {
             fprintf(fd, "%s", "text");
             fclose(fd);
 
-            marg_string *text = file_loader_load(loader, "test.marg");
-            assert_that_int(marg_string_get_char_at_index(text, 0) equals to 't');
-            assert_that_int(marg_string_get_char_at_index(text, 1) equals to 'e');
-            assert_that_int(marg_string_get_char_at_index(text, 2) equals to 'x');
-            assert_that_int(marg_string_get_char_at_index(text, 3) equals to 't');
-            assert_that_charptr(marg_string_get(text) equals to "text");
+            string *text = file_loader_load(loader, "test.marg");
+            assert_that_int(string_get_char_at_index(text, 0) equals to 't');
+            assert_that_int(string_get_char_at_index(text, 1) equals to 'e');
+            assert_that_int(string_get_char_at_index(text, 2) equals to 'x');
+            assert_that_int(string_get_char_at_index(text, 3) equals to 't');
+            assert_that_charptr(string_get(text) equals to "text");
         });
     });
 

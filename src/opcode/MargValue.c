@@ -4,22 +4,22 @@
 
 #include "../base/memory.h"
 
-marg_string *marg_value_format(MargValue self) {
-    marg_string *res = marg_string_new("");
+string *marg_value_format(MargValue self) {
+    string *res = string_new("");
 
     if(IS_NIL(self))
-        marg_string_add_str(res, "nil");
+        string_add_str(res, "nil");
     else if(IS_BOOL(self))
-        marg_string_add_str(res, AS_BOOL(self) ? "true" : "false");
+        string_add_str(res, AS_BOOL(self) ? "true" : "false");
     else if(IS_NUMBER(self)) {
         double num = AS_NUMBER(self);
         if(floor(num) == num)
-            marg_string_addf(res, "%lld", (long long)(num));
+            string_addf(res, "%lld", (long long)(num));
         else
-            marg_string_addf(res, "%g", num);
+            string_addf(res, "%g", num);
     }
     else if(IS_STRING(self))
-        marg_string_addf(res, "\"%s\"", AS_CSTRING(self));
+        string_addf(res, "\"%s\"", AS_CSTRING(self));
     return res;
 }
 

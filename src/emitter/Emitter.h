@@ -1,7 +1,7 @@
 #ifndef __EMITTER_H_
 #define __EMITTER_H_
 
-#include "../base/marg_vector.h"
+#include "../base/vector.h"
 #include "../vm/vm.h"
 
 /**
@@ -10,6 +10,6 @@
  * @param self -> The Emitter object
  * @return VM* -> The new VM object
  */
-VM *emitter_emit(marg_vector *formal_bytecode);
+VM *emitter_emit(vector *formal_bytecode);
 
 #endif

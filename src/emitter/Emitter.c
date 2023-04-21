@@ -2,7 +2,7 @@
 
 #include "../opcode/Opcodes.h"
 
-#define opcode_case(opstr) else if(marg_string_equals(opcode, (opstr)))
+#define opcode_case(opstr) else if(string_equals(opcode, (opstr)))
 
 #define EMIT_CONSTANT(constant) do { \
     if(value_vector_size(vm->bytecode->constants) < 256) { \
@@ -21,14 +21,14 @@
     } \
 } while(0)
 
-VM *emitter_emit(marg_vector *formal_bytecode) {
+VM *emitter_emit(vector *formal_bytecode) {
     VM *vm = vm_new();
 
-    size_t bytecode_size = marg_vector_size(formal_bytecode);
+    size_t bytecode_size = vector_size(formal_bytecode);
     for(size_t ip = 0; ip < bytecode_size; ip++) {
-        marg_string *opcode = marg_vector_get(formal_bytecode, ip);
+        string *opcode = vector_get(formal_bytecode, ip);
 
-        if(marg_string_equals(opcode, FM_VARIABLE)) {}
+        if(string_equals(opcode, FM_VARIABLE)) {}
         opcode_case(FM_INSTANCE) {}
 
         opcode_case(FM_STORE) {}
@@ -48,16 +48,16 @@ VM *emitter_emit(marg_vector *formal_bytecode) {
         opcode_case(FM_SUPER) {}
 
         opcode_case(FM_INTEGER) {
-            marg_string *constant_str = marg_vector_get(formal_bytecode, ++ip);
-            MargValue constant = MARG_NUMBER((long long)atoi(marg_string_get(constant_str)));
+            string *constant_str = vector_get(formal_bytecode, ++ip);
+            MargValue constant = MARG_NUMBER((long long)atoi(string_get(constant_str)));
             EMIT_CONSTANT(constant);
         }
         opcode_case(FM_FLOAT) {}
         opcode_case(FM_CHAR) {}
         opcode_case(FM_STRING) {
-            marg_string *constant_str = marg_vector_get(formal_bytecode, ++ip);
-            char *chars = marg_string_get(constant_str);
-            size_t size = marg_string_size(constant_str);
+            string *constant_str = vector_get(formal_bytecode, ++ip);
+            char *chars = string_get(constant_str);
+            size_t size = string_size(constant_str);
             MargValue constant = MARG_OBJ(obj_string_copy(chars, size));
             EMIT_CONSTANT(constant);
         }

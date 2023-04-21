@@ -6,11 +6,11 @@
 
 // base
 #include "base/alternate_to_dec.spec.h"
+#include "base/boolean.spec.h"
 #include "base/file_loader.spec.h"
-#include "base/marg_boolean.spec.h"
-#include "base/marg_vector.spec.h"
-#include "base/marg_string.spec.h"
 #include "base/memory.spec.h"
+#include "base/string.spec.h"
+#include "base/vector.spec.h"
 
 // bytecode
 #include "bytecode/FormalAST.spec.h"
@@ -85,11 +85,11 @@ spec_suite({
     VersionSpec();
 
     alternate_to_dec_spec();
+    boolean_spec();
     file_loader_spec();
-    marg_boolean_spec();
-    marg_vector_spec();
-    marg_string_spec();
     memory_spec();
+    string_spec();
+    vector_spec();
 
     FormalASTSpec();
 

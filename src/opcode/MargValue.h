@@ -1,8 +1,8 @@
 #ifndef __MARG_VALUE_H_
 #define __MARG_VALUE_H_
 
-#include "../base/marg_string.h"
-#include "../base/marg_boolean.h"
+#include "../base/boolean.h"
+#include "../base/string.h"
 
 #include "MargObject.h"
 #include "MargString.h"
@@ -60,9 +60,9 @@ static inline MargValue num_to_value(double num) {
 /**
  * @brief Formats a marg value using QNAN boxing
  * @param self -> The MargValue represented as a double
- * @return marg_string*
+ * @return string*
  */
-marg_string *marg_value_format(MargValue self);
+string *marg_value_format(MargValue self);
 
 /**
  * @brief Splits a 32 bit constant into 4, 8-bit parts

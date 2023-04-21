@@ -1,10 +1,10 @@
-#include "marg_vector.h"
+#include "vector.h"
 
-#include "../base/memory.h"
+#include "memory.h"
 
-#define MARG_VECTOR_GROW_FACTOR 1.618
+#define VECTOR_GROW_FACTOR 1.618
 
-#define MARG_VECTOR_DEFINE(structname, typename, type) \
+#define VECTOR_DEFINE(structname, typename, type) \
     /**
      * @desc: Ensure there is enough space for our values in the vector
      * @param self -> The vector to use
@@ -33,7 +33,7 @@
     structname *typename##_add(structname *self, type item) { \
         if(self == NULL) return self; \
         if(self->alloced == self->size) \
-            typename##_ensure_space(self, self->alloced * MARG_VECTOR_GROW_FACTOR); \
+            typename##_ensure_space(self, self->alloced * VECTOR_GROW_FACTOR); \
         self->items[self->size++] = item; \
         \
         return self; \
@@ -52,12 +52,12 @@
         return self->size; \
     }
 
-MARG_VECTOR_DEFINE(marg_vector, marg_vector, void*)
-MARG_VECTOR_DEFINE(ValueVector, value_vector, MargValue)
-MARG_VECTOR_DEFINE(Chunk, chunk, uint8_t)
+VECTOR_DEFINE(vector, vector, void*)
+VECTOR_DEFINE(ValueVector, value_vector, MargValue)
+VECTOR_DEFINE(Chunk, chunk, uint8_t)
 
-marg_vector *__internal_marg_vector_new(size_t argc, ...) {
-    marg_vector *self = (marg_vector*)collected_malloc(sizeof(marg_vector));
+vector *__internal_vector_new(size_t argc, ...) {
+    vector *self = (vector*)collected_malloc(sizeof(vector));
     self->alloced = 512;
     self->size = 0;
     self->items = (void**)collected_malloc(sizeof(void*) * self->alloced);
@@ -67,7 +67,7 @@ marg_vector *__internal_marg_vector_new(size_t argc, ...) {
     va_list vars;
     va_start(vars, argc);
         for(size_t i = 0; i < argc; i++)
-            marg_vector_add(self, va_arg(vars, void*));
+            vector_add(self, va_arg(vars, void*));
     va_end(vars);
 
     return self;

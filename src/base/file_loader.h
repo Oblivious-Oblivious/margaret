@@ -3,7 +3,7 @@
 
 #include <stdio.h>  /* FILE */
 
-#include "marg_string.h"
+#include "string.h"
 
 /**
  * @struct file_loader
@@ -39,8 +39,8 @@ int file_loader_close(file_loader *self);
  * @brief Loads each character into a vector
  * @param self -> The file_loader to read from
  * @param filepath -> The name of the file to read from
- * @return marg_string* 
+ * @return string* 
  */
-marg_string *file_loader_load(file_loader *self, char *filepath);
+string *file_loader_load(file_loader *self, char *filepath);
 
 #endif

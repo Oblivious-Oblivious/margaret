@@ -7,8 +7,8 @@
 #include "libs/readline/readline/history.h"
 
 #include "src/base/file_loader.h"
-#include "src/base/marg_string.h"
-#include "src/base/marg_vector.h"
+#include "src/base/string.h"
+#include "src/base/vector.h"
 #include "src/emitter/Emitter.h"
 #include "src/evaluator/Evaluator.h"
 #include "src/inspector/Inspector.h"
@@ -16,31 +16,31 @@
 #include "src/optimizer/Optimizer.h"
 #include "src/parser/Parser.h"
 
-static marg_string *LOAD(char *filename) {
+static string *LOAD(char *filename) {
     return file_loader_load(file_loader_new(), filename);
 }
 
-static marg_string *SCAN(char *prompt) {
+static string *SCAN(char *prompt) {
     char *line = readline(prompt);
     if(!strcmp(line, ""))
-        return marg_string_new("()");
+        return string_new("()");
     else if(!strcmp(line, "<<exit>>") || !strcmp(line, "<<quit>>"))
         exit(0);
     else {
         add_history(line);
-        return marg_string_new(line);
+        return string_new(line);
     }
 }
 
-static TokenTable *READ(marg_string *chars) {
+static TokenTable *READ(string *chars) {
     return lexer_make_tokens(lexer_new("repl", chars));
 }
 
-static marg_vector *FORMALIZE(TokenTable *tokens) {
+static vector *FORMALIZE(TokenTable *tokens) {
     return parser_analyze_syntax(parser_new(tokens));
 }
 
-static VM *EMIT(marg_vector *formal_bytecode) {
+static VM *EMIT(vector *formal_bytecode) {
     return emitter_emit(formal_bytecode);
 }
 
@@ -53,16 +53,16 @@ static MargValue EVAL(VM *vm) {
 }
 
 static void PRINT(MargValue evaluated) {
-    printf("%s\n", marg_string_get(marg_value_format(evaluated)));
+    printf("%s\n", string_get(marg_value_format(evaluated)));
 }
 
-static void PRINT_FORMAL(marg_vector *formal_bytecode) {
+static void PRINT_FORMAL(vector *formal_bytecode) {
     printf("[");
-    size_t formal_bytecode_size = marg_vector_size(formal_bytecode);
+    size_t formal_bytecode_size = vector_size(formal_bytecode);
     if(formal_bytecode_size > 0) {
         for(size_t i = 0; i < formal_bytecode_size-1; i++)
-            printf("%s, ", marg_string_get(marg_vector_get(formal_bytecode, i)));
-        printf("%s", marg_string_get(marg_vector_get(formal_bytecode, formal_bytecode_size-1)));
+            printf("%s, ", string_get(vector_get(formal_bytecode, i)));
+        printf("%s", string_get(vector_get(formal_bytecode, formal_bytecode_size-1)));
     }
     printf("]\n");
 }
@@ -73,10 +73,10 @@ static void margaret_repl(void) {
 }
 
 static void margaret_run_file(char *filename) {
-    marg_string *chars = LOAD(filename);
+    string *chars = LOAD(filename);
     TokenTable *tokens = READ(chars);
-    marg_vector *formal_bytecode = FORMALIZE(tokens);
-    PRINT_FORMAL(formal_bytecode);
+    vector *formal_bytecode = FORMALIZE(tokens);
+    // PRINT_FORMAL(formal_bytecode);
     VM *vm = EMIT(formal_bytecode);
 
     vm = OPTIMIZE(vm);

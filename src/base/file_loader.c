@@ -2,7 +2,7 @@
 
 #include <stdio.h>  /* FILE, fopen, fclose, printf */
 
-#include "../base/memory.h"
+#include "memory.h"
 
 /**
  * @brief Check if the path file exists in the filesystem
@@ -48,13 +48,13 @@ int file_loader_close(file_loader *self) {
     return 1;
 }
 
-marg_string *file_loader_load(file_loader *self, char *filepath) {
+string *file_loader_load(file_loader *self, char *filepath) {
     file_loader_open(self, filepath);
-    marg_string *result = marg_string_new("");
+    string *result = string_new("");
 
     char ch;
     while((ch = fgetc(self->fd)) != EOF)
-        marg_string_add_char(result, ch);
+        string_add_char(result, ch);
 
     return result;
 }

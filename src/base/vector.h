@@ -1,13 +1,13 @@
-#ifndef __MARG_VECTOR_H_
-#define __MARG_VECTOR_H_
+#ifndef __VECTOR_H_
+#define __VECTOR_H_
 
-#include <stdlib.h>
+#include <stdlib.h> /* size_t */
 #include <stdarg.h> /* va_start, va_end, va_list, va_arg */
 #include <stdint.h> /* uint8_t */
 
 #include "../opcode/MargValue.h"
 
-#define MARG_VECTOR_PP_256TH_ARG( \
+#define VECTOR_PP_256TH_ARG( \
     _1, _2, _3, _4, _5, _6, _7, _8, _9,_10, \
     _11,_12,_13,_14,_15,_16,_17,_18,_19,_20, \
     _21,_22,_23,_24,_25,_26,_27,_28,_29,_30, \
@@ -60,7 +60,7 @@
     _491,_492,_493,_494,_495,_496,_497,_498,_499,_500, \
     _501,_502,_503,_504,_505,_506,_507,_508,_509,_510, \
     _511,_512,N,...) N
-#define MARG_VECTOR_PP_RSEQ_N() \
+#define VECTOR_PP_RSEQ_N() \
     512,511,510, \
     509,508,507,506,505,504,503,502,501,500, \
     499,498,497,496,495,494,493,492,491,490, \
@@ -114,12 +114,12 @@
     19,18,17,16,15,14,13,12,11,10, \
     9,8,7,6,5,4,3,2,1,0
 
-#define MARG_VECTOR_PP_NARG_(...) \
-    MARG_VECTOR_PP_256TH_ARG(__VA_ARGS__)
-#define MARG_VECTOR_PP_NARG(...) \
-    MARG_VECTOR_PP_NARG_(__VA_ARGS__,MARG_VECTOR_PP_RSEQ_N())
+#define VECTOR_PP_NARG_(...) \
+    VECTOR_PP_256TH_ARG(__VA_ARGS__)
+#define VECTOR_PP_NARG(...) \
+    VECTOR_PP_NARG_(__VA_ARGS__,VECTOR_PP_RSEQ_N())
 
-#define MARG_VECTOR_DECLARE(structname, typename, type) \
+#define VECTOR_DECLARE(structname, typename, type) \
     /**
      * @brief: Defines a vector data structure
      * @param items -> A void pointer array that contains the heterogenous elements of the vector
@@ -164,11 +164,11 @@
      */ \
     size_t typename##_size(structname *self);
 
-MARG_VECTOR_DECLARE(marg_vector, marg_vector, void*)
-MARG_VECTOR_DECLARE(ValueVector, value_vector, MargValue)
-MARG_VECTOR_DECLARE(Chunk, chunk, uint8_t)
+VECTOR_DECLARE(vector, vector, void*)
+VECTOR_DECLARE(ValueVector, value_vector, MargValue)
+VECTOR_DECLARE(Chunk, chunk, uint8_t)
 
-#define marg_vector_new(...) __internal_marg_vector_new(MARG_VECTOR_PP_NARG(__VA_ARGS__), __VA_ARGS__)
+#define vector_new(...) __internal_vector_new(VECTOR_PP_NARG(__VA_ARGS__), __VA_ARGS__)
 
 /**
  * @brief: Initializes a vector data structure
@@ -176,7 +176,7 @@ MARG_VECTOR_DECLARE(Chunk, chunk, uint8_t)
  * @param ... -> Initialization arguments
  * @return: The newly created vector
  */
-marg_vector *__internal_marg_vector_new(size_t argc, ...);
+vector *__internal_vector_new(size_t argc, ...);
 
 /**
  * @brief Helper for adding a constant

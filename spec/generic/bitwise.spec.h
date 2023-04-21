@@ -5,16 +5,16 @@
 
 module(bitwise_spec, {
     it("parses bitwise operations", {
-        parse("(x = 0xff bitand: 0x0f)", marg_vector_new(FM_INTEGER, marg_string_new("255"), FM_INTEGER, marg_string_new("15"), FM_KEYWORD, marg_string_new("bitand:"), marg_string_new("1"), FM_STORE, marg_string_new("x")));
-        parse("(x = 0xf0 bitor: 0x0f)", marg_vector_new(FM_INTEGER, marg_string_new("240"), FM_INTEGER, marg_string_new("15"), FM_KEYWORD, marg_string_new("bitor:"), marg_string_new("1"), FM_STORE, marg_string_new("x")));
-        parse("(x = 0xff bitxor: 0x0f)", marg_vector_new(FM_INTEGER, marg_string_new("255"), FM_INTEGER, marg_string_new("15"), FM_KEYWORD, marg_string_new("bitxor:"), marg_string_new("1"), FM_STORE, marg_string_new("x")));
-        parse("(x = 0xff bitinvert)", marg_vector_new(FM_INTEGER, marg_string_new("255"), FM_UNARY, marg_string_new("bitinvert"), FM_STORE, marg_string_new("x")));
-        parse("(x = 0x0f bitshift: 4)", marg_vector_new(FM_INTEGER, marg_string_new("15"), FM_INTEGER, marg_string_new("4"), FM_KEYWORD, marg_string_new("bitshift:"), marg_string_new("1"), FM_STORE, marg_string_new("x"))); // Left shift
-        parse("(x = 0xf0 bitshift: -4)", marg_vector_new(FM_INTEGER, marg_string_new("240"), FM_INTEGER, marg_string_new("-4"), FM_KEYWORD, marg_string_new("bitshift:"), marg_string_new("1"), FM_STORE, marg_string_new("x"))); // Right shift
-        parse("(x = 0x80 highbit)", marg_vector_new(FM_INTEGER, marg_string_new("128"), FM_UNARY, marg_string_new("highbit"), FM_STORE, marg_string_new("x")));
-        parse("(x = 0xff all_mask: 0x0f)", marg_vector_new(FM_INTEGER, marg_string_new("255"), FM_INTEGER, marg_string_new("15"), FM_KEYWORD, marg_string_new("all_mask:"), marg_string_new("1"), FM_STORE, marg_string_new("x")));
-        parse("(x = 0xff any_mask: 0x0f)", marg_vector_new(FM_INTEGER, marg_string_new("255"), FM_INTEGER, marg_string_new("15"), FM_KEYWORD, marg_string_new("any_mask:"), marg_string_new("1"), FM_STORE, marg_string_new("x")));
-        parse("(x = 0xff no_mask: 0x0f)", marg_vector_new(FM_INTEGER, marg_string_new("255"), FM_INTEGER, marg_string_new("15"), FM_KEYWORD, marg_string_new("no_mask:"), marg_string_new("1"), FM_STORE, marg_string_new("x")));
+        parse("(x = 0xff bitand: 0x0f)", vector_new(FM_INTEGER, string_new("255"), FM_INTEGER, string_new("15"), FM_KEYWORD, string_new("bitand:"), string_new("1"), FM_STORE, string_new("x")));
+        parse("(x = 0xf0 bitor: 0x0f)", vector_new(FM_INTEGER, string_new("240"), FM_INTEGER, string_new("15"), FM_KEYWORD, string_new("bitor:"), string_new("1"), FM_STORE, string_new("x")));
+        parse("(x = 0xff bitxor: 0x0f)", vector_new(FM_INTEGER, string_new("255"), FM_INTEGER, string_new("15"), FM_KEYWORD, string_new("bitxor:"), string_new("1"), FM_STORE, string_new("x")));
+        parse("(x = 0xff bitinvert)", vector_new(FM_INTEGER, string_new("255"), FM_UNARY, string_new("bitinvert"), FM_STORE, string_new("x")));
+        parse("(x = 0x0f bitshift: 4)", vector_new(FM_INTEGER, string_new("15"), FM_INTEGER, string_new("4"), FM_KEYWORD, string_new("bitshift:"), string_new("1"), FM_STORE, string_new("x"))); // Left shift
+        parse("(x = 0xf0 bitshift: -4)", vector_new(FM_INTEGER, string_new("240"), FM_INTEGER, string_new("-4"), FM_KEYWORD, string_new("bitshift:"), string_new("1"), FM_STORE, string_new("x"))); // Right shift
+        parse("(x = 0x80 highbit)", vector_new(FM_INTEGER, string_new("128"), FM_UNARY, string_new("highbit"), FM_STORE, string_new("x")));
+        parse("(x = 0xff all_mask: 0x0f)", vector_new(FM_INTEGER, string_new("255"), FM_INTEGER, string_new("15"), FM_KEYWORD, string_new("all_mask:"), string_new("1"), FM_STORE, string_new("x")));
+        parse("(x = 0xff any_mask: 0x0f)", vector_new(FM_INTEGER, string_new("255"), FM_INTEGER, string_new("15"), FM_KEYWORD, string_new("any_mask:"), string_new("1"), FM_STORE, string_new("x")));
+        parse("(x = 0xff no_mask: 0x0f)", vector_new(FM_INTEGER, string_new("255"), FM_INTEGER, string_new("15"), FM_KEYWORD, string_new("no_mask:"), string_new("1"), FM_STORE, string_new("x")));
     });
 })
 

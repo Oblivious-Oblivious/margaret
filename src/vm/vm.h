@@ -2,7 +2,7 @@
 #define __VM_H_
 
 #include <stdint.h>
-#include "../base/marg_vector.h"
+#include "../base/vector.h"
 #include "../base/memory.h"
 #include "../opcode/MargValue.h"
 
