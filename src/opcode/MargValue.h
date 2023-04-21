@@ -4,6 +4,7 @@
 #include "../base/marg_string.h"
 #include "../base/marg_boolean.h"
 
+#include "MargObject.h"
 
 typedef uint64_t MargValue;
 
