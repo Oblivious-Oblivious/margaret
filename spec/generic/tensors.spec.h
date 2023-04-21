@@ -17,6 +17,7 @@ module(tensors_spec, {
             FM_STRING, string_new("Hello"), \
             FM_VARIABLE, string_new("v1"), \
             FM_VARIABLE, string_new("v2"), \
+            FM_NIL, \
             FM_TENSOR, string_new("0"), \
             FM_HASH, string_new("0"), \
             FM_INTEGER, string_new("1"), FM_STORE, string_new("x"), \

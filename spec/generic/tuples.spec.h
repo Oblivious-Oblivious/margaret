@@ -17,6 +17,7 @@ module(tuples_spec, {
             FM_STRING, string_new("Hello"), \
             FM_VARIABLE, string_new("v1"), \
             FM_VARIABLE, string_new("v2"), \
+            FM_NIL, \
             FM_TENSOR, string_new("0"), \
             FM_HASH, string_new("0"), \
             FM_TUPLE, string_new("0"), \

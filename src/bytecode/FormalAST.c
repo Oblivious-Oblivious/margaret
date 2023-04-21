@@ -185,7 +185,10 @@ vector *ast_group(vector *unit_list) {
             vector_add(res, vector_get(item, j));
     }
 
-    return res;
+    if(vector_size(res) == 0)
+        return vector_new(FM_NIL);
+    else
+        return res;
 }
 
 vector *ast_variable(string *optional_instance_symbol, string *name) {

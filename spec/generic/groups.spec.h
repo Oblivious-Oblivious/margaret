@@ -5,22 +5,22 @@
 
 module(groups_spec, {
     it("parses an empty group as a first unit", {
-        parse("()", vector_new_empty());
+        parse("()", vector_new(FM_NIL));
     });
 
     it("parses multiple groups as translation units", {
-        parse("(())", vector_new_empty());
-        parse("((()))", vector_new_empty());
-        parse("((), (), (), ())", vector_new_empty());
-        parse("((()), ())", vector_new_empty());
+        parse("(())", vector_new(FM_NIL));
+        parse("((()))", vector_new(FM_NIL));
+        parse("((), (), (), ())", vector_new(FM_NIL, FM_NIL, FM_NIL, FM_NIL));
+        parse("((()), ())", vector_new(FM_NIL, FM_NIL));
     });
 
     it("parses infinite groups of groups", {
         parse("(42)", vector_new(FM_INTEGER, string_new("42")));
         parse("(42, 43, 44)", vector_new(FM_INTEGER, string_new("42"), FM_INTEGER, string_new("43"), FM_INTEGER, string_new("44")));
-        parse("(42, (), 43, ())", vector_new(FM_INTEGER, string_new("42"), FM_INTEGER, string_new("43")));
-        parse("(42, (43), 44, ())", vector_new(FM_INTEGER, string_new("42"), FM_INTEGER, string_new("43"), FM_INTEGER, string_new("44")));
-        parse("((((()))))", vector_new_empty());
+        parse("(42, (), 43, ())", vector_new(FM_INTEGER, string_new("42"), FM_NIL, FM_INTEGER, string_new("43"), FM_NIL));
+        parse("(42, (43), 44, ())", vector_new(FM_INTEGER, string_new("42"), FM_INTEGER, string_new("43"), FM_INTEGER, string_new("44"), FM_NIL));
+        parse("((((()))))", vector_new(FM_NIL));
         parse("(1, 2, (10, 20, 30), 3)", vector_new(FM_INTEGER, string_new("1"), FM_INTEGER, string_new("2"), FM_INTEGER, string_new("10"), FM_INTEGER, string_new("20"), FM_INTEGER, string_new("30"), FM_INTEGER, string_new("3")));
     });
 
@@ -42,7 +42,7 @@ module(groups_spec, {
         parse("(x = arr select: { a | a > 2 })", vector_new(FM_VARIABLE, string_new("arr"), FM_START_PROC, FM_VARIABLE, string_new("a"), FM_TENSOR, string_new("1"), FM_VARIABLE, string_new("a"), FM_INTEGER, string_new("2"), FM_BINARY, string_new(">"), FM_END_PROC, FM_KEYWORD, string_new("select:"), string_new("1"), FM_STORE, string_new("x")));
         parse("(x = arr reject: { a | a < 2 })", vector_new(FM_VARIABLE, string_new("arr"), FM_START_PROC, FM_VARIABLE, string_new("a"), FM_TENSOR, string_new("1"), FM_VARIABLE, string_new("a"), FM_INTEGER, string_new("2"), FM_BINARY, string_new("<"), FM_END_PROC, FM_KEYWORD, string_new("reject:"), string_new("1"), FM_STORE, string_new("x")));
         parse("(x = arr collect: { a | a + a })", vector_new(FM_VARIABLE, string_new("arr"), FM_START_PROC, FM_VARIABLE, string_new("a"), FM_TENSOR, string_new("1"), FM_VARIABLE, string_new("a"), FM_VARIABLE, string_new("a"), FM_BINARY, string_new("+"), FM_END_PROC, FM_KEYWORD, string_new("collect:"), string_new("1"), FM_STORE, string_new("x")));
-        parse("(x = arr detect: { a | a > 3 } if_none: ())", vector_new(FM_VARIABLE, string_new("arr"), FM_START_PROC, FM_VARIABLE, string_new("a"), FM_TENSOR, string_new("1"), FM_VARIABLE, string_new("a"), FM_INTEGER, string_new("3"), FM_BINARY, string_new(">"), FM_END_PROC, FM_KEYWORD, string_new("detect:if_none:"), string_new("2"), FM_STORE, string_new("x")));
+        parse("(x = arr detect: { a | a > 3 } if_none: ())", vector_new(FM_VARIABLE, string_new("arr"), FM_START_PROC, FM_VARIABLE, string_new("a"), FM_TENSOR, string_new("1"), FM_VARIABLE, string_new("a"), FM_INTEGER, string_new("3"), FM_BINARY, string_new(">"), FM_END_PROC, FM_NIL, FM_KEYWORD, string_new("detect:if_none:"), string_new("2"), FM_STORE, string_new("x")));
         parse("( \
             arr = [1, 2, 3, 4], \
             sum = 0, \
