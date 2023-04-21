@@ -1,6 +1,6 @@
 #include "alternate_to_dec.h"
 
-#include "../base/memory.h"
+#include "memory.h"
 
 #include <stdio.h>  /* snprintf */
 #include <stdlib.h> /* uint64_t */
