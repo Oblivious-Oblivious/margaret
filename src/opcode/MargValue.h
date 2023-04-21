@@ -18,18 +18,18 @@ typedef uint64_t MargValue;
 #define TAG_FALSE  2 /* 10 -> last bits of `rest` */
 #define TAG_TRUE   3 /* 11 -> last bits of `rest` */
 
-static inline double value_to_num(MargValue value) {
+static inline long double value_to_num(MargValue value) {
     union {
         MargValue bits;
-        double num;
+        long double num;
     } data;
     data.bits = value;
     return data.num;
 }
 
-static inline MargValue num_to_value(double num) {
+static inline MargValue num_to_value(long double num) {
     union {
-        double bits;
+        long double bits;
         MargValue value;
     } data;
     data.bits = num;
