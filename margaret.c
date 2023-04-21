@@ -53,17 +53,7 @@ static MargValue EVAL(VM *vm) {
 }
 
 static void PRINT(MargValue evaluated) {
-    if(IS_BOOL(evaluated))
-        printf(AS_BOOL(evaluated) ? "true" : "false");
-    else if(IS_NIL(evaluated))
-        printf("nil");
-    else if(IS_NUMBER(evaluated))
-        printf("%g", AS_NUMBER(evaluated));
-    // else if(IS_OBJ(evaluated)) {
-    //     printObject(evaluated);
-    // }
-
-    printf("\n");
+    printf("%s\n", marg_string_get(marg_value_format(evaluated)));
 }
 
 static void PRINT_FORMAL(marg_vector *formal_bytecode) {
