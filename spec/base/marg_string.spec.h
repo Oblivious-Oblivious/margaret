@@ -1,5 +1,6 @@
-#ifndef __MARG_STRING_SPEC_H_
-#define __MARG_STRING_SPEC_H_
+// TODO Rename
+#ifndef __STRING_SPEC_H_
+#define __STRING_SPEC_H_
 
 #include "../../src/base/marg_string.h"
 #include "../cSpec.h"
