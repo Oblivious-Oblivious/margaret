@@ -27,12 +27,15 @@ static EvaluatorResult evaluator_run(VM *self) {
                 break;
             }
 
+            // TODO Rename CONSTANT to LITERAL or OBJECT
             case OP_CONSTANT: {
                 MargValue constant = READ_CONSTANT();
                 STACK_PUSH(self, constant);
                 break;
             }
-            case OP_LONG_CONSTANT: {}
+            case OP_LONG_CONSTANT: {
+                // TODO
+            }
 
             case OP_RETURN: {
                 return EVALUATOR_OK;
