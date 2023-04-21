@@ -4,11 +4,6 @@
 #include "../base/marg_string.h"
 #include "../base/marg_boolean.h"
 
-typedef enum MargValueType {
-    MARG_TYPE_NIL,
-    MARG_TYPE_BOOL,
-    MARG_TYPE_NUMBER,
-} MargValueType;
 
 typedef uint64_t MargValue;
 
