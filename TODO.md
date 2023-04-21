@@ -45,10 +45,10 @@
     ]
     🟥 Typecheck default parameters on multimethods!!
     ---------------------------
-    🟥 Compile time bytecodes
+    🟩 Compile time bytecodes
         Stored along with runtime ones.
         Executed only once.
-        End-toend optimization.
+        End-to-end optimization.
     🟥 Methods and functions compile to procs with own context.
         Procs compile to bitstrings/tensors/arrays of opcodes and are first class literals.
         Can be passed into optimization phases at runtime.
