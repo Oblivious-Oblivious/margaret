@@ -3,6 +3,10 @@
 
 #include <stdlib.h> /* size_t */
 
+// TODO Eventually remove
+#define MEMORY_GROW_FACTOR 2
+#define MEMORY_GROW_CAPACITY(capacity) ((capacity) < 8 ? 8 : (capacity) * MEMORY_GROW_FACTOR)
+
 /**
  * @brief Interface to a garbage collected allocation
  * @param nbytes -> Size of allocation

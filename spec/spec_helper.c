@@ -60,6 +60,7 @@
 #include "lexer/Lexer.spec.h"
 
 // opcode
+#include "opcode/MargHash.spec.h"
 #include "opcode/MargObject.spec.h"
 #include "opcode/MargString.spec.h"
 #include "opcode/MargValue.spec.h"
@@ -131,6 +132,7 @@ spec_suite({
 
     LexerSpec();
 
+    MargHashSpec();
     MargObjectSpec();
     MargStringSpec();
     MargValueSpec();
