@@ -30,10 +30,10 @@ VM *emitter_emit(vector *formal_bytecode) {
     for(size_t ip = 0; ip < bytecode_size; ip++) {
         string *opcode = vector_get(formal_bytecode, ip);
 
-        if(string_equals(opcode, FM_VARIABLE)) {}
+        if(string_equals(opcode, FM_LOCAL)) {}
         opcode_case(FM_INSTANCE) {}
 
-        opcode_case(FM_STORE) {}
+        opcode_case(FM_STORE_LOCAL) {}
         opcode_case(FM_STORE_INSTANCE) {}
 
         opcode_case(FM_NIL) {

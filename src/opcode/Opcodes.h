@@ -4,10 +4,10 @@
 #include "../base/string.h"
 
 // ------ Formal Messages Opcodes ------
-#define FM_VARIABLE          string_new("VARIABLE")
+#define FM_LOCAL             string_new("LOCAL")
 #define FM_INSTANCE          string_new("INSTANCE")
 
-#define FM_STORE             string_new("STORE")
+#define FM_STORE_LOCAL       string_new("STORE")
 #define FM_STORE_INSTANCE    string_new("STORE_INSTANCE")
 
 #define FM_NIL               string_new("NIL")

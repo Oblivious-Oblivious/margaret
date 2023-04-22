@@ -41,7 +41,7 @@ vector *ast_assignment(vector *id) {
     if(string_equals(vector_get(id, 0), FM_INSTANCE))
         return vector_new(FM_STORE_INSTANCE, vector_get(id, 1));
     else
-        return vector_new(FM_STORE, vector_get(id, 1));
+        return vector_new(FM_STORE_LOCAL, vector_get(id, 1));
 }
 
 vector *ast_message(vector *msg) {
@@ -171,7 +171,7 @@ vector *ast_expression(vector *unit) {
 }
 
 vector *ast_margaret_object(void) {
-    return vector_new(FM_VARIABLE, string_new("Margaret"));
+    return vector_new(FM_LOCAL, string_new("Margaret"));
 }
 
 vector *ast_group(vector *unit_list) {
@@ -205,7 +205,7 @@ vector *ast_variable(string *optional_instance_symbol, string *name) {
     else if(string_equals(optional_instance_symbol, string_new("@")))
         return vector_new(FM_INSTANCE, name);
     else
-        return vector_new(FM_VARIABLE, name);
+        return vector_new(FM_LOCAL, name);
 }
 
 vector *ast_proc_literal(vector *param_list, vector *function) {
@@ -213,7 +213,7 @@ vector *ast_proc_literal(vector *param_list, vector *function) {
 
     size_t param_list_size = vector_size(param_list);
     for(size_t i = 0; i < param_list_size; i++) {
-        vector_add(res, FM_VARIABLE);
+        vector_add(res, FM_LOCAL);
         vector_add(res, vector_get(param_list, i));
     }
 
@@ -233,15 +233,15 @@ vector *ast_proc_literal(vector *param_list, vector *function) {
 }
 
 vector *ast_c_function_declaration(string *return_type, string *name, vector *params) {
-    vector *res = vector_new(FM_START_C_FUNCTION, FM_VARIABLE, return_type, FM_VARIABLE, name);
+    vector *res = vector_new(FM_START_C_FUNCTION, FM_LOCAL, return_type, FM_LOCAL, name);
 
     size_t params_size = vector_size(params);
     for(size_t i = 0; i < params_size; i++) {
-        vector_add(res, FM_VARIABLE);
+        vector_add(res, FM_LOCAL);
         vector_add(res, string_new("CFunParam"));
-        vector_add(res, FM_VARIABLE);
+        vector_add(res, FM_LOCAL);
         vector_add(res, vector_get(vector_get(params, i), 0));
-        vector_add(res, FM_VARIABLE);
+        vector_add(res, FM_LOCAL);
         vector_add(res, vector_get(vector_get(params, i), 1));
         vector_add(res, FM_KEYWORD);
         vector_add(res, string_new("c_type:c_name:"));
@@ -258,7 +258,7 @@ vector *ast_c_function_declaration(string *return_type, string *name, vector *pa
 }
 
 vector *ast_unary_method_definition(vector *multimethod_object_default_value, string *selector, vector *function) {
-    vector *res = vector_new(FM_VARIABLE, string_new("Method"), FM_UNARY, string_new("unary"));
+    vector *res = vector_new(FM_LOCAL, string_new("Method"), FM_UNARY, string_new("unary"));
 
     size_t multimethod_object_default_value_size = vector_size(multimethod_object_default_value);
     for(size_t i = 0; i < multimethod_object_default_value_size; i++)
@@ -283,7 +283,7 @@ vector *ast_unary_method_definition(vector *multimethod_object_default_value, st
 }
 
 vector *ast_binary_method_definition(vector *multimethod_object_default_value, string *selector, vector *param, vector *function) {
-    vector *res = vector_new(FM_VARIABLE, string_new("Method"), FM_UNARY, string_new("binary"));
+    vector *res = vector_new(FM_LOCAL, string_new("Method"), FM_UNARY, string_new("binary"));
 
     size_t multimethod_object_default_value_size = vector_size(multimethod_object_default_value);
     for(size_t i = 0; i < multimethod_object_default_value_size; i++)
@@ -305,7 +305,7 @@ vector *ast_binary_method_definition(vector *multimethod_object_default_value, s
     vector_add(res, FM_START_PROC);
     vector_add(res, FM_SELF);
     if(string_equals(vector_get(param, 0), FM_METHOD_PARAMETER)) {
-        vector_add(res, FM_VARIABLE);
+        vector_add(res, FM_LOCAL);
         vector_add(res, vector_get(param, 1));
         vector_add(res, FM_TENSOR);
         vector_add(res, string_new("2"));
@@ -326,7 +326,7 @@ vector *ast_binary_method_definition(vector *multimethod_object_default_value, s
 }
 
 vector *ast_keyword_method_definition(vector *multimethod_object_default_value, string *selector, vector *params, vector *function) {
-    vector *res = vector_new(FM_VARIABLE, string_new("Method"), FM_UNARY, string_new("keyword"));
+    vector *res = vector_new(FM_LOCAL, string_new("Method"), FM_UNARY, string_new("keyword"));
 
     size_t multimethod_object_default_value_size = vector_size(multimethod_object_default_value);
     for(size_t i = 0; i < multimethod_object_default_value_size; i++)
@@ -360,7 +360,7 @@ vector *ast_keyword_method_definition(vector *multimethod_object_default_value, 
     for(size_t i = 0; i < params_size; i++) {
         vector *param = vector_get(params, i);
         if(string_equals(vector_get(param, 0), FM_METHOD_PARAMETER)) {
-            vector_add(res, FM_VARIABLE);
+            vector_add(res, FM_LOCAL);
             vector_add(res, vector_get(param, 1));
         }
     }
@@ -527,7 +527,7 @@ vector *ast_hash_literal(vector *association_list) {
 
 vector *ast_bit_literal(vector *bit) {
     vector *res = vector_new_empty();
-    vector_add(res, FM_VARIABLE);
+    vector_add(res, FM_LOCAL);
     vector_add(res, string_new("Bit"));
 
     size_t bit_length = vector_size(bit);
@@ -542,7 +542,7 @@ vector *ast_bit_literal(vector *bit) {
 
 vector *ast_bit_size_literal(vector *bit, vector *size) {
     vector *res = vector_new_empty();
-    vector_add(res, FM_VARIABLE);
+    vector_add(res, FM_LOCAL);
     vector_add(res, string_new("Bit"));
 
     size_t bit_length = vector_size(bit);
@@ -561,7 +561,7 @@ vector *ast_bit_size_literal(vector *bit, vector *size) {
 
 vector *ast_association(vector *key, vector *value) {
     vector *res = vector_new_empty();
-    vector_add(res, FM_VARIABLE);
+    vector_add(res, FM_LOCAL);
     vector_add(res, string_new("Association"));
 
     size_t key_size = vector_size(key);
@@ -580,7 +580,7 @@ vector *ast_association(vector *key, vector *value) {
 
 vector *ast_json_association(string *key, vector *value) {
     vector *res = vector_new_empty();
-    vector_add(res, FM_VARIABLE);
+    vector_add(res, FM_LOCAL);
     vector_add(res, string_new("Association"));
     vector_add(res, FM_STRING);
     vector_add(res, key);

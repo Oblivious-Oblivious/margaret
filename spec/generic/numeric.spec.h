@@ -43,7 +43,7 @@ module(numeric_spec, {
         parse("( \
             x = 0b0101 + 0b1011, \
             x to_int puts, \
-        )", vector_new(FM_INTEGER, string_new("5"), FM_INTEGER, string_new("11"), FM_BINARY, string_new("+"), FM_STORE, string_new("x"), FM_VARIABLE, string_new("x"), FM_UNARY, string_new("to_int"), FM_UNARY, string_new("puts")));
+        )", vector_new(FM_INTEGER, string_new("5"), FM_INTEGER, string_new("11"), FM_BINARY, string_new("+"), FM_STORE_LOCAL, string_new("x"), FM_LOCAL, string_new("x"), FM_UNARY, string_new("to_int"), FM_UNARY, string_new("puts")));
     });
 
     it("parses hexadecimal literals", {
@@ -51,7 +51,7 @@ module(numeric_spec, {
         parse("-0xbeEf", vector_new(FM_INTEGER, string_new("-48879")));
         parse("0X0427", vector_new(FM_INTEGER, string_new("1063")));
         parse("-0X0427", vector_new(FM_INTEGER, string_new("-1063")));
-        parse("(x = 0xbeef to_bin to_int puts)", vector_new(FM_INTEGER, string_new("48879"), FM_UNARY, string_new("to_bin"), FM_UNARY, string_new("to_int"), FM_UNARY, string_new("puts"), FM_STORE, string_new("x")));
+        parse("(x = 0xbeef to_bin to_int puts)", vector_new(FM_INTEGER, string_new("48879"), FM_UNARY, string_new("to_bin"), FM_UNARY, string_new("to_int"), FM_UNARY, string_new("puts"), FM_STORE_LOCAL, string_new("x")));
         parse("(0xbeef - 0xabb2)", vector_new(FM_INTEGER, string_new("48879"), FM_INTEGER, string_new("43954"), FM_BINARY, string_new("-")));
     });
 
@@ -60,7 +60,7 @@ module(numeric_spec, {
         parse("-0o741", vector_new(FM_INTEGER, string_new("-481")));
         parse("0O0210", vector_new(FM_INTEGER, string_new("136")));
         parse("-0O0210", vector_new(FM_INTEGER, string_new("-136")));
-        parse("(x = 0o751 to_hex to_bin to_int puts)", vector_new(FM_INTEGER, string_new("489"), FM_UNARY, string_new("to_hex"), FM_UNARY, string_new("to_bin"), FM_UNARY, string_new("to_int"), FM_UNARY, string_new("puts"), FM_STORE, string_new("x")));
+        parse("(x = 0o751 to_hex to_bin to_int puts)", vector_new(FM_INTEGER, string_new("489"), FM_UNARY, string_new("to_hex"), FM_UNARY, string_new("to_bin"), FM_UNARY, string_new("to_int"), FM_UNARY, string_new("puts"), FM_STORE_LOCAL, string_new("x")));
         parse("(0O541 + 0o777)", vector_new(FM_INTEGER, string_new("353"), FM_INTEGER, string_new("511"), FM_BINARY, string_new("+")));
     });
 
