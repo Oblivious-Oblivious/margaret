@@ -89,6 +89,11 @@ static Token *lexer_tokenize_number(Lexer *self, char c) {
     string *final_number = string_new("");
     string_add_char(final_number, c);
 
+    // TODO Refactor to work with multiple zeros
+    // "0", "-0", "+0", "0b0", "-0b0", "+0b0", "0b00", "-0b00", "+0b00", "0o0", "-0o0", "+0o0", "0o000", "-0o000", "+0o000", "0x0", "-0x0", "+0x0", "0x00", "-0x00", "+0x00"
+    // "1", "+1", "0b1", "+0b1", "0b01", "+0b01", "0o1", "+0o1", "0o001", "+0o001", "0x1", "+0x1", "0x01", "+0x01"
+    // "-1", "-0b1", "-0b01", "-0o1", "-0o001", "-0x1", "-0x01"
+    // "2", "+2", "0b10", "+0b10", "0b010", "+0b010", "0o2", "+0o2", "0o002", "+0o002", "0x2", "+0x2", "0x02", "+0x02"
     if(c == '0') {
         c = lexer_peek_character(self, 1);
         if(c == '.')

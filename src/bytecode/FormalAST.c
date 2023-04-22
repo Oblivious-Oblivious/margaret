@@ -3,8 +3,6 @@
 #include <stdio.h> /* snprintf */
 #include "../base/alternate_to_dec.h"
 
-// TODO Possibly work with tokens instead of MargValues
-
 static int __all_keywords_equal(vector *selectors) {
     size_t selectors_size = vector_size(selectors);
     for(size_t i = 0; i < selectors_size; i++) {
@@ -407,11 +405,6 @@ vector *ast_literal(vector *unit) {
 }
 
 vector *ast_integer_literal(string *sign, string *number) {
-    // TODO Refactor to work with multiple zeros
-    // "0", "-0", "+0", "0b0", "-0b0", "+0b0", "0b00", "-0b00", "+0b00", "0o0", "-0o0", "+0o0", "0o000", "-0o000", "+0o000", "0x0", "-0x0", "+0x0", "0x00", "-0x00", "+0x00"
-    // "1", "+1", "0b1", "+0b1", "0b01", "+0b01", "0o1", "+0o1", "0o001", "+0o001", "0x1", "+0x1", "0x01", "+0x01"
-    // "-1", "-0b1", "-0b01", "-0o1", "-0o001", "-0x1", "-0x01"
-    // "2", "+2", "0b10", "+0b10", "0b010", "+0b010", "0o2", "+0o2", "0o002", "+0o002", "0x2", "+0x2", "0x02", "+0x02"
     number = string_remove_underscores(number);
 
     if(string_get_char_at_index(number, 0) == '0' && (string_get_char_at_index(number, 1) == 'b' || string_get_char_at_index(number, 1) == 'B')) {

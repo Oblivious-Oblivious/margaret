@@ -39,8 +39,6 @@ module(string_spec, {
             test = string_remove_underscores(test);
             assert_that_charptr(string_get(test) equals to "42000000");
         });
-
-        /* TODO Write more tests */
     });
 })
 
