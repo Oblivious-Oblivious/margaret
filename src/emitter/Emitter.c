@@ -14,7 +14,7 @@
     } \
     else { \
         chunk_add_with_line(vm->bytecode, OP_LONG_CONSTANT, 123); \
-        uint32_t constant_index = chunk_add_constant(vm->bytecode, constant); \
+        uint32_t constant_index = chunk_add_long_constant(vm->bytecode, constant); \
         uint8_t *constant_in_bytes = long_constant_to_bytes(constant_index); \
         chunk_add_with_line(vm->bytecode, constant_in_bytes[0], 123); \
         chunk_add_with_line(vm->bytecode, constant_in_bytes[1], 123); \

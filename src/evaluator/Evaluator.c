@@ -34,7 +34,9 @@ static EvaluatorResult evaluator_run(VM *self) {
                 break;
             }
             case OP_LONG_CONSTANT: {
-                // TODO
+                MargValue constant = READ_CONSTANT();
+                STACK_PUSH(self, constant);
+                break;
             }
 
             case OP_RETURN: {
