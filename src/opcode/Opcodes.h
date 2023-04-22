@@ -49,17 +49,31 @@
 #define OP_CONSTANT                         0x04
 #define OP_LONG_CONSTANT                    0x05
 
-// #define OP_SELF                             0xff
-// #define OP_SUPER                            0xff
-
+// TODO Superinstructions for -1,0,1,2
+// TODO Superinstructions for incrementing, decrementing and doubling
+// TODO Superinstructions for comparing with zero
 // #define OP_0                                0xff
 // #define OP_1                                0xff
 // #define OP_MINUS_1                          0xff
 // #define OP_2                                0xff
 
+// #define OP_SELF                             0xff
+// #define OP_SUPER                            0xff
+
 // #define FM_METHOD_UNARY                     0xff
 // #define FM_METHOD_BINARY                    0xff
 // #define FM_METHOD_KEYWORD                   0xff
+
+
+
+
+
+
+
+
+
+
+
 
 
 // #define OP_DECLARE_VARIABLE              string_new("DECLARE_VARIABLE")
