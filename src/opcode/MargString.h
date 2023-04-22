@@ -8,8 +8,8 @@
 struct MargString {
     MargObject obj;
     size_t size;
-    char *chars;
     uint64_t hash;
+    char chars[];
 };
 
 uint64_t marg_string_hash(char *key, size_t size);

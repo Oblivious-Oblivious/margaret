@@ -17,21 +17,21 @@ uint64_t marg_string_hash(char *key, size_t size) {
     return hash;
 }
 
-static MargString *marg_string_allocate(char *chars, size_t size, uint32_t hash) {
-    MargString *string = (MargString*)marg_object_allocate(sizeof(MargString), MARG_STRING);
+static MargString *marg_string_allocate(size_t size, uint32_t hash) {
+    MargString *string = (MargString*)marg_object_allocate(sizeof(MargString) + size + 1, MARG_STRING);
 
     string->size = size;
-    string->chars = chars;
     string->hash = hash;
 
     return string;
 }
 
 MargString *marg_string_copy(char *chars, size_t size) {
-    char *heap_chars = (char*)collected_malloc(sizeof(char) * size + 1);
-    memcpy(heap_chars, chars, size);
-    heap_chars[size] = '\0';
     uint64_t hash = marg_string_hash(chars, size);
+    MargString *str = marg_string_allocate(size, hash);
 
-    return marg_string_allocate(heap_chars, size, hash);
+    memcpy(str->chars, chars, size);
+    str->chars[size] = '\0';
+
+    return str;
 }
