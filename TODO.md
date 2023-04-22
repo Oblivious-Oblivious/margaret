@@ -1,5 +1,7 @@
 ## (✗) ver. 0.2.0
 -----------------
+    🟥 Optimize the design Hash to be data-oriented (separate keys from values for locality).
+    🟥 Optimize hash function for better string interning.
     🟥 Add visual literals of trees, graphs and matrices (2-dimentional data representation).
     🟥 Use comments for docs or TODO graphs.
     🟥 Use crystal-lang C extensions to bind native values to margaret ones. C code should be exported as a static library and the exposed API should be declared in code.
