@@ -1,6 +1,8 @@
 #ifndef __MARG_OBJECT_H_
 #define __MARG_OBJECT_H_
 
+// TODO docs comment all function definitions and structs
+
 #include <stdlib.h> /* size_t */
 
 typedef struct MargObject MargObject;
