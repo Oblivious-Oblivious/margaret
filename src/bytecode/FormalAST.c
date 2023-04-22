@@ -40,6 +40,8 @@ vector *ast_translation_unit(vector *optional_assignment_list, vector *expr) {
 vector *ast_assignment(vector *id) {
     if(string_equals(vector_get(id, 0), FM_INSTANCE))
         return vector_new(FM_STORE_INSTANCE, vector_get(id, 1));
+    else if(string_equals(vector_get(id, 0), FM_GLOBAL))
+        return vector_new(FM_STORE_GLOBAL, vector_get(id, 1));
     else
         return vector_new(FM_STORE_LOCAL, vector_get(id, 1));
 }
@@ -204,6 +206,8 @@ vector *ast_variable(string *optional_instance_symbol, string *name) {
         return vector_new(FM_SUPER);
     else if(string_equals(optional_instance_symbol, string_new("@")))
         return vector_new(FM_INSTANCE, name);
+    else if(string_equals(optional_instance_symbol, string_new("$")))
+        return vector_new(FM_GLOBAL, name);
     else
         return vector_new(FM_LOCAL, name);
 }

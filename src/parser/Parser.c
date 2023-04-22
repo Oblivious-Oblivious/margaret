@@ -59,7 +59,10 @@ vector *parser_translation_unit(Parser *self) {
 
 vector *parser_assignment_chain(Parser *self) {
     vector *optional_assignment_list = vector_new_empty();
-    while((lookahead_1_type_equals(TOKEN_IDENTIFIER) && lookahead_2_value_equals("=")) || (lookahead_1_value_equals("@") && lookahead_2_type_equals(TOKEN_IDENTIFIER) && lookahead_3_value_equals("=")))
+    while((lookahead_1_type_equals(TOKEN_IDENTIFIER) && lookahead_2_value_equals("="))
+       || (lookahead_1_value_equals("@") && lookahead_2_type_equals(TOKEN_IDENTIFIER) && lookahead_3_value_equals("="))
+       || (lookahead_1_value_equals("$") && lookahead_2_type_equals(TOKEN_IDENTIFIER) && lookahead_3_value_equals("="))
+    )
         vector_add(optional_assignment_list, parser_assignment(self));
 
     return optional_assignment_list;
@@ -175,7 +178,10 @@ vector *parser_expression(Parser *self) {
         return ast_expression(parser_group(self));
     else if(lookahead_1_type_equals(TOKEN_IDENTIFIER) && (lookahead_2_value_equals(":") || (lookahead_2_type_equals(TOKEN_ID_SYMBOL) && lookahead_3_value_equals(":"))))
         return ast_margaret_object();
-    else if(lookahead_1_type_equals(TOKEN_IDENTIFIER) || (lookahead_1_value_equals("@") && lookahead_2_type_equals(TOKEN_IDENTIFIER)))
+    else if(lookahead_1_type_equals(TOKEN_IDENTIFIER)
+        || (lookahead_1_value_equals("@") && lookahead_2_type_equals(TOKEN_IDENTIFIER))
+        || (lookahead_1_value_equals("$") && lookahead_2_type_equals(TOKEN_IDENTIFIER))
+    )
         return ast_expression(parser_variable(self));
     else if(lookahead_1_value_equals("{")
          && lookahead_2_value_not_equals("<")
@@ -208,9 +214,10 @@ vector *parser_group(Parser *self) {
 }
 
 vector *parser_variable(Parser *self) {
-    // TODO Add global variables (AND REMEMBER TO UPDATE PLACES CHECKING FOR `@` TO ALSO CHECK FOR `$`)
     if(lookahead_1_value_equals("@"))
-        return ast_variable(ensure_value("@", "expected '@' on instance variable declaration."), ensure_type(TOKEN_IDENTIFIER, "expected identifier on variable declaration."));
+        return ast_variable(ensure_value("@", "expected '@' on instance variable declaration."), ensure_type(TOKEN_IDENTIFIER, "expected identifier on local variable declaration."));
+    else if(lookahead_1_value_equals("$"))
+        return ast_variable(ensure_value("$", "expected '$' on global variable declaration."), ensure_type(TOKEN_IDENTIFIER, "expected identifier on global variable declaration."));
     else
         return ast_variable(string_new(""), ensure_type(TOKEN_IDENTIFIER, "expected identifier on variable declaration."));
 }

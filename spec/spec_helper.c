@@ -52,6 +52,7 @@
 #include "generic/symbols.spec.h"
 #include "generic/tensors.spec.h"
 #include "generic/tuples.spec.h"
+#include "generic/variables.spec.h"
 
 // inspector
 #include "inspector/Inspector.spec.h"
@@ -127,6 +128,7 @@ spec_suite({
     symbols_spec();
     tensors_spec();
     tuples_spec();
+    variables_spec();
 
     InspectorSpec();
 

@@ -6,9 +6,11 @@
 // ------ Formal Messages Opcodes ------
 #define FM_LOCAL             string_new("LOCAL")
 #define FM_INSTANCE          string_new("INSTANCE")
+#define FM_GLOBAL            string_new("GLOBAL")
 
 #define FM_STORE_LOCAL       string_new("STORE")
 #define FM_STORE_INSTANCE    string_new("STORE_INSTANCE")
+#define FM_STORE_GLOBAL      string_new("STORE_GLOBAL")
 
 #define FM_NIL               string_new("NIL")
 #define FM_TRUE              string_new("TRUE")

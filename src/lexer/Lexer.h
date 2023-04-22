@@ -19,8 +19,8 @@ static const char REGEX_BINARY[3] = {'0','1','\0'};
 static const char REGEX_HEXADECIMAL[23] = {'0','1','2','3','4','5','6','7','8','9','A','a','B','b','C','c','D','d','E','e','F','f','\0'};
 static const char REGEX_OCTAL[9] = {'0','1','2','3','4','5','6','7','\0'};
 static const char REGEX_ID_SYMBOL[3] = {'!','?','\0'};
-static const char REGEX_MESSAGE_SYMBOL[20] = {'!','?','+','-','*','/','\\','~','<','>','=','%','|','&','^',';','.','`','$','\0'};
-static const char REGEX_SYNTAX_SYMBOL[12] = {'_','(',')','[',']','{','}',',',':','@','#','\0'};
+static const char REGEX_MESSAGE_SYMBOL[19] = {'!','?','+','-','*','/','\\','~','<','>','=','%','|','&','^',';','.','`','\0'};
+static const char REGEX_SYNTAX_SYMBOL[13] = {'_','(',')','[',']','{','}',',',':','@','$','#','\0'};
 static const char REGEX_SINGLE_QUOTE[2] = {'\'','\0'};
 static const char REGEX_DOUBLE_QUOTE[2] = {'"','\0'};
 

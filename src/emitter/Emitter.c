@@ -32,9 +32,11 @@ VM *emitter_emit(vector *formal_bytecode) {
 
         if(string_equals(opcode, FM_LOCAL)) {}
         opcode_case(FM_INSTANCE) {}
+        opcode_case(FM_GLOBAL) {}
 
         opcode_case(FM_STORE_LOCAL) {}
         opcode_case(FM_STORE_INSTANCE) {}
+        opcode_case(FM_STORE_GLOBAL) {}
 
         opcode_case(FM_NIL) {
             chunk_add_with_line(vm->bytecode, OP_NIL, 123);
