@@ -19,6 +19,7 @@ VM *vm_new(void) {
     VM *vm = (VM*)collected_malloc(sizeof(VM));
 
     vm->bytecode = chunk_new_empty();
+    marg_hash_init(&vm->interned_strings);
 
     reset_stack(vm);
     primitives_define();

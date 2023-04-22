@@ -5,6 +5,7 @@
 #include "../base/vector.h"
 #include "../base/memory.h"
 #include "../opcode/MargValue.h"
+#include "../opcode/MargHash.h"
 
 /**
  * @brief Virtual Machine Engine
@@ -18,6 +19,8 @@ typedef struct VM {
 
     MargValue stack[65536];
     MargValue *stack_top;
+
+    MargHash interned_strings;
 } VM;
 
 /** @brief Better assurances for inlining */

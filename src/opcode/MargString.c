@@ -3,12 +3,26 @@
 #include <string.h> /* memcpy */
 
 #include "../base/memory.h"
+#include "MargHash.h"
+#include "MargValue.h"
 
-static MargString *marg_string_allocate(char *chars, size_t size) {
+uint64_t marg_string_hash(char *key, size_t size) {
+    uint64_t hash = 14695981039346656037u;
+
+    for(size_t i = 0; i < size; i++) {
+        hash ^= (uint8_t)key[i];
+        hash *= 1099511628211;
+    }
+
+    return hash;
+}
+
+static MargString *marg_string_allocate(char *chars, size_t size, uint32_t hash) {
     MargString *string = (MargString*)marg_object_allocate(sizeof(MargString), MARG_STRING);
 
     string->size = size;
     string->chars = chars;
+    string->hash = hash;
 
     return string;
 }
@@ -17,5 +31,7 @@ MargString *marg_string_copy(char *chars, size_t size) {
     char *heap_chars = (char*)collected_malloc(sizeof(char) * size + 1);
     memcpy(heap_chars, chars, size);
     heap_chars[size] = '\0';
-    return marg_string_allocate(heap_chars, size);
+    uint64_t hash = marg_string_hash(chars, size);
+
+    return marg_string_allocate(heap_chars, size, hash);
 }

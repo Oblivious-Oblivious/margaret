@@ -67,7 +67,15 @@ VM *emitter_emit(vector *formal_bytecode) {
             string *constant_str = vector_get(formal_bytecode, ++ip);
             char *chars = string_get(constant_str);
             size_t size = string_size(constant_str);
-            MargValue constant = MARG_OBJECT(marg_string_copy(chars, size));
+
+            uint64_t hash = marg_string_hash(chars, size);
+            MargString *interned = marg_hash_find_string(&vm->interned_strings, chars, size, hash);
+            if(interned == NULL) {
+                interned = marg_string_copy(chars, size);
+                marg_hash_set(&vm->interned_strings, interned, MARG_NIL);
+            }
+
+            MargValue constant = MARG_OBJECT(interned);
             EMIT_CONSTANT(constant);
         }
 
