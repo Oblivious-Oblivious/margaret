@@ -146,6 +146,7 @@ static Token *lexer_tokenize_string(Lexer *self, char c) {
     string *final_string = string_new("");
     string_add_char(final_string, c);
     c = lexer_next_character(self);
+    // TODO Separate pairs of single and double quotes -> avoid ("str'), or ('str")
     while(!regex_matches(c, REGEX_SINGLE_QUOTE) && !regex_matches(c, REGEX_DOUBLE_QUOTE)) {
         string_add_char(final_string, c);
         c = lexer_next_character(self);
