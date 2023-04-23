@@ -6,12 +6,6 @@
 
 #define opcode_case(opstr) else if(string_equals(opcode, (opstr)))
 
-#define CHECK_FOR_CONSTANT_TABLE_OVERFLOW(opcode) do { \
-    if(value_vector_size(vm->bytecode->constants) < 256) \
-        chunk_add_with_line(vm->bytecode, opcode, 123); \
-    else \
-        chunk_add_with_line(vm->bytecode, opcode##_LONG, 123); \
-} while(0)
 
 #define MAKE_CONSTANT() do { \
     if(value_vector_size(vm->bytecode->constants) < 256) \
@@ -52,6 +46,11 @@
     uint32_t constant_index; \
     MAKE_CONSTANT(); \
     ADD_CONSTANT(); \
+#define EMIT_POSSIBLE_LONG_OP(opcode) do { \
+    if(value_vector_size(vm->bytecode->constants) < 256) \
+        chunk_add_with_line(vm->bytecode, (opcode), 123); \
+    else \
+        chunk_add_with_line(vm->bytecode, (opcode##_LONG), 123); \
 } while(0)
 
 #include <stdio.h>
@@ -98,12 +97,14 @@ VM *emitter_emit(vector *formal_bytecode) {
             char *end;
             string *constant_str = vector_get(formal_bytecode, ++ip);
             MargValue constant = MARG_NUMBER(strtoll(string_get(constant_str), &end, 10));
+            EMIT_POSSIBLE_LONG_OP(OP_CONSTANT);
             EMIT_CONSTANT();
         }
         opcode_case(FM_FLOAT) {
             char *end;
             string *constant_str = vector_get(formal_bytecode, ++ip);
             MargValue constant = MARG_NUMBER(strtold(string_get(constant_str), &end));
+            EMIT_POSSIBLE_LONG_OP(OP_CONSTANT);
             EMIT_CONSTANT();
         }
 
@@ -120,6 +121,7 @@ VM *emitter_emit(vector *formal_bytecode) {
             }
 
             MargValue constant = MARG_OBJECT(interned);
+            EMIT_POSSIBLE_LONG_OP(OP_CONSTANT);
             EMIT_CONSTANT();
         }
 
