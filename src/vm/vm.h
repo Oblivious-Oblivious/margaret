@@ -22,6 +22,7 @@ typedef struct VM {
 
     MargHash interned_strings;
     MargHash global_variables;
+    MargHash string_constants;
 } VM;
 
 /** @brief Better assurances for inlining */

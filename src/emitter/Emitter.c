@@ -55,9 +55,30 @@ VM *emitter_emit(vector *formal_bytecode) {
         opcode_case(FM_STORE_INSTANCE) {}
         opcode_case(FM_STORE_GLOBAL) {
             string *variable_name = vector_get(formal_bytecode, ++ip);
-            MargValue constant = MARG_OBJECT(marg_string_copy(variable_name->str, variable_name->size));
-            EMIT_CONSTANT();
 
+            EMIT_POSSIBLE_LONG_OP(OP_STORE_GLOBAL);
+
+            uint32_t constant_index;
+            MargString *str = marg_string_copy(variable_name->str, variable_name->size);
+            MargValue index;
+            if(marg_hash_get(&vm->string_constants, str, &index)) {
+                constant_index = (uint32_t)AS_NUMBER(index);
+            }
+            else {
+                constant_index = make_constant(vm, MARG_OBJECT(str));
+                marg_hash_set(&vm->string_constants, str, MARG_NUMBER((long double)constant_index));
+            }
+
+            if(value_vector_size(vm->bytecode->constants) < 256) {
+                chunk_add_with_line(vm->bytecode, (uint8_t)constant_index, 123);
+            }
+            else {
+                uint8_t *constant_index_in_bytes = long_constant_to_bytes(constant_index);
+                chunk_add_with_line(vm->bytecode, constant_index_in_bytes[0], 123);
+                chunk_add_with_line(vm->bytecode, constant_index_in_bytes[1], 123);
+                chunk_add_with_line(vm->bytecode, constant_index_in_bytes[2], 123);
+                chunk_add_with_line(vm->bytecode, constant_index_in_bytes[3], 123);
+            }
         }
 
         opcode_case(FM_NIL) {
