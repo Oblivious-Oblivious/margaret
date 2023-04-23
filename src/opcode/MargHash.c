@@ -21,7 +21,7 @@ static MargHashEntry *marg_hash_find_entry(MargHashEntry *entries, size_t capaci
             else if(tombstone == NULL)
                 tombstone = entry;
         }
-        else if(entry->key == key) {
+        else if(entry->key->hash == key->hash) {
             return entry;
         }
 
