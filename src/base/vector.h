@@ -185,7 +185,7 @@ vector *__internal_vector_new(size_t argc, ...);
  * @param value -> MargValue
  * @return size_t -> The index the constant was appended to
  */
-uint8_t chunk_add_constant(Chunk *chunk, MargValue value);
+uint32_t chunk_add_constant(Chunk *chunk, MargValue value);
 uint32_t chunk_add_long_constant(Chunk *chunk, MargValue value);
 
 /**

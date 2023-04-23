@@ -32,14 +32,45 @@ static EvaluatorResult evaluator_run(VM *self) {
                 STACK_PUSH(self, READ_CONSTANT());
                 break;
             }
-            case OP_LONG_CONSTANT: {
+            case OP_CONSTANT_LONG: {
                 STACK_PUSH(self, READ_LONG_CONSTANT());
+                break;
+            }
+
+            case OP_POP: {
+                STACK_POP(self);
+                break;
+            }
+
+            case OP_STORE_GLOBAL: {
+                marg_hash_set(&self->global_variables, READ_STRING(), STACK_PEEK(self));
+                STACK_POP(self);
+                break;
+            }
+            case OP_STORE_GLOBAL_LONG: {
+                marg_hash_set(&self->global_variables, READ_LONG_STRING(), STACK_PEEK(self));
+                STACK_POP(self);
+                break;
+            }
+
+            case OP_GLOBAL: {
+                MargValue variable;
+                marg_hash_get(&self->global_variables, READ_STRING(), &variable);
+                STACK_PUSH(self, variable);
+                break;
+            }
+            case OP_GLOBAL_LONG: {
+                MargValue variable;
+                marg_hash_get(&self->global_variables, READ_LONG_STRING(), &variable);
+                STACK_PUSH(self, variable);
                 break;
             }
 
             case OP_RETURN: {
                 return EVALUATOR_OK;
             }
+
+            default: {}
         }
     }
 }

@@ -41,7 +41,7 @@ static size_t instruction_offset_2(vector *res, const char *name, Chunk *chunk, 
     string *disassembled_instruction = string_new("");
     write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
     string_addf(disassembled_instruction, "%02x %02x               ", opcode, constant);
-    string_addf(disassembled_instruction, "%-16s %d (", name, constant);
+    string_addf(disassembled_instruction, "%-24s %d (", name, constant);
     string_add(disassembled_instruction, marg_value_format(chunk_get_constant(chunk, constant)));
     string_add_str(disassembled_instruction, ")");
     vector_add(res, disassembled_instruction);
@@ -62,7 +62,7 @@ static size_t instruction_offset_5(vector *res, const char *name, Chunk *chunk, 
     string *disassembled_instruction = string_new("");
     write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
     string_addf(disassembled_instruction, "%02x %02x %02x %02x %02x      ", opcode, chunk_get(chunk, offset + 1), bytes[1], bytes[2], bytes[3]);
-    string_addf(disassembled_instruction, "%-16s %d (", name, constant);
+    string_addf(disassembled_instruction, "%-24s %d (", name, constant);
     string_add(disassembled_instruction, marg_value_format(chunk_get_constant(chunk, constant)));
     string_add_str(disassembled_instruction, ")");
     vector_add(res, disassembled_instruction);
@@ -92,8 +92,21 @@ static size_t inspect_instruction(vector *res, Chunk *chunk, size_t offset) {
 
         case OP_CONSTANT:
             return instruction_offset_2(res, "CONSTANT", chunk, offset);
-        case OP_LONG_CONSTANT:
-            return instruction_offset_5(res, "LONG_CONSTANT", chunk, offset);
+        case OP_CONSTANT_LONG:
+            return instruction_offset_5(res, "CONSTANT_LONG", chunk, offset);
+
+        case OP_POP:
+            return instruction_offset_1(res, "POP", chunk, offset);
+
+        case OP_STORE_GLOBAL:
+            return instruction_offset_2(res, "STORE_GLOBAL", chunk, offset);
+        case OP_STORE_GLOBAL_LONG:
+            return instruction_offset_5(res, "STORE_GLOBAL_LONG", chunk, offset);
+
+        case OP_GLOBAL:
+            return instruction_offset_2(res, "GLOBAL", chunk, offset);
+        case OP_GLOBAL_LONG:
+            return instruction_offset_2(res, "GLOBAL_LONG", chunk, offset);
 
         default: {
             string *unknown_opcode = string_new("");

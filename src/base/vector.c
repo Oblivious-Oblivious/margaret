@@ -73,7 +73,7 @@ vector *__internal_vector_new(size_t argc, ...) {
     return self;
 }
 
-uint8_t chunk_add_constant(Chunk *chunk, MargValue value) {
+uint32_t chunk_add_constant(Chunk *chunk, MargValue value) {
     if(chunk->constants == NULL) chunk->constants = value_vector_new_empty();
 
     value_vector_add(chunk->constants, value);

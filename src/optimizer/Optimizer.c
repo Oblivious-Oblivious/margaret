@@ -9,8 +9,6 @@ VM *optimizer_optimize(VM *self) {
     while(1) {
         uint8_t instruction;
         switch(instruction = READ_BYTE()) {
-            case OP_CONSTANT: {}
-            case OP_LONG_CONSTANT: {}
             case OP_RETURN: {
                 return self;
             }

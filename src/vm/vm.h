@@ -21,6 +21,7 @@ typedef struct VM {
     MargValue *stack_top;
 
     MargHash interned_strings;
+    MargHash global_variables;
 } VM;
 
 /** @brief Better assurances for inlining */
@@ -45,6 +46,8 @@ inline MargValue STACK_PEEK(VM *self) {
 #define READ_BYTE() (*self->ip++)
 #define READ_CONSTANT() (self->bytecode->constants->items[READ_BYTE()])
 #define READ_LONG_CONSTANT() (self->bytecode->constants->items[bytes_to_long_constant((uint8_t[4]){READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE()})])
+#define READ_STRING() AS_STRING(READ_CONSTANT())
+#define READ_LONG_STRING() AS_STRING(READ_LONG_CONSTANT())
 
 VM *vm_new(void);
 

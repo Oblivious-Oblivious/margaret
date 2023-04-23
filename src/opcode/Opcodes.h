@@ -49,7 +49,15 @@
 #define OP_FALSE                            0x03
 
 #define OP_CONSTANT                         0x04
-#define OP_LONG_CONSTANT                    0x05
+#define OP_CONSTANT_LONG                    0x05
+
+#define OP_POP                              0x06
+
+#define OP_STORE_GLOBAL                     0x07
+#define OP_STORE_GLOBAL_LONG                0x08
+
+#define OP_GLOBAL                           0x0d
+#define OP_GLOBAL_LONG                      0x0e
 
 // TODO Superinstructions for -1,0,1,2
 // TODO Superinstructions for incrementing, decrementing and doubling
