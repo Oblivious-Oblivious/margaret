@@ -7,10 +7,12 @@
 #define MARG_HASH_MAX_LOAD 0.75
 
 static MargHashEntry *marg_hash_find_entry(MargHashEntry *entries, size_t capacity, MargString *key) {
-    uint64_t index = key->hash % capacity;
-    MargHashEntry *tombstone = NULL;
+    uint64_t index = MEMORY_GROW_FACTOR == 2
+        ? key->hash & (capacity - 1)
+        : key->hash % capacity;
 
     // Linear probing
+    MargHashEntry *tombstone = NULL;
     while(true) {
         MargHashEntry *entry = &entries[index];
         if(entry->key == NULL) {
@@ -23,7 +25,9 @@ static MargHashEntry *marg_hash_find_entry(MargHashEntry *entries, size_t capaci
             return entry;
         }
 
-        index = (index + 1) % capacity;
+        index = MEMORY_GROW_FACTOR == 2
+            ? (index + 1) & (capacity - 1)
+            : (index + 1) % capacity;
     }
 }
 
@@ -35,6 +39,7 @@ static void marg_hash_adjust_capacity(MargHash *self, size_t capacity) {
         entries[i].value = MARG_NIL;
     }
 
+    self->count = 0;
     for(size_t i = 0; i < self->capacity; i++) {
         MargHashEntry *entry = &self->entries[i];
         if(entry->key == NULL)
@@ -112,7 +117,10 @@ MargString *marg_hash_find_string(MargHash *self, char *chars, size_t size, uint
     if(self->count == 0)
         return NULL;
 
-    uint64_t index = hash % self->capacity;
+    uint64_t index = MEMORY_GROW_FACTOR == 2
+        ? hash & (self->capacity - 1)
+        : hash % self->capacity;
+
     while(true) {
         MargHashEntry *entry = &self->entries[index];
         if(entry->key == NULL) {
@@ -127,6 +135,8 @@ MargString *marg_hash_find_string(MargHash *self, char *chars, size_t size, uint
             return entry->key;
         }
 
-        index = (index + 1) % self->capacity;
+        index = MEMORY_GROW_FACTOR == 2
+            ? (index + 1) & (self->capacity - 1)
+            : (index + 1) % self->capacity;
     }
 }
