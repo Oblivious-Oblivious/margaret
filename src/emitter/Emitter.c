@@ -48,7 +48,22 @@ static void add_constant(VM *vm, uint32_t constant_index) {
     }
 }
 
-#define emit_constant(constant) add_constant(vm, make_constant(vm, (constant)));
+#define emit_constant(constant) do { \
+    if(value_vector_size(vm->bytecode->constants) < 256) { \
+        uint32_t constant_index = chunk_add_constant(vm->bytecode, (constant)); \
+        emit_byte((uint8_t)constant_index); \
+    } \
+    else { \
+        uint32_t constant_index = chunk_add_long_constant(vm->bytecode, (constant)); \
+        uint8_t *constant_index_in_bytes = long_constant_to_bytes(constant_index); \
+        emit_bytes4( \
+            constant_index_in_bytes[0], \
+            constant_index_in_bytes[1], \
+            constant_index_in_bytes[2], \
+            constant_index_in_bytes[3] \
+        ); \
+    } \
+} while(0)
 
 #define emit_possible_long_op(opcode) do { \
     if(value_vector_size(vm->bytecode->constants) < 256) \
@@ -91,18 +106,7 @@ VM *emitter_emit(vector *formal_bytecode) {
                 marg_hash_set(&vm->string_constants, str, MARG_NUMBER((long double)constant_index));
             }
 
-            if(value_vector_size(vm->bytecode->constants) < 256) {
-                emit_byte((uint8_t)constant_index);
-            }
-            else {
-                uint8_t *constant_index_in_bytes = long_constant_to_bytes(constant_index);
-                emit_bytes4(
-                    constant_index_in_bytes[0],
-                    constant_index_in_bytes[1],
-                    constant_index_in_bytes[2],
-                    constant_index_in_bytes[3]
-                );
-            }
+            add_constant(vm, constant_index);
         }
 
         opcode_case(FM_NIL) {
