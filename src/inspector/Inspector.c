@@ -106,7 +106,7 @@ static size_t inspect_instruction(vector *res, Chunk *chunk, size_t offset) {
         case OP_GLOBAL:
             return instruction_offset_2(res, "GLOBAL", chunk, offset);
         case OP_GLOBAL_LONG:
-            return instruction_offset_2(res, "GLOBAL_LONG", chunk, offset);
+            return instruction_offset_5(res, "GLOBAL_LONG", chunk, offset);
 
         default: {
             string *unknown_opcode = string_new("");
