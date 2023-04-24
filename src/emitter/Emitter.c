@@ -26,7 +26,7 @@ static void add_constant(VM *vm, uint32_t constant_index) {
     }
 }
 
-#define EMIT_CONSTANT() add_constant(vm, make_constant(vm, constant));
+#define EMIT_CONSTANT(constant) add_constant(vm, make_constant(vm, (constant)));
 
 #define EMIT_POSSIBLE_LONG_OP(opcode) do { \
     if(value_vector_size(vm->bytecode->constants) < 256) \
@@ -48,7 +48,7 @@ VM *emitter_emit(vector *formal_bytecode) {
             string *variable_name = vector_get(formal_bytecode, ++ip);
             MargValue constant = MARG_OBJECT(marg_string_copy(variable_name->str, variable_name->size));
             EMIT_POSSIBLE_LONG_OP(OP_GLOBAL);
-            EMIT_CONSTANT();
+            EMIT_CONSTANT(constant);
         }
 
         opcode_case(FM_STORE_LOCAL) {}
@@ -100,14 +100,14 @@ VM *emitter_emit(vector *formal_bytecode) {
             string *constant_str = vector_get(formal_bytecode, ++ip);
             MargValue constant = MARG_NUMBER(strtoll(string_get(constant_str), &end, 10));
             EMIT_POSSIBLE_LONG_OP(OP_CONSTANT);
-            EMIT_CONSTANT();
+            EMIT_CONSTANT(constant);
         }
         opcode_case(FM_FLOAT) {
             char *end;
             string *constant_str = vector_get(formal_bytecode, ++ip);
             MargValue constant = MARG_NUMBER(strtold(string_get(constant_str), &end));
             EMIT_POSSIBLE_LONG_OP(OP_CONSTANT);
-            EMIT_CONSTANT();
+            EMIT_CONSTANT(constant);
         }
 
         opcode_case(FM_STRING) {
@@ -124,7 +124,7 @@ VM *emitter_emit(vector *formal_bytecode) {
 
             MargValue constant = MARG_OBJECT(interned);
             EMIT_POSSIBLE_LONG_OP(OP_CONSTANT);
-            EMIT_CONSTANT();
+            EMIT_CONSTANT(constant);
         }
 
         opcode_case(FM_TENSOR) {}
