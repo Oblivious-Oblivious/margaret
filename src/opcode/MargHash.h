@@ -7,6 +7,10 @@
 #include "MargValue.h"
 #include "MargString.h"
 
+// TODO Implement data-oriented approach by separating keys with values
+//      for better memory compaction, and less cache misses
+// MargHashKeys -> hash -> {key1: index1, key2: index2, ...}
+// MargHashValues -> vector -> [index1, index2, ...]
 typedef struct MargHashEntry {
     MargString *key;
     MargValue value;
