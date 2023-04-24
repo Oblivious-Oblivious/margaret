@@ -79,12 +79,16 @@ bool marg_hash_set(MargHash *self, MargString *key, MargValue value) {
 }
 
 bool marg_hash_get(MargHash *self, MargString *key, MargValue *value) {
-    if(self->count == 0)
+    if(self->count == 0) {
+        *value = MARG_NIL;
         return false;
+    }
 
     MargHashEntry *entry = marg_hash_find_entry(self->entries, self->capacity, key);
-    if(entry->key == NULL)
+    if(entry->key == NULL) {
+        *value = MARG_NIL;
         return false;
+    }
 
     *value = entry->value;
     return true;
