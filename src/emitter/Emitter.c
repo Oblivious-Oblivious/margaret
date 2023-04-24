@@ -6,6 +6,26 @@
 
 #define opcode_case(opstr) else if(string_equals(opcode, (opstr)))
 
+#define emit_byte(byte) chunk_add_with_line(vm->bytecode, (byte), 123)
+
+#define emit_bytes2(byte1, byte2) do { \
+    emit_byte((byte1)); \
+    emit_byte((byte2)); \
+} while(0)
+
+#define emit_bytes3(byte1, byte2, byte3) do { \
+    emit_byte((byte1)); \
+    emit_byte((byte2)); \
+    emit_byte((byte3)); \
+} while(0)
+
+#define emit_bytes4(byte1, byte2, byte3, byte4) do { \
+    emit_byte((byte1)); \
+    emit_byte((byte2)); \
+    emit_byte((byte3)); \
+    emit_byte((byte4)); \
+} while(0)
+
 static uint32_t make_constant(VM *vm, MargValue constant) {
     if(value_vector_size(vm->bytecode->constants) < 256)
         return chunk_add_constant(vm->bytecode, constant);
@@ -15,14 +35,16 @@ static uint32_t make_constant(VM *vm, MargValue constant) {
 
 static void add_constant(VM *vm, uint32_t constant_index) {
     if(constant_index < 256) {
-        chunk_add_with_line(vm->bytecode, (uint8_t)constant_index, 123);
+        emit_byte((uint8_t)constant_index);
     }
     else {
         uint8_t *constant_index_in_bytes = long_constant_to_bytes(constant_index);
-        chunk_add_with_line(vm->bytecode, constant_index_in_bytes[0], 123);
-        chunk_add_with_line(vm->bytecode, constant_index_in_bytes[1], 123);
-        chunk_add_with_line(vm->bytecode, constant_index_in_bytes[2], 123);
-        chunk_add_with_line(vm->bytecode, constant_index_in_bytes[3], 123);
+        emit_bytes4(
+            constant_index_in_bytes[0],
+            constant_index_in_bytes[1],
+            constant_index_in_bytes[2],
+            constant_index_in_bytes[3]
+        );
     }
 }
 
@@ -47,8 +69,8 @@ VM *emitter_emit(vector *formal_bytecode) {
         opcode_case(FM_GLOBAL) {
             string *variable_name = vector_get(formal_bytecode, ++ip);
             MargValue constant = MARG_OBJECT(marg_string_copy(variable_name->str, variable_name->size));
-            EMIT_POSSIBLE_LONG_OP(OP_GLOBAL);
-            EMIT_CONSTANT(constant);
+            emit_possible_long_op(OP_GLOBAL);
+            emit_constant(constant);
         }
 
         opcode_case(FM_STORE_LOCAL) {}
@@ -56,7 +78,7 @@ VM *emitter_emit(vector *formal_bytecode) {
         opcode_case(FM_STORE_GLOBAL) {
             string *variable_name = vector_get(formal_bytecode, ++ip);
 
-            EMIT_POSSIBLE_LONG_OP(OP_STORE_GLOBAL);
+            emit_possible_long_op(OP_STORE_GLOBAL);
 
             uint32_t constant_index;
             MargString *str = marg_string_copy(variable_name->str, variable_name->size);
@@ -70,25 +92,27 @@ VM *emitter_emit(vector *formal_bytecode) {
             }
 
             if(value_vector_size(vm->bytecode->constants) < 256) {
-                chunk_add_with_line(vm->bytecode, (uint8_t)constant_index, 123);
+                emit_byte((uint8_t)constant_index);
             }
             else {
                 uint8_t *constant_index_in_bytes = long_constant_to_bytes(constant_index);
-                chunk_add_with_line(vm->bytecode, constant_index_in_bytes[0], 123);
-                chunk_add_with_line(vm->bytecode, constant_index_in_bytes[1], 123);
-                chunk_add_with_line(vm->bytecode, constant_index_in_bytes[2], 123);
-                chunk_add_with_line(vm->bytecode, constant_index_in_bytes[3], 123);
+                emit_bytes4(
+                    constant_index_in_bytes[0],
+                    constant_index_in_bytes[1],
+                    constant_index_in_bytes[2],
+                    constant_index_in_bytes[3]
+                );
             }
         }
 
         opcode_case(FM_NIL) {
-            chunk_add_with_line(vm->bytecode, OP_NIL, 123);
+            emit_byte(OP_NIL);
         }
         opcode_case(FM_TRUE) {
-            chunk_add_with_line(vm->bytecode, OP_TRUE, 123);
+            emit_byte(OP_TRUE);
         }
         opcode_case(FM_FALSE) {
-            chunk_add_with_line(vm->bytecode, OP_FALSE, 123);
+            emit_byte(OP_FALSE);
         }
 
         opcode_case(FM_SELF) {}
@@ -145,6 +169,6 @@ VM *emitter_emit(vector *formal_bytecode) {
         opcode_case(FM_KEYWORD) {}
     }
 
-    chunk_add_with_line(vm->bytecode, OP_RETURN, 123);
+    emit_byte(OP_RETURN);
     return vm;
 }
