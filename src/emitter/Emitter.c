@@ -26,6 +26,30 @@
     emit_byte((byte4)); \
 } while(0)
 
+#define emit_possible_long_op(opcode) do { \
+    if(value_vector_size(vm->bytecode->constants) < 256) \
+        chunk_add_with_line(vm->bytecode, (opcode), 123); \
+    else \
+        chunk_add_with_line(vm->bytecode, (opcode##_LONG), 123); \
+} while(0)
+
+#define emit_constant(constant) do { \
+    if(value_vector_size(vm->bytecode->constants) < 256) { \
+        uint32_t constant_index = chunk_add_constant(vm->bytecode, (constant)); \
+        emit_byte((uint8_t)constant_index); \
+    } \
+    else { \
+        uint32_t constant_index = chunk_add_long_constant(vm->bytecode, (constant)); \
+        uint8_t *constant_index_in_bytes = long_constant_to_bytes(constant_index); \
+        emit_bytes4( \
+            constant_index_in_bytes[0], \
+            constant_index_in_bytes[1], \
+            constant_index_in_bytes[2], \
+            constant_index_in_bytes[3] \
+        ); \
+    } \
+} while(0)
+
 static uint32_t make_constant(VM *vm, MargValue constant) {
     if(value_vector_size(vm->bytecode->constants) < 256)
         return chunk_add_constant(vm->bytecode, constant);
@@ -47,30 +71,6 @@ static void add_constant(VM *vm, uint32_t constant_index) {
         );
     }
 }
-
-#define emit_constant(constant) do { \
-    if(value_vector_size(vm->bytecode->constants) < 256) { \
-        uint32_t constant_index = chunk_add_constant(vm->bytecode, (constant)); \
-        emit_byte((uint8_t)constant_index); \
-    } \
-    else { \
-        uint32_t constant_index = chunk_add_long_constant(vm->bytecode, (constant)); \
-        uint8_t *constant_index_in_bytes = long_constant_to_bytes(constant_index); \
-        emit_bytes4( \
-            constant_index_in_bytes[0], \
-            constant_index_in_bytes[1], \
-            constant_index_in_bytes[2], \
-            constant_index_in_bytes[3] \
-        ); \
-    } \
-} while(0)
-
-#define emit_possible_long_op(opcode) do { \
-    if(value_vector_size(vm->bytecode->constants) < 256) \
-        chunk_add_with_line(vm->bytecode, (opcode), 123); \
-    else \
-        chunk_add_with_line(vm->bytecode, (opcode##_LONG), 123); \
-} while(0)
 
 VM *emitter_emit(vector *formal_bytecode) {
     VM *vm = vm_new();
