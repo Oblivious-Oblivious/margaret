@@ -34,7 +34,7 @@ static uint32_t make_constant(VM *vm, MargValue constant) {
 }
 
 static void add_constant(VM *vm, uint32_t constant_index) {
-    if(constant_index < 256) {
+    if(value_vector_size(vm->bytecode->constants) < 256) {
         emit_byte((uint8_t)constant_index);
     }
     else {
