@@ -215,15 +215,9 @@ vector *ast_proc_literal(vector *param_list, vector *function) {
 
     size_t param_list_size = vector_size(param_list);
     for(size_t i = 0; i < param_list_size; i++) {
-        vector_add(res, FM_LOCAL);
+        vector_add(res, FM_PROC_PARAMETER);
         vector_add(res, vector_get(param_list, i));
     }
-
-    vector_add(res, FM_TENSOR);
-    char size_ptr[32];
-    snprintf(size_ptr, sizeof(size_ptr), "%zu", vector_size(param_list));
-    string *size = string_new(size_ptr);
-    vector_add(res, size);
 
     size_t function_size = vector_size(function);
     for(size_t i = 0; i < function_size; i++)
@@ -270,9 +264,8 @@ vector *ast_unary_method_definition(vector *multimethod_object_default_value, st
     vector_add(res, selector);
 
     vector_add(res, FM_START_PROC);
+    vector_add(res, FM_PROC_PARAMETER);
     vector_add(res, FM_SELF);
-    vector_add(res, FM_TENSOR);
-    vector_add(res, string_new("1"));
     size_t function_size = vector_size(function);
     for(size_t i = 0; i < function_size; i++)
         vector_add(res, vector_get(function, i));
@@ -305,16 +298,11 @@ vector *ast_binary_method_definition(vector *multimethod_object_default_value, s
     }
 
     vector_add(res, FM_START_PROC);
+    vector_add(res, FM_PROC_PARAMETER);
     vector_add(res, FM_SELF);
     if(string_equals(vector_get(param, 0), FM_METHOD_PARAMETER)) {
-        vector_add(res, FM_LOCAL);
+        vector_add(res, FM_PROC_PARAMETER);
         vector_add(res, vector_get(param, 1));
-        vector_add(res, FM_TENSOR);
-        vector_add(res, string_new("2"));
-    }
-    else {
-        vector_add(res, FM_TENSOR);
-        vector_add(res, string_new("1"));
     }
     size_t function_size = vector_size(function);
     for(size_t i = 0; i < function_size; i++)
@@ -338,11 +326,9 @@ vector *ast_keyword_method_definition(vector *multimethod_object_default_value, 
     vector_add(res, selector);
 
     size_t params_size = vector_size(params);
-    size_t number_of_formal_params = 1;
     for(size_t i = 0; i < params_size; i++) {
         vector *param = vector_get(params, i);
         if(string_equals(vector_get(param, 0), FM_METHOD_PARAMETER)) {
-            number_of_formal_params++;
             vector_add(res, FM_METHOD_PARAMETER);
             vector_add(res, vector_get(param, 1));
         }
@@ -358,18 +344,15 @@ vector *ast_keyword_method_definition(vector *multimethod_object_default_value, 
     vector_add(res, string_new(params_size_str));
 
     vector_add(res, FM_START_PROC);
+    vector_add(res, FM_PROC_PARAMETER);
     vector_add(res, FM_SELF);
     for(size_t i = 0; i < params_size; i++) {
         vector *param = vector_get(params, i);
         if(string_equals(vector_get(param, 0), FM_METHOD_PARAMETER)) {
-            vector_add(res, FM_LOCAL);
+            vector_add(res, FM_PROC_PARAMETER);
             vector_add(res, vector_get(param, 1));
         }
     }
-    vector_add(res, FM_TENSOR);
-    char number_of_formal_params_str[32];
-    snprintf(number_of_formal_params_str, sizeof(number_of_formal_params_str), "%zu", number_of_formal_params);
-    vector_add(res, string_new(number_of_formal_params_str));
     size_t function_size = vector_size(function);
     for(size_t i = 0; i < function_size; i++)
         vector_add(res, vector_get(function, i));

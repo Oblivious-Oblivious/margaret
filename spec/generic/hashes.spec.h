@@ -24,9 +24,9 @@ module(hashes_spec, {
         parse("(b = x includes_key: \"a\")", vector_new(FM_LOCAL, string_new("x"), FM_STRING, string_new("a"), FM_KEYWORD, string_new("includes_key:"), string_new("1"), FM_STORE_LOCAL, string_new("b")));
         parse("(x keys puts)", vector_new(FM_LOCAL, string_new("x"), FM_UNARY, string_new("keys"), FM_UNARY, string_new("puts")));
         parse("(x values puts)", vector_new(FM_LOCAL, string_new("x"), FM_UNARY, string_new("values"), FM_UNARY, string_new("puts")));
-        parse("(x each_key: {a | a puts})", vector_new(FM_LOCAL, string_new("x"), FM_START_PROC, FM_LOCAL, string_new("a"), FM_TENSOR, string_new("1"), FM_LOCAL, string_new("a"), FM_UNARY, string_new("puts"), FM_END_PROC, FM_KEYWORD, string_new("each_key:"), string_new("1")));
-        parse("(x each_value: {a | a puts})", vector_new(FM_LOCAL, string_new("x"), FM_START_PROC, FM_LOCAL, string_new("a"), FM_TENSOR, string_new("1"), FM_LOCAL, string_new("a"), FM_UNARY, string_new("puts"), FM_END_PROC, FM_KEYWORD, string_new("each_value:"), string_new("1")));
-        parse("(x each: {a | a puts})", vector_new(FM_LOCAL, string_new("x"), FM_START_PROC, FM_LOCAL, string_new("a"), FM_TENSOR, string_new("1"), FM_LOCAL, string_new("a"), FM_UNARY, string_new("puts"), FM_END_PROC, FM_KEYWORD, string_new("each:"), string_new("1")));
+        parse("(x each_key: {a | a puts})", vector_new(FM_LOCAL, string_new("x"), FM_START_PROC, FM_PROC_PARAMETER, string_new("a"), FM_LOCAL, string_new("a"), FM_UNARY, string_new("puts"), FM_END_PROC, FM_KEYWORD, string_new("each_key:"), string_new("1")));
+        parse("(x each_value: {a | a puts})", vector_new(FM_LOCAL, string_new("x"), FM_START_PROC, FM_PROC_PARAMETER, string_new("a"), FM_LOCAL, string_new("a"), FM_UNARY, string_new("puts"), FM_END_PROC, FM_KEYWORD, string_new("each_value:"), string_new("1")));
+        parse("(x each: {a | a puts})", vector_new(FM_LOCAL, string_new("x"), FM_START_PROC, FM_PROC_PARAMETER, string_new("a"), FM_LOCAL, string_new("a"), FM_UNARY, string_new("puts"), FM_END_PROC, FM_KEYWORD, string_new("each:"), string_new("1")));
     });
 })
 

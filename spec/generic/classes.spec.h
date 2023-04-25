@@ -66,10 +66,9 @@ module(classes_spec, {
             FM_METHOD_PARAMETER, string_new("yparam"), \
             FM_TENSOR, string_new("2"), \
             FM_START_PROC, \
-                FM_SELF, \
-                FM_LOCAL, string_new("xparam"), \
-                FM_LOCAL, string_new("yparam"), \
-                FM_TENSOR, string_new("3"), \
+                FM_PROC_PARAMETER, FM_SELF, \
+                FM_PROC_PARAMETER, string_new("xparam"), \
+                FM_PROC_PARAMETER, string_new("yparam"), \
                 FM_LOCAL, string_new("xparam"), \
                 FM_STORE_INSTANCE, string_new("x"), \
                 FM_LOCAL, string_new("yparam"), \
@@ -84,8 +83,7 @@ module(classes_spec, {
             FM_ANY_OBJECT, \
             FM_STRING, string_new("calc"), \
             FM_START_PROC,
-                FM_SELF, \
-                FM_TENSOR, string_new("1"), \
+                FM_PROC_PARAMETER, FM_SELF, \
                 FM_INSTANCE, string_new("x"), \
                 FM_INSTANCE, string_new("y"), \
                 FM_BINARY, string_new("+"), \
@@ -99,8 +97,7 @@ module(classes_spec, {
             FM_STRING, string_new("+"), \
             FM_NIL, \
             FM_START_PROC, \
-                FM_SELF, \
-                FM_TENSOR, string_new("1"), \
+                FM_PROC_PARAMETER, FM_SELF, \
                 FM_SELF, \
             FM_END_PROC, \
             FM_KEYWORD, string_new("object:message:param:method:"), string_new("4"), \
@@ -110,9 +107,8 @@ module(classes_spec, {
             FM_STRING, string_new("+"), \
             FM_METHOD_PARAMETER, string_new("other"), \
             FM_START_PROC, \
-                FM_SELF, \
-                FM_LOCAL, string_new("other"), \
-                FM_TENSOR, string_new("2"), \
+                FM_PROC_PARAMETER, FM_SELF, \
+                FM_PROC_PARAMETER, string_new("other"), \
                 FM_INSTANCE, string_new("x"), \
                 FM_LOCAL, string_new("other"), \
                 FM_UNARY, string_new("x"), \
@@ -145,11 +141,10 @@ module(classes_spec, {
             FM_METHOD_PARAMETER, string_new("z"), \
             FM_TENSOR, string_new("3"), \
             FM_START_PROC, \
-                FM_SELF, \
-                FM_LOCAL, string_new("x"), \
-                FM_LOCAL, string_new("y"), \
-                FM_LOCAL, string_new("z"), \
-                FM_TENSOR, string_new("4"), \
+                FM_PROC_PARAMETER, FM_SELF, \
+                FM_PROC_PARAMETER, string_new("x"), \
+                FM_PROC_PARAMETER, string_new("y"), \
+                FM_PROC_PARAMETER, string_new("z"), \
                 FM_SUPER, \
                 FM_INSTANCE, string_new("x"), \
                 FM_INSTANCE, string_new("y"), \
@@ -166,8 +161,7 @@ module(classes_spec, {
             FM_ANY_OBJECT, \
             FM_STRING, string_new("calc"), \
             FM_START_PROC,
-                FM_SELF, \
-                FM_TENSOR, string_new("1"), \
+                FM_PROC_PARAMETER, FM_SELF, \
                 FM_SUPER, \
                 FM_UNARY, string_new("calc"), \
                 FM_INSTANCE, string_new("z"), \
@@ -182,9 +176,8 @@ module(classes_spec, {
             FM_STRING, string_new("+"), \
             FM_METHOD_PARAMETER, string_new("other"), \
             FM_START_PROC, \
-                FM_SELF, \
-                FM_LOCAL, string_new("other"), \
-                FM_TENSOR, string_new("2"), \
+                FM_PROC_PARAMETER, FM_SELF, \
+                FM_PROC_PARAMETER, string_new("other"), \
                 FM_SUPER, \
                 FM_LOCAL, string_new("other"), \
                 FM_BINARY, string_new("+"), \

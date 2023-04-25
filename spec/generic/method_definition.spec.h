@@ -10,9 +10,8 @@ module(method_definition_spec, {
             FM_UNARY, string_new("unary"), \
             FM_ANY_OBJECT, \
             FM_STRING, string_new("incr"), \
-            FM_START_PROC,
-                FM_SELF, \
-                FM_TENSOR, string_new("1"), \
+            FM_START_PROC, \
+                FM_PROC_PARAMETER, FM_SELF, \
                 FM_SELF, \
                 FM_INTEGER, string_new("1"), \
                 FM_BINARY, string_new("+"), \
@@ -24,9 +23,8 @@ module(method_definition_spec, {
             FM_UNARY, string_new("unary"), \
             FM_ANY_OBJECT, \
             FM_STRING, string_new("incr"), \
-            FM_START_PROC,
-                FM_SELF, \
-                FM_TENSOR, string_new("1"), \
+            FM_START_PROC, \
+                FM_PROC_PARAMETER, FM_SELF, \
                 FM_SELF, \
                 FM_INTEGER, string_new("1"), \
                 FM_BINARY, string_new("+"), \
@@ -38,9 +36,8 @@ module(method_definition_spec, {
             FM_UNARY, string_new("unary"), \
             FM_ANY_OBJECT, \
             FM_STRING, string_new("is_empty?"), \
-            FM_START_PROC,
-                FM_SELF, \
-                FM_TENSOR, string_new("1"), \
+            FM_START_PROC, \
+                FM_PROC_PARAMETER, FM_SELF, \
                 FM_TRUE, \
             FM_END_PROC, \
             FM_KEYWORD, string_new("object:message:method:"), string_new("3") \
@@ -52,8 +49,7 @@ module(method_definition_spec, {
             FM_INTEGER, string_new("0"), \
             FM_STRING, string_new("fact"), \
             FM_START_PROC, \
-                FM_SELF, \
-                FM_TENSOR, string_new("1"), \
+                FM_PROC_PARAMETER, FM_SELF, \
                 FM_INTEGER, string_new("1"), \
             FM_END_PROC, \
             FM_KEYWORD, string_new("object:message:method:"), string_new("3") \
@@ -70,8 +66,7 @@ module(method_definition_spec, {
             FM_INTEGER, string_new("0"), \
             FM_STRING, string_new("fact"), \
             FM_START_PROC, \
-                FM_SELF, \
-                FM_TENSOR, string_new("1"), \
+                FM_PROC_PARAMETER, FM_SELF, \
                 FM_INTEGER, string_new("1"), \
             FM_END_PROC, \
             FM_KEYWORD, string_new("object:message:method:"), string_new("3"), \
@@ -81,8 +76,7 @@ module(method_definition_spec, {
             FM_ANY_OBJECT, \
             FM_STRING, string_new("fact"), \
             FM_START_PROC, \
-                FM_SELF, \
-                FM_TENSOR, string_new("1"), \
+                FM_PROC_PARAMETER, FM_SELF, \
                 FM_SELF, \
                 FM_SELF, \
                 FM_INTEGER, string_new("1"), \
@@ -103,8 +97,7 @@ module(method_definition_spec, {
             FM_STRING, string_new("**"), \
             FM_INTEGER, string_new("0"), \
             FM_START_PROC, \
-                FM_SELF, \
-                FM_TENSOR, string_new("1"), \
+                FM_PROC_PARAMETER, FM_SELF, \
                 FM_NIL, \
             FM_END_PROC, \
             FM_KEYWORD, string_new("object:message:param:method:"), string_new("4") \
@@ -118,8 +111,7 @@ module(method_definition_spec, {
             FM_STRING, string_new("**"), \
             FM_ANY_OBJECT, \
             FM_START_PROC, \
-                FM_SELF, \
-                FM_TENSOR, string_new("1"), \
+                FM_PROC_PARAMETER, FM_SELF, \
                 FM_INTEGER, string_new("0"), \
             FM_END_PROC, \
             FM_KEYWORD, string_new("object:message:param:method:"), string_new("4") \
@@ -133,8 +125,7 @@ module(method_definition_spec, {
             FM_STRING, string_new("**"), \
             FM_INTEGER, string_new("0"),
             FM_START_PROC, \
-                FM_SELF, \
-                FM_TENSOR, string_new("1"), \
+                FM_PROC_PARAMETER, FM_SELF, \
                 FM_INTEGER, string_new("1"), \
             FM_END_PROC, \
             FM_KEYWORD, string_new("object:message:param:method:"), string_new("4") \
@@ -148,9 +139,8 @@ module(method_definition_spec, {
             FM_STRING, string_new("**"), \
             FM_METHOD_PARAMETER, string_new("a_number"), \
             FM_START_PROC, \
-                FM_SELF, \
-                FM_LOCAL, string_new("a_number"), \
-                FM_TENSOR, string_new("2"), \
+                FM_PROC_PARAMETER, FM_SELF, \
+                FM_PROC_PARAMETER, string_new("a_number"), \
                 FM_INTEGER, string_new("0"), \
             FM_END_PROC, \
             FM_KEYWORD, string_new("object:message:param:method:"), string_new("4") \
@@ -164,9 +154,8 @@ module(method_definition_spec, {
             FM_STRING, string_new("**"), \
             FM_METHOD_PARAMETER, string_new("a_number"), \
             FM_START_PROC, \
-                FM_SELF, \
-                FM_LOCAL, string_new("a_number"), \
-                FM_TENSOR, string_new("2"), \
+                FM_PROC_PARAMETER, FM_SELF, \
+                FM_PROC_PARAMETER, string_new("a_number"), \
                 FM_SELF, \
                 FM_LOCAL, string_new("a_number"), \
                 FM_KEYWORD, string_new("raised_to:"), string_new("1"), \
@@ -186,10 +175,9 @@ module(method_definition_spec, {
             FM_METHOD_PARAMETER, string_new("position"), \
             FM_TENSOR, string_new("2"), \
             FM_START_PROC, \
-                FM_SELF, \
-                FM_LOCAL, string_new("element"), \
-                FM_LOCAL, string_new("position"), \
-                FM_TENSOR, string_new("3"), \
+                FM_PROC_PARAMETER, FM_SELF, \
+                FM_PROC_PARAMETER, string_new("element"), \
+                FM_PROC_PARAMETER, string_new("position"), \
                 FM_INTEGER, string_new("42"), \
             FM_END_PROC, \
             FM_KEYWORD, string_new("object:message:params:method:"), string_new("4") \
@@ -204,8 +192,7 @@ module(method_definition_spec, {
             FM_INTEGER, string_new("2"), \
             FM_TENSOR, string_new("1"), \
             FM_START_PROC, \
-                FM_SELF, \
-                FM_TENSOR, string_new("1"), \
+                FM_PROC_PARAMETER, FM_SELF, \
                 FM_INTEGER, string_new("1"),
             FM_END_PROC, \
             FM_KEYWORD, string_new("object:message:params:method:"), string_new("4") \
@@ -220,8 +207,7 @@ module(method_definition_spec, {
             FM_NIL, \
             FM_TENSOR, string_new("1"), \
             FM_START_PROC, \
-                FM_SELF, \
-                FM_TENSOR, string_new("1"), \
+                FM_PROC_PARAMETER, FM_SELF, \
                 FM_NIL, \
             FM_END_PROC, \
             FM_KEYWORD, string_new("object:message:params:method:"), string_new("4") \
@@ -236,8 +222,7 @@ module(method_definition_spec, {
             FM_INTEGER, string_new("2"), \
             FM_TENSOR, string_new("1"), \
             FM_START_PROC, \
-                FM_SELF, \
-                FM_TENSOR, string_new("1"), \
+                FM_PROC_PARAMETER, FM_SELF, \
                 FM_INTEGER, string_new("3"),
             FM_END_PROC, \
             FM_KEYWORD, string_new("object:message:params:method:"), string_new("4") \
@@ -253,8 +238,7 @@ module(method_definition_spec, {
             FM_ANY_OBJECT, \
             FM_TENSOR, string_new("2"), \
             FM_START_PROC, \
-                FM_SELF, \
-                FM_TENSOR, string_new("1"), \
+                FM_PROC_PARAMETER, FM_SELF, \
                 FM_INTEGER, string_new("42"),
             FM_END_PROC, \
             FM_KEYWORD, string_new("object:message:params:method:"), string_new("4") \
@@ -270,10 +254,9 @@ module(method_definition_spec, {
             FM_METHOD_PARAMETER, string_new("value2"), \
             FM_TENSOR, string_new("2"), \
             FM_START_PROC, \
-                FM_SELF, \
-                FM_LOCAL, string_new("value1"),
-                FM_LOCAL, string_new("value2"),
-                FM_TENSOR, string_new("3"),
+                FM_PROC_PARAMETER, FM_SELF, \
+                FM_PROC_PARAMETER, string_new("value1"), \
+                FM_PROC_PARAMETER, string_new("value2"), \
                 FM_INTEGER, string_new("17"), \
             FM_END_PROC, \
             FM_KEYWORD, string_new("object:message:params:method:"), string_new("4") \
@@ -289,10 +272,9 @@ module(method_definition_spec, {
             FM_METHOD_PARAMETER, string_new("position"), \
             FM_TENSOR, string_new("2"), \
             FM_START_PROC, \
-                FM_SELF, \
-                FM_LOCAL, string_new("element"), \
-                FM_LOCAL, string_new("position"), \
-                FM_TENSOR, string_new("3"), \
+                FM_PROC_PARAMETER, FM_SELF, \
+                FM_PROC_PARAMETER, string_new("element"), \
+                FM_PROC_PARAMETER, string_new("position"), \
                 FM_INTEGER, string_new("17"), \
             FM_END_PROC, \
             FM_KEYWORD, string_new("object:message:params:method:"), string_new("4") \
@@ -308,8 +290,7 @@ module(method_definition_spec, {
             FM_INTEGER, string_new("0"),
             FM_TENSOR, string_new("2"), \
             FM_START_PROC, \
-                FM_SELF, \
-                FM_TENSOR, string_new("1"), \
+                FM_PROC_PARAMETER, FM_SELF, \
                 FM_STRING, string_new("a"), \
                 FM_TENSOR, string_new("1"), \
             FM_END_PROC, \
@@ -326,8 +307,7 @@ module(method_definition_spec, {
             FM_INTEGER, string_new("0"),
             FM_TENSOR, string_new("2"), \
             FM_START_PROC, \
-                FM_SELF, \
-                FM_TENSOR, string_new("1"), \
+                FM_PROC_PARAMETER, FM_SELF, \
                 FM_STRING, string_new("a"), \
                 FM_TENSOR, string_new("1"), \
                 FM_SELF, \
@@ -351,13 +331,11 @@ module(method_definition_spec, {
             FM_METHOD_PARAMETER, string_new("a_block"), \
             FM_TENSOR, string_new("1"), \
             FM_START_PROC, \
-                FM_SELF, \
-                FM_LOCAL, string_new("a_block"), \
-                FM_TENSOR, string_new("2"), \
+                FM_PROC_PARAMETER, FM_SELF, \
+                FM_PROC_PARAMETER, string_new("a_block"), \
                 FM_SELF, \
                 FM_STORE_LOCAL, string_new("remaining"), \
                 FM_START_PROC, \
-                    FM_TENSOR, string_new("0"), \
                     FM_LOCAL, string_new("remaining"), \
                     FM_INTEGER, string_new("1"), \
                     FM_BINARY, string_new("-"), \
@@ -366,7 +344,6 @@ module(method_definition_spec, {
                     FM_BINARY, string_new(">="), \
                 FM_END_PROC, \
                 FM_START_PROC, \
-                    FM_TENSOR, string_new("0"), \
                     FM_LOCAL, string_new("a_block"), \
                     FM_UNARY, string_new("value"), \
                 FM_END_PROC, \

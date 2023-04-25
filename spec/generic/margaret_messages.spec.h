@@ -8,8 +8,8 @@ module(margaret_messages_spec, {
         parse("if: true then: {|} else: {|}", vector_new( \
             FM_LOCAL, string_new("Margaret"), \
             FM_TRUE,
-            FM_START_PROC, FM_TENSOR, string_new("0"), FM_END_PROC,
-            FM_START_PROC, FM_TENSOR, string_new("0"), FM_END_PROC,
+            FM_START_PROC, FM_END_PROC,
+            FM_START_PROC, FM_END_PROC,
             FM_KEYWORD, string_new("if:then:else:"), string_new("3")
         ));
 
@@ -44,15 +44,13 @@ module(margaret_messages_spec, {
             FM_METHOD_PARAMETER, string_new("block"), \
             FM_TENSOR, string_new("2"), \
             FM_START_PROC, \
-                FM_SELF, \
-                FM_LOCAL, string_new("condition_block"), \
-                FM_LOCAL, string_new("block"), \
-                FM_TENSOR, string_new("3"), \
+                FM_PROC_PARAMETER, FM_SELF, \
+                FM_PROC_PARAMETER, string_new("condition_block"), \
+                FM_PROC_PARAMETER, string_new("block"), \
                 FM_LOCAL, string_new("Margaret"), \
                 FM_LOCAL, string_new("condition_block"), \
                 FM_UNARY, string_new("eval"), \
                 FM_START_PROC, \
-                    FM_TENSOR, string_new("0"), \
                     FM_LOCAL, string_new("block"), \
                     FM_UNARY, string_new("eval"), \
                     FM_LOCAL, string_new("Margaret"), \
