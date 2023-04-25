@@ -34,6 +34,8 @@
 
 #define FM_START_PROC        string_new("START_PROC")
 #define FM_END_PROC          string_new("END_PROC")
+#define FM_PROC_PARAMETER    string_new("PROC_PARAMETER")
+
 #define FM_START_C_FUNCTION  string_new("START_C_FUNCTION")
 #define FM_END_C_FUNCTION    string_new("END_C_FUNCTION")
 
