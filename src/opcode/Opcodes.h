@@ -8,7 +8,7 @@
 #define FM_INSTANCE          string_new("INSTANCE")
 #define FM_GLOBAL            string_new("GLOBAL")
 
-#define FM_STORE_LOCAL       string_new("STORE")
+#define FM_STORE_LOCAL       string_new("STORE_LOCAL")
 #define FM_STORE_INSTANCE    string_new("STORE_INSTANCE")
 #define FM_STORE_GLOBAL      string_new("STORE_GLOBAL")
 
