@@ -51,7 +51,7 @@ static inline MargValue cdouble_to_marg_value(double number) {
 #define IS_BOOL(value)           (((value) | 1) == MARG_TRUE)
 #define IS_NUMBER(value)         (((value) & QNAN) != QNAN)
 #define IS_OBJECT(value)         (((value) & (QNAN | SIGN_BIT)) == (QNAN | SIGN_BIT))
-#define IS_STRING(value)         IS_OBJECT(value) && OBJECT_TYPE(value) == MARG_STRING
+#define IS_STRING(value)         IS_OBJECT(value) && OBJECT_TYPE(value) == MARG_STRING_TYPE
 
 /**
  * @brief Formats a marg value using QNAN boxing

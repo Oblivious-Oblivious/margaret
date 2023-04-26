@@ -9,7 +9,7 @@ typedef struct MargObject MargObject;
 typedef struct MargString MargString;
 
 typedef enum {
-    MARG_STRING,
+    MARG_STRING_TYPE,
 } MargObjectType;
 
 struct MargObject {

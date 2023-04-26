@@ -18,7 +18,7 @@ uint64_t marg_string_hash(char *key, size_t size) {
 }
 
 static MargString *marg_string_allocate(size_t size, uint64_t hash) {
-    MargString *string = (MargString*)marg_object_allocate(sizeof(MargString) + size + 1, MARG_STRING);
+    MargString *string = (MargString*)marg_object_allocate(sizeof(MargString) + size + 1, MARG_STRING_TYPE);
 
     string->size = size;
     string->hash = hash;
