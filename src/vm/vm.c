@@ -4,7 +4,7 @@
  * @brief Resets the top of the stack.
  * @param vm -> Current VM 
  */
-static void reset_stack(VM *vm) {
+static inline void STACK_RESET(VM *vm) {
     vm->stack_top = vm->stack;
 }
 
@@ -23,7 +23,7 @@ VM *vm_new(void) {
     marg_hash_init(&vm->global_variables);
     marg_hash_init(&vm->string_constants);
 
-    reset_stack(vm);
+    STACK_RESET(vm);
     primitives_define();
 
     return vm;

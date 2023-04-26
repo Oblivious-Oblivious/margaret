@@ -28,10 +28,6 @@ typedef struct VM {
 /** @brief Better assurances for inlining */
 #define inline __inline__
 
-inline void STACK_RESET(VM *self) {
-    self->stack_top = self->stack;
-}
-
 inline void STACK_PUSH(VM *self, MargValue item) {
     *self->stack_top++ = item;
 }
