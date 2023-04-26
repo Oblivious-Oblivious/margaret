@@ -98,12 +98,12 @@ VM *emitter_emit(vector *formal_bytecode) {
             uint32_t constant_index;
             MargString *str = marg_string_copy(variable_name->str, variable_name->size);
             MargValue index;
-            if(marg_hash_get(&vm->string_constants, str, &index)) {
+            if(marg_hash_get(&vm->interned_strings, str, &index)) {
                 constant_index = (uint32_t)AS_NUMBER(index);
             }
             else {
                 constant_index = make_constant(vm, MARG_OBJECT(str));
-                marg_hash_set(&vm->string_constants, str, MARG_NUMBER((long double)constant_index));
+                marg_hash_set(&vm->interned_strings, str, MARG_NUMBER((long double)constant_index));
             }
 
             add_constant(vm, constant_index);

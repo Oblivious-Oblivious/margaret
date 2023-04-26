@@ -21,7 +21,6 @@ VM *vm_new(void) {
     vm->bytecode = chunk_new_empty();
     marg_hash_init(&vm->interned_strings);
     marg_hash_init(&vm->global_variables);
-    marg_hash_init(&vm->string_constants);
 
     STACK_RESET(vm);
     primitives_define();
