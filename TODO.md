@@ -1,3 +1,20 @@
+## (✗) ver. 0.4.0
+-----------------
+    🟥 Add green threads
+    🟥 Upgrade to a concurrent tricolor generational mark & sweep gc
+       Employ a separate process/thread for collection
+       Store a fiber in each object that listens for collections
+       This fiber can choose to give itself for collection or not depending on whether the objects is being used for performance oriented calculation.
+
+## (✗) ver. 0.3.0
+-----------------
+    🟥 Add a custom mark and sweep garbage collector
+    🟥 Upgrade to a mark & sweep generational gc
+       gen0, gen1, gen2
+       every 3 gen0 collections, collect gen1 once, every 10 gen0 collections collect gen2 once
+    🟥 Upgrade to a tricolor generational mark & sweep gc
+       Precursor to concurrent implementation
+
 ## (✗) ver. 0.2.0
 -----------------
     🟥 Optimize the design Hash to be data-oriented (separate keys from values for locality).
@@ -18,16 +35,16 @@
 
 ## (✗) ver. 0.1.0
 -----------------
+    🟥 Add lexically removed comments.
     🟥 Make comments part of the language (Comment new: "...").
     🟥 Make comments dynamic and persistent on code files.
     🟥 Add string interpolation and formatting with `#{..}` or similar.
     🟥 Procs, methods and functions return tensors of bytecodes.
-    🟥 Add primitives for `while_true` to avoid endless recursion.
+    🟥 Add primitives for `while:` to avoid endless recursion.
     🟥 Add a switch matcher -> `obj match: [[1, 100], [2, 200], [3, 300],]`.
     🟥 Make bang (!) messages denote persistant changes in object state.
-    🟥 Add a `message then: unit1 else: unit2`.
     🟥 Add complex numbers `(0+2i)`, and rational numbers `(1/2r)` -> unary messages.
-    🟥 Use custom syntax structures for break and continue. -> `list iterate: { elem | elem puts } exit_on: { elem | elem == 42 }`
+    🟥 Use GOTO for break and continue. -> `list iterate: { elem | if: { elem == 42 } then: {( goto: exit_label )} elem puts } Label new: "exit_label"`.
     ---------------------------
     🟥 Add functional features:
     🟥 [<a, b, c] = [<"hello", "world", 42] (TUPLES)
@@ -50,13 +67,10 @@
     🟥 Typecheck default parameters on multimethods!!
     ---------------------------
     🟩 Compile time bytecodes
-        Stored along with runtime ones.
-        Executed only once.
-        End-to-end optimization.
-    🟥 Methods and functions compile to procs with own context.
-        Procs compile to bitstrings/tensors/arrays of opcodes and are first class literals.
-        Can be passed into optimization phases at runtime.
-    🟥 Objects are (maybe?) represented as hashmap of slots.
-        Preferably only one parent.
-        Hashes though serving as activation windows should be optimized,
-        abstracted out or at least follow data-oriented programming principles.
+       Stored along with runtime ones.
+       Executed only once.
+       End-to-end optimization.
+    🟩 Methods and functions compile to procs with own context.
+       Procs compile to bitstrings/tensors/arrays of opcodes and are first class literals.
+    🟩 Objects are (maybe?) represented as hashmap of slots.
+       Preferably only one parent.
