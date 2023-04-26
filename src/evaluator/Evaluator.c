@@ -48,12 +48,12 @@ static EvaluatorResult evaluator_run(VM *self) {
             }
 
             case OP_STORE_GLOBAL: {
-                marg_hash_set(&self->global_variables, READ_STRING(), STACK_PEEK(self));
+                marg_hash_set(&self->global_variables, READ_STRING(), STACK_PEEK(self, 0));
                 STACK_POP(self);
                 break;
             }
             case OP_STORE_GLOBAL_LONG: {
-                marg_hash_set(&self->global_variables, READ_LONG_STRING(), STACK_PEEK(self));
+                marg_hash_set(&self->global_variables, READ_LONG_STRING(), STACK_PEEK(self, 0));
                 STACK_POP(self);
                 break;
             }
@@ -85,5 +85,5 @@ MargValue evaluator_evaluate(VM *self) {
     EvaluatorResult result = evaluator_run(self);
     (void)result;
 
-    return STACK_PEEK(self);
+    return STACK_PEEK(self, 0);
 }
