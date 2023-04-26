@@ -10,8 +10,10 @@ string *marg_value_format(MargValue self) {
 
     if(IS_NIL(self))
         string_add_str(res, "nil");
-    else if(IS_BOOL(self))
-        string_add_str(res, AS_BOOL(self) ? "true" : "false");
+    else if(IS_FALSE(self))
+        string_add_str(res, "false");
+    else if(IS_TRUE(self))
+        string_add_str(res, "true");
     else if(IS_NUMBER(self)) {
         double num = AS_NUMBER(self);
         if(floor(num) == num)

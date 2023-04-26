@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 #include "../opcode/Opcodes.h"
-#include "../opcode/MargNil.h"
+#include "../opcode/MargValue.h"
 
 /**
  * @brief Runs the iterator that evaluates
@@ -25,11 +25,11 @@ static EvaluatorResult evaluator_run(VM *self) {
                 break;
             }
             case OP_TRUE: {
-                STACK_PUSH(self, MARG_BOOL(true));
+                STACK_PUSH(self, MARG_TRUE);
                 break;
             }
             case OP_FALSE: {
-                STACK_PUSH(self, MARG_BOOL(false));
+                STACK_PUSH(self, MARG_FALSE);
                 break;
             }
 

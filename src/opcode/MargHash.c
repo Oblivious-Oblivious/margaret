@@ -105,7 +105,7 @@ bool marg_hash_delete(MargHash *self, MargString *key) {
 
     /* Places a `tombstone` entry in the deleted position */
     entry->key = NULL;
-    entry->value = MARG_BOOL(true);
+    entry->value = MARG_TRUE;
 
     return true;
 }
