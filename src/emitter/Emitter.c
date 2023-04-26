@@ -168,7 +168,9 @@ VM *emitter_emit(vector *formal_bytecode) {
         opcode_case(FM_START_C_FUNCTION) {}
         opcode_case(FM_END_C_FUNCTION) {}
 
-        opcode_case(FM_UNARY) {}
+        opcode_case(FM_UNARY) {
+            emit_byte(TEST_OP_PRINT);
+        }
         opcode_case(FM_BINARY) {}
         opcode_case(FM_KEYWORD) {}
     }

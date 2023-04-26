@@ -14,6 +14,11 @@ static EvaluatorResult evaluator_run(VM *self) {
     while(1) {
         uint8_t instruction;
         switch(instruction = READ_BYTE()) {
+            case TEST_OP_PRINT: {
+                printf("%s\n", string_get(marg_value_format(STACK_PEEK(self, 0))));
+                STACK_POP(self);
+                break;
+            }
             case OP_NIL: {
                 STACK_PUSH(self, MARG_NIL);
                 break;

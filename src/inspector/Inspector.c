@@ -135,6 +135,9 @@ static size_t instruction_long_constant(vector *res, const char *name, Chunk *ch
 static size_t inspect_instruction(vector *res, Chunk *chunk, size_t offset) {
     uint8_t instruction = chunk_get(chunk, offset);
     switch(instruction) {
+        case TEST_OP_PRINT:
+            return instruction_single(res, "PRINT", chunk, offset);
+
         case OP_RETURN:
             return instruction_single(res, "RETURN", chunk, offset);
 

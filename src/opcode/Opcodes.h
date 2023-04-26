@@ -44,6 +44,8 @@
 #define FM_KEYWORD           string_new("KEYWORD")
 
 // ------ Emmited Opcodes ------
+#define TEST_OP_PRINT                       0xfa
+
 #define OP_RETURN                           0x00
 
 #define OP_NIL                              0x01
