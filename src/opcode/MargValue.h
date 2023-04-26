@@ -37,6 +37,8 @@ static inline MargValue cdouble_to_marg_value(double number) {
 #define MARG_NUMBER(number)      cdouble_to_marg_value(number)
 #define MARG_OBJECT(object)      (MargValue)(SIGN_BIT | QNAN | (uint64_t)(uintptr_t)(object))
 #define MARG_NIL                 MARG_OBJECT(marg_nil_new())
+#define MARG_STRING(chars, size)                     MARG_OBJECT(marg_string_new((chars), (size)))
+#define MARG_STRING_INTERNED(vm, chars, size, hash)  MARG_OBJECT(marg_hash_find_string(&vm->interned_strings, chars, size, hash));
 
 #define AS_BOOL(value)           ((value) == MARG_TRUE)
 #define AS_NUMBER(value)         marg_value_to_cdouble(value)
