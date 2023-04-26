@@ -40,7 +40,7 @@
     } \
     else { \
         uint32_t constant_index = chunk_add_long_constant(vm->bytecode, (constant)); \
-        uint8_t *constant_index_in_bytes = long_constant_to_bytes(constant_index); \
+        uint8_t *constant_index_in_bytes = dword_to_bytes(constant_index); \
         emit_bytes4( \
             constant_index_in_bytes[0], \
             constant_index_in_bytes[1], \
@@ -62,7 +62,7 @@ static void add_constant(VM *vm, uint32_t constant_index) {
         emit_byte((uint8_t)constant_index);
     }
     else {
-        uint8_t *constant_index_in_bytes = long_constant_to_bytes(constant_index);
+        uint8_t *constant_index_in_bytes = dword_to_bytes(constant_index);
         emit_bytes4(
             constant_index_in_bytes[0],
             constant_index_in_bytes[1],

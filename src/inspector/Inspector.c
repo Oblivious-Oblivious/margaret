@@ -57,7 +57,7 @@ static size_t instruction_offset_5(vector *res, const char *name, Chunk *chunk, 
         chunk_get(chunk, offset + 3),
         chunk_get(chunk, offset + 4),
     };
-    uint32_t constant = bytes_to_long_constant(bytes);
+    uint32_t constant = bytes_to_dword(bytes);
 
     string *disassembled_instruction = string_new("");
     write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
