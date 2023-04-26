@@ -39,6 +39,9 @@
     🟥 Make comments part of the language (Comment new: "...").
     🟥 Make comments dynamic and persistent on code files.
     🟥 Add string interpolation and formatting with `#{..}` or similar.
+    🟥 Separate value types from object types
+       Nil, True, False, Integer, Float, String are `VALUES` (cannot change self)
+       Tensor, Hash, Tuple, BitString are `OBJECTS`          (can change self)
     🟥 Procs, methods and functions return tensors of bytecodes.
     🟥 Add primitives for `while:` to avoid endless recursion.
     🟥 Add a switch matcher -> `obj match: [[1, 100], [2, 200], [3, 300],]`.
