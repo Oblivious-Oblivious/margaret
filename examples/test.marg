@@ -10,7 +10,13 @@
 
     "foo\tbar", "ok1", "ok1", "ok1",
 
-    $x,
+    $ok1 = 123,
+
+    "" print,
+    $x print,
     $x = 42,$x = 42,$x = 42,
-    $x,
+    $y = 41,
+    $x = $y,
+    $x print,
+
 )
