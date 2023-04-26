@@ -46,7 +46,8 @@ inline MargValue STACK_PEEK(VM *self, int distance) {
 #define READ_QWORD() (bytes_to_qword((uint8_t[8]){READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE()}))
 
 #define READ_CONSTANT() (self->bytecode->constants->items[READ_BYTE()])
-#define READ_LONG_CONSTANT() (self->bytecode->constants->items[bytes_to_long_constant((uint8_t[4]){READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE()})])
+#define READ_LONG_CONSTANT() (self->bytecode->constants->items[READ_DWORD()])
+
 #define READ_STRING() AS_STRING(READ_CONSTANT())
 #define READ_LONG_STRING() AS_STRING(READ_LONG_CONSTANT())
 
