@@ -103,7 +103,7 @@ VM *emitter_emit(vector *formal_bytecode) {
             }
             else {
                 constant_index = make_constant(vm, MARG_OBJECT(str));
-                marg_hash_set(&vm->interned_strings, str, MARG_NUMBER((long double)constant_index));
+                marg_hash_set(&vm->interned_strings, str, MARG_NUMBER((double)constant_index));
             }
 
             add_constant(vm, constant_index);
@@ -153,7 +153,7 @@ VM *emitter_emit(vector *formal_bytecode) {
                 uint32_t constant_index = make_constant(vm, constant);
                 add_constant(vm, constant_index);
 
-                marg_hash_set(&vm->interned_strings, interned, MARG_NUMBER((long double)constant_index));
+                marg_hash_set(&vm->interned_strings, interned, MARG_NUMBER((double)constant_index));
             }
             else {
                 MargValue constant = MARG_OBJECT(interned);

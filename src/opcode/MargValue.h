@@ -20,15 +20,15 @@ typedef uint64_t MargValue;
 #define TAG_FALSE  2 /* 10 -> last bits of `rest` */
 #define TAG_TRUE   3 /* 11 -> last bits of `rest` */
 
-static inline long double marg_value_as_number(MargValue value) {
-    long double number;
+static inline double marg_value_to_cdouble(MargValue value) {
+    double number;
     memcpy(&number, &value, sizeof(MargValue));
     return number;
 }
 
-static inline MargValue marg_number_from_value(long double number) {
+static inline MargValue cdouble_to_marg_value(double number) {
     MargValue value;
-    memcpy(&value, &number, sizeof(long double));
+    memcpy(&value, &number, sizeof(double));
     return value;
 }
 
@@ -36,11 +36,11 @@ static inline MargValue marg_number_from_value(long double number) {
 #define MARG_FALSE               ((MargValue)(uint64_t)(QNAN | TAG_FALSE))
 #define MARG_TRUE                ((MargValue)(uint64_t)(QNAN | TAG_TRUE))
 #define MARG_BOOL(b)             ((b) ? MARG_TRUE : MARG_FALSE)
-#define MARG_NUMBER(num)         marg_number_from_value(num)
+#define MARG_NUMBER(num)         cdouble_to_marg_value(num)
 #define MARG_OBJECT(obj)         (MargValue)(SIGN_BIT | QNAN | (uint64_t)(uintptr_t)(obj))
 
 #define AS_BOOL(value)           ((value) == MARG_TRUE)
-#define AS_NUMBER(value)         marg_value_as_number(value)
+#define AS_NUMBER(value)         marg_value_to_cdouble(value)
 #define AS_OBJECT(value)         ((MargObject*)(uintptr_t)((value) & ~(SIGN_BIT | QNAN)))
 #define AS_STRING(value)         ((MargString*)AS_OBJECT(value))
 #define AS_CSTRING(value)        (((MargString*)AS_OBJECT(value))->chars)
