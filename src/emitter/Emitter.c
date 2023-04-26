@@ -147,12 +147,20 @@ VM *emitter_emit(vector *formal_bytecode) {
             MargString *interned = marg_hash_find_string(&vm->interned_strings, chars, size, hash);
             if(interned == NULL) {
                 interned = marg_string_copy(chars, size);
-                marg_hash_set(&vm->interned_strings, interned, MARG_NIL);
-            }
 
-            MargValue constant = MARG_OBJECT(interned);
-            emit_possible_long_op(OP_CONSTANT);
-            emit_constant(constant);
+                MargValue constant = MARG_OBJECT(interned);
+                emit_possible_long_op(OP_CONSTANT);
+                uint32_t constant_index = make_constant(vm, constant);
+                add_constant(vm, constant_index);
+
+                marg_hash_set(&vm->interned_strings, interned, MARG_NUMBER((long double)constant_index));
+            }
+            else {
+                MargValue constant = MARG_OBJECT(interned);
+                emit_possible_long_op(OP_CONSTANT);
+                uint32_t constant_index = make_constant(vm, constant);
+                add_constant(vm, constant_index);
+            }
         }
 
         opcode_case(FM_TENSOR) {}
