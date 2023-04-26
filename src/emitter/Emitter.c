@@ -83,7 +83,7 @@ VM *emitter_emit(vector *formal_bytecode) {
         opcode_case(FM_INSTANCE) {}
         opcode_case(FM_GLOBAL) {
             string *variable_name = vector_get(formal_bytecode, ++ip);
-            MargValue constant = MARG_OBJECT(marg_string_copy(variable_name->str, variable_name->size));
+            MargValue constant = MARG_OBJECT(marg_string_new(variable_name->str, variable_name->size));
             emit_possible_long_op(OP_GLOBAL);
             emit_constant(constant);
         }
@@ -96,7 +96,7 @@ VM *emitter_emit(vector *formal_bytecode) {
             emit_possible_long_op(OP_STORE_GLOBAL);
 
             uint32_t constant_index;
-            MargString *str = marg_string_copy(variable_name->str, variable_name->size);
+            MargString *str = marg_string_new(variable_name->str, variable_name->size);
             MargValue index;
             if(marg_hash_get(&vm->interned_strings, str, &index)) {
                 constant_index = (uint32_t)AS_NUMBER(index);
@@ -146,7 +146,7 @@ VM *emitter_emit(vector *formal_bytecode) {
             uint64_t hash = marg_string_hash(chars, size);
             MargString *interned = marg_hash_find_string(&vm->interned_strings, chars, size, hash);
             if(interned == NULL) {
-                interned = marg_string_copy(chars, size);
+                interned = marg_string_new(chars, size);
 
                 MargValue constant = MARG_OBJECT(interned);
                 emit_possible_long_op(OP_CONSTANT);

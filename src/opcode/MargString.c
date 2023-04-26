@@ -26,12 +26,12 @@ static MargString *marg_string_allocate(size_t size, uint64_t hash) {
     return string;
 }
 
-MargString *marg_string_copy(char *chars, size_t size) {
+MargString *marg_string_new(char *chars, size_t size) {
     uint64_t hash = marg_string_hash(chars, size);
-    MargString *str = marg_string_allocate(size, hash);
+    MargString *self = marg_string_allocate(size, hash);
 
-    memcpy(str->chars, chars, size);
-    str->chars[size] = '\0';
+    memcpy(self->chars, chars, size);
+    self->chars[size] = '\0';
 
-    return str;
+    return self;
 }

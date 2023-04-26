@@ -6,7 +6,7 @@
 #include "MargObject.h"
 
 struct MargString {
-    MargObject obj;
+    MargObject _;
     size_t size;
     uint64_t hash;
     char chars[];
@@ -14,6 +14,6 @@ struct MargString {
 
 uint64_t marg_string_hash(char *key, size_t size);
 
-MargString *marg_string_copy(char *chars, size_t size);
+MargString *marg_string_new(char *chars, size_t size);
 
 #endif
