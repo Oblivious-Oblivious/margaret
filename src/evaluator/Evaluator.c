@@ -3,6 +3,7 @@
 #include <stdio.h>
 
 #include "../opcode/Opcodes.h"
+#include "../opcode/MargNil.h"
 
 /**
  * @brief Runs the iterator that evaluates

@@ -16,7 +16,6 @@ typedef uint64_t MargValue;
 #define QNAN       ((uint64_t)0x7ffc000000000000)
 #define SIGN_BIT   ((uint64_t)0x8000000000000000)
 
-#define TAG_NIL    1 /* 01 -> last bits of `rest` */
 #define TAG_FALSE  2 /* 10 -> last bits of `rest` */
 #define TAG_TRUE   3 /* 11 -> last bits of `rest` */
 
@@ -32,25 +31,26 @@ static inline MargValue cdouble_to_marg_value(double number) {
     return value;
 }
 
-#define MARG_NIL                 ((MargValue)(uint64_t)(QNAN | TAG_NIL))
 #define MARG_FALSE               ((MargValue)(uint64_t)(QNAN | TAG_FALSE))
 #define MARG_TRUE                ((MargValue)(uint64_t)(QNAN | TAG_TRUE))
 #define MARG_BOOL(boolean)       ((boolean) ? MARG_TRUE : MARG_FALSE)
 #define MARG_NUMBER(number)      cdouble_to_marg_value(number)
 #define MARG_OBJECT(object)      (MargValue)(SIGN_BIT | QNAN | (uint64_t)(uintptr_t)(object))
+#define MARG_NIL                 MARG_OBJECT(marg_nil_new())
 
 #define AS_BOOL(value)           ((value) == MARG_TRUE)
 #define AS_NUMBER(value)         marg_value_to_cdouble(value)
 #define AS_OBJECT(value)         ((MargObject*)(uintptr_t)((value) & ~(SIGN_BIT | QNAN)))
+#define AS_NIL(value)            ((MargNil*)AS_OBJECT(value))
 #define AS_STRING(value)         ((MargString*)AS_OBJECT(value))
 #define AS_CSTRING(value)        (((MargString*)AS_OBJECT(value))->chars)
 
 #define OBJECT_TYPE(value)       (AS_OBJECT(value)->type)
 
-#define IS_NIL(value)            ((value) == MARG_NIL)
 #define IS_BOOL(value)           (((value) | 1) == MARG_TRUE)
 #define IS_NUMBER(value)         (((value) & QNAN) != QNAN)
 #define IS_OBJECT(value)         (((value) & (QNAN | SIGN_BIT)) == (QNAN | SIGN_BIT))
+#define IS_NIL(value)            IS_OBJECT(value) && OBJECT_TYPE(value) == MARG_NIL_TYPE
 #define IS_STRING(value)         IS_OBJECT(value) && OBJECT_TYPE(value) == MARG_STRING_TYPE
 
 /**

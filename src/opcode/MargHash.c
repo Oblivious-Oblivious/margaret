@@ -3,6 +3,7 @@
 #include <string.h> /* memcmp */
 
 #include "../base/memory.h"
+#include "MargNil.h"
 
 #define MARG_HASH_MAX_LOAD 0.75
 
