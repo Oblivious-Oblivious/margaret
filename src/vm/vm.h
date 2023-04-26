@@ -33,7 +33,7 @@ inline void STACK_PUSH(VM *self, MargValue item) {
 }
 
 inline MargValue STACK_POP(VM *self) {
-    return --*self->stack_top;
+    return *--self->stack_top;
 }
 
 inline MargValue STACK_PEEK(VM *self, int distance) {
