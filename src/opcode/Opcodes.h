@@ -29,15 +29,15 @@
 #define FM_BITSTRING         string_new("BITSTRING")
 #define FM_HASH              string_new("HASH")
 
-#define FM_ANY_OBJECT        string_new("ANY_OBJECT")
-#define FM_METHOD_PARAMETER  string_new("METHOD_PARAMETER")
-
 #define FM_START_PROC        string_new("START_PROC")
 #define FM_END_PROC          string_new("END_PROC")
 #define FM_PROC_PARAMETER    string_new("PROC_PARAMETER")
 
 #define FM_START_C_FUNCTION  string_new("START_C_FUNCTION")
 #define FM_END_C_FUNCTION    string_new("END_C_FUNCTION")
+
+#define FM_ANY_OBJECT        string_new("ANY_OBJECT")
+#define FM_METHOD_PARAMETER  string_new("METHOD_PARAMETER")
 
 #define FM_UNARY             string_new("UNARY")
 #define FM_BINARY            string_new("BINARY")
@@ -57,9 +57,17 @@
 
 #define OP_STORE_GLOBAL                     0x07
 #define OP_STORE_GLOBAL_LONG                0x08
+#define OP_STORE_INSTANCE                   0x09
+#define OP_STORE_INSTANCE_LONG              0x0a
+#define OP_STORE_LOCAL                      0x0b
+#define OP_STORE_LOCAL_LONG                 0x0c
 
 #define OP_GLOBAL                           0x0d
 #define OP_GLOBAL_LONG                      0x0e
+#define OP_INSTANCE                         0x0f
+#define OP_INSTANCE_LONG                    0x10
+#define OP_LOCAL                            0x11
+#define OP_LOCAL_LONG                       0x12
 
 // TODO Superinstructions for -1,0,1,2
 // TODO Superinstructions for incrementing, decrementing and doubling
