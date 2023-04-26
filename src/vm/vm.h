@@ -36,8 +36,8 @@ inline MargValue STACK_POP(VM *self) {
     return --*self->stack_top;
 }
 
-inline MargValue STACK_PEEK(VM *self) {
-    return *(self->stack_top - 1);
+inline MargValue STACK_PEEK(VM *self, int distance) {
+    return *(self->stack_top - 1 - distance);
 }
 
 #define READ_BYTE() (*self->ip++)
