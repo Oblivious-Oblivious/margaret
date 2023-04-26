@@ -7,6 +7,7 @@
 #include "../base/string.h"
 
 #include "MargObject.h"
+#include "MargNil.h"
 #include "MargString.h"
 
 typedef uint64_t MargValue;
