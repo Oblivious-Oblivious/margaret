@@ -41,7 +41,7 @@ module(InspectorSpec, {
         for(int i = 0; i <= 4000; i++) {
             uint32_t long_constant = chunk_add_long_constant(bytecode, MARG_NUMBER(42.42));
             chunk_add_with_line(bytecode, OP_CONSTANT_LONG, 123);
-            uint8_t *constant_in_bytes = long_constant_to_bytes(long_constant);
+            uint8_t *constant_in_bytes = dword_to_bytes(long_constant);
             chunk_add_with_line(bytecode, constant_in_bytes[0], 123);
             chunk_add_with_line(bytecode, constant_in_bytes[1], 123);
             chunk_add_with_line(bytecode, constant_in_bytes[2], 123);
