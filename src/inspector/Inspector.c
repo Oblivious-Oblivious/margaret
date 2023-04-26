@@ -50,6 +50,60 @@ static size_t instruction_constant(vector *res, const char *name, Chunk *chunk, 
     return offset + 2;
 }
 
+static size_t instruction_variable(vector *res, const char *name, Chunk *chunk, size_t offset) {
+    uint8_t opcode = chunk_get(chunk, offset);
+    uint8_t variable = chunk_get(chunk, offset + 1);
+
+    string *disassembled_instruction = string_new("");
+    write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
+    string_addf(disassembled_instruction, "%02x %02x               ", opcode, variable);
+    string_addf(disassembled_instruction, "%-24s %d (", name, variable);
+    if(!strcmp(name, "STORE_GLOBAL")
+    || !strcmp(name, "GLOBAL")) {
+        string_add_str(disassembled_instruction, "$");
+    }
+    else if(!strcmp(name, "STORE_INSTANCE")
+         || !strcmp(name, "INSTANCE")
+    ) {
+        string_add_str(disassembled_instruction, "@");
+    }
+    string_add(disassembled_instruction, marg_value_as_variable(chunk_get_constant(chunk, variable)));
+    string_add_str(disassembled_instruction, ")");
+    vector_add(res, disassembled_instruction);
+
+    return offset + 2;
+}
+
+static size_t instruction_long_variable(vector *res, const char *name, Chunk *chunk, size_t offset) {
+    uint8_t opcode = chunk_get(chunk, offset);
+    uint8_t bytes[4] = {
+        chunk_get(chunk, offset + 1),
+        chunk_get(chunk, offset + 2),
+        chunk_get(chunk, offset + 3),
+        chunk_get(chunk, offset + 4),
+    };
+    uint32_t variable = bytes_to_dword(bytes);
+
+    string *disassembled_instruction = string_new("");
+    write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
+    string_addf(disassembled_instruction, "%02x %02x %02x %02x %02x      ", opcode, chunk_get(chunk, offset + 1), bytes[1], bytes[2], bytes[3]);
+    string_addf(disassembled_instruction, "%-24s %d (", name, variable);
+    if(!strcmp(name, "STORE_GLOBAL_LONG")
+    || !strcmp(name, "GLOBAL_LONG")) {
+        string_add_str(disassembled_instruction, "$");
+    }
+    else if(!strcmp(name, "STORE_INSTANCE_LONG")
+         || !strcmp(name, "INSTANCE_LONG")
+    ) {
+        string_add_str(disassembled_instruction, "@");
+    }
+    string_add(disassembled_instruction, marg_value_as_variable(chunk_get_constant(chunk, variable)));
+    string_add_str(disassembled_instruction, ")");
+    vector_add(res, disassembled_instruction);
+
+    return offset + 5;
+}
+
 static size_t instruction_long_constant(vector *res, const char *name, Chunk *chunk, size_t offset) {
     uint8_t opcode = chunk_get(chunk, offset);
     uint8_t bytes[4] = {
@@ -100,14 +154,30 @@ static size_t inspect_instruction(vector *res, Chunk *chunk, size_t offset) {
             return instruction_single(res, "POP", chunk, offset);
 
         case OP_STORE_GLOBAL:
-            return instruction_offset_2(res, "STORE_GLOBAL", chunk, offset);
+            return instruction_variable(res, "STORE_GLOBAL", chunk, offset);
         case OP_STORE_GLOBAL_LONG:
-            return instruction_offset_5(res, "STORE_GLOBAL_LONG", chunk, offset);
+            return instruction_long_variable(res, "STORE_GLOBAL_LONG", chunk, offset);
+        case OP_STORE_INSTANCE:
+            return instruction_variable(res, "STORE_INSTANCE", chunk, offset);
+        case OP_STORE_INSTANCE_LONG:
+            return instruction_long_variable(res, "STORE_INSTANCE_LONG", chunk, offset);
+        case OP_STORE_LOCAL:
+            return instruction_variable(res, "STORE_LOCAL", chunk, offset);
+        case OP_STORE_LOCAL_LONG:
+            return instruction_long_variable(res, "STORE_LOCAL_LONG", chunk, offset);
 
         case OP_GLOBAL:
-            return instruction_offset_2(res, "GLOBAL", chunk, offset);
+            return instruction_variable(res, "GLOBAL", chunk, offset);
         case OP_GLOBAL_LONG:
-            return instruction_offset_5(res, "GLOBAL_LONG", chunk, offset);
+            return instruction_long_variable(res, "GLOBAL_LONG", chunk, offset);
+        case OP_INSTANCE:
+            return instruction_variable(res, "INSTANCE", chunk, offset);
+        case OP_INSTANCE_LONG:
+            return instruction_long_variable(res, "INSTANCE_LONG", chunk, offset);
+        case OP_LOCAL:
+            return instruction_variable(res, "LOCAL", chunk, offset);
+        case OP_LOCAL_LONG:
+            return instruction_long_variable(res, "LOCAL_LONG", chunk, offset);
 
         default: {
             string *unknown_opcode = string_new("");
