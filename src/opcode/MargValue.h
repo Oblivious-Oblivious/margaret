@@ -35,9 +35,9 @@ static inline MargValue cdouble_to_marg_value(double number) {
 #define MARG_NIL                 ((MargValue)(uint64_t)(QNAN | TAG_NIL))
 #define MARG_FALSE               ((MargValue)(uint64_t)(QNAN | TAG_FALSE))
 #define MARG_TRUE                ((MargValue)(uint64_t)(QNAN | TAG_TRUE))
-#define MARG_BOOL(b)             ((b) ? MARG_TRUE : MARG_FALSE)
-#define MARG_NUMBER(num)         cdouble_to_marg_value(num)
-#define MARG_OBJECT(obj)         (MargValue)(SIGN_BIT | QNAN | (uint64_t)(uintptr_t)(obj))
+#define MARG_BOOL(boolean)       ((boolean) ? MARG_TRUE : MARG_FALSE)
+#define MARG_NUMBER(number)      cdouble_to_marg_value(number)
+#define MARG_OBJECT(object)      (MargValue)(SIGN_BIT | QNAN | (uint64_t)(uintptr_t)(object))
 
 #define AS_BOOL(value)           ((value) == MARG_TRUE)
 #define AS_NUMBER(value)         marg_value_to_cdouble(value)
