@@ -20,6 +20,7 @@
     🟥 Optimize the design Hash to be data-oriented (separate keys from values for locality).
     🟥 Optimize hash function for better string interning.
     🟥 Add a character literal.
+    🟥 Add big integers and big floats.
     🟥 Implement precedent rules on multibound method dispatch (not just order of definition)
     🟥 Add visual literals of trees, graphs and matrices (2-dimentional data representation).
     🟥 Use comments for docs or TODO graphs.
@@ -38,6 +39,7 @@
     🟥 Add lexically removed comments.
     🟥 Make comments part of the language (Comment new: "...").
     🟥 Make comments dynamic and persistent on code files.
+    🟥 Since comments are dynamic, we can use interpolation to change them according to data (for documentation comments).
     🟥 Add string interpolation and formatting with `#{..}` or similar.
     🟥 Separate value types from object types
        Nil, True, False, Integer, Float, String are `VALUES` (cannot change self)
