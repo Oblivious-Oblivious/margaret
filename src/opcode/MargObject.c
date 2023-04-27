@@ -3,9 +3,9 @@
 #include "../base/memory.h"
 
 MargObject *marg_object_allocate(size_t size, MargObjectType type) {
-    MargObject *object = (MargObject*)collected_malloc(sizeof(MargObject) * size);
+    MargObject *self = (MargObject*)collected_malloc(sizeof(MargObject) * size);
 
-    object->type = type;
+    self->type = type;
 
-    return object;
+    return self;
 }
