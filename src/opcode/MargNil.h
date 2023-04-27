@@ -2,7 +2,6 @@
 #define __MARG_NIL_H_
 
 #include "MargObject.h"
-#include "MargValue.h"
 
 /**
  * @brief An object representation of MARG_NIL
