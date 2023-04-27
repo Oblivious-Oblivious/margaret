@@ -46,7 +46,6 @@ static inline MargValue cdouble_to_marg_value(double number) {
 #define AS_FALSE(value)                              ((MargFalse*)AS_OBJECT(value))
 #define AS_TRUE(value)                               ((MargTrue*)AS_OBJECT(value))
 #define AS_STRING(value)                             ((MargString*)AS_OBJECT(value))
-#define AS_CSTRING(value)                            (((MargString*)AS_OBJECT(value))->chars)
 
 #define OBJECT_TYPE(value)                           (AS_OBJECT(value)->type)
 

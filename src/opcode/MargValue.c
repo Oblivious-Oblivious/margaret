@@ -22,7 +22,7 @@ string *marg_value_format(MargValue self) {
             string_addf(res, "%.*Lg", LDBL_DIG, num);
     }
     else if(IS_STRING(self))
-        string_addf(res, "\"%s\"", AS_CSTRING(self));
+        string_addf(res, "\"%s\"", AS_STRING(self)->chars);
     return res;
 }
 
@@ -30,7 +30,7 @@ string *marg_value_as_variable(MargValue self) {
     string *res = string_new("");
 
     if(IS_STRING(self))
-        string_addf(res, "%s", AS_CSTRING(self));
+        string_addf(res, "%s", AS_STRING(self)->chars);
 
     return res;
 }
