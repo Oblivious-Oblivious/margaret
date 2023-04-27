@@ -59,6 +59,21 @@ static uint32_t make_constant(VM *vm, MargValue constant) {
 }
 
 static void add_constant(VM *vm, uint32_t constant_index) {
+    if(value_vector_size(vm->bytecode->constants) < 256+1) {
+        emit_byte((uint8_t)constant_index);
+    }
+    else {
+        uint8_t *constant_index_in_bytes = dword_to_bytes(constant_index);
+        emit_bytes4(
+            constant_index_in_bytes[0],
+            constant_index_in_bytes[1],
+            constant_index_in_bytes[2],
+            constant_index_in_bytes[3]
+        );
+    }
+}
+
+static void add_premade_constant(VM *vm, uint32_t constant_index) {
     if(value_vector_size(vm->bytecode->constants) < 256) {
         emit_byte((uint8_t)constant_index);
     }
@@ -101,13 +116,14 @@ VM *emitter_emit(vector *formal_bytecode) {
             MargValue index;
             if(marg_hash_get(&vm->interned_strings, AS_STRING(str), &index)) {
                 constant_index = (uint32_t)AS_NUMBER(index);
+                add_premade_constant(vm, constant_index);
             }
             else {
                 constant_index = make_constant(vm, MARG_OBJECT(str));
                 marg_hash_set(&vm->interned_strings, AS_STRING(str), MARG_NUMBER((double)constant_index));
+                add_constant(vm, constant_index);
             }
 
-            add_constant(vm, constant_index);
         }
 
         opcode_case(FM_NIL) {
