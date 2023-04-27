@@ -24,10 +24,11 @@
 // generic
 #include "generic/arithmetic.spec.h"
 #include "generic/assignments.spec.h"
-#include "generic/bitwise.spec.h"
 #include "generic/bitstrings.spec.h"
+#include "generic/bitwise.spec.h"
 #include "generic/booleans.spec.h"
 #include "generic/c_functions.spec.h"
+#include "generic/characters.spec.h"
 #include "generic/classes.spec.h"
 #include "generic/code_as_data.spec.h"
 #include "generic/complex.spec.h"
@@ -63,6 +64,8 @@
 // opcode
 #include "opcode/MargFalse.spec.h"
 #include "opcode/MargHash.spec.h"
+#include "opcode/MargInteger.spec.h"
+#include "opcode/MargNil.spec.h"
 #include "opcode/MargObject.spec.h"
 #include "opcode/MargString.spec.h"
 #include "opcode/MargTrue.spec.h"
@@ -102,10 +105,11 @@ spec_suite({
 
     arithmetic_spec();
     assignments_spec();
-    bitwise_spec();
     bitstrings_spec();
+    bitwise_spec();
     booleans_spec();
     c_functions_spec();
+    characters_spec();
     classes_spec();
     code_as_data_spec();
     complex_spec();
@@ -138,6 +142,8 @@ spec_suite({
 
     MargFalseSpec();
     MargHashSpec();
+    MargIntegerSpec();
+    MargNilSpec();
     MargObjectSpec();
     MargStringSpec();
     MargTrueSpec();
