@@ -12,6 +12,8 @@ typedef enum {
     MARG_NIL_TYPE,
     MARG_FALSE_TYPE,
     MARG_TRUE_TYPE,
+    MARG_INTEGER_TYPE,
+    MARG_FLOAT_TYPE,
     MARG_STRING_TYPE,
 } MargObjectType;
 

@@ -63,6 +63,7 @@
 
 // opcode
 #include "opcode/MargFalse.spec.h"
+#include "opcode/MargFloat.spec.h"
 #include "opcode/MargHash.spec.h"
 #include "opcode/MargInteger.spec.h"
 #include "opcode/MargNil.spec.h"
@@ -141,6 +142,7 @@ spec_suite({
     LexerSpec();
 
     MargFalseSpec();
+    MargFloatSpec();
     MargHashSpec();
     MargIntegerSpec();
     MargNilSpec();

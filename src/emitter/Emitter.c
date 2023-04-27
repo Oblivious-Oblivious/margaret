@@ -115,15 +115,14 @@ VM *emitter_emit(vector *formal_bytecode) {
             MargValue str = MARG_STRING(variable_name->str, variable_name->size);
             MargValue index;
             if(marg_hash_get(&vm->interned_strings, AS_STRING(str), &index)) {
-                constant_index = (uint32_t)AS_NUMBER(index);
+                constant_index = (uint32_t)AS_INTEGER(index)->value;
                 add_premade_constant(vm, constant_index);
             }
             else {
                 constant_index = make_constant(vm, MARG_OBJECT(str));
-                marg_hash_set(&vm->interned_strings, AS_STRING(str), MARG_NUMBER((double)constant_index));
+                marg_hash_set(&vm->interned_strings, AS_STRING(str), MARG_INTEGER(constant_index));
                 add_constant(vm, constant_index);
             }
-
         }
 
         opcode_case(FM_NIL) {
@@ -143,14 +142,14 @@ VM *emitter_emit(vector *formal_bytecode) {
         opcode_case(FM_INTEGER) {
             char *end;
             string *constant_str = vector_get(formal_bytecode, ++ip);
-            MargValue constant = MARG_NUMBER(strtoll(string_get(constant_str), &end, 10));
+            MargValue constant = MARG_INTEGER(strtoll(string_get(constant_str), &end, 10));
             emit_possible_long_op(OP_CONSTANT);
             emit_constant(constant);
         }
         opcode_case(FM_FLOAT) {
             char *end;
             string *constant_str = vector_get(formal_bytecode, ++ip);
-            MargValue constant = MARG_NUMBER(strtold(string_get(constant_str), &end));
+            MargValue constant = MARG_FLOAT(strtold(string_get(constant_str), &end));
             emit_possible_long_op(OP_CONSTANT);
             emit_constant(constant);
         }
@@ -170,7 +169,7 @@ VM *emitter_emit(vector *formal_bytecode) {
                 uint32_t constant_index = make_constant(vm, interned);
                 add_constant(vm, constant_index);
 
-                marg_hash_set(&vm->interned_strings, AS_STRING(interned), MARG_NUMBER((double)constant_index));
+                marg_hash_set(&vm->interned_strings, AS_STRING(interned), MARG_INTEGER(constant_index));
             }
             else {
                 uint32_t constant_index = make_constant(vm, interned);

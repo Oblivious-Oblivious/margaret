@@ -14,13 +14,10 @@ string *marg_value_format(MargValue self) {
         string_add_str(res, "false");
     else if(IS_TRUE(self))
         string_add_str(res, "true");
-    else if(IS_NUMBER(self)) {
-        double num = AS_NUMBER(self);
-        if(floor(num) == num)
-            string_addf(res, "%lld", (int64_t)(num));
-        else
-            string_addf(res, "%.*Lg", LDBL_DIG, num);
-    }
+    else if(IS_INTEGER(self))
+        string_addf(res, "%lld", AS_INTEGER(self)->value);
+    else if(IS_FLOAT(self))
+        string_addf(res, "%.*Lg", LDBL_DIG, AS_FLOAT(self)->value);
     else if(IS_STRING(self))
         string_addf(res, "\"%s\"", AS_STRING(self)->chars);
     return res;
