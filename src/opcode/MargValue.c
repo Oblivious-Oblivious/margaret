@@ -17,7 +17,7 @@ string *marg_value_format(MargValue self) {
     else if(IS_NUMBER(self)) {
         double num = AS_NUMBER(self);
         if(floor(num) == num)
-            string_addf(res, "%lld", (long long)(num));
+            string_addf(res, "%lld", (int64_t)(num));
         else
             string_addf(res, "%.*Lg", LDBL_DIG, num);
     }
