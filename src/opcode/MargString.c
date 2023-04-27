@@ -17,19 +17,11 @@ uint64_t marg_string_hash(char *key, size_t size) {
     return hash;
 }
 
-static MargString *marg_string_allocate(size_t size, uint64_t hash) {
-    MargString *string = (MargString*)marg_object_allocate(sizeof(MargString) + size + 1, MARG_STRING_TYPE);
-
-    string->size = size;
-    string->hash = hash;
-
-    return string;
-}
-
 MargString *marg_string_new(char *chars, size_t size) {
-    uint64_t hash = marg_string_hash(chars, size);
-    MargString *self = marg_string_allocate(size, hash);
+    MargString *self = (MargString*)marg_object_allocate(sizeof(MargString) + size + 1, MARG_STRING_TYPE);
 
+    self->size = size;
+    self->hash = marg_string_hash(chars, size);
     memcpy(self->chars, chars, size);
     self->chars[size] = '\0';
 
