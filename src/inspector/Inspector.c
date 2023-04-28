@@ -51,6 +51,26 @@ static size_t instruction_constant(vector *res, const char *name, Chunk *chunk, 
     return offset + 2;
 }
 
+    uint8_t opcode = chunk_get(chunk, offset);
+    uint8_t bytes[4] = {
+        chunk_get(chunk, offset + 1),
+        chunk_get(chunk, offset + 2),
+        chunk_get(chunk, offset + 3),
+        chunk_get(chunk, offset + 4),
+    };
+    uint32_t constant = bytes_to_dword(bytes);
+
+    string *disassembled_instruction = string_new("");
+    write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
+    string_addf(disassembled_instruction, "%02x %02x %02x %02x %02x      ", opcode, chunk_get(chunk, offset + 1), bytes[1], bytes[2], bytes[3]);
+    string_addf(disassembled_instruction, "%-24s ", name);
+    string_add(disassembled_instruction, marg_value_format(chunk_constant_get(chunk, constant)));
+    string_addf(disassembled_instruction, " @[%d]", constant);
+    vector_add(res, disassembled_instruction);
+
+    return offset + 5;
+}
+
 static size_t instruction_variable(vector *res, const char *name, Chunk *chunk, size_t offset) {
     uint8_t opcode = chunk_get(chunk, offset);
     uint8_t variable = chunk_get(chunk, offset + 1);
@@ -106,26 +126,6 @@ static size_t instruction_long_variable(vector *res, const char *name, Chunk *ch
 }
 
 static size_t instruction_long_constant(vector *res, const char *name, Chunk *chunk, size_t offset) {
-    uint8_t opcode = chunk_get(chunk, offset);
-    uint8_t bytes[4] = {
-        chunk_get(chunk, offset + 1),
-        chunk_get(chunk, offset + 2),
-        chunk_get(chunk, offset + 3),
-        chunk_get(chunk, offset + 4),
-    };
-    uint32_t constant = bytes_to_dword(bytes);
-
-    string *disassembled_instruction = string_new("");
-    write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
-    string_addf(disassembled_instruction, "%02x %02x %02x %02x %02x      ", opcode, chunk_get(chunk, offset + 1), bytes[1], bytes[2], bytes[3]);
-    string_addf(disassembled_instruction, "%-24s ", name);
-    string_add(disassembled_instruction, marg_value_format(chunk_constant_get(chunk, constant)));
-    string_addf(disassembled_instruction, " @[%d]", constant);
-    vector_add(res, disassembled_instruction);
-
-    return offset + 5;
-}
-
 /**
  * @brief Inspects an instruction inside of a chunk
  * @param res -> Adds log information to the res vector
