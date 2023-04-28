@@ -120,11 +120,20 @@ VM *emitter_emit(vector *formal_bytecode) {
 
         // TODO Distinguish normal number from big numbers
         opcode_case(FM_INTEGER) {
-            char *end;
             string *constant_str = vector_get(formal_bytecode, ++ip);
-            MargValue constant = MARG_INTEGER(strtoll(string_get(constant_str), &end, 10));
-            emit_possible_long_op(OP_PUT_OBJECT);
-            emit_constant(constant);
+            char *end; long long integer = strtoll(string_get(constant_str), &end, 10);
+            if(integer == -1)
+                emit_byte(OP_PUT_MINUS_1);
+            else if(integer == 0)
+                emit_byte(OP_PUT_0);
+            else if(integer == 1)
+                emit_byte(OP_PUT_1);
+            else if(integer == 2)
+                emit_byte(OP_PUT_2);
+            else {
+                emit_possible_long_op(OP_PUT_OBJECT);
+                emit_constant(MARG_INTEGER(integer));
+            }
         }
         opcode_case(FM_FLOAT) {
             char *end;

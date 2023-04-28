@@ -33,6 +33,23 @@ static EvaluatorResult evaluator_run(VM *self) {
                 break;
             }
 
+            case OP_PUT_MINUS_1: {
+                STACK_PUSH(self, MARG_MINUS_1);
+                break;
+            }
+            case OP_PUT_0: {
+                STACK_PUSH(self, MARG_0);
+                break;
+            }
+            case OP_PUT_1: {
+                STACK_PUSH(self, MARG_1);
+                break;
+            }
+            case OP_PUT_2: {
+                STACK_PUSH(self, MARG_2);
+                break;
+            }
+
             case OP_PUT_OBJECT: {
                 STACK_PUSH(self, READ_CONSTANT());
                 break;

@@ -52,31 +52,30 @@
 #define OP_PUT_TRUE                         0x02
 #define OP_PUT_FALSE                        0x03
 
-#define OP_PUT_OBJECT                       0x04
-#define OP_PUT_OBJECT_LONG                  0x05
+#define OP_PUT_MINUS_1                      0x04
+#define OP_PUT_0                            0x05
+#define OP_PUT_1                            0x06
+#define OP_PUT_2                            0x07
 
-#define OP_SET_GLOBAL                       0x07
-#define OP_SET_GLOBAL_LONG                  0x08
-#define OP_SET_INSTANCE                     0x09
-#define OP_SET_INSTANCE_LONG                0x0a
-#define OP_SET_LOCAL                        0x0b
-#define OP_SET_LOCAL_LONG                   0x0c
+#define OP_PUT_OBJECT                       0x08
+#define OP_PUT_OBJECT_LONG                  0x09
 
-#define OP_GET_GLOBAL                       0x0d
-#define OP_GET_GLOBAL_LONG                  0x0e
-#define OP_GET_INSTANCE                     0x0f
-#define OP_GET_INSTANCE_LONG                0x10
-#define OP_GET_LOCAL                        0x11
-#define OP_GET_LOCAL_LONG                   0x12
+#define OP_SET_GLOBAL                       0x0a
+#define OP_SET_GLOBAL_LONG                  0x0b
+#define OP_SET_INSTANCE                     0x0c
+#define OP_SET_INSTANCE_LONG                0x0d
+#define OP_SET_LOCAL                        0x0e
+#define OP_SET_LOCAL_LONG                   0x0f
 
-// TODO Superinstructions for -1,0,1,2
+#define OP_GET_GLOBAL                       0x10
+#define OP_GET_GLOBAL_LONG                  0x11
+#define OP_GET_INSTANCE                     0x12
+#define OP_GET_INSTANCE_LONG                0x13
+#define OP_GET_LOCAL                        0x14
+#define OP_GET_LOCAL_LONG                   0x15
+
 // TODO Superinstructions for incrementing, decrementing and doubling
 // TODO Superinstructions for comparing with zero
-// #define OP_0                                0xff
-// #define OP_1                                0xff
-// #define OP_MINUS_1                          0xff
-// #define OP_2                                0xff
-
 // #define OP_SELF                             0xff
 // #define OP_SUPER                            0xff
 

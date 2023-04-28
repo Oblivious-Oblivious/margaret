@@ -23,6 +23,10 @@ typedef uint64_t MargValue;
 #define MARG_FALSE                                   MARG_OBJECT(marg_false_new())
 #define MARG_TRUE                                    MARG_OBJECT(marg_true_new())
 #define MARG_INTEGER(number)                         MARG_OBJECT(marg_integer_new(number))
+#define MARG_MINUS_1                                 MARG_OBJECT(marg_integer_new(-1))
+#define MARG_0                                       MARG_OBJECT(marg_integer_new(0))
+#define MARG_1                                       MARG_OBJECT(marg_integer_new(1))
+#define MARG_2                                       MARG_OBJECT(marg_integer_new(2))
 #define MARG_FLOAT(number)                           MARG_OBJECT(marg_float_new(number))
 #define MARG_STRING(chars, size)                     MARG_OBJECT(marg_string_new((chars), (size)))
 #define MARG_STRING_INTERNED(vm, chars, size, hash)  MARG_OBJECT(marg_hash_find_string(&vm->interned_strings, chars, size, hash));
