@@ -18,7 +18,7 @@ static void primitives_define(void) {
 VM *vm_new(void) {
     VM *vm = (VM*)collected_malloc(sizeof(VM));
 
-    vm->bytecode = chunk_new_empty();
+    vm->bytecode = chunk_new();
     marg_hash_init(&vm->interned_strings);
     marg_hash_init(&vm->global_variables);
 

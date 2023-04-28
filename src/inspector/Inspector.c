@@ -4,6 +4,7 @@
 #include <string.h> /* strcmp */
 
 #include "../base/string.h"
+#include "../base/Chunk.h"
 
 #include "../opcode/Opcodes.h"
 
@@ -43,7 +44,7 @@ static size_t instruction_constant(vector *res, const char *name, Chunk *chunk, 
     write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
     string_addf(disassembled_instruction, "%02x %02x               ", opcode, constant);
     string_addf(disassembled_instruction, "%-24s %d (", name, constant);
-    string_add(disassembled_instruction, marg_value_format(chunk_get_constant(chunk, constant)));
+    string_add(disassembled_instruction, marg_value_format(chunk_constant_get(chunk, constant)));
     string_add_str(disassembled_instruction, ")");
     vector_add(res, disassembled_instruction);
 
@@ -67,7 +68,7 @@ static size_t instruction_variable(vector *res, const char *name, Chunk *chunk, 
     ) {
         string_add_str(disassembled_instruction, "@");
     }
-    string_add(disassembled_instruction, marg_value_as_variable(chunk_get_constant(chunk, variable)));
+    string_add(disassembled_instruction, marg_value_as_variable(chunk_constant_get(chunk, variable)));
     string_add_str(disassembled_instruction, ")");
     vector_add(res, disassembled_instruction);
 
@@ -97,7 +98,7 @@ static size_t instruction_long_variable(vector *res, const char *name, Chunk *ch
     ) {
         string_add_str(disassembled_instruction, "@");
     }
-    string_add(disassembled_instruction, marg_value_as_variable(chunk_get_constant(chunk, variable)));
+    string_add(disassembled_instruction, marg_value_as_variable(chunk_constant_get(chunk, variable)));
     string_add_str(disassembled_instruction, ")");
     vector_add(res, disassembled_instruction);
 
@@ -118,7 +119,7 @@ static size_t instruction_long_constant(vector *res, const char *name, Chunk *ch
     write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
     string_addf(disassembled_instruction, "%02x %02x %02x %02x %02x      ", opcode, chunk_get(chunk, offset + 1), bytes[1], bytes[2], bytes[3]);
     string_addf(disassembled_instruction, "%-24s %d (", name, constant);
-    string_add(disassembled_instruction, marg_value_format(chunk_get_constant(chunk, constant)));
+    string_add(disassembled_instruction, marg_value_format(chunk_constant_get(chunk, constant)));
     string_add_str(disassembled_instruction, ")");
     vector_add(res, disassembled_instruction);
 

@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include "../base/vector.h"
 #include "../base/memory.h"
+#include "../base/Chunk.h"
 #include "../opcode/MargValue.h"
 #include "../opcode/MargHash.h"
 
@@ -44,8 +45,8 @@ inline MargValue STACK_PEEK(VM *self, int distance) {
 #define READ_DWORD() (bytes_to_dword((uint8_t[4]){READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE()}))
 #define READ_QWORD() (bytes_to_qword((uint8_t[8]){READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE()}))
 
-#define READ_CONSTANT() (self->bytecode->constants->items[READ_BYTE()])
-#define READ_LONG_CONSTANT() (self->bytecode->constants->items[READ_DWORD()])
+#define READ_CONSTANT() (chunk_constant_get(self->bytecode, READ_BYTE()))
+#define READ_LONG_CONSTANT() (chunk_constant_get(self->bytecode, READ_DWORD()))
 
 #define READ_STRING() AS_STRING(READ_CONSTANT())
 #define READ_LONG_STRING() AS_STRING(READ_LONG_CONSTANT())

@@ -3,12 +3,14 @@
 // TODO https://stackoverflow.com/questions/17002969/how-to-convert-string-to-int64-t
 #include <string.h> /* strtoll, strtold */
 
+#include "../base/Constants.h"
+#include "../base/Chunk.h"
 #include "../opcode/Opcodes.h"
 #include "../opcode/MargValue.h"
 
 #define opcode_case(opstr) else if(string_equals(opcode, (opstr)))
 
-#define emit_byte(byte) chunk_add_with_line(vm->bytecode, (byte), 123)
+#define emit_byte(byte) chunk_add(vm->bytecode, (byte), 123)
 
 #define emit_bytes2(byte1, byte2) do { \
     emit_byte((byte1)); \
@@ -29,38 +31,23 @@
 } while(0)
 
 #define emit_possible_long_op(opcode) do { \
-    if(value_vector_size(vm->bytecode->constants) < 256) \
-        chunk_add_with_line(vm->bytecode, (opcode), 123); \
+    if(constants_size(vm->bytecode->constants) < 256) \
+        chunk_add(vm->bytecode, (opcode), 123); \
     else \
-        chunk_add_with_line(vm->bytecode, (opcode##_LONG), 123); \
+        chunk_add(vm->bytecode, (opcode##_LONG), 123); \
 } while(0)
 
 #define emit_constant(constant) do { \
-    if(value_vector_size(vm->bytecode->constants) < 256) { \
-        uint32_t constant_index = chunk_add_constant(vm->bytecode, (constant)); \
-        emit_byte((uint8_t)constant_index); \
-    } \
-    else { \
-        uint32_t constant_index = chunk_add_long_constant(vm->bytecode, (constant)); \
-        uint8_t *constant_index_in_bytes = dword_to_bytes(constant_index); \
-        emit_bytes4( \
-            constant_index_in_bytes[0], \
-            constant_index_in_bytes[1], \
-            constant_index_in_bytes[2], \
-            constant_index_in_bytes[3] \
-        ); \
-    } \
+    uint32_t constant_index = make_constant(vm, (constant)); \
+    add_constant(vm, constant_index); \
 } while(0)
 
 static uint32_t make_constant(VM *vm, MargValue constant) {
-    if(value_vector_size(vm->bytecode->constants) < 256)
-        return chunk_add_constant(vm->bytecode, constant);
-    else
-        return chunk_add_long_constant(vm->bytecode, constant);
+    return chunk_constant_add(vm->bytecode, constant);
 }
 
 static void add_constant(VM *vm, uint32_t constant_index) {
-    if(value_vector_size(vm->bytecode->constants) < 256+1) {
+    if(constants_size(vm->bytecode->constants) < 256+1) {
         emit_byte((uint8_t)constant_index);
     }
     else {
@@ -75,7 +62,7 @@ static void add_constant(VM *vm, uint32_t constant_index) {
 }
 
 static void add_premade_constant(VM *vm, uint32_t constant_index) {
-    if(value_vector_size(vm->bytecode->constants) < 256) {
+    if(constants_size(vm->bytecode->constants) < 256) {
         emit_byte((uint8_t)constant_index);
     }
     else {
