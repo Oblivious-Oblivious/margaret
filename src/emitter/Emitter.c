@@ -46,8 +46,8 @@ static uint32_t make_constant(VM *vm, MargValue constant) {
     return chunk_constant_add(vm->bytecode, constant);
 }
 
-static void add_constant(VM *vm, uint32_t constant_index) {
-    if(constants_size(vm->bytecode->constants) < 256+1) {
+static void __add_constant_function(VM *vm, uint32_t constant_index, uint16_t upper_bound) {
+    if(constants_size(vm->bytecode->constants) < upper_bound) {
         emit_byte((uint8_t)constant_index);
     }
     else {
@@ -61,19 +61,11 @@ static void add_constant(VM *vm, uint32_t constant_index) {
     }
 }
 
+static void add_constant(VM *vm, uint32_t constant_index) {
+    __add_constant_function(vm, constant_index, 256+1);
+}
 static void add_premade_constant(VM *vm, uint32_t constant_index) {
-    if(constants_size(vm->bytecode->constants) < 256) {
-        emit_byte((uint8_t)constant_index);
-    }
-    else {
-        uint8_t *constant_index_in_bytes = dword_to_bytes(constant_index);
-        emit_bytes4(
-            constant_index_in_bytes[0],
-            constant_index_in_bytes[1],
-            constant_index_in_bytes[2],
-            constant_index_in_bytes[3]
-        );
-    }
+    __add_constant_function(vm, constant_index, 256);
 }
 
 VM *emitter_emit(vector *formal_bytecode) {
