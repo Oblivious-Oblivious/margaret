@@ -34,7 +34,7 @@ module(InspectorSpec, {
         assert_that_charptr(string_get(vector_get(res, 3)) equals to "0006         |      00                  RETURN");
     });
 
-    xit("tests multiple long constants", {
+    it("tests multiple long constants", {
         VM *vm = vm_new();
         Chunk *bytecode = vm->bytecode;
 
