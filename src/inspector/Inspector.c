@@ -36,7 +36,7 @@ static size_t instruction_single(vector *res, const char *name, Chunk *chunk, si
     return offset + 1;
 }
 
-static size_t instruction_constant(vector *res, const char *name, Chunk *chunk, size_t offset) {
+static size_t instruction_object(vector *res, const char *name, Chunk *chunk, size_t offset) {
     uint8_t opcode = chunk_get(chunk, offset);
     uint8_t constant = chunk_get(chunk, offset + 1);
 
@@ -51,6 +51,7 @@ static size_t instruction_constant(vector *res, const char *name, Chunk *chunk, 
     return offset + 2;
 }
 
+static size_t instruction_long_object(vector *res, const char *name, Chunk *chunk, size_t offset) {
     uint8_t opcode = chunk_get(chunk, offset);
     uint8_t bytes[4] = {
         chunk_get(chunk, offset + 1),
@@ -125,7 +126,6 @@ static size_t instruction_long_variable(vector *res, const char *name, Chunk *ch
     return offset + 5;
 }
 
-static size_t instruction_long_constant(vector *res, const char *name, Chunk *chunk, size_t offset) {
 /**
  * @brief Inspects an instruction inside of a chunk
  * @param res -> Adds log information to the res vector
@@ -136,9 +136,10 @@ static size_t instruction_long_constant(vector *res, const char *name, Chunk *ch
 static size_t inspect_instruction(vector *res, Chunk *chunk, size_t offset) {
     uint8_t instruction = chunk_get(chunk, offset);
     switch(instruction) {
+        case OP_POP:
+            return instruction_single(res, "POP", chunk, offset);
         case TEST_OP_PRINT:
             return instruction_single(res, "PRINT", chunk, offset);
-
         case OP_RETURN:
             return instruction_single(res, "RETURN", chunk, offset);
 
@@ -150,12 +151,9 @@ static size_t inspect_instruction(vector *res, Chunk *chunk, size_t offset) {
             return instruction_single(res, "PUT_FALSE", chunk, offset);
 
         case OP_PUT_OBJECT:
-            return instruction_constant(res, "PUT_OBJECT", chunk, offset);
+            return instruction_object(res, "PUT_OBJECT", chunk, offset);
         case OP_PUT_OBJECT_LONG:
-            return instruction_long_constant(res, "PUT_OBJECT_LONG", chunk, offset);
-
-        case OP_POP:
-            return instruction_single(res, "POP", chunk, offset);
+            return instruction_long_object(res, "PUT_OBJECT_LONG", chunk, offset);
 
         case OP_SET_GLOBAL:
             return instruction_variable(res, "SET_GLOBAL", chunk, offset);
