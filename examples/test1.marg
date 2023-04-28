@@ -8,7 +8,7 @@
                 if_true: { -self }
                 if_false: { self }
         ),
-    Comment new: "Method selector: 'abs' block: {...}",
+    Comment new: "Method selector: abs block: {...}",
 
     Numeric bind: #** a_number => self raised_to: a_number,
 
@@ -19,5 +19,5 @@
         ),
     Numeric bind:
         #add: element at: position => 42,
-    Comment new: "Method selector: 'add:at:' block: {element, position | 42}",
+    Comment new: "Method selector: add:at: block: {element, position | 42}",
 )} eval
