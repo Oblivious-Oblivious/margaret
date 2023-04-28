@@ -25,7 +25,7 @@ typedef struct Chunk {
 } Chunk;
 
 /**
- * @brief Creates a new mprty chunk
+ * @brief Creates a new empty chunk
  * @return Chunk*
  */
 Chunk *chunk_new(void);
