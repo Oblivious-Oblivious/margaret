@@ -5,11 +5,12 @@
 #define CHUNK_GROW_FACTOR 1.618
 
 static void chunk_ensure_space(Chunk *self) {
-    uint8_t *new_items = (uint8_t*)collected_realloc(self->items, sizeof(uint8_t) * CHUNK_GROW_FACTOR);
-    size_t *new_lines = (size_t*)collected_realloc(self->items, sizeof(size_t) * CHUNK_GROW_FACTOR);
+    size_t new_capacity = self->alloced * CHUNK_GROW_FACTOR;
+    uint8_t *new_items = (uint8_t*)collected_realloc(self->items, sizeof(uint8_t) * new_capacity);
+    size_t *new_lines = (size_t*)collected_realloc(self->lines, sizeof(size_t) * new_capacity);
 
     if(new_items) {
-        self->alloced = self->alloced * CHUNK_GROW_FACTOR;
+        self->alloced = new_capacity;
         self->items = new_items;
     }
     if(new_lines)
@@ -19,7 +20,7 @@ static void chunk_ensure_space(Chunk *self) {
 Chunk *chunk_new(void) {
     Chunk *self = (Chunk*)collected_malloc(sizeof(Chunk));
 
-    self->alloced = 5000;
+    self->alloced = 32;
     self->size = 0;
     self->items = (uint8_t*)collected_malloc(sizeof(uint8_t) * self->alloced);
     self->lines = (size_t*)collected_malloc(sizeof(size_t) * self->alloced);
