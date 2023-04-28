@@ -59,12 +59,12 @@ static size_t instruction_variable(vector *res, const char *name, Chunk *chunk, 
     write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
     string_addf(disassembled_instruction, "%02x %02x               ", opcode, variable);
     string_addf(disassembled_instruction, "%-24s %d (", name, variable);
-    if(!strcmp(name, "STORE_GLOBAL")
-    || !strcmp(name, "GLOBAL")) {
+    if(!strcmp(name, "SET_GLOBAL")
+    || !strcmp(name, "GET_GLOBAL")) {
         string_add_str(disassembled_instruction, "$");
     }
-    else if(!strcmp(name, "STORE_INSTANCE")
-         || !strcmp(name, "INSTANCE")
+    else if(!strcmp(name, "SET_INSTANCE")
+         || !strcmp(name, "GET_INSTANCE")
     ) {
         string_add_str(disassembled_instruction, "@");
     }
@@ -89,12 +89,12 @@ static size_t instruction_long_variable(vector *res, const char *name, Chunk *ch
     write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
     string_addf(disassembled_instruction, "%02x %02x %02x %02x %02x      ", opcode, chunk_get(chunk, offset + 1), bytes[1], bytes[2], bytes[3]);
     string_addf(disassembled_instruction, "%-24s %d (", name, variable);
-    if(!strcmp(name, "STORE_GLOBAL_LONG")
-    || !strcmp(name, "GLOBAL_LONG")) {
+    if(!strcmp(name, "SET_GLOBAL_LONG")
+    || !strcmp(name, "GET_GLOBAL_LONG")) {
         string_add_str(disassembled_instruction, "$");
     }
-    else if(!strcmp(name, "STORE_INSTANCE_LONG")
-         || !strcmp(name, "INSTANCE_LONG")
+    else if(!strcmp(name, "SET_INSTANCE_LONG")
+         || !strcmp(name, "GET_INSTANCE_LONG")
     ) {
         string_add_str(disassembled_instruction, "@");
     }
@@ -142,46 +142,46 @@ static size_t inspect_instruction(vector *res, Chunk *chunk, size_t offset) {
         case OP_RETURN:
             return instruction_single(res, "RETURN", chunk, offset);
 
-        case OP_NIL:
-            return instruction_single(res, "NIL", chunk, offset);
-        case OP_TRUE:
-            return instruction_single(res, "TRUE", chunk, offset);
-        case OP_FALSE:
-            return instruction_single(res, "FALSE", chunk, offset);
+        case OP_PUT_NIL:
+            return instruction_single(res, "PUT_NIL", chunk, offset);
+        case OP_PUT_TRUE:
+            return instruction_single(res, "PUT_TRUE", chunk, offset);
+        case OP_PUT_FALSE:
+            return instruction_single(res, "PUT_FALSE", chunk, offset);
 
-        case OP_CONSTANT:
-            return instruction_constant(res, "CONSTANT", chunk, offset);
-        case OP_CONSTANT_LONG:
-            return instruction_long_constant(res, "CONSTANT_LONG", chunk, offset);
+        case OP_PUT_OBJECT:
+            return instruction_constant(res, "PUT_OBJECT", chunk, offset);
+        case OP_PUT_OBJECT_LONG:
+            return instruction_long_constant(res, "PUT_OBJECT_LONG", chunk, offset);
 
         case OP_POP:
             return instruction_single(res, "POP", chunk, offset);
 
-        case OP_STORE_GLOBAL:
-            return instruction_variable(res, "STORE_GLOBAL", chunk, offset);
-        case OP_STORE_GLOBAL_LONG:
-            return instruction_long_variable(res, "STORE_GLOBAL_LONG", chunk, offset);
-        case OP_STORE_INSTANCE:
-            return instruction_variable(res, "STORE_INSTANCE", chunk, offset);
-        case OP_STORE_INSTANCE_LONG:
-            return instruction_long_variable(res, "STORE_INSTANCE_LONG", chunk, offset);
-        case OP_STORE_LOCAL:
-            return instruction_variable(res, "STORE_LOCAL", chunk, offset);
-        case OP_STORE_LOCAL_LONG:
-            return instruction_long_variable(res, "STORE_LOCAL_LONG", chunk, offset);
+        case OP_SET_GLOBAL:
+            return instruction_variable(res, "SET_GLOBAL", chunk, offset);
+        case OP_SET_GLOBAL_LONG:
+            return instruction_long_variable(res, "SET_GLOBAL_LONG", chunk, offset);
+        case OP_SET_INSTANCE:
+            return instruction_variable(res, "SET_INSTANCE", chunk, offset);
+        case OP_SET_INSTANCE_LONG:
+            return instruction_long_variable(res, "SET_INSTANCE_LONG", chunk, offset);
+        case OP_SET_LOCAL:
+            return instruction_variable(res, "SET_LOCAL", chunk, offset);
+        case OP_SET_LOCAL_LONG:
+            return instruction_long_variable(res, "SET_LOCAL_LONG", chunk, offset);
 
-        case OP_GLOBAL:
-            return instruction_variable(res, "GLOBAL", chunk, offset);
-        case OP_GLOBAL_LONG:
-            return instruction_long_variable(res, "GLOBAL_LONG", chunk, offset);
-        case OP_INSTANCE:
-            return instruction_variable(res, "INSTANCE", chunk, offset);
-        case OP_INSTANCE_LONG:
-            return instruction_long_variable(res, "INSTANCE_LONG", chunk, offset);
-        case OP_LOCAL:
-            return instruction_variable(res, "LOCAL", chunk, offset);
-        case OP_LOCAL_LONG:
-            return instruction_long_variable(res, "LOCAL_LONG", chunk, offset);
+        case OP_GET_GLOBAL:
+            return instruction_variable(res, "GET_GLOBAL", chunk, offset);
+        case OP_GET_GLOBAL_LONG:
+            return instruction_long_variable(res, "GET_GLOBAL_LONG", chunk, offset);
+        case OP_GET_INSTANCE:
+            return instruction_variable(res, "GET_INSTANCE", chunk, offset);
+        case OP_GET_INSTANCE_LONG:
+            return instruction_long_variable(res, "GET_INSTANCE_LONG", chunk, offset);
+        case OP_GET_LOCAL:
+            return instruction_variable(res, "GET_LOCAL", chunk, offset);
+        case OP_GET_LOCAL_LONG:
+            return instruction_long_variable(res, "GET_LOCAL_LONG", chunk, offset);
 
         default: {
             string *unknown_opcode = string_new("");

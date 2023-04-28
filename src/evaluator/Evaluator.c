@@ -20,25 +20,24 @@ static EvaluatorResult evaluator_run(VM *self) {
                 STACK_POP(self);
                 break;
             }
-            case OP_NIL: {
+            case OP_PUT_NIL: {
                 STACK_PUSH(self, MARG_NIL);
                 break;
             }
-            case OP_TRUE: {
+            case OP_PUT_TRUE: {
                 STACK_PUSH(self, MARG_TRUE);
                 break;
             }
-            case OP_FALSE: {
+            case OP_PUT_FALSE: {
                 STACK_PUSH(self, MARG_FALSE);
                 break;
             }
 
-            // TODO Rename CONSTANT to LITERAL or OBJECT
-            case OP_CONSTANT: {
+            case OP_PUT_OBJECT: {
                 STACK_PUSH(self, READ_CONSTANT());
                 break;
             }
-            case OP_CONSTANT_LONG: {
+            case OP_PUT_OBJECT_LONG: {
                 STACK_PUSH(self, READ_LONG_CONSTANT());
                 break;
             }
@@ -48,24 +47,24 @@ static EvaluatorResult evaluator_run(VM *self) {
                 break;
             }
 
-            case OP_STORE_GLOBAL: {
+            case OP_SET_GLOBAL: {
                 marg_hash_set(&self->global_variables, READ_STRING(), STACK_PEEK(self, 0));
                 STACK_POP(self);
                 break;
             }
-            case OP_STORE_GLOBAL_LONG: {
+            case OP_SET_GLOBAL_LONG: {
                 marg_hash_set(&self->global_variables, READ_LONG_STRING(), STACK_PEEK(self, 0));
                 STACK_POP(self);
                 break;
             }
 
-            case OP_GLOBAL: {
+            case OP_GET_GLOBAL: {
                 MargValue variable;
                 marg_hash_get(&self->global_variables, READ_STRING(), &variable);
                 STACK_PUSH(self, variable);
                 break;
             }
-            case OP_GLOBAL_LONG: {
+            case OP_GET_GLOBAL_LONG: {
                 MargValue variable;
                 marg_hash_get(&self->global_variables, READ_LONG_STRING(), &variable);
                 STACK_PUSH(self, variable);

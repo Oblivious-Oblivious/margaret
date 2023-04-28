@@ -44,32 +44,30 @@
 #define FM_KEYWORD           string_new("KEYWORD")
 
 // ------ Emmited Opcodes ------
-#define TEST_OP_PRINT                       0xfa
+#define OP_POP                              0xfd
+#define TEST_OP_PRINT                       0xfe
+#define OP_RETURN                           0xff
 
-#define OP_RETURN                           0x00
+#define OP_PUT_NIL                          0x01
+#define OP_PUT_TRUE                         0x02
+#define OP_PUT_FALSE                        0x03
 
-#define OP_NIL                              0x01
-#define OP_TRUE                             0x02
-#define OP_FALSE                            0x03
+#define OP_PUT_OBJECT                       0x04
+#define OP_PUT_OBJECT_LONG                  0x05
 
-#define OP_CONSTANT                         0x04
-#define OP_CONSTANT_LONG                    0x05
+#define OP_SET_GLOBAL                       0x07
+#define OP_SET_GLOBAL_LONG                  0x08
+#define OP_SET_INSTANCE                     0x09
+#define OP_SET_INSTANCE_LONG                0x0a
+#define OP_SET_LOCAL                        0x0b
+#define OP_SET_LOCAL_LONG                   0x0c
 
-#define OP_POP                              0x06
-
-#define OP_STORE_GLOBAL                     0x07
-#define OP_STORE_GLOBAL_LONG                0x08
-#define OP_STORE_INSTANCE                   0x09
-#define OP_STORE_INSTANCE_LONG              0x0a
-#define OP_STORE_LOCAL                      0x0b
-#define OP_STORE_LOCAL_LONG                 0x0c
-
-#define OP_GLOBAL                           0x0d
-#define OP_GLOBAL_LONG                      0x0e
-#define OP_INSTANCE                         0x0f
-#define OP_INSTANCE_LONG                    0x10
-#define OP_LOCAL                            0x11
-#define OP_LOCAL_LONG                       0x12
+#define OP_GET_GLOBAL                       0x0d
+#define OP_GET_GLOBAL_LONG                  0x0e
+#define OP_GET_INSTANCE                     0x0f
+#define OP_GET_INSTANCE_LONG                0x10
+#define OP_GET_LOCAL                        0x11
+#define OP_GET_LOCAL_LONG                   0x12
 
 // TODO Superinstructions for -1,0,1,2
 // TODO Superinstructions for incrementing, decrementing and doubling
