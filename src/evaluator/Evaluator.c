@@ -15,11 +15,19 @@ static EvaluatorResult evaluator_run(VM *self) {
     while(1) {
         uint8_t instruction;
         switch(instruction = READ_BYTE()) {
+            case OP_POP: {
+                STACK_POP(self);
+                break;
+            }
+            case OP_RETURN: {
+                return EVALUATOR_OK;
+            }
             case TEST_OP_PRINT: {
                 printf("%s\n", string_get(marg_value_format(STACK_PEEK(self, 0))));
                 STACK_POP(self);
                 break;
             }
+
             case OP_PUT_NIL: {
                 STACK_PUSH(self, MARG_NIL);
                 break;
@@ -59,11 +67,6 @@ static EvaluatorResult evaluator_run(VM *self) {
                 break;
             }
 
-            case OP_POP: {
-                STACK_POP(self);
-                break;
-            }
-
             case OP_SET_GLOBAL: {
                 marg_hash_set(&self->global_variables, READ_STRING(), STACK_PEEK(self, 0));
                 STACK_POP(self);
@@ -86,10 +89,6 @@ static EvaluatorResult evaluator_run(VM *self) {
                 marg_hash_get(&self->global_variables, READ_LONG_STRING(), &variable);
                 STACK_PUSH(self, variable);
                 break;
-            }
-
-            case OP_RETURN: {
-                return EVALUATOR_OK;
             }
 
             default: {}
