@@ -7,6 +7,8 @@
 // base
 #include "base/alternate_to_dec.spec.h"
 #include "base/boolean.spec.h"
+#include "base/Chunk.spec.h"
+#include "base/Constants.spec.h"
 #include "base/file_loader.spec.h"
 #include "base/memory.spec.h"
 #include "base/string.spec.h"
@@ -93,6 +95,8 @@ spec_suite({
 
     alternate_to_dec_spec();
     boolean_spec();
+    ChunkSpec();
+    ConstantsSpec();
     file_loader_spec();
     memory_spec();
     string_spec();

@@ -3,9 +3,6 @@
 
 #include <stdlib.h> /* size_t */
 #include <stdarg.h> /* va_start, va_end, va_list, va_arg */
-#include <stdint.h> /* uint8_t */
-
-#include "../opcode/MargValue.h"
 
 #define VECTOR_PP_256TH_ARG( \
     _1, _2, _3, _4, _5, _6, _7, _8, _9,_10, \
@@ -119,56 +116,17 @@
 #define VECTOR_PP_NARG(...) \
     VECTOR_PP_NARG_(__VA_ARGS__,VECTOR_PP_RSEQ_N())
 
-#define VECTOR_DECLARE(structname, typename, type) \
-    /**
-     * @brief: Defines a vector data structure
-     * @param items -> A void pointer array that contains the heterogenous elements of the vector
-     * @param alloced -> The total capacity of the vector
-     * @param size -> The total number of values
-     */ \
-    typedef struct structname { \
-        type *items; \
-        size_t alloced; \
-        size_t size; \
-        \
-        size_t *lines; \
-        struct ValueVector *constants; \
-    } structname; \
-    \
-    /**
-     * @brief Creates a new empty vector
-     * @return typename*
-     */ \
-    structname *typename##_new_empty(void); \
-    \
-    /**
-     * @brief: Adds a new element in the vector
-     * @param v -> The vector to use
-     * @param item -> The item to add
-     * @return The modified vector
-     */ \
-    structname *typename##_add(structname *self, type item); \
-    \
-    /**
-     * @brief: Get the value of a specific vector index
-     * @param self -> The vector to use
-     * @param index -> The index to get the value of
-     * @return The value
-     */ \
-    type typename##_get(structname *self, size_t index); \
-    \
-    /**
-     * @brief: Get the total number of values inserted in the vector
-     * @param self -> The vector to use
-     * @return: The number of items in the vector
-     */ \
-    size_t typename##_size(structname *self);
-
-VECTOR_DECLARE(vector, vector, void*)
-VECTOR_DECLARE(ValueVector, value_vector, MargValue)
-VECTOR_DECLARE(Chunk, chunk, uint8_t)
-
-#define vector_new(...) __internal_vector_new(VECTOR_PP_NARG(__VA_ARGS__), __VA_ARGS__)
+/**
+ * @brief: Defines a vector data structure
+ * @param items -> A void pointer array that contains the heterogenous elements of the vector
+ * @param alloced -> The total capacity of the vector
+ * @param size -> The total number of values
+ */
+typedef struct vector {
+    void **items;
+    size_t alloced;
+    size_t size;
+} vector;
 
 /**
  * @brief: Initializes a vector data structure
@@ -177,33 +135,35 @@ VECTOR_DECLARE(Chunk, chunk, uint8_t)
  * @return: The newly created vector
  */
 vector *__internal_vector_new(size_t argc, ...);
+#define vector_new(...) __internal_vector_new(VECTOR_PP_NARG(__VA_ARGS__), __VA_ARGS__)
 
 /**
- * @brief Helper for adding a constant
-    inside the value vector of a chunk
- * @param chunk -> Current chunk
- * @param value -> MargValue
- * @return size_t -> The index the constant was appended to
+ * @brief Creates a new empty vector
+ * @return vector*
  */
-uint32_t chunk_add_constant(Chunk *chunk, MargValue value);
-uint32_t chunk_add_long_constant(Chunk *chunk, MargValue value);
+vector *vector_new_empty(void);
 
 /**
- * @brief Helper for retrieving a constant from the
-    value vector of a chunk using index
- * @param chunk -> Current chunk
- * @param index -> Index of the constant
- * @return MargValue -> The value of the constant
+ * @brief: Adds a new element in the vector
+ * @param v -> The vector to use
+ * @param item -> The item to add
+ * @return The modified vector
  */
-MargValue chunk_get_constant(Chunk *chunk, size_t index);
+vector *vector_add(vector *self, void *item);
 
 /**
- * @brief Helper for adding an opcode and the
-    line in code it was translated from
- * @param chunk -> Current chunk
- * @param byte -> The opcode to add
- * @param line -> Line number
+ * @brief: Get the value of a specific vector index
+ * @param self -> The vector to use
+ * @param index -> The index to get the value of
+ * @return The value
  */
-void chunk_add_with_line(Chunk *chunk, uint8_t byte, size_t line);
+void *vector_get(vector *self, size_t index);
+
+/**
+ * @brief: Get the total number of values inserted in the vector
+ * @param self -> The vector to use
+ * @return: The number of items in the vector
+ */
+size_t vector_size(vector *self);
 
 #endif
