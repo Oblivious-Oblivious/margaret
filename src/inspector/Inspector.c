@@ -43,9 +43,9 @@ static size_t instruction_constant(vector *res, const char *name, Chunk *chunk, 
     string *disassembled_instruction = string_new("");
     write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
     string_addf(disassembled_instruction, "%02x %02x               ", opcode, constant);
-    string_addf(disassembled_instruction, "%-24s %d (", name, constant);
+    string_addf(disassembled_instruction, "%-24s ", name);
     string_add(disassembled_instruction, marg_value_format(chunk_constant_get(chunk, constant)));
-    string_add_str(disassembled_instruction, ")");
+    string_addf(disassembled_instruction, " @[%d]", constant);
     vector_add(res, disassembled_instruction);
 
     return offset + 2;
@@ -58,7 +58,7 @@ static size_t instruction_variable(vector *res, const char *name, Chunk *chunk, 
     string *disassembled_instruction = string_new("");
     write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
     string_addf(disassembled_instruction, "%02x %02x               ", opcode, variable);
-    string_addf(disassembled_instruction, "%-24s %d (", name, variable);
+    string_addf(disassembled_instruction, "%-24s ", name);
     if(!strcmp(name, "SET_GLOBAL")
     || !strcmp(name, "GET_GLOBAL")) {
         string_add_str(disassembled_instruction, "$");
@@ -69,7 +69,7 @@ static size_t instruction_variable(vector *res, const char *name, Chunk *chunk, 
         string_add_str(disassembled_instruction, "@");
     }
     string_add(disassembled_instruction, marg_value_as_variable(chunk_constant_get(chunk, variable)));
-    string_add_str(disassembled_instruction, ")");
+    string_addf(disassembled_instruction, " @[%d]", variable);
     vector_add(res, disassembled_instruction);
 
     return offset + 2;
@@ -88,7 +88,7 @@ static size_t instruction_long_variable(vector *res, const char *name, Chunk *ch
     string *disassembled_instruction = string_new("");
     write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
     string_addf(disassembled_instruction, "%02x %02x %02x %02x %02x      ", opcode, chunk_get(chunk, offset + 1), bytes[1], bytes[2], bytes[3]);
-    string_addf(disassembled_instruction, "%-24s %d (", name, variable);
+    string_addf(disassembled_instruction, "%-24s ", name);
     if(!strcmp(name, "SET_GLOBAL_LONG")
     || !strcmp(name, "GET_GLOBAL_LONG")) {
         string_add_str(disassembled_instruction, "$");
@@ -99,7 +99,7 @@ static size_t instruction_long_variable(vector *res, const char *name, Chunk *ch
         string_add_str(disassembled_instruction, "@");
     }
     string_add(disassembled_instruction, marg_value_as_variable(chunk_constant_get(chunk, variable)));
-    string_add_str(disassembled_instruction, ")");
+    string_addf(disassembled_instruction, " @[%d]", variable);
     vector_add(res, disassembled_instruction);
 
     return offset + 5;
@@ -118,9 +118,9 @@ static size_t instruction_long_constant(vector *res, const char *name, Chunk *ch
     string *disassembled_instruction = string_new("");
     write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
     string_addf(disassembled_instruction, "%02x %02x %02x %02x %02x      ", opcode, chunk_get(chunk, offset + 1), bytes[1], bytes[2], bytes[3]);
-    string_addf(disassembled_instruction, "%-24s %d (", name, constant);
+    string_addf(disassembled_instruction, "%-24s ", name);
     string_add(disassembled_instruction, marg_value_format(chunk_constant_get(chunk, constant)));
-    string_add_str(disassembled_instruction, ")");
+    string_addf(disassembled_instruction, " @[%d]", constant);
     vector_add(res, disassembled_instruction);
 
     return offset + 5;
