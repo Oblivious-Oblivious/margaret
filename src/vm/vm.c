@@ -27,3 +27,11 @@ VM *vm_new(void) {
 
     return vm;
 }
+
+void vm_free(VM *vm) {
+    // TODO
+    (void)vm;
+    // chunk_free(vm->bytecode);
+    // marg_hash_free(&vm->interned_strings);
+    // marg_hash_free(&vm->global_variables);
+}

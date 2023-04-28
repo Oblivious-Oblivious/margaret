@@ -15,6 +15,7 @@
 #include "src/lexer/Lexer.h"
 #include "src/optimizer/Optimizer.h"
 #include "src/parser/Parser.h"
+#include "src/vm/vm.h"
 
 static string *LOAD(char *filename) {
     return file_loader_load(file_loader_new(), filename);
@@ -84,6 +85,7 @@ static void margaret_run_file(char *filename) {
 
     MargValue evaluation_result = EVAL(vm);
     PRINT(evaluation_result);
+    vm_free(vm);
 }
 
 static void banner(void) {
@@ -91,7 +93,7 @@ static void banner(void) {
 }
 
 int main(int argc, char **argv) {
-    GC_INIT();
+    // GC_INIT();
 
     if(argc < 2) {
         (void)argc;(void)argv;

@@ -51,6 +51,18 @@ inline MargValue STACK_PEEK(VM *self, int distance) {
 #define READ_STRING() AS_STRING(READ_CONSTANT())
 #define READ_LONG_STRING() AS_STRING(READ_LONG_CONSTANT())
 
+/**
+ * @brief Creates a new VM instance
+        By being an explicit pointer can create multiple of them
+ * @return VM* 
+ */
 VM *vm_new(void);
+
+/**
+ * @brief Explicitely frees VM memory that is kept outside of the collector
+        Memory critical sections like constants are kept outside of the GC
+ * @param vm -> Current vm
+ */
+void vm_free(VM *vm);
 
 #endif
