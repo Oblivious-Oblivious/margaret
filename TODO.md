@@ -5,10 +5,11 @@
        Employ a separate process/thread for collection
        Store a fiber in each object that listens for collections
        This fiber can choose to give itself for collection or not depending on whether the objects is being used for performance oriented calculation.
+    🟥 Upgrade to a compacting concurrent tricolor generational mark & sweep gc
+       Ensure memory expansions to expand by φ (1.618)
 
 ## (✗) ver. 0.3.0
 -----------------
-    🟥 Add a custom mark and sweep garbage collector
     🟥 Upgrade to a mark & sweep generational gc
        gen0, gen1, gen2
        every 3 gen0 collections, collect gen1 once, every 10 gen0 collections collect gen2 once
@@ -26,6 +27,7 @@
     🟥 Use comments for docs or TODO graphs.
     🟥 Use crystal-lang C extensions to bind native values to margaret ones. C code should be exported as a static library and the exposed API should be declared in code.
     🟥 Add cascaded messages.
+    🟥 Add a custom mark and sweep garbage collector
     🟥 Optimize repeating bytecodes that offer no state change outside the loop
     🟥 Add syntax for using user defined inferred objects -> Inferred start_using: MyObject, one: 1 two: 2   -> (MyObject one: 1 two: 2) Inferred stop_using: MyObject
        Possibly MyObject can inherit from Margaret to not lose predefined marg messages
