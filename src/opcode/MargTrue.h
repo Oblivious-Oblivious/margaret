@@ -1,14 +1,14 @@
 #ifndef __MARG_TRUE_H_
 #define __MARG_TRUE_H_
 
-#include "MargObject.h"
+#include "MargPointer.h"
 
 /**
  * @brief An object representation of MARG_TRUE
  * @param _ -> Inherted object properties
  */
 typedef struct MargTrue {
-    MargObject _;
+    MargPointer _;
 } MargTrue;
 
 /**

@@ -4,10 +4,10 @@
 #include <stdlib.h> /* size_t */
 #include <stdint.h> /* uint64_t */
 
-#include "MargObject.h"
+#include "MargPointer.h"
 
 typedef struct MargString {
-    MargObject _;
+    MargPointer _;
     size_t size;
     uint64_t hash;
     char chars[];

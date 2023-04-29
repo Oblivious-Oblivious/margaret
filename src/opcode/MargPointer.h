@@ -1,5 +1,5 @@
-#ifndef __MARG_OBJECT_H_
-#define __MARG_OBJECT_H_
+#ifndef __MARG_POINTER_H_
+#define __MARG_POINTER_H_
 
 // TODO docs comment all function definitions and structs
 
@@ -12,12 +12,12 @@ typedef enum {
     MARG_INTEGER_TYPE,
     MARG_FLOAT_TYPE,
     MARG_STRING_TYPE,
-} MargObjectType;
+} MargPointerType;
 
-typedef struct MargObject {
-    MargObjectType type;
-} MargObject;
+typedef struct MargPointer {
+    MargPointerType type;
+} MargPointer;
 
-MargObject *marg_object_allocate(size_t size, MargObjectType type);
+MargPointer *marg_pointer_new(size_t size, MargPointerType type);
 
 #endif

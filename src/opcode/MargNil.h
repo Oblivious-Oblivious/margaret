@@ -1,14 +1,14 @@
 #ifndef __MARG_NIL_H_
 #define __MARG_NIL_H_
 
-#include "MargObject.h"
+#include "MargPointer.h"
 
 /**
  * @brief An object representation of MARG_NIL
  * @param _ -> Inherted object properties
  */
 typedef struct MargNil {
-    MargObject _;
+    MargPointer _;
 } MargNil;
 
 /**

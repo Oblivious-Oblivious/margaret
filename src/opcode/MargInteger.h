@@ -3,14 +3,14 @@
 
 #include <stdint.h> /* int64_t */
 
-#include "MargObject.h"
+#include "MargPointer.h"
 
 /**
  * @brief An object representation of MARG_INTEGER
  * @param _ -> Inherted object properties
  */
 typedef struct MargInteger {
-    MargObject _;
+    MargPointer _;
     int64_t value;
 } MargInteger;
 

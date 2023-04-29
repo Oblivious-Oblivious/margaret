@@ -1,14 +1,14 @@
 #ifndef __MARG_FLOAT_H_
 #define __MARG_FLOAT_H_
 
-#include "MargObject.h"
+#include "MargPointer.h"
 
 /**
  * @brief An object representation of MARG_FLOAT
  * @param _ -> Inherted object properties
  */
 typedef struct MargFloat {
-    MargObject _;
+    MargPointer _;
     double value;
 } MargFloat;
 
