@@ -1,7 +1,7 @@
 #ifndef __MARG_FLOAT_H_
 #define __MARG_FLOAT_H_
 
-#include "MargValue.h"
+#include "MargObject.h"
 
 /**
  * @brief An object representation of MARG_FLOAT

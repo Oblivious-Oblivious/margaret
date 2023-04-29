@@ -1,7 +1,8 @@
 #ifndef __MARG_STRING_H_
 #define __MARG_STRING_H_
 
-#include <stdlib.h> /* size_t, uint64_t */
+#include <stdlib.h> /* size_t */
+#include <stdint.h> /* uint64_t */
 
 #include "MargObject.h"
 

@@ -1,7 +1,9 @@
 #ifndef __MARG_INTEGER_H_
 #define __MARG_INTEGER_H_
 
-#include "MargValue.h"
+#include <stdint.h> /* int64_t */
+
+#include "MargObject.h"
 
 /**
  * @brief An object representation of MARG_INTEGER
