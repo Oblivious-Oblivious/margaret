@@ -5,8 +5,6 @@
 
 #include <stdlib.h> /* size_t */
 
-typedef struct MargObject MargObject;
-
 typedef enum {
     MARG_NIL_TYPE,
     MARG_FALSE_TYPE,
@@ -16,9 +14,9 @@ typedef enum {
     MARG_STRING_TYPE,
 } MargObjectType;
 
-struct MargObject {
+typedef struct MargObject {
     MargObjectType type;
-};
+} MargObject;
 
 MargObject *marg_object_allocate(size_t size, MargObjectType type);
 
