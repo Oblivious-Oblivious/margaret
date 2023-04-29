@@ -79,15 +79,11 @@ static EvaluatorResult evaluator_run(VM *self) {
             }
 
             case OP_GET_GLOBAL: {
-                MargValue variable;
-                table_get(&self->global_variables, READ_STRING(), &variable);
-                STACK_PUSH(self, variable);
+                STACK_PUSH(self, table_get(&self->global_variables, READ_STRING()));
                 break;
             }
             case OP_GET_GLOBAL_LONG: {
-                MargValue variable;
-                table_get(&self->global_variables, READ_LONG_STRING(), &variable);
-                STACK_PUSH(self, variable);
+                STACK_PUSH(self, table_get(&self->global_variables, READ_LONG_STRING()));
                 break;
             }
 

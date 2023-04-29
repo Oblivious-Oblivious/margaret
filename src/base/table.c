@@ -80,20 +80,15 @@ bool table_set(table *self, MargString *key, MargValue value) {
     return is_key_new;
 }
 
-bool table_get(table *self, MargString *key, MargValue *value) {
-    if(self->count == 0) {
-        *value = MARG_NIL;
-        return false;
-    }
+MargValue table_get(table *self, MargString *key) {
+    if(self->count == 0)
+        return MARG_NIL;
 
     table_entry *entry = table_find_entry(self->entries, self->capacity, key);
-    if(entry->key == NULL) {
-        *value = MARG_NIL;
-        return false;
-    }
+    if(entry->key == NULL)
+        return MARG_NIL;
 
-    *value = entry->value;
-    return true;
+    return entry->value;
 }
 
 bool table_delete(table *self, MargString *key) {

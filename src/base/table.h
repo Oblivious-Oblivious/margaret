@@ -44,11 +44,9 @@ bool table_set(table *self, MargString *key, MargValue value);
     and saves it into the passed pointer parameter
  * @param self -> Current table
  * @param key -> Key of value we are searching for
- * @param value -> Result pointer
- * @return true -> Retrieval succeeded
- * @return false -> Retrieval failed
+ * @return -> Result pointer
  */
-bool table_get(table *self, MargString *key, MargValue *value);
+MargValue table_get(table *self, MargString *key);
 
 /**
  * @brief Deletes the value of the corresponding key
