@@ -6,7 +6,7 @@ OPT = -O3
 VERSION = -std=c99
 
 FLAGS = -Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic
-WARNINGS = -Wno-unused-function -Wno-strict-prototypes -Wno-gnu-line-marker
+WARNINGS = -Wno-strict-prototypes -Wno-unused-function
 HEADERS =
 LIBS = libs/readline/libreadline.dylib
 
