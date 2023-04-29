@@ -21,6 +21,7 @@ static string *LOAD(char *filename) {
 }
 
 static string *SCAN(char *prompt) {
+    // TODO Abstract to own file
     char *line = readline(prompt);
     if(!strcmp(line, ""))
         return string_new("()");
