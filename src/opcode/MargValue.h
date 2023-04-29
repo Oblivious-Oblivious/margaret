@@ -3,6 +3,8 @@
 
 #include "../base/string.h"
 
+typedef uint64_t MargValue;
+
 #include "MargObject.h"
 #include "MargNil.h"
 #include "MargFalse.h"
@@ -10,8 +12,6 @@
 #include "MargInteger.h"
 #include "MargFloat.h"
 #include "MargString.h"
-
-typedef uint64_t MargValue;
 
 /* QNAN = 0b    0     11111111111       1            1       ('0' * 50)
              (sign) (exponent bits) (qnan bit) (intel value)   (rest)        */
