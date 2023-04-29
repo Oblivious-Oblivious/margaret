@@ -3,6 +3,8 @@
 
 #include <stdlib.h> /* size_t */
 
+// TODO Implement a rudimentary GC
+
 // TODO Eventually remove
 #define MEMORY_GROW_FACTOR 2
 #define MEMORY_GROW_CAPACITY(capacity) ((capacity) < 8 ? 8 : (capacity) * MEMORY_GROW_FACTOR)
@@ -12,7 +14,9 @@
  * @param nbytes -> Size of allocation
  * @return void*
  */
-void *collected_malloc(size_t nbytes);
+inline void *collected_malloc(size_t nbytes) {
+    return malloc(nbytes);
+}
 
 /**
  * @brief Interface to a garbage collected reallocation
@@ -20,6 +24,8 @@ void *collected_malloc(size_t nbytes);
  * @param new_size -> Size of reallocation
  * @return void* 
  */
-void *collected_realloc(void *old, size_t new_size);
+inline void *collected_realloc(void *old, size_t new_size) {
+    return realloc(old, new_size);
+}
 
 #endif
