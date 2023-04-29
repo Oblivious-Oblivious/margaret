@@ -5,12 +5,12 @@
 
 #include "MargObject.h"
 
-struct MargString {
+typedef struct MargString {
     MargObject _;
     size_t size;
     uint64_t hash;
     char chars[];
-};
+} MargString;
 
 uint64_t marg_string_hash(char *key, size_t size);
 

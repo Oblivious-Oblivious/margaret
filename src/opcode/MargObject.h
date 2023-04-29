@@ -6,7 +6,6 @@
 #include <stdlib.h> /* size_t */
 
 typedef struct MargObject MargObject;
-typedef struct MargString MargString;
 
 typedef enum {
     MARG_NIL_TYPE,

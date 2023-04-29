@@ -2,10 +2,6 @@
 
 #include <string.h> /* memcpy */
 
-#include "../base/memory.h"
-#include "MargHash.h"
-#include "MargValue.h"
-
 uint64_t marg_string_hash(char *key, size_t size) {
     uint64_t hash = 14695981039346656037u;
 
