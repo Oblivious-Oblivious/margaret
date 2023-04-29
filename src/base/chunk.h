@@ -103,5 +103,13 @@ chunk *chunk_new(void);
 #define chunk_temporary_get(chunk, index) \
     temporaries_get(&(chunk)->temp_vector, (index))
 
+/**
+ * @brief Helper for retrieving the number of elements
+    from the temporary vector of a chunk
+ * @param chunk -> Current chunk
+ * @return size_t -> Number of elements
+ */
+#define chunk_temporary_size(chunk) \
+    temporaries_size(&(chunk)->temp_vector)
 
 #endif
