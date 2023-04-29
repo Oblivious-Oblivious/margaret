@@ -30,7 +30,7 @@
 } while(0)
 
 #define emit_possible_long_op(opcode) do { \
-    if(chunk_temporary_size(vm->bytecode) < 256) \
+    if(chunk_temporaries_size(vm->bytecode) < 256) \
         chunk_add(vm->bytecode, (opcode), 123); \
     else \
         chunk_add(vm->bytecode, (opcode##_LONG), 123); \
@@ -43,11 +43,11 @@
 } while(0)
 
 static void make_temporary(VM *vm, MargValue temporary, uint32_t *index) {
-    chunk_temporary_add(vm->bytecode, temporary, index);
+    chunk_temporaries_add(vm->bytecode, temporary, index);
 }
 
 static void __add_temporary_function(VM *vm, uint32_t temporary_index, uint16_t upper_bound) {
-    if(chunk_temporary_size(vm->bytecode) < upper_bound) {
+    if(chunk_temporaries_size(vm->bytecode) < upper_bound) {
         emit_byte((uint8_t)temporary_index);
     }
     else {

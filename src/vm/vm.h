@@ -45,8 +45,8 @@ inline MargValue STACK_PEEK(VM *self, int distance) {
 #define READ_DWORD() (bytes_to_dword((uint8_t[4]){READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE()}))
 #define READ_QWORD() (bytes_to_qword((uint8_t[8]){READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE()}))
 
-#define READ_TEMPORARY() (chunk_temporary_get(self->bytecode, READ_BYTE()))
-#define READ_LONG_TEMPORARY() (chunk_temporary_get(self->bytecode, READ_DWORD()))
+#define READ_TEMPORARY() (chunk_temporaries_get(self->bytecode, READ_BYTE()))
+#define READ_LONG_TEMPORARY() (chunk_temporaries_get(self->bytecode, READ_DWORD()))
 
 #define READ_STRING() AS_STRING(READ_TEMPORARY())
 #define READ_LONG_STRING() AS_STRING(READ_LONG_TEMPORARY())

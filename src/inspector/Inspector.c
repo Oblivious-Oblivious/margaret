@@ -44,7 +44,7 @@ static size_t instruction_object(vector *res, const char *name, chunk *chunk, si
     write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
     string_addf(disassembled_instruction, "%02x %02x               ", opcode, temporary);
     string_addf(disassembled_instruction, "%-24s ", name);
-    string_add(disassembled_instruction, marg_value_format(chunk_temporary_get(chunk, temporary)));
+    string_add(disassembled_instruction, marg_value_format(chunk_temporaries_get(chunk, temporary)));
     string_addf(disassembled_instruction, " @[%d]", temporary);
     vector_add(res, disassembled_instruction);
 
@@ -65,7 +65,7 @@ static size_t instruction_long_object(vector *res, const char *name, chunk *chun
     write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
     string_addf(disassembled_instruction, "%02x %02x %02x %02x %02x      ", opcode, chunk_get(chunk, offset + 1), bytes[1], bytes[2], bytes[3]);
     string_addf(disassembled_instruction, "%-24s ", name);
-    string_add(disassembled_instruction, marg_value_format(chunk_temporary_get(chunk, temporary)));
+    string_add(disassembled_instruction, marg_value_format(chunk_temporaries_get(chunk, temporary)));
     string_addf(disassembled_instruction, " @[%d]", temporary);
     vector_add(res, disassembled_instruction);
 
@@ -89,7 +89,7 @@ static size_t instruction_variable(vector *res, const char *name, chunk *chunk, 
     ) {
         string_add_str(disassembled_instruction, "@");
     }
-    string_add(disassembled_instruction, marg_value_as_variable(chunk_temporary_get(chunk, variable)));
+    string_add(disassembled_instruction, marg_value_as_variable(chunk_temporaries_get(chunk, variable)));
     string_addf(disassembled_instruction, " @[%d]", variable);
     vector_add(res, disassembled_instruction);
 
@@ -119,7 +119,7 @@ static size_t instruction_long_variable(vector *res, const char *name, chunk *ch
     ) {
         string_add_str(disassembled_instruction, "@");
     }
-    string_add(disassembled_instruction, marg_value_as_variable(chunk_temporary_get(chunk, variable)));
+    string_add(disassembled_instruction, marg_value_as_variable(chunk_temporaries_get(chunk, variable)));
     string_addf(disassembled_instruction, " @[%d]", variable);
     vector_add(res, disassembled_instruction);
 

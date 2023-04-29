@@ -88,7 +88,7 @@ chunk *chunk_new(void);
  * @param value -> MargValue
  * @return size_t -> The index the temporary was appended to
  */
-#define chunk_temporary_add(chunk, value, index) do { \
+#define chunk_temporaries_add(chunk, value, index) do { \
     temporaries_add(&(chunk)->temp_vector, (value)); \
     *(index) = temporaries_size(&(chunk)->temp_vector) - 1; \
 } while(0)
@@ -100,7 +100,7 @@ chunk *chunk_new(void);
  * @param index -> Index of the temporary
  * @return MargValue -> The value of the temporary
  */
-#define chunk_temporary_get(chunk, index) \
+#define chunk_temporaries_get(chunk, index) \
     temporaries_get(&(chunk)->temp_vector, (index))
 
 /**
@@ -109,7 +109,7 @@ chunk *chunk_new(void);
  * @param chunk -> Current chunk
  * @return size_t -> Number of elements
  */
-#define chunk_temporary_size(chunk) \
+#define chunk_temporaries_size(chunk) \
     temporaries_size(&(chunk)->temp_vector)
 
 #endif
