@@ -1,10 +1,10 @@
 #ifndef __CHUNK_SPEC_H_
 #define __CHUNK_SPEC_H_
 
-#include "../../src/base/Chunk.h"
+#include "../../src/base/_chunk.h"
 #include "../cSpec.h"
 
-module(ChunkSpec, {
+module(chunk_spec, {
     // TODO
 })
 

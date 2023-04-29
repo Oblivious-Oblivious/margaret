@@ -6,11 +6,11 @@
 
 // base
 #include "base/boolean.spec.h"
-#include "base/Chunk.spec.h"
+#include "base/_chunk.spec.h"
 #include "base/memory.spec.h"
 #include "base/string.spec.h"
-#include "base/Temporaries.spec.h"
 #include "base/table.spec.h"
+#include "base/_temporaries.spec.h"
 #include "base/vector.spec.h"
 
 // bytecode
@@ -96,11 +96,11 @@ spec_suite({
     VersionSpec();
 
     boolean_spec();
-    ChunkSpec();
+    chunk_spec();
     memory_spec();
     string_spec();
-    TemporariesSpec();
     table_spec();
+    temporaries_spec();
     vector_spec();
 
     alternate_to_dec_spec();

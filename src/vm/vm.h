@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include "../base/vector.h"
 #include "../base/memory.h"
-#include "../base/Chunk.h"
+#include "../base/_chunk.h"
 #include "../base/table.h"
 #include "../opcode/MargValue.h"
 
@@ -15,7 +15,7 @@
  */
 typedef struct VM {
     // TODO Refactor Chunk for space locality
-    Chunk *bytecode;
+    chunk *bytecode;
     uint8_t *ip;
 
     MargValue stack[65536];

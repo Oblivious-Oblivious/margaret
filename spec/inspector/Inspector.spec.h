@@ -10,7 +10,7 @@ module(InspectorSpec, {
     // TODO Test for a `postcard` type mini program that includes every single feature
     it("tests multiple long temporaries", {
         VM *vm = vm_new();
-        Chunk *bytecode = vm->bytecode;
+        chunk *bytecode = vm->bytecode;
 
         for(int i = 0; i <= 4000; i++) {
             uint32_t long_temporary = chunk_temporary_add(bytecode, MARG_FLOAT(42.42));

@@ -4,7 +4,7 @@
 #include <stdlib.h> /* size_t */
 #include <stdint.h> /* uint8_t */
 
-#include "Temporaries.h"
+#include "_temporaries.h"
 #include "../opcode/MargValue.h"
 
 /**
@@ -15,20 +15,20 @@
  * @param lines -> An array which indices map with those of `items`, storing line information for each opcode
  * @param temporaries -> A vector storing actual MargValues of created temporaries
  */
-typedef struct Chunk {
+typedef struct chunk {
     uint8_t *items;
     size_t alloced;
     size_t size;
 
     size_t *lines;
-    Temporaries *temporaries;
-} Chunk;
+    temporaries *temp_vector;
+} chunk;
 
 /**
  * @brief Creates a new empty chunk
- * @return Chunk*
+ * @return chunk*
  */
-Chunk *chunk_new(void);
+chunk *chunk_new(void);
 
 /**
  * @brief Adds a new item in the vector,
@@ -37,7 +37,7 @@ Chunk *chunk_new(void);
  * @param item -> Item to add
  * @param line -> Line number the bytecode was emitted from
  */
-void chunk_add(Chunk *self, uint8_t item, size_t line);
+void chunk_add(chunk *self, uint8_t item, size_t line);
 
 /**
  * @brief Get the value of a specific chunk index
@@ -45,7 +45,7 @@ void chunk_add(Chunk *self, uint8_t item, size_t line);
  * @param index -> Index to get the value from
  * @return uint8_t
  */
-inline uint8_t chunk_get(Chunk *self, size_t index) {
+inline uint8_t chunk_get(chunk *self, size_t index) {
     return self->items[index];
 }
 
@@ -54,7 +54,7 @@ inline uint8_t chunk_get(Chunk *self, size_t index) {
  * @param self -> Current chunk
  * @return size_t -> Number of items in the vector
  */
-inline size_t chunk_size(Chunk *self) {
+inline size_t chunk_size(chunk *self) {
     return self->size;
 }
 
@@ -65,7 +65,7 @@ inline size_t chunk_size(Chunk *self) {
  * @param value -> MargValue
  * @return size_t -> The index the temporary was appended to
  */
-uint32_t chunk_temporary_add(Chunk *chunk, MargValue value);
+uint32_t chunk_temporary_add(chunk *chunk, MargValue value);
 
 /**
  * @brief Helper for retrieving a temporary from the
@@ -74,8 +74,8 @@ uint32_t chunk_temporary_add(Chunk *chunk, MargValue value);
  * @param index -> Index of the temporary
  * @return MargValue -> The value of the temporary
  */
-inline MargValue chunk_temporary_get(Chunk *chunk, size_t index) {
-    return temporaries_get(chunk->temporaries, index);
+inline MargValue chunk_temporary_get(chunk *chunk, size_t index) {
+    return temporaries_get(chunk->temp_vector, index);
 }
 
 #endif

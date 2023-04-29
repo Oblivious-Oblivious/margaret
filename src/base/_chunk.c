@@ -1,10 +1,10 @@
-#include "Chunk.h"
+#include "_chunk.h"
 
 #include "memory.h"
 
 #define CHUNK_GROW_FACTOR 1.618
 
-static void chunk_ensure_space(Chunk *self) {
+static void chunk_ensure_space(chunk *self) {
     size_t new_capacity = self->alloced * CHUNK_GROW_FACTOR;
     uint8_t *new_items = (uint8_t*)collected_realloc(self->items, sizeof(uint8_t) * new_capacity);
     size_t *new_lines = (size_t*)collected_realloc(self->lines, sizeof(size_t) * new_capacity);
@@ -17,19 +17,19 @@ static void chunk_ensure_space(Chunk *self) {
         self->lines = new_lines;
 }
 
-Chunk *chunk_new(void) {
-    Chunk *self = (Chunk*)collected_malloc(sizeof(Chunk));
+chunk *chunk_new(void) {
+    chunk *self = (chunk*)collected_malloc(sizeof(chunk));
 
     self->alloced = 32;
     self->size = 0;
     self->items = (uint8_t*)collected_malloc(sizeof(uint8_t) * self->alloced);
     self->lines = (size_t*)collected_malloc(sizeof(size_t) * self->alloced);
-    self->temporaries = temporaries_new();
+    self->temp_vector = temporaries_new();
 
     return self;
 }
 
-void chunk_add(Chunk *self, uint8_t item, size_t line) {
+void chunk_add(chunk *self, uint8_t item, size_t line) {
     if(self->alloced == self->size)
         chunk_ensure_space(self);
 
@@ -38,7 +38,7 @@ void chunk_add(Chunk *self, uint8_t item, size_t line) {
     self->size++;
 }
 
-uint32_t chunk_temporary_add(Chunk *chunk, MargValue value) {
-    temporaries_add(chunk->temporaries, value);
-    return temporaries_size(chunk->temporaries) - 1;
+uint32_t chunk_temporary_add(chunk *chunk, MargValue value) {
+    temporaries_add(chunk->temp_vector, value);
+    return temporaries_size(chunk->temp_vector) - 1;
 }

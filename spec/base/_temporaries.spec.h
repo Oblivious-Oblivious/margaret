@@ -1,10 +1,10 @@
 #ifndef __TEMPORARIES_SPEC_H_
 #define __TEMPORARIES_SPEC_H_
 
-#include "../../src/base/Temporaries.h"
+#include "../../src/base/_temporaries.h"
 #include "../cSpec.h"
 
-module(TemporariesSpec, {
+module(temporaries_spec, {
     // TODO
 })
 

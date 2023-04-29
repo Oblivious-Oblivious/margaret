@@ -3,8 +3,8 @@
 // TODO https://stackoverflow.com/questions/17002969/how-to-convert-string-to-int64-t
 #include <string.h> /* strtoll, strtold */
 
-#include "../base/Chunk.h"
-#include "../base/Temporaries.h"
+#include "../base/_chunk.h"
+#include "../base/_temporaries.h"
 #include "../opcode/Opcodes.h"
 #include "../opcode/MargValue.h"
 
@@ -31,7 +31,7 @@
 } while(0)
 
 #define emit_possible_long_op(opcode) do { \
-    if(temporaries_size(vm->bytecode->temporaries) < 256) \
+    if(temporaries_size(vm->bytecode->temp_vector) < 256) \
         chunk_add(vm->bytecode, (opcode), 123); \
     else \
         chunk_add(vm->bytecode, (opcode##_LONG), 123); \
@@ -47,7 +47,7 @@ static uint32_t make_temporary(VM *vm, MargValue temporary) {
 }
 
 static void __add_temporary_function(VM *vm, uint32_t temporary_index, uint16_t upper_bound) {
-    if(temporaries_size(vm->bytecode->temporaries) < upper_bound) {
+    if(temporaries_size(vm->bytecode->temp_vector) < upper_bound) {
         emit_byte((uint8_t)temporary_index);
     }
     else {

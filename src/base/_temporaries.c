@@ -1,10 +1,10 @@
-#include "Temporaries.h"
+#include "_temporaries.h"
 
 #include "memory.h"
 
 #define TEMPORARIES_GROW_FACTOR 1.618
 
-static void temporaries_ensure_space(Temporaries *self) {
+static void temporaries_ensure_space(temporaries *self) {
     size_t new_capacity = self->alloced * TEMPORARIES_GROW_FACTOR;
     MargValue *items = (MargValue*)collected_realloc(self->items, sizeof(MargValue) * new_capacity);
 
@@ -14,8 +14,8 @@ static void temporaries_ensure_space(Temporaries *self) {
     }
 }
 
-Temporaries *temporaries_new(void) {
-    Temporaries *self = (Temporaries*)collected_malloc(sizeof(Temporaries));
+temporaries *temporaries_new(void) {
+    temporaries *self = (temporaries*)collected_malloc(sizeof(temporaries));
 
     self->alloced = 32;
     self->size = 0;
@@ -24,7 +24,7 @@ Temporaries *temporaries_new(void) {
     return self;
 }
 
-void temporaries_add(Temporaries *self, MargValue item) {
+void temporaries_add(temporaries *self, MargValue item) {
     if(self->alloced == self->size)
         temporaries_ensure_space(self);
 
