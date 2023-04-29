@@ -98,7 +98,7 @@ uint16_t bytes_to_word(uint8_t *bytes);
 uint32_t bytes_to_dword(uint8_t *bytes);
 
 /**
- * @brief Joins 8, 8-bit parats into a single 64 bit integer
+ * @brief Joins 8, 8-bit parts into a single 64 bit integer
  * @param bytes -> The list of bytes
  * @return uint64_t -> The 64 bit result
  */
