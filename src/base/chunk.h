@@ -24,7 +24,7 @@ typedef struct chunk {
     size_t size;
 
     size_t *lines;
-    temporaries *temp_vector;
+    temporaries temp_vector;
 } chunk;
 
 /**
@@ -89,8 +89,8 @@ chunk *chunk_new(void);
  * @return size_t -> The index the temporary was appended to
  */
 #define chunk_temporary_add(chunk, value, index) do { \
-    temporaries_add((chunk)->temp_vector, (value)); \
-    *(index) = temporaries_size((chunk)->temp_vector) - 1; \
+    temporaries_add(&(chunk)->temp_vector, (value)); \
+    *(index) = temporaries_size(&(chunk)->temp_vector) - 1; \
 } while(0)
 
 /**
@@ -101,6 +101,7 @@ chunk *chunk_new(void);
  * @return MargValue -> The value of the temporary
  */
 #define chunk_temporary_get(chunk, index) \
-    temporaries_get((chunk)->temp_vector, (index))
+    temporaries_get(&(chunk)->temp_vector, (index))
+
 
 #endif

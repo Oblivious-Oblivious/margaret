@@ -7,7 +7,7 @@ chunk *chunk_new(void) {
     self->size = 0;
     self->items = (uint8_t*)collected_malloc(sizeof(uint8_t) * self->alloced);
     self->lines = (size_t*)collected_malloc(sizeof(size_t) * self->alloced);
-    self->temp_vector = temporaries_new();
+    temporaries_init(&self->temp_vector);
 
     return self;
 }

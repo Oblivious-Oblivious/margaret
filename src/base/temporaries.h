@@ -46,10 +46,10 @@ temporaries *temporaries_new(void);
  * @param item -> Item to add
  */
 #define temporaries_add(self, item) do { \
-    if(self->alloced == self->size) \
-        temporaries_ensure_space(self); \
+    if((self)->alloced == (self)->size) \
+        temporaries_ensure_space((self)); \
     \
-    self->items[self->size++] = item; \
+    (self)->items[(self)->size++] = item; \
 } while(0)
 
 /**
