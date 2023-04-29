@@ -1,21 +1,21 @@
-#include "MargHash.h"
+#include "Table.h"
 
 #include <string.h> /* memcmp */
 
 #include "../base/memory.h"
 #include "MargNil.h"
 
-#define MARG_HASH_MAX_LOAD 0.75
+#define TABLE_MAX_LOAD 0.75
 
-static MargHashEntry *marg_hash_find_entry(MargHashEntry *entries, size_t capacity, MargString *key) {
+static TableEntry *table_find_entry(TableEntry *entries, size_t capacity, MargString *key) {
     uint64_t index = MEMORY_GROW_FACTOR == 2
         ? key->hash & (capacity - 1)
         : key->hash % capacity;
 
     // Linear probing
-    MargHashEntry *tombstone = NULL;
+    TableEntry *tombstone = NULL;
     while(true) {
-        MargHashEntry *entry = &entries[index];
+        TableEntry *entry = &entries[index];
         if(entry->key == NULL) {
             if(IS_NIL(entry->value))
                 return tombstone != NULL ? tombstone : entry;
@@ -32,8 +32,8 @@ static MargHashEntry *marg_hash_find_entry(MargHashEntry *entries, size_t capaci
     }
 }
 
-static void marg_hash_adjust_capacity(MargHash *self, size_t capacity) {
-    MargHashEntry *entries = (MargHashEntry*)collected_malloc(sizeof(MargHashEntry) * capacity);
+static void table_adjust_capacity(Table *self, size_t capacity) {
+    TableEntry *entries = (TableEntry*)collected_malloc(sizeof(TableEntry) * capacity);
 
     for(size_t i = 0; i < capacity; i++) {
         entries[i].key = NULL;
@@ -42,11 +42,11 @@ static void marg_hash_adjust_capacity(MargHash *self, size_t capacity) {
 
     self->count = 0;
     for(size_t i = 0; i < self->capacity; i++) {
-        MargHashEntry *entry = &self->entries[i];
+        TableEntry *entry = &self->entries[i];
         if(entry->key == NULL)
             continue;
 
-        MargHashEntry *new_entry = marg_hash_find_entry(entries, capacity, entry->key);
+        TableEntry *new_entry = table_find_entry(entries, capacity, entry->key);
         new_entry->key = entry->key;
         new_entry->value = entry->value;
         self->count++;
@@ -56,19 +56,19 @@ static void marg_hash_adjust_capacity(MargHash *self, size_t capacity) {
     self->capacity = capacity;
 }
 
-void marg_hash_init(MargHash *self) {
+void table_init(Table *self) {
     self->count = 0;
     self->capacity = 0;
     self->entries = NULL;
 }
 
-bool marg_hash_set(MargHash *self, MargString *key, MargValue value) {
-    if(self->count + 1 > self->capacity * MARG_HASH_MAX_LOAD) {
+bool table_set(Table *self, MargString *key, MargValue value) {
+    if(self->count + 1 > self->capacity * TABLE_MAX_LOAD) {
         size_t capacity = MEMORY_GROW_CAPACITY(self->capacity);
-        marg_hash_adjust_capacity(self, capacity);
+        table_adjust_capacity(self, capacity);
     }
 
-    MargHashEntry *entry = marg_hash_find_entry(self->entries, self->capacity, key);
+    TableEntry *entry = table_find_entry(self->entries, self->capacity, key);
     bool is_key_new = entry->key == NULL;
     if(is_key_new && IS_NIL(entry->value))
         self->count++;
@@ -79,13 +79,13 @@ bool marg_hash_set(MargHash *self, MargString *key, MargValue value) {
     return is_key_new;
 }
 
-bool marg_hash_get(MargHash *self, MargString *key, MargValue *value) {
+bool table_get(Table *self, MargString *key, MargValue *value) {
     if(self->count == 0) {
         *value = MARG_NIL;
         return false;
     }
 
-    MargHashEntry *entry = marg_hash_find_entry(self->entries, self->capacity, key);
+    TableEntry *entry = table_find_entry(self->entries, self->capacity, key);
     if(entry->key == NULL) {
         *value = MARG_NIL;
         return false;
@@ -95,11 +95,11 @@ bool marg_hash_get(MargHash *self, MargString *key, MargValue *value) {
     return true;
 }
 
-bool marg_hash_delete(MargHash *self, MargString *key) {
+bool table_delete(Table *self, MargString *key) {
     if(self->count == 0)
         return false;
 
-    MargHashEntry *entry = marg_hash_find_entry(self->entries, self->capacity, key);
+    TableEntry *entry = table_find_entry(self->entries, self->capacity, key);
     if(entry->key == NULL)
         return false;
 
@@ -110,15 +110,15 @@ bool marg_hash_delete(MargHash *self, MargString *key) {
     return true;
 }
 
-void marg_hash_add_all(MargHash *src, MargHash *dest) {
+void table_add_all(Table *src, Table *dest) {
     for(size_t i = 0; i < src->capacity; i++) {
-        MargHashEntry *entry = &src->entries[i];
+        TableEntry *entry = &src->entries[i];
         if(entry->key != NULL)
-            marg_hash_set(dest, entry->key, entry->value);
+            table_set(dest, entry->key, entry->value);
     }
 }
 
-MargString *marg_hash_find_string(MargHash *self, char *chars, size_t size, uint64_t hash) {
+MargString *table_find_string(Table *self, char *chars, size_t size, uint64_t hash) {
     if(self->count == 0)
         return NULL;
 
@@ -127,7 +127,7 @@ MargString *marg_hash_find_string(MargHash *self, char *chars, size_t size, uint
         : hash % self->capacity;
 
     while(true) {
-        MargHashEntry *entry = &self->entries[index];
+        TableEntry *entry = &self->entries[index];
         if(entry->key == NULL) {
             // Stops on a tombstone entry
             if(IS_NIL(entry->value))

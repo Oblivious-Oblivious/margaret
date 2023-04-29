@@ -66,13 +66,13 @@
 // opcode
 #include "opcode/MargFalse.spec.h"
 #include "opcode/MargFloat.spec.h"
-#include "opcode/MargHash.spec.h"
 #include "opcode/MargInteger.spec.h"
 #include "opcode/MargNil.spec.h"
 #include "opcode/MargObject.spec.h"
 #include "opcode/MargString.spec.h"
 #include "opcode/MargTrue.spec.h"
 #include "opcode/MargValue.spec.h"
+#include "opcode/Table.spec.h"
 
 // optimizer
 #include "optimizer/Optimizer.spec.h"
@@ -147,13 +147,13 @@ spec_suite({
 
     MargFalseSpec();
     MargFloatSpec();
-    MargHashSpec();
     MargIntegerSpec();
     MargNilSpec();
     MargObjectSpec();
     MargStringSpec();
     MargTrueSpec();
     MargValueSpec();
+    TableSpec();
 
     OptimizerSpec();
 

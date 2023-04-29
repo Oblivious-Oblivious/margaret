@@ -93,12 +93,12 @@ VM *emitter_emit(vector *formal_bytecode) {
 
             MargValue temporary = MARG_STRING(variable_name->str, variable_name->size);
             MargValue index;
-            if(marg_hash_get(&vm->interned_strings, AS_STRING(temporary), &index)) {
+            if(table_get(&vm->interned_strings, AS_STRING(temporary), &index)) {
                 add_premade_temporary(vm, (uint32_t)AS_INTEGER(index)->value);
             }
             else {
                 uint32_t temporary_index = make_temporary(vm, temporary);
-                marg_hash_set(&vm->interned_strings, AS_STRING(temporary), MARG_INTEGER(temporary_index));
+                table_set(&vm->interned_strings, AS_STRING(temporary), MARG_INTEGER(temporary_index));
                 add_temporary(vm, temporary_index);
             }
         }
@@ -156,7 +156,7 @@ VM *emitter_emit(vector *formal_bytecode) {
                 uint32_t temporary_index = make_temporary(vm, interned);
                 add_temporary(vm, temporary_index);
 
-                marg_hash_set(&vm->interned_strings, AS_STRING(interned), MARG_INTEGER(temporary_index));
+                table_set(&vm->interned_strings, AS_STRING(interned), MARG_INTEGER(temporary_index));
             }
             else {
                 uint32_t temporary_index = make_temporary(vm, interned);

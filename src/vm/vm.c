@@ -19,8 +19,8 @@ VM *vm_new(void) {
     VM *vm = (VM*)collected_malloc(sizeof(VM));
 
     vm->bytecode = chunk_new();
-    marg_hash_init(&vm->interned_strings);
-    marg_hash_init(&vm->global_variables);
+    table_init(&vm->interned_strings);
+    table_init(&vm->global_variables);
 
     STACK_RESET(vm);
     primitives_define();
@@ -32,6 +32,6 @@ void vm_free(VM *vm) {
     // TODO
     (void)vm;
     // chunk_free(vm->bytecode);
-    // marg_hash_free(&vm->interned_strings);
-    // marg_hash_free(&vm->global_variables);
+    // table_free(&vm->interned_strings);
+    // table_free(&vm->global_variables);
 }

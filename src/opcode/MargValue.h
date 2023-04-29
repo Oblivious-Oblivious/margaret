@@ -29,7 +29,7 @@ typedef uint64_t MargValue;
 #define MARG_2                                       MARG_OBJECT(marg_integer_new(2))
 #define MARG_FLOAT(number)                           MARG_OBJECT(marg_float_new(number))
 #define MARG_STRING(chars, size)                     MARG_OBJECT(marg_string_new((chars), (size)))
-#define MARG_STRING_INTERNED(vm, chars, size, hash)  MARG_OBJECT(marg_hash_find_string(&vm->interned_strings, chars, size, hash));
+#define MARG_STRING_INTERNED(vm, chars, size, hash)  MARG_OBJECT(table_find_string(&vm->interned_strings, chars, size, hash));
 
 #define AS_OBJECT(value)                             ((MargObject*)(uintptr_t)((value) & ~(SIGN_BIT | QNAN)))
 #define AS_NIL(value)                                ((MargNil*)AS_OBJECT(value))

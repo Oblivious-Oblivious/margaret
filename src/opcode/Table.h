@@ -1,5 +1,5 @@
-#ifndef __MARG_HASH_H_
-#define __MARG_HASH_H_
+#ifndef __TABLE_H_
+#define __TABLE_H_
 
 #include <stdlib.h> /* size_t */
 
@@ -9,73 +9,73 @@
 
 // TODO Implement data-oriented approach by separating keys with values
 //      for better memory compaction, and less cache misses
-// MargHashKeys -> hash -> {key1: index1, key2: index2, ...}
-// MargHashValues -> vector -> [index1, index2, ...]
-typedef struct MargHashEntry {
+// TableKeys -> table -> {key1: index1, key2: index2, ...}
+// TableValues -> vector -> [index1, index2, ...]
+typedef struct TableEntry {
     MargString *key;
     MargValue value;
-} MargHashEntry;
+} TableEntry;
 
-typedef struct MargHash {
+typedef struct Table {
     size_t count;
     size_t capacity;
-    MargHashEntry *entries;
-} MargHash;
+    TableEntry *entries;
+} Table;
 
 /**
- * @brief Initializes the values of a hash
- * @param self -> Hash that is passed from the stack
+ * @brief Initializes the values of a table
+ * @param self -> Table that is passed from the stack
  */
-void marg_hash_init(MargHash *self);
+void table_init(Table *self);
 
 /**
- * @brief Inserts given key/value pair into the hash
+ * @brief Inserts given key/value pair into the table
         Overrites value if the key exists
- * @param self -> Current hash
+ * @param self -> Current table
  * @param key
  * @param value 
  * @return true -> Insertion succeeded
  * @return false -> Insertion failed
  */
-bool marg_hash_set(MargHash *self, MargString *key, MargValue value);
+bool table_set(Table *self, MargString *key, MargValue value);
 
 /**
  * @brief Retrieves the value of the corresponding key,
     and saves it into the passed pointer parameter
- * @param self -> Current hash
+ * @param self -> Current table
  * @param key -> Key of value we are searching for
  * @param value -> Result pointer
  * @return true -> Retrieval succeeded
  * @return false -> Retrieval failed
  */
-bool marg_hash_get(MargHash *self, MargString *key, MargValue *value);
+bool table_get(Table *self, MargString *key, MargValue *value);
 
 /**
  * @brief Deletes the value of the corresponding key
- * @param self -> Current hash
+ * @param self -> Current table
  * @param key -> Key of value we are deleting
  * @return true -> Deletion succeeded
  * @return false -> Deletion failed
  */
-bool marg_hash_delete(MargHash *self, MargString *key);
+bool table_delete(Table *self, MargString *key);
 
 /**
  * @brief Adds all entries from src to dest
- * @param src -> Initial hash
- * @param dest -> New hash
+ * @param src -> Initial table
+ * @param dest -> New table
  */
-void marg_hash_add_all(MargHash *src, MargHash *dest);
+void table_add_all(Table *src, Table *dest);
 
 /**
  * @brief Finds a string key efficiently.
-        Checks for equal sizes, hash values and
+        Checks for equal sizes, table values and
         only then, mem compares each character
- * @param self -> Current Hash
- * @param chars 
- * @param size 
- * @param hash 
+ * @param self -> Current Table
+ * @param chars
+ * @param size
+ * @param hash
  * @return MargString*
  */
-MargString *marg_hash_find_string(MargHash *self, char *chars, size_t size, uint64_t hash);
+MargString *table_find_string(Table *self, char *chars, size_t size, uint64_t hash);
 
 #endif

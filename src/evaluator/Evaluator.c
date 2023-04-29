@@ -68,25 +68,25 @@ static EvaluatorResult evaluator_run(VM *self) {
             }
 
             case OP_SET_GLOBAL: {
-                marg_hash_set(&self->global_variables, READ_STRING(), STACK_PEEK(self, 0));
+                table_set(&self->global_variables, READ_STRING(), STACK_PEEK(self, 0));
                 STACK_POP(self);
                 break;
             }
             case OP_SET_GLOBAL_LONG: {
-                marg_hash_set(&self->global_variables, READ_LONG_STRING(), STACK_PEEK(self, 0));
+                table_set(&self->global_variables, READ_LONG_STRING(), STACK_PEEK(self, 0));
                 STACK_POP(self);
                 break;
             }
 
             case OP_GET_GLOBAL: {
                 MargValue variable;
-                marg_hash_get(&self->global_variables, READ_STRING(), &variable);
+                table_get(&self->global_variables, READ_STRING(), &variable);
                 STACK_PUSH(self, variable);
                 break;
             }
             case OP_GET_GLOBAL_LONG: {
                 MargValue variable;
-                marg_hash_get(&self->global_variables, READ_LONG_STRING(), &variable);
+                table_get(&self->global_variables, READ_LONG_STRING(), &variable);
                 STACK_PUSH(self, variable);
                 break;
             }
