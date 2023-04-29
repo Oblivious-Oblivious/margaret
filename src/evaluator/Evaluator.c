@@ -99,7 +99,7 @@ static EvaluatorResult evaluator_run(VM *self) {
 MargValue evaluator_evaluate(VM *self) {
     self->ip = self->bytecode->items;
     EvaluatorResult result = evaluator_run(self);
-    (void)result;
+    (void)result; // TODO
 
     return STACK_PEEK(self, 0);
 }
