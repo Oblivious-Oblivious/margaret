@@ -3,6 +3,7 @@
 
 #include <stdlib.h> /* size_t */
 #include <stdarg.h> /* va_start, va_end, va_list, va_arg */
+#include "memory.h"
 
 #define VECTOR_PP_256TH_ARG( \
     _1, _2, _3, _4, _5, _6, _7, _8, _9,_10, \
@@ -116,6 +117,8 @@
 #define VECTOR_PP_NARG(...) \
     VECTOR_PP_NARG_(__VA_ARGS__,VECTOR_PP_RSEQ_N())
 
+#define VECTOR_GROW_FACTOR 1.618
+
 /**
  * @brief: Defines a vector data structure
  * @param items -> A void pointer array that contains the heterogenous elements of the vector
@@ -144,12 +147,29 @@ vector *__internal_vector_new(size_t argc, ...);
 vector *vector_new_empty(void);
 
 /**
+ * @desc: Ensure there is enough space for our values in the vector
+ * @param self -> The vector to use
+ **/
+#define vector_ensure_space(self) do { \
+    size_t new_capacity = (self)->alloced * VECTOR_GROW_FACTOR; \
+    void **new_items = (void**)collected_realloc((self)->items, sizeof(void*) * new_capacity); \
+    \
+    if(new_items) { \
+        (self)->alloced = new_capacity; \
+        (self)->items = new_items; \
+    } \
+} while(0)
+
+/**
  * @brief: Adds a new element in the vector
  * @param v -> The vector to use
  * @param item -> The item to add
- * @return The modified vector
  */
-vector *vector_add(vector *self, void *item);
+#define vector_add(self, item) do { \
+    if((self)->alloced == (self)->size) \
+        vector_ensure_space((self)); \
+    (self)->items[(self)->size++] = (item); \
+} while(0)
 
 /**
  * @brief: Get the value of a specific vector index
@@ -157,13 +177,17 @@ vector *vector_add(vector *self, void *item);
  * @param index -> The index to get the value of
  * @return The value
  */
-void *vector_get(vector *self, size_t index);
+inline void *vector_get(vector *self, size_t index) {
+    return self->items[index];
+}
 
 /**
  * @brief: Get the total number of values inserted in the vector
  * @param self -> The vector to use
  * @return: The number of items in the vector
  */
-size_t vector_size(vector *self);
+inline size_t vector_size(vector *self) {
+    return self->size;
+}
 
 #endif
