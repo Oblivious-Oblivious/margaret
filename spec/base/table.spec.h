@@ -3,7 +3,7 @@
 
 #include "../_helpers.h"
 
-module(TableSpec, {
+module(table_spec, {
     // TODO
 })
 

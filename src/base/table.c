@@ -1,21 +1,22 @@
-#include "Table.h"
+#include "table.h"
 
 #include <string.h> /* memcmp */
 
-#include "../base/memory.h"
-#include "MargNil.h"
+#include "memory.h"
+#include "../opcode/MargNil.h"
+#include "../opcode/MargTrue.h"
 
 #define TABLE_MAX_LOAD 0.75
 
-static TableEntry *table_find_entry(TableEntry *entries, size_t capacity, MargString *key) {
+static table_entry *table_find_entry(table_entry *entries, size_t capacity, MargString *key) {
     uint64_t index = MEMORY_GROW_FACTOR == 2
         ? key->hash & (capacity - 1)
         : key->hash % capacity;
 
     // Linear probing
-    TableEntry *tombstone = NULL;
+    table_entry *tombstone = NULL;
     while(true) {
-        TableEntry *entry = &entries[index];
+        table_entry *entry = &entries[index];
         if(entry->key == NULL) {
             if(IS_NIL(entry->value))
                 return tombstone != NULL ? tombstone : entry;
@@ -32,8 +33,8 @@ static TableEntry *table_find_entry(TableEntry *entries, size_t capacity, MargSt
     }
 }
 
-static void table_adjust_capacity(Table *self, size_t capacity) {
-    TableEntry *entries = (TableEntry*)collected_malloc(sizeof(TableEntry) * capacity);
+static void table_adjust_capacity(table *self, size_t capacity) {
+    table_entry *entries = (table_entry*)collected_malloc(sizeof(table_entry) * capacity);
 
     for(size_t i = 0; i < capacity; i++) {
         entries[i].key = NULL;
@@ -42,11 +43,11 @@ static void table_adjust_capacity(Table *self, size_t capacity) {
 
     self->count = 0;
     for(size_t i = 0; i < self->capacity; i++) {
-        TableEntry *entry = &self->entries[i];
+        table_entry *entry = &self->entries[i];
         if(entry->key == NULL)
             continue;
 
-        TableEntry *new_entry = table_find_entry(entries, capacity, entry->key);
+        table_entry *new_entry = table_find_entry(entries, capacity, entry->key);
         new_entry->key = entry->key;
         new_entry->value = entry->value;
         self->count++;
@@ -56,19 +57,19 @@ static void table_adjust_capacity(Table *self, size_t capacity) {
     self->capacity = capacity;
 }
 
-void table_init(Table *self) {
+void table_init(table *self) {
     self->count = 0;
     self->capacity = 0;
     self->entries = NULL;
 }
 
-bool table_set(Table *self, MargString *key, MargValue value) {
+bool table_set(table *self, MargString *key, MargValue value) {
     if(self->count + 1 > self->capacity * TABLE_MAX_LOAD) {
         size_t capacity = MEMORY_GROW_CAPACITY(self->capacity);
         table_adjust_capacity(self, capacity);
     }
 
-    TableEntry *entry = table_find_entry(self->entries, self->capacity, key);
+    table_entry *entry = table_find_entry(self->entries, self->capacity, key);
     bool is_key_new = entry->key == NULL;
     if(is_key_new && IS_NIL(entry->value))
         self->count++;
@@ -79,13 +80,13 @@ bool table_set(Table *self, MargString *key, MargValue value) {
     return is_key_new;
 }
 
-bool table_get(Table *self, MargString *key, MargValue *value) {
+bool table_get(table *self, MargString *key, MargValue *value) {
     if(self->count == 0) {
         *value = MARG_NIL;
         return false;
     }
 
-    TableEntry *entry = table_find_entry(self->entries, self->capacity, key);
+    table_entry *entry = table_find_entry(self->entries, self->capacity, key);
     if(entry->key == NULL) {
         *value = MARG_NIL;
         return false;
@@ -95,11 +96,11 @@ bool table_get(Table *self, MargString *key, MargValue *value) {
     return true;
 }
 
-bool table_delete(Table *self, MargString *key) {
+bool table_delete(table *self, MargString *key) {
     if(self->count == 0)
         return false;
 
-    TableEntry *entry = table_find_entry(self->entries, self->capacity, key);
+    table_entry *entry = table_find_entry(self->entries, self->capacity, key);
     if(entry->key == NULL)
         return false;
 
@@ -110,15 +111,15 @@ bool table_delete(Table *self, MargString *key) {
     return true;
 }
 
-void table_add_all(Table *src, Table *dest) {
+void table_add_all(table *src, table *dest) {
     for(size_t i = 0; i < src->capacity; i++) {
-        TableEntry *entry = &src->entries[i];
+        table_entry *entry = &src->entries[i];
         if(entry->key != NULL)
             table_set(dest, entry->key, entry->value);
     }
 }
 
-MargString *table_find_string(Table *self, char *chars, size_t size, uint64_t hash) {
+MargString *table_find_string(table *self, char *chars, size_t size, uint64_t hash) {
     if(self->count == 0)
         return NULL;
 
@@ -127,7 +128,7 @@ MargString *table_find_string(Table *self, char *chars, size_t size, uint64_t ha
         : hash % self->capacity;
 
     while(true) {
-        TableEntry *entry = &self->entries[index];
+        table_entry *entry = &self->entries[index];
         if(entry->key == NULL) {
             // Stops on a tombstone entry
             if(IS_NIL(entry->value))

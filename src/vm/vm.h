@@ -5,8 +5,8 @@
 #include "../base/vector.h"
 #include "../base/memory.h"
 #include "../base/Chunk.h"
+#include "../base/table.h"
 #include "../opcode/MargValue.h"
-#include "../opcode/Table.h"
 
 /**
  * @brief Virtual Machine Engine
@@ -21,8 +21,8 @@ typedef struct VM {
     MargValue stack[65536];
     MargValue *stack_top;
 
-    Table interned_strings;
-    Table global_variables;
+    table interned_strings;
+    table global_variables;
 } VM;
 
 /** @brief Better assurances for inlining */

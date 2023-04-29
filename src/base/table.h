@@ -4,29 +4,29 @@
 #include <stdlib.h> /* size_t */
 
 #include "../base/boolean.h"
-#include "MargValue.h"
-#include "MargString.h"
+#include "../opcode/MargString.h"
+#include "../opcode/MargValue.h"
 
 // TODO Implement data-oriented approach by separating keys with values
 //      for better memory compaction, and less cache misses
 // TableKeys -> table -> {key1: index1, key2: index2, ...}
 // TableValues -> vector -> [index1, index2, ...]
-typedef struct TableEntry {
+typedef struct table_entry {
     MargString *key;
     MargValue value;
-} TableEntry;
+} table_entry;
 
-typedef struct Table {
+typedef struct table {
     size_t count;
     size_t capacity;
-    TableEntry *entries;
-} Table;
+    table_entry *entries;
+} table;
 
 /**
  * @brief Initializes the values of a table
- * @param self -> Table that is passed from the stack
+ * @param self -> table that is passed from the stack
  */
-void table_init(Table *self);
+void table_init(table *self);
 
 /**
  * @brief Inserts given key/value pair into the table
@@ -37,7 +37,7 @@ void table_init(Table *self);
  * @return true -> Insertion succeeded
  * @return false -> Insertion failed
  */
-bool table_set(Table *self, MargString *key, MargValue value);
+bool table_set(table *self, MargString *key, MargValue value);
 
 /**
  * @brief Retrieves the value of the corresponding key,
@@ -48,7 +48,7 @@ bool table_set(Table *self, MargString *key, MargValue value);
  * @return true -> Retrieval succeeded
  * @return false -> Retrieval failed
  */
-bool table_get(Table *self, MargString *key, MargValue *value);
+bool table_get(table *self, MargString *key, MargValue *value);
 
 /**
  * @brief Deletes the value of the corresponding key
@@ -57,14 +57,14 @@ bool table_get(Table *self, MargString *key, MargValue *value);
  * @return true -> Deletion succeeded
  * @return false -> Deletion failed
  */
-bool table_delete(Table *self, MargString *key);
+bool table_delete(table *self, MargString *key);
 
 /**
  * @brief Adds all entries from src to dest
  * @param src -> Initial table
  * @param dest -> New table
  */
-void table_add_all(Table *src, Table *dest);
+void table_add_all(table *src, table *dest);
 
 /**
  * @brief Finds a string key efficiently.
@@ -76,6 +76,6 @@ void table_add_all(Table *src, Table *dest);
  * @param hash
  * @return MargString*
  */
-MargString *table_find_string(Table *self, char *chars, size_t size, uint64_t hash);
+MargString *table_find_string(table *self, char *chars, size_t size, uint64_t hash);
 
 #endif

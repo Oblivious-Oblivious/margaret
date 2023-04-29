@@ -10,6 +10,7 @@
 #include "base/memory.spec.h"
 #include "base/string.spec.h"
 #include "base/Temporaries.spec.h"
+#include "base/table.spec.h"
 #include "base/vector.spec.h"
 
 // bytecode
@@ -74,7 +75,6 @@
 #include "opcode/MargString.spec.h"
 #include "opcode/MargTrue.spec.h"
 #include "opcode/MargValue.spec.h"
-#include "opcode/Table.spec.h"
 
 // optimizer
 #include "optimizer/Optimizer.spec.h"
@@ -100,6 +100,7 @@ spec_suite({
     memory_spec();
     string_spec();
     TemporariesSpec();
+    table_spec();
     vector_spec();
 
     alternate_to_dec_spec();
@@ -156,7 +157,6 @@ spec_suite({
     MargStringSpec();
     MargTrueSpec();
     MargValueSpec();
-    TableSpec();
 
     OptimizerSpec();
 
