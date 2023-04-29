@@ -5,7 +5,7 @@
  * @param vm -> Current VM 
  */
 static inline void STACK_RESET(VM *vm) {
-    vm->stack_top = vm->stack;
+    vm->sp = vm->stack;
 }
 
 /**

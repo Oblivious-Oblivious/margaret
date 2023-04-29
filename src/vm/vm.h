@@ -20,7 +20,7 @@ typedef struct VM {
     uint8_t *ip;
 
     MargValue stack[65536];
-    MargValue *stack_top;
+    MargValue *sp;
 
     table interned_strings;
     table global_variables;
@@ -30,15 +30,15 @@ typedef struct VM {
 #define inline __inline__
 
 inline void STACK_PUSH(VM *self, MargValue item) {
-    *self->stack_top++ = item;
+    *self->sp++ = item;
 }
 
 inline MargValue STACK_POP(VM *self) {
-    return *--self->stack_top;
+    return *--self->sp;
 }
 
 inline MargValue STACK_PEEK(VM *self, int distance) {
-    return *(self->stack_top - 1 - distance);
+    return *(self->sp - 1 - distance);
 }
 
 #define READ_BYTE() (*self->ip++)
