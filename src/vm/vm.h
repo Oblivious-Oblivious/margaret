@@ -45,11 +45,11 @@ inline MargValue STACK_PEEK(VM *self, int distance) {
 #define READ_DWORD() (bytes_to_dword((uint8_t[4]){READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE()}))
 #define READ_QWORD() (bytes_to_qword((uint8_t[8]){READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE()}))
 
-#define READ_CONSTANT() (chunk_constant_get(self->bytecode, READ_BYTE()))
-#define READ_LONG_CONSTANT() (chunk_constant_get(self->bytecode, READ_DWORD()))
+#define READ_TEMPORARY() (chunk_temporary_get(self->bytecode, READ_BYTE()))
+#define READ_LONG_TEMPORARY() (chunk_temporary_get(self->bytecode, READ_DWORD()))
 
-#define READ_STRING() AS_STRING(READ_CONSTANT())
-#define READ_LONG_STRING() AS_STRING(READ_LONG_CONSTANT())
+#define READ_STRING() AS_STRING(READ_TEMPORARY())
+#define READ_LONG_STRING() AS_STRING(READ_LONG_TEMPORARY())
 
 /**
  * @brief Creates a new VM instance
@@ -60,7 +60,7 @@ VM *vm_new(void);
 
 /**
  * @brief Explicitely frees VM memory that is kept outside of the collector
-        Memory critical sections like constants are kept outside of the GC
+        Memory critical sections like temporaries are kept outside of the GC
  * @param vm -> Current vm
  */
 void vm_free(VM *vm);

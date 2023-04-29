@@ -24,7 +24,7 @@ Chunk *chunk_new(void) {
     self->size = 0;
     self->items = (uint8_t*)collected_malloc(sizeof(uint8_t) * self->alloced);
     self->lines = (size_t*)collected_malloc(sizeof(size_t) * self->alloced);
-    self->constants = constants_new();
+    self->temporaries = temporaries_new();
 
     return self;
 }
@@ -38,7 +38,7 @@ void chunk_add(Chunk *self, uint8_t item, size_t line) {
     self->size++;
 }
 
-uint32_t chunk_constant_add(Chunk *chunk, MargValue value) {
-    constants_add(chunk->constants, value);
-    return constants_size(chunk->constants) - 1;
+uint32_t chunk_temporary_add(Chunk *chunk, MargValue value) {
+    temporaries_add(chunk->temporaries, value);
+    return temporaries_size(chunk->temporaries) - 1;
 }

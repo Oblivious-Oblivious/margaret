@@ -1,34 +1,34 @@
-#ifndef __CONSTANTS_H_
-#define __CONSTANTS_H_
+#ifndef __TEMPORARIES_H_
+#define __TEMPORARIES_H_
 
 #include <stdlib.h> /* size_t */
 
 #include "../opcode/MargValue.h"
 
 /**
- * @brief: Defines a vector data structure storing MargValue constants
+ * @brief: Defines a vector data structure storing MargValue temporaries
  * @param items -> A MargValue pointer array
  * @param alloced -> The total capacity of the vector
  * @param size -> The total number of values
  */
-typedef struct Constants {
+typedef struct Temporaries {
     MargValue *items;
     size_t alloced;
     size_t size;
-} Constants;
+} Temporaries;
 
 /**
- * @brief Creates a new empty constants vector
- * @return Constants*
+ * @brief Creates a new empty temporaries vector
+ * @return Temporaries*
  */
-Constants *constants_new(void);
+Temporaries *temporaries_new(void);
 
 /**
- * @brief Adds a new element in the constants vector
+ * @brief Adds a new element in the temporaries vector
  * @param self -> Current vector
  * @param item -> Item to add
  */
-void constants_add(Constants *self, MargValue item);
+void temporaries_add(Temporaries *self, MargValue item);
 
 /**
  * @brief Get the value of a specific vector index
@@ -36,7 +36,7 @@ void constants_add(Constants *self, MargValue item);
  * @param index -> Index to get the value from
  * @return MargValue
  */
-inline MargValue constants_get(Constants *self, size_t index) {
+inline MargValue temporaries_get(Temporaries *self, size_t index) {
     return self->items[index];
 }
 
@@ -45,7 +45,7 @@ inline MargValue constants_get(Constants *self, size_t index) {
  * @param self -> Current vector
  * @return size_t -> Number of items in the vector
  */
-inline size_t constants_size(Constants *self) {
+inline size_t temporaries_size(Temporaries *self) {
     return self->size;
 }
 

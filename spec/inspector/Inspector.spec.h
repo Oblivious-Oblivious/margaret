@@ -34,22 +34,22 @@ module(InspectorSpec, {
         assert_that_charptr(string_get(vector_get(res, 3)) equals to "0006         |      00                  RETURN");
     });
 
-    it("tests multiple long constants", {
+    it("tests multiple long temporaries", {
         VM *vm = vm_new();
         Chunk *bytecode = vm->bytecode;
 
         for(int i = 0; i <= 4000; i++) {
-            uint32_t long_constant = chunk_constant_add(bytecode, MARG_FLOAT(42.42));
-            chunk_add(bytecode, OP_CONSTANT_LONG, 123);
-            uint8_t *constant_in_bytes = dword_to_bytes(long_constant);
-            chunk_add(bytecode, constant_in_bytes[0], 123);
-            chunk_add(bytecode, constant_in_bytes[1], 123);
-            chunk_add(bytecode, constant_in_bytes[2], 123);
-            chunk_add(bytecode, constant_in_bytes[3], 123);
+            uint32_t long_temporary = chunk_temporary_add(bytecode, MARG_FLOAT(42.42));
+            chunk_add(bytecode, OP_PUT_OBJECT_LONG, 123);
+            uint8_t *temporary_in_bytes = dword_to_bytes(long_temporary);
+            chunk_add(bytecode, temporary_in_bytes[0], 123);
+            chunk_add(bytecode, temporary_in_bytes[1], 123);
+            chunk_add(bytecode, temporary_in_bytes[2], 123);
+            chunk_add(bytecode, temporary_in_bytes[3], 123);
         }
 
         vector *res = inspect_vm_bytecode(vm);
-        assert_that_charptr(string_get(vector_get(res, 4000)) equals to "4e20         |      05 00 00 0f a0      CONSTANT_LONG            4000 (42.42)");
+        assert_that_charptr(string_get(vector_get(res, 4000)) equals to "4e20         |      09 00 00 0f a0      PUT_OBJECT_LONG          42.42 @[4000]");
     });
 })
 

@@ -4,7 +4,7 @@
 #include <stdlib.h> /* size_t */
 #include <stdint.h> /* uint8_t */
 
-#include "Constants.h"
+#include "Temporaries.h"
 #include "../opcode/MargValue.h"
 
 /**
@@ -13,7 +13,7 @@
  * @param alloced -> The total memory capacity of the vector
  * @param size -> The total number of values
  * @param lines -> An array which indices map with those of `items`, storing line information for each opcode
- * @param constants -> A vector storing actual MargValues of created constants
+ * @param temporaries -> A vector storing actual MargValues of created temporaries
  */
 typedef struct Chunk {
     uint8_t *items;
@@ -21,7 +21,7 @@ typedef struct Chunk {
     size_t size;
 
     size_t *lines;
-    Constants *constants;
+    Temporaries *temporaries;
 } Chunk;
 
 /**
@@ -59,23 +59,23 @@ inline size_t chunk_size(Chunk *self) {
 }
 
 /**
- * @brief Helper for adding a constant
+ * @brief Helper for adding a temporary
     inside the value vector of a chunk
  * @param chunk -> Current chunk
  * @param value -> MargValue
- * @return size_t -> The index the constant was appended to
+ * @return size_t -> The index the temporary was appended to
  */
-uint32_t chunk_constant_add(Chunk *chunk, MargValue value);
+uint32_t chunk_temporary_add(Chunk *chunk, MargValue value);
 
 /**
- * @brief Helper for retrieving a constant from the
+ * @brief Helper for retrieving a temporary from the
     value vector of a chunk using index
  * @param chunk -> Current chunk
- * @param index -> Index of the constant
- * @return MargValue -> The value of the constant
+ * @param index -> Index of the temporary
+ * @return MargValue -> The value of the temporary
  */
-inline MargValue chunk_constant_get(Chunk *chunk, size_t index) {
-    return constants_get(chunk->constants, index);
+inline MargValue chunk_temporary_get(Chunk *chunk, size_t index) {
+    return temporaries_get(chunk->temporaries, index);
 }
 
 #endif

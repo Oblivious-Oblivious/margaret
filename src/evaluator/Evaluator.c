@@ -59,11 +59,11 @@ static EvaluatorResult evaluator_run(VM *self) {
             }
 
             case OP_PUT_OBJECT: {
-                STACK_PUSH(self, READ_CONSTANT());
+                STACK_PUSH(self, READ_TEMPORARY());
                 break;
             }
             case OP_PUT_OBJECT_LONG: {
-                STACK_PUSH(self, READ_LONG_CONSTANT());
+                STACK_PUSH(self, READ_LONG_TEMPORARY());
                 break;
             }
 

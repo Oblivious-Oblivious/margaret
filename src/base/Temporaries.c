@@ -1,11 +1,11 @@
-#include "Constants.h"
+#include "Temporaries.h"
 
 #include "memory.h"
 
-#define CONSTANTS_GROW_FACTOR 1.618
+#define TEMPORARIES_GROW_FACTOR 1.618
 
-static void constants_ensure_space(Constants *self) {
-    size_t new_capacity = self->alloced * CONSTANTS_GROW_FACTOR;
+static void temporaries_ensure_space(Temporaries *self) {
+    size_t new_capacity = self->alloced * TEMPORARIES_GROW_FACTOR;
     MargValue *items = (MargValue*)collected_realloc(self->items, sizeof(MargValue) * new_capacity);
 
     if(items) {
@@ -14,8 +14,8 @@ static void constants_ensure_space(Constants *self) {
     }
 }
 
-Constants *constants_new(void) {
-    Constants *self = (Constants*)collected_malloc(sizeof(Constants));
+Temporaries *temporaries_new(void) {
+    Temporaries *self = (Temporaries*)collected_malloc(sizeof(Temporaries));
 
     self->alloced = 32;
     self->size = 0;
@@ -24,9 +24,9 @@ Constants *constants_new(void) {
     return self;
 }
 
-void constants_add(Constants *self, MargValue item) {
+void temporaries_add(Temporaries *self, MargValue item) {
     if(self->alloced == self->size)
-        constants_ensure_space(self);
+        temporaries_ensure_space(self);
 
     self->items[self->size++] = item;
 }

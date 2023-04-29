@@ -38,14 +38,14 @@ static size_t instruction_single(vector *res, const char *name, Chunk *chunk, si
 
 static size_t instruction_object(vector *res, const char *name, Chunk *chunk, size_t offset) {
     uint8_t opcode = chunk_get(chunk, offset);
-    uint8_t constant = chunk_get(chunk, offset + 1);
+    uint8_t temporary = chunk_get(chunk, offset + 1);
 
     string *disassembled_instruction = string_new("");
     write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
-    string_addf(disassembled_instruction, "%02x %02x               ", opcode, constant);
+    string_addf(disassembled_instruction, "%02x %02x               ", opcode, temporary);
     string_addf(disassembled_instruction, "%-24s ", name);
-    string_add(disassembled_instruction, marg_value_format(chunk_constant_get(chunk, constant)));
-    string_addf(disassembled_instruction, " @[%d]", constant);
+    string_add(disassembled_instruction, marg_value_format(chunk_temporary_get(chunk, temporary)));
+    string_addf(disassembled_instruction, " @[%d]", temporary);
     vector_add(res, disassembled_instruction);
 
     return offset + 2;
@@ -59,14 +59,14 @@ static size_t instruction_long_object(vector *res, const char *name, Chunk *chun
         chunk_get(chunk, offset + 3),
         chunk_get(chunk, offset + 4),
     };
-    uint32_t constant = bytes_to_dword(bytes);
+    uint32_t temporary = bytes_to_dword(bytes);
 
     string *disassembled_instruction = string_new("");
     write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
     string_addf(disassembled_instruction, "%02x %02x %02x %02x %02x      ", opcode, chunk_get(chunk, offset + 1), bytes[1], bytes[2], bytes[3]);
     string_addf(disassembled_instruction, "%-24s ", name);
-    string_add(disassembled_instruction, marg_value_format(chunk_constant_get(chunk, constant)));
-    string_addf(disassembled_instruction, " @[%d]", constant);
+    string_add(disassembled_instruction, marg_value_format(chunk_temporary_get(chunk, temporary)));
+    string_addf(disassembled_instruction, " @[%d]", temporary);
     vector_add(res, disassembled_instruction);
 
     return offset + 5;
@@ -89,7 +89,7 @@ static size_t instruction_variable(vector *res, const char *name, Chunk *chunk, 
     ) {
         string_add_str(disassembled_instruction, "@");
     }
-    string_add(disassembled_instruction, marg_value_as_variable(chunk_constant_get(chunk, variable)));
+    string_add(disassembled_instruction, marg_value_as_variable(chunk_temporary_get(chunk, variable)));
     string_addf(disassembled_instruction, " @[%d]", variable);
     vector_add(res, disassembled_instruction);
 
@@ -119,7 +119,7 @@ static size_t instruction_long_variable(vector *res, const char *name, Chunk *ch
     ) {
         string_add_str(disassembled_instruction, "@");
     }
-    string_add(disassembled_instruction, marg_value_as_variable(chunk_constant_get(chunk, variable)));
+    string_add(disassembled_instruction, marg_value_as_variable(chunk_temporary_get(chunk, variable)));
     string_addf(disassembled_instruction, " @[%d]", variable);
     vector_add(res, disassembled_instruction);
 

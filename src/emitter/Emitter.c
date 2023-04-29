@@ -3,8 +3,8 @@
 // TODO https://stackoverflow.com/questions/17002969/how-to-convert-string-to-int64-t
 #include <string.h> /* strtoll, strtold */
 
-#include "../base/Constants.h"
 #include "../base/Chunk.h"
+#include "../base/Temporaries.h"
 #include "../opcode/Opcodes.h"
 #include "../opcode/MargValue.h"
 
@@ -31,41 +31,41 @@
 } while(0)
 
 #define emit_possible_long_op(opcode) do { \
-    if(constants_size(vm->bytecode->constants) < 256) \
+    if(temporaries_size(vm->bytecode->temporaries) < 256) \
         chunk_add(vm->bytecode, (opcode), 123); \
     else \
         chunk_add(vm->bytecode, (opcode##_LONG), 123); \
 } while(0)
 
-#define emit_constant(constant) do { \
-    uint32_t constant_index = make_constant(vm, (constant)); \
-    add_constant(vm, constant_index); \
+#define emit_temporary(temporary) do { \
+    uint32_t temporary_index = make_temporary(vm, (temporary)); \
+    add_temporary(vm, temporary_index); \
 } while(0)
 
-static uint32_t make_constant(VM *vm, MargValue constant) {
-    return chunk_constant_add(vm->bytecode, constant);
+static uint32_t make_temporary(VM *vm, MargValue temporary) {
+    return chunk_temporary_add(vm->bytecode, temporary);
 }
 
-static void __add_constant_function(VM *vm, uint32_t constant_index, uint16_t upper_bound) {
-    if(constants_size(vm->bytecode->constants) < upper_bound) {
-        emit_byte((uint8_t)constant_index);
+static void __add_temporary_function(VM *vm, uint32_t temporary_index, uint16_t upper_bound) {
+    if(temporaries_size(vm->bytecode->temporaries) < upper_bound) {
+        emit_byte((uint8_t)temporary_index);
     }
     else {
-        uint8_t *constant_index_in_bytes = dword_to_bytes(constant_index);
+        uint8_t *temporary_index_in_bytes = dword_to_bytes(temporary_index);
         emit_bytes4(
-            constant_index_in_bytes[0],
-            constant_index_in_bytes[1],
-            constant_index_in_bytes[2],
-            constant_index_in_bytes[3]
+            temporary_index_in_bytes[0],
+            temporary_index_in_bytes[1],
+            temporary_index_in_bytes[2],
+            temporary_index_in_bytes[3]
         );
     }
 }
 
-static void add_constant(VM *vm, uint32_t constant_index) {
-    __add_constant_function(vm, constant_index, 256+1);
+static void add_temporary(VM *vm, uint32_t temporary_index) {
+    __add_temporary_function(vm, temporary_index, 256+1);
 }
-static void add_premade_constant(VM *vm, uint32_t constant_index) {
-    __add_constant_function(vm, constant_index, 256);
+static void add_premade_temporary(VM *vm, uint32_t temporary_index) {
+    __add_temporary_function(vm, temporary_index, 256);
 }
 
 VM *emitter_emit(vector *formal_bytecode) {
@@ -79,9 +79,9 @@ VM *emitter_emit(vector *formal_bytecode) {
         opcode_case(FM_INSTANCE) {}
         opcode_case(FM_GLOBAL) {
             string *variable_name = vector_get(formal_bytecode, ++ip);
-            MargValue constant = MARG_STRING(variable_name->str, variable_name->size);
+            MargValue temporary = MARG_STRING(variable_name->str, variable_name->size);
             emit_possible_long_op(OP_GET_GLOBAL);
-            emit_constant(constant);
+            emit_temporary(temporary);
         }
 
         opcode_case(FM_STORE_LOCAL) {}
@@ -91,17 +91,15 @@ VM *emitter_emit(vector *formal_bytecode) {
 
             emit_possible_long_op(OP_SET_GLOBAL);
 
-            uint32_t constant_index;
-            MargValue str = MARG_STRING(variable_name->str, variable_name->size);
+            MargValue temporary = MARG_STRING(variable_name->str, variable_name->size);
             MargValue index;
-            if(marg_hash_get(&vm->interned_strings, AS_STRING(str), &index)) {
-                constant_index = (uint32_t)AS_INTEGER(index)->value;
-                add_premade_constant(vm, constant_index);
+            if(marg_hash_get(&vm->interned_strings, AS_STRING(temporary), &index)) {
+                add_premade_temporary(vm, (uint32_t)AS_INTEGER(index)->value);
             }
             else {
-                constant_index = make_constant(vm, MARG_OBJECT(str));
-                marg_hash_set(&vm->interned_strings, AS_STRING(str), MARG_INTEGER(constant_index));
-                add_constant(vm, constant_index);
+                uint32_t temporary_index = make_temporary(vm, temporary);
+                marg_hash_set(&vm->interned_strings, AS_STRING(temporary), MARG_INTEGER(temporary_index));
+                add_temporary(vm, temporary_index);
             }
         }
 
@@ -120,8 +118,8 @@ VM *emitter_emit(vector *formal_bytecode) {
 
         // TODO Distinguish normal number from big numbers
         opcode_case(FM_INTEGER) {
-            string *constant_str = vector_get(formal_bytecode, ++ip);
-            char *end; long long integer = strtoll(string_get(constant_str), &end, 10);
+            string *temporary_str = vector_get(formal_bytecode, ++ip);
+            char *end; long long integer = strtoll(string_get(temporary_str), &end, 10);
             if(integer == -1)
                 emit_byte(OP_PUT_MINUS_1);
             else if(integer == 0)
@@ -132,21 +130,21 @@ VM *emitter_emit(vector *formal_bytecode) {
                 emit_byte(OP_PUT_2);
             else {
                 emit_possible_long_op(OP_PUT_OBJECT);
-                emit_constant(MARG_INTEGER(integer));
+                emit_temporary(MARG_INTEGER(integer));
             }
         }
         opcode_case(FM_FLOAT) {
             char *end;
-            string *constant_str = vector_get(formal_bytecode, ++ip);
-            MargValue constant = MARG_FLOAT(strtold(string_get(constant_str), &end));
+            string *temporary_str = vector_get(formal_bytecode, ++ip);
+            MargValue temporary = MARG_FLOAT(strtold(string_get(temporary_str), &end));
             emit_possible_long_op(OP_PUT_OBJECT);
-            emit_constant(constant);
+            emit_temporary(temporary);
         }
 
         opcode_case(FM_STRING) {
-            string *constant_str = vector_get(formal_bytecode, ++ip);
-            char *chars = string_get(constant_str);
-            size_t size = string_size(constant_str);
+            string *temporary_str = vector_get(formal_bytecode, ++ip);
+            char *chars = string_get(temporary_str);
+            size_t size = string_size(temporary_str);
 
             uint64_t hash = marg_string_hash(chars, size);
             MargValue interned = MARG_STRING_INTERNED(vm, chars, size, hash);
@@ -155,14 +153,14 @@ VM *emitter_emit(vector *formal_bytecode) {
             if(AS_STRING(interned) == NULL) {
                 interned = MARG_STRING(chars, size);
 
-                uint32_t constant_index = make_constant(vm, interned);
-                add_constant(vm, constant_index);
+                uint32_t temporary_index = make_temporary(vm, interned);
+                add_temporary(vm, temporary_index);
 
-                marg_hash_set(&vm->interned_strings, AS_STRING(interned), MARG_INTEGER(constant_index));
+                marg_hash_set(&vm->interned_strings, AS_STRING(interned), MARG_INTEGER(temporary_index));
             }
             else {
-                uint32_t constant_index = make_constant(vm, interned);
-                add_constant(vm, constant_index);
+                uint32_t temporary_index = make_temporary(vm, interned);
+                add_temporary(vm, temporary_index);
             }
         }
 
