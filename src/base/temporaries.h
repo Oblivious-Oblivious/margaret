@@ -24,7 +24,11 @@ typedef struct temporaries {
  * @brief Creates a new empty temporaries vector
  * @return temporaries*
  */
-temporaries *temporaries_new(void);
+#define temporaries_init(self) do { \
+    (self)->alloced = 32; \
+    (self)->size = 0; \
+    (self)->items = (MargValue*)collected_malloc(sizeof(MargValue) * (self)->alloced); \
+} while(0)
 
 /**
  * @desc: Ensure there is enough space for values in the temp vector
