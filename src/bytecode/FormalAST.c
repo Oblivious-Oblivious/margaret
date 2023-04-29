@@ -1,7 +1,7 @@
 #include "FormalAST.h"
 
 #include <stdio.h> /* snprintf */
-#include "../base/alternate_to_dec.h"
+#include "alternate_to_dec.h"
 
 static int __all_keywords_equal(vector *selectors) {
     size_t selectors_size = vector_size(selectors);

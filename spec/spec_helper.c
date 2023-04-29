@@ -5,7 +5,6 @@
 #include "version.spec.h"
 
 // base
-#include "base/alternate_to_dec.spec.h"
 #include "base/boolean.spec.h"
 #include "base/Chunk.spec.h"
 #include "base/file_loader.spec.h"
@@ -15,6 +14,7 @@
 #include "base/vector.spec.h"
 
 // bytecode
+#include "bytecode/alternate_to_dec.spec.h"
 #include "bytecode/FormalAST.spec.h"
 
 // emitter
@@ -93,7 +93,6 @@
 spec_suite({
     VersionSpec();
 
-    alternate_to_dec_spec();
     boolean_spec();
     ChunkSpec();
     file_loader_spec();
@@ -102,6 +101,7 @@ spec_suite({
     TemporariesSpec();
     vector_spec();
 
+    alternate_to_dec_spec();
     FormalASTSpec();
 
     EmitterSpec();
