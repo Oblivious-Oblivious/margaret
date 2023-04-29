@@ -2,7 +2,6 @@
 
 #include <stdio.h>
 
-#include "libs/boehm_gc/bdwgc/gc.h"
 #include "libs/readline/readline/readline.h"
 #include "libs/readline/readline/history.h"
 
