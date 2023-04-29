@@ -5,6 +5,7 @@
 #include "../cSpec.h"
 
 #include "../../src/opcode/Opcodes.h"
+#include "../../src/vm/byte_conversions.h"
 
 module(InspectorSpec, {
     // TODO Test for a `postcard` type mini program that includes every single feature

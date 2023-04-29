@@ -6,6 +6,7 @@
 #include "../base/chunk.h"
 #include "../opcode/Opcodes.h"
 #include "../opcode/MargValue.h"
+#include "../vm/byte_conversions.h"
 
 #define opcode_case(opstr) else if(string_equals(opcode, (opstr)))
 

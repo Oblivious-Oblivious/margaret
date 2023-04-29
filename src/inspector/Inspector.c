@@ -7,6 +7,7 @@
 #include "../base/chunk.h"
 
 #include "../opcode/Opcodes.h"
+#include "../vm/byte_conversions.h"
 
 static void write_offset_and_line_number_on(string *disassembled_instruction, chunk *chunk, size_t offset) {
     string_addf(disassembled_instruction, "%04zx    ", offset);

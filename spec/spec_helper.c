@@ -88,6 +88,7 @@
 #include "tokens/Type.spec.h"
 
 // vm
+#include "vm/byte_conversions.spec.h"
 #include "vm/vm.spec.h"
 
 #include "cSpec.h"
@@ -166,6 +167,7 @@ spec_suite({
     TokenTableSpec();
     TypeSpec();
 
+    byte_conversions_spec();
     VmSpec();
 })
 

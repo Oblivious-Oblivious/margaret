@@ -7,6 +7,7 @@
 #include "../base/chunk.h"
 #include "../base/table.h"
 #include "../opcode/MargValue.h"
+#include "byte_conversions.h"
 
 /**
  * @brief Virtual Machine Engine
