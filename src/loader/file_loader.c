@@ -2,7 +2,7 @@
 
 #include <stdio.h>  /* FILE, fopen, fclose, printf */
 
-#include "memory.h"
+#include "../base/memory.h"
 
 /**
  * @brief Check if the path file exists in the filesystem

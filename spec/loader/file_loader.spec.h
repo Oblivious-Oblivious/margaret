@@ -1,7 +1,7 @@
 #ifndef __FILE_LOADER_SPEC_H_
 #define __FILE_LOADER_SPEC_H_
 
-#include "../../src/base/file_loader.h"
+#include "../../src/loader/file_loader.h"
 #include "../cSpec.h"
 
 file_loader *loader;

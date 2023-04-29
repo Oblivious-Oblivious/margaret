@@ -7,7 +7,6 @@
 // base
 #include "base/boolean.spec.h"
 #include "base/Chunk.spec.h"
-#include "base/file_loader.spec.h"
 #include "base/memory.spec.h"
 #include "base/string.spec.h"
 #include "base/Temporaries.spec.h"
@@ -63,6 +62,9 @@
 // lexer
 #include "lexer/Lexer.spec.h"
 
+// loader
+#include "loader/file_loader.spec.h"
+
 // opcode
 #include "opcode/MargFalse.spec.h"
 #include "opcode/MargFloat.spec.h"
@@ -95,7 +97,6 @@ spec_suite({
 
     boolean_spec();
     ChunkSpec();
-    file_loader_spec();
     memory_spec();
     string_spec();
     TemporariesSpec();
@@ -144,6 +145,8 @@ spec_suite({
     InspectorSpec();
 
     LexerSpec();
+
+    file_loader_spec();
 
     MargFalseSpec();
     MargFloatSpec();
