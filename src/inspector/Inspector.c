@@ -4,7 +4,7 @@
 #include <string.h> /* strcmp */
 
 #include "../base/string.h"
-#include "../base/_chunk.h"
+#include "../base/chunk.h"
 
 #include "../opcode/Opcodes.h"
 

@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include "../base/vector.h"
 #include "../base/memory.h"
-#include "../base/_chunk.h"
+#include "../base/chunk.h"
 #include "../base/table.h"
 #include "../opcode/MargValue.h"
 

@@ -6,11 +6,11 @@
 
 // base
 #include "base/boolean.spec.h"
-#include "base/_chunk.spec.h"
+#include "base/chunk.spec.h"
 #include "base/memory.spec.h"
 #include "base/string.spec.h"
 #include "base/table.spec.h"
-#include "base/_temporaries.spec.h"
+#include "base/temporaries.spec.h"
 #include "base/vector.spec.h"
 
 // bytecode
