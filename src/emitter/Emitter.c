@@ -93,9 +93,9 @@ VM *emitter_emit(vector *formal_bytecode) {
             emit_possible_long_op(OP_SET_GLOBAL);
 
             MargValue temporary = MARG_STRING(variable_name->str, variable_name->size);
-            MargValue index = table_get(&vm->interned_strings, AS_STRING(temporary));
-            if(!IS_NIL(index)) {
-                add_premade_temporary(vm, (uint32_t)AS_INTEGER(index)->value);
+            MargValue interned_index = table_get(&vm->interned_strings, AS_STRING(temporary));
+            if(!IS_NIL(interned_index)) {
+                add_premade_temporary(vm, (uint32_t)AS_INTEGER(interned_index)->value);
             }
             else {
                 uint32_t temporary_index;
