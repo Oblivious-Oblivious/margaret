@@ -13,9 +13,10 @@ module(InspectorSpec, {
         chunk *bytecode = vm->bytecode;
 
         for(int i = 0; i <= 4000; i++) {
-            uint32_t long_temporary = chunk_temporary_add(bytecode, MARG_FLOAT(42.42));
+            uint32_t long_temporary_index;
+            chunk_temporary_add(bytecode, MARG_FLOAT(42.42), &long_temporary_index);
             chunk_add(bytecode, OP_PUT_OBJECT_LONG, 123);
-            uint8_t *temporary_in_bytes = dword_to_bytes(long_temporary);
+            uint8_t *temporary_in_bytes = dword_to_bytes(long_temporary_index);
             chunk_add(bytecode, temporary_in_bytes[0], 123);
             chunk_add(bytecode, temporary_in_bytes[1], 123);
             chunk_add(bytecode, temporary_in_bytes[2], 123);

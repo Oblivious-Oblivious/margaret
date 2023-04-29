@@ -4,8 +4,11 @@
 #include <stdlib.h> /* size_t */
 #include <stdint.h> /* uint8_t */
 
+#include "memory.h"
 #include "temporaries.h"
 #include "../opcode/MargValue.h"
+
+#define CHUNK_GROW_FACTOR 1.618
 
 /**
  * @brief: Defines a vector data structure
@@ -31,13 +34,37 @@ typedef struct chunk {
 chunk *chunk_new(void);
 
 /**
+ * @desc: Ensure there is enough space for values in the chunk
+ * @param self -> The vector to use
+ **/
+#define chunk_ensure_space(self) do { \
+    size_t new_capacity = (self)->alloced * CHUNK_GROW_FACTOR; \
+    uint8_t *new_items = (uint8_t*)collected_realloc((self)->items, sizeof(uint8_t) * new_capacity); \
+    size_t *new_lines = (size_t*)collected_realloc((self)->lines, sizeof(size_t) * new_capacity); \
+    \
+    if(new_items) { \
+        (self)->alloced = new_capacity; \
+        (self)->items = new_items; \
+    } \
+    if(new_lines) \
+        (self)->lines = new_lines; \
+} while(0)
+
+/**
  * @brief Adds a new item in the vector,
         and a new line in the line array
  * @param self -> Current chunk
  * @param item -> Item to add
  * @param line -> Line number the bytecode was emitted from
  */
-void chunk_add(chunk *self, uint8_t item, size_t line);
+#define chunk_add(self, item, line) do { \
+    if((self)->alloced == (self)->size) \
+        chunk_ensure_space((self)); \
+    \
+    (self)->items[(self)->size] = (item); \
+    (self)->lines[(self)->size] = (line); \
+    (self)->size++; \
+} while(0)
 
 /**
  * @brief Get the value of a specific chunk index
@@ -45,18 +72,14 @@ void chunk_add(chunk *self, uint8_t item, size_t line);
  * @param index -> Index to get the value from
  * @return uint8_t
  */
-inline uint8_t chunk_get(chunk *self, size_t index) {
-    return self->items[index];
-}
+#define chunk_get(self, index) (self)->items[(index)]
 
 /**
  * @brief Get the total number of values inserted
  * @param self -> Current chunk
  * @return size_t -> Number of items in the vector
  */
-inline size_t chunk_size(chunk *self) {
-    return self->size;
-}
+#define chunk_size(self) (self)->size
 
 /**
  * @brief Helper for adding a temporary
@@ -65,7 +88,10 @@ inline size_t chunk_size(chunk *self) {
  * @param value -> MargValue
  * @return size_t -> The index the temporary was appended to
  */
-uint32_t chunk_temporary_add(chunk *chunk, MargValue value);
+#define chunk_temporary_add(chunk, value, index) do { \
+    temporaries_add((chunk)->temp_vector, (value)); \
+    *(index) = temporaries_size((chunk)->temp_vector) - 1; \
+} while(0)
 
 /**
  * @brief Helper for retrieving a temporary from the
@@ -74,8 +100,7 @@ uint32_t chunk_temporary_add(chunk *chunk, MargValue value);
  * @param index -> Index of the temporary
  * @return MargValue -> The value of the temporary
  */
-inline MargValue chunk_temporary_get(chunk *chunk, size_t index) {
-    return temporaries_get(chunk->temp_vector, index);
-}
+#define chunk_temporary_get(chunk, index) \
+    temporaries_get((chunk)->temp_vector, (index))
 
 #endif

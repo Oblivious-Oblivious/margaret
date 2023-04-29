@@ -38,12 +38,13 @@
 } while(0)
 
 #define emit_temporary(temporary) do { \
-    uint32_t temporary_index = make_temporary(vm, (temporary)); \
+    uint32_t temporary_index; \
+    make_temporary(vm, (temporary), &temporary_index); \
     add_temporary(vm, temporary_index); \
 } while(0)
 
-static uint32_t make_temporary(VM *vm, MargValue temporary) {
-    return chunk_temporary_add(vm->bytecode, temporary);
+static void make_temporary(VM *vm, MargValue temporary, uint32_t *index) {
+    chunk_temporary_add(vm->bytecode, temporary, index);
 }
 
 static void __add_temporary_function(VM *vm, uint32_t temporary_index, uint16_t upper_bound) {
@@ -97,7 +98,8 @@ VM *emitter_emit(vector *formal_bytecode) {
                 add_premade_temporary(vm, (uint32_t)AS_INTEGER(index)->value);
             }
             else {
-                uint32_t temporary_index = make_temporary(vm, temporary);
+                uint32_t temporary_index;
+                make_temporary(vm, temporary, &temporary_index);
                 table_set(&vm->interned_strings, AS_STRING(temporary), MARG_INTEGER(temporary_index));
                 add_temporary(vm, temporary_index);
             }
@@ -153,13 +155,15 @@ VM *emitter_emit(vector *formal_bytecode) {
             if(AS_STRING(interned) == NULL) {
                 interned = MARG_STRING(chars, size);
 
-                uint32_t temporary_index = make_temporary(vm, interned);
+                uint32_t temporary_index;
+                make_temporary(vm, interned, &temporary_index);
                 add_temporary(vm, temporary_index);
 
                 table_set(&vm->interned_strings, AS_STRING(interned), MARG_INTEGER(temporary_index));
             }
             else {
-                uint32_t temporary_index = make_temporary(vm, interned);
+                uint32_t temporary_index;
+                make_temporary(vm, interned, &temporary_index);
                 add_temporary(vm, temporary_index);
             }
         }

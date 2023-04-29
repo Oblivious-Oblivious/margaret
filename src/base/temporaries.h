@@ -3,7 +3,10 @@
 
 #include <stdlib.h> /* size_t */
 
+#include "memory.h"
 #include "../opcode/MargValue.h"
+
+#define TEMPORARIES_GROW_FACTOR 1.618
 
 /**
  * @brief: Defines a vector data structure storing MargValue temporaries
@@ -24,11 +27,30 @@ typedef struct temporaries {
 temporaries *temporaries_new(void);
 
 /**
+ * @desc: Ensure there is enough space for values in the temp vector
+ * @param self -> The vector to use
+ **/
+#define temporaries_ensure_space(self) { \
+    size_t new_capacity = (self)->alloced * TEMPORARIES_GROW_FACTOR; \
+    MargValue *items = (MargValue*)collected_realloc((self)->items, sizeof(MargValue) * new_capacity); \
+    \
+    if(items) { \
+        (self)->alloced = new_capacity; \
+        (self)->items = items; \
+    } \
+} while(0)
+
+/**
  * @brief Adds a new element in the temporaries vector
  * @param self -> Current vector
  * @param item -> Item to add
  */
-void temporaries_add(temporaries *self, MargValue item);
+#define temporaries_add(self, item) do { \
+    if(self->alloced == self->size) \
+        temporaries_ensure_space(self); \
+    \
+    self->items[self->size++] = item; \
+} while(0)
 
 /**
  * @brief Get the value of a specific vector index
@@ -36,17 +58,13 @@ void temporaries_add(temporaries *self, MargValue item);
  * @param index -> Index to get the value from
  * @return MargValue
  */
-inline MargValue temporaries_get(temporaries *self, size_t index) {
-    return self->items[index];
-}
+#define temporaries_get(self, index) (self)->items[(index)]
 
 /**
  * @brief Get the total number of values inserted
  * @param self -> Current vector
  * @return size_t -> Number of items in the vector
  */
-inline size_t temporaries_size(temporaries *self) {
-    return self->size;
-}
+#define temporaries_size(self) (self)->size
 
 #endif
