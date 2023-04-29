@@ -83,8 +83,7 @@ static void margaret_run_file(char *filename) {
     vm = OPTIMIZE(vm);
     inspect_and_print_vm_bytecode(vm);
 
-    MargValue evaluation_result = EVAL(vm);
-    PRINT(evaluation_result);
+    EVAL(vm);
     vm_free(vm);
 }
 
@@ -93,8 +92,6 @@ static void banner(void) {
 }
 
 int main(int argc, char **argv) {
-    // GC_INIT();
-
     if(argc < 2) {
         (void)argc;(void)argv;
         margaret_repl();
