@@ -148,8 +148,7 @@ VM *emitter_emit(vector *formal_bytecode) {
             char *chars = string_get(temporary_str);
             size_t size = string_size(temporary_str);
 
-            uint64_t hash = marg_string_hash(chars, size);
-            MargValue interned = MARG_STRING_INTERNED(vm, chars, size, hash);
+            MargValue interned = MARG_STRING_INTERNED(vm, chars, size);
             emit_possible_long_op(OP_PUT_OBJECT);
 
             if(AS_STRING(interned) == NULL) {
