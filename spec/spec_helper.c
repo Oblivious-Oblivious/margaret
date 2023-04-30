@@ -7,6 +7,7 @@
 // base
 #include "base/boolean.spec.h"
 #include "base/chunk.spec.h"
+#include "base/fnv_1a_64_hash.spec.h"
 #include "base/memory.spec.h"
 #include "base/string.spec.h"
 #include "base/table.spec.h"
@@ -98,6 +99,7 @@ spec_suite({
 
     boolean_spec();
     chunk_spec();
+    fnv_1a_64_hash_spec();
     memory_spec();
     string_spec();
     table_spec();

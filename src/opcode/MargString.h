@@ -13,8 +13,6 @@ typedef struct MargString {
     char chars[];
 } MargString;
 
-uint64_t marg_string_hash(char *key, size_t size);
-
 MargString *marg_string_new(char *chars, size_t size);
 
 #endif
