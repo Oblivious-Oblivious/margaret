@@ -72,22 +72,22 @@ static EvaluatorResult evaluator_run(VM *self) {
             }
 
             case OP_SET_GLOBAL: {
-                table_set(&self->global_variables, READ_STRING(), STACK_PEEK(self, 0));
+                table_set(&self->global_variables, READ_TEMPORARY(), STACK_PEEK(self, 0));
                 STACK_POP(self);
                 break;
             }
             case OP_SET_GLOBAL_LONG: {
-                table_set(&self->global_variables, READ_LONG_STRING(), STACK_PEEK(self, 0));
+                table_set(&self->global_variables, READ_LONG_TEMPORARY(), STACK_PEEK(self, 0));
                 STACK_POP(self);
                 break;
             }
 
             case OP_GET_GLOBAL: {
-                STACK_PUSH(self, table_get(&self->global_variables, READ_STRING()));
+                STACK_PUSH(self, table_get(&self->global_variables, READ_TEMPORARY()));
                 break;
             }
             case OP_GET_GLOBAL_LONG: {
-                STACK_PUSH(self, table_get(&self->global_variables, READ_LONG_STRING()));
+                STACK_PUSH(self, table_get(&self->global_variables, READ_LONG_TEMPORARY()));
                 break;
             }
 

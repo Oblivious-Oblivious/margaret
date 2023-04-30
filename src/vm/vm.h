@@ -49,9 +49,6 @@ inline MargValue STACK_PEEK(VM *self, int distance) {
 #define READ_TEMPORARY() (chunk_temporaries_get(self->bytecode, READ_BYTE()))
 #define READ_LONG_TEMPORARY() (chunk_temporaries_get(self->bytecode, READ_DWORD()))
 
-#define READ_STRING() AS_STRING(READ_TEMPORARY())
-#define READ_LONG_STRING() AS_STRING(READ_LONG_TEMPORARY())
-
 /**
  * @brief Creates a new VM instance
         By being an explicit pointer can create multiple of them
