@@ -3,8 +3,7 @@
 
 #include <stdlib.h> /* size_t */
 
-#include "../base/boolean.h"
-#include "../opcode/MargString.h"
+#include "boolean.h"
 #include "../opcode/MargValue.h"
 
 // TODO Implement data-oriented approach by separating keys with values
@@ -12,7 +11,7 @@
 // TableKeys -> table -> {key1: index1, key2: index2, ...}
 // TableValues -> vector -> [index1, index2, ...]
 typedef struct table_entry {
-    MargString *key;
+    MargValue key;
     MargValue value;
 } table_entry;
 
@@ -37,7 +36,7 @@ void table_init(table *self);
  * @return true -> Insertion succeeded
  * @return false -> Insertion failed
  */
-bool table_set(table *self, MargString *key, MargValue value);
+bool table_set(table *self, MargValue key, MargValue value);
 
 /**
  * @brief Retrieves the value of the corresponding key,
@@ -46,7 +45,7 @@ bool table_set(table *self, MargString *key, MargValue value);
  * @param key -> Key of value we are searching for
  * @return -> Result pointer
  */
-MargValue table_get(table *self, MargString *key);
+MargValue table_get(table *self, MargValue key);
 
 /**
  * @brief Deletes the value of the corresponding key
@@ -55,7 +54,7 @@ MargValue table_get(table *self, MargString *key);
  * @return true -> Deletion succeeded
  * @return false -> Deletion failed
  */
-bool table_delete(table *self, MargString *key);
+bool table_delete(table *self, MargValue key);
 
 /**
  * @brief Adds all entries from src to dest
@@ -72,8 +71,8 @@ void table_add_all(table *src, table *dest);
  * @param chars
  * @param size
  * @param hash
- * @return MargString*
+ * @return MargValue
  */
-MargString *table_find_string(table *self, char *chars, size_t size, uint64_t hash);
+MargValue table_find_string(table *self, char *chars, size_t size, uint64_t hash);
 
 #endif

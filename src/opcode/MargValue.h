@@ -6,20 +6,19 @@
 
 typedef uint64_t MargValue;
 
-#include "MargNil.h"
-#include "MargFalse.h"
-#include "MargTrue.h"
-#include "MargInteger.h"
-#include "MargFloat.h"
-#include "MargString.h"
-
 /* QNAN = 0b    0     11111111111       1            1       ('0' * 50)
              (sign) (exponent bits) (qnan bit) (intel value)   (rest)        */
 #define QNAN       ((uint64_t)0x7ffc000000000000)
 #define SIGN_BIT   ((uint64_t)0x8000000000000000)
 
+#define UNDEFINED_TAG                                1
+#define NOT_INTERNED_TAG                             2
+
 #define QNAN_BOX(pointer)                            ((MargValue)(SIGN_BIT | QNAN | (uint64_t)(uintptr_t)(pointer)))
 #define QNAN_UNBOX(value)                            ((MargPointer*)(uintptr_t)((value) & ~(SIGN_BIT | QNAN)))
+
+#define MARG_UNDEFINED                               ((MargValue)(uint64_t)(QNAN | SIGN_BIT | UNDEFINED_TAG))
+#define MARG_NOT_INTERNED                            ((MargValue)(uint64_t)(QNAN | SIGN_BIT | NOT_INTERNED_TAG))
 
 #define MARG_NIL                                     (QNAN_BOX(marg_nil_new()))
 #define MARG_FALSE                                   (QNAN_BOX(marg_false_new()))
@@ -39,6 +38,9 @@ typedef uint64_t MargValue;
 #define AS_INTEGER(value)                            ((MargInteger*)QNAN_UNBOX(value))
 #define AS_FLOAT(value)                              ((MargFloat*)QNAN_UNBOX(value))
 #define AS_STRING(value)                             ((MargString*)QNAN_UNBOX(value))
+
+#define IS_UNDEFINED(value)                          ((value) == MARG_UNDEFINED)
+#define IS_NOT_INTERNED(value)                       ((value) == MARG_NOT_INTERNED)
 
 #define IS_NIL(value)                                (QNAN_UNBOX(value)->type == MARG_NIL_TYPE)
 #define IS_FALSE(value)                              (QNAN_UNBOX(value)->type == MARG_FALSE_TYPE)

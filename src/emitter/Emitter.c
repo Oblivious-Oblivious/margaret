@@ -6,6 +6,9 @@
 #include "../base/chunk.h"
 #include "../opcode/Opcodes.h"
 #include "../opcode/MargValue.h"
+#include "../opcode/MargInteger.h"
+#include "../opcode/MargFloat.h"
+#include "../opcode/MargString.h"
 #include "../vm/byte_conversions.h"
 
 #define opcode_case(opstr) else if(string_equals(opcode, (opstr)))
@@ -93,14 +96,14 @@ VM *emitter_emit(vector *formal_bytecode) {
             emit_possible_long_op(OP_SET_GLOBAL);
 
             MargValue temporary = MARG_STRING(variable_name->str, variable_name->size);
-            MargValue interned_index = table_get(&vm->interned_strings, AS_STRING(temporary));
-            if(!IS_NIL(interned_index)) {
+            MargValue interned_index = table_get(&vm->interned_strings, temporary);
+            if(!IS_UNDEFINED(interned_index)) {
                 add_premade_temporary(vm, (uint32_t)AS_INTEGER(interned_index)->value);
             }
             else {
                 uint32_t temporary_index;
                 make_temporary(vm, temporary, &temporary_index);
-                table_set(&vm->interned_strings, AS_STRING(temporary), MARG_INTEGER(temporary_index));
+                table_set(&vm->interned_strings, temporary, MARG_INTEGER(temporary_index));
                 add_temporary(vm, temporary_index);
             }
         }
@@ -151,14 +154,14 @@ VM *emitter_emit(vector *formal_bytecode) {
             MargValue interned = MARG_STRING_INTERNED(vm, chars, size);
             emit_possible_long_op(OP_PUT_OBJECT);
 
-            if(AS_STRING(interned) == NULL) {
+            if(IS_NOT_INTERNED(interned)) {
                 interned = MARG_STRING(chars, size);
 
                 uint32_t temporary_index;
                 make_temporary(vm, interned, &temporary_index);
                 add_temporary(vm, temporary_index);
 
-                table_set(&vm->interned_strings, AS_STRING(interned), MARG_INTEGER(temporary_index));
+                table_set(&vm->interned_strings, interned, MARG_INTEGER(temporary_index));
             }
             else {
                 uint32_t temporary_index;

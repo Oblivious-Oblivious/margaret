@@ -5,6 +5,10 @@
 #include "../opcode/Opcodes.h"
 #include "../opcode/MargValue.h"
 
+#include "../opcode/MargNil.h"
+#include "../opcode/MargFalse.h"
+#include "../opcode/MargTrue.h"
+#include "../opcode/MargInteger.h"
 /**
  * @brief Runs the iterator that evaluates
     the result of the generated opcodes
