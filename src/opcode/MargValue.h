@@ -17,7 +17,7 @@ typedef uint64_t MargValue;
 #define QNAN       ((uint64_t)0x7ffc000000000000)
 #define SIGN_BIT   ((uint64_t)0x8000000000000000)
 
-#define QNAN_BOX(pointer)                            (MargValue)(SIGN_BIT | QNAN | (uint64_t)(uintptr_t)(pointer))
+#define QNAN_BOX(pointer)                            ((MargValue)(SIGN_BIT | QNAN | (uint64_t)(uintptr_t)(pointer)))
 #define QNAN_UNBOX(value)                            ((MargPointer*)(uintptr_t)((value) & ~(SIGN_BIT | QNAN)))
 
 #define MARG_NIL                                     (QNAN_BOX(marg_nil_new()))
