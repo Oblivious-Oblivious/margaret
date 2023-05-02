@@ -8,6 +8,9 @@ module(constants_spec, {
         parse("(b = $true)", vector_new(FM_TRUE, FM_STORE_LOCAL, string_new("b")));
         parse("(b = $false)", vector_new(FM_FALSE, FM_STORE_LOCAL, string_new("b")));
         parse("(x = $nil)", vector_new(FM_NIL, FM_STORE_LOCAL, string_new("x")));
+        parse("true = 123", vector_new(FM_INTEGER, string_new("123"), FM_STORE_LOCAL, string_new("true")));
+        parse("false = 123", vector_new(FM_INTEGER, string_new("123"), FM_STORE_LOCAL, string_new("false")));
+        parse("nil = 123", vector_new(FM_INTEGER, string_new("123"), FM_STORE_LOCAL, string_new("nil")));
 
         parse("(x = 1)", vector_new(FM_INTEGER, string_new("1"), FM_STORE_LOCAL, string_new("x")));
         parse("(x = -1)", vector_new(FM_INTEGER, string_new("-1"), FM_STORE_LOCAL, string_new("x")));
