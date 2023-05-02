@@ -23,7 +23,7 @@ struct VM {
     MargValue *sp;
     table global_variables;
     table interned_strings;
-    ActivationRecord *main;
+    ActivationRecord *current;
 };
 
 /** @brief Better assurances for inlining */
@@ -41,13 +41,13 @@ inline MargValue STACK_PEEK(VM *vm, int distance) {
     return *(vm->sp - 1 - distance);
 }
 
-#define READ_BYTE() (*vm->main->ip++)
+#define READ_BYTE() (*vm->current->ip++)
 #define READ_WORD() (bytes_to_word((uint8_t[2]){READ_BYTE(), READ_BYTE()}))
 #define READ_DWORD() (bytes_to_dword((uint8_t[4]){READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE()}))
 #define READ_QWORD() (bytes_to_qword((uint8_t[8]){READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE()}))
 
-#define READ_TEMPORARY() (chunk_temporaries_get(vm->main->bytecode, READ_BYTE()))
-#define READ_LONG_TEMPORARY() (chunk_temporaries_get(vm->main->bytecode, READ_DWORD()))
+#define READ_TEMPORARY() (chunk_temporaries_get(vm->current->bytecode, READ_BYTE()))
+#define READ_LONG_TEMPORARY() (chunk_temporaries_get(vm->current->bytecode, READ_DWORD()))
 
 /**
  * @brief Creates a new VM instance

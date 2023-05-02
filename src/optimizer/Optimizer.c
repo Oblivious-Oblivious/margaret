@@ -3,7 +3,7 @@
 #include "../opcode/Opcodes.h"
 
 VM *optimizer_optimize(VM *vm) {
-    vm->main->ip = vm->main->bytecode->items;
+    vm->current->ip = vm->current->bytecode->items;
 
     // TODO Branch table, computed goto
     while(1) {

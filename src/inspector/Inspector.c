@@ -203,9 +203,9 @@ static size_t inspect_instruction(vector *res, chunk *chunk, size_t offset) {
 vector *inspect_vm_bytecode(VM *vm) {
     vector *res = vector_new_empty();
 
-    size_t number_of_bytecodes = chunk_size(vm->main->bytecode);
+    size_t number_of_bytecodes = chunk_size(vm->current->bytecode);
     for(size_t offset = 0; offset < number_of_bytecodes;)
-        offset = inspect_instruction(res, vm->main->bytecode, offset);
+        offset = inspect_instruction(res, vm->current->bytecode, offset);
 
     return res;
 }

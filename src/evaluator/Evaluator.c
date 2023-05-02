@@ -98,7 +98,7 @@ static EvaluatorResult evaluator_run(VM *vm) {
 }
 
 MargValue evaluator_evaluate(VM *vm) {
-    vm->main->ip = vm->main->bytecode->items;
+    vm->current->ip = vm->current->bytecode->items;
     EvaluatorResult result = evaluator_run(vm);
     (void)result; // TODO
 
