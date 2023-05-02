@@ -17,7 +17,7 @@ typedef uint64_t MargValue;
 #define NOT_INTERNED_TAG                             2
 
 #define QNAN_BOX(pointer)                            ((MargValue)(SIGN_BIT | QNAN | (uint64_t)(uintptr_t)(pointer)))
-#define QNAN_UNBOX(value)                            ((MargPointer*)(uintptr_t)((value) & ~(SIGN_BIT | QNAN)))
+#define QNAN_UNBOX(value)                            ((MargObject*)(uintptr_t)((value) & ~(SIGN_BIT | QNAN)))
 
 #define MARG_UNDEFINED                               ((MargValue)(uint64_t)(QNAN | SIGN_BIT | UNDEFINED_TAG))
 #define MARG_NOT_INTERNED                            ((MargValue)(uint64_t)(QNAN | SIGN_BIT | NOT_INTERNED_TAG))
