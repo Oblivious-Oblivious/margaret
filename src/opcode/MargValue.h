@@ -34,6 +34,7 @@ typedef uint64_t MargValue;
 #define MARG_STRING(chars, size)                     (QNAN_BOX(marg_string_new((chars), (size))))
 #define MARG_STRING_INTERNED(vm, chars, size)        (QNAN_BOX(table_find_string(&(vm)->interned_strings, (chars), (size), fnv_1a_64_hash((chars), (size)))))
 #define MARG_OBJECT(name, name_size)                 (QNAN_BOX(marg_object_new(&vm->global_variables, sizeof(MargObject), (name), (name_size))))
+#define MARG_METHOD(bound_object)                    (QNAN_BOX(marg_method_new(&vm->global_variables, (bound_object))))
 
 #define AS_NIL(value)                                ((MargNil*)QNAN_UNBOX(value))
 #define AS_FALSE(value)                              ((MargFalse*)QNAN_UNBOX(value))
@@ -42,6 +43,7 @@ typedef uint64_t MargValue;
 #define AS_FLOAT(value)                              ((MargFloat*)QNAN_UNBOX(value))
 #define AS_STRING(value)                             ((MargString*)QNAN_UNBOX(value))
 #define AS_OBJECT(value)                             ((MargObject*)QNAN_UNBOX(value))
+#define AS_METHOD(value)                             ((MargMethod*)QNAN_UNBOX(value))
 
 #define IS_UNDEFINED(value)                          ((value) == MARG_UNDEFINED)
 #define IS_NOT_INTERNED(value)                       ((value) == MARG_NOT_INTERNED)
