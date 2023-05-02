@@ -50,6 +50,7 @@ vector *parser_binary_method_definition(Parser *self, vector *multimethod_object
 vector *parser_keyword_method_definition(Parser *self, vector *multimethod_object_default_value);
 vector *parser_any_object(void);
 vector *parser_method_parameter(string *param_name);
+vector *parser_global_primitive_method_parameter(string *param_name);
 
 vector *parser_literal(Parser *self);
 vector *parser_integer_literal(Parser *self, string *sign);

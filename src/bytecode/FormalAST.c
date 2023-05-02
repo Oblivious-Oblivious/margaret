@@ -192,11 +192,11 @@ vector *ast_group(vector *unit_list) {
 }
 
 vector *ast_variable(string *optional_instance_symbol, string *name) {
-    if(string_equals(name, string_new("nil")))
+    if(string_equals(optional_instance_symbol, string_new("$")) && string_equals(name, string_new("nil")))
         return vector_new(FM_NIL);
-    else if(string_equals(name, string_new("true")))
+    else if(string_equals(optional_instance_symbol, string_new("$")) && string_equals(name, string_new("true")))
         return vector_new(FM_TRUE);
-    else if(string_equals(name, string_new("false")))
+    else if(string_equals(optional_instance_symbol, string_new("$")) && string_equals(name, string_new("false")))
         return vector_new(FM_FALSE);
     else if(string_equals(name, string_new("self")))
         return vector_new(FM_SELF);
@@ -369,11 +369,11 @@ vector *ast_any_object(void) {
 }
 
 vector *ast_method_parameter(string *param_name) {
-    if(string_equals(param_name, string_new("nil")))
+    if(string_equals(param_name, string_new("$nil")))
         return vector_new(FM_NIL);
-    else if(string_equals(param_name, string_new("true")))
+    else if(string_equals(param_name, string_new("$true")))
         return vector_new(FM_TRUE);
-    else if(string_equals(param_name, string_new("false")))
+    else if(string_equals(param_name, string_new("$false")))
         return vector_new(FM_FALSE);
     else if(string_equals(param_name, string_new("self")))
         return vector_new(FM_SELF);

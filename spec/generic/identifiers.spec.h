@@ -16,9 +16,9 @@ module(identifiers_spec, {
     });
 
     it("parses pseudo variables (used as normal identifiers)", {
-        parse("nil", vector_new(FM_NIL));
-        parse("true", vector_new(FM_TRUE));
-        parse("false", vector_new(FM_FALSE));
+        parse("$nil", vector_new(FM_NIL));
+        parse("$true", vector_new(FM_TRUE));
+        parse("$false", vector_new(FM_FALSE));
         parse("self", vector_new(FM_SELF));
         parse("super", vector_new(FM_SUPER));
     });

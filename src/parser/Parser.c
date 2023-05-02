@@ -308,14 +308,16 @@ vector *parser_binary_method_definition(Parser *self, vector *multimethod_object
     string *selector = ensure_type(TOKEN_MESSAGE_SYMBOL, "expected message symbol on binary method definition.");
 
     vector *param = NULL;
-    if(lookahead_1_type_equals(TOKEN_IDENTIFIER)) {
-        if(lookahead_1_value_equals("_")) {
-            ensure_value("_", "missing '_' on multimethod default parameter");
-            param = parser_any_object();
-        }
-        else {
-            param = parser_method_parameter(ensure_type(TOKEN_IDENTIFIER, "expected one parameter on binary method definition."));
-        }
+    if(lookahead_1_value_equals("_")) {
+        ensure_value("_", "missing '_' on multimethod default parameter");
+        param = parser_any_object();
+    }
+    else if(lookahead_1_value_equals("$") && lookahead_2_type_equals(TOKEN_IDENTIFIER)) {
+        ensure_value("$", "primitives '$nil', '$false' and '$true' are globals and require '$' for reference.");
+        param = parser_global_primitive_method_parameter(ensure_type(TOKEN_IDENTIFIER, "expected one parameter on binary method definition."));
+    }
+    else if(lookahead_1_type_equals(TOKEN_IDENTIFIER)) {
+        param = parser_method_parameter(ensure_type(TOKEN_IDENTIFIER, "expected one parameter on binary method definition."));
     }
     else {
         param = parser_literal(self);
@@ -336,14 +338,16 @@ vector *parser_keyword_method_definition(Parser *self, vector *multimethod_objec
         string_add(key, ensure_value(":", "expected ':' on keyword method definition."));
         string_add(selector, key);
 
-        if(lookahead_1_type_equals(TOKEN_IDENTIFIER)) {
-            if(lookahead_1_value_equals("_")) {
-                ensure_value("_", "missing '_' on multimethod default parameter");
-                vector_add(params, parser_any_object());
-            }
-            else {
-                vector_add(params, parser_method_parameter(ensure_type(TOKEN_IDENTIFIER, "expected keyword parameter.")));
-            }
+        if(lookahead_1_value_equals("_")) {
+            ensure_value("_", "missing '_' on multimethod default parameter");
+            vector_add(params, parser_any_object());
+        }
+        else if(lookahead_1_value_equals("$") && lookahead_2_type_equals(TOKEN_IDENTIFIER)) {
+            ensure_value("$", "primitives '$nil', '$false' and '$true' are globals and require '$' for reference.");
+            vector_add(params, parser_global_primitive_method_parameter(ensure_type(TOKEN_IDENTIFIER, "expected keyword parameter.")));
+        }
+        else if(lookahead_1_type_equals(TOKEN_IDENTIFIER)) {
+            vector_add(params, parser_method_parameter(ensure_type(TOKEN_IDENTIFIER, "expected keyword parameter.")));
         }
         else {
             vector_add(params, parser_literal(self));
@@ -360,6 +364,12 @@ vector *parser_any_object(void) {
 
 vector *parser_method_parameter(string *param_name) {
     return ast_method_parameter(param_name);
+}
+
+vector *parser_global_primitive_method_parameter(string *param_name) {
+    string *res = string_new("$");
+    string_add(res, param_name);
+    return ast_method_parameter(res);
 }
 
 vector *parser_literal(Parser *self) {

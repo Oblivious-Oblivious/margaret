@@ -31,7 +31,7 @@ module(method_definition_spec, {
             FM_END_PROC, \
             FM_KEYWORD, string_new("object:message:method:"), string_new("3") \
         ));
-        parse("#is_empty? => true", vector_new( \
+        parse("#is_empty? => $true", vector_new( \
             FM_LOCAL, string_new("Method"), \
             FM_UNARY, string_new("unary"), \
             FM_ANY_OBJECT, \
@@ -89,8 +89,8 @@ module(method_definition_spec, {
     });
 
     it("parses binary methods", {
-        // Method binary object: 0 message: "**" param: 0 method: { self | nil }
-        parse("# 0 ** 0 => nil", vector_new( \
+        // Method binary object: 0 message: "**" param: 0 method: { self | $nil }
+        parse("# 0 ** 0 => $nil", vector_new( \
             FM_LOCAL, string_new("Method"), \
             FM_UNARY, string_new("binary"), \
             FM_INTEGER, string_new("0"), \
@@ -198,8 +198,8 @@ module(method_definition_spec, {
             FM_KEYWORD, string_new("object:message:params:method:"), string_new("4") \
         ));
 
-        // Method keyword object: 1 message: "add:" params: [nil] method: { self | nil }
-        parse("# 1 add: nil => nil", vector_new( \
+        // Method keyword object: 1 message: "add:" params: [$nil] method: { self | $nil }
+        parse("# 1 add: $nil => $nil", vector_new( \
             FM_LOCAL, string_new("Method"), \
             FM_UNARY, string_new("keyword"), \
             FM_INTEGER, string_new("1"), \

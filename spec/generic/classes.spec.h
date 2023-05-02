@@ -18,7 +18,7 @@ module(classes_spec, {
             Point bind: #calc => @x + @y, \
             \
             Point multibind: [ \
-                # + nil => self, \
+                # + $nil => self, \
                 # + other => ( \
                     @x = @x + other x, \
                     @y = @y + other y, \
@@ -224,7 +224,7 @@ module(classes_spec, {
                     @y = y, \
                     self clone, \
                 ), \
-                # + nil => self, \
+                # + $nil => self, \
                 # + other => ( \
                     @x = @x + other x, \
                     @y = @y + other y, \

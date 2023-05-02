@@ -5,7 +5,7 @@
 
 module(margaret_messages_spec, {
     it("parses messages without an object", {
-        parse("if: true then: {|} else: {|}", vector_new( \
+        parse("if: $true then: {|} else: {|}", vector_new( \
             FM_GLOBAL, string_new("Margaret"), \
             FM_TRUE,
             FM_START_PROC, FM_END_PROC,

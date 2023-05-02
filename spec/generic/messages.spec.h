@@ -49,9 +49,9 @@ module(messages_spec, {
             x puts \
         )", vector_new(FM_LOCAL, string_new("List"), FM_UNARY, string_new("new"), FM_STORE_LOCAL, string_new("list"), FM_LOCAL, string_new("list"), FM_INTEGER, string_new("42"), FM_INTEGER, string_new("5"), FM_KEYWORD, string_new("put:at:"), string_new("2"), FM_LOCAL, string_new("list"), FM_INTEGER, string_new("2"), FM_KEYWORD, string_new("get:"), string_new("1"), FM_STORE_LOCAL, string_new("x"), FM_LOCAL, string_new("x"), FM_UNARY, string_new("puts")));
         parse("2 + 3 incr add: 11", vector_new(FM_INTEGER, string_new("2"), FM_INTEGER, string_new("3"), FM_UNARY, string_new("incr"), FM_BINARY, string_new("+"), FM_INTEGER, string_new("11"), FM_KEYWORD, string_new("add:"), string_new("1")));
-        parse("(1, 2, 3) reverse!: true", vector_new(FM_INTEGER, string_new("1"), FM_INTEGER, string_new("2"), FM_INTEGER, string_new("3"), FM_TRUE, FM_KEYWORD, string_new("reverse!:"), string_new("1")));
-        parse("true then: 1 else: 2", vector_new(FM_TRUE, FM_INTEGER, string_new("1"), FM_INTEGER, string_new("2"), FM_KEYWORD, string_new("then:else:"), string_new("2")));
-        parse("x ok?: true otherwise!: false", vector_new(FM_LOCAL, string_new("x"), FM_TRUE, FM_FALSE, FM_KEYWORD, string_new("ok?:otherwise!:"), string_new("2")));
+        parse("(1, 2, 3) reverse!: $true", vector_new(FM_INTEGER, string_new("1"), FM_INTEGER, string_new("2"), FM_INTEGER, string_new("3"), FM_TRUE, FM_KEYWORD, string_new("reverse!:"), string_new("1")));
+        parse("$true then: 1 else: 2", vector_new(FM_TRUE, FM_INTEGER, string_new("1"), FM_INTEGER, string_new("2"), FM_KEYWORD, string_new("then:else:"), string_new("2")));
+        parse("x ok?: $true otherwise!: $false", vector_new(FM_LOCAL, string_new("x"), FM_TRUE, FM_FALSE, FM_KEYWORD, string_new("ok?:otherwise!:"), string_new("2")));
         parse("(5 + 13) greater_than?: (11 + 2)", vector_new(FM_INTEGER, string_new("5"), FM_INTEGER, string_new("13"), FM_BINARY, string_new("+"), FM_INTEGER, string_new("11"), FM_INTEGER, string_new("2"), FM_BINARY, string_new("+"), FM_KEYWORD, string_new("greater_than?:"), string_new("1")));
         parse("42 factorial and: (2 + 3)", vector_new(FM_INTEGER, string_new("42"), FM_UNARY, string_new("factorial"), FM_INTEGER, string_new("2"), FM_INTEGER, string_new("3"), FM_BINARY, string_new("+"), FM_KEYWORD, string_new("and:"), string_new("1")));
         parse("(list at: 3) + (list at: 5)", vector_new(FM_LOCAL, string_new("list"), FM_INTEGER, string_new("3"), FM_KEYWORD, string_new("at:"), string_new("1"), FM_LOCAL, string_new("list"), FM_INTEGER, string_new("5"), FM_KEYWORD, string_new("at:"), string_new("1"), FM_BINARY, string_new("+")));
@@ -68,7 +68,7 @@ module(messages_spec, {
         parse("( \
             origin <= point \
                 if_true: { out goto } \
-                if_false: { false return }, \
+                if_false: { $false return }, \
             out = Label new \
         )", vector_new(FM_LOCAL, string_new("origin"), FM_LOCAL, string_new("point"), FM_BINARY, string_new("<="), FM_START_PROC, FM_LOCAL, string_new("out"), FM_UNARY, string_new("goto"), FM_END_PROC, FM_START_PROC, FM_FALSE, FM_UNARY, string_new("return"), FM_END_PROC, FM_KEYWORD, string_new("if_true:if_false:"), string_new("2"), FM_LOCAL, string_new("Label"), FM_UNARY, string_new("new"), FM_STORE_LOCAL, string_new("out")));
     });
