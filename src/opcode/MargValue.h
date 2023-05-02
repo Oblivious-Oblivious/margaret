@@ -32,7 +32,7 @@ typedef uint64_t MargValue;
 #define MARG_2                                       (QNAN_BOX(marg_integer_new(2)))
 #define MARG_FLOAT(number)                           (QNAN_BOX(marg_float_new((number))))
 #define MARG_STRING(chars, size)                     (QNAN_BOX(marg_string_new((chars), (size))))
-#define MARG_STRING_INTERNED(vm, chars, size)        (QNAN_BOX(table_find_string(&(vm)->interned_strings, (chars), (size), fnv_1a_64_hash((chars), (size)))))
+#define MARG_STRING_INTERNED(chars, size)            (QNAN_BOX(table_find_string(&vm->interned_strings, (chars), (size), fnv_1a_64_hash((chars), (size)))))
 #define MARG_OBJECT(name, name_size)                 (QNAN_BOX(marg_object_new(&vm->global_variables, sizeof(MargObject), (name), (name_size))))
 #define MARG_METHOD(bound_object)                    (QNAN_BOX(marg_method_new(&vm->global_variables, (bound_object))))
 #define MARG_PROC(bound_method)                      (QNAN_BOX(marg_proc_new(&vm->global_variables, (bound_method))))
