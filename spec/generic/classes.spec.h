@@ -215,6 +215,32 @@ module(classes_spec, {
             FM_UNARY, string_new("puts") \
         ));
     });
+
+    it("parses multibinds", {
+        parse("( \
+            Point = $Margaret clone: [ \
+                # x: x y: y => ( \
+                    @x = x, \
+                    @y = y, \
+                    self clone, \
+                ), \
+                # + nil => self, \
+                # + other => ( \
+                    @x = @x + other x, \
+                    @y = @y + other y, \
+                    self, \
+                ), \
+            ], \
+            Point attr_reader: [\"@x\", \"@y\"], \
+            \
+            p1 = Point x: 2 y: 3, \
+            p2 = Point x: 5 y: 7, \
+            p3 = p1 + p2, \
+            puts: p3, \
+        )", vector_new( \
+            FM_SELF
+        ));
+    });
 })
 
 #endif
