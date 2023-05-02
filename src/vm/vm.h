@@ -1,30 +1,30 @@
 #ifndef __VM_H_
 #define __VM_H_
 
-#include <stdint.h>
+#include <stdint.h> /* uint8_t */
+
 #include "../base/vector.h"
 #include "../base/memory.h"
 #include "../base/chunk.h"
 #include "../base/table.h"
 #include "../opcode/MargValue.h"
+#include "../opcode/ActivationRecord.h"
 #include "byte_conversions.h"
+
+// TODO extern global VM instance
 
 /**
  * @brief Virtual Machine Engine
  * @param bytecode -> The list of emitted bytecode instructions
  * @param ip -> Instruction pointer that directly points into bytecode array
  */
-typedef struct VM {
-    // TODO Refactor Chunk for space locality
-    chunk *bytecode;
-    uint8_t *ip;
-
+struct VM {
     MargValue stack[65536];
     MargValue *sp;
-
-    table interned_strings;
     table global_variables;
-} VM;
+    table interned_strings;
+    ActivationRecord *main;
+};
 
 /** @brief Better assurances for inlining */
 #define inline __inline__

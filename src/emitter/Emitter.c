@@ -13,7 +13,7 @@
 
 #define opcode_case(opstr) else if(string_equals(opcode, (opstr)))
 
-#define emit_byte(byte) chunk_add(vm->bytecode, (byte), 123)
+#define emit_byte(byte) chunk_add(vm->main->bytecode, (byte), 123)
 
 #define emit_bytes2(byte1, byte2) do { \
     emit_byte((byte1)); \
@@ -34,10 +34,10 @@
 } while(0)
 
 #define emit_possible_long_op(opcode) do { \
-    if(chunk_temporaries_size(vm->bytecode) < 256) \
-        chunk_add(vm->bytecode, (opcode), 123); \
+    if(chunk_temporaries_size(vm->main->bytecode) < 256) \
+        chunk_add(vm->main->bytecode, (opcode), 123); \
     else \
-        chunk_add(vm->bytecode, (opcode##_LONG), 123); \
+        chunk_add(vm->main->bytecode, (opcode##_LONG), 123); \
 } while(0)
 
 #define emit_temporary(temporary) do { \
@@ -47,11 +47,11 @@
 } while(0)
 
 static void make_temporary(VM *vm, MargValue temporary, uint32_t *index) {
-    chunk_temporaries_add(vm->bytecode, temporary, index);
+    chunk_temporaries_add(vm->main->bytecode, temporary, index);
 }
 
 static void __add_temporary_function(VM *vm, uint32_t temporary_index, uint16_t upper_bound) {
-    if(chunk_temporaries_size(vm->bytecode) < upper_bound) {
+    if(chunk_temporaries_size(vm->main->bytecode) < upper_bound) {
         emit_byte((uint8_t)temporary_index);
     }
     else {

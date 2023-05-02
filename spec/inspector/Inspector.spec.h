@@ -12,7 +12,7 @@ module(InspectorSpec, {
     // TODO Test for a `postcard` type mini program that includes every single feature
     it("tests multiple long temporaries", {
         VM *vm = vm_new();
-        chunk *bytecode = vm->bytecode;
+        chunk *bytecode = vm->main->bytecode;
 
         for(int i = 0; i <= 4000; i++) {
             uint32_t long_temporary_index;

@@ -7,6 +7,7 @@
 #include "../base/fnv_1a_64_hash.h"
 
 typedef uint64_t MargValue;
+typedef struct VM VM;
 
 /* QNAN = 0b    0     11111111111       1            1       ('0' * 50)
              (sign) (exponent bits) (qnan bit) (intel value)   (rest)        */

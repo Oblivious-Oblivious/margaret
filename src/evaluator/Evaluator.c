@@ -97,8 +97,8 @@ static EvaluatorResult evaluator_run(VM *vm) {
     }
 }
 
-    self->ip = self->bytecode->items;
 MargValue evaluator_evaluate(VM *vm) {
+    vm->main->ip = vm->main->bytecode->items;
     EvaluatorResult result = evaluator_run(vm);
     (void)result; // TODO
 

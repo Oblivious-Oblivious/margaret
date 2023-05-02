@@ -1,29 +1,53 @@
 #include "vm.h"
 
-/**
- * @brief Resets the top of the stack.
- * @param vm -> Current VM 
- */
-static inline void STACK_RESET(VM *vm) {
-    vm->sp = vm->stack;
+#include "../opcode/MargString.h"
+#include "../opcode/MargObject.h"
+#include "../opcode/MargMethod.h"
+
+static void Margaret_primitives(VM *vm) {
+    MargObject *marg = AS_OBJECT(MARG_OBJECT("$Margaret", 10));
+    MargMethod *main = AS_METHOD(MARG_METHOD(marg));
+    main->proc = AS_PROC(MARG_PROC(main));
+
+    table_set(
+        &marg->messages,
+        MARG_STRING("main:", 6),
+        QNAN_BOX(main)
+    );
+
+    table_set(
+        &vm->global_variables,
+        MARG_STRING("$Margaret", 10),
+        QNAN_BOX(marg)
+    );
 }
 
 /**
  * @brief Defines a set of primitive messages with
     which all user defined ones will be composed from
  */
-static void primitives_define(void) {
+static void primitives_define(VM *vm) {
+    Margaret_primitives(vm);
+    // nil_primitives(vm);
+    // true_primitives(vm);
+    // false_primitives(vm);
+    // Integer_primitives(vm);
+    // Float_primitives(vm);
+    // String_primitives(vm);
+
+    MargObject *marg = AS_OBJECT(table_get(&vm->global_variables, MARG_STRING("$Margaret", 10)));
+    MargMethod *main = AS_METHOD(table_get(&marg->messages, MARG_STRING("main:", 6)));
+    vm->main = main->proc->code;
 }
 
 VM *vm_new(void) {
     VM *vm = (VM*)collected_malloc(sizeof(VM));
 
-    vm->bytecode = chunk_new();
-    table_init(&vm->interned_strings);
+    vm->sp = vm->stack;
     table_init(&vm->global_variables);
+    table_init(&vm->interned_strings);
 
-    STACK_RESET(vm);
-    primitives_define();
+    primitives_define(vm);
 
     return vm;
 }
@@ -31,7 +55,7 @@ VM *vm_new(void) {
 void vm_free(VM *vm) {
     // TODO
     (void)vm;
-    // chunk_free(vm->bytecode);
+    // activation_record_free(vm->main);
     // table_free(&vm->interned_strings);
     // table_free(&vm->global_variables);
 }

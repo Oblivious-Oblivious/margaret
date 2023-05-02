@@ -2,8 +2,8 @@
 
 #include "../opcode/Opcodes.h"
 
-    self->ip = self->bytecode->items;
 VM *optimizer_optimize(VM *vm) {
+    vm->main->ip = vm->main->bytecode->items;
 
     // TODO Branch table, computed goto
     while(1) {
