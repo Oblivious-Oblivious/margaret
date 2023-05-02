@@ -29,4 +29,15 @@
     $x = $y,
     $x print,
 
+    nil print,
+    true print,
+    false print,
+    -1 print,
+    0 print,
+    1 print,
+    2 print,
+    42 print,
+    42.42 print,
+    "ok1" print,
+
 )
