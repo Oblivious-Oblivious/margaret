@@ -1,7 +1,8 @@
 #include "MargFloat.h"
 
-MargFloat *marg_float_new(double value) {
-    MargFloat *self = (MargFloat*)marg_pointer_new(sizeof(MargFloat), MARG_FLOAT_TYPE);
+MargFloat *marg_float_new(table *global_variables, double value) {
+    MargObject *obj = (MargObject*)marg_object_new(global_variables, sizeof(MargFloat), "$Float", 7);
+    MargFloat *self = (MargFloat*)obj;
 
     self->value = value;
 

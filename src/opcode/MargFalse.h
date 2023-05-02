@@ -1,20 +1,21 @@
 #ifndef __MARG_FALSE_H_
 #define __MARG_FALSE_H_
 
-#include "MargPointer.h"
+#include "MargObject.h"
 
 /**
  * @brief An object representation of MARG_FALSE
  * @param _ -> Inherted object properties
  */
 typedef struct MargFalse {
-    MargPointer _;
+    MargObject _;
 } MargFalse;
 
 /**
  * @brief Constructs a new false object
+ * @param global_variables -> A pointer to the current VM's global variables
  * @return MargFalse*
  */
-MargFalse *marg_false_new(void);
+MargFalse *marg_false_new(table *global_variables);
 
 #endif
