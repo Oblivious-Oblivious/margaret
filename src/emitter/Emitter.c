@@ -151,7 +151,7 @@ VM *emitter_emit(vector *formal_bytecode) {
             char *chars = string_get(temporary_str);
             size_t size = string_size(temporary_str);
 
-            MargValue interned = MARG_STRING_INTERNED(vm, chars, size);
+            MargValue interned = MARG_STRING_INTERNED(chars, size);
             emit_possible_long_op(OP_PUT_OBJECT);
 
             if(IS_NOT_INTERNED(interned)) {
