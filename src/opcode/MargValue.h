@@ -10,7 +10,7 @@ typedef uint64_t MargValue;
 typedef struct VM VM;
 
 /* QNAN = 0b    0     11111111111       1            1       ('0' * 50)
-             (sign) (exponent bits) (qnan bit) (QNAN FP IND)   (rest)        */
+             (sign) (exponent bits) (qnan bit) (qnan fp ind)   (rest)        */
 #define QNAN       ((uint64_t)0x7ffc000000000000)
 #define SIGN_BIT   ((uint64_t)0x8000000000000000)
 
