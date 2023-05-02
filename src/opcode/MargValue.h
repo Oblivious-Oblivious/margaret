@@ -14,20 +14,22 @@ typedef struct VM VM;
 #define SIGN_BIT   ((uint64_t)0x8000000000000000)
 #define EXPONENTS  ((uint64_t)0x7ff0000000000000)
 #define QNAN       ((uint64_t)0x0008000000000000)
+#define FP_IND     ((uint64_t)0x0000800000000000)
+#define ENCODING   (EXPONENTS | QNAN | FP_IND)
 
-#define QNAN_BOX(pointer)                            ((MargValue)(EXPONENTS | QNAN | (uint64_t)(uintptr_t)(pointer)))
-#define QNAN_UNBOX(value)                            ((MargObject*)(uintptr_t)((value) & ~(EXPONENTS | QNAN)))
+#define QNAN_BOX(pointer)                            ((MargValue)(ENCODING | (uint64_t)(uintptr_t)(pointer)))
+#define QNAN_UNBOX(value)                            ((MargObject*)(uintptr_t)((value) & ~(ENCODING)))
 
 // sign = 1
 // rest =  ('0' * 48)    0       0
 //          (Pointer) (tag1)  (tag0)
 // Allows for 4 distinct values (00, 01, 10, 11) that are not objects
 #define UNDEFINED_TAG                                0x00
-#define MARG_UNDEFINED                               ((MargValue)(uint64_t)(SIGN_BIT | EXPONENTS | QNAN | UNDEFINED_TAG))
+#define MARG_UNDEFINED                               ((MargValue)(uint64_t)(SIGN_BIT | ENCODING | UNDEFINED_TAG))
 #define IS_UNDEFINED(value)                          ((value) == MARG_UNDEFINED)
 
 #define NOT_INTERNED_TAG                             0x01
-#define MARG_NOT_INTERNED                            ((MargValue)(uint64_t)(SIGN_BIT | EXPONENTS | QNAN | NOT_INTERNED_TAG))
+#define MARG_NOT_INTERNED                            ((MargValue)(uint64_t)(SIGN_BIT | ENCODING | NOT_INTERNED_TAG))
 #define IS_NOT_INTERNED(value)                       ((value) == MARG_NOT_INTERNED)
 
 // Objects
