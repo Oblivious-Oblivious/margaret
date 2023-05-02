@@ -14,6 +14,6 @@ struct MargProc {
     ActivationRecord *code;
 };
 
-MargProc *marg_proc_new(table *global_variables, MargMethod *bound_method);
+MargProc *marg_proc_new(VM *vm, MargMethod *bound_method);
 
 #endif

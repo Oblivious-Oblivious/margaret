@@ -1,7 +1,7 @@
 #include "MargProc.h"
 
-MargProc *marg_proc_new(table *global_variables, MargMethod *bound_method) {
-    MargObject *obj = marg_object_new(global_variables, sizeof(MargProc), "$Proc", 6);
+MargProc *marg_proc_new(VM *vm, MargMethod *bound_method) {
+    MargObject *obj = marg_object_new(vm, sizeof(MargProc), "$Proc", 6);
     MargProc *self = (MargProc*)obj;
 
     table_init(&self->parameters);

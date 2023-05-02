@@ -13,9 +13,9 @@ typedef struct MargFalse {
 
 /**
  * @brief Constructs a new false object
- * @param global_variables -> A pointer to the current VM's global variables
+ * @param vm -> A pointer to the current VM
  * @return MargFalse*
  */
-MargFalse *marg_false_new(table *global_variables);
+MargFalse *marg_false_new(VM *vm);
 
 #endif

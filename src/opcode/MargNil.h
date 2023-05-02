@@ -14,8 +14,8 @@ typedef struct MargNil {
 /**
  * @brief Constructs a new nil object
  * @return MargNil*
- * @param global_variables -> A pointer to the current VM's global variables
+ * @param vm -> A pointer to the current VM
  */
-MargNil *marg_nil_new(table *global_variables);
+MargNil *marg_nil_new(VM *vm);
 
 #endif

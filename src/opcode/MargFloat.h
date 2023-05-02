@@ -14,10 +14,10 @@ typedef struct MargFloat {
 
 /**
  * @brief Constructs a new float object
- * @param global_variables -> A pointer to the current VM's global variables
+ * @param vm -> A pointer to the current VM
  * @param value -> Actual C double value
  * @return MargFloat*
  */
-MargFloat *marg_float_new(table *global_variables, double value);
+MargFloat *marg_float_new(VM *vm, double value);
 
 #endif

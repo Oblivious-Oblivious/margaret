@@ -13,9 +13,9 @@ typedef struct MargTrue {
 
 /**
  * @brief Constructs a new true object
- * @param global_variables -> A pointer to the current VM's global variables
+ * @param vm -> A pointer to the current VM
  * @return MargTrue*
  */
-MargTrue *marg_true_new(table *global_variables);
+MargTrue *marg_true_new(VM *vm);
 
 #endif

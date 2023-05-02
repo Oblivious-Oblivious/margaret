@@ -11,6 +11,6 @@ struct MargMethod {
     MargObject *bound_object;
 };
 
-MargMethod *marg_method_new(table *global_variables, MargObject *bound_object);
+MargMethod *marg_method_new(VM *vm, MargObject *bound_object);
 
 #endif

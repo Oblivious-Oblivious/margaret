@@ -18,7 +18,7 @@ typedef struct ActivationRecord ActivationRecord;
  * @param name -> Name of the object
  * @param instance_variables -> Object scoped @variables
  * @param messages -> A table for messages pointing to a vector of methods
- * @param global_variables -> A pointer to the current VM's global variables
+ * @param bound_vm -> A pointer to the current VM
  */
 typedef struct MargObject {
     bool is_marked;
@@ -28,7 +28,7 @@ typedef struct MargObject {
     table instance_variables;
     table messages;
 
-    table *global_variables;
+    VM *bound_vm;
 } MargObject;
 
 /**
@@ -37,6 +37,6 @@ typedef struct MargObject {
  * @param name -> Name of the object
  * @return MargObject*
  */
-MargObject *marg_object_new(table *global_variables, size_t size, char *name, size_t name_size);
+MargObject *marg_object_new(VM *bound_vm, size_t size, char *name, size_t name_size);
 
 #endif
