@@ -68,11 +68,14 @@
 #include "loader/file_loader.spec.h"
 
 // opcode
+#include "opcode/ActivationRecord.spec.h"
 #include "opcode/MargFalse.spec.h"
 #include "opcode/MargFloat.spec.h"
 #include "opcode/MargInteger.spec.h"
+#include "opcode/MargMethod.spec.h"
 #include "opcode/MargNil.spec.h"
-#include "opcode/MargPointer.spec.h"
+#include "opcode/MargObject.spec.h"
+#include "opcode/MargProc.spec.h"
 #include "opcode/MargString.spec.h"
 #include "opcode/MargTrue.spec.h"
 #include "opcode/MargValue.spec.h"
@@ -152,11 +155,14 @@ spec_suite({
 
     file_loader_spec();
 
+    ActivationRecordSpec();
     MargFalseSpec();
     MargFloatSpec();
     MargIntegerSpec();
+    MargMethodSpec();
     MargNilSpec();
-    MargPointerSpec();
+    MargObjectSpec();
+    MargProcSpec();
     MargStringSpec();
     MargTrueSpec();
     MargValueSpec();
