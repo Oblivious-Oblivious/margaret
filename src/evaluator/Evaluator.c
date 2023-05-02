@@ -9,6 +9,7 @@
 #include "../opcode/MargFalse.h"
 #include "../opcode/MargTrue.h"
 #include "../opcode/MargInteger.h"
+
 /**
  * @brief Runs the iterator that evaluates
     the result of the generated opcodes
@@ -33,8 +34,7 @@ static EvaluatorResult evaluator_run(VM *vm) {
             }
 
             case OP_PUT_NIL: {
-                MargValue nilv = MARG_NIL;
-                STACK_PUSH(vm, nilv);
+                STACK_PUSH(vm, MARG_NIL);
                 break;
             }
             case OP_PUT_TRUE: {
