@@ -1,25 +1,15 @@
 #include "vm.h"
 
-#include "../opcode/MargString.h"
-#include "../opcode/MargObject.h"
-#include "../opcode/MargMethod.h"
+#include "Margaret.h"
 
 static void Margaret_primitives(VM *vm) {
-    MargObject *marg = AS_OBJECT(MARG_OBJECT("$Margaret", 10));
-    MargMethod *main = AS_METHOD(MARG_METHOD(marg));
-    main->proc = AS_PROC(MARG_PROC(main));
+    primitive_1_margaret_main(vm);
+}
 
-    table_set(
-        &marg->messages,
-        MARG_STRING("main:", 6),
-        QNAN_BOX(main)
-    );
-
-    table_set(
-        &vm->global_variables,
-        MARG_STRING("$Margaret", 10),
-        QNAN_BOX(marg)
-    );
+static void set_initial_current_record_to_main(VM *vm) {
+    MargObject *marg = AS_OBJECT(table_get(&vm->global_variables, MARG_STRING("$Margaret", 10)));
+    MargMethod *main = AS_METHOD(table_get(&marg->messages, MARG_STRING("main:", 6)));
+    vm->current = main->proc->code;
 }
 
 /**
@@ -35,9 +25,7 @@ static void primitives_define(VM *vm) {
     // Float_primitives(vm);
     // String_primitives(vm);
 
-    MargObject *marg = AS_OBJECT(table_get(&vm->global_variables, MARG_STRING("$Margaret", 10)));
-    MargMethod *main = AS_METHOD(table_get(&marg->messages, MARG_STRING("main:", 6)));
-    vm->main = main->proc->code;
+    set_initial_current_record_to_main(vm);
 }
 
 VM *vm_new(void) {
