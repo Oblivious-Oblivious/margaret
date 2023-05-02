@@ -29,25 +29,25 @@ typedef struct VM {
 /** @brief Better assurances for inlining */
 #define inline __inline__
 
-inline void STACK_PUSH(VM *self, MargValue item) {
-    *self->sp++ = item;
+inline void STACK_PUSH(VM *vm, MargValue item) {
+    *vm->sp++ = item;
 }
 
-inline MargValue STACK_POP(VM *self) {
-    return *--self->sp;
+inline MargValue STACK_POP(VM *vm) {
+    return *--vm->sp;
 }
 
-inline MargValue STACK_PEEK(VM *self, int distance) {
-    return *(self->sp - 1 - distance);
+inline MargValue STACK_PEEK(VM *vm, int distance) {
+    return *(vm->sp - 1 - distance);
 }
 
-#define READ_BYTE() (*self->ip++)
+#define READ_BYTE() (*vm->main->ip++)
 #define READ_WORD() (bytes_to_word((uint8_t[2]){READ_BYTE(), READ_BYTE()}))
 #define READ_DWORD() (bytes_to_dword((uint8_t[4]){READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE()}))
 #define READ_QWORD() (bytes_to_qword((uint8_t[8]){READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE()}))
 
-#define READ_TEMPORARY() (chunk_temporaries_get(self->bytecode, READ_BYTE()))
-#define READ_LONG_TEMPORARY() (chunk_temporaries_get(self->bytecode, READ_DWORD()))
+#define READ_TEMPORARY() (chunk_temporaries_get(vm->main->bytecode, READ_BYTE()))
+#define READ_LONG_TEMPORARY() (chunk_temporaries_get(vm->main->bytecode, READ_DWORD()))
 
 /**
  * @brief Creates a new VM instance
