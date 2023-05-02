@@ -171,7 +171,7 @@ vector *ast_expression(vector *unit) {
 }
 
 vector *ast_margaret_object(void) {
-    return vector_new(FM_LOCAL, string_new("Margaret"));
+    return vector_new(FM_GLOBAL, string_new("Margaret"));
 }
 
 vector *ast_group(vector *unit_list) {
