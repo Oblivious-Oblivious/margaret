@@ -1,6 +1,8 @@
 #ifndef __MARG_VALUE_H_
 #define __MARG_VALUE_H_
 
+#include <string.h> /* strcmp */
+
 #include "../base/string.h"
 #include "../base/fnv_1a_64_hash.h"
 
@@ -44,12 +46,15 @@ typedef uint64_t MargValue;
 #define IS_UNDEFINED(value)                          ((value) == MARG_UNDEFINED)
 #define IS_NOT_INTERNED(value)                       ((value) == MARG_NOT_INTERNED)
 
-#define IS_NIL(value)                                (QNAN_UNBOX(value)->type == MARG_NIL_TYPE)
-#define IS_FALSE(value)                              (QNAN_UNBOX(value)->type == MARG_FALSE_TYPE)
-#define IS_TRUE(value)                               (QNAN_UNBOX(value)->type == MARG_TRUE_TYPE)
-#define IS_INTEGER(value)                            (QNAN_UNBOX(value)->type == MARG_INTEGER_TYPE)
-#define IS_FLOAT(value)                              (QNAN_UNBOX(value)->type == MARG_FLOAT_TYPE)
-#define IS_STRING(value)                             (QNAN_UNBOX(value)->type == MARG_STRING_TYPE)
+// TODO Eventually remove predefined types
+// TODO $nil, $true, $false -> Singleton objects
+// TODO Atomic value objects like (integer, float, string) return self on clone
+#define IS_NIL(value)                                (!strcmp(QNAN_UNBOX(value)->name, "$nil"))
+#define IS_FALSE(value)                              (!strcmp(QNAN_UNBOX(value)->name, "$false"))
+#define IS_TRUE(value)                               (!strcmp(QNAN_UNBOX(value)->name, "$true"))
+#define IS_INTEGER(value)                            (!strcmp(QNAN_UNBOX(value)->name, "$Integer"))
+#define IS_FLOAT(value)                              (!strcmp(QNAN_UNBOX(value)->name, "$Float"))
+#define IS_STRING(value)                             (!strcmp(QNAN_UNBOX(value)->name, "$String"))
 
 /**
  * @brief Formats a marg value using QNAN boxing
