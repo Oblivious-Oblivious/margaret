@@ -1,6 +1,6 @@
 {(
-    Margaret = Margaret subclass,
-    Margaret extend: (
+    $Margaret = $Margaret subclass,
+    $Margaret extend: (
         #new => Primitive no: 1,
         #not => Primitive no: 2,
         #!= other => Primitive no: 3,

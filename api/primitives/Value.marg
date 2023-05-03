@@ -1,7 +1,7 @@
 {(
-    Value = Object clone,
-    Value extend: (
-        #== other => false,
+    $Value = Object clone,
+    $Value extend: (
+        #== other => $false,
         #dup => self,
         #clone => self
     )
