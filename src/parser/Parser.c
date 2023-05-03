@@ -312,10 +312,6 @@ vector *parser_binary_method_definition(Parser *self, vector *multimethod_object
         ensure_value("_", "missing '_' on multimethod default parameter");
         param = parser_any_object();
     }
-    else if(lookahead_1_value_equals("$") && lookahead_2_type_equals(TOKEN_IDENTIFIER)) {
-        ensure_value("$", "primitives '$nil', '$false' and '$true' are globals and require '$' for reference.");
-        param = parser_global_primitive_method_parameter(ensure_type(TOKEN_IDENTIFIER, "expected one parameter on binary method definition."));
-    }
     else if(lookahead_1_type_equals(TOKEN_IDENTIFIER)) {
         param = parser_method_parameter(ensure_type(TOKEN_IDENTIFIER, "expected one parameter on binary method definition."));
     }
@@ -341,10 +337,6 @@ vector *parser_keyword_method_definition(Parser *self, vector *multimethod_objec
         if(lookahead_1_value_equals("_")) {
             ensure_value("_", "missing '_' on multimethod default parameter");
             vector_add(params, parser_any_object());
-        }
-        else if(lookahead_1_value_equals("$") && lookahead_2_type_equals(TOKEN_IDENTIFIER)) {
-            ensure_value("$", "primitives '$nil', '$false' and '$true' are globals and require '$' for reference.");
-            vector_add(params, parser_global_primitive_method_parameter(ensure_type(TOKEN_IDENTIFIER, "expected keyword parameter.")));
         }
         else if(lookahead_1_type_equals(TOKEN_IDENTIFIER)) {
             vector_add(params, parser_method_parameter(ensure_type(TOKEN_IDENTIFIER, "expected keyword parameter.")));
@@ -380,7 +372,13 @@ vector *parser_literal(Parser *self) {
         sign = ensure_value("-", "expected '-' on literal.");
 
     // TODO Add different integer sizes
-    if(lookahead_1_type_equals(TOKEN_INTEGER))
+    if(lookahead_1_value_equals("$") && lookahead_2_value_equals("nil"))
+        return ast_literal(parser_nil_literal(self));
+    else if(lookahead_1_value_equals("$") && lookahead_2_value_equals("false"))
+        return ast_literal(parser_false_literal(self));
+    else if(lookahead_1_value_equals("$") && lookahead_2_value_equals("true"))
+        return ast_literal(parser_true_literal(self));
+    else if(lookahead_1_type_equals(TOKEN_INTEGER))
         return ast_literal(parser_integer_literal(self, sign));
     else if(lookahead_1_type_equals(TOKEN_FLOAT))
         return ast_literal(parser_float_literal(self, sign));
@@ -402,6 +400,24 @@ vector *parser_literal(Parser *self) {
     }
     else
         return ast_empty();
+}
+
+vector *parser_nil_literal(Parser *self) {
+    ensure_value("$", "primitive '$nil' is global and requires '$' for reference.");
+    ensure_value("nil", "");
+    return ast_nil_literal();
+}
+
+vector *parser_false_literal(Parser *self) {
+    ensure_value("$", "primitive '$false' is global and requires '$' for reference.");
+    ensure_value("false", "");
+    return ast_false_literal();
+}
+
+vector *parser_true_literal(Parser *self) {
+    ensure_value("$", "primitive '$true' is global and requires '$' for reference.");
+    ensure_value("true", "");
+    return ast_true_literal();
 }
 
 vector *parser_integer_literal(Parser *self, string *sign) {

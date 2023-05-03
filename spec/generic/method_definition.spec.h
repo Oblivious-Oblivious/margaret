@@ -5,6 +5,30 @@
 
 module(method_definition_spec, {
     it("parses unary methods", {
+        parse("# $true not => $false", vector_new( \
+            FM_LOCAL, string_new("Method"), \
+            FM_UNARY, string_new("unary"), \
+            FM_TRUE, \
+            FM_STRING, string_new("not"), \
+            FM_START_PROC, \
+                FM_PROC_PARAMETER, FM_SELF, \
+                FM_FALSE, \
+            FM_END_PROC, \
+            FM_KEYWORD, string_new("object:message:method:"), string_new("3") \
+        ));
+
+        parse("# $false neg => $nil", vector_new( \
+            FM_LOCAL, string_new("Method"), \
+            FM_UNARY, string_new("unary"), \
+            FM_FALSE, \
+            FM_STRING, string_new("neg"), \
+            FM_START_PROC, \
+                FM_PROC_PARAMETER, FM_SELF, \
+                FM_NIL, \
+            FM_END_PROC, \
+            FM_KEYWORD, string_new("object:message:method:"), string_new("3") \
+        ));
+
         parse("#incr => self + 1", vector_new( \
             FM_LOCAL, string_new("Method"), \
             FM_UNARY, string_new("unary"), \

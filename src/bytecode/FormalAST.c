@@ -369,13 +369,7 @@ vector *ast_any_object(void) {
 }
 
 vector *ast_method_parameter(string *param_name) {
-    if(string_equals(param_name, string_new("$nil")))
-        return vector_new(FM_NIL);
-    else if(string_equals(param_name, string_new("$true")))
-        return vector_new(FM_TRUE);
-    else if(string_equals(param_name, string_new("$false")))
-        return vector_new(FM_FALSE);
-    else if(string_equals(param_name, string_new("self")))
+    if(string_equals(param_name, string_new("self")))
         return vector_new(FM_SELF);
     else if(string_equals(param_name, string_new("super")))
         return vector_new(FM_SUPER);
@@ -385,6 +379,18 @@ vector *ast_method_parameter(string *param_name) {
 
 vector *ast_literal(vector *unit) {
     return unit;
+}
+
+vector *ast_nil_literal(void) {
+    return vector_new(FM_NIL);
+}
+
+vector *ast_false_literal(void) {
+    return vector_new(FM_FALSE);
+}
+
+vector *ast_true_literal(void) {
+    return vector_new(FM_TRUE);
 }
 
 vector *ast_integer_literal(string *sign, string *number) {

@@ -35,6 +35,9 @@ vector *ast_any_object(void);
 vector *ast_method_parameter(string *param_name);
 
 vector *ast_literal(vector *unit);
+vector *ast_nil_literal(void);
+vector *ast_false_literal(void);
+vector *ast_true_literal(void);
 vector *ast_integer_literal(string *sign, string *number);
 vector *ast_float_literal(string *sign, string *number);
 vector *ast_string_literal(string *string);
