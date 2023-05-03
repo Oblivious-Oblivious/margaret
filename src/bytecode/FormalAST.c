@@ -183,6 +183,7 @@ vector *ast_group(vector *unit_list) {
         size_t item_size = vector_size(item);
         for(size_t j = 0; j < item_size; j++)
             vector_add(res, vector_get(item, j));
+        vector_add(res, FM_POP);
     }
 
     if(vector_size(res) == 0)

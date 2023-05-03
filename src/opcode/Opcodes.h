@@ -4,6 +4,8 @@
 #include "../base/string.h"
 
 // ------ Formal Messages Opcodes ------
+#define FM_POP               string_new("POP")
+
 #define FM_LOCAL             string_new("LOCAL")
 #define FM_INSTANCE          string_new("INSTANCE")
 #define FM_GLOBAL            string_new("GLOBAL")

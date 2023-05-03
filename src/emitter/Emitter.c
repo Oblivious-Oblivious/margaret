@@ -81,6 +81,10 @@ VM *emitter_emit(vector *formal_bytecode) {
 
         if(string_equals(opcode, FM_LOCAL)) {}
         opcode_case(FM_INSTANCE) {}
+        if(string_equals(opcode, FM_POP)) {
+            emit_byte(OP_POP);
+        }
+
         opcode_case(FM_GLOBAL) {
             string *variable_name = vector_get(formal_bytecode, ++ip);
             MargValue temporary = MARG_STRING(variable_name->str, variable_name->size);
