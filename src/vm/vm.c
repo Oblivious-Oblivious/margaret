@@ -3,7 +3,11 @@
 #include "Margaret.h"
 
 static void Margaret_primitives(VM *vm) {
-    primitive_1_margaret_main(vm);
+    MargObject *object = AS_OBJECT(MARG_OBJECT("$Margaret", 10));
+
+    primitive_1_margaret_main(vm, object);
+
+    table_set(&vm->global_variables, MARG_STRING("$Margaret", 10), QNAN_BOX(object));
 }
 
 static void set_initial_current_record_to_main(VM *vm) {
