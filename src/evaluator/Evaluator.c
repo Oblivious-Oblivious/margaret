@@ -82,6 +82,26 @@ static EvaluatorResult evaluator_run(VM *vm) {
                 STACK_POP(vm);
                 break;
             }
+            case OP_SET_INSTANCE: {
+                table_set(vm->current->instance_variables, READ_TEMPORARY(), STACK_PEEK(vm, 0));
+                STACK_POP(vm);
+                break;
+            }
+            case OP_SET_INSTANCE_LONG: {
+                table_set(vm->current->instance_variables, READ_LONG_TEMPORARY(), STACK_PEEK(vm, 0));
+                STACK_POP(vm);
+                break;
+            }
+            case OP_SET_LOCAL: {
+                table_set(&vm->current->local_variables, READ_TEMPORARY(), STACK_PEEK(vm, 0));
+                STACK_POP(vm);
+                break;
+            }
+            case OP_SET_LOCAL_LONG: {
+                table_set(&vm->current->local_variables, READ_LONG_TEMPORARY(), STACK_PEEK(vm, 0));
+                STACK_POP(vm);
+                break;
+            }
 
             case OP_GET_GLOBAL: {
                 STACK_PUSH(vm, table_get(&vm->global_variables, READ_TEMPORARY()));
@@ -89,6 +109,22 @@ static EvaluatorResult evaluator_run(VM *vm) {
             }
             case OP_GET_GLOBAL_LONG: {
                 STACK_PUSH(vm, table_get(&vm->global_variables, READ_LONG_TEMPORARY()));
+                break;
+            }
+            case OP_GET_INSTANCE: {
+                STACK_PUSH(vm, table_get(vm->current->instance_variables, READ_TEMPORARY()));
+                break;
+            }
+            case OP_GET_INSTANCE_LONG: {
+                STACK_PUSH(vm, table_get(vm->current->instance_variables, READ_LONG_TEMPORARY()));
+                break;
+            }
+            case OP_GET_LOCAL: {
+                STACK_PUSH(vm, table_get(&vm->current->local_variables, READ_TEMPORARY()));
+                break;
+            }
+            case OP_GET_LOCAL_LONG: {
+                STACK_PUSH(vm, table_get(&vm->current->local_variables, READ_LONG_TEMPORARY()));
                 break;
             }
 
