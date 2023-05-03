@@ -5,10 +5,8 @@
 #include "../opcode/MargObject.h"
 #include "../opcode/MargMethod.h"
 
-static void primitive_1_margaret_main(VM *vm) {
-    MargMethod *method = AS_METHOD(MARG_METHOD(object));
-
-    table_set(&object->messages, MARG_STRING("main:", 6), QNAN_BOX(method));
+static void primitive_1_margaret_main(VM *vm, MargObject *object) {
+    table_set(&object->messages, MARG_STRING("main:", 6), MARG_METHOD(object));
 }
 
 #endif
