@@ -14,7 +14,7 @@ typedef struct VM VM;
 #define SIGN_BIT   ((uint64_t)0x8000000000000000)
 #define EXPONENTS  ((uint64_t)0x7ff0000000000000)
 #define QNAN       ((uint64_t)0x0008000000000000)
-#define FP_IND     ((uint64_t)0x000c000000000000)
+#define FP_IND     ((uint64_t)0x0004000000000000)
 #define ENCODING   (EXPONENTS | QNAN | FP_IND)
 
 #define QNAN_BOX(pointer)                            ((MargValue)(ENCODING | (uint64_t)(uintptr_t)(pointer)))
