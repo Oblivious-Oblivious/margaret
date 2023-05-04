@@ -6,9 +6,9 @@
 
 struct MargMethod {
     MargObject _;
-    MargProc *proc;
-
     MargObject *bound_object;
+
+    MargProc *proc;
 };
 
 MargMethod *marg_method_new(VM *vm, MargObject *bound_object);

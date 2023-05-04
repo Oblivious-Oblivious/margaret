@@ -5,6 +5,7 @@ MargMethod *marg_method_new(VM *vm, MargObject *bound_object) {
     MargMethod *self = (MargMethod*)obj;
 
     self->bound_object = bound_object;
+
     self->proc = marg_proc_new(vm, self);
 
     return self;

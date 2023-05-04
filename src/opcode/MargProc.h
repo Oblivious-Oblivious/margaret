@@ -9,8 +9,9 @@
 
 struct MargProc {
     MargObject _;
-    table parameters;
     MargMethod *bound_method;
+
+    table parameters;
     ActivationRecord *activation_record;
 };
 

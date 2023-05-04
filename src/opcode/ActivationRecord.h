@@ -8,13 +8,13 @@
 #include "../vm/vm.h"
 
 struct ActivationRecord {
-    chunk *bytecode;
-    uint8_t *ip;
+    MargProc *bound_proc;
+    table *global_variables;
+    table *instance_variables;
     table local_variables;
 
-    MargProc *bound_proc;
-    table *instance_variables;
-    table *global_variables;
+    chunk *bytecode;
+    uint8_t *ip;
 };
 
 ActivationRecord *activation_record_new(MargProc *bound_proc);

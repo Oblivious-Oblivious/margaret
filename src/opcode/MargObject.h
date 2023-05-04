@@ -24,11 +24,11 @@ typedef struct MargObject {
     bool is_marked;
     struct MargObject *next;
 
+    VM *bound_vm;
+
     char *name;
     table instance_variables;
     table messages;
-
-    VM *bound_vm;
 } MargObject;
 
 /**
