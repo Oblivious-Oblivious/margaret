@@ -85,62 +85,6 @@
 // #define FM_METHOD_BINARY                    0xff
 // #define FM_METHOD_KEYWORD                   0xff
 
-
-
-
-
-
-
-
-
-
-
-
-
-// #define OP_DECLARE_VARIABLE              string_new("DECLARE_VARIABLE")
-// #define OP_GENERATE_IDENTIFIER_POSITION  string_new("GENERATE_IDENTIFIER_POSITION")
-// #define OP_ADD_VARIABLE_TO_VECTOR        string_new("ADD_VARIABLE_TO_VECTOR")
-// #define OP_MAKE_VARIABLE                 string_new("MAKE_VARIABLE")
-// #define OP_COMPILER_NEW                  string_new("COMPILER_NEW")
-// #define OP_SCOPE_BEGIN                   string_new("SCOPE_BEGIN")
-// #define OP_SCOPE_END                     string_new("SCOPE_END")
-
-// #define OP_NIL                           string_new("NIL")
-// #define OP_TRUE                          string_new("TRUE")
-// #define OP_FALSE                         string_new("FALSE")
-// #define OP_SELF                          string_new("SELF")
-// #define OP_SUPER                         string_new("SUPER")
-// #define OP_0                             string_new("0")
-// #define OP_1                             string_new("1")
-// #define OP_MINUS_1                       string_new("MINUS_1")
-// #define OP_2                             string_new("2")
-// #define OP_INTEGER                       string_new("INTEGER")
-// #define OP_FLOAT                         string_new("FLOAT")
-// #define OP_CHAR                          string_new("CHAR")
-// #define OP_STRING                        string_new("STRING")
-// #define OP_VARIABLE                      string_new("VARIABLE")
-// #define OP_INSTANCE                      string_new("INSTANCE")
-// #define OP_TENSOR                        string_new("TENSOR")
-// #define OP_TUPLE                         string_new("TUPLE")
-// #define OP_BITSTRING                     string_new("BITSTRING")
-// #define OP_HASH                          string_new("HASH")
-
-// #define OP_ANY_OBJECT                    string_new("ANY_OBJECT")
-// #define OP_METHOD_PARAMETER              string_new("METHOD_PARAMETER")
-
-// #define OP_START_PROC                    string_new("START_PROC")
-// #define OP_END_PROC                      string_new("END_PROC")
-// #define OP_START_C_FUNCTION              string_new("START_C_FUNCTION")
-// #define OP_END_C_FUNCTION                string_new("END_C_FUNCTION")
-
-// #define OP_POP                           string_new("POP")
-// #define OP_POPN                          string_new("POPN")
-
-// #define OP_STORE                         string_new("STORE")
-// #define OP_STORE_LOCAL                   string_new("STORE_LOCAL")
-// #define OP_STORE_GLOBAL                  string_new("STORE_GLOBAL")
-// #define OP_STORE_UPVALUE                 string_new("STORE_UPVALUE")
-
 // #define OP_LABEL                         string_new("LABEL")
 
 // #define OP_JUMP                          string_new("JUMP")
