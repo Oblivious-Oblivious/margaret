@@ -2,7 +2,9 @@
 
 #include "../base/memory.h"
 
-MargObject *marg_object_new(VM *bound_vm, size_t size, char *name, size_t name_size) {
+#include <string.h> /* strlen */
+
+MargObject *marg_object_new(VM *bound_vm, size_t size, char *name) {
     MargObject *self = (MargObject*)collected_malloc(sizeof(MargObject) * size);
 
     self->is_marked = false;
@@ -10,7 +12,7 @@ MargObject *marg_object_new(VM *bound_vm, size_t size, char *name, size_t name_s
 
     self->bound_vm = bound_vm;
 
-    self->name = (char*)malloc(sizeof(char) * name_size);
+    self->name = (char*)malloc(sizeof(char) * strlen(name));
     self->name = name;
     table_init(&self->instance_variables);
     table_init(&self->messages);

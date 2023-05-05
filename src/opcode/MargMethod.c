@@ -1,7 +1,7 @@
 #include "MargMethod.h"
 
 MargMethod *marg_method_new(VM *vm, MargObject *bound_object) {
-    MargObject *obj = marg_object_new(vm, sizeof(MargMethod), "$Method", 8);
+    MargObject *obj = marg_object_new(vm, sizeof(MargMethod), "$Method");
     MargMethod *self = (MargMethod*)obj;
 
     self->bound_object = bound_object;

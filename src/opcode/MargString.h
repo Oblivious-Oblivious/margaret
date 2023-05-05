@@ -13,6 +13,6 @@ typedef struct MargString {
     char chars[];
 } MargString;
 
-MargString *marg_string_new(VM *vm, char *chars, size_t size);
+MargString *marg_string_new(VM *vm, char *chars);
 
 #endif

@@ -42,9 +42,9 @@ typedef struct VM VM;
 #define MARG_1                                       (QNAN_BOX(marg_integer_new(vm, 1)))
 #define MARG_2                                       (QNAN_BOX(marg_integer_new(vm, 2)))
 #define MARG_FLOAT(number)                           (QNAN_BOX(marg_float_new(vm, (number))))
-#define MARG_STRING(chars, size)                     (QNAN_BOX(marg_string_new(vm, (chars), (size))))
+#define MARG_STRING(chars)                           (QNAN_BOX(marg_string_new(vm, (chars))))
 #define MARG_STRING_INTERNED(chars, size)            (QNAN_BOX(table_find_string(&vm->interned_strings, (chars), (size), fnv_1a_64_hash((chars), (size)))))
-#define MARG_OBJECT(name, name_size)                 (QNAN_BOX(marg_object_new(vm, sizeof(MargObject), (name), (name_size))))
+#define MARG_OBJECT(name)                            (QNAN_BOX(marg_object_new(vm, sizeof(MargObject), (name))))
 #define MARG_METHOD(bound_object)                    (QNAN_BOX(marg_method_new(vm, (bound_object))))
 #define MARG_PROC(bound_method)                      (QNAN_BOX(marg_proc_new(vm, (bound_method))))
 

@@ -9,6 +9,13 @@
 #include "../opcode/MargFalse.h"
 #include "../opcode/MargTrue.h"
 #include "../opcode/MargInteger.h"
+#include "../opcode/MargString.h"
+
+static ActivationRecord *get_margaret_main_activation_record(VM *vm) {
+    MargObject *margaret_object = AS_OBJECT(table_get(&vm->global_variables, MARG_STRING("$Margaret")));
+    MargMethod *main_method = AS_METHOD(table_get(&margaret_object->messages, MARG_STRING("main:")));
+    return main_method->proc->activation_record;
+}
 
 /**
  * @brief Runs the iterator that evaluates

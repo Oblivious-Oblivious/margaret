@@ -74,8 +74,8 @@ static void add_premade_temporary(VM *vm, uint32_t temporary_index) {
 
 VM *emitter_emit(vector *formal_bytecode) {
     VM *vm = vm_new();
-    MargObject *marg_object = AS_OBJECT(table_get(&vm->global_variables, MARG_STRING("$Margaret", 10)));
-    MargMethod *main_method = AS_METHOD(table_get(&marg_object->messages, MARG_STRING("main:", 6)));
+    MargObject *marg_object = AS_OBJECT(table_get(&vm->global_variables, MARG_STRING("$Margaret")));
+    MargMethod *main_method = AS_METHOD(table_get(&marg_object->messages, MARG_STRING("main:")));
     ActivationRecord *Margaret_main_activation_record = main_method->proc->activation_record;
 
     size_t bytecode_size = vector_size(formal_bytecode);
@@ -88,19 +88,19 @@ VM *emitter_emit(vector *formal_bytecode) {
 
         opcode_case(FM_LOCAL) {
             string *variable_name = vector_get(formal_bytecode, ++ip);
-            MargValue temporary = MARG_STRING(variable_name->str, variable_name->size);
+            MargValue temporary = MARG_STRING(variable_name->str);
             emit_possible_long_op(OP_GET_LOCAL);
             emit_temporary(temporary);
         }
         opcode_case(FM_INSTANCE) {
             string *variable_name = vector_get(formal_bytecode, ++ip);
-            MargValue temporary = MARG_STRING(variable_name->str, variable_name->size);
+            MargValue temporary = MARG_STRING(variable_name->str);
             emit_possible_long_op(OP_GET_INSTANCE);
             emit_temporary(temporary);
         }
         opcode_case(FM_GLOBAL) {
             string *variable_name = vector_get(formal_bytecode, ++ip);
-            MargValue temporary = MARG_STRING(variable_name->str, variable_name->size);
+            MargValue temporary = MARG_STRING(variable_name->str);
             emit_possible_long_op(OP_GET_GLOBAL);
             emit_temporary(temporary);
         }
@@ -144,7 +144,7 @@ VM *emitter_emit(vector *formal_bytecode) {
 
             emit_possible_long_op(OP_SET_GLOBAL);
 
-            MargValue temporary = MARG_STRING(variable_name->str, variable_name->size);
+            MargValue temporary = MARG_STRING(variable_name->str);
             MargValue interned_index = table_get(&vm->interned_strings, temporary);
             if(!IS_UNDEFINED(interned_index)) {
                 add_premade_temporary(vm, (uint32_t)AS_INTEGER(interned_index)->value);
@@ -204,7 +204,7 @@ VM *emitter_emit(vector *formal_bytecode) {
             emit_possible_long_op(OP_PUT_OBJECT);
 
             if(IS_NOT_INTERNED(interned)) {
-                interned = MARG_STRING(chars, size);
+                interned = MARG_STRING(chars);
 
                 uint32_t temporary_index;
                 make_temporary(vm, interned, &temporary_index);

@@ -37,6 +37,6 @@ typedef struct MargObject {
  * @param name -> Name of the object
  * @return MargObject*
  */
-MargObject *marg_object_new(VM *bound_vm, size_t size, char *name, size_t name_size);
+MargObject *marg_object_new(VM *bound_vm, size_t size, char *name);
 
 #endif
