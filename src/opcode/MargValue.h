@@ -67,6 +67,9 @@ typedef struct VM VM;
 #define IS_INTEGER(value)                            (!strcmp(QNAN_UNBOX(value)->name, "$Integer"))
 #define IS_FLOAT(value)                              (!strcmp(QNAN_UNBOX(value)->name, "$Float"))
 #define IS_STRING(value)                             (!strcmp(QNAN_UNBOX(value)->name, "$String"))
+#define IS_OBJECT(value)                             (!strcmp(QNAN_UNBOX(value)->name, "$Object"))
+#define IS_METHOD(value)                             (!strcmp(QNAN_UNBOX(value)->name, "$Method"))
+#define IS_PROC(value)                               (!strcmp(QNAN_UNBOX(value)->name, "$Proc"))
 
 /**
  * @brief Formats a marg value using QNAN boxing
