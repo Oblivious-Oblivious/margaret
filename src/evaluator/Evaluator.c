@@ -22,7 +22,7 @@ static ActivationRecord *get_margaret_main_activation_record(VM *vm) {
     the result of the generated opcodes
  * @param vm -> result enum
  */
-static EvaluatorResult evaluator_run(VM *vm) {
+static void evaluator_run(VM *vm) {
     vm->current = get_margaret_main_activation_record(vm);
     vm->current->ip = vm->current->bytecode->items;
 
@@ -35,7 +35,7 @@ static EvaluatorResult evaluator_run(VM *vm) {
                 break;
             }
             case OP_RETURN: {
-                return EVALUATOR_OK;
+                return;
             }
             case TEST_OP_PRINT: {
                 printf("%s\n", string_get(marg_value_format(STACK_PEEK(vm, 0))));
@@ -155,8 +155,6 @@ static EvaluatorResult evaluator_run(VM *vm) {
 }
 
 MargValue evaluator_evaluate(VM *vm) {
-    EvaluatorResult result = evaluator_run(vm);
-    (void)result; // TODO
-
+    evaluator_run(vm);
     return STACK_PEEK(vm, 0);
 }
