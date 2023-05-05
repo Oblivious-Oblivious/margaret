@@ -107,54 +107,18 @@ VM *emitter_emit(vector *formal_bytecode) {
 
         opcode_case(FM_STORE_LOCAL) {
             string *variable_name = vector_get(formal_bytecode, ++ip);
-
             emit_possible_long_op(OP_SET_LOCAL);
-
-            MargValue temporary = MARG_STRING(variable_name->str, variable_name->size);
-            MargValue interned_index = table_get(&vm->interned_strings, temporary);
-            if(!IS_UNDEFINED(interned_index)) {
-                add_premade_temporary(vm, (uint32_t)AS_INTEGER(interned_index)->value);
-            }
-            else {
-                uint32_t temporary_index;
-                make_temporary(vm, temporary, &temporary_index);
-                table_set(&vm->interned_strings, temporary, MARG_INTEGER(temporary_index));
-                add_temporary(vm, temporary_index);
-            }
+            emit_temporary(MARG_STRING(variable_name->str));
         }
         opcode_case(FM_STORE_INSTANCE) {
             string *variable_name = vector_get(formal_bytecode, ++ip);
-
             emit_possible_long_op(OP_SET_INSTANCE);
-
-            MargValue temporary = MARG_STRING(variable_name->str, variable_name->size);
-            MargValue interned_index = table_get(&vm->interned_strings, temporary);
-            if(!IS_UNDEFINED(interned_index)) {
-                add_premade_temporary(vm, (uint32_t)AS_INTEGER(interned_index)->value);
-            }
-            else {
-                uint32_t temporary_index;
-                make_temporary(vm, temporary, &temporary_index);
-                table_set(&vm->interned_strings, temporary, MARG_INTEGER(temporary_index));
-                add_temporary(vm, temporary_index);
-            }
+            emit_temporary(MARG_STRING(variable_name->str));
         }
         opcode_case(FM_STORE_GLOBAL) {
             string *variable_name = vector_get(formal_bytecode, ++ip);
-
             emit_possible_long_op(OP_SET_GLOBAL);
-
-            MargValue temporary = MARG_STRING(variable_name->str);
-            MargValue interned_index = table_get(&vm->interned_strings, temporary);
-            if(!IS_UNDEFINED(interned_index)) {
-                add_premade_temporary(vm, (uint32_t)AS_INTEGER(interned_index)->value);
-            }
-            else {
-                uint32_t temporary_index;
-                make_temporary(vm, temporary, &temporary_index);
-                table_set(&vm->interned_strings, temporary, MARG_INTEGER(temporary_index));
-                add_temporary(vm, temporary_index);
-            }
+            emit_temporary(MARG_STRING(variable_name->str));
         }
 
         opcode_case(FM_NIL) {
