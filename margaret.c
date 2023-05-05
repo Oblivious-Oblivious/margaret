@@ -1,9 +1,6 @@
 // Copyright (C) 2023 Thanasis Papapostolou (Oblivious)
 
-#include <stdio.h>
-
-#include "libs/readline/readline/readline.h"
-#include "libs/readline/readline/history.h"
+#include <stdio.h> /* printf */
 
 #include "src/base/string.h"
 #include "src/base/vector.h"
@@ -14,6 +11,7 @@
 #include "src/loader/file_loader.h"
 #include "src/optimizer/Optimizer.h"
 #include "src/parser/Parser.h"
+#include "src/scanner/Scanner.h"
 #include "src/vm/vm.h"
 
 static string *LOAD(char *filename) {
@@ -21,16 +19,7 @@ static string *LOAD(char *filename) {
 }
 
 static string *SCAN(char *prompt) {
-    // TODO Abstract to own file
-    char *line = readline(prompt);
-    if(!strcmp(line, ""))
-        return string_new("()");
-    else if(!strcmp(line, "<<exit>>") || !strcmp(line, "<<quit>>"))
-        exit(0);
-    else {
-        add_history(line);
-        return string_new(line);
-    }
+    return scanner_scan(prompt);
 }
 
 static TokenTable *READ(string *chars) {

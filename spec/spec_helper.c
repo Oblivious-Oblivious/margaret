@@ -86,6 +86,9 @@
 // parser
 #include "parser/Parser.spec.h"
 
+// scanner
+#include "scanner/Scanner.spec.h"
+
 // tokens
 #include "tokens/Token.spec.h"
 #include "tokens/TokenTable.spec.h"
@@ -170,6 +173,8 @@ spec_suite({
     OptimizerSpec();
 
     ParserSpec();
+
+    ScannerSpec();
 
     TokenSpec();
     TokenTableSpec();
