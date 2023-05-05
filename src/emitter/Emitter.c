@@ -195,7 +195,9 @@ VM *emitter_emit(vector *formal_bytecode) {
             emit_byte(OP_EXIT_PROC);
             vm->current = Margaret_main_activation_record;
         }
-        opcode_case(FM_PROC_PARAMETER) {}
+        opcode_case(FM_PROC_PARAMETER) {
+            ;
+        }
 
         opcode_case(FM_START_C_FUNCTION) {}
         opcode_case(FM_END_C_FUNCTION) {}
