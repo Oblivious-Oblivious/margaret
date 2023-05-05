@@ -47,8 +47,8 @@
     "ok1" puts,
     "" puts,
 
-    $ok1 = 123,
-    $ok1 puts,
+    $a = 123,
+    $a puts,
 
     $x puts,
     $x = 42,$x = 42,$x = 42,
@@ -68,12 +68,23 @@
     @a puts,
     @b puts,
 
-    p1 = { "inside of proc" puts },
-    p1 puts,
+    p0 = {|},
+    p0 puts,
 
-    p2 = { ($global = 12, $global puts) },
-    p3 = { a | (a puts) },
-    p4 = { a | (a puts, a = 12, a puts) },
-    p5 = { ("@a should be `33`:" puts, @a puts) },
-    p6 = { @a = 321 },
+    p1 = { "inside of proc" puts },
+
+    p2 = { ($a = 12, "$a should be `12`:" puts, $a puts) },
+    "$a should be `12`:" puts, $a puts,
+
+    p3 = { ("@a should be `33`:" puts, @a puts) },
+    "@a should be `33`:" puts, @a puts,
+
+    p4 = { (@a = 321, "@a should be `321`:" puts, @a puts) },
+    "@a should be `321`:" puts, @a puts,
+
+    p5 = { a | (a puts) },
+    p6 = { a | (a puts, a = 12, a puts) },
+
+    p7 = { ("y should be `5`:" puts, y puts) },
+    "y should be `5`:" puts, y puts,
 )
