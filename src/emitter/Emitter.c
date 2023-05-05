@@ -184,8 +184,6 @@ VM *emitter_emit(vector *formal_bytecode) {
         opcode_case(FM_HASH) {}
         opcode_case(FM_BITSTRING) {}
 
-        opcode_case(FM_ANY_OBJECT) {}
-        opcode_case(FM_METHOD_PARAMETER) {}
         opcode_case(FM_START_PROC) {
             MargValue new_proc = MARG_PROC(vm->current->bound_proc->bound_method);
             emit_possible_long_op(OP_PUT_OBJECT);
@@ -201,6 +199,9 @@ VM *emitter_emit(vector *formal_bytecode) {
 
         opcode_case(FM_START_C_FUNCTION) {}
         opcode_case(FM_END_C_FUNCTION) {}
+
+        opcode_case(FM_ANY_OBJECT) {}
+        opcode_case(FM_METHOD_PARAMETER) {}
 
         opcode_case(FM_UNARY) {
             emit_byte(TEST_OP_PRINT);
