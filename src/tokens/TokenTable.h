@@ -10,8 +10,7 @@
 
 typedef struct TokenTable {
     vector *token_list;
-    /* TODO Preferably size_t */
-    int64_t pos;
+    size_t pos;
 } TokenTable;
 
 void token_table_display(TokenTable *self);

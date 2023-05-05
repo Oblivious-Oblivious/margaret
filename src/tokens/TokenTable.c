@@ -30,7 +30,7 @@ TokenTable *token_table_new(void) {
     TokenTable *t = (TokenTable*)collected_malloc(sizeof(TokenTable));
 
     t->token_list = vector_new_empty();
-    t->pos = -1;
+    t->pos = 0;
 
     return t;
 }
@@ -52,12 +52,12 @@ Token *token_table_get(TokenTable *self, size_t i) {
 }
 
 Token *token_table_lookahead(TokenTable *self, size_t i) {
-    return token_table_get(self, self->pos + i);
+    return token_table_get(self, self->pos + i - 1);
 }
 
 Token *token_table_consume(TokenTable *self) {
     self->pos += 1;
-    return token_table_get(self, self->pos);
+    return token_table_get(self, self->pos - 1);
 }
 
 string *token_table_ensure_value(TokenTable *self, char *value, char *error_message) {
