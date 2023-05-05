@@ -23,6 +23,9 @@ static ActivationRecord *get_margaret_main_activation_record(VM *vm) {
  * @param vm -> result enum
  */
 static EvaluatorResult evaluator_run(VM *vm) {
+    vm->current = get_margaret_main_activation_record(vm);
+    vm->current->ip = vm->current->bytecode->items;
+
     // TODO Branch table, computed goto
     while(1) {
         uint8_t instruction;
@@ -135,13 +138,23 @@ static EvaluatorResult evaluator_run(VM *vm) {
                 break;
             }
 
+            case OP_CALL_PROC: {
+                MargProc *proc = AS_PROC(table_get(&vm->current->local_variables, READ_TEMPORARY()));
+                table_add_all(&vm->current->local_variables, &proc->activation_record->local_variables);
+                vm->current = proc->activation_record;
+                break;
+            }
+            case OP_EXIT_PROC: {
+                vm->current = get_margaret_main_activation_record(vm);
+                break;
+            }
+
             default: {}
         }
     }
 }
 
 MargValue evaluator_evaluate(VM *vm) {
-    vm->current->ip = vm->current->bytecode->items;
     EvaluatorResult result = evaluator_run(vm);
     (void)result; // TODO
 

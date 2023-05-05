@@ -191,6 +191,11 @@ static size_t inspect_instruction(vector *res, chunk *chunk, size_t offset) {
         case OP_GET_LOCAL_LONG:
             return instruction_long_variable(res, "GET_LOCAL_LONG", chunk, offset);
 
+        case OP_CALL_PROC:
+            return instruction_single(res, "CALL_PROC", chunk, offset);
+        case OP_EXIT_PROC:
+            return instruction_single(res, "EXIT_PROC", chunk, offset);
+
         default: {
             string *unknown_opcode = string_new("");
             string_addf(unknown_opcode, "Unknown opcode %d", instruction);

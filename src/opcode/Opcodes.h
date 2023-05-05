@@ -74,6 +74,9 @@
 #define OP_GET_LOCAL                        0x14
 #define OP_GET_LOCAL_LONG                   0x15
 
+#define OP_CALL_PROC                        0x16
+#define OP_EXIT_PROC                        0x17
+
 // TODO Superinstructions for incrementing, decrementing and doubling
 // TODO Superinstructions for comparing with zero
 // #define OP_SELF                             0xff
