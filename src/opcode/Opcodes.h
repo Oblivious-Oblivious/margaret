@@ -57,6 +57,7 @@
 #define OP_PUT_1                            0x06
 #define OP_PUT_2                            0x07
 
+// TODO OP_PUT_OBJECT_WORD, OP_PUT_OBJECT_DWORD, OP_PUT_OBJECT_QWORD
 #define OP_PUT_OBJECT                       0x08
 #define OP_PUT_OBJECT_LONG                  0x09
 
@@ -79,6 +80,9 @@
 
 // TODO Superinstructions for incrementing, decrementing and doubling
 // TODO Superinstructions for comparing with zero
+// TODO OP_JUMP_LOCAL -> Jumps into a label in the same context (fast jump)
+// TODO OP_JUMP -> Jumps into a label on different context (searches object->message->method->proc->activation_record)
+// TODO Label, LabelLocal primitives that store position in bytecode
 // #define OP_SELF                             0xff
 // #define OP_SUPER                            0xff
 
@@ -117,13 +121,5 @@
 // ... most used keywords
 // ...
 // ...
-
-// #define OP_SELF_UNARY                    string_new("SELF_UNARY")
-// #define OP_SELF_BINARY                   string_new("SELF_BINARY")
-// #define OP_SELF_KEYWORD                  string_new("SELF_KEYWORD")
-
-// #define OP_SUPER_UNARY                   string_new("SUPER_UNARY")
-// #define OP_SUPER_BINARY                  string_new("SUPER_BINARY")
-// #define OP_SUPER_KEYWORD                 string_new("SUPER_KEYWORD")
 
 #endif
