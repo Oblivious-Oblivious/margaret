@@ -56,11 +56,4 @@ inline MargValue STACK_PEEK(VM *vm, int distance) {
  */
 VM *vm_new(void);
 
-/**
- * @brief Explicitely frees VM memory that is kept outside of the collector
-        Memory critical sections like temporaries are kept outside of the GC
- * @param vm -> Current vm
- */
-void vm_free(VM *vm);
-
 #endif

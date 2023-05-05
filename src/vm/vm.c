@@ -43,11 +43,3 @@ VM *vm_new(void) {
 
     return vm;
 }
-
-void vm_free(VM *vm) {
-    // TODO
-    (void)vm;
-    // activation_record_free(vm->main);
-    // table_free(&vm->interned_strings);
-    // table_free(&vm->global_variables);
-}
