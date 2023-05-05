@@ -82,11 +82,7 @@ VM *emitter_emit(vector *formal_bytecode) {
     for(size_t ip = 0; ip < bytecode_size; ip++) {
         string *opcode = vector_get(formal_bytecode, ip);
 
-        if(string_equals(opcode, FM_POP)) {
-            emit_byte(OP_POP);
-        }
-
-        opcode_case(FM_LOCAL) {
+        if(string_equals(opcode, FM_LOCAL)) {
             string *variable_name = vector_get(formal_bytecode, ++ip);
             MargValue temporary = MARG_STRING(variable_name->str);
             emit_possible_long_op(OP_GET_LOCAL);
