@@ -1,6 +1,5 @@
 #include "Emitter.h"
 
-// TODO https://stackoverflow.com/questions/17002969/how-to-convert-string-to-int64-t
 #include <string.h> /* strtoll, strtold */
 
 #include "../base/chunk.h"
