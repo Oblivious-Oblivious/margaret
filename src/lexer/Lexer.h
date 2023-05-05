@@ -1,7 +1,7 @@
 #ifndef __LEXER_H_
 #define __LEXER_H_
 
-#include <stdint.h> /* int64_t, uint64_t */
+#include <stdint.h> /* size_t */
 #include <string.h> /* strlen */
 
 #include "../base/string.h"
@@ -42,9 +42,8 @@ static int regex_matches(char c, const char *matcher) {
 typedef struct Lexer {
     char *filename;
     string *text;
-    /* TODO Abstract into generic size */
-    int64_t pos;
-    uint64_t lineno;
+    size_t pos;
+    size_t lineno;
 } Lexer;
 
 /**

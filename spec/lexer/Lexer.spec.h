@@ -10,7 +10,7 @@ module(LexerSpec, {
             Lexer *l = lexer_new("file.marg", string_new("(42 factorial)"));
             assert_that_charptr(l->filename equals to "file.marg");
             assert_that_charptr(string_get(l->text) equals to "(42 factorial)");
-            assert_that_int(l->pos equals to -1);
+            assert_that_int(l->pos equals to 0);
             assert_that_int(l->lineno equals to 1);
         });
 
@@ -20,17 +20,17 @@ module(LexerSpec, {
 
                 char current_char = lexer_next_character(l);
                 assert_that(current_char is '(');
-                assert_that_int(l->pos equals to 0);
+                assert_that_int(l->pos equals to 1);
 
                 current_char = lexer_next_character(l);
                 assert_that(current_char is '4');
-                assert_that_int(l->pos equals to 1);
+                assert_that_int(l->pos equals to 2);
 
                 current_char = lexer_next_character(l);
                 current_char = lexer_next_character(l);
                 current_char = lexer_next_character(l);
                 assert_that(current_char is 'f');
-                assert_that_int(l->pos equals to 4);
+                assert_that_int(l->pos equals to 5);
             });
 
             it("reads all characters until the list ends", {

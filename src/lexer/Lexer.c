@@ -11,25 +11,25 @@ Lexer *lexer_new(char *filename, string *text) {
 
     self->filename = filename;
     self->text = text;
-    self->pos = -1;
+    self->pos = 0;
     self->lineno = 1;
 
     return self;
 }
 
 void *lexer_error(Lexer *self, char *message, string *token) {
-    fprintf(stderr, "%s:%llu: \033[1;31merror:\033[0m %s on `%s`\n", self->filename, self->lineno, message, string_get(token));
+    fprintf(stderr, "%s:%zu: \033[1;31merror:\033[0m %s on `%s`\n", self->filename, self->lineno, message, string_get(token));
     /* TODO Return a NULL token table in case of lexer error */
     return NULL;
 }
 
 char lexer_next_character(Lexer *self) {
     self->pos++;
-    return string_get_char_at_index(self->text, self->pos);
+    return string_get_char_at_index(self->text, self->pos - 1);
 }
 
 char lexer_peek_character(Lexer *self, size_t i) {
-    return string_get_char_at_index(self->text, self->pos + i);
+    return string_get_char_at_index(self->text, self->pos + i - 1);
 }
 
 static Token *lexer_tokenize_integer(Lexer *self, char c) {
