@@ -67,4 +67,13 @@
     @b = 47,
     @a puts,
     @b puts,
+
+    p1 = { "inside of proc" puts },
+    p1 puts,
+
+    p2 = { ($global = 12, $global puts) },
+    p3 = { a | (a puts) },
+    p4 = { a | (a puts, a = 12, a puts) },
+    p5 = { ("@a should be `33`:" puts, @a puts) },
+    p6 = { @a = 321 },
 )
