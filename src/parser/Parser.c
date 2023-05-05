@@ -385,7 +385,7 @@ vector *parser_literal(Parser *self) {
     else if(lookahead_1_type_equals(TOKEN_STRING))
         return ast_literal(parser_string_literal(self));
     // TODO Look at combining tuples and bitstrings with syntax
-    // TODO where `<1,2,3>` is a tuple and `<1:1,0:1,:1:1>` a 3-bitstring
+        // where `<1,2,3>` is a tuple and `<1:1,0:1,:1:1>` a 3-bitstring
     else if(lookahead_1_value_equals("[")) {
         if(lookahead_2_value_equals("<"))
             return ast_literal(parser_tuple_literal(self));
