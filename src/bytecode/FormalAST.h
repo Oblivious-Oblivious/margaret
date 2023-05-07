@@ -32,7 +32,6 @@ vector *ast_unary_method_definition(vector *multimethod_object_default_value, st
 vector *ast_binary_method_definition(vector *multimethod_object_default_value, string *selector, vector *param, vector *function);
 vector *ast_keyword_method_definition(vector *multimethod_object_default_value, string *selector, vector *params, vector *function);
 vector *ast_any_object(void);
-vector *ast_method_parameter(string *param_name);
 
 vector *ast_literal(vector *unit);
 vector *ast_nil_literal(void);

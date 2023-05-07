@@ -58,57 +58,34 @@ module(classes_spec, {
             FM_TENSOR, string_new("2"), \
             FM_KEYWORD, string_new("attr_reader:"), string_new("1"), \
             FM_LOCAL, string_new("Point"), \
-            FM_LOCAL, string_new("Method"), \
-            FM_UNARY, string_new("keyword"), \
-            FM_ANY_OBJECT, \
-            FM_STRING, string_new("x:y:"), \
-            FM_METHOD_PARAMETER, string_new("xparam"), \
-            FM_METHOD_PARAMETER, string_new("yparam"), \
-            FM_TENSOR, string_new("2"), \
-            FM_START_PROC, \
-                FM_PROC_PARAMETER, FM_SELF, \
-                FM_PROC_PARAMETER, string_new("xparam"), \
-                FM_PROC_PARAMETER, string_new("yparam"), \
+            FM_START_KEYWORD_METHOD, string_new("x:y:"), \
+                FM_ANY_OBJECT, FM_METHOD_RECEIVER, \
+                FM_LOCAL, string_new("xparam"), FM_METHOD_PARAMETER, \
+                FM_LOCAL, string_new("yparam"), FM_METHOD_PARAMETER, \
                 FM_LOCAL, string_new("xparam"), \
                 FM_STORE_INSTANCE, string_new("x"), \
                 FM_LOCAL, string_new("yparam"), \
                 FM_STORE_INSTANCE, string_new("y"), \
                 FM_SELF, \
-            FM_END_PROC, \
-            FM_KEYWORD, string_new("object:message:params:method:"), string_new("4"), \
+            FM_END_KEYWORD_METHOD, \
             FM_KEYWORD, string_new("bind:"), string_new("1"), \
             FM_LOCAL, string_new("Point"), \
-            FM_LOCAL, string_new("Method"), \
-            FM_UNARY, string_new("unary"), \
-            FM_ANY_OBJECT, \
-            FM_STRING, string_new("calc"), \
-            FM_START_PROC,
-                FM_PROC_PARAMETER, FM_SELF, \
+            FM_START_UNARY_METHOD, string_new("calc"), \
+                FM_ANY_OBJECT, FM_METHOD_RECEIVER, \
                 FM_INSTANCE, string_new("x"), \
                 FM_INSTANCE, string_new("y"), \
                 FM_BINARY, string_new("+"), \
-            FM_END_PROC, \
-            FM_KEYWORD, string_new("object:message:method:"), string_new("3"), \
+            FM_END_UNARY_METHOD, \
             FM_KEYWORD, string_new("bind:"), string_new("1"), \
             FM_LOCAL, string_new("Point"), \
-            FM_LOCAL, string_new("Method"), \
-            FM_UNARY, string_new("binary"), \
-            FM_ANY_OBJECT, \
-            FM_STRING, string_new("+"), \
-            FM_NIL, \
-            FM_START_PROC, \
-                FM_PROC_PARAMETER, FM_SELF, \
+            FM_START_BINARY_METHOD, string_new("+"), \
+                FM_ANY_OBJECT, FM_METHOD_RECEIVER, \
+                FM_NIL, FM_METHOD_PARAMETER, \
                 FM_SELF, \
-            FM_END_PROC, \
-            FM_KEYWORD, string_new("object:message:param:method:"), string_new("4"), \
-            FM_LOCAL, string_new("Method"), \
-            FM_UNARY, string_new("binary"), \
-            FM_ANY_OBJECT, \
-            FM_STRING, string_new("+"), \
-            FM_METHOD_PARAMETER, string_new("other"), \
-            FM_START_PROC, \
-                FM_PROC_PARAMETER, FM_SELF, \
-                FM_PROC_PARAMETER, string_new("other"), \
+            FM_END_BINARY_METHOD, \
+            FM_START_BINARY_METHOD, string_new("+"), \
+                FM_ANY_OBJECT, FM_METHOD_RECEIVER, \
+                FM_LOCAL, string_new("other"), FM_METHOD_PARAMETER, \
                 FM_INSTANCE, string_new("x"), \
                 FM_LOCAL, string_new("other"), \
                 FM_UNARY, string_new("x"), \
@@ -120,8 +97,7 @@ module(classes_spec, {
                 FM_BINARY, string_new("+"), \
                 FM_STORE_INSTANCE, string_new("y"), \
                 FM_SELF, \
-            FM_END_PROC, \
-            FM_KEYWORD, string_new("object:message:param:method:"), string_new("4"), \
+            FM_END_BINARY_METHOD, \
             FM_TENSOR, string_new("2"),
             FM_KEYWORD, string_new("multibind:"), string_new("1"), \
             FM_LOCAL, string_new("Point"), \
@@ -132,19 +108,11 @@ module(classes_spec, {
             FM_TENSOR, string_new("1"), \
             FM_KEYWORD, string_new("attr_reader:"), string_new("1"), \
             FM_LOCAL, string_new("Point3D"), \
-            FM_LOCAL, string_new("Method"), \
-            FM_UNARY, string_new("keyword"), \
-            FM_ANY_OBJECT, \
-            FM_STRING, string_new("x:y:z:"), \
-            FM_METHOD_PARAMETER, string_new("x"), \
-            FM_METHOD_PARAMETER, string_new("y"), \
-            FM_METHOD_PARAMETER, string_new("z"), \
-            FM_TENSOR, string_new("3"), \
-            FM_START_PROC, \
-                FM_PROC_PARAMETER, FM_SELF, \
-                FM_PROC_PARAMETER, string_new("x"), \
-                FM_PROC_PARAMETER, string_new("y"), \
-                FM_PROC_PARAMETER, string_new("z"), \
+            FM_START_KEYWORD_METHOD, string_new("x:y:z:"), \
+                FM_ANY_OBJECT, FM_METHOD_RECEIVER, \
+                FM_LOCAL, string_new("x"), FM_METHOD_PARAMETER, \
+                FM_LOCAL, string_new("y"), FM_METHOD_PARAMETER, \
+                FM_LOCAL, string_new("z"), FM_METHOD_PARAMETER, \
                 FM_SUPER, \
                 FM_INSTANCE, string_new("x"), \
                 FM_INSTANCE, string_new("y"), \
@@ -152,32 +120,21 @@ module(classes_spec, {
                 FM_LOCAL, string_new("z"), \
                 FM_STORE_INSTANCE, string_new("z"), \
                 FM_SELF, \
-            FM_END_PROC, \
-            FM_KEYWORD, string_new("object:message:params:method:"), string_new("4"), \
+            FM_END_KEYWORD_METHOD, \
             FM_KEYWORD, string_new("bind:"), string_new("1"), \
             FM_LOCAL, string_new("Point3D"), \
-            FM_LOCAL, string_new("Method"), \
-            FM_UNARY, string_new("unary"), \
-            FM_ANY_OBJECT, \
-            FM_STRING, string_new("calc"), \
-            FM_START_PROC,
-                FM_PROC_PARAMETER, FM_SELF, \
+            FM_START_UNARY_METHOD, string_new("calc"), \
+                FM_ANY_OBJECT, FM_METHOD_RECEIVER, \
                 FM_SUPER, \
                 FM_UNARY, string_new("calc"), \
                 FM_INSTANCE, string_new("z"), \
                 FM_BINARY, string_new("+"), \
-            FM_END_PROC, \
-            FM_KEYWORD, string_new("object:message:method:"), string_new("3"), \
+            FM_END_UNARY_METHOD, \
             FM_KEYWORD, string_new("bind:"), string_new("1"), \
             FM_LOCAL, string_new("Point3D"), \
-            FM_LOCAL, string_new("Method"), \
-            FM_UNARY, string_new("binary"), \
-            FM_ANY_OBJECT, \
-            FM_STRING, string_new("+"), \
-            FM_METHOD_PARAMETER, string_new("other"), \
-            FM_START_PROC, \
-                FM_PROC_PARAMETER, FM_SELF, \
-                FM_PROC_PARAMETER, string_new("other"), \
+            FM_START_BINARY_METHOD, string_new("+"), \
+                FM_ANY_OBJECT, FM_METHOD_RECEIVER, \
+                FM_LOCAL, string_new("other"), FM_METHOD_PARAMETER, \
                 FM_SUPER, \
                 FM_LOCAL, string_new("other"), \
                 FM_BINARY, string_new("+"), \
@@ -187,8 +144,7 @@ module(classes_spec, {
                 FM_BINARY, string_new("+"), \
                 FM_STORE_INSTANCE, string_new("z"), \
                 FM_SELF, \
-            FM_END_PROC, \
-            FM_KEYWORD, string_new("object:message:param:method:"), string_new("4"), \
+            FM_END_BINARY_METHOD, \
             FM_KEYWORD, string_new("bind:"), string_new("1"), \
             FM_LOCAL, string_new("Point3D"), \
             FM_INTEGER, string_new("10"), \
@@ -217,7 +173,7 @@ module(classes_spec, {
     });
 
     it("parses multibinds", {
-        parse("( \
+        debug("( \
             Point = $Margaret clone: [ \
                 # x: x y: y => ( \
                     @x = x, \
@@ -238,7 +194,63 @@ module(classes_spec, {
             p3 = p1 + p2, \
             puts: p3, \
         )", vector_new( \
-            FM_SELF
+            FM_GLOBAL, string_new("Margaret"), \
+            FM_START_KEYWORD_METHOD, string_new("x:y:"), \
+                FM_ANY_OBJECT, FM_METHOD_RECEIVER, \
+                FM_LOCAL, string_new("x"), FM_METHOD_PARAMETER, \
+                FM_LOCAL, string_new("y"), FM_METHOD_PARAMETER, \
+                FM_LOCAL, string_new("x"), \
+                FM_STORE_INSTANCE, string_new("x"), \
+                FM_LOCAL, string_new("y"), \
+                FM_STORE_INSTANCE, string_new("y"), \
+                FM_SELF, \
+                FM_UNARY, string_new("clone"), \
+            FM_END_KEYWORD_METHOD, \
+            FM_START_BINARY_METHOD, string_new("+"), \
+                FM_ANY_OBJECT, FM_METHOD_RECEIVER, \
+                FM_NIL, FM_METHOD_PARAMETER, \
+                FM_SELF, \
+            FM_END_BINARY_METHOD, \
+            FM_START_BINARY_METHOD, string_new("+"), \
+                FM_ANY_OBJECT, FM_METHOD_RECEIVER, \
+                FM_LOCAL, string_new("other"), FM_METHOD_PARAMETER, \
+                FM_INSTANCE, string_new("x"), \
+                FM_LOCAL, string_new("other"), \
+                FM_UNARY, string_new("x"), \
+                FM_BINARY, string_new("+"), \
+                FM_STORE_INSTANCE, string_new("x"), \
+                FM_INSTANCE, string_new("y"), \
+                FM_LOCAL, string_new("other"), \
+                FM_UNARY, string_new("y"), \
+                FM_BINARY, string_new("+"), \
+                FM_STORE_INSTANCE, string_new("y"), \
+                FM_SELF, \
+            FM_END_BINARY_METHOD, \
+            FM_TENSOR, string_new("3"), \
+            FM_KEYWORD, string_new("clone:"), string_new("1"), \
+            FM_STORE_LOCAL, string_new("Point"), \
+            FM_LOCAL, string_new("Point"), \
+            FM_STRING, string_new("@x"), \
+            FM_STRING, string_new("@y"), \
+            FM_TENSOR, string_new("2"), \
+            FM_KEYWORD, string_new("attr_reader:"), string_new("1"), \
+            FM_LOCAL, string_new("Point"), \
+            FM_INTEGER, string_new("2"), \
+            FM_INTEGER, string_new("3"), \
+            FM_KEYWORD, string_new("x:y:"), string_new("2"), \
+            FM_STORE_LOCAL, string_new("p1"),
+            FM_LOCAL, string_new("Point"), \
+            FM_INTEGER, string_new("5"), \
+            FM_INTEGER, string_new("7"), \
+            FM_KEYWORD, string_new("x:y:"), string_new("2"), \
+            FM_STORE_LOCAL, string_new("p2"), \
+            FM_LOCAL, string_new("p1"), \
+            FM_LOCAL, string_new("p2"), \
+            FM_BINARY, string_new("+"), \
+            FM_STORE_LOCAL, string_new("p3"), \
+            FM_GLOBAL, string_new("Margaret"), \
+            FM_LOCAL, string_new("p3"), \
+            FM_KEYWORD, string_new("puts:"), string_new("1") \
         ));
     });
 })

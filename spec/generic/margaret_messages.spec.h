@@ -36,17 +36,10 @@ module(margaret_messages_spec, {
             )} \
         ", vector_new( \
             FM_GLOBAL, string_new("Margaret"), \
-            FM_LOCAL, string_new("Method"), \
-            FM_UNARY, string_new("keyword"), \
-            FM_ANY_OBJECT, \
-            FM_STRING, string_new("while:do:"), \
-            FM_METHOD_PARAMETER, string_new("condition_block"), \
-            FM_METHOD_PARAMETER, string_new("block"), \
-            FM_TENSOR, string_new("2"), \
-            FM_START_PROC, \
-                FM_PROC_PARAMETER, FM_SELF, \
-                FM_PROC_PARAMETER, string_new("condition_block"), \
-                FM_PROC_PARAMETER, string_new("block"), \
+            FM_START_KEYWORD_METHOD, string_new("while:do:"), \
+                FM_ANY_OBJECT, FM_METHOD_RECEIVER, \
+                FM_LOCAL, string_new("condition_block"), FM_METHOD_PARAMETER, \
+                FM_LOCAL, string_new("block"), FM_METHOD_PARAMETER, \
                 FM_GLOBAL, string_new("Margaret"), \
                 FM_LOCAL, string_new("condition_block"), \
                 FM_UNARY, string_new("eval"), \
@@ -59,8 +52,7 @@ module(margaret_messages_spec, {
                     FM_KEYWORD, string_new("while:do:"), string_new("2"), \
                 FM_END_PROC, \
                 FM_KEYWORD, string_new("if:then:"), string_new("2"), \
-            FM_END_PROC, \
-            FM_KEYWORD, string_new("object:message:params:method:"), string_new("4"), \
+            FM_END_KEYWORD_METHOD, \
             FM_KEYWORD, string_new("bind:"), string_new("1") \
         ));
     });

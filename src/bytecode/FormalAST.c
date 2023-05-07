@@ -254,127 +254,69 @@ vector *ast_c_function_declaration(string *return_type, string *name, vector *pa
 }
 
 vector *ast_unary_method_definition(vector *multimethod_object_default_value, string *selector, vector *function) {
-    vector *res = vector_new(FM_LOCAL, string_new("Method"), FM_UNARY, string_new("unary"));
+    vector *res = vector_new(FM_START_UNARY_METHOD, selector);
 
     size_t multimethod_object_default_value_size = vector_size(multimethod_object_default_value);
     for(size_t i = 0; i < multimethod_object_default_value_size; i++)
         vector_add(res, vector_get(multimethod_object_default_value, i));
+    vector_add(res, FM_METHOD_RECEIVER);
 
-    vector_add(res, FM_STRING);
-    vector_add(res, selector);
-
-    vector_add(res, FM_START_PROC);
-    vector_add(res, FM_PROC_PARAMETER);
-    vector_add(res, FM_SELF);
     size_t function_size = vector_size(function);
     for(size_t i = 0; i < function_size; i++)
         vector_add(res, vector_get(function, i));
-    vector_add(res, FM_END_PROC);
-    vector_add(res, FM_KEYWORD);
-    vector_add(res, string_new("object:message:method:"));
-    vector_add(res, string_new("3"));
+    vector_add(res, FM_END_UNARY_METHOD);
 
     return res;
 }
 
 vector *ast_binary_method_definition(vector *multimethod_object_default_value, string *selector, vector *param, vector *function) {
-    vector *res = vector_new(FM_LOCAL, string_new("Method"), FM_UNARY, string_new("binary"));
+    vector *res = vector_new(FM_START_BINARY_METHOD, selector);
 
     size_t multimethod_object_default_value_size = vector_size(multimethod_object_default_value);
     for(size_t i = 0; i < multimethod_object_default_value_size; i++)
         vector_add(res, vector_get(multimethod_object_default_value, i));
+    vector_add(res, FM_METHOD_RECEIVER);
 
-    vector_add(res, FM_STRING);
-    vector_add(res, selector);
+    size_t param_size = vector_size(param);
+    for(size_t i = 0; i < param_size; i++)
+        vector_add(res, vector_get(param, i));
+    vector_add(res, FM_METHOD_PARAMETER);
 
-    if(string_equals(vector_get(param, 0), FM_METHOD_PARAMETER)) {
-        vector_add(res, FM_METHOD_PARAMETER);
-        vector_add(res, vector_get(param, 1));
-    }
-    else {
-        size_t param_size = vector_size(param);
-        for(size_t i = 0; i < param_size; i++)
-            vector_add(res, vector_get(param, i));
-    }
-
-    vector_add(res, FM_START_PROC);
-    vector_add(res, FM_PROC_PARAMETER);
-    vector_add(res, FM_SELF);
-    if(string_equals(vector_get(param, 0), FM_METHOD_PARAMETER)) {
-        vector_add(res, FM_PROC_PARAMETER);
-        vector_add(res, vector_get(param, 1));
-    }
     size_t function_size = vector_size(function);
     for(size_t i = 0; i < function_size; i++)
         vector_add(res, vector_get(function, i));
-    vector_add(res, FM_END_PROC);
-    vector_add(res, FM_KEYWORD);
-    vector_add(res, string_new("object:message:param:method:"));
-    vector_add(res, string_new("4"));
+    vector_add(res, FM_END_BINARY_METHOD);
 
     return res;
 }
 
 vector *ast_keyword_method_definition(vector *multimethod_object_default_value, string *selector, vector *params, vector *function) {
-    vector *res = vector_new(FM_LOCAL, string_new("Method"), FM_UNARY, string_new("keyword"));
+    vector *res = vector_new(FM_START_KEYWORD_METHOD, selector);
 
     size_t multimethod_object_default_value_size = vector_size(multimethod_object_default_value);
     for(size_t i = 0; i < multimethod_object_default_value_size; i++)
         vector_add(res, vector_get(multimethod_object_default_value, i));
-
-    vector_add(res, FM_STRING);
-    vector_add(res, selector);
+    vector_add(res, FM_METHOD_RECEIVER);
 
     size_t params_size = vector_size(params);
     for(size_t i = 0; i < params_size; i++) {
         vector *param = vector_get(params, i);
-        if(string_equals(vector_get(param, 0), FM_METHOD_PARAMETER)) {
-            vector_add(res, FM_METHOD_PARAMETER);
-            vector_add(res, vector_get(param, 1));
-        }
-        else {
-            size_t param_size = vector_size(param);
-            for(size_t i = 0; i < param_size; i++)
-                vector_add(res, vector_get(param, i));
-        }
+        size_t param_size = vector_size(param);
+        for(size_t i = 0; i < param_size; i++)
+            vector_add(res, vector_get(param, i));
+        vector_add(res, FM_METHOD_PARAMETER);
     }
-    vector_add(res, FM_TENSOR);
-    char params_size_str[32];
-    snprintf(params_size_str, sizeof(params_size_str), "%zu", params_size);
-    vector_add(res, string_new(params_size_str));
 
-    vector_add(res, FM_START_PROC);
-    vector_add(res, FM_PROC_PARAMETER);
-    vector_add(res, FM_SELF);
-    for(size_t i = 0; i < params_size; i++) {
-        vector *param = vector_get(params, i);
-        if(string_equals(vector_get(param, 0), FM_METHOD_PARAMETER)) {
-            vector_add(res, FM_PROC_PARAMETER);
-            vector_add(res, vector_get(param, 1));
-        }
-    }
     size_t function_size = vector_size(function);
     for(size_t i = 0; i < function_size; i++)
         vector_add(res, vector_get(function, i));
-    vector_add(res, FM_END_PROC);
-    vector_add(res, FM_KEYWORD);
-    vector_add(res, string_new("object:message:params:method:"));
-    vector_add(res, string_new("4"));
+    vector_add(res, FM_END_KEYWORD_METHOD);
 
     return res;
 }
 
 vector *ast_any_object(void) {
     return vector_new(FM_ANY_OBJECT);
-}
-
-vector *ast_method_parameter(string *param_name) {
-    if(string_equals(param_name, string_new("self")))
-        return vector_new(FM_SELF);
-    else if(string_equals(param_name, string_new("super")))
-        return vector_new(FM_SUPER);
-    else
-        return vector_new(FM_METHOD_PARAMETER, param_name);
 }
 
 vector *ast_literal(vector *unit) {

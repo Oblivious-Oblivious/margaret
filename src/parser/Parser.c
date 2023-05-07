@@ -313,7 +313,7 @@ vector *parser_binary_method_definition(Parser *self, vector *multimethod_object
         param = parser_any_object();
     }
     else if(lookahead_1_type_equals(TOKEN_IDENTIFIER)) {
-        param = parser_method_parameter(ensure_type(TOKEN_IDENTIFIER, "expected one parameter on binary method definition."));
+        param = parser_variable(self);
     }
     else {
         param = parser_literal(self);
@@ -339,7 +339,7 @@ vector *parser_keyword_method_definition(Parser *self, vector *multimethod_objec
             vector_add(params, parser_any_object());
         }
         else if(lookahead_1_type_equals(TOKEN_IDENTIFIER)) {
-            vector_add(params, parser_method_parameter(ensure_type(TOKEN_IDENTIFIER, "expected keyword parameter.")));
+            vector_add(params, parser_variable(self));
         }
         else {
             vector_add(params, parser_literal(self));
@@ -352,16 +352,6 @@ vector *parser_keyword_method_definition(Parser *self, vector *multimethod_objec
 
 vector *parser_any_object(void) {
     return ast_any_object();
-}
-
-vector *parser_method_parameter(string *param_name) {
-    return ast_method_parameter(param_name);
-}
-
-vector *parser_global_primitive_method_parameter(string *param_name) {
-    string *res = string_new("$");
-    string_add(res, param_name);
-    return ast_method_parameter(res);
 }
 
 vector *parser_literal(Parser *self) {

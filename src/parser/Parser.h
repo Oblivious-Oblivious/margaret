@@ -49,8 +49,6 @@ vector *parser_unary_method_definition(Parser *self, vector *multimethod_object_
 vector *parser_binary_method_definition(Parser *self, vector *multimethod_object_default_value);
 vector *parser_keyword_method_definition(Parser *self, vector *multimethod_object_default_value);
 vector *parser_any_object(void);
-vector *parser_method_parameter(string *param_name);
-vector *parser_global_primitive_method_parameter(string *param_name);
 
 vector *parser_literal(Parser *self);
 vector *parser_nil_literal(Parser *self);
