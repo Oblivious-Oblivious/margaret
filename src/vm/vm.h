@@ -8,7 +8,7 @@
 #include "../base/chunk.h"
 #include "../base/table.h"
 #include "../opcode/MargValue.h"
-#include "../opcode/ActivationRecord.h"
+#include "../opcode/MargProc.h"
 #include "byte_conversions.h"
 
 // TODO extern global VM instance
@@ -23,7 +23,7 @@ struct VM {
     MargValue *sp;
     table global_variables;
     table interned_strings;
-    ActivationRecord *current;
+    MargProc *current;
 };
 
 /** @brief Better assurances for inlining */

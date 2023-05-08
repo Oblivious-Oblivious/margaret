@@ -11,10 +11,14 @@
 #include "../opcode/MargInteger.h"
 #include "../opcode/MargString.h"
 
-static ActivationRecord *get_margaret_main_activation_record(VM *vm) {
+#include "../opcode/MargObject.h"
+#include "../opcode/MargMethod.h"
+#include "../opcode/MargProc.h"
+
+static MargProc *get_margaret_main_method_proc(VM *vm) {
     MargObject *margaret_object = AS_OBJECT(table_get(&vm->global_variables, MARG_STRING("$Margaret")));
     MargMethod *main_method = AS_METHOD(table_get(&margaret_object->messages, MARG_STRING("main:")));
-    return main_method->proc->activation_record;
+    return main_method->proc;
 }
 
 /**
@@ -23,7 +27,7 @@ static ActivationRecord *get_margaret_main_activation_record(VM *vm) {
  * @param vm -> result enum
  */
 static void evaluator_run(VM *vm) {
-    vm->current = get_margaret_main_activation_record(vm);
+    vm->current = get_margaret_main_method_proc(vm);
     vm->current->ip = vm->current->bytecode->items;
 
     // TODO Branch table, computed goto
@@ -140,12 +144,12 @@ static void evaluator_run(VM *vm) {
 
             case OP_CALL_PROC: {
                 MargProc *proc = AS_PROC(table_get(&vm->current->local_variables, READ_TEMPORARY()));
-                table_add_all(&vm->current->local_variables, &proc->activation_record->local_variables);
-                vm->current = proc->activation_record;
+                table_add_all(&vm->current->local_variables, &proc->local_variables);
+                vm->current = proc;
                 break;
             }
             case OP_EXIT_PROC: {
-                vm->current = get_margaret_main_activation_record(vm);
+                vm->current = vm->current->bound_proc;
                 break;
             }
 

@@ -68,7 +68,6 @@
 #include "loader/file_loader.spec.h"
 
 // opcode
-#include "opcode/ActivationRecord.spec.h"
 #include "opcode/MargFalse.spec.h"
 #include "opcode/MargFloat.spec.h"
 #include "opcode/MargInteger.spec.h"
@@ -158,7 +157,6 @@ spec_suite({
 
     file_loader_spec();
 
-    ActivationRecordSpec();
     MargFalseSpec();
     MargFloatSpec();
     MargIntegerSpec();

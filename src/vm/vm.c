@@ -13,7 +13,7 @@ static void Margaret_primitives(VM *vm) {
 static void set_initial_current_record_to_main(VM *vm) {
     MargObject *marg = AS_OBJECT(table_get(&vm->global_variables, MARG_STRING("$Margaret")));
     MargMethod *main = AS_METHOD(table_get(&marg->messages, MARG_STRING("main:")));
-    vm->current = main->proc->activation_record;
+    vm->current = main->proc;
 }
 
 /**

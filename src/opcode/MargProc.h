@@ -4,7 +4,6 @@
 #include "../base/table.h"
 
 #include "MargObject.h"
-#include "ActivationRecord.h"
 #include "MargMethod.h"
 
 struct MargProc {
@@ -12,7 +11,6 @@ struct MargProc {
     MargMethod *bound_method;
 
     table parameters;
-    ActivationRecord *activation_record;
 };
 
 MargProc *marg_proc_new(VM *vm, MargMethod *bound_method);

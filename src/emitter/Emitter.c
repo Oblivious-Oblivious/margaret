@@ -8,6 +8,7 @@
 #include "../opcode/MargInteger.h"
 #include "../opcode/MargFloat.h"
 #include "../opcode/MargString.h"
+#include "../opcode/MargProc.h"
 #include "../vm/byte_conversions.h"
 
 #define opcode_case(opstr) else if(string_equals(opcode, (opstr)))
@@ -75,7 +76,7 @@ VM *emitter_emit(vector *formal_bytecode) {
     VM *vm = vm_new();
     MargObject *marg_object = AS_OBJECT(table_get(&vm->global_variables, MARG_STRING("$Margaret")));
     MargMethod *main_method = AS_METHOD(table_get(&marg_object->messages, MARG_STRING("main:")));
-    ActivationRecord *Margaret_main_activation_record = main_method->proc->activation_record;
+    MargProc *margaret_main_method_proc = main_method->proc;
 
     size_t bytecode_size = vector_size(formal_bytecode);
     for(size_t ip = 0; ip < bytecode_size; ip++) {
@@ -184,11 +185,11 @@ VM *emitter_emit(vector *formal_bytecode) {
         opcode_case(FM_BITSTRING) {}
 
         opcode_case(FM_START_PROC) {
-            MargValue new_proc = MARG_PROC(vm->current->bound_proc->bound_method);
+            MargValue new_proc = MARG_PROC(vm->current->bound_method);
             emit_possible_long_op(OP_PUT_OBJECT);
             emit_temporary(new_proc);
 
-            vm->current = AS_PROC(new_proc)->activation_record;
+            vm->current = AS_PROC(new_proc);
         }
         opcode_case(FM_END_PROC) {
             emit_byte(OP_EXIT_PROC);

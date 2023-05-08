@@ -9,7 +9,6 @@
 
 typedef struct MargMethod MargMethod;
 typedef struct MargProc MargProc;
-typedef struct ActivationRecord ActivationRecord;
 
 /**
  * @brief A representation of user-defined object
