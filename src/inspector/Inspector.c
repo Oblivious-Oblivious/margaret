@@ -25,7 +25,7 @@ static void write_offset_and_line_number_on(string *disassembled_instruction, ch
  * @param offset -> Current offset
  * @return size_t -> Newly calculated offset
  */
-static size_t instruction_single(vector *res, const char *name, chunk *chunk, size_t offset) {
+static size_t instruction_single(vector *res, char *name, chunk *chunk, size_t offset) {
     uint8_t opcode = chunk_get(chunk, offset);
 
     string *disassembled_instruction = string_new("");
@@ -37,7 +37,8 @@ static size_t instruction_single(vector *res, const char *name, chunk *chunk, si
     return offset + 1;
 }
 
-static size_t instruction_object(vector *res, const char *name, chunk *chunk, size_t offset) {
+
+static size_t instruction_object(vector *res, char *name, chunk *chunk, size_t offset) {
     uint8_t opcode = chunk_get(chunk, offset);
     uint8_t temporary = chunk_get(chunk, offset + 1);
 
@@ -52,7 +53,7 @@ static size_t instruction_object(vector *res, const char *name, chunk *chunk, si
     return offset + 2;
 }
 
-static size_t instruction_long_object(vector *res, const char *name, chunk *chunk, size_t offset) {
+static size_t instruction_long_object(vector *res, char *name, chunk *chunk, size_t offset) {
     uint8_t opcode = chunk_get(chunk, offset);
     uint8_t bytes[4] = {
         chunk_get(chunk, offset + 1),
@@ -73,7 +74,7 @@ static size_t instruction_long_object(vector *res, const char *name, chunk *chun
     return offset + 5;
 }
 
-static size_t instruction_variable(vector *res, const char *name, chunk *chunk, size_t offset) {
+static size_t instruction_variable(vector *res, char *name, chunk *chunk, size_t offset) {
     uint8_t opcode = chunk_get(chunk, offset);
     uint8_t variable = chunk_get(chunk, offset + 1);
 
@@ -97,7 +98,7 @@ static size_t instruction_variable(vector *res, const char *name, chunk *chunk, 
     return offset + 2;
 }
 
-static size_t instruction_long_variable(vector *res, const char *name, chunk *chunk, size_t offset) {
+static size_t instruction_long_variable(vector *res, char *name, chunk *chunk, size_t offset) {
     uint8_t opcode = chunk_get(chunk, offset);
     uint8_t bytes[4] = {
         chunk_get(chunk, offset + 1),
