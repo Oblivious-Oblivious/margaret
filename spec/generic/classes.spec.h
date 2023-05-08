@@ -173,7 +173,7 @@ module(classes_spec, {
     });
 
     it("parses multibinds", {
-        debug("( \
+        parse("( \
             Point = $Margaret clone: [ \
                 # x: x y: y => ( \
                     @x = x, \
