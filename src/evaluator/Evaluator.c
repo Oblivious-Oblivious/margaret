@@ -2,6 +2,8 @@
 
 #include <stdio.h>
 
+#include "../inspector/Inspector.h"
+
 #include "../opcode/Opcodes.h"
 #include "../opcode/MargValue.h"
 
@@ -143,7 +145,7 @@ static void evaluator_run(VM *vm) {
             }
 
             case OP_CALL_PROC: {
-                MargProc *proc = AS_PROC(table_get(&vm->current->local_variables, READ_TEMPORARY()));
+                MargProc *proc = AS_PROC(STACK_PEEK(vm, 0));
                 table_add_all(&vm->current->local_variables, &proc->local_variables);
                 vm->current = proc;
                 break;

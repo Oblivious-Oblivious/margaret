@@ -186,14 +186,16 @@ VM *emitter_emit(vector *formal_bytecode) {
 
         opcode_case(FM_START_PROC) {
             MargValue new_proc = MARG_PROC(vm->current->bound_method);
+            AS_PROC(new_proc)->bound_proc = vm->current;
             emit_possible_long_op(OP_PUT_OBJECT);
             emit_temporary(new_proc);
+            emit_byte(OP_CALL_PROC);
 
             vm->current = AS_PROC(new_proc);
         }
         opcode_case(FM_END_PROC) {
             emit_byte(OP_EXIT_PROC);
-            vm->current = Margaret_main_activation_record;
+            vm->current = vm->current->bound_proc;
         }
         opcode_case(FM_PROC_PARAMETER) {
             ;
