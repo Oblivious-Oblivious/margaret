@@ -70,7 +70,7 @@ static void margaret_run_file(char *filename) {
     VM *vm = EMIT(formal_bytecode);
 
     vm = OPTIMIZE(vm);
-    inspect_and_print_vm_bytecode(vm);
+    // inspect_and_print_vm_bytecode(vm);
 
     EVAL(vm);
 }
