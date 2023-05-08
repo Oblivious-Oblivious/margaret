@@ -198,9 +198,9 @@ vector *ast_variable(string *optional_instance_symbol, string *name) {
         return vector_new(FM_TRUE);
     else if(string_equals(optional_instance_symbol, string_new("$")) && string_equals(name, string_new("false")))
         return vector_new(FM_FALSE);
-    else if(string_equals(name, string_new("self")))
+    else if(string_equals(optional_instance_symbol, string_new("@")) && string_equals(name, string_new("self")))
         return vector_new(FM_SELF);
-    else if(string_equals(name, string_new("super")))
+    else if(string_equals(optional_instance_symbol, string_new("@")) && string_equals(name, string_new("super")))
         return vector_new(FM_SUPER);
     else if(string_equals(optional_instance_symbol, string_new("@")))
         return vector_new(FM_INSTANCE, name);

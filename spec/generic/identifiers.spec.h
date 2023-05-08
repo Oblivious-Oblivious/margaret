@@ -19,8 +19,8 @@ module(identifiers_spec, {
         parse("$nil", vector_new(FM_NIL));
         parse("$true", vector_new(FM_TRUE));
         parse("$false", vector_new(FM_FALSE));
-        parse("self", vector_new(FM_SELF));
-        parse("super", vector_new(FM_SUPER));
+        parse("@self", vector_new(FM_SELF));
+        parse("@super", vector_new(FM_SUPER));
     });
 })
 

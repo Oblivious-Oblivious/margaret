@@ -5,41 +5,41 @@
 
 module(classes_spec, {
     it("parses generating an object with inheritance", {
-        parse("( \
+        debug("( \
             Point = Object subclass, \
             Point attr_reader: [\"x\", \"y\"], \
             \
             Point bind: #x: xparam y: yparam => ( \
                 @x = xparam, \
                 @y = yparam, \
-                self \
+                @self \
             ), \
             \
             Point bind: #calc => @x + @y, \
             \
             Point multibind: [ \
-                # + $nil => self, \
+                # + $nil => @self, \
                 # + other => ( \
                     @x = @x + other x, \
                     @y = @y + other y, \
-                    self \
+                    @self \
                 ) \
             ], \
             Point3D = Point subclass, \
             Point attr_reader: [\"z\"], \
             \
             Point3D bind: #x: x y: y z: z => ( \
-                super x: @x y: @y, \
+                @super x: @x y: @y, \
                 @z = z, \
-                self \
+                @self \
             ), \
             \
-            Point3D bind: #calc => super calc + @z, \
+            Point3D bind: #calc => @super calc + @z, \
             \
             Point3D bind: #+ other => ( \
-                super + other, \
+                @super + other, \
                 @z = @z + other z, \
-                self \
+                @self \
             ), \
             \
             p1 = Point3D x: 10 y: 20 z: 30, \
@@ -178,13 +178,13 @@ module(classes_spec, {
                 # x: x y: y => ( \
                     @x = x, \
                     @y = y, \
-                    self clone, \
+                    @self clone, \
                 ), \
-                # + $nil => self, \
+                # + $nil => @self, \
                 # + other => ( \
                     @x = @x + other x, \
                     @y = @y + other y, \
-                    self, \
+                    @self, \
                 ), \
             ], \
             Point attr_reader: [\"@x\", \"@y\"], \

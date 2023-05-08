@@ -19,7 +19,7 @@ module(method_definition_spec, {
             FM_END_UNARY_METHOD \
         ));
 
-        parse("#incr => self + 1", vector_new( \
+        parse("#incr => @self + 1", vector_new( \
             FM_START_UNARY_METHOD, string_new("incr"), \
                 FM_ANY_OBJECT, FM_METHOD_RECEIVER, \
                 FM_SELF, \
@@ -27,7 +27,7 @@ module(method_definition_spec, {
                 FM_BINARY, string_new("+"), \
             FM_END_UNARY_METHOD \
         ));
-        parse("#  incr => self + 1", vector_new( \
+        parse("#  incr => @self + 1", vector_new( \
             FM_START_UNARY_METHOD, string_new("incr"), \
                 FM_ANY_OBJECT, FM_METHOD_RECEIVER, \
                 FM_SELF, \
@@ -49,11 +49,11 @@ module(method_definition_spec, {
             FM_END_UNARY_METHOD \
         ));
 
-        // Method unary object: 0 message: "fact" method: { self | 1 }
-        // Method unary object: _ message: "fact" method: { self | self * (self - 1) fact }
+        // Method unary object: 0 message: "fact" method: { 1 }
+        // Method unary object: _ message: "fact" method: { @self * (@self - 1) fact }
         parse("( \
             # 0 fact => 1, \
-            # _ fact => self * (self-1) fact \
+            # _ fact => @self * (@self-1) fact \
         )", vector_new( \
             FM_START_UNARY_METHOD, string_new("fact"), \
                 FM_INTEGER, string_new("0"), FM_METHOD_RECEIVER, \
@@ -73,7 +73,7 @@ module(method_definition_spec, {
     });
 
     it("parses binary methods", {
-        // Method binary object: 0 message: "**" param: 0 method: { self | $nil }
+        // Method binary object: 0 message: "**" param: 0 method: { $nil }
         parse("# 0 ** 0 => $nil", vector_new( \
             FM_START_BINARY_METHOD, string_new("**"), \
                 FM_INTEGER, string_new("0"), FM_METHOD_RECEIVER, \
@@ -82,7 +82,7 @@ module(method_definition_spec, {
             FM_END_BINARY_METHOD \
         ));
 
-        // Method binary object: 0 message: "**" param: _ method: { self | 0 }
+        // Method binary object: 0 message: "**" param: _ method: { 0 }
         parse("# 0 ** _ => 0", vector_new( \
             FM_START_BINARY_METHOD, string_new("**"), \
                 FM_INTEGER, string_new("0"), FM_METHOD_RECEIVER, \
@@ -91,7 +91,7 @@ module(method_definition_spec, {
             FM_END_BINARY_METHOD \
         ));
 
-        // Method binary object: _ message: "**" param: 0 method: { self | 1 }
+        // Method binary object: _ message: "**" param: 0 method: { 1 }
         parse("# _ ** 0 => 1", vector_new( \
             FM_START_BINARY_METHOD, string_new("**"), \
                 FM_ANY_OBJECT, FM_METHOD_RECEIVER, \
@@ -100,7 +100,7 @@ module(method_definition_spec, {
             FM_END_BINARY_METHOD \
         ));
 
-        // Method binary object: 0 message: "**" param: a_number method: { self, a_number | 0 }
+        // Method binary object: 0 message: "**" param: a_number method: { a_number | 0 }
         parse("# 0 ** a_number => 0", vector_new( \
             FM_START_BINARY_METHOD, string_new("**"), \
                 FM_INTEGER, string_new("0"), FM_METHOD_RECEIVER, \
@@ -109,8 +109,8 @@ module(method_definition_spec, {
             FM_END_BINARY_METHOD \
         ));
 
-        // Method binary object: _ message: "**" param: a_number method: { self, a_number | self raised_to: a_number }
-        parse("# ** a_number => self raised_to: a_number", vector_new( \
+        // Method binary object: _ message: "**" param: a_number method: { a_number | @self raised_to: a_number }
+        parse("# ** a_number => @self raised_to: a_number", vector_new( \
             FM_START_BINARY_METHOD, string_new("**"), \
                 FM_ANY_OBJECT, FM_METHOD_RECEIVER, \
                 FM_LOCAL, string_new("a_number"), FM_METHOD_PARAMETER, \
@@ -122,7 +122,7 @@ module(method_definition_spec, {
     });
 
     it("parses keyword methods", {
-        // Method keyword object: _ message: "add:at:" params: [element, position] method: { self, element, position | 42 }
+        // Method keyword object: _ message: "add:at:" params: [element, position] method: { element, position | 42 }
         parse("#add: element at: position => 42", vector_new( \
             FM_START_KEYWORD_METHOD, string_new("add:at:"), \
                 FM_ANY_OBJECT, FM_METHOD_RECEIVER, \
@@ -132,7 +132,7 @@ module(method_definition_spec, {
             FM_END_KEYWORD_METHOD \
         ));
 
-        // Method keyword object: _ message: "new:" params: [2] method: { self | 1 }
+        // Method keyword object: _ message: "new:" params: [2] method: { 1 }
         parse("# _ new: 2 => 1", vector_new( \
             FM_START_KEYWORD_METHOD, string_new("new:"), \
                 FM_ANY_OBJECT, FM_METHOD_RECEIVER, \
@@ -141,7 +141,7 @@ module(method_definition_spec, {
             FM_END_KEYWORD_METHOD \
         ));
 
-        // Method keyword object: 1 message: "add:" params: [$nil] method: { self | $nil }
+        // Method keyword object: 1 message: "add:" params: [$nil] method: { $nil }
         parse("# 1 add: $nil => $nil", vector_new( \
             FM_START_KEYWORD_METHOD, string_new("add:"), \
                 FM_INTEGER, string_new("1"), FM_METHOD_RECEIVER, \
@@ -150,7 +150,7 @@ module(method_definition_spec, {
             FM_END_KEYWORD_METHOD \
         ));
 
-        // Method keyword object: 1 message: "add:" params: [2] method: { self | 3 }
+        // Method keyword object: 1 message: "add:" params: [2] method: { 3 }
         parse("# 1 add: 2 => 3", vector_new( \
             FM_START_KEYWORD_METHOD, string_new("add:"), \
                 FM_INTEGER, string_new("1"), FM_METHOD_RECEIVER, \
@@ -159,7 +159,7 @@ module(method_definition_spec, {
             FM_END_KEYWORD_METHOD \
         ));
 
-        // Method keyword object: 1 message: "one:" params: [_, _] method: { self | 42 }
+        // Method keyword object: 1 message: "one:" params: [_, _] method: { 42 }
         parse("# 1 one: _ two: _ => 42", vector_new( \
             FM_START_KEYWORD_METHOD, string_new("one:two:"), \
                 FM_INTEGER, string_new("1"), FM_METHOD_RECEIVER, \
@@ -169,7 +169,7 @@ module(method_definition_spec, {
             FM_END_KEYWORD_METHOD \
         ));
 
-        // Method keyword object: _ message: "ok?:otherwise!:" params: [value1, value2] method: { self, value1, value2 | 17 }
+        // Method keyword object: _ message: "ok?:otherwise!:" params: [value1, value2] method: { value1, value2 | 17 }
         parse("#ok?: value1 otherwise!: value2 => 17", vector_new( \
             FM_START_KEYWORD_METHOD, string_new("ok?:otherwise!:"), \
                 FM_ANY_OBJECT, FM_METHOD_RECEIVER, \
@@ -179,7 +179,7 @@ module(method_definition_spec, {
             FM_END_KEYWORD_METHOD \
         ));
 
-        // Method keyword object: [] message: "add:at:" params: ["element", "position"] method: { self, element, position | 17 }
+        // Method keyword object: [] message: "add:at:" params: ["element", "position"] method: { element, position | 17 }
         parse("# [] add: element at: position => 17", vector_new( \
             FM_START_KEYWORD_METHOD, string_new("add:at:"), \
                 FM_TENSOR, string_new("0"), FM_METHOD_RECEIVER, \
@@ -189,7 +189,7 @@ module(method_definition_spec, {
             FM_END_KEYWORD_METHOD \
         ));
 
-        // Method keyword object: [] message: "add:at:" params: ['a', 0] method: { self | ['a'] }
+        // Method keyword object: [] message: "add:at:" params: ['a', 0] method: { ['a'] }
         parse("# [] add: 'a' at: 0 => ['a']", vector_new( \
             FM_START_KEYWORD_METHOD, string_new("add:at:"), \
                 FM_TENSOR, string_new("0"), FM_METHOD_RECEIVER, \
@@ -200,8 +200,8 @@ module(method_definition_spec, {
             FM_END_KEYWORD_METHOD \
         ));
 
-        // Method keyword object: _ message: "add:at:" params: ['a', 0] method { self | ['a'] ++ self }
-        parse("#add: 'a' at: 0 => ['a'] ++ self", vector_new( \
+        // Method keyword object: _ message: "add:at:" params: ['a', 0] method { ['a'] ++ @self }
+        parse("#add: 'a' at: 0 => ['a'] ++ @self", vector_new( \
             FM_START_KEYWORD_METHOD, string_new("add:at:"), \
                 FM_ANY_OBJECT, FM_METHOD_RECEIVER, \
                 FM_STRING, string_new("a"), FM_METHOD_PARAMETER, \
@@ -213,12 +213,12 @@ module(method_definition_spec, {
             FM_END_KEYWORD_METHOD \
         ));
 
-        // Method keyword object: _ message: "times:" params: ["a_block"] method: { self, a_block | (
-        //     remaining = self,
+        // Method keyword object: _ message: "times:" params: ["a_block"] method: { a_block | (
+        //     remaining = @self,
         //     { (remaining = remaining - 1) >= 0 } while_true: { a_block value }
         // ) }
         parse("#times: a_block => ( \
-            remaining = self, \
+            remaining = @self, \
             { (remaining = remaining - 1) >= 0 } while_true: { a_block value } \
         )", vector_new( \
             FM_START_KEYWORD_METHOD, string_new("times:"), \
