@@ -171,6 +171,8 @@ vector *vector_new_empty(void);
     (self)->items[(self)->size++] = (item); \
 } while(0)
 
+#define vector_remove(self, index) (self)->items[--(self)->size] = NULL;
+
 /**
  * @brief: Get the value of a specific vector index
  * @param self -> The vector to use

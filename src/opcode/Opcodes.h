@@ -4,6 +4,8 @@
 #include "../base/string.h"
 
 // ------ Formal Messages Opcodes ------
+#define FM_POP                    string_new("POP")
+
 #define FM_LOCAL                  string_new("LOCAL")
 #define FM_INSTANCE               string_new("INSTANCE")
 #define FM_GLOBAL                 string_new("GLOBAL")
@@ -51,9 +53,10 @@
 #define FM_KEYWORD                string_new("KEYWORD")
 
 // ------ Emmited Opcodes ------
-#define OP_POP                    0xfd
 #define TEST_OP_PRINT             0xfe
+
 #define OP_HALT                   0x00
+#define OP_POP                    0xfd
 
 #define OP_PUT_NIL                0x01
 #define OP_PUT_TRUE               0x02

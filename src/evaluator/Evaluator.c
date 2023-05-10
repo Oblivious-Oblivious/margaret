@@ -46,6 +46,7 @@ static void evaluator_run(VM *vm) {
             case TEST_OP_PRINT: {
                 printf("%s\n", string_get(marg_value_format(STACK_PEEK(vm, 0))));
                 STACK_POP(vm);
+                // STACK_POP(vm);
                 break;
             }
 
@@ -93,32 +94,26 @@ static void evaluator_run(VM *vm) {
 
             case OP_SET_GLOBAL: {
                 table_set(&vm->global_variables, READ_TEMPORARY(), STACK_PEEK(vm, 0));
-                STACK_POP(vm);
                 break;
             }
             case OP_SET_GLOBAL_LONG: {
                 table_set(&vm->global_variables, READ_LONG_TEMPORARY(), STACK_PEEK(vm, 0));
-                STACK_POP(vm);
                 break;
             }
             case OP_SET_INSTANCE: {
                 table_set(vm->current->instance_variables, READ_TEMPORARY(), STACK_PEEK(vm, 0));
-                STACK_POP(vm);
                 break;
             }
             case OP_SET_INSTANCE_LONG: {
                 table_set(vm->current->instance_variables, READ_LONG_TEMPORARY(), STACK_PEEK(vm, 0));
-                STACK_POP(vm);
                 break;
             }
             case OP_SET_LOCAL: {
                 table_set(&vm->current->local_variables, READ_TEMPORARY(), STACK_PEEK(vm, 0));
-                STACK_POP(vm);
                 break;
             }
             case OP_SET_LOCAL_LONG: {
                 table_set(&vm->current->local_variables, READ_LONG_TEMPORARY(), STACK_PEEK(vm, 0));
-                STACK_POP(vm);
                 break;
             }
 

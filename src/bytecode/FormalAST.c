@@ -31,6 +31,7 @@ vector *ast_translation_unit(vector *optional_assignment_list, vector *expr) {
         for(size_t j = 0; j < item_size; j++)
             vector_add(res, vector_get(item, j));
     }
+    vector_add(res, FM_POP);
 
     return res;
 }
@@ -187,8 +188,10 @@ vector *ast_group(vector *unit_list) {
 
     if(vector_size(res) == 0)
         return vector_new(FM_NIL);
-    else
+    else {
+        vector_remove(res, unit_list_size-1);
         return res;
+    }
 }
 
 vector *ast_variable(string *optional_instance_symbol, string *name) {
