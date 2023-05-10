@@ -24,7 +24,7 @@ module(procs_spec, {
         parse("{ param | param puts }", vector_new(FM_START_PROC, FM_PROC_PARAMETER, string_new("param"), FM_LOCAL, string_new("param"), FM_UNARY, string_new("puts"), FM_POP, FM_END_PROC, FM_POP));
         parse("{ a | a }", vector_new(FM_START_PROC, FM_PROC_PARAMETER, string_new("a"), FM_LOCAL, string_new("a"), FM_POP, FM_END_PROC, FM_POP));
         parse("{ x = 2 } call", vector_new(FM_START_PROC, FM_INTEGER, string_new("2"), FM_STORE_LOCAL, string_new("x"), FM_POP, FM_END_PROC, FM_UNARY, string_new("call"), FM_POP));
-        parse("{ param | param puts } call: {a: 42}", vector_new(FM_START_PROC, FM_PROC_PARAMETER, string_new("param"), FM_LOCAL, string_new("param"), FM_UNARY, string_new("puts"), FM_POP, FM_END_PROC, FM_LOCAL, string_new("Association"), FM_STRING, string_new("a"), FM_INTEGER, string_new("42"), FM_POP, FM_KEYWORD, string_new("key:value:"), string_new("2"), FM_HASH, string_new("1"), FM_KEYWORD, string_new("call:"), string_new("1"), FM_POP));
+        parse("{ param | param puts } call: {a: 42}", vector_new(FM_START_PROC, FM_PROC_PARAMETER, string_new("param"), FM_LOCAL, string_new("param"), FM_UNARY, string_new("puts"), FM_POP, FM_END_PROC, FM_STRING, string_new("a"), FM_INTEGER, string_new("42"), FM_HASH, string_new("2"), FM_KEYWORD, string_new("call:"), string_new("1"), FM_POP));
     });
 })
 

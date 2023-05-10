@@ -399,6 +399,7 @@ vector *ast_tuple_literal(vector *item_list) {
         size_t item_size = vector_size(item);
         for(size_t j = 0; j < item_size; j++)
             vector_add(res, vector_get(item, j));
+        vector_remove(res, i);
     }
 
     vector_add(res, FM_TUPLE);
@@ -442,7 +443,7 @@ vector *ast_bitstring_literal(vector *item_list) {
 
     vector_add(res, FM_BITSTRING);
     char size_ptr[32];
-    snprintf(size_ptr, sizeof(size_ptr), "%zu", vector_size(item_list));
+    snprintf(size_ptr, sizeof(size_ptr), "%zu", vector_size(item_list) * 2);
     string *size = string_new(size_ptr);
     vector_add(res, size);
     return res;
@@ -457,11 +458,12 @@ vector *ast_hash_literal(vector *association_list) {
         size_t item_size = vector_size(item);
         for(size_t j = 0; j < item_size; j++)
             vector_add(res, vector_get(item, j));
+        vector_remove(res, i);
     }
-    
+
     vector_add(res, FM_HASH);
     char size_ptr[32];
-    snprintf(size_ptr, sizeof(size_ptr), "%zu", vector_size(association_list));
+    snprintf(size_ptr, sizeof(size_ptr), "%zu", vector_size(association_list) * 2);
     string *size = string_new(size_ptr);
     vector_add(res, size);
     return res;
@@ -469,23 +471,19 @@ vector *ast_hash_literal(vector *association_list) {
 
 vector *ast_bit_literal(vector *bit) {
     vector *res = vector_new_empty();
-    vector_add(res, FM_LOCAL);
-    vector_add(res, string_new("Bit"));
 
     size_t bit_length = vector_size(bit);
     for(size_t i = 0; i < bit_length; i++)
         vector_add(res, vector_get(bit, i));
 
-    vector_add(res, FM_KEYWORD);
-    vector_add(res, string_new("value:"));
-    vector_add(res, string_new("1"));
+    vector_add(res, FM_INTEGER);
+    vector_add(res, string_new("8"));
+
     return res;
 }
 
 vector *ast_bit_size_literal(vector *bit, vector *size) {
     vector *res = vector_new_empty();
-    vector_add(res, FM_LOCAL);
-    vector_add(res, string_new("Bit"));
 
     size_t bit_length = vector_size(bit);
     for(size_t i = 0; i < bit_length; i++)
@@ -494,36 +492,26 @@ vector *ast_bit_size_literal(vector *bit, vector *size) {
     size_t size_length = vector_size(size);
     for(size_t i = 0; i < size_length; i++)
         vector_add(res, vector_get(size, i));
-    
-    vector_add(res, FM_KEYWORD);
-    vector_add(res, string_new("value:size:"));
-    vector_add(res, string_new("2"));
+
     return res;
 }
 
 vector *ast_association(vector *key, vector *value) {
     vector *res = vector_new_empty();
-    vector_add(res, FM_LOCAL);
-    vector_add(res, string_new("Association"));
 
     size_t key_size = vector_size(key);
     for(size_t i = 0; i < key_size; i++)
         vector_add(res, vector_get(key, i));
-    
+
     size_t value_size = vector_size(value);
     for(size_t i = 0; i < value_size; i++)
         vector_add(res, vector_get(value, i));
-    
-    vector_add(res, FM_KEYWORD);
-    vector_add(res, string_new("key:value:"));
-    vector_add(res, string_new("2"));
+
     return res;
 }
 
 vector *ast_json_association(string *key, vector *value) {
     vector *res = vector_new_empty();
-    vector_add(res, FM_LOCAL);
-    vector_add(res, string_new("Association"));
     vector_add(res, FM_STRING);
     vector_add(res, key);
 
@@ -531,8 +519,5 @@ vector *ast_json_association(string *key, vector *value) {
     for(size_t i = 0; i < value_size; i++)
         vector_add(res, vector_get(value, i));
 
-    vector_add(res, FM_KEYWORD);
-    vector_add(res, string_new("key:value:"));
-    vector_add(res, string_new("2"));
     return res;
 }
