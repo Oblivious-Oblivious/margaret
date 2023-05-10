@@ -222,10 +222,20 @@ vector *ast_proc_literal(vector *param_list, vector *function) {
         vector_add(res, vector_get(param_list, i));
     }
 
+    size_t valid_function_elements = 0;
     size_t function_size = vector_size(function);
-    for(size_t i = 0; i < function_size; i++)
-        if(vector_get(function, i) != NULL)
+    for(size_t i = 0; i < function_size; i++) {
+        if(vector_get(function, i) != NULL) {
+            valid_function_elements++;
             vector_add(res, vector_get(function, i));
+        }
+    }
+
+    if(valid_function_elements == 1) {
+        vector_remove(res, vector_size(res)-1);
+        vector_add(res, FM_NIL);
+        vector_add(res, FM_POP);
+    }
 
     vector_add(res, FM_END_PROC);
     return res;
