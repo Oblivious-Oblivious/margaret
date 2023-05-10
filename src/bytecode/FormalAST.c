@@ -418,6 +418,7 @@ vector *ast_tensor_literal(vector *item_list) {
         size_t item_size = vector_size(item);
         for(size_t j = 0; j < item_size; j++)
             vector_add(res, vector_get(item, j));
+        vector_remove(res, i);
     }
 
     vector_add(res, FM_TENSOR);

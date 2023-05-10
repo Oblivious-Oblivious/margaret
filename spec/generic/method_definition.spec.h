@@ -236,7 +236,6 @@ module(method_definition_spec, {
                 FM_STRING, string_new("a"), FM_METHOD_PARAMETER, \
                 FM_INTEGER, string_new("0"), FM_METHOD_PARAMETER, \
                 FM_STRING, string_new("a"), \
-                FM_POP, \
                 FM_TENSOR, string_new("1"), \
                 FM_POP, \
             FM_END_KEYWORD_METHOD, \
@@ -250,7 +249,6 @@ module(method_definition_spec, {
                 FM_STRING, string_new("a"), FM_METHOD_PARAMETER, \
                 FM_INTEGER, string_new("0"), FM_METHOD_PARAMETER, \
                 FM_STRING, string_new("a"), \
-                FM_POP, \
                 FM_TENSOR, string_new("1"), \
                 FM_SELF, \
                 FM_BINARY, string_new("++"), \

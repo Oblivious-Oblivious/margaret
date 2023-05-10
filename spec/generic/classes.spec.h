@@ -55,9 +55,7 @@ module(classes_spec, {
             FM_POP, \
             FM_LOCAL, string_new("Point"), \
             FM_STRING, string_new("x"), \
-            FM_POP, \
             FM_STRING, string_new("y"), \
-            FM_POP, \
             FM_TENSOR, string_new("2"), \
             FM_KEYWORD, string_new("attr_reader:"), string_new("1"), \
             FM_POP, \
@@ -94,7 +92,6 @@ module(classes_spec, {
                 FM_SELF, \
                 FM_POP, \
             FM_END_BINARY_METHOD, \
-            FM_POP, \
             FM_START_BINARY_METHOD, string_new("+"), \
                 FM_ANY_OBJECT, FM_METHOD_RECEIVER, \
                 FM_LOCAL, string_new("other"), FM_METHOD_PARAMETER, \
@@ -113,7 +110,6 @@ module(classes_spec, {
                 FM_SELF, \
                 FM_POP, \
             FM_END_BINARY_METHOD, \
-            FM_POP, \
             FM_TENSOR, string_new("2"),
             FM_KEYWORD, string_new("multibind:"), string_new("1"), \
             FM_POP, \
@@ -123,7 +119,6 @@ module(classes_spec, {
             FM_POP, \
             FM_LOCAL, string_new("Point"), \
             FM_STRING, string_new("z"), \
-            FM_POP, \
             FM_TENSOR, string_new("1"), \
             FM_KEYWORD, string_new("attr_reader:"), string_new("1"), \
             FM_POP, \
@@ -244,14 +239,12 @@ module(classes_spec, {
                 FM_UNARY, string_new("clone"), \
                 FM_POP, \
             FM_END_KEYWORD_METHOD, \
-            FM_POP, \
             FM_START_BINARY_METHOD, string_new("+"), \
                 FM_ANY_OBJECT, FM_METHOD_RECEIVER, \
                 FM_NIL, FM_METHOD_PARAMETER, \
                 FM_SELF, \
                 FM_POP, \
             FM_END_BINARY_METHOD, \
-            FM_POP, \
             FM_START_BINARY_METHOD, string_new("+"), \
                 FM_ANY_OBJECT, FM_METHOD_RECEIVER, \
                 FM_LOCAL, string_new("other"), FM_METHOD_PARAMETER, \
@@ -270,16 +263,13 @@ module(classes_spec, {
                 FM_SELF, \
                 FM_POP, \
             FM_END_BINARY_METHOD, \
-            FM_POP, \
             FM_TENSOR, string_new("3"), \
             FM_KEYWORD, string_new("clone:"), string_new("1"), \
             FM_STORE_LOCAL, string_new("Point"), \
             FM_POP, \
             FM_LOCAL, string_new("Point"), \
             FM_STRING, string_new("@x"), \
-            FM_POP, \
             FM_STRING, string_new("@y"), \
-            FM_POP, \
             FM_TENSOR, string_new("2"), \
             FM_KEYWORD, string_new("attr_reader:"), string_new("1"), \
             FM_POP, \

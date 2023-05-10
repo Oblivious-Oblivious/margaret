@@ -48,9 +48,9 @@ module(arithmetic_spec, {
         parse("(x = 0.7 arcsin)", vector_new(FM_FLOAT, string_new("0.7"), FM_UNARY, string_new("arcsin"), FM_STORE_LOCAL, string_new("x"), FM_POP));
         parse("(x = 0.7 arccos)", vector_new(FM_FLOAT, string_new("0.7"), FM_UNARY, string_new("arccos"), FM_STORE_LOCAL, string_new("x"), FM_POP));
         parse("(x = 0.7 arctan)", vector_new(FM_FLOAT, string_new("0.7"), FM_UNARY, string_new("arctan"), FM_STORE_LOCAL, string_new("x"), FM_POP));
-        parse("(x = [10, 20] max)", vector_new(FM_INTEGER, string_new("10"), FM_POP, FM_INTEGER, string_new("20"), FM_POP, FM_TENSOR, string_new("2"), FM_UNARY, string_new("max"), FM_STORE_LOCAL, string_new("x"), FM_POP));
-        parse("(x = [10, 20] min)", vector_new(FM_INTEGER, string_new("10"), FM_POP, FM_INTEGER, string_new("20"), FM_POP, FM_TENSOR, string_new("2"), FM_UNARY, string_new("min"), FM_STORE_LOCAL, string_new("x"), FM_POP));
-        parse("(x = [0, 100] random)", vector_new(FM_INTEGER, string_new("0"), FM_POP, FM_INTEGER, string_new("100"), FM_POP, FM_TENSOR, string_new("2"), FM_UNARY, string_new("random"), FM_STORE_LOCAL, string_new("x"), FM_POP));
+        parse("(x = [10, 20] max)", vector_new(FM_INTEGER, string_new("10"), FM_INTEGER, string_new("20"), FM_TENSOR, string_new("2"), FM_UNARY, string_new("max"), FM_STORE_LOCAL, string_new("x"), FM_POP));
+        parse("(x = [10, 20] min)", vector_new(FM_INTEGER, string_new("10"), FM_INTEGER, string_new("20"), FM_TENSOR, string_new("2"), FM_UNARY, string_new("min"), FM_STORE_LOCAL, string_new("x"), FM_POP));
+        parse("(x = [0, 100] random)", vector_new(FM_INTEGER, string_new("0"), FM_INTEGER, string_new("100"), FM_TENSOR, string_new("2"), FM_UNARY, string_new("random"), FM_STORE_LOCAL, string_new("x"), FM_POP));
 
         parse("(x = Float PI)", vector_new(FM_LOCAL, string_new("Float"), FM_UNARY, string_new("PI"), FM_STORE_LOCAL, string_new("x"), FM_POP));
         parse("(x = Float E)", vector_new(FM_LOCAL, string_new("Float"), FM_UNARY, string_new("E"), FM_STORE_LOCAL, string_new("x"), FM_POP));

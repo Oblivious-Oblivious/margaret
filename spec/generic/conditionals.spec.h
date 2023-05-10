@@ -24,7 +24,7 @@ module(conditionals_spec, {
                     [2, 200], \
                     [3, 300], \
                 ] \
-        )", vector_new(FM_LOCAL, string_new("obj"), FM_INTEGER, string_new("1"), FM_POP, FM_INTEGER, string_new("100"), FM_POP, FM_TENSOR, string_new("2"), FM_POP, FM_INTEGER, string_new("2"), FM_POP, FM_INTEGER, string_new("200"), FM_POP, FM_TENSOR, string_new("2"), FM_POP, FM_INTEGER, string_new("3"), FM_POP, FM_INTEGER, string_new("300"), FM_POP, FM_TENSOR, string_new("2"), FM_POP, FM_TENSOR, string_new("3"), FM_KEYWORD, string_new("match:"), string_new("1"), FM_POP));
+        )", vector_new(FM_LOCAL, string_new("obj"), FM_INTEGER, string_new("1"), FM_INTEGER, string_new("100"), FM_TENSOR, string_new("2"), FM_INTEGER, string_new("2"), FM_INTEGER, string_new("200"), FM_TENSOR, string_new("2"), FM_INTEGER, string_new("3"), FM_INTEGER, string_new("300"), FM_TENSOR, string_new("2"), FM_TENSOR, string_new("3"), FM_KEYWORD, string_new("match:"), string_new("1"), FM_POP));
         parse("obj match: {\"1\": 100, \"2\": 200, \"3\": 300}", vector_new(FM_LOCAL, string_new("obj"), FM_LOCAL, string_new("Association"), FM_STRING, string_new("1"), FM_INTEGER, string_new("100"), FM_POP, FM_KEYWORD, string_new("key:value:"), string_new("2"), FM_LOCAL, string_new("Association"), FM_STRING, string_new("2"), FM_INTEGER, string_new("200"), FM_POP, FM_KEYWORD, string_new("key:value:"), string_new("2"), FM_LOCAL, string_new("Association"), FM_STRING, string_new("3"), FM_INTEGER, string_new("300"), FM_POP, FM_KEYWORD, string_new("key:value:"), string_new("2"), FM_HASH, string_new("3"), FM_KEYWORD, string_new("match:"), string_new("1"), FM_POP));
     });
 })

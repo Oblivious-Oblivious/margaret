@@ -35,7 +35,7 @@ module(messages_spec, {
         parse("x = a + b * 2 - 5", vector_new(FM_LOCAL, string_new("a"), FM_LOCAL, string_new("b"), FM_BINARY, string_new("+"), FM_INTEGER, string_new("2"), FM_BINARY, string_new("*"), FM_INTEGER, string_new("5"), FM_BINARY, string_new("-"), FM_STORE_LOCAL, string_new("x"), FM_POP));
         parse("x << item", vector_new(FM_LOCAL, string_new("x"), FM_LOCAL, string_new("item"), FM_BINARY, string_new("<<"), FM_POP));
         parse("x <<>>+-++-- 15", vector_new(FM_LOCAL, string_new("x"), FM_INTEGER, string_new("15"), FM_BINARY, string_new("<<>>+-++--"), FM_POP));
-        parse("[1, 2, 3] ++ [4, 5]", vector_new(FM_INTEGER, string_new("1"), FM_POP, FM_INTEGER, string_new("2"), FM_POP, FM_INTEGER, string_new("3"), FM_POP, FM_TENSOR, string_new("3"), FM_INTEGER, string_new("4"), FM_POP, FM_INTEGER, string_new("5"), FM_POP, FM_TENSOR, string_new("2"), FM_BINARY, string_new("++"), FM_POP));
+        parse("[1, 2, 3] ++ [4, 5]", vector_new(FM_INTEGER, string_new("1"), FM_INTEGER, string_new("2"), FM_INTEGER, string_new("3"), FM_TENSOR, string_new("3"), FM_INTEGER, string_new("4"), FM_INTEGER, string_new("5"), FM_TENSOR, string_new("2"), FM_BINARY, string_new("++"), FM_POP));
         parse("(4 + 3) * (5 + 6)", vector_new(FM_INTEGER, string_new("4"), FM_INTEGER, string_new("3"), FM_BINARY, string_new("+"), FM_INTEGER, string_new("5"), FM_INTEGER, string_new("6"), FM_BINARY, string_new("+"), FM_BINARY, string_new("*"), FM_POP));
     });
 

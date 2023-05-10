@@ -24,7 +24,7 @@ module(assignments_spec, {
     });
 
     it("parses assignments as a plain message on non assignable values", {
-        parse("[a, b, c] = [1, 2, 3]", vector_new(FM_LOCAL, string_new("a"), FM_POP, FM_LOCAL, string_new("b"), FM_POP, FM_LOCAL, string_new("c"), FM_POP, FM_TENSOR, string_new("3"), FM_INTEGER, string_new("1"), FM_POP, FM_INTEGER, string_new("2"), FM_POP, FM_INTEGER, string_new("3"), FM_POP, FM_TENSOR, string_new("3"), FM_BINARY, string_new("="), FM_POP));
+        parse("[a, b, c] = [1, 2, 3]", vector_new(FM_LOCAL, string_new("a"), FM_LOCAL, string_new("b"), FM_LOCAL, string_new("c"), FM_TENSOR, string_new("3"), FM_INTEGER, string_new("1"), FM_INTEGER, string_new("2"), FM_INTEGER, string_new("3"), FM_TENSOR, string_new("3"), FM_BINARY, string_new("="), FM_POP));
         parse("a = 3 + 4", vector_new(FM_INTEGER, string_new("3"), FM_INTEGER, string_new("4"), FM_BINARY, string_new("+"), FM_STORE_LOCAL, string_new("a"), FM_POP));
         parse("2 = 3 + 4", vector_new(FM_INTEGER, string_new("2"), FM_INTEGER, string_new("3"), FM_BINARY, string_new("="), FM_INTEGER, string_new("4"), FM_BINARY, string_new("+"), FM_POP));
     });
