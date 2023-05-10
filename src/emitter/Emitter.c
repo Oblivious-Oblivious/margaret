@@ -76,7 +76,8 @@ VM *emitter_emit(vector *formal_bytecode) {
     VM *vm = vm_new();
     MargObject *marg_object = AS_OBJECT(table_get(&vm->global_variables, MARG_STRING("$Margaret")));
     MargMethod *main_method = AS_METHOD(table_get(&marg_object->messages, MARG_STRING("main:")));
-    MargProc *margaret_main_method_proc = main_method->proc;
+    // MargProc *margaret_main_method_proc = main_method->proc;
+    vm->current = main_method->proc;
 
     size_t bytecode_size = vector_size(formal_bytecode);
     for(size_t ip = 0; ip < bytecode_size; ip++) {
