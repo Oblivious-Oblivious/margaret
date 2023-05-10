@@ -164,5 +164,5 @@ static void evaluator_run(VM *vm) {
 
 MargValue evaluator_evaluate(VM *vm) {
     evaluator_run(vm);
-    return STACK_PEEK(vm, 0);
+    return STACK_PEEK(vm, -1);
 }

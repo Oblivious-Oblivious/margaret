@@ -58,8 +58,8 @@ static void PRINT_FORMAL(vector *formal_bytecode) {
 }
 
 static void margaret_repl(void) {
-    // while(1) PRINT(EVAL(OPTIMIZE(EMIT(FORMALIZE(READ(SCAN("$> ")))))));
-    while(1) PRINT_FORMAL(FORMALIZE(READ(SCAN("$> "))));
+    while(1) PRINT(EVAL(OPTIMIZE(EMIT(FORMALIZE(READ(SCAN("$> ")))))));
+    // while(1) PRINT_FORMAL(FORMALIZE(READ(SCAN("$> "))));
 }
 
 static void margaret_run_file(char *filename) {
