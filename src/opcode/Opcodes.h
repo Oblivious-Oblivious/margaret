@@ -53,7 +53,7 @@
 // ------ Emmited Opcodes ------
 #define OP_POP                    0xfd
 #define TEST_OP_PRINT             0xfe
-#define OP_RETURN                 0xff
+#define OP_HALT                   0x00
 
 #define OP_PUT_NIL                0x01
 #define OP_PUT_TRUE               0x02

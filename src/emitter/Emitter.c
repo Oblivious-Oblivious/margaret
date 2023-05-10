@@ -214,6 +214,6 @@ VM *emitter_emit(vector *formal_bytecode) {
         opcode_case(FM_KEYWORD) {}
     }
 
-    emit_byte(OP_RETURN);
+    emit_byte(OP_HALT);
     return vm;
 }

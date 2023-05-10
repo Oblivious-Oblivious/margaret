@@ -9,7 +9,7 @@ VM *optimizer_optimize(VM *vm) {
     while(1) {
         uint8_t instruction;
         switch(instruction = READ_BYTE()) {
-            case OP_RETURN: {
+            case OP_HALT: {
                 return vm;
             }
             default: {}

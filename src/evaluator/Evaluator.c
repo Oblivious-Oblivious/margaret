@@ -43,14 +43,14 @@ static void evaluator_run(VM *vm) {
                 STACK_POP(vm);
                 break;
             }
-            case OP_RETURN: {
-                return;
-            }
             case TEST_OP_PRINT: {
                 printf("%s\n", string_get(marg_value_format(STACK_PEEK(vm, 0))));
                 STACK_POP(vm);
                 break;
             }
+
+            case OP_HALT:
+                return;
 
             case OP_PUT_NIL: {
                 STACK_PUSH(vm, MARG_NIL);

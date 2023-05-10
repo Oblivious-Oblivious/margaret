@@ -142,8 +142,9 @@ static size_t inspect_instruction(vector *res, chunk *chunk, size_t offset) {
             return instruction_single(res, "POP", chunk, offset);
         case TEST_OP_PRINT:
             return instruction_single(res, "PRINT", chunk, offset);
-        case OP_RETURN:
-            return instruction_single(res, "RETURN", chunk, offset);
+
+        case OP_HALT:
+            return instruction_single(res, "HALT", chunk, offset);
 
         case OP_PUT_NIL:
             return instruction_single(res, "PUT_NIL", chunk, offset);
