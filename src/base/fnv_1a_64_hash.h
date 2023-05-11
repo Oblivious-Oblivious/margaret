@@ -4,6 +4,12 @@
 #include <stdlib.h> /* size_t */
 #include <stdint.h> /* uint64_t */
 
+/**
+ * @brief Implementation of the fnv reverse (xor first, mult later)
+ * @param key
+ * @param size
+ * @return uint64_t hash
+ */
 uint64_t fnv_1a_64_hash(char *key, size_t size);
 
 #endif
