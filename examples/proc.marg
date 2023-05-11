@@ -6,12 +6,15 @@
             v = 2,
             {(
                 v = 3,
-                v puts,
-            )},
-            v puts,
-        )},
-        v puts,
+                puts: v,
+            )} call,
+            puts: v,
+        )} call,
+        puts: v,
     )},
-    v puts,
-    p0 puts,
+
+    v = 0,
+    p0 call,
+    puts: v,
+    puts: p0,
 )

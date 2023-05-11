@@ -68,7 +68,6 @@
     puts: @a,
     puts: @b,
 
-    v = 0,
     p0 = {(
         v = 1,
         {(
@@ -76,29 +75,34 @@
             {(
                 v = 3,
                 puts: v,
-            )},
+            )} call,
             puts: v,
-        )},
+        )} call,
         puts: v,
     )},
+    p1 = { ( puts: "inside of proc" ) },
+    p2 = { ($a = 12, puts: "$a should be `12`:", puts: $a) },
+    p3 = { (puts: "@a should be `33`:", puts: @a) },
+    p4 = { (@a = 321, puts: "@a should be `321`:", puts: @a) },
+    p5 = { a | (puts: a) },
+    p6 = { a | (puts: a, a = 12, puts: a) },
+    p7 = { (puts: "y should be `5`:", puts: y) },
+
+    v = 0,
+    p0 call,
     puts: v,
     puts: p0,
 
-    p1 = { ( puts: "inside of proc" ) },
-
-    p2 = { ($a = 12, puts: "$a should be `12`:", puts: $a) },
+    p1 call,
+    p2 call,
     puts: "$a should be `12`:", puts: $a,
-
-    p3 = { (puts: "@a should be `33`:", puts: @a) },
+    p3 call,
     puts: "@a should be `33`:", puts: @a,
-
-    p4 = { (@a = 321, puts: "@a should be `321`:", puts: @a) },
+    p4 call,
     puts: "@a should be `321`:", puts: @a,
-
-    p5 = { a | (puts: a) },
-    p6 = { a | (puts: a, a = 12, puts: a) },
-
-    p7 = { (puts: "y should be `5`:", puts: y) },
+    p5 call,
+    p6 call,
+    p7 call,
     puts: "y should be `5`:", puts: y,
 
 )
