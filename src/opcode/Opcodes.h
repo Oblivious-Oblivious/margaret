@@ -89,7 +89,8 @@
 #define OP_GET_LOCAL_LONG         0x15
 
 #define OP_CALL_PROC              0x16
-#define OP_EXIT_PROC              0x17
+// #define OP_CALL_PROC_PARAMS       0x17
+#define OP_EXIT_PROC              0x18
 
 
 // TODO Superinstructions for incrementing, decrementing and doubling
