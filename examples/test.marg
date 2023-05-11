@@ -105,4 +105,10 @@
     p7 call,
     puts: "y should be `5`:", puts: y,
 
+    u0 = #test => 42,
+    puts: u0,
+    b0 = #+ other => (),
+    puts: b0,
+    k0 = # add: element at: position => (),
+    puts: k0,
 )
