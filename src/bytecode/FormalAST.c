@@ -216,11 +216,13 @@ vector *ast_variable(string *optional_instance_symbol, string *name) {
 vector *ast_proc_literal(vector *param_list, vector *function) {
     vector *res = vector_new(FM_START_PROC);
 
-    size_t param_list_size = vector_size(param_list);
-    for(size_t i = 0; i < param_list_size; i++) {
-        vector_add(res, FM_PROC_PARAMETER);
-        vector_add(res, vector_get(param_list, i));
-    }
+    (void)param_list;
+
+    // size_t param_list_size = vector_size(param_list);
+    // for(size_t i = 0; i < param_list_size; i++) {
+    //     vector_add(res, FM_PROC_PARAMETER);
+    //     vector_add(res, vector_get(param_list, i));
+    // }
 
     size_t valid_function_elements = 0;
     size_t function_size = vector_size(function);
@@ -269,10 +271,12 @@ vector *ast_c_function_declaration(string *return_type, string *name, vector *pa
 vector *ast_unary_method_definition(vector *multimethod_object_default_value, string *selector, vector *function) {
     vector *res = vector_new(FM_START_UNARY_METHOD, selector);
 
-    size_t multimethod_object_default_value_size = vector_size(multimethod_object_default_value);
-    for(size_t i = 0; i < multimethod_object_default_value_size; i++)
-        vector_add(res, vector_get(multimethod_object_default_value, i));
-    vector_add(res, FM_METHOD_RECEIVER);
+    (void)multimethod_object_default_value;
+
+    // size_t multimethod_object_default_value_size = vector_size(multimethod_object_default_value);
+    // for(size_t i = 0; i < multimethod_object_default_value_size; i++)
+    //     vector_add(res, vector_get(multimethod_object_default_value, i));
+    // vector_add(res, FM_METHOD_RECEIVER);
 
     size_t function_size = vector_size(function);
     for(size_t i = 0; i < function_size; i++)
@@ -285,15 +289,18 @@ vector *ast_unary_method_definition(vector *multimethod_object_default_value, st
 vector *ast_binary_method_definition(vector *multimethod_object_default_value, string *selector, vector *param, vector *function) {
     vector *res = vector_new(FM_START_BINARY_METHOD, selector);
 
-    size_t multimethod_object_default_value_size = vector_size(multimethod_object_default_value);
-    for(size_t i = 0; i < multimethod_object_default_value_size; i++)
-        vector_add(res, vector_get(multimethod_object_default_value, i));
-    vector_add(res, FM_METHOD_RECEIVER);
+    (void)multimethod_object_default_value;
+    (void)param;
 
-    size_t param_size = vector_size(param);
-    for(size_t i = 0; i < param_size; i++)
-        vector_add(res, vector_get(param, i));
-    vector_add(res, FM_METHOD_PARAMETER);
+    // size_t multimethod_object_default_value_size = vector_size(multimethod_object_default_value);
+    // for(size_t i = 0; i < multimethod_object_default_value_size; i++)
+    //     vector_add(res, vector_get(multimethod_object_default_value, i));
+    // vector_add(res, FM_METHOD_RECEIVER);
+
+    // size_t param_size = vector_size(param);
+    // for(size_t i = 0; i < param_size; i++)
+    //     vector_add(res, vector_get(param, i));
+    // vector_add(res, FM_METHOD_PARAMETER);
 
     size_t function_size = vector_size(function);
     for(size_t i = 0; i < function_size; i++)
@@ -306,19 +313,22 @@ vector *ast_binary_method_definition(vector *multimethod_object_default_value, s
 vector *ast_keyword_method_definition(vector *multimethod_object_default_value, string *selector, vector *params, vector *function) {
     vector *res = vector_new(FM_START_KEYWORD_METHOD, selector);
 
-    size_t multimethod_object_default_value_size = vector_size(multimethod_object_default_value);
-    for(size_t i = 0; i < multimethod_object_default_value_size; i++)
-        vector_add(res, vector_get(multimethod_object_default_value, i));
-    vector_add(res, FM_METHOD_RECEIVER);
+    (void)multimethod_object_default_value;
+    (void)params;
 
-    size_t params_size = vector_size(params);
-    for(size_t i = 0; i < params_size; i++) {
-        vector *param = vector_get(params, i);
-        size_t param_size = vector_size(param);
-        for(size_t i = 0; i < param_size; i++)
-            vector_add(res, vector_get(param, i));
-        vector_add(res, FM_METHOD_PARAMETER);
-    }
+    // size_t multimethod_object_default_value_size = vector_size(multimethod_object_default_value);
+    // for(size_t i = 0; i < multimethod_object_default_value_size; i++)
+    //     vector_add(res, vector_get(multimethod_object_default_value, i));
+    // vector_add(res, FM_METHOD_RECEIVER);
+
+    // size_t params_size = vector_size(params);
+    // for(size_t i = 0; i < params_size; i++) {
+    //     vector *param = vector_get(params, i);
+    //     size_t param_size = vector_size(param);
+    //     for(size_t i = 0; i < param_size; i++)
+    //         vector_add(res, vector_get(param, i));
+    //     vector_add(res, FM_METHOD_PARAMETER);
+    // }
 
     size_t function_size = vector_size(function);
     for(size_t i = 0; i < function_size; i++)
@@ -329,7 +339,8 @@ vector *ast_keyword_method_definition(vector *multimethod_object_default_value, 
 }
 
 vector *ast_any_object(void) {
-    return vector_new(FM_ANY_OBJECT);
+    // return vector_new(FM_ANY_OBJECT);
+    return vector_new_empty();
 }
 
 vector *ast_literal(vector *unit) {
