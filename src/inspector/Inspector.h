@@ -17,4 +17,24 @@ vector *inspect_vm_bytecode(VM *vm);
  */
 void inspect_and_print_vm_bytecode(VM *vm);
 
+/**
+ * @brief Inspects a proc
+ * @param vm -> The vm to be disassembled
+    Assuming that ip now points to a proc activation record
+ */
+void inspect_and_print_proc(VM *vm);
+
+/**
+ * @brief Inspects a proc
+ * @param vm -> The vm to be disassembled
+    Assuming that ip now points to a method activation record
+ */
+void inspect_and_print_method(VM *vm);
+
+/**
+ * @brief Inspects the main method ($Margaret main)
+ * @param vm -> The vm to be disassembled
+ */
+void inspect_and_print_main(VM *vm);
+
 #endif

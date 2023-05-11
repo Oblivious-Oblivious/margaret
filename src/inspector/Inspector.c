@@ -224,3 +224,21 @@ void inspect_and_print_vm_bytecode(VM *vm) {
     for(size_t i = 0; i < disassembled_size; i++)
         printf("%s\n", string_get(vector_get(disassembled, i)));
 }
+
+void inspect_and_print_proc(VM *vm) {
+    printf("\n/-------------- Disassembly: <proc> ------------\\\n");
+    inspect_and_print_vm_bytecode(vm);
+    printf("\\-----------------------------------------------/\n\n");
+}
+
+void inspect_and_print_method(VM *vm) {
+    printf("\n/--------------- Disassembly: <method> ---------\\\n");
+    inspect_and_print_vm_bytecode(vm);
+    printf("\\-----------------------------------------------/\n\n");
+}
+
+void inspect_and_print_main(VM *vm) {
+    printf("\n/-------------- Disassembly: <MAIN> ------------\\\n");
+    inspect_and_print_vm_bytecode(vm);
+    printf("\\-----------------------------------------------/\n\n");
+}

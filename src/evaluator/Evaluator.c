@@ -2,8 +2,6 @@
 
 #include <stdio.h>
 
-#include "../inspector/Inspector.h"
-
 #include "../opcode/Opcodes.h"
 #include "../opcode/MargValue.h"
 
@@ -31,10 +29,6 @@ static MargProc *get_margaret_main_method_proc(VM *vm) {
 static void evaluator_run(VM *vm) {
     vm->current = get_margaret_main_method_proc(vm);
     vm->current->ip = vm->current->bytecode->items;
-    printf("\n/-------------- Disassembly: <MAIN> ------------\\\n");
-    inspect_and_print_vm_bytecode(vm);
-    printf("\\-----------------------------------------------/\n\n");
-
     // TODO Branch table, computed goto
     while(1) {
         uint8_t instruction;
@@ -146,10 +140,6 @@ static void evaluator_run(VM *vm) {
                 MargProc *proc = AS_PROC(STACK_PEEK(vm, 0));
                 table_add_all(&vm->current->local_variables, &proc->local_variables);
                 vm->current = proc;
-
-                printf("\n/-------------- Disassembly: <proc> ------------\\\n");
-                inspect_and_print_vm_bytecode(vm);
-                printf("\\-----------------------------------------------/\n\n");
                 break;
             }
             case OP_EXIT_PROC: {

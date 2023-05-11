@@ -2,6 +2,8 @@
 
 #include <string.h> /* strtoll, strtold */
 
+#include "../inspector/Inspector.h"
+
 #include "../base/chunk.h"
 #include "../opcode/Opcodes.h"
 #include "../opcode/MargValue.h"
@@ -200,6 +202,7 @@ VM *emitter_emit(vector *formal_bytecode) {
         }
         opcode_case(FM_END_PROC) {
             emit_byte(OP_EXIT_PROC);
+            inspect_and_print_proc(vm);
             vm->current = vm->current->bound_proc;
         }
         opcode_case(FM_PROC_PARAMETER) {
@@ -220,5 +223,7 @@ VM *emitter_emit(vector *formal_bytecode) {
     }
 
     emit_byte(OP_HALT);
+    inspect_and_print_main(vm);
+
     return vm;
 }
