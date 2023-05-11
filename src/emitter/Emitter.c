@@ -206,6 +206,51 @@ VM *emitter_emit(vector *formal_bytecode) {
         opcode_case(FM_START_C_FUNCTION) {}
         opcode_case(FM_END_C_FUNCTION) {}
 
+        opcode_case(FM_START_UNARY_METHOD) {
+            MargValue new_method = MARG_METHOD(vm->current->bound_method->bound_object);
+            AS_METHOD(new_method)->proc->bound_proc = vm->current;
+            emit_possible_long_op(OP_PUT_OBJECT);
+            emit_temporary(new_method);
+            emit_byte(OP_SEND);
+
+            vm->current = AS_METHOD(new_method)->proc;
+        }
+        opcode_case(FM_END_UNARY_METHOD) {
+            emit_byte(OP_EXIT_METHOD);
+            inspect_and_print_method(vm);
+            vm->current = vm->current->bound_proc;
+        }
+        opcode_case(FM_START_BINARY_METHOD) {
+            MargValue new_method = MARG_METHOD(vm->current->bound_method->bound_object);
+            AS_METHOD(new_method)->proc->bound_proc = vm->current;
+            emit_possible_long_op(OP_PUT_OBJECT);
+            emit_temporary(new_method);
+            emit_byte(OP_SEND);
+
+            vm->current = AS_METHOD(new_method)->proc;
+        }
+        opcode_case(FM_END_BINARY_METHOD) {
+            // emit_byte(OP_POP);
+            emit_byte(OP_EXIT_METHOD);
+            inspect_and_print_method(vm);
+            vm->current = vm->current->bound_proc;
+        }
+        opcode_case(FM_START_KEYWORD_METHOD) {
+            MargValue new_method = MARG_METHOD(vm->current->bound_method->bound_object);
+            AS_METHOD(new_method)->proc->bound_proc = vm->current;
+            emit_possible_long_op(OP_PUT_OBJECT);
+            emit_temporary(new_method);
+            emit_byte(OP_SEND);
+
+            vm->current = AS_METHOD(new_method)->proc;
+        }
+        opcode_case(FM_END_KEYWORD_METHOD) {
+            // emit_byte(OP_POP);
+            // emit_byte(OP_POP);
+            emit_byte(OP_EXIT_METHOD);
+            inspect_and_print_method(vm);
+            vm->current = vm->current->bound_proc;
+        }
 
         opcode_case(FM_UNARY) {
             emit_byte(TEST_OP_PRINT);
