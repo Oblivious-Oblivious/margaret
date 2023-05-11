@@ -200,7 +200,6 @@ VM *emitter_emit(vector *formal_bytecode) {
             AS_PROC(new_proc)->bound_proc = vm->current;
             emit_possible_long_op(OP_PUT_OBJECT);
             emit_temporary(new_proc);
-            emit_byte(OP_CALL_PROC);
 
             vm->current = AS_PROC(new_proc);
         }
