@@ -13,6 +13,8 @@
 #include "MargFloat.h"
 #include "MargString.h"
 
+#include "MargTensor.h"
+
 #include "MargObject.h"
 #include "MargMethod.h"
 #include "MargProc.h"
@@ -36,6 +38,21 @@ string *marg_value_format(MargValue self) {
         string_addf(res, "%.*Lg", LDBL_DIG, AS_FLOAT(self)->value);
     else if(IS_STRING(self))
         string_addf(res, "\"%s\"", AS_STRING(self)->chars);
+
+    else if(IS_TENSOR(self)) {
+        MargTensor *tensor = AS_TENSOR(self);
+
+        string_add_str(res, "[");
+        size_t tensor_size = marg_tensor_size(tensor);
+        if(tensor_size > 0) {
+            for(size_t i = 0; i < tensor_size-1; i++)
+                string_addf(res, "%s, ", string_get(marg_value_format(marg_tensor_get(tensor, i))), ",");
+            string_addf(res, "%s]", string_get(marg_value_format(marg_tensor_get(tensor, tensor_size-1))));
+        }
+        else {
+            string_addf(res, "]");
+        }
+    }
 
     else if(IS_OBJECT(self))
         string_add_str(res, AS_OBJECT(self)->name);

@@ -76,6 +76,7 @@
 #include "opcode/MargObject.spec.h"
 #include "opcode/MargProc.spec.h"
 #include "opcode/MargString.spec.h"
+#include "opcode/MargTensor.spec.h"
 #include "opcode/MargTrue.spec.h"
 #include "opcode/MargValue.spec.h"
 
@@ -165,6 +166,7 @@ spec_suite({
     MargObjectSpec();
     MargProcSpec();
     MargStringSpec();
+    MargTensorSpec();
     MargTrueSpec();
     MargValueSpec();
 

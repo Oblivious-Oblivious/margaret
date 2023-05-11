@@ -183,7 +183,14 @@ VM *emitter_emit(vector *formal_bytecode) {
             }
         }
 
-        opcode_case(FM_TENSOR) {}
+        opcode_case(FM_TENSOR) {
+            char *end;
+            string *number_of_elements = vector_get(formal_bytecode, ++ip);
+            MargValue temporary = MARG_INTEGER(strtoll(string_get(number_of_elements), &end, 10));
+            emit_possible_long_op(OP_PUT_TENSOR);
+            emit_temporary(temporary);
+        }
+
         opcode_case(FM_TUPLE) {}
         opcode_case(FM_HASH) {}
         opcode_case(FM_BITSTRING) {}

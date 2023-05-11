@@ -128,6 +128,40 @@ static size_t instruction_long_variable(vector *res, char *name, chunk *chunk, s
     return offset + 5;
 }
 
+static size_t instruction_array_type(vector *res, char *name, chunk *chunk, size_t offset) {
+    uint8_t opcode = chunk_get(chunk, offset);
+    uint8_t number_of_elements = chunk_get(chunk, offset + 1);
+
+    string *disassembled_instruction = string_new("");
+    write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
+    string_addf(disassembled_instruction, "%02x %02x               ", opcode, number_of_elements);
+    string_addf(disassembled_instruction, "%-24s ", name);
+    string_add(disassembled_instruction, marg_value_format(chunk_temporaries_get(chunk, number_of_elements)));
+    vector_add(res, disassembled_instruction);
+
+    return offset + 2;
+}
+
+static size_t instruction_long_array_type(vector *res, char *name, chunk *chunk, size_t offset) {
+    uint8_t opcode = chunk_get(chunk, offset);
+    uint8_t bytes[4] = {
+        chunk_get(chunk, offset + 1),
+        chunk_get(chunk, offset + 2),
+        chunk_get(chunk, offset + 3),
+        chunk_get(chunk, offset + 4),
+    };
+    uint32_t number_of_elements = bytes_to_dword(bytes);
+
+    string *disassembled_instruction = string_new("");
+    write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
+    string_addf(disassembled_instruction, "%02x %02x %02x %02x %02x      ", opcode, chunk_get(chunk, offset + 1), bytes[1], bytes[2], bytes[3]);
+    string_addf(disassembled_instruction, "%-24s ", name);
+    string_add(disassembled_instruction, marg_value_format(chunk_temporaries_get(chunk, number_of_elements)));
+    vector_add(res, disassembled_instruction);
+
+    return offset + 5;
+}
+
 /**
  * @brief Inspects an instruction inside of a chunk
  * @param res -> Adds log information to the res vector
@@ -166,6 +200,11 @@ static size_t inspect_instruction(vector *res, chunk *chunk, size_t offset) {
             return instruction_object(res, "PUT_OBJECT", chunk, offset);
         case OP_PUT_OBJECT_LONG:
             return instruction_long_object(res, "PUT_OBJECT_LONG", chunk, offset);
+
+        case OP_PUT_TENSOR:
+            return instruction_array_type(res, "PUT_TENSOR", chunk, offset);
+        case OP_PUT_TENSOR_LONG:
+            return instruction_long_array_type(res, "PUT_TENSOR_LONG", chunk, offset);
 
         case OP_SET_GLOBAL:
             return instruction_variable(res, "SET_GLOBAL", chunk, offset);

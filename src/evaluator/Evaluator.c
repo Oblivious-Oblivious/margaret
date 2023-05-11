@@ -11,6 +11,8 @@
 #include "../opcode/MargInteger.h"
 #include "../opcode/MargString.h"
 
+#include "../opcode/MargTensor.h"
+
 #include "../opcode/MargObject.h"
 #include "../opcode/MargMethod.h"
 #include "../opcode/MargProc.h"
@@ -77,6 +79,29 @@ static void evaluator_run(VM *vm) {
             }
             case OP_PUT_OBJECT_LONG: {
                 STACK_PUSH(vm, READ_LONG_TEMPORARY());
+                break;
+            }
+
+            case OP_PUT_TENSOR: {
+                int64_t number_of_elements = AS_INTEGER(READ_TEMPORARY())->value;
+                MargValue tensor_value = MARG_TENSOR(number_of_elements);
+                MargTensor *tensor_object = AS_TENSOR(tensor_value);
+
+                for(int64_t i = number_of_elements-1; i >= 0; i--)
+                    marg_tensor_add_at(tensor_object, STACK_POP(vm), i);
+
+                STACK_PUSH(vm, tensor_value);
+                break;
+            }
+            case OP_PUT_TENSOR_LONG: {
+                int64_t number_of_elements = AS_INTEGER(READ_LONG_TEMPORARY())->value;
+                MargValue tensor_value = MARG_TENSOR(number_of_elements);
+                MargTensor *tensor_object = AS_TENSOR(tensor_value);
+
+                for(int64_t i = number_of_elements-1; i >= 0; i--)
+                    marg_tensor_add_at(tensor_object, STACK_POP(vm), i);
+
+                STACK_PUSH(vm, tensor_value);
                 break;
             }
 

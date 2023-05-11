@@ -71,6 +71,9 @@
 #define OP_PUT_OBJECT             0x08
 #define OP_PUT_OBJECT_LONG        0x09
 
+#define OP_PUT_TENSOR             0xef
+#define OP_PUT_TENSOR_LONG        0xee
+
 #define OP_SET_GLOBAL             0x0a
 #define OP_SET_GLOBAL_LONG        0x0b
 #define OP_SET_INSTANCE           0x0c
