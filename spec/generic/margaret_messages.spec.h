@@ -45,9 +45,6 @@ module(margaret_messages_spec, {
         ", vector_new( \
             FM_GLOBAL, string_new("Margaret"), \
             FM_START_KEYWORD_METHOD, string_new("while:do:"), \
-                FM_ANY_OBJECT, FM_METHOD_RECEIVER, \
-                FM_LOCAL, string_new("condition_block"), FM_METHOD_PARAMETER, \
-                FM_LOCAL, string_new("block"), FM_METHOD_PARAMETER, \
                 FM_GLOBAL, string_new("Margaret"), \
                 FM_LOCAL, string_new("condition_block"), \
                 FM_UNARY, string_new("eval"), \

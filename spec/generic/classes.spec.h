@@ -61,9 +61,6 @@ module(classes_spec, {
             FM_POP, \
             FM_LOCAL, string_new("Point"), \
             FM_START_KEYWORD_METHOD, string_new("x:y:"), \
-                FM_ANY_OBJECT, FM_METHOD_RECEIVER, \
-                FM_LOCAL, string_new("xparam"), FM_METHOD_PARAMETER, \
-                FM_LOCAL, string_new("yparam"), FM_METHOD_PARAMETER, \
                 FM_LOCAL, string_new("xparam"), \
                 FM_STORE_INSTANCE, string_new("x"), \
                 FM_POP, \
@@ -77,7 +74,6 @@ module(classes_spec, {
             FM_POP, \
             FM_LOCAL, string_new("Point"), \
             FM_START_UNARY_METHOD, string_new("calc"), \
-                FM_ANY_OBJECT, FM_METHOD_RECEIVER, \
                 FM_INSTANCE, string_new("x"), \
                 FM_INSTANCE, string_new("y"), \
                 FM_BINARY, string_new("+"), \
@@ -87,14 +83,10 @@ module(classes_spec, {
             FM_POP, \
             FM_LOCAL, string_new("Point"), \
             FM_START_BINARY_METHOD, string_new("+"), \
-                FM_ANY_OBJECT, FM_METHOD_RECEIVER, \
-                FM_NIL, FM_METHOD_PARAMETER, \
                 FM_SELF, \
                 FM_POP, \
             FM_END_BINARY_METHOD, \
             FM_START_BINARY_METHOD, string_new("+"), \
-                FM_ANY_OBJECT, FM_METHOD_RECEIVER, \
-                FM_LOCAL, string_new("other"), FM_METHOD_PARAMETER, \
                 FM_INSTANCE, string_new("x"), \
                 FM_LOCAL, string_new("other"), \
                 FM_UNARY, string_new("x"), \
@@ -124,10 +116,6 @@ module(classes_spec, {
             FM_POP, \
             FM_LOCAL, string_new("Point3D"), \
             FM_START_KEYWORD_METHOD, string_new("x:y:z:"), \
-                FM_ANY_OBJECT, FM_METHOD_RECEIVER, \
-                FM_LOCAL, string_new("x"), FM_METHOD_PARAMETER, \
-                FM_LOCAL, string_new("y"), FM_METHOD_PARAMETER, \
-                FM_LOCAL, string_new("z"), FM_METHOD_PARAMETER, \
                 FM_SUPER, \
                 FM_INSTANCE, string_new("x"), \
                 FM_INSTANCE, string_new("y"), \
@@ -143,7 +131,6 @@ module(classes_spec, {
             FM_POP, \
             FM_LOCAL, string_new("Point3D"), \
             FM_START_UNARY_METHOD, string_new("calc"), \
-                FM_ANY_OBJECT, FM_METHOD_RECEIVER, \
                 FM_SUPER, \
                 FM_UNARY, string_new("calc"), \
                 FM_INSTANCE, string_new("z"), \
@@ -154,8 +141,6 @@ module(classes_spec, {
             FM_POP, \
             FM_LOCAL, string_new("Point3D"), \
             FM_START_BINARY_METHOD, string_new("+"), \
-                FM_ANY_OBJECT, FM_METHOD_RECEIVER, \
-                FM_LOCAL, string_new("other"), FM_METHOD_PARAMETER, \
                 FM_SUPER, \
                 FM_LOCAL, string_new("other"), \
                 FM_BINARY, string_new("+"), \
@@ -226,9 +211,6 @@ module(classes_spec, {
         )", vector_new( \
             FM_GLOBAL, string_new("Margaret"), \
             FM_START_KEYWORD_METHOD, string_new("x:y:"), \
-                FM_ANY_OBJECT, FM_METHOD_RECEIVER, \
-                FM_LOCAL, string_new("x"), FM_METHOD_PARAMETER, \
-                FM_LOCAL, string_new("y"), FM_METHOD_PARAMETER, \
                 FM_LOCAL, string_new("x"), \
                 FM_STORE_INSTANCE, string_new("x"), \
                 FM_POP, \
@@ -240,14 +222,10 @@ module(classes_spec, {
                 FM_POP, \
             FM_END_KEYWORD_METHOD, \
             FM_START_BINARY_METHOD, string_new("+"), \
-                FM_ANY_OBJECT, FM_METHOD_RECEIVER, \
-                FM_NIL, FM_METHOD_PARAMETER, \
                 FM_SELF, \
                 FM_POP, \
             FM_END_BINARY_METHOD, \
             FM_START_BINARY_METHOD, string_new("+"), \
-                FM_ANY_OBJECT, FM_METHOD_RECEIVER, \
-                FM_LOCAL, string_new("other"), FM_METHOD_PARAMETER, \
                 FM_INSTANCE, string_new("x"), \
                 FM_LOCAL, string_new("other"), \
                 FM_UNARY, string_new("x"), \
