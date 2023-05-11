@@ -53,7 +53,7 @@
 #define FM_KEYWORD                string_new("KEYWORD")
 
 // ------ Emmited Opcodes ------
-#define TEST_OP_PRINT             0xfe
+#define TEST_OP_PRINT             0xff
 
 #define OP_HALT                   0x00
 #define OP_POP                    0xfd
