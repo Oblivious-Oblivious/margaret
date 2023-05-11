@@ -374,8 +374,7 @@ vector *parser_literal(Parser *self) {
         return ast_literal(parser_float_literal(self, sign));
     else if(lookahead_1_type_equals(TOKEN_STRING))
         return ast_literal(parser_string_literal(self));
-    // TODO Look at combining tuples and bitstrings with syntax
-        // where `<1,2,3>` is a tuple and `<1:1,0:1,:1:1>` a 3-bitstring
+    // TODO Look removing tuples and refactoring bitstring syntax as such: `<1:1,0:1,1:1>`
     else if(lookahead_1_value_equals("[")) {
         if(lookahead_2_value_equals("<"))
             return ast_literal(parser_tuple_literal(self));
