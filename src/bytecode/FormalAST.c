@@ -401,26 +401,6 @@ vector *ast_string_literal(string *string) {
     return vector_new(FM_STRING, string);
 }
 
-vector *ast_tuple_literal(vector *item_list) {
-    vector *res = vector_new_empty();
-
-    size_t item_list_size = vector_size(item_list);
-    for(size_t i = 0; i < item_list_size; i++) {
-        vector *item = vector_get(item_list, i);
-        size_t item_size = vector_size(item);
-        for(size_t j = 0; j < item_size; j++)
-            vector_add(res, vector_get(item, j));
-        vector_remove(res, i);
-    }
-
-    vector_add(res, FM_TUPLE);
-    char size_ptr[32];
-    snprintf(size_ptr, sizeof(size_ptr), "%zu", vector_size(item_list));
-    string *size = string_new(size_ptr);
-    vector_add(res, size);
-    return res;
-}
-
 vector *ast_tensor_literal(vector *item_list) {
     vector *res = vector_new_empty();
 
@@ -441,20 +421,21 @@ vector *ast_tensor_literal(vector *item_list) {
     return res;
 }
 
-vector *ast_bitstring_literal(vector *item_list) {
+vector *ast_tuple_literal(vector *item_list) {
     vector *res = vector_new_empty();
-    size_t item_list_size = vector_size(item_list);
 
+    size_t item_list_size = vector_size(item_list);
     for(size_t i = 0; i < item_list_size; i++) {
         vector *item = vector_get(item_list, i);
         size_t item_size = vector_size(item);
         for(size_t j = 0; j < item_size; j++)
             vector_add(res, vector_get(item, j));
+        vector_remove(res, i);
     }
 
-    vector_add(res, FM_BITSTRING);
+    vector_add(res, FM_TUPLE);
     char size_ptr[32];
-    snprintf(size_ptr, sizeof(size_ptr), "%zu", vector_size(item_list) * 2);
+    snprintf(size_ptr, sizeof(size_ptr), "%zu", vector_size(item_list));
     string *size = string_new(size_ptr);
     vector_add(res, size);
     return res;
@@ -475,6 +456,51 @@ vector *ast_hash_literal(vector *association_list) {
     vector_add(res, FM_HASH);
     char size_ptr[32];
     snprintf(size_ptr, sizeof(size_ptr), "%zu", vector_size(association_list) * 2);
+    string *size = string_new(size_ptr);
+    vector_add(res, size);
+    return res;
+}
+
+vector *ast_association(vector *key, vector *value) {
+    vector *res = vector_new_empty();
+
+    size_t key_size = vector_size(key);
+    for(size_t i = 0; i < key_size; i++)
+        vector_add(res, vector_get(key, i));
+
+    size_t value_size = vector_size(value);
+    for(size_t i = 0; i < value_size; i++)
+        vector_add(res, vector_get(value, i));
+
+    return res;
+}
+
+vector *ast_json_association(string *key, vector *value) {
+    vector *res = vector_new_empty();
+    vector_add(res, FM_STRING);
+    vector_add(res, key);
+
+    size_t value_size = vector_size(value);
+    for(size_t i = 0; i < value_size; i++)
+        vector_add(res, vector_get(value, i));
+
+    return res;
+}
+
+vector *ast_bitstring_literal(vector *item_list) {
+    vector *res = vector_new_empty();
+    size_t item_list_size = vector_size(item_list);
+
+    for(size_t i = 0; i < item_list_size; i++) {
+        vector *item = vector_get(item_list, i);
+        size_t item_size = vector_size(item);
+        for(size_t j = 0; j < item_size; j++)
+            vector_add(res, vector_get(item, j));
+    }
+
+    vector_add(res, FM_BITSTRING);
+    char size_ptr[32];
+    snprintf(size_ptr, sizeof(size_ptr), "%zu", vector_size(item_list) * 2);
     string *size = string_new(size_ptr);
     vector_add(res, size);
     return res;
@@ -503,32 +529,6 @@ vector *ast_bit_size_literal(vector *bit, vector *size) {
     size_t size_length = vector_size(size);
     for(size_t i = 0; i < size_length; i++)
         vector_add(res, vector_get(size, i));
-
-    return res;
-}
-
-vector *ast_association(vector *key, vector *value) {
-    vector *res = vector_new_empty();
-
-    size_t key_size = vector_size(key);
-    for(size_t i = 0; i < key_size; i++)
-        vector_add(res, vector_get(key, i));
-
-    size_t value_size = vector_size(value);
-    for(size_t i = 0; i < value_size; i++)
-        vector_add(res, vector_get(value, i));
-
-    return res;
-}
-
-vector *ast_json_association(string *key, vector *value) {
-    vector *res = vector_new_empty();
-    vector_add(res, FM_STRING);
-    vector_add(res, key);
-
-    size_t value_size = vector_size(value);
-    for(size_t i = 0; i < value_size; i++)
-        vector_add(res, vector_get(value, i));
 
     return res;
 }

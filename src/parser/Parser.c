@@ -421,6 +421,20 @@ vector *parser_string_literal(Parser *self) {
     return ast_string_literal(ensure_type(TOKEN_STRING, "expected string literal."));
 }
 
+vector *parser_tensor_literal(Parser *self) {
+    ensure_value("[", "missing opening bracket on tensor.");
+
+    vector *__items = vector_new_empty();
+    while(!lookahead_1_value_equals("]") && !lookahead_1_value_equals("eof")) {
+        vector_add(__items, parser_translation_unit(self));
+        if(!lookahead_1_value_equals("]") && !lookahead_1_value_equals("eof"))
+            ensure_value(",", "tensor items should be separated by commas.");
+    }
+
+    ensure_value("]", "missing closing bracket on tensor.");
+    return ast_tensor_literal(__items);
+}
+
 vector *parser_tuple_literal(Parser *self) {
     ensure_value("[", "missing opening bracket on tuple.");
     ensure_value("<", "missing opening tag on tuple.");
@@ -436,35 +450,6 @@ vector *parser_tuple_literal(Parser *self) {
     return ast_tuple_literal(__items);
 }
 
-vector *parser_tensor_literal(Parser *self) {
-    ensure_value("[", "missing opening bracket on tensor.");
-
-    vector *__items = vector_new_empty();
-    while(!lookahead_1_value_equals("]") && !lookahead_1_value_equals("eof")) {
-        vector_add(__items, parser_translation_unit(self));
-        if(!lookahead_1_value_equals("]") && !lookahead_1_value_equals("eof"))
-            ensure_value(",", "tensor items should be separated by commas.");
-    }
-
-    ensure_value("]", "missing closing bracket on tensor.");
-    return ast_tensor_literal(__items);
-}
-
-vector *parser_bitstring_literal(Parser *self) {
-    ensure_value("{", "missing opening curly brace on bitstring");
-    ensure_value("<", "missing opening tag on bitstring");
-
-    vector *__items = vector_new_empty();
-    while(!lookahead_1_value_equals("}") && !lookahead_1_value_equals("eof")) {
-        vector_add(__items, parser_bit_literal(self));
-        if(!lookahead_1_value_equals("}") && !lookahead_1_value_equals("eof"))
-            ensure_value(",", "keys should be separated by commas.");
-    }
-
-    ensure_value("}", "missing closing curly brace on bitstring.");
-    return ast_bitstring_literal(__items);
-}
-
 vector *parser_hash_literal(Parser *self) {
     ensure_value("{", "missing opening curly brace on hash.");
 
@@ -477,23 +462,6 @@ vector *parser_hash_literal(Parser *self) {
 
     ensure_value("}", "missing closing curly brace on hash.");
     return ast_hash_literal(__items);
-}
-
-vector *parser_bit_literal(Parser *self) {
-    vector *bit = NULL;
-    if(lookahead_1_type_equals(TOKEN_IDENTIFIER))
-        bit = parser_variable(self);
-    else
-        bit = parser_literal(self);
-
-    if(lookahead_1_value_equals(":") && lookahead_2_type_equals(TOKEN_INTEGER)) {
-        ensure_value(":", "bit size should be denoted by colons on bitstrings.");
-        vector *size = parser_integer_literal(self, string_new("+"));
-        return ast_bit_size_literal(bit, size);
-    }
-    else {
-        return ast_bit_literal(bit);
-    }
 }
 
 vector *parser_association_literal(Parser *self) {
@@ -511,6 +479,38 @@ vector *parser_association_literal(Parser *self) {
     }
     else {
         return ast_empty();
+    }
+}
+
+vector *parser_bitstring_literal(Parser *self) {
+    ensure_value("{", "missing opening curly brace on bitstring");
+    ensure_value("<", "missing opening tag on bitstring");
+
+    vector *__items = vector_new_empty();
+    while(!lookahead_1_value_equals("}") && !lookahead_1_value_equals("eof")) {
+        vector_add(__items, parser_bit_literal(self));
+        if(!lookahead_1_value_equals("}") && !lookahead_1_value_equals("eof"))
+            ensure_value(",", "keys should be separated by commas.");
+    }
+
+    ensure_value("}", "missing closing curly brace on bitstring.");
+    return ast_bitstring_literal(__items);
+}
+
+vector *parser_bit_literal(Parser *self) {
+    vector *bit = NULL;
+    if(lookahead_1_type_equals(TOKEN_IDENTIFIER))
+        bit = parser_variable(self);
+    else
+        bit = parser_literal(self);
+
+    if(lookahead_1_value_equals(":") && lookahead_2_type_equals(TOKEN_INTEGER)) {
+        ensure_value(":", "bit size should be denoted by colons on bitstrings.");
+        vector *size = parser_integer_literal(self, string_new("+"));
+        return ast_bit_size_literal(bit, size);
+    }
+    else {
+        return ast_bit_literal(bit);
     }
 }
 
