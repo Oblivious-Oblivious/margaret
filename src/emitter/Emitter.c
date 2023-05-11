@@ -202,15 +202,10 @@ VM *emitter_emit(vector *formal_bytecode) {
             inspect_and_print_proc(vm);
             vm->current = vm->current->bound_proc;
         }
-        opcode_case(FM_PROC_PARAMETER) {
-            ;
-        }
 
         opcode_case(FM_START_C_FUNCTION) {}
         opcode_case(FM_END_C_FUNCTION) {}
 
-        opcode_case(FM_ANY_OBJECT) {}
-        opcode_case(FM_METHOD_PARAMETER) {}
 
         opcode_case(FM_UNARY) {
             emit_byte(TEST_OP_PRINT);

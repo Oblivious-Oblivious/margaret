@@ -33,7 +33,7 @@
 
 #define FM_START_PROC             string_new("START_PROC")
 #define FM_END_PROC               string_new("END_PROC")
-#define FM_PROC_PARAMETER         string_new("PROC_PARAMETER")
+// #define FM_PROC_PARAMETER         string_new("PROC_PARAMETER")
 
 #define FM_START_C_FUNCTION       string_new("START_C_FUNCTION")
 #define FM_END_C_FUNCTION         string_new("END_C_FUNCTION")
@@ -44,9 +44,9 @@
 #define FM_END_BINARY_METHOD      string_new("END_BINARY_METHOD")
 #define FM_START_KEYWORD_METHOD   string_new("START_KEYWORD_METHOD")
 #define FM_END_KEYWORD_METHOD     string_new("END_KEYWORD_METHOD")
-#define FM_ANY_OBJECT             string_new("ANY_OBJECT")
-#define FM_METHOD_PARAMETER       string_new("METHOD_PARAMETER")
-#define FM_METHOD_RECEIVER        string_new("METHOD_RECEIVER")
+// #define FM_ANY_OBJECT             string_new("ANY_OBJECT")
+// #define FM_METHOD_PARAMETER       string_new("METHOD_PARAMETER")
+// #define FM_METHOD_RECEIVER        string_new("METHOD_RECEIVER")
 
 #define FM_UNARY                  string_new("UNARY")
 #define FM_BINARY                 string_new("BINARY")
@@ -68,7 +68,6 @@
 #define OP_PUT_2                  0x07
 
 // TODO OP_PUT_OBJECT_WORD, OP_PUT_OBJECT_DWORD, OP_PUT_OBJECT_QWORD
-#define OP_CALL_UNARY_METHOD                0x18
 #define OP_PUT_OBJECT             0x08
 #define OP_PUT_OBJECT_LONG        0x09
 
