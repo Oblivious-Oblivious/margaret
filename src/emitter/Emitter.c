@@ -13,6 +13,7 @@
 #include "../opcode/MargProc.h"
 #include "../vm/byte_conversions.h"
 
+#define switch_opcode_case(opstr) if(string_equals(opcode, (opstr)))
 #define opcode_case(opstr) else if(string_equals(opcode, (opstr)))
 
 #define emit_byte(byte) chunk_add(vm->current->bytecode, (byte), 123)
@@ -85,7 +86,7 @@ VM *emitter_emit(vector *formal_bytecode) {
     for(size_t ip = 0; ip < bytecode_size; ip++) {
         string *opcode = vector_get(formal_bytecode, ip);
 
-        if(string_equals(opcode, FM_POP)) {
+        switch_opcode_case(FM_POP) {
             emit_byte(OP_POP);
         }
 
