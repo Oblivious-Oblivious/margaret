@@ -13,7 +13,6 @@
         puts: v,
     )},
 
-    v = 0,
     p0 call,
     puts: v,
     puts: p0,
