@@ -49,9 +49,13 @@
     add_temporary(vm, temporary_index); \
 } while(0)
 
-static void make_temporary(VM *vm, MargValue temporary, uint32_t *index) {
-    chunk_temporaries_add(vm->current->bytecode, temporary, index);
-}
+#define make_temporary(vm, temporary, index) \
+    chunk_temporaries_add((vm)->current->bytecode, (temporary), (index));
+
+#define add_temporary(vm, temporary_index) \
+    __add_temporary_function(vm, temporary_index, 256+1);
+#define add_premade_temporary(vm, temporary_index) \
+    __add_temporary_function(vm, temporary_index, 256);
 
 static void __add_temporary_function(VM *vm, uint32_t temporary_index, uint16_t upper_bound) {
     if(chunk_temporaries_size(vm->current->bytecode) < upper_bound) {
@@ -68,18 +72,10 @@ static void __add_temporary_function(VM *vm, uint32_t temporary_index, uint16_t 
     }
 }
 
-static void add_temporary(VM *vm, uint32_t temporary_index) {
-    __add_temporary_function(vm, temporary_index, 256+1);
-}
-static void add_premade_temporary(VM *vm, uint32_t temporary_index) {
-    __add_temporary_function(vm, temporary_index, 256);
-}
-
 VM *emitter_emit(vector *formal_bytecode) {
     VM *vm = vm_new();
     MargObject *marg_object = AS_OBJECT(table_get(&vm->global_variables, MARG_STRING("$Margaret")));
     MargMethod *main_method = AS_METHOD(table_get(&marg_object->messages, MARG_STRING("main:")));
-    // MargProc *margaret_main_method_proc = main_method->proc;
     vm->current = main_method->proc;
 
     size_t bytecode_size = vector_size(formal_bytecode);
