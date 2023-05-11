@@ -21,6 +21,8 @@
  * @param vm -> result enum
  */
 static void evaluator_run(VM *vm) {
+    vm->current->ip = vm->current->bytecode->items;
+
     // TODO Branch table, computed goto
     while(1) {
         uint8_t instruction;
