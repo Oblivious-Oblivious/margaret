@@ -15,20 +15,12 @@
 #include "../opcode/MargMethod.h"
 #include "../opcode/MargProc.h"
 
-static MargProc *get_margaret_main_method_proc(VM *vm) {
-    MargObject *margaret_object = AS_OBJECT(table_get(&vm->global_variables, MARG_STRING("$Margaret")));
-    MargMethod *main_method = AS_METHOD(table_get(&margaret_object->messages, MARG_STRING("main:")));
-    return main_method->proc;
-}
-
 /**
  * @brief Runs the iterator that evaluates
     the result of the generated opcodes
  * @param vm -> result enum
  */
 static void evaluator_run(VM *vm) {
-    vm->current = get_margaret_main_method_proc(vm);
-    vm->current->ip = vm->current->bytecode->items;
     // TODO Branch table, computed goto
     while(1) {
         uint8_t instruction;
