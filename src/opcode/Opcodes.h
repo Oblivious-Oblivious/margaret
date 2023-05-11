@@ -88,7 +88,6 @@
 #define OP_CALL_PROC              0x16
 #define OP_EXIT_PROC              0x17
 
-#define OP_EXIT_UNARY_METHOD      0x19
 
 // TODO Superinstructions for incrementing, decrementing and doubling
 // TODO Superinstructions for comparing with zero
