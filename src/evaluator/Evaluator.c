@@ -12,6 +12,7 @@
 #include "../opcode/MargString.h"
 
 #include "../opcode/MargTensor.h"
+#include "../opcode/MargHash.h"
 
 #include "../opcode/MargObject.h"
 #include "../opcode/MargMethod.h"
@@ -102,6 +103,34 @@ static void evaluator_run(VM *vm) {
                     marg_tensor_add_at(tensor_object, STACK_POP(vm), i);
 
                 STACK_PUSH(vm, tensor_value);
+                break;
+            }
+            case OP_PUT_HASH: {
+                int64_t number_of_elements = AS_INTEGER(READ_TEMPORARY())->value / 2;
+                MargValue hash_value = MARG_HASH;
+                MargHash *hash_object = AS_HASH(hash_value);
+
+                for(int64_t i = 0; i < number_of_elements; i++) {
+                    MargValue value = STACK_POP(vm);
+                    MargValue key = STACK_POP(vm);
+                    marg_hash_add(hash_object, key, value);
+                }
+
+                STACK_PUSH(vm, hash_value);
+                break;
+            }
+            case OP_PUT_HASH_LONG: {
+                int64_t number_of_elements = AS_INTEGER(READ_LONG_TEMPORARY())->value;
+                MargValue hash_value = MARG_HASH;
+                MargHash *hash_object = AS_HASH(hash_value);
+
+                for(int64_t i = 0; i < number_of_elements; i++) {
+                    MargValue value = STACK_POP(vm);
+                    MargValue key = STACK_POP(vm);
+                    marg_hash_add(hash_object, key, value);
+                }
+
+                STACK_PUSH(vm, hash_value);
                 break;
             }
 

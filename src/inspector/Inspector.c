@@ -205,6 +205,10 @@ static size_t inspect_instruction(vector *res, chunk *chunk, size_t offset) {
             return instruction_array_type(res, "PUT_TENSOR", chunk, offset);
         case OP_PUT_TENSOR_LONG:
             return instruction_long_array_type(res, "PUT_TENSOR_LONG", chunk, offset);
+        case OP_PUT_HASH:
+            return instruction_array_type(res, "PUT_HASH", chunk, offset);
+        case OP_PUT_HASH_LONG:
+            return instruction_long_array_type(res, "PUT_HASH_LONG", chunk, offset);
 
         case OP_SET_GLOBAL:
             return instruction_variable(res, "SET_GLOBAL", chunk, offset);

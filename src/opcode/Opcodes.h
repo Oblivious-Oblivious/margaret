@@ -73,6 +73,8 @@
 
 #define OP_PUT_TENSOR             0xef
 #define OP_PUT_TENSOR_LONG        0xee
+#define OP_PUT_HASH               0xed
+#define OP_PUT_HASH_LONG          0xec
 
 #define OP_SET_GLOBAL             0x0a
 #define OP_SET_GLOBAL_LONG        0x0b
