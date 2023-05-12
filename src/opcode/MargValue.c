@@ -47,7 +47,7 @@ string *marg_value_format(MargValue self) {
         size_t tensor_size = marg_tensor_size(tensor);
         if(tensor_size > 0) {
             for(size_t i = 0; i < tensor_size-1; i++)
-                string_addf(res, "%s, ", string_get(marg_value_format(marg_tensor_get(tensor, i))), ",");
+                string_addf(res, "%s, ", string_get(marg_value_format(marg_tensor_get(tensor, i))));
             string_addf(res, "%s]", string_get(marg_value_format(marg_tensor_get(tensor, tensor_size-1))));
         }
         else {
