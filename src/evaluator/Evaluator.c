@@ -36,8 +36,9 @@ static void evaluator_run(VM *vm) {
             }
             case TEST_OP_PRINT: {
                 printf("%s\n", string_get(marg_value_format(STACK_PEEK(vm, 0))));
-                // STACK_POP(vm);
-                // STACK_POP(vm);
+                STACK_POP(vm); // $Margaret
+                // puts:
+                STACK_POP(vm); // value
                 break;
             }
 
