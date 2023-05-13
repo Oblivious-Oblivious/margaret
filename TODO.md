@@ -47,10 +47,10 @@
     🟥 Make comments dynamic and persistent on code files.
     🟥 Since comments are dynamic, we can use interpolation to change them according to data (for documentation comments).
     🟥 Add string interpolation and formatting with `#{..}` or similar.
-    🟥 Separate value types from object types
+    🟩 Separate value types from object types
        Nil, True, False, Integer, Float, String are `VALUES` (cannot change self)
        Tensor, Hash, Tuple, BitString are `OBJECTS`          (can change self)
-    🟥 Procs, methods and functions return tensors of bytecodes.
+    🟩 Procs, methods and functions return tensors of bytecodes.
     🟥 Add primitives for `while:` to avoid endless recursion.
     🟥 Add a switch matcher -> `obj match: [[1, 100], [2, 200], [3, 300],]`.
     🟥 Make bang (!) messages denote persistant changes in object state.

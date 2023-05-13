@@ -271,6 +271,9 @@ vector *ast_c_function_declaration(string *return_type, string *name, vector *pa
 vector *ast_unary_method_definition(vector *multimethod_object_default_value, string *selector, vector *function) {
     vector *res = vector_new(FM_START_UNARY_METHOD, selector);
 
+    // TODO Hash method definition as a particular message instead of pattern matching
+        // from `# 0 + 1 => 1` we derive: HASHED("MARG_0 + MARG_1")
+        // from `# + other => self + other` we derive default HASHED("+")
     (void)multimethod_object_default_value;
 
     // size_t multimethod_object_default_value_size = vector_size(multimethod_object_default_value);
