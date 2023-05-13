@@ -121,7 +121,7 @@ static void evaluator_run(VM *vm) {
                 break;
             }
             case OP_PUT_HASH_LONG: {
-                int64_t number_of_elements = AS_INTEGER(READ_LONG_TEMPORARY())->value;
+                int64_t number_of_elements = AS_INTEGER(READ_LONG_TEMPORARY())->value / 2;
                 MargValue hash_value = MARG_HASH;
                 MargHash *hash_object = AS_HASH(hash_value);
 
