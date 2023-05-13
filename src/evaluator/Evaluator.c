@@ -208,7 +208,7 @@ static void evaluator_run(VM *vm) {
                 vm->current = proc;
                 break;
             }
-            case OP_EXIT_PROC: {
+            case OP_EXIT_ACTIVATION_RECORD: {
                 /* Reset proc's IP */
                 vm->current->ip = vm->current->bytecode->items;
                 /* Reset proc local and parameter table */

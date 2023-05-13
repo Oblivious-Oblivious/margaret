@@ -240,8 +240,9 @@ static size_t inspect_instruction(vector *res, chunk *chunk, size_t offset) {
             return instruction_single(res, "CALL_PROC", chunk, offset);
         case OP_CALL_PROC_PARAMS:
             return instruction_single(res, "CALL_PROC_PARAMS", chunk, offset);
-        case OP_EXIT_PROC:
-            return instruction_single(res, "EXIT_PROC", chunk, offset);
+        case OP_EXIT_ACTIVATION_RECORD:
+            return instruction_single(res, "EXIT_ACTIVATION_RECORD", chunk, offset);
+
 
         default: {
             string *unknown_opcode = string_new("");

@@ -92,7 +92,7 @@
 
 #define OP_CALL_PROC              0x16
 #define OP_CALL_PROC_PARAMS       0x17
-#define OP_EXIT_PROC              0x18
+#define OP_EXIT_ACTIVATION_RECORD 0x18
 
 
 // TODO Superinstructions for incrementing, decrementing and doubling
