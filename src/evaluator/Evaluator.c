@@ -191,12 +191,28 @@ static void evaluator_run(VM *vm) {
                 vm->current = proc;
                 break;
             }
+            case OP_CALL_PROC_PARAMS: {
+                MargHash *parameters = AS_HASH(STACK_POP(vm));
+                MargProc *proc = AS_PROC(STACK_POP(vm));
+
+                /* Close over local variables*/
+                table_add_all(&vm->current->local_variables, &proc->local_variables);
+
+                /* Inject proc parameters */
+                for(size_t i = 0; i < parameters->alloced; i++) {
+                    MargHashEntry *entry = &parameters->entries[i];
+                    if(!IS_NOT_INTERNED(entry->key))
+                        table_set(&proc->local_variables, entry->key, entry->value);
+                }
+
+                vm->current = proc;
+                break;
+            }
             case OP_EXIT_PROC: {
                 vm->current = vm->current->bound_proc;
                 break;
             }
 
-            default: {}
         }
     }
 }

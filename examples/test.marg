@@ -87,6 +87,7 @@
     p5 = { a | (puts: a) },
     p6 = { a | (puts: a, a = 12, puts: a) },
     p7 = { (puts: "y should be `5`:", puts: y) },
+    p8 = { a, b | (puts: "", puts: a, puts: b, puts: "") },
 
     v = 0,
     p0 call,
@@ -104,6 +105,15 @@
     p6 call,
     p7 call,
     puts: "y should be `5`:", puts: y,
+
+    a = 123,
+    b = 321,
+    p8 call: {a: 2, b: 3},
+    p8 call: {b: 7, a: 5},
+    p8 call: {b: 11},
+    p8 call: {a: 13},
+    puts: "a should be `123`:", puts: a,
+    puts: "b should be `321`:", puts: b,
 
     u0 = #test => 42,
     puts: u0,
