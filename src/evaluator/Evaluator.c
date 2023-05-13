@@ -186,7 +186,7 @@ static void evaluator_run(VM *vm) {
             }
 
             case OP_CALL_PROC: {
-                MargProc *proc = AS_PROC(STACK_PEEK(vm, 0));
+                MargProc *proc = AS_PROC(STACK_POP(vm));
                 table_add_all(&vm->current->local_variables, &proc->local_variables);
                 vm->current = proc;
                 break;
