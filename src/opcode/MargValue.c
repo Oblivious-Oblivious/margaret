@@ -62,9 +62,7 @@ string *marg_value_format(MargValue self) {
         if(hash_size > 0) {
             for(size_t i = 0; i < hash->alloced; i++) {
                 MargHashEntry *entry = &hash->entries[i];
-                if(IS_UNDEFINED(entry->key) || IS_NOT_INTERNED(entry->key) || IS_UNDEFINED(entry->value) || IS_NOT_INTERNED(entry->value))
-                    ;
-                else
+                if(!IS_NOT_INTERNED(entry->key))
                     string_addf(res, "%s: %s, ", string_get(marg_value_format(entry->key)), string_get(marg_value_format(entry->value)));
             }
             string_shorten(res, string_size(res)-2);
