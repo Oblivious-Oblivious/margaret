@@ -16,6 +16,18 @@
 #define switch_opcode_case(opstr) if(string_equals(opcode, (opstr)))
 #define opcode_case(opstr) else if(string_equals(opcode, (opstr)))
 
+#define switch_unary_case(unarystr) if(string_equals(unary_name, string_new((unarystr))))
+#define unary_case(unarystr) else if(string_equals(unary_name, string_new((unarystr))))
+#define default_unary_case else
+
+#define switch_binary_case(binarystr) if(string_equals(binary_name, string_new((binarystr))))
+#define binary_case(binarystr) else if(string_equals(binary_name, string_new((binarystr))))
+#define default_binary_case else
+
+#define switch_keyword_case(keywordstr) if(string_equals(keyword_name, string_new((keywordstr))))
+#define keyword_case(keywordstr) else if(string_equals(keyword_name, string_new((keywordstr))))
+#define default_keyword_case else
+
 #define emit_byte(byte) chunk_add(vm->current->bytecode, (byte), 123)
 
 #define emit_bytes2(byte1, byte2) do { \
@@ -264,10 +276,40 @@ VM *emitter_emit(vector *formal_bytecode) {
         }
 
         opcode_case(FM_UNARY) {
-            emit_byte(TEST_OP_PRINT);
+            string *unary_name = vector_get(formal_bytecode, ++ip);
+
+            switch_unary_case("call")
+                emit_byte(OP_CALL_PROC);
+            default_unary_case {
+                // emit_temporary(MARG_STRING(string_get(unary_name)));
+                // emit_temporary(MARG_INTEGER(0));
+                // emit_byte(OP_SEND);
+            }
         }
-        opcode_case(FM_BINARY) {}
-        opcode_case(FM_KEYWORD) {}
+        opcode_case(FM_BINARY) {
+            string *binary_name = vector_get(formal_bytecode, ++ip);
+
+            switch_binary_case("<<")
+                ;
+            binary_case("++")
+                ;
+            default_binary_case {
+                // emit_byte(OP_SEND);
+            }
+        }
+        opcode_case(FM_KEYWORD) {
+            string *keyword_name = vector_get(formal_bytecode, ++ip);
+
+            switch_keyword_case("puts:")
+                emit_byte(TEST_OP_PRINT);
+            keyword_case("at:put:")
+                ;
+            keyword_case("call:")
+                emit_byte(OP_CALL_PROC_PARAMS);
+            default_keyword_case {
+                // emit_byte(OP_SEND);
+            }
+        }
     }
 
     emit_byte(OP_HALT);
