@@ -230,11 +230,10 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
         opcode_case(FM_END_C_FUNCTION) {}
 
         opcode_case(FM_START_UNARY_METHOD) {
-            MargValue new_method = MARG_METHOD(vm->current->bound_method->bound_object);
+            MargValue new_method = MARG_METHOD(vm->current->bound_method->bound_object, string_get(vector_get(formal_bytecode, ++ip)));
             AS_METHOD(new_method)->proc->bound_proc = vm->current;
             emit_possible_long_op(OP_PUT_OBJECT);
             emit_temporary(new_method);
-            emit_byte(OP_SEND);
 
             vm->current = AS_METHOD(new_method)->proc;
         }
@@ -244,11 +243,10 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
             vm->current = vm->current->bound_proc;
         }
         opcode_case(FM_START_BINARY_METHOD) {
-            MargValue new_method = MARG_METHOD(vm->current->bound_method->bound_object);
+            MargValue new_method = MARG_METHOD(vm->current->bound_method->bound_object, string_get(vector_get(formal_bytecode, ++ip)));
             AS_METHOD(new_method)->proc->bound_proc = vm->current;
             emit_possible_long_op(OP_PUT_OBJECT);
             emit_temporary(new_method);
-            emit_byte(OP_SEND);
 
             vm->current = AS_METHOD(new_method)->proc;
         }
@@ -259,7 +257,7 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
             vm->current = vm->current->bound_proc;
         }
         opcode_case(FM_START_KEYWORD_METHOD) {
-            MargValue new_method = MARG_METHOD(vm->current->bound_method->bound_object);
+            MargValue new_method = MARG_METHOD(vm->current->bound_method->bound_object, string_get(vector_get(formal_bytecode, ++ip)));
             AS_METHOD(new_method)->proc->bound_proc = vm->current;
             emit_possible_long_op(OP_PUT_OBJECT);
             emit_temporary(new_method);

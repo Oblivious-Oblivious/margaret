@@ -6,7 +6,7 @@
 #include "../opcode/MargMethod.h"
 
 static void primitive_1_margaret_main(VM *vm, MargObject *object) {
-    table_set(&object->messages, MARG_STRING("main:"), MARG_METHOD(object));
+    table_set(&object->messages, MARG_STRING("main:"), MARG_METHOD(object, "main:"));
 }
 
 #endif

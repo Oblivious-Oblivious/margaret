@@ -46,7 +46,7 @@ typedef uint64_t MargValue;
 #define MARG_TENSOR(initial_alloced)                 (QNAN_BOX(marg_tensor_new(vm, (initial_alloced))))
 #define MARG_HASH                                    (QNAN_BOX(marg_hash_new(vm)))
 #define MARG_OBJECT(name)                            (QNAN_BOX(marg_object_new(vm, sizeof(MargObject), (name))))
-#define MARG_METHOD(bound_object)                    (QNAN_BOX(marg_method_new(vm, (bound_object))))
+#define MARG_METHOD(bound_object, message_name)      (QNAN_BOX(marg_method_new(vm, (bound_object), (message_name))))
 #define MARG_PROC(bound_method)                      (QNAN_BOX(marg_proc_new(vm, (bound_method))))
 
 #define AS_NIL(value)                                ((MargNil*)QNAN_UNBOX(value))
