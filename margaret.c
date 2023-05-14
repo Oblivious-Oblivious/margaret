@@ -58,9 +58,9 @@ static void PRINT_FORMAL(vector *formal_bytecode) {
 }
 
 static void margaret_repl(VM *vm) {
-    // while(1) PRINT(EVAL(OPTIMIZE(EMIT(FORMALIZE(READ(SCAN("$> ")))))));
     while(1) {
         vector *formal_bytecode = FORMALIZE(READ(SCAN("$> ")));
+        // PRINT_FORMAL(formal_bytecode);
         PRINT(EVAL(OPTIMIZE(EMIT(vm, formal_bytecode))));
     }
 }
