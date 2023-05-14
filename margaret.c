@@ -30,8 +30,8 @@ static vector *FORMALIZE(TokenTable *tokens) {
     return parser_analyze_syntax(parser_new(tokens));
 }
 
-static VM *EMIT(vector *formal_bytecode) {
-    return emitter_emit(formal_bytecode);
+static VM *EMIT(VM *vm, vector *formal_bytecode) {
+    return emitter_emit(vm, formal_bytecode);
 }
 
 static VM *OPTIMIZE(VM *vm) {
@@ -57,17 +57,20 @@ static void PRINT_FORMAL(vector *formal_bytecode) {
     printf("]\n");
 }
 
-static void margaret_repl(void) {
-    while(1) PRINT(EVAL(OPTIMIZE(EMIT(FORMALIZE(READ(SCAN("$> ")))))));
-    // while(1) PRINT_FORMAL(FORMALIZE(READ(SCAN("$> "))));
+static void margaret_repl(VM *vm) {
+    // while(1) PRINT(EVAL(OPTIMIZE(EMIT(FORMALIZE(READ(SCAN("$> ")))))));
+    while(1) {
+        vector *formal_bytecode = FORMALIZE(READ(SCAN("$> ")));
+        PRINT(EVAL(OPTIMIZE(EMIT(vm, formal_bytecode))));
+    }
 }
 
-static void margaret_run_file(char *filename) {
+static void margaret_run_file(VM *vm, char *filename) {
     string *chars = LOAD(filename);
     TokenTable *tokens = READ(chars);
     vector *formal_bytecode = FORMALIZE(tokens);
     // PRINT_FORMAL(formal_bytecode);
-    VM *vm = EMIT(formal_bytecode);
+    vm = EMIT(vm, formal_bytecode);
     vm = OPTIMIZE(vm);
     EVAL(vm);
 }
@@ -77,11 +80,12 @@ static void banner(void) {
 }
 
 int main(int argc, char **argv) {
+    VM *vm = vm_new();
     if(argc < 2) {
         (void)argc;(void)argv;
-        margaret_repl();
+        margaret_repl(vm);
     }
     else {
-        margaret_run_file(argv[1]);
+        margaret_run_file(vm, argv[1]);
     }
 }

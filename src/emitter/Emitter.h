@@ -8,8 +8,9 @@
  * @brief Runs the iterator that transforms
     into scoped emitted bytecode
  * @param self -> The Emitter object
- * @return VM* -> The new VM object
+ * @param vm -> The new vm object
+ * @return VM* -> The modified VM object
  */
-VM *emitter_emit(vector *formal_bytecode);
+VM *emitter_emit(VM *vm, vector *formal_bytecode);
 
 #endif
