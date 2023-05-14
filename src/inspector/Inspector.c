@@ -263,7 +263,7 @@ void inspect_and_print_proc(VM *vm) {
 }
 
 void inspect_and_print_method(VM *vm) {
-    printf("\n/--------------- Disassembly: <method> ---------\\\n");
+    printf("\n/--------------- Disassembly: < %s#%s > ---------\\\n", vm->current->bound_method->bound_object->name, AS_STRING(vm->current->bound_method->message_name)->chars);
     inspect_and_print_vm_bytecode(vm);
     printf("\\-----------------------------------------------/\n\n");
 }
