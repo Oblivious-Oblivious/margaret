@@ -288,6 +288,8 @@ vector *ast_unary_method_definition(vector *multimethod_object_default_value, st
     size_t function_size = vector_size(function);
     for(size_t i = 0; i < function_size; i++)
         vector_add(res, vector_get(function, i));
+
+    vector_remove(res, function_size-1);
     vector_add(res, FM_END_UNARY_METHOD);
 
     return res;
@@ -312,6 +314,8 @@ vector *ast_binary_method_definition(vector *multimethod_object_default_value, s
     size_t function_size = vector_size(function);
     for(size_t i = 0; i < function_size; i++)
         vector_add(res, vector_get(function, i));
+
+    vector_remove(res, function_size-1);
     vector_add(res, FM_END_BINARY_METHOD);
 
     return res;
@@ -340,6 +344,8 @@ vector *ast_keyword_method_definition(vector *multimethod_object_default_value, 
     size_t function_size = vector_size(function);
     for(size_t i = 0; i < function_size; i++)
         vector_add(res, vector_get(function, i));
+
+    vector_remove(res, function_size-1);
     vector_add(res, FM_END_KEYWORD_METHOD);
 
     return res;
