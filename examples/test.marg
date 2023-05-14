@@ -113,7 +113,7 @@
     p8 call: {a: 13},
     puts: "a should be `123`:", puts: a,
 
-    u0 = #test => 42,
+    u0 = #test => (),
     puts: u0,
     b0 = #+ other => (),
     puts: b0,
@@ -137,7 +137,7 @@
     ),
 
     b1 = # + other => puts: "inside of binary method",
-    b2 = # test => (puts: "@a should be `55`:", puts: @a),
+    b2 = # - test => (puts: "@a should be `55`:", puts: @a),
 
     puts: [],
     puts: [42],
