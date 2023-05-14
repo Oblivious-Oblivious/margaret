@@ -11,8 +11,8 @@ module(identifiers_spec, {
 
     it("parses normal and instance variables", {
         parse("variable", vector_new(FM_LOCAL, string_new("variable"), FM_POP));
-        parse("@instvar", vector_new(FM_INSTANCE, string_new("instvar"), FM_POP));
-        parse("@x", vector_new(FM_INSTANCE, string_new("x"), FM_POP));
+        parse("@instvar", vector_new(FM_INSTANCE, string_new("@instvar"), FM_POP));
+        parse("@x", vector_new(FM_INSTANCE, string_new("@x"), FM_POP));
     });
 
     it("parses pseudo variables (used as normal identifiers)", {

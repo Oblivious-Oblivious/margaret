@@ -8,7 +8,7 @@ module(messages_spec, {
         parse("42 factorial", vector_new(FM_INTEGER, string_new("42"), FM_UNARY, string_new("factorial"), FM_POP));
         parse("17 incr puts", vector_new(FM_INTEGER, string_new("17"), FM_UNARY, string_new("incr"), FM_UNARY, string_new("puts"), FM_POP));
         parse("23 one two three", vector_new(FM_INTEGER, string_new("23"), FM_UNARY, string_new("one"), FM_UNARY, string_new("two"), FM_UNARY, string_new("three"), FM_POP));
-        parse("@inst one two three", vector_new(FM_INSTANCE, string_new("inst"), FM_UNARY, string_new("one"), FM_UNARY, string_new("two"), FM_UNARY, string_new("three"), FM_POP));
+        parse("@inst one two three", vector_new(FM_INSTANCE, string_new("@inst"), FM_UNARY, string_new("one"), FM_UNARY, string_new("two"), FM_UNARY, string_new("three"), FM_POP));
         parse("42 puts", vector_new(FM_INTEGER, string_new("42"), FM_UNARY, string_new("puts"), FM_POP));
         parse("obj puts", vector_new(FM_LOCAL, string_new("obj"), FM_UNARY, string_new("puts"), FM_POP));
         parse("x = (obj puts)", vector_new(FM_LOCAL, string_new("obj"), FM_UNARY, string_new("puts"), FM_STORE_LOCAL, string_new("x"), FM_POP));

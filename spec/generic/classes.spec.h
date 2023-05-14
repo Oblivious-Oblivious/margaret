@@ -62,45 +62,41 @@ module(classes_spec, {
             FM_LOCAL, string_new("Point"), \
             FM_START_KEYWORD_METHOD, string_new("x:y:"), \
                 FM_LOCAL, string_new("xparam"), \
-                FM_STORE_INSTANCE, string_new("x"), \
+                FM_STORE_INSTANCE, string_new("@x"), \
                 FM_POP, \
                 FM_LOCAL, string_new("yparam"), \
-                FM_STORE_INSTANCE, string_new("y"), \
+                FM_STORE_INSTANCE, string_new("@y"), \
                 FM_POP, \
                 FM_SELF, \
-                FM_POP, \
             FM_END_KEYWORD_METHOD, \
             FM_KEYWORD, string_new("bind:"), string_new("1"), \
             FM_POP, \
             FM_LOCAL, string_new("Point"), \
             FM_START_UNARY_METHOD, string_new("calc"), \
-                FM_INSTANCE, string_new("x"), \
-                FM_INSTANCE, string_new("y"), \
+                FM_INSTANCE, string_new("@x"), \
+                FM_INSTANCE, string_new("@y"), \
                 FM_BINARY, string_new("+"), \
-                FM_POP, \
             FM_END_UNARY_METHOD, \
             FM_KEYWORD, string_new("bind:"), string_new("1"), \
             FM_POP, \
             FM_LOCAL, string_new("Point"), \
             FM_START_BINARY_METHOD, string_new("+"), \
                 FM_SELF, \
-                FM_POP, \
             FM_END_BINARY_METHOD, \
             FM_START_BINARY_METHOD, string_new("+"), \
-                FM_INSTANCE, string_new("x"), \
+                FM_INSTANCE, string_new("@x"), \
                 FM_LOCAL, string_new("other"), \
                 FM_UNARY, string_new("x"), \
                 FM_BINARY, string_new("+"), \
-                FM_STORE_INSTANCE, string_new("x"), \
+                FM_STORE_INSTANCE, string_new("@x"), \
                 FM_POP, \
-                FM_INSTANCE, string_new("y"), \
+                FM_INSTANCE, string_new("@y"), \
                 FM_LOCAL, string_new("other"), \
                 FM_UNARY, string_new("y"), \
                 FM_BINARY, string_new("+"), \
-                FM_STORE_INSTANCE, string_new("y"), \
+                FM_STORE_INSTANCE, string_new("@y"), \
                 FM_POP, \
                 FM_SELF, \
-                FM_POP, \
             FM_END_BINARY_METHOD, \
             FM_TENSOR, string_new("2"),
             FM_KEYWORD, string_new("multibind:"), string_new("1"), \
@@ -117,15 +113,14 @@ module(classes_spec, {
             FM_LOCAL, string_new("Point3D"), \
             FM_START_KEYWORD_METHOD, string_new("x:y:z:"), \
                 FM_SUPER, \
-                FM_INSTANCE, string_new("x"), \
-                FM_INSTANCE, string_new("y"), \
+                FM_INSTANCE, string_new("@x"), \
+                FM_INSTANCE, string_new("@y"), \
                 FM_KEYWORD, string_new("x:y:"), string_new("2"), \
                 FM_POP, \
                 FM_LOCAL, string_new("z"), \
-                FM_STORE_INSTANCE, string_new("z"), \
+                FM_STORE_INSTANCE, string_new("@z"), \
                 FM_POP, \
                 FM_SELF, \
-                FM_POP, \
             FM_END_KEYWORD_METHOD, \
             FM_KEYWORD, string_new("bind:"), string_new("1"), \
             FM_POP, \
@@ -133,9 +128,8 @@ module(classes_spec, {
             FM_START_UNARY_METHOD, string_new("calc"), \
                 FM_SUPER, \
                 FM_UNARY, string_new("calc"), \
-                FM_INSTANCE, string_new("z"), \
+                FM_INSTANCE, string_new("@z"), \
                 FM_BINARY, string_new("+"), \
-                FM_POP, \
             FM_END_UNARY_METHOD, \
             FM_KEYWORD, string_new("bind:"), string_new("1"), \
             FM_POP, \
@@ -145,14 +139,13 @@ module(classes_spec, {
                 FM_LOCAL, string_new("other"), \
                 FM_BINARY, string_new("+"), \
                 FM_POP, \
-                FM_INSTANCE, string_new("z"), \
+                FM_INSTANCE, string_new("@z"), \
                 FM_LOCAL, string_new("other"), \
                 FM_UNARY, string_new("z"), \
                 FM_BINARY, string_new("+"), \
-                FM_STORE_INSTANCE, string_new("z"), \
+                FM_STORE_INSTANCE, string_new("@z"), \
                 FM_POP, \
                 FM_SELF, \
-                FM_POP, \
             FM_END_BINARY_METHOD, \
             FM_KEYWORD, string_new("bind:"), string_new("1"), \
             FM_POP, \
@@ -209,37 +202,34 @@ module(classes_spec, {
             p3 = p1 + p2, \
             puts: p3, \
         )", vector_new( \
-            FM_GLOBAL, string_new("Margaret"), \
+            FM_GLOBAL, string_new("$Margaret"), \
             FM_START_KEYWORD_METHOD, string_new("x:y:"), \
                 FM_LOCAL, string_new("x"), \
-                FM_STORE_INSTANCE, string_new("x"), \
+                FM_STORE_INSTANCE, string_new("@x"), \
                 FM_POP, \
                 FM_LOCAL, string_new("y"), \
-                FM_STORE_INSTANCE, string_new("y"), \
+                FM_STORE_INSTANCE, string_new("@y"), \
                 FM_POP, \
                 FM_SELF, \
                 FM_UNARY, string_new("clone"), \
-                FM_POP, \
             FM_END_KEYWORD_METHOD, \
             FM_START_BINARY_METHOD, string_new("+"), \
                 FM_SELF, \
-                FM_POP, \
             FM_END_BINARY_METHOD, \
             FM_START_BINARY_METHOD, string_new("+"), \
-                FM_INSTANCE, string_new("x"), \
+                FM_INSTANCE, string_new("@x"), \
                 FM_LOCAL, string_new("other"), \
                 FM_UNARY, string_new("x"), \
                 FM_BINARY, string_new("+"), \
-                FM_STORE_INSTANCE, string_new("x"), \
+                FM_STORE_INSTANCE, string_new("@x"), \
                 FM_POP, \
-                FM_INSTANCE, string_new("y"), \
+                FM_INSTANCE, string_new("@y"), \
                 FM_LOCAL, string_new("other"), \
                 FM_UNARY, string_new("y"), \
                 FM_BINARY, string_new("+"), \
-                FM_STORE_INSTANCE, string_new("y"), \
+                FM_STORE_INSTANCE, string_new("@y"), \
                 FM_POP, \
                 FM_SELF, \
-                FM_POP, \
             FM_END_BINARY_METHOD, \
             FM_TENSOR, string_new("3"), \
             FM_KEYWORD, string_new("clone:"), string_new("1"), \
@@ -268,7 +258,7 @@ module(classes_spec, {
             FM_BINARY, string_new("+"), \
             FM_STORE_LOCAL, string_new("p3"), \
             FM_POP, \
-            FM_GLOBAL, string_new("Margaret"), \
+            FM_GLOBAL, string_new("$Margaret"), \
             FM_LOCAL, string_new("p3"), \
             FM_KEYWORD, string_new("puts:"), string_new("1"), \
             FM_POP \

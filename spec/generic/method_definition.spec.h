@@ -8,7 +8,6 @@ module(method_definition_spec, {
         parse("# $true not => $false", vector_new( \
             FM_START_UNARY_METHOD, string_new("not"),
                 FM_FALSE, \
-                FM_POP, \
             FM_END_UNARY_METHOD, \
             FM_POP \
         ));
@@ -16,7 +15,6 @@ module(method_definition_spec, {
         parse("# $false neg => $nil", vector_new( \
             FM_START_UNARY_METHOD, string_new("neg"), \
                 FM_NIL, \
-                FM_POP, \
             FM_END_UNARY_METHOD, \
             FM_POP \
         ));
@@ -26,7 +24,6 @@ module(method_definition_spec, {
                 FM_SELF, \
                 FM_INTEGER, string_new("1"), \
                 FM_BINARY, string_new("+"), \
-                FM_POP, \
             FM_END_UNARY_METHOD, \
             FM_POP \
         ));
@@ -35,14 +32,12 @@ module(method_definition_spec, {
                 FM_SELF, \
                 FM_INTEGER, string_new("1"), \
                 FM_BINARY, string_new("+"), \
-                FM_POP, \
             FM_END_UNARY_METHOD, \
             FM_POP \
         ));
         parse("#is_empty? => $true", vector_new( \
             FM_START_UNARY_METHOD, string_new("is_empty?"), \
                 FM_TRUE, \
-                FM_POP, \
             FM_END_UNARY_METHOD, \
             FM_POP \
         ));
@@ -50,7 +45,6 @@ module(method_definition_spec, {
         parse("# 0 fact => 1", vector_new( \
             FM_START_UNARY_METHOD, string_new("fact"), \
                 FM_INTEGER, string_new("1"), \
-                FM_POP, \
             FM_END_UNARY_METHOD, \
             FM_POP \
         ));
@@ -63,7 +57,6 @@ module(method_definition_spec, {
         )", vector_new( \
             FM_START_UNARY_METHOD, string_new("fact"), \
                 FM_INTEGER, string_new("1"), \
-                FM_POP, \
             FM_END_UNARY_METHOD, \
             FM_POP, \
             \
@@ -74,7 +67,6 @@ module(method_definition_spec, {
                 FM_BINARY, string_new("-"), \
                 FM_UNARY, string_new("fact"), \
                 FM_BINARY, string_new("*"), \
-                FM_POP, \
             FM_END_UNARY_METHOD, \
             FM_POP \
         ));
@@ -85,7 +77,6 @@ module(method_definition_spec, {
         parse("# 0 ** 0 => $nil", vector_new( \
             FM_START_BINARY_METHOD, string_new("**"), \
                 FM_NIL, \
-                FM_POP, \
             FM_END_BINARY_METHOD, \
             FM_POP \
         ));
@@ -94,7 +85,6 @@ module(method_definition_spec, {
         parse("# 0 ** _ => 0", vector_new( \
             FM_START_BINARY_METHOD, string_new("**"), \
                 FM_INTEGER, string_new("0"), \
-                FM_POP, \
             FM_END_BINARY_METHOD, \
             FM_POP \
         ));
@@ -103,7 +93,6 @@ module(method_definition_spec, {
         parse("# _ ** 0 => 1", vector_new( \
             FM_START_BINARY_METHOD, string_new("**"), \
                 FM_INTEGER, string_new("1"), \
-                FM_POP, \
             FM_END_BINARY_METHOD, \
             FM_POP \
         ));
@@ -112,7 +101,6 @@ module(method_definition_spec, {
         parse("# 0 ** a_number => 0", vector_new( \
             FM_START_BINARY_METHOD, string_new("**"), \
                 FM_INTEGER, string_new("0"), \
-                FM_POP, \
             FM_END_BINARY_METHOD, \
             FM_POP \
         ));
@@ -123,7 +111,6 @@ module(method_definition_spec, {
                 FM_SELF, \
                 FM_LOCAL, string_new("a_number"), \
                 FM_KEYWORD, string_new("raised_to:"), string_new("1"), \
-                FM_POP, \
             FM_END_BINARY_METHOD, \
             FM_POP \
         ));
@@ -134,7 +121,6 @@ module(method_definition_spec, {
         parse("#add: element at: position => 42", vector_new( \
             FM_START_KEYWORD_METHOD, string_new("add:at:"), \
                 FM_INTEGER, string_new("42"), \
-                FM_POP, \
             FM_END_KEYWORD_METHOD, \
             FM_POP \
         ));
@@ -143,7 +129,6 @@ module(method_definition_spec, {
         parse("# _ new: 2 => 1", vector_new( \
             FM_START_KEYWORD_METHOD, string_new("new:"), \
                 FM_INTEGER, string_new("1"), \
-                FM_POP, \
             FM_END_KEYWORD_METHOD, \
             FM_POP \
         ));
@@ -152,7 +137,6 @@ module(method_definition_spec, {
         parse("# 1 add: $nil => $nil", vector_new( \
             FM_START_KEYWORD_METHOD, string_new("add:"), \
                 FM_NIL, \
-                FM_POP, \
             FM_END_KEYWORD_METHOD, \
             FM_POP \
         ));
@@ -161,7 +145,6 @@ module(method_definition_spec, {
         parse("# 1 add: 2 => 3", vector_new( \
             FM_START_KEYWORD_METHOD, string_new("add:"), \
                 FM_INTEGER, string_new("3"), \
-                FM_POP, \
             FM_END_KEYWORD_METHOD, \
             FM_POP \
         ));
@@ -170,7 +153,6 @@ module(method_definition_spec, {
         parse("# 1 one: _ two: _ => 42", vector_new( \
             FM_START_KEYWORD_METHOD, string_new("one:two:"), \
                 FM_INTEGER, string_new("42"), \
-                FM_POP, \
             FM_END_KEYWORD_METHOD, \
             FM_POP \
         ));
@@ -179,7 +161,6 @@ module(method_definition_spec, {
         parse("#ok?: value1 otherwise!: value2 => 17", vector_new( \
             FM_START_KEYWORD_METHOD, string_new("ok?:otherwise!:"), \
                 FM_INTEGER, string_new("17"), \
-                FM_POP, \
             FM_END_KEYWORD_METHOD, \
             FM_POP \
         ));
@@ -188,7 +169,6 @@ module(method_definition_spec, {
         parse("# [] add: element at: position => 17", vector_new( \
             FM_START_KEYWORD_METHOD, string_new("add:at:"), \
                 FM_INTEGER, string_new("17"), \
-                FM_POP, \
             FM_END_KEYWORD_METHOD, \
             FM_POP \
         ));
@@ -198,7 +178,6 @@ module(method_definition_spec, {
             FM_START_KEYWORD_METHOD, string_new("add:at:"), \
                 FM_STRING, string_new("a"), \
                 FM_TENSOR, string_new("1"), \
-                FM_POP, \
             FM_END_KEYWORD_METHOD, \
             FM_POP \
         ));
@@ -210,7 +189,6 @@ module(method_definition_spec, {
                 FM_TENSOR, string_new("1"), \
                 FM_SELF, \
                 FM_BINARY, string_new("++"), \
-                FM_POP, \
             FM_END_KEYWORD_METHOD, \
             FM_POP \
         ));
@@ -242,7 +220,6 @@ module(method_definition_spec, {
                     FM_POP, \
                 FM_END_PROC, \
                 FM_KEYWORD, string_new("while_true:"), string_new("1"), \
-                FM_POP, \
             FM_END_KEYWORD_METHOD, \
             FM_POP \
         ));
