@@ -79,7 +79,7 @@ string *marg_value_format(MargValue self) {
         string_add_str(res, "<proc>");
 
     else
-        string_add_str(res, "Undefined");
+        string_add_str(res, AS_OBJECT(self)->name);
 
     return res;
 }
