@@ -172,7 +172,7 @@ vector *ast_expression(vector *unit) {
 }
 
 vector *ast_margaret_object(void) {
-    return vector_new(FM_GLOBAL, string_new("Margaret"));
+    return vector_new(FM_GLOBAL, string_new("$Margaret"));
 }
 
 vector *ast_group(vector *unit_list) {
@@ -205,10 +205,14 @@ vector *ast_variable(string *optional_instance_symbol, string *name) {
         return vector_new(FM_SELF);
     else if(string_equals(optional_instance_symbol, string_new("@")) && string_equals(name, string_new("super")))
         return vector_new(FM_SUPER);
-    else if(string_equals(optional_instance_symbol, string_new("@")))
-        return vector_new(FM_INSTANCE, name);
-    else if(string_equals(optional_instance_symbol, string_new("$")))
-        return vector_new(FM_GLOBAL, name);
+    else if(string_equals(optional_instance_symbol, string_new("@"))) {
+        string_add(optional_instance_symbol, name);
+        return vector_new(FM_INSTANCE, optional_instance_symbol);
+    }
+    else if(string_equals(optional_instance_symbol, string_new("$"))) {
+        string_add(optional_instance_symbol, name);
+        return vector_new(FM_GLOBAL, optional_instance_symbol);
+    }
     else
         return vector_new(FM_LOCAL, name);
 }
