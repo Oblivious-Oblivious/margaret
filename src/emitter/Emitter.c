@@ -261,7 +261,6 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
             AS_METHOD(new_method)->proc->bound_proc = vm->current;
             emit_possible_long_op(OP_PUT_OBJECT);
             emit_temporary(new_method);
-            emit_byte(OP_SEND);
 
             vm->current = AS_METHOD(new_method)->proc;
         }
@@ -300,8 +299,8 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
 
             switch_keyword_case("puts:")
                 emit_byte(TEST_OP_PRINT);
-            keyword_case("at:put:")
-                ;
+            keyword_case("bind:")
+                emit_byte(OP_BIND_METHOD);
             keyword_case("call:")
                 emit_byte(OP_CALL_PROC_PARAMS);
             default_keyword_case {

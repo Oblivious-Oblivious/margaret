@@ -217,6 +217,13 @@ static void evaluator_run(VM *vm) {
                 break;
             }
 
+            case OP_BIND_METHOD: {
+                MargValue method = STACK_POP(vm);
+                MargValue object = STACK_PEEK(vm, 0);
+                table_set(&AS_OBJECT(object)->messages, AS_METHOD(method)->message_name, method);
+                break;
+            }
+
         }
     }
 }

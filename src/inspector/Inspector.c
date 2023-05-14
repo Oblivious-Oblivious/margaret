@@ -226,6 +226,9 @@ static size_t inspect_instruction(vector *res, chunk *chunk, size_t offset) {
             return instruction_single(res, "EXIT_ACTIVATION_RECORD", chunk, offset);
 
 
+        case OP_BIND_METHOD:
+            return instruction_single(res, "BIND_METHOD", chunk, offset);
+
         default: {
             string *unknown_opcode = string_new("");
             string_addf(unknown_opcode, "Unknown opcode %d", instruction);

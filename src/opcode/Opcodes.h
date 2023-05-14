@@ -94,6 +94,8 @@
 #define OP_CALL_PROC_PARAMS       0x17
 #define OP_EXIT_ACTIVATION_RECORD 0x18
 
+#define OP_BIND_METHOD            0x19
+
 
 // TODO Superinstructions for incrementing, decrementing and doubling
 // TODO Superinstructions for comparing with zero
