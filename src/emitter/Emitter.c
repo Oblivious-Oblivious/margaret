@@ -251,7 +251,6 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
             vm->current = AS_METHOD(new_method)->proc;
         }
         opcode_case(FM_END_BINARY_METHOD) {
-            // emit_byte(OP_POP);
             emit_byte(OP_EXIT_ACTIVATION_RECORD);
             inspect_and_print_method(vm);
             vm->current = vm->current->bound_proc;
@@ -265,8 +264,6 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
             vm->current = AS_METHOD(new_method)->proc;
         }
         opcode_case(FM_END_KEYWORD_METHOD) {
-            // emit_byte(OP_POP);
-            // emit_byte(OP_POP);
             emit_byte(OP_EXIT_ACTIVATION_RECORD);
             inspect_and_print_method(vm);
             vm->current = vm->current->bound_proc;
