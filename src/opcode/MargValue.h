@@ -63,7 +63,6 @@ typedef uint64_t MargValue;
 
 // TODO Eventually remove predefined types
 // TODO $nil, $true, $false -> Singleton objects
-// TODO Atomic value objects like (integer, float, string) return self on clone
 #define IS_NIL(value)                                (!strcmp(QNAN_UNBOX(value)->name, "$nil"))
 #define IS_FALSE(value)                              (!strcmp(QNAN_UNBOX(value)->name, "$false"))
 #define IS_TRUE(value)                               (!strcmp(QNAN_UNBOX(value)->name, "$true"))

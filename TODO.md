@@ -15,6 +15,7 @@
        every 3 gen0 collections, collect gen1 once, every 10 gen0 collections collect gen2 once
     🟥 Upgrade to a tricolor generational mark & sweep gc
        Precursor to concurrent implementation
+    🟥 Specialize tokens by assigning different values for each token.
 
 ## (✗) ver. 0.2.0
 -----------------
@@ -56,6 +57,7 @@
     🟥 Make bang (!) messages denote persistant changes in object state.
     🟥 Add complex numbers `(0+2i)`, and rational numbers `(1/2r)` -> unary messages.
     🟥 Use GOTO for break and continue. -> `list iterate: { elem | if: { elem == 42 } then: {( goto: exit_label )} elem puts } Label new: "exit_label"`.
+    🟥 Create an `import/require` Margaret message.  Probably simple concatenation of files (C-like include), not actual module system
     ---------------------------
     🟥 Add functional features:
     🟥 [<a, b, c] = [<"hello", "world", 42] (TUPLES)
