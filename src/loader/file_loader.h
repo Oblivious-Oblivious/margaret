@@ -25,6 +25,7 @@ file_loader *file_loader_new(void);
 
 /**
  * @brief Open a file in read mode
+ * @param self -> Current file loader
  * @param filepath -> The path to open
  * @return a boolean signaling if the opening was successful
  */
@@ -32,6 +33,8 @@ int file_loader_open(file_loader *self, char *filepath);
 
 /**
  * @brief Attempts to close the buffers to avoid memory overflows
+ * @param self -> Current file loader
+ * @return int -> Boolean value signalling success of operation
  */
 int file_loader_close(file_loader *self);
 

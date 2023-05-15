@@ -39,6 +39,13 @@ static int regex_matches(char c, const char *matcher) {
     return 0;
 }
 
+/**
+ * @brief Defines a lexer object
+ * @param filename -> Current filename to lex tokens from
+ * @param text -> string* version of scanned raw text
+ * @param pos -> Current position in text array
+ * @param lineno -> Counter for line numbers
+ */
 typedef struct Lexer {
     char *filename;
     string *text;

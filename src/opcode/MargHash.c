@@ -5,6 +5,13 @@
 
 #define MARG_HASH_MAX_LOAD 0.75
 
+/**
+ * @brief Finds a specific entry using a key
+ * @param entries -> The entries array
+ * @param alloced -> Current alloced size used for hashing calculations
+ * @param key -> Current key used for searching
+ * @return MargHashEntry* -> Found entry, or tombstone in case of removal
+ */
 static MargHashEntry *marg_hash_find_entry(MargHashEntry *entries, size_t alloced, MargValue key) {
     uint64_t index = MEMORY_GROW_FACTOR == 2
         ? AS_STRING(key)->hash & (alloced - 1)
@@ -30,6 +37,11 @@ static MargHashEntry *marg_hash_find_entry(MargHashEntry *entries, size_t alloce
     }
 }
 
+/**
+ * @brief Resizes the Hash and rehashes interned elements
+ * @param self -> Current Hash
+ * @param alloced -> New, increased capacity number
+ */
 static void marg_hash_adjust_capacity(MargHash *self, size_t alloced) {
     MargHashEntry *entries = (MargHashEntry*)collected_malloc(sizeof(MargHashEntry) * alloced);
 

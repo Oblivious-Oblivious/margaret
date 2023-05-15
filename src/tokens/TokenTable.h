@@ -8,11 +8,22 @@
 #include "../base/string.h"
 #include "../base/vector.h"
 
+/**
+ * @brief Defines a token table (array-like) data structure.
+    Allows for adding tokens, displaying values, retrieving
+    lookaheads, as well as consuming by value or type.
+ * @param token_list -> A vector storing tokens
+ * @param pos -> Current position of table pointer
+ */
 typedef struct TokenTable {
     vector *token_list;
     size_t pos;
 } TokenTable;
 
+/**
+ * @brief Displays the entirety or the table, prints all tokens
+ * @param self -> The table to display
+ */
 void token_table_display(TokenTable *self);
 
 /**

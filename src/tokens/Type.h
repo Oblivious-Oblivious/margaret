@@ -1,6 +1,15 @@
 #ifndef __TYPE_H_
 #define __TYPE_H_
 
+/**
+ * @brief Token types definition
+    Some of them are specific like int, float or string
+    while others like message/syntax symbol facilitate
+    parsing for most of Margaret's contstucts like array-
+    type literals, procs, message sending and solve grammar
+    ambiguities.  Tokens should be specialized as singletons
+    by assigning different values for each token.
+ */
 typedef enum Type {
     TOKEN_EOF = 0,
 

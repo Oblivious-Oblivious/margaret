@@ -5,6 +5,11 @@
 #include "../base/vector.h"
 #include "../tokens/TokenTable.h"
 
+/**
+ * @brief Simple wrapper struct over a token table
+    Does not store any additional information so we
+    namespace with `Parser` for code clarity
+ */
 typedef struct Parser {
     TokenTable *table;
 } Parser;

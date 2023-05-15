@@ -6,6 +6,7 @@
 /**
  * @brief An object representation of MARG_FLOAT
  * @param _ -> Inherted object properties
+ * @param value -> Actual double value of Float object
  */
 typedef struct MargFloat {
     MargObject _;

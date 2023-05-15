@@ -68,6 +68,11 @@ MargValue marg_hash_get(MargHash *self, MargValue key);
  */
 void marg_hash_delete(MargHash *self, MargValue key);
 
+/**
+ * @brief Get the number of entries inserted
+ * @param self -> Current MargHash
+ * @return size_t -> Number of entries
+ */
 #define marg_hash_size(self) \
     (self)->size;
 

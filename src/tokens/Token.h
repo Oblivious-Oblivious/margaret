@@ -8,6 +8,14 @@
 
 #include "../base/string.h"
 
+/**
+ * @brief Describes a Token data structure that
+    organizes lexing information from file inputs
+ * @param value -> Stringified value of the token
+ * @param type -> A token type annotation
+ * @param line_number -> Current line number this token was found on
+ * @param filename -> Filename this token was found on
+ */
 typedef struct Token {
     string *value;
     Type type;

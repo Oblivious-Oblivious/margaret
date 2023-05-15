@@ -6,6 +6,7 @@
 
 /**
  * @brief Check if the path file exists in the filesystem
+ * @param self -> Current file loader
  * @return true if it does not exist
  */
 static int file_loader_file_does_not_exist(file_loader *self) {

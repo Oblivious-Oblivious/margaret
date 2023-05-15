@@ -1,8 +1,6 @@
 #ifndef __MARG_OBJECT_H_
 #define __MARG_OBJECT_H_
 
-// TODO docs comment all function definitions and structs
-
 #include <stdlib.h> /* size_t */
 #include "../base/boolean.h"
 #include "../base/table.h"
