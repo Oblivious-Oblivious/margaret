@@ -217,6 +217,7 @@ static size_t inspect_instruction(vector *res, chunk *chunk, size_t offset) {
         case OP_PUT_OBJECT_LONG:
             return instruction_long_object(res, "PUT_OBJECT_LONG", chunk, offset);
 
+        // TODO RENAME LONG VARIATIONS OF FUNCTIONS        
         case OP_PUT_TENSOR:
             return instruction_array_type(res, "PUT_TENSOR", chunk, offset);
         case OP_PUT_TENSOR_LONG:
