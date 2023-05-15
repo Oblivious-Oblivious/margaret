@@ -6,7 +6,7 @@
 #include "../src/base/string.h"
 #include "../src/base/vector.h"
 #include "../src/lexer/Lexer.h"
-#include "../src/opcode/Opcodes.h"
+#include "../src/opcode/fmcodes.h"
 #include "../src/parser/Parser.h"
 
 #define parse(code, expected_result) do { \

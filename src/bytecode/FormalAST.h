@@ -3,7 +3,6 @@
 
 #include "../base/string.h"
 #include "../base/vector.h"
-#include "../opcode/Opcodes.h"
 
 vector *ast_empty(void);
 

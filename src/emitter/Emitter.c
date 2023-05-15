@@ -5,6 +5,7 @@
 #include "../inspector/Inspector.h"
 
 #include "../base/chunk.h"
+#include "../opcode/fmcodes.h"
 #include "../opcode/Opcodes.h"
 #include "../opcode/MargValue.h"
 #include "../opcode/MargInteger.h"

@@ -3,6 +3,8 @@
 #include <stdio.h> /* snprintf */
 #include "alternate_to_dec.h"
 
+#include "../opcode/fmcodes.h"
+
 static int __all_keywords_equal(vector *selectors) {
     size_t selectors_size = vector_size(selectors);
     for(size_t i = 0; i < selectors_size; i++) {
