@@ -299,17 +299,18 @@ vector *ast_binary_method_definition(vector *multimethod_object_default_value, s
     vector *res = vector_new(FM_START_BINARY_METHOD, selector);
 
     (void)multimethod_object_default_value;
-    (void)param;
 
     // size_t multimethod_object_default_value_size = vector_size(multimethod_object_default_value);
     // for(size_t i = 0; i < multimethod_object_default_value_size; i++)
     //     vector_add(res, vector_get(multimethod_object_default_value, i));
     // vector_add(res, FM_METHOD_RECEIVER);
 
-    // size_t param_size = vector_size(param);
-    // for(size_t i = 0; i < param_size; i++)
-    //     vector_add(res, vector_get(param, i));
-    // vector_add(res, FM_METHOD_PARAMETER);
+    // TODO Refactor assumption that we define methods with named parameters
+    vector_add(res, FM_METHOD_PARAMETER);
+    if(vector_size(param) == 1)
+        vector_add(res, vector_get(param, 0));
+    else
+        vector_add(res, vector_get(param, 1));
 
     size_t function_size = vector_size(function);
     for(size_t i = 0; i < function_size; i++)
@@ -325,21 +326,22 @@ vector *ast_keyword_method_definition(vector *multimethod_object_default_value, 
     vector *res = vector_new(FM_START_KEYWORD_METHOD, selector);
 
     (void)multimethod_object_default_value;
-    (void)params;
 
     // size_t multimethod_object_default_value_size = vector_size(multimethod_object_default_value);
     // for(size_t i = 0; i < multimethod_object_default_value_size; i++)
     //     vector_add(res, vector_get(multimethod_object_default_value, i));
     // vector_add(res, FM_METHOD_RECEIVER);
 
-    // size_t params_size = vector_size(params);
-    // for(size_t i = 0; i < params_size; i++) {
-    //     vector *param = vector_get(params, i);
-    //     size_t param_size = vector_size(param);
-    //     for(size_t i = 0; i < param_size; i++)
-    //         vector_add(res, vector_get(param, i));
-    //     vector_add(res, FM_METHOD_PARAMETER);
-    // }
+    size_t params_size = vector_size(params);
+    for(size_t i = 0; i < params_size; i++) {
+        vector *param = vector_get(params, i);
+        // TODO Refactor assumption that we define methods with named parameters
+        vector_add(res, FM_METHOD_PARAMETER);
+        if(vector_size(param) == 1)
+            vector_add(res, vector_get(param, 0));
+        else
+            vector_add(res, vector_get(param, 1));
+    }
 
     size_t function_size = vector_size(function);
     for(size_t i = 0; i < function_size; i++)
@@ -352,8 +354,7 @@ vector *ast_keyword_method_definition(vector *multimethod_object_default_value, 
 }
 
 vector *ast_any_object(void) {
-    // return vector_new(FM_ANY_OBJECT);
-    return vector_new_empty();
+    return vector_new(FM_ANY_OBJECT);
 }
 
 vector *ast_literal(vector *unit) {

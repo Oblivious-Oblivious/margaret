@@ -2,7 +2,6 @@
 #define __MARG_METHOD_H_
 
 #include "MargObject.h"
-#include "MargString.h"
 #include "MargProc.h"
 
 struct MargMethod {
@@ -10,6 +9,7 @@ struct MargMethod {
     MargObject *bound_object;
 
     MargValue message_name;
+    MargValue parameter_names;
     MargProc *proc;
 };
 

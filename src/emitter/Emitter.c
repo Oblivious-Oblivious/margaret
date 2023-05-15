@@ -10,6 +10,7 @@
 #include "../opcode/MargInteger.h"
 #include "../opcode/MargFloat.h"
 #include "../opcode/MargString.h"
+#include "../opcode/MargTensor.h"
 #include "../opcode/MargProc.h"
 #include "../vm/byte_conversions.h"
 
@@ -267,6 +268,12 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
             emit_byte(OP_EXIT_ACTIVATION_RECORD);
             inspect_and_print_method(vm);
             vm->current = vm->current->bound_proc;
+        }
+
+        opcode_case(FM_ANY_OBJECT) {}
+        opcode_case(FM_METHOD_PARAMETER) {
+            char *parameter_name = string_get(vector_get(formal_bytecode, ++ip));
+            marg_tensor_add(AS_TENSOR(vm->current->bound_method->parameter_names), MARG_STRING(parameter_name));
         }
 
         opcode_case(FM_UNARY) {

@@ -44,8 +44,9 @@
 #define FM_END_BINARY_METHOD      string_new("END_BINARY_METHOD")
 #define FM_START_KEYWORD_METHOD   string_new("START_KEYWORD_METHOD")
 #define FM_END_KEYWORD_METHOD     string_new("END_KEYWORD_METHOD")
-// #define FM_ANY_OBJECT             string_new("ANY_OBJECT")
-// #define FM_METHOD_PARAMETER       string_new("METHOD_PARAMETER")
+
+#define FM_ANY_OBJECT             string_new("ANY_OBJECT")
+#define FM_METHOD_PARAMETER       string_new("METHOD_PARAMETER")
 // #define FM_METHOD_RECEIVER        string_new("METHOD_RECEIVER")
 
 #define FM_UNARY                  string_new("UNARY")
