@@ -19,7 +19,6 @@ Lexer *lexer_new(char *filename, string *text) {
 
 void *lexer_error(Lexer *self, char *message, string *token) {
     fprintf(stderr, "%s:%zu: \033[1;31merror:\033[0m %s on `%s`\n", self->filename, self->lineno, message, string_get(token));
-    /* TODO Return a NULL token table in case of lexer error */
     return NULL;
 }
 
@@ -139,7 +138,6 @@ static Token *lexer_tokenize_message_symbol(Lexer *self, char c) {
             break;
         c = lexer_next_character(self);
     }
-    // TODO Implement UTF-8 strings
     char maybe_id_symb = string_get_char_at_index(final_symbol, 0);
     if(string_size(final_symbol) == 1 && regex_matches(maybe_id_symb, REGEX_ID_SYMBOL))
         return token_new(final_symbol, TOKEN_ID_SYMBOL, self->lineno, self->filename);
