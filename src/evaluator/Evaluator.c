@@ -69,6 +69,11 @@ static void evaluator_run(VM *vm) {
                 break;
             }
 
+            case OP_PUT_SELF: {
+                STACK_PUSH(vm, table_get(&vm->current->bound_method->bound_object->instance_variables, MARG_STRING("@self")));
+                break;
+            }
+
             case OP_PUT_MINUS_1: {
                 STACK_PUSH(vm, MARG_MINUS_1);
                 break;
@@ -235,6 +240,8 @@ static void evaluator_run(VM *vm) {
                 MargValue method = STACK_POP(vm);
                 MargValue object = STACK_PEEK(vm, 0);
                 table_set(&AS_OBJECT(object)->messages, AS_METHOD(method)->message_name, method);
+                AS_METHOD(method)->bound_object = AS_OBJECT(object);
+                table_set(&AS_METHOD(method)->bound_object->instance_variables, MARG_STRING("@self"), object);
                 break;
             }
 

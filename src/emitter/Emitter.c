@@ -144,8 +144,12 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
             emit_byte(OP_PUT_FALSE);
         }
 
-        opcode_case(FM_SELF) {}
-        opcode_case(FM_SUPER) {}
+        opcode_case(FM_SELF) {
+            emit_byte(OP_PUT_SELF);
+        }
+        opcode_case(FM_SUPER) {
+            // TODO
+        }
 
         // TODO Distinguish normal number from big numbers
         opcode_case(FM_INTEGER) {
