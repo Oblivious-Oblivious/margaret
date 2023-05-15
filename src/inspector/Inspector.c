@@ -311,7 +311,7 @@ void inspect_and_print_method(VM *vm) {
 }
 
 void inspect_and_print_main(VM *vm) {
-    printf("\n/-------------- Disassembly: <MAIN> ------------\\\n");
+    printf("\n/-------------- Disassembly: < $Margaret#main: > ------------\\\n");
     inspect_and_print_vm_bytecode(vm);
     printf("\\-----------------------------------------------/\n\n");
 }
