@@ -6,7 +6,7 @@
 #include "../base/string.h"
 #include "../base/chunk.h"
 
-#include "../opcode/Opcodes.h"
+#include "../opcode/opcodes.h"
 #include "../opcode/MargString.h"
 #include "../vm/byte_conversions.h"
 

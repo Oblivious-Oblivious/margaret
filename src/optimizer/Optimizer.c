@@ -1,6 +1,6 @@
 #include "Optimizer.h"
 
-#include "../opcode/Opcodes.h"
+#include "../opcode/opcodes.h"
 
 VM *optimizer_optimize(VM *vm) {
     vm->current->ip = vm->current->bytecode->items;

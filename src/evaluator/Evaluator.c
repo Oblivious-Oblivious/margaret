@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 
-#include "../opcode/Opcodes.h"
+#include "../opcode/opcodes.h"
 #include "../opcode/MargValue.h"
 
 #include "../opcode/MargNil.h"

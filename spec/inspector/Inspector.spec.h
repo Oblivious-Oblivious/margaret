@@ -4,7 +4,7 @@
 #include "../../src/inspector/Inspector.h"
 #include "../cSpec.h"
 
-#include "../../src/opcode/Opcodes.h"
+#include "../../src/opcode/opcodes.h"
 #include "../../src/opcode/MargFloat.h"
 #include "../../src/vm/byte_conversions.h"
 
