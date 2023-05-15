@@ -310,6 +310,8 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
                 emit_byte(OP_BIND_METHOD);
             keyword_case("call:")
                 emit_byte(OP_CALL_PROC_PARAMS);
+            keyword_case("clone:")
+                emit_byte(OP_CLONE_OBJECT);
             default_keyword_case {
                 if(string_equals(number_of_parameters, string_new("1")))
                     emit_byte(OP_PUT_1);

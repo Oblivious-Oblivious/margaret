@@ -54,6 +54,7 @@
 #define FM_KEYWORD                string_new("KEYWORD")
 
 // ------ Emmited Opcodes ------
+// TODO FIX OPCODE NUMBERING
 #define TEST_OP_PRINT             0xff
 
 #define OP_HALT                   0x00
@@ -99,6 +100,8 @@
 
 #define OP_SEND                   0x1a
 #define OP_SEND_LONG              0x1b
+
+#define OP_CLONE_OBJECT           0x1c
 
 // TODO Superinstructions for incrementing, decrementing and doubling
 // TODO Superinstructions for comparing with zero

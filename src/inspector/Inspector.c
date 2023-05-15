@@ -267,6 +267,8 @@ static size_t inspect_instruction(vector *res, chunk *chunk, size_t offset) {
 
         case OP_BIND_METHOD:
             return instruction_single(res, "BIND_METHOD", chunk, offset);
+        case OP_CLONE_OBJECT:
+            return instruction_single(res, "CLONE_OBJECT", chunk, offset);
 
         default: {
             string *unknown_opcode = string_new("");

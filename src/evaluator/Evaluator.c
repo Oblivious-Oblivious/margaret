@@ -276,6 +276,12 @@ static void evaluator_run(VM *vm) {
                 vm->current = method->proc;
                 break;
             }
+
+            case OP_CLONE_OBJECT: {
+                MargValue new_object_name = STACK_POP(vm);
+                STACK_PUSH(vm, MARG_OBJECT(AS_STRING(new_object_name)->chars));
+                break;
+            }
         }
     }
 }
