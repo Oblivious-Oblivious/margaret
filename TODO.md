@@ -19,6 +19,7 @@
 
 ## (✗) ver. 0.2.0
 -----------------
+    🟥 Pattern-match multimethods by hashing receiver and parameters
     🟥 Optimize the design Hash to be data-oriented (separate keys from values for locality).
     🟥 Optimize hash function for better string interning.
     🟥 Add a character literal.
@@ -89,7 +90,6 @@
             -> actual_params = [0, 42]
             -> foreach param:
                 table_set(locals, parameters.get[i], actual_params[i])
-    🟥 Typecheck default parameters on multimethods!!
     ---------------------------
     🟩 Compile time bytecodes
        Stored along with runtime ones.
