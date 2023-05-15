@@ -1,0 +1,12 @@
+(
+    puts: (a = 2 + 3),
+    puts: (b = 7 - 5),
+    puts: (c = a * b),
+    puts: (d = c / 2),
+    puts: (e = -11 abs),
+    puts: (f = 11 == e),
+    puts: (g = d < 42),
+    puts: (h = e > d),
+    puts: (i = 13 <= 13),
+    puts: (j = 17 >= 17),
+)

@@ -271,6 +271,27 @@ static size_t inspect_instruction(vector *res, chunk *chunk, size_t offset) {
         case OP_CLONE_OBJECT:
             return instruction_single(res, "CLONE_OBJECT", chunk, offset);
 
+        case OP_PRIM_INTEGER_ADD:
+            return instruction_single(res, "PRIM_INTEGER_ADD", chunk, offset);
+        case OP_PRIM_INTEGER_SUB:
+            return instruction_single(res, "PRIM_INTEGER_SUB", chunk, offset);
+        case OP_PRIM_INTEGER_MUL:
+            return instruction_single(res, "PRIM_INTEGER_MUL", chunk, offset);
+        case OP_PRIM_INTEGER_DIV:
+            return instruction_single(res, "PRIM_INTEGER_DIV", chunk, offset);
+        case OP_PRIM_INTEGER_ABS:
+            return instruction_single(res, "PRIM_INTEGER_ABS", chunk, offset);
+        case OP_PRIM_INTEGER_EQUALS:
+            return instruction_single(res, "PRIM_INTEGER_EQUALS", chunk, offset);
+        case OP_PRIM_INTEGER_LT:
+            return instruction_single(res, "PRIM_INTEGER_LT", chunk, offset);
+        case OP_PRIM_INTEGER_GT:
+            return instruction_single(res, "PRIM_INTEGER_GT", chunk, offset);
+        case OP_PRIM_INTEGER_LTE:
+            return instruction_single(res, "PRIM_INTEGER_LTE", chunk, offset);
+        case OP_PRIM_INTEGER_GTE:
+            return instruction_single(res, "PRIM_INTEGER_GTE", chunk, offset);
+
         default: {
             string *unknown_opcode = string_new("");
             string_addf(unknown_opcode, "Unknown opcode %d", instruction);

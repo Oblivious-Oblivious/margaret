@@ -281,6 +281,8 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
 
             switch_unary_case("call")
                 emit_byte(OP_CALL_PROC);
+            unary_case("abs")
+                emit_byte(OP_PRIM_INTEGER_ABS);
             default_unary_case {
                 emit_byte(OP_PUT_0);
                 emit_possible_long_op(OP_SEND);
@@ -290,8 +292,24 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
         opcode_case(FM_BINARY) {
             string *binary_name = vector_get(formal_bytecode, ++ip);
 
-            switch_binary_case("<<")
-                ;
+            switch_binary_case("+")
+                emit_byte(OP_PRIM_INTEGER_ADD);
+            binary_case("-")
+                emit_byte(OP_PRIM_INTEGER_SUB);
+            binary_case("*")
+                emit_byte(OP_PRIM_INTEGER_MUL);
+            binary_case("/")
+                emit_byte(OP_PRIM_INTEGER_DIV);
+            binary_case("==")
+                emit_byte(OP_PRIM_INTEGER_EQUALS);
+            binary_case("<")
+                emit_byte(OP_PRIM_INTEGER_LT);
+            binary_case(">")
+                emit_byte(OP_PRIM_INTEGER_GT);
+            binary_case("<=")
+                emit_byte(OP_PRIM_INTEGER_LTE);
+            binary_case(">=")
+                emit_byte(OP_PRIM_INTEGER_GTE);
             binary_case("++")
                 ;
             default_binary_case {

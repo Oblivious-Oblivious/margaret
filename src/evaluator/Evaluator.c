@@ -19,6 +19,20 @@
 #include "../opcode/MargProc.h"
 
 /**
+ * @brief Typechecks object that came from primitive.  Primitives
+    neither send nor execute any bytecode so we have to ensure
+    we send to the appropriate object at runtime.
+ * 
+ * @param object -> Object to typecheck
+ * @param type -> String version of type (we check MargObject name)
+ * @param true
+ * @param false
+ */
+static bool type_of_object_is(MargValue object, char *type) {
+    return !strncmp(AS_OBJECT(object)->name, type, strlen(type));
+}
+
+/**
  * @brief Runs the iterator that evaluates
     the result of the generated opcodes
  * @param vm -> result enum
@@ -280,6 +294,126 @@ static void evaluator_run(VM *vm) {
             case OP_CLONE_OBJECT: {
                 MargValue new_object_name = STACK_POP(vm);
                 STACK_PUSH(vm, MARG_OBJECT(AS_STRING(new_object_name)->chars));
+                break;
+            }
+
+            case OP_PRIM_INTEGER_ADD: {
+                MargValue op2 = STACK_POP(vm);
+                MargValue op1 = STACK_POP(vm);
+                if(type_of_object_is(op1, "$Integer"))
+                    STACK_PUSH(vm, MARG_INTEGER(AS_INTEGER(op1)->value + AS_INTEGER(op2)->value));
+                else
+                    STACK_PUSH(vm, MARG_NIL);
+                break;
+            }
+            case OP_PRIM_INTEGER_SUB: {
+                MargValue op2 = STACK_POP(vm);
+                MargValue op1 = STACK_POP(vm);
+                if(type_of_object_is(op1, "$Integer"))
+                    STACK_PUSH(vm, MARG_INTEGER(AS_INTEGER(op1)->value - AS_INTEGER(op2)->value));
+                else
+                    STACK_PUSH(vm, MARG_NIL);
+                break;
+            }
+            case OP_PRIM_INTEGER_MUL: {
+                MargValue op2 = STACK_POP(vm);
+                MargValue op1 = STACK_POP(vm);
+                if(type_of_object_is(op1, "$Integer"))
+                    STACK_PUSH(vm, MARG_INTEGER(AS_INTEGER(op1)->value * AS_INTEGER(op2)->value));
+                else
+                    STACK_PUSH(vm, MARG_NIL);
+                break;
+            }
+            case OP_PRIM_INTEGER_DIV: {
+                MargValue op2 = STACK_POP(vm);
+                MargValue op1 = STACK_POP(vm);
+                if(type_of_object_is(op1, "$Integer")) {
+                    if(op2 == 0)
+                        STACK_PUSH(vm, MARG_NIL);
+                    else
+                        STACK_PUSH(vm, MARG_INTEGER(AS_INTEGER(op1)->value / AS_INTEGER(op2)->value));
+                }
+                else {
+                    STACK_PUSH(vm, MARG_NIL);
+                }
+                break;
+            }
+            case OP_PRIM_INTEGER_ABS: {
+                MargValue number = STACK_POP(vm);
+                if(type_of_object_is(number, "$Integer"))
+                    STACK_PUSH(vm, MARG_INTEGER((AS_INTEGER(number)->value < 0) ? -AS_INTEGER(number)->value : AS_INTEGER(number)->value));
+                else
+                    STACK_PUSH(vm, MARG_NIL);
+                break;
+            }
+            case OP_PRIM_INTEGER_EQUALS: {
+                MargValue op2 = STACK_POP(vm);
+                MargValue op1 = STACK_POP(vm);
+                if(type_of_object_is(op1, "$Integer")) {
+                    if(AS_INTEGER(op1)->value == AS_INTEGER(op2)->value)
+                        STACK_PUSH(vm, MARG_TRUE);
+                    else
+                        STACK_PUSH(vm, MARG_FALSE);
+                }
+                else {
+                    STACK_PUSH(vm, MARG_NIL);
+                }
+                break;
+            }
+            case OP_PRIM_INTEGER_LT: {
+                MargValue op2 = STACK_POP(vm);
+                MargValue op1 = STACK_POP(vm);
+                if(type_of_object_is(op1, "$Integer")) {
+                    if(AS_INTEGER(op1)->value < AS_INTEGER(op2)->value)
+                        STACK_PUSH(vm, MARG_TRUE);
+                    else
+                        STACK_PUSH(vm, MARG_FALSE);
+                }
+                else {
+                    STACK_PUSH(vm, MARG_NIL);
+                }
+                break;
+            }
+            case OP_PRIM_INTEGER_GT: {
+                MargValue op2 = STACK_POP(vm);
+                MargValue op1 = STACK_POP(vm);
+                if(type_of_object_is(op1, "$Integer")) {
+                    if(AS_INTEGER(op1)->value > AS_INTEGER(op2)->value)
+                        STACK_PUSH(vm, MARG_TRUE);
+                    else
+                        STACK_PUSH(vm, MARG_FALSE);
+                }
+                else {
+                    STACK_PUSH(vm, MARG_NIL);
+                }
+                break;
+            }
+            case OP_PRIM_INTEGER_LTE: {
+                MargValue op2 = STACK_POP(vm);
+                MargValue op1 = STACK_POP(vm);
+                if(type_of_object_is(op1, "$Integer")) {
+                    if(AS_INTEGER(op1)->value <= AS_INTEGER(op2)->value)
+                        STACK_PUSH(vm, MARG_TRUE);
+                    else
+                        STACK_PUSH(vm, MARG_FALSE);
+                }
+                else {
+                    STACK_PUSH(vm, MARG_NIL);
+                }
+                break;
+            }
+            case OP_PRIM_INTEGER_GTE: {
+                MargValue op2 = STACK_POP(vm);
+                MargValue op1 = STACK_POP(vm);
+                if(type_of_object_is(op1, "$Integer")) {
+                    if(AS_INTEGER(op1)->value >= AS_INTEGER(op2)->value)
+                        STACK_PUSH(vm, MARG_TRUE);
+                    else
+                        STACK_PUSH(vm, MARG_FALSE);
+                }
+                else {
+                    STACK_PUSH(vm, MARG_NIL);
+                }
                 break;
             }
         }

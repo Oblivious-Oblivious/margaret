@@ -103,6 +103,17 @@
 
 #define OP_CLONE_OBJECT           0x1c
 
+#define OP_PRIM_INTEGER_ADD       0x1d
+#define OP_PRIM_INTEGER_SUB       0x1e
+#define OP_PRIM_INTEGER_MUL       0x1f
+#define OP_PRIM_INTEGER_DIV       0x20
+#define OP_PRIM_INTEGER_ABS       0x21
+#define OP_PRIM_INTEGER_EQUALS    0x23
+#define OP_PRIM_INTEGER_LT        0x24
+#define OP_PRIM_INTEGER_GT        0x25
+#define OP_PRIM_INTEGER_LTE       0x27
+#define OP_PRIM_INTEGER_GTE       0x26
+
 // TODO Superinstructions for incrementing, decrementing and doubling
 // TODO Superinstructions for comparing with zero
 // TODO OP_JUMP_LOCAL -> Jumps into a label in the same context (fast jump)
