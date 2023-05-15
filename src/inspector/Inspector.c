@@ -87,7 +87,7 @@ static size_t instruction_object(vector *res, char *name, chunk *chunk, size_t o
     return offset + 2;
 }
 
-static size_t instruction_long_object(vector *res, char *name, chunk *chunk, size_t offset) {
+static size_t instruction_object_long(vector *res, char *name, chunk *chunk, size_t offset) {
     uint8_t opcode = chunk_get(chunk, offset);
     uint8_t bytes[4] = {
         chunk_get(chunk, offset + 1),
@@ -123,7 +123,7 @@ static size_t instruction_variable(vector *res, char *name, chunk *chunk, size_t
     return offset + 2;
 }
 
-static size_t instruction_long_variable(vector *res, char *name, chunk *chunk, size_t offset) {
+static size_t instruction_variable_long(vector *res, char *name, chunk *chunk, size_t offset) {
     uint8_t opcode = chunk_get(chunk, offset);
     uint8_t bytes[4] = {
         chunk_get(chunk, offset + 1),
@@ -158,7 +158,7 @@ static size_t instruction_array_type(vector *res, char *name, chunk *chunk, size
     return offset + 2;
 }
 
-static size_t instruction_long_array_type(vector *res, char *name, chunk *chunk, size_t offset) {
+static size_t instruction_array_type_long(vector *res, char *name, chunk *chunk, size_t offset) {
     uint8_t opcode = chunk_get(chunk, offset);
     uint8_t bytes[4] = {
         chunk_get(chunk, offset + 1),
@@ -218,43 +218,42 @@ static size_t inspect_instruction(vector *res, chunk *chunk, size_t offset) {
         case OP_PUT_OBJECT:
             return instruction_object(res, "PUT_OBJECT", chunk, offset);
         case OP_PUT_OBJECT_LONG:
-            return instruction_long_object(res, "PUT_OBJECT_LONG", chunk, offset);
+            return instruction_object_long(res, "PUT_OBJECT_LONG", chunk, offset);
 
-        // TODO RENAME LONG VARIATIONS OF FUNCTIONS        
         case OP_PUT_TENSOR:
             return instruction_array_type(res, "PUT_TENSOR", chunk, offset);
         case OP_PUT_TENSOR_LONG:
-            return instruction_long_array_type(res, "PUT_TENSOR_LONG", chunk, offset);
+            return instruction_array_type_long(res, "PUT_TENSOR_LONG", chunk, offset);
         case OP_PUT_HASH:
             return instruction_array_type(res, "PUT_HASH", chunk, offset);
         case OP_PUT_HASH_LONG:
-            return instruction_long_array_type(res, "PUT_HASH_LONG", chunk, offset);
+            return instruction_array_type_long(res, "PUT_HASH_LONG", chunk, offset);
 
         case OP_SET_GLOBAL:
             return instruction_variable(res, "SET_GLOBAL", chunk, offset);
         case OP_SET_GLOBAL_LONG:
-            return instruction_long_variable(res, "SET_GLOBAL_LONG", chunk, offset);
+            return instruction_variable_long(res, "SET_GLOBAL_LONG", chunk, offset);
         case OP_SET_INSTANCE:
             return instruction_variable(res, "SET_INSTANCE", chunk, offset);
         case OP_SET_INSTANCE_LONG:
-            return instruction_long_variable(res, "SET_INSTANCE_LONG", chunk, offset);
+            return instruction_variable_long(res, "SET_INSTANCE_LONG", chunk, offset);
         case OP_SET_LOCAL:
             return instruction_variable(res, "SET_LOCAL", chunk, offset);
         case OP_SET_LOCAL_LONG:
-            return instruction_long_variable(res, "SET_LOCAL_LONG", chunk, offset);
+            return instruction_variable_long(res, "SET_LOCAL_LONG", chunk, offset);
 
         case OP_GET_GLOBAL:
             return instruction_variable(res, "GET_GLOBAL", chunk, offset);
         case OP_GET_GLOBAL_LONG:
-            return instruction_long_variable(res, "GET_GLOBAL_LONG", chunk, offset);
+            return instruction_variable_long(res, "GET_GLOBAL_LONG", chunk, offset);
         case OP_GET_INSTANCE:
             return instruction_variable(res, "GET_INSTANCE", chunk, offset);
         case OP_GET_INSTANCE_LONG:
-            return instruction_long_variable(res, "GET_INSTANCE_LONG", chunk, offset);
+            return instruction_variable_long(res, "GET_INSTANCE_LONG", chunk, offset);
         case OP_GET_LOCAL:
             return instruction_variable(res, "GET_LOCAL", chunk, offset);
         case OP_GET_LOCAL_LONG:
-            return instruction_long_variable(res, "GET_LOCAL_LONG", chunk, offset);
+            return instruction_variable_long(res, "GET_LOCAL_LONG", chunk, offset);
 
         case OP_CALL_PROC:
             return instruction_single(res, "CALL_PROC", chunk, offset);
