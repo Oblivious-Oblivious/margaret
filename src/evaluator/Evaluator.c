@@ -30,10 +30,6 @@ static void evaluator_run(VM *vm) {
     while(1) {
         uint8_t instruction;
         switch(instruction = READ_BYTE()) {
-            case OP_POP: {
-                STACK_POP(vm);
-                break;
-            }
             case TEST_OP_PRINT: {
                 printf("%s\n", string_get(marg_value_format(STACK_PEEK(vm, 0))));
                 break;
@@ -41,6 +37,10 @@ static void evaluator_run(VM *vm) {
 
             case OP_HALT:
                 return;
+            case OP_POP: {
+                STACK_POP(vm);
+                break;
+            }
 
             case OP_PUT_NIL: {
                 STACK_PUSH(vm, MARG_NIL);
