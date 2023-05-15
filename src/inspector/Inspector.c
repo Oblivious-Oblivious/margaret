@@ -7,6 +7,7 @@
 #include "../base/chunk.h"
 
 #include "../opcode/Opcodes.h"
+#include "../opcode/MargString.h"
 #include "../vm/byte_conversions.h"
 
 static void write_offset_and_line_number_on(string *disassembled_instruction, chunk *chunk, size_t offset) {
@@ -37,6 +38,39 @@ static size_t instruction_single(vector *res, char *name, chunk *chunk, size_t o
     return offset + 1;
 }
 
+static size_t instruction_send(vector *res, char *name, chunk *chunk, size_t offset) {
+    uint8_t opcode = chunk_get(chunk, offset);
+    uint8_t message_name_index = chunk_get(chunk, offset + 1);
+
+    string *disassembled_instruction = string_new("");
+    write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
+    string_addf(disassembled_instruction, "%02x %02x               ", opcode, message_name_index);
+    string_addf(disassembled_instruction, "%-24s #", name);
+    string_add(disassembled_instruction, marg_value_as_variable(chunk_temporaries_get(chunk, message_name_index)));
+    vector_add(res, disassembled_instruction);
+
+    return offset + 2;
+}
+
+static size_t instruction_send_long(vector *res, char *name, chunk *chunk, size_t offset) {
+    uint8_t opcode = chunk_get(chunk, offset);
+    uint8_t bytes[4] = {
+        chunk_get(chunk, offset + 1),
+        chunk_get(chunk, offset + 2),
+        chunk_get(chunk, offset + 3),
+        chunk_get(chunk, offset + 4),
+    };
+    uint32_t message_name_index = bytes_to_dword(bytes);
+
+    string *disassembled_instruction = string_new("");
+    write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
+    string_addf(disassembled_instruction, "%02x %02x %02x %02x %02x      ", opcode, bytes[0], bytes[1], bytes[2], bytes[3]);
+    string_addf(disassembled_instruction, "%-24s #", name);
+    string_add(disassembled_instruction, marg_value_as_variable(chunk_temporaries_get(chunk, message_name_index)));
+    vector_add(res, disassembled_instruction);
+
+    return offset + 5;
+}
 
 static size_t instruction_object(vector *res, char *name, chunk *chunk, size_t offset) {
     uint8_t opcode = chunk_get(chunk, offset);
@@ -65,7 +99,7 @@ static size_t instruction_long_object(vector *res, char *name, chunk *chunk, siz
 
     string *disassembled_instruction = string_new("");
     write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
-    string_addf(disassembled_instruction, "%02x %02x %02x %02x %02x      ", opcode, chunk_get(chunk, offset + 1), bytes[1], bytes[2], bytes[3]);
+    string_addf(disassembled_instruction, "%02x %02x %02x %02x %02x      ", opcode, bytes[0], bytes[1], bytes[2], bytes[3]);
     string_addf(disassembled_instruction, "%-24s ", name);
     string_add(disassembled_instruction, marg_value_format(chunk_temporaries_get(chunk, temporary)));
     string_addf(disassembled_instruction, " @[%d]", temporary);
@@ -225,6 +259,10 @@ static size_t inspect_instruction(vector *res, chunk *chunk, size_t offset) {
         case OP_EXIT_ACTIVATION_RECORD:
             return instruction_single(res, "EXIT_ACTIVATION_RECORD", chunk, offset);
 
+        case OP_SEND:
+            return instruction_send(res, "SEND", chunk, offset);
+        case OP_SEND_LONG:
+            return instruction_send_long(res, "SEND_LONG", chunk, offset);
 
         case OP_BIND_METHOD:
             return instruction_single(res, "BIND_METHOD", chunk, offset);

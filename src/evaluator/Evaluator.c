@@ -224,6 +224,58 @@ static void evaluator_run(VM *vm) {
                 break;
             }
 
+            case OP_SEND: {
+                /* Read temporary values */
+                MargValue message_name = READ_TEMPORARY();
+                int64_t number_of_parameters = AS_INTEGER(STACK_POP(vm))->value;
+
+                /* Pop all parameters first */
+                MargValue *actual_parameters = collected_malloc(sizeof(MargValue) * number_of_parameters);
+                for(int64_t i = number_of_parameters-1; i >= 0; i--)
+                    actual_parameters[i] = STACK_POP(vm);
+
+                /* Pop object after parameters */
+                MargObject *object = AS_OBJECT(STACK_POP(vm));
+                MargMethod *method = AS_METHOD(table_get(&object->messages, message_name));
+
+                /* Close over local variables */
+                table_add_all(&vm->current->local_variables, &method->proc->local_variables);
+
+                /* Inject method parameters */
+                for(int64_t i = 0; i < number_of_parameters; i++) {
+                    MargValue parameter_name = marg_tensor_get(AS_TENSOR(method->parameter_names), i);
+                    table_set(&method->proc->local_variables, parameter_name, actual_parameters[i]);
+                }
+
+                vm->current = method->proc;
+                break;
+            }
+            case OP_SEND_LONG: {
+                /* Read temporary values */
+                MargValue message_name = READ_LONG_TEMPORARY();
+                int64_t number_of_parameters = AS_INTEGER(STACK_POP(vm))->value;
+
+                /* Pop all parameters first */
+                MargValue *actual_parameters = collected_malloc(sizeof(MargValue) * number_of_parameters);
+                for(int64_t i = number_of_parameters-1; i >= 0; i--)
+                    actual_parameters[i] = STACK_POP(vm);
+
+                /* Pop object after parameters */
+                MargObject *object = AS_OBJECT(STACK_POP(vm));
+                MargMethod *method = AS_METHOD(table_get(&object->messages, message_name));
+
+                /* Close over local variables */
+                table_add_all(&vm->current->local_variables, &method->proc->local_variables);
+
+                /* Inject method parameters */
+                for(int64_t i = 0; i < number_of_parameters; i++) {
+                    MargValue parameter_name = marg_tensor_get(AS_TENSOR(method->parameter_names), i);
+                    table_set(&method->proc->local_variables, parameter_name, actual_parameters[i]);
+                }
+
+                vm->current = method->proc;
+                break;
+            }
         }
     }
 }

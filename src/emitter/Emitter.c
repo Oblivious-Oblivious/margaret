@@ -282,9 +282,9 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
             switch_unary_case("call")
                 emit_byte(OP_CALL_PROC);
             default_unary_case {
-                // emit_temporary(MARG_STRING(string_get(unary_name)));
-                // emit_temporary(MARG_INTEGER(0));
-                // emit_byte(OP_SEND);
+                emit_byte(OP_PUT_0);
+                emit_possible_long_op(OP_SEND);
+                emit_temporary(MARG_STRING(string_get(unary_name)));
             }
         }
         opcode_case(FM_BINARY) {
@@ -295,11 +295,14 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
             binary_case("++")
                 ;
             default_binary_case {
-                // emit_byte(OP_SEND);
+                emit_byte(OP_PUT_1);
+                emit_possible_long_op(OP_SEND);
+                emit_temporary(MARG_STRING(string_get(binary_name)));
             }
         }
         opcode_case(FM_KEYWORD) {
             string *keyword_name = vector_get(formal_bytecode, ++ip);
+            string *number_of_parameters = vector_get(formal_bytecode, ++ip);
 
             switch_keyword_case("puts:")
                 emit_byte(TEST_OP_PRINT);
@@ -308,7 +311,17 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
             keyword_case("call:")
                 emit_byte(OP_CALL_PROC_PARAMS);
             default_keyword_case {
-                // emit_byte(OP_SEND);
+                if(string_equals(number_of_parameters, string_new("1")))
+                    emit_byte(OP_PUT_1);
+                if(string_equals(number_of_parameters, string_new("2")))
+                    emit_byte(OP_PUT_2);
+                else {
+                    char *end; long long integer = strtoll(string_get(number_of_parameters), &end, 10);
+                    emit_bytes2(OP_PUT_OBJECT, integer);
+                }
+
+                emit_possible_long_op(OP_SEND);
+                emit_temporary(MARG_STRING(string_get(keyword_name)));
             }
         }
     }

@@ -97,6 +97,8 @@
 
 #define OP_BIND_METHOD            0x19
 
+#define OP_SEND                   0x1a
+#define OP_SEND_LONG              0x1b
 
 // TODO Superinstructions for incrementing, decrementing and doubling
 // TODO Superinstructions for comparing with zero
