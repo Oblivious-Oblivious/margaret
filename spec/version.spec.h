@@ -6,7 +6,7 @@
 
 module(VersionSpec, {
     it("checks that latest version number", {
-        assert_that_charptr(MARGARET_VERSION equals to "0.1.0");
+        assert_that_charptr(MARGARET_VERSION equals to "0.0.1");
     });
 })
 
