@@ -188,13 +188,13 @@ static size_t instruction_long_array_type(vector *res, char *name, chunk *chunk,
 static size_t inspect_instruction(vector *res, chunk *chunk, size_t offset) {
     uint8_t instruction = chunk_get(chunk, offset);
     switch(instruction) {
-        case OP_POP:
-            return instruction_single(res, "POP", chunk, offset);
         case TEST_OP_PRINT:
             return instruction_single(res, "PRINT", chunk, offset);
 
         case OP_HALT:
             return instruction_single(res, "HALT", chunk, offset);
+        case OP_POP:
+            return instruction_single(res, "POP", chunk, offset);
 
         case OP_PUT_NIL:
             return instruction_single(res, "PUT_NIL", chunk, offset);
@@ -260,13 +260,14 @@ static size_t inspect_instruction(vector *res, chunk *chunk, size_t offset) {
         case OP_EXIT_ACTIVATION_RECORD:
             return instruction_single(res, "EXIT_ACTIVATION_RECORD", chunk, offset);
 
+        case OP_BIND_METHOD:
+            return instruction_single(res, "BIND_METHOD", chunk, offset);
+
         case OP_SEND:
             return instruction_send(res, "SEND", chunk, offset);
         case OP_SEND_LONG:
             return instruction_send_long(res, "SEND_LONG", chunk, offset);
 
-        case OP_BIND_METHOD:
-            return instruction_single(res, "BIND_METHOD", chunk, offset);
         case OP_CLONE_OBJECT:
             return instruction_single(res, "CLONE_OBJECT", chunk, offset);
 
