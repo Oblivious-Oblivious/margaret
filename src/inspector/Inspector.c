@@ -52,6 +52,24 @@ static size_t instruction_send(vector *res, char *name, chunk *chunk, size_t off
     return offset + 2;
 }
 
+static size_t instruction_send_word(vector *res, char *name, chunk *chunk, size_t offset) {
+    uint8_t opcode = chunk_get(chunk, offset);
+    uint8_t bytes[2] = {
+        chunk_get(chunk, offset + 1),
+        chunk_get(chunk, offset + 2),
+    };
+    uint16_t message_name_index = bytes_to_word(bytes);
+
+    string *disassembled_instruction = string_new("");
+    write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
+    string_addf(disassembled_instruction, "%02x %02x %02x            ", opcode, bytes[0], bytes[1]);
+    string_addf(disassembled_instruction, "%-24s #", name);
+    string_add(disassembled_instruction, marg_value_as_variable(chunk_temporaries_get(chunk, message_name_index)));
+    vector_add(res, disassembled_instruction);
+
+    return offset + 3;
+}
+
 static size_t instruction_send_dword(vector *res, char *name, chunk *chunk, size_t offset) {
     uint8_t opcode = chunk_get(chunk, offset);
     uint8_t bytes[4] = {
@@ -85,6 +103,26 @@ static size_t instruction_object(vector *res, char *name, chunk *chunk, size_t o
     vector_add(res, disassembled_instruction);
 
     return offset + 2;
+}
+
+static size_t instruction_object_word(vector *res, char *name, chunk *chunk, size_t offset) {
+    uint8_t opcode = chunk_get(chunk, offset);
+    uint8_t bytes[2] = {
+        chunk_get(chunk, offset + 1),
+        chunk_get(chunk, offset + 2),
+    };
+    uint16_t temporary = bytes_to_word(bytes);
+
+    string *disassembled_instruction = string_new("");
+    write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
+    string_addf(disassembled_instruction, "%02x %02x %02x            ", opcode, bytes[0], bytes[1]);
+    string_addf(disassembled_instruction, "%-24s ", name);
+    string_add(disassembled_instruction, marg_value_format(chunk_temporaries_get(chunk, temporary)));
+    string_addf(disassembled_instruction, " @[%d]", temporary);
+    vector_add(res, disassembled_instruction);
+    printf("OK\n");
+
+    return offset + 3;
 }
 
 static size_t instruction_object_dword(vector *res, char *name, chunk *chunk, size_t offset) {
@@ -123,6 +161,25 @@ static size_t instruction_variable(vector *res, char *name, chunk *chunk, size_t
     return offset + 2;
 }
 
+static size_t instruction_variable_word(vector *res, char *name, chunk *chunk, size_t offset) {
+    uint8_t opcode = chunk_get(chunk, offset);
+    uint8_t bytes[2] = {
+        chunk_get(chunk, offset + 1),
+        chunk_get(chunk, offset + 2),
+    };
+    uint16_t variable = bytes_to_word(bytes);
+
+    string *disassembled_instruction = string_new("");
+    write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
+    string_addf(disassembled_instruction, "%02x %02x %02x            ", opcode, chunk_get(chunk, offset + 1), bytes[1]);
+    string_addf(disassembled_instruction, "%-24s ", name);
+    string_add(disassembled_instruction, marg_value_as_variable(chunk_temporaries_get(chunk, variable)));
+    string_addf(disassembled_instruction, " @[%d]", variable);
+    vector_add(res, disassembled_instruction);
+
+    return offset + 3;
+}
+
 static size_t instruction_variable_dword(vector *res, char *name, chunk *chunk, size_t offset) {
     uint8_t opcode = chunk_get(chunk, offset);
     uint8_t bytes[4] = {
@@ -156,6 +213,24 @@ static size_t instruction_array_type(vector *res, char *name, chunk *chunk, size
     vector_add(res, disassembled_instruction);
 
     return offset + 2;
+}
+
+static size_t instruction_array_type_word(vector *res, char *name, chunk *chunk, size_t offset) {
+    uint8_t opcode = chunk_get(chunk, offset);
+    uint8_t bytes[2] = {
+        chunk_get(chunk, offset + 1),
+        chunk_get(chunk, offset + 2),
+    };
+    uint16_t number_of_elements = bytes_to_word(bytes);
+
+    string *disassembled_instruction = string_new("");
+    write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
+    string_addf(disassembled_instruction, "%02x %02x %02x            ", opcode, chunk_get(chunk, offset + 1), bytes[1]);
+    string_addf(disassembled_instruction, "%-24s ", name);
+    string_add(disassembled_instruction, marg_value_format(chunk_temporaries_get(chunk, number_of_elements)));
+    vector_add(res, disassembled_instruction);
+
+    return offset + 3;
 }
 
 static size_t instruction_array_type_dword(vector *res, char *name, chunk *chunk, size_t offset) {
@@ -216,46 +291,85 @@ static size_t inspect_instruction(vector *res, chunk *chunk, size_t offset) {
 
         case OP_PUT_OBJECT:
             return instruction_object(res, "PUT_OBJECT", chunk, offset);
+        case OP_PUT_OBJECT_WORD:
+            return instruction_object_word(res, "PUT_OBJECT_WORD", chunk, offset);
         case OP_PUT_OBJECT_DWORD:
             return instruction_object_dword(res, "PUT_OBJECT_DWORD", chunk, offset);
 
         case OP_PUT_TENSOR:
             return instruction_array_type(res, "PUT_TENSOR", chunk, offset);
+        case OP_PUT_TENSOR_WORD:
+            return instruction_array_type_word(res, "PUT_TENSOR_WORD", chunk, offset);
         case OP_PUT_TENSOR_DWORD:
             return instruction_array_type_dword(res, "PUT_TENSOR_DWORD", chunk, offset);
+        // case OP_PUT_TUPLE:
+        //     return instruction_array_type(res, "PUT_TUPLE", chunk, offset);
+        // case OP_PUT_TUPLE_WORD:
+        //     return instruction_array_type_word(res, "PUT_TUPLE_WORD", chunk, offset);
+        // case OP_PUT_TUPLE_DWORD:
+        //     return instruction_array_type_dword(res, "PUT_TUPLE_DWORD", chunk, offset);
         case OP_PUT_HASH:
             return instruction_array_type(res, "PUT_HASH", chunk, offset);
+        case OP_PUT_HASH_WORD:
+            return instruction_array_type_word(res, "PUT_HASH_WORD", chunk, offset);
         case OP_PUT_HASH_DWORD:
             return instruction_array_type_dword(res, "PUT_HASH_DWORD", chunk, offset);
+        // case OP_PUT_BITSTRING:
+        //     return instruction_array_type(res, "PUT_BITSTRING", chunk, offset);
+        // case OP_PUT_BITSTRING_WORD:
+        //     return instruction_array_type_word(res, "PUT_BITSTRING_WORD", chunk, offset);
+        // case OP_PUT_BITSTRING_DWORD:
+        //     return instruction_array_type_dword(res, "PUT_BITSTRING_DWORD", chunk, offset);
+
+        // case OP_PUT_LABEL:
+        //     return offset + ??;
+        // case OP_GOTO:
+        //     return offset + ??;
+        // case OP_GOTO_LOCAL:
+        //     return offset + ??;
 
         case OP_SET_GLOBAL:
             return instruction_variable(res, "SET_GLOBAL", chunk, offset);
+        case OP_SET_GLOBAL_WORD:
+            return instruction_variable_word(res, "SET_GLOBAL_WORD", chunk, offset);
         case OP_SET_GLOBAL_DWORD:
             return instruction_variable_dword(res, "SET_GLOBAL_DWORD", chunk, offset);
         case OP_SET_INSTANCE:
             return instruction_variable(res, "SET_INSTANCE", chunk, offset);
+        case OP_SET_INSTANCE_WORD:
+            return instruction_variable_word(res, "SET_INSTANCE_WORD", chunk, offset);
         case OP_SET_INSTANCE_DWORD:
             return instruction_variable_dword(res, "SET_INSTANCE_DWORD", chunk, offset);
         case OP_SET_LOCAL:
             return instruction_variable(res, "SET_LOCAL", chunk, offset);
+        case OP_SET_LOCAL_WORD:
+            return instruction_variable_word(res, "SET_LOCAL_WORD", chunk, offset);
         case OP_SET_LOCAL_DWORD:
             return instruction_variable_dword(res, "SET_LOCAL_DWORD", chunk, offset);
 
         case OP_GET_GLOBAL:
             return instruction_variable(res, "GET_GLOBAL", chunk, offset);
+        case OP_GET_GLOBAL_WORD:
+            return instruction_variable_word(res, "GET_GLOBAL_WORD", chunk, offset);
         case OP_GET_GLOBAL_DWORD:
             return instruction_variable_dword(res, "GET_GLOBAL_DWORD", chunk, offset);
         case OP_GET_INSTANCE:
             return instruction_variable(res, "GET_INSTANCE", chunk, offset);
+        case OP_GET_INSTANCE_WORD:
+            return instruction_variable_word(res, "GET_INSTANCE_WORD", chunk, offset);
         case OP_GET_INSTANCE_DWORD:
             return instruction_variable_dword(res, "GET_INSTANCE_DWORD", chunk, offset);
         case OP_GET_LOCAL:
             return instruction_variable(res, "GET_LOCAL", chunk, offset);
+        case OP_GET_LOCAL_WORD:
+            return instruction_variable_word(res, "GET_LOCAL_WORD", chunk, offset);
         case OP_GET_LOCAL_DWORD:
             return instruction_variable_dword(res, "GET_LOCAL_DWORD", chunk, offset);
 
         case OP_SEND:
             return instruction_send(res, "SEND", chunk, offset);
+        case OP_SEND_WORD:
+            return instruction_send_word(res, "SEND_WORD", chunk, offset);
         case OP_SEND_DWORD:
             return instruction_send_dword(res, "SEND_DWORD", chunk, offset);
         case OP_CLONE_OBJECT:

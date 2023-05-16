@@ -17,41 +17,52 @@
 #define OP_PUT_1                  0x06
 #define OP_PUT_2                  0x07
 
-// TODO OP_JUMP_LOCAL -> Jumps into a label in the same context (fast jump)
-// TODO OP_JUMP -> Jumps into a label on different context (searches object->message->method->proc->activation_record)
-// TODO Label, LabelLocal primitives that store position in bytecode
-// #define OP_JUMP                   0x??
-// #define OP_JUMP_LOCAL             0x??
-// #define OP_PUT_LABEL              0x??
-
-// TODO OP_PUT_OBJECT_WORD
 #define OP_PUT_OBJECT             0x08
+#define OP_PUT_OBJECT_WORD        0x33
 #define OP_PUT_OBJECT_DWORD       0x09
 
 #define OP_PUT_TENSOR             0xef
+#define OP_PUT_TENSOR_WORD        0x55
 #define OP_PUT_TENSOR_DWORD       0xee
 // #define OP_PUT_TUPLE              0x??
+// #define OP_PUT_TUPLE_WORD         0x??
 // #define OP_PUT_TUPLE_DWORD        0x??
 #define OP_PUT_HASH               0xed
+#define OP_PUT_HASH_WORD          0x56
 #define OP_PUT_HASH_DWORD         0xec
 // #define OP_PUT_BITSTRING          0x??
+// #define OP_PUT_BITSTRING_WORD     0x??
 // #define OP_PUT_BITSTRING_DWORD    0x??
 
+// TODO OP_JUMP_LOCAL -> Jumps into a label in the same context (fast jump)
+// TODO OP_JUMP -> Jumps into a label on different context (searches object->message->method->proc->activation_record)
+// TODO Label, LabelLocal primitives that store position in bytecode
+// #define OP_PUT_LABEL              0x??
+// #define OP_GOTO                   0x??
+// #define OP_GOTO_LOCAL             0x??
+
 #define OP_SET_GLOBAL             0x0a
+#define OP_SET_GLOBAL_WORD        0x57
 #define OP_SET_GLOBAL_DWORD       0x0b
 #define OP_SET_INSTANCE           0x0c
+#define OP_SET_INSTANCE_WORD      0x58
 #define OP_SET_INSTANCE_DWORD     0x0d
 #define OP_SET_LOCAL              0x0e
+#define OP_SET_LOCAL_WORD         0x59
 #define OP_SET_LOCAL_DWORD        0x0f
 
 #define OP_GET_GLOBAL             0x10
+#define OP_GET_GLOBAL_WORD        0x60
 #define OP_GET_GLOBAL_DWORD       0x11
 #define OP_GET_INSTANCE           0x12
+#define OP_GET_INSTANCE_WORD      0x61
 #define OP_GET_INSTANCE_DWORD     0x13
 #define OP_GET_LOCAL              0x14
+#define OP_GET_LOCAL_WORD         0x62
 #define OP_GET_LOCAL_DWORD        0x15
 
 #define OP_SEND                   0x1a
+#define OP_SEND_WORD              0x66
 #define OP_SEND_DWORD             0x1b
 #define OP_CLONE_OBJECT           0x1c
 #define OP_BIND_METHOD            0x19
@@ -59,8 +70,6 @@
 
 // $Margaret
 #define OP_PRIM_MARGARET_PUTS     0xff
-
-// $Object
 
 // $Proc
 #define OP_PRIM_PROC_CALL         0x16

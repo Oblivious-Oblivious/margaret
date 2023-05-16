@@ -53,6 +53,8 @@
 #define emit_variable_length_op(opcode) do { \
     if(chunk_temporaries_size(vm->current->bytecode) < 256) \
         chunk_add(vm->current->bytecode, (opcode), 123); \
+    else if(chunk_temporaries_size(vm->current->bytecode) < 65536) \
+        chunk_add(vm->current->bytecode, (opcode##_WORD), 123); \
     else \
         chunk_add(vm->current->bytecode, (opcode##_DWORD), 123); \
 } while(0)
@@ -67,13 +69,20 @@
     chunk_temporaries_add((vm)->current->bytecode, (temporary), (index));
 
 #define add_temporary(vm, temporary_index) \
-    __add_temporary_function(vm, temporary_index, 256+1);
+    __add_temporary_function(vm, temporary_index, 256+1, 65536+1);
 #define add_premade_temporary(vm, temporary_index) \
-    __add_temporary_function(vm, temporary_index, 256);
+    __add_temporary_function(vm, temporary_index, 256, 65536);
 
-static void __add_temporary_function(VM *vm, uint32_t temporary_index, uint16_t upper_bound) {
-    if(chunk_temporaries_size(vm->current->bytecode) < upper_bound) {
+static void __add_temporary_function(VM *vm, uint32_t temporary_index, uint16_t byte_bound, uint32_t word_bound) {
+    if(chunk_temporaries_size(vm->current->bytecode) < byte_bound) {
         emit_byte((uint8_t)temporary_index);
+    }
+    else if(chunk_temporaries_size(vm->current->bytecode) < word_bound) {
+        uint8_t *temporary_index_in_bytes = word_to_bytes(temporary_index);
+        emit_bytes2(
+            temporary_index_in_bytes[0],
+            temporary_index_in_bytes[1]
+        );
     }
     else {
         uint8_t *temporary_index_in_bytes = dword_to_bytes(temporary_index);
