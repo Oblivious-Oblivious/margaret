@@ -285,7 +285,7 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
             string *unary_name = vector_get(formal_bytecode, ++ip);
 
             switch_unary_case("call")
-                emit_byte(OP_CALL_PROC);
+                emit_byte(OP_PRIM_PROC_CALL);
             unary_case("abs")
                 emit_byte(OP_PRIM_INTEGER_ABS);
             default_unary_case {
@@ -327,14 +327,14 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
             string *keyword_name = vector_get(formal_bytecode, ++ip);
             string *number_of_parameters = vector_get(formal_bytecode, ++ip);
 
-            switch_keyword_case("puts:")
-                emit_byte(TEST_OP_PRINT);
+            switch_keyword_case("clone:")
+                emit_byte(OP_CLONE_OBJECT);
             keyword_case("bind:")
                 emit_byte(OP_BIND_METHOD);
+            keyword_case("puts:")
+                emit_byte(OP_PRIM_MARGARET_PUTS);
             keyword_case("call:")
-                emit_byte(OP_CALL_PROC_PARAMS);
-            keyword_case("clone:")
-                emit_byte(OP_CLONE_OBJECT);
+                emit_byte(OP_PRIM_PROC_CALL_PARAMS);
             default_keyword_case {
                 if(string_equals(number_of_parameters, string_new("1")))
                     emit_byte(OP_PUT_1);

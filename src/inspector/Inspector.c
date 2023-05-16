@@ -188,9 +188,6 @@ static size_t instruction_array_type_long(vector *res, char *name, chunk *chunk,
 static size_t inspect_instruction(vector *res, chunk *chunk, size_t offset) {
     uint8_t instruction = chunk_get(chunk, offset);
     switch(instruction) {
-        case TEST_OP_PRINT:
-            return instruction_single(res, "PRINT", chunk, offset);
-
         case OP_HALT:
             return instruction_single(res, "HALT", chunk, offset);
         case OP_POP:
@@ -257,23 +254,24 @@ static size_t inspect_instruction(vector *res, chunk *chunk, size_t offset) {
         case OP_GET_LOCAL_LONG:
             return instruction_variable_long(res, "GET_LOCAL_LONG", chunk, offset);
 
-        case OP_CALL_PROC:
-            return instruction_single(res, "CALL_PROC", chunk, offset);
-        case OP_CALL_PROC_PARAMS:
-            return instruction_single(res, "CALL_PROC_PARAMS", chunk, offset);
-        case OP_EXIT_ACTIVATION_RECORD:
-            return instruction_single(res, "EXIT_ACTIVATION_RECORD", chunk, offset);
-
-        case OP_BIND_METHOD:
-            return instruction_single(res, "BIND_METHOD", chunk, offset);
-
         case OP_SEND:
             return instruction_send(res, "SEND", chunk, offset);
         case OP_SEND_LONG:
             return instruction_send_long(res, "SEND_LONG", chunk, offset);
-
         case OP_CLONE_OBJECT:
             return instruction_single(res, "CLONE_OBJECT", chunk, offset);
+        case OP_BIND_METHOD:
+            return instruction_single(res, "BIND_METHOD", chunk, offset);
+        case OP_EXIT_ACTIVATION_RECORD:
+            return instruction_single(res, "EXIT_ACTIVATION_RECORD", chunk, offset);
+
+        case OP_PRIM_MARGARET_PUTS:
+            return instruction_single(res, "PRIM_MARGARET_PUTS", chunk, offset);
+
+        case OP_PRIM_PROC_CALL:
+            return instruction_single(res, "PRIM_PROC_CALL", chunk, offset);
+        case OP_PRIM_PROC_CALL_PARAMS:
+            return instruction_single(res, "PRIM_PROC_CALL_PARAMS", chunk, offset);
 
         case OP_PRIM_INTEGER_ADD:
             return instruction_single(res, "PRIM_INTEGER_ADD", chunk, offset);

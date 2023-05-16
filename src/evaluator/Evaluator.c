@@ -44,11 +44,6 @@ static void evaluator_run(VM *vm) {
     while(1) {
         uint8_t instruction;
         switch(instruction = READ_BYTE()) {
-            case TEST_OP_PRINT: {
-                printf("%s\n", string_get(marg_value_format(STACK_PEEK(vm, 0))));
-                break;
-            }
-
             case OP_HALT:
                 return;
             case OP_POP: {
@@ -205,49 +200,6 @@ static void evaluator_run(VM *vm) {
                 break;
             }
 
-            case OP_CALL_PROC: {
-                MargProc *proc = AS_PROC(STACK_POP(vm));
-                table_add_all(&vm->current->local_variables, &proc->local_variables);
-                vm->current = proc;
-                break;
-            }
-            case OP_CALL_PROC_PARAMS: {
-                MargHash *parameters = AS_HASH(STACK_POP(vm));
-                MargProc *proc = AS_PROC(STACK_POP(vm));
-
-                /* Close over local variables*/
-                table_add_all(&vm->current->local_variables, &proc->local_variables);
-
-                /* Inject proc parameters */
-                for(size_t i = 0; i < parameters->alloced; i++) {
-                    MargHashEntry *entry = &parameters->entries[i];
-                    if(!IS_NOT_INTERNED(entry->key))
-                        table_set(&proc->local_variables, entry->key, entry->value);
-                }
-
-                vm->current = proc;
-                break;
-            }
-            case OP_EXIT_ACTIVATION_RECORD: {
-                /* Reset proc's IP */
-                vm->current->ip = vm->current->bytecode->items;
-                /* Reset proc local and parameter table */
-                table_init(&vm->current->local_variables);
-                table_init(&vm->current->parameters);
-                /* Reset back to enclosing bound proc */
-                vm->current = vm->current->bound_proc;
-                break;
-            }
-
-            case OP_BIND_METHOD: {
-                MargValue method = STACK_POP(vm);
-                MargValue object = STACK_PEEK(vm, 0);
-                table_set(&AS_OBJECT(object)->messages, AS_METHOD(method)->message_name, method);
-                AS_METHOD(method)->bound_object = AS_OBJECT(object);
-                table_set(&AS_METHOD(method)->bound_object->instance_variables, MARG_STRING("@self"), object);
-                break;
-            }
-
             case OP_SEND: {
                 /* Read temporary values */
                 MargValue message_name = READ_TEMPORARY();
@@ -300,13 +252,71 @@ static void evaluator_run(VM *vm) {
                 vm->current = method->proc;
                 break;
             }
-
             case OP_CLONE_OBJECT: {
                 MargValue new_object_name = STACK_POP(vm);
                 MargValue parent_object = STACK_POP(vm);
                 MargValue child_object = MARG_OBJECT(AS_STRING(new_object_name)->chars);
                 table_set(&AS_OBJECT(child_object)->instance_variables, MARG_STRING("@super"), parent_object);
                 STACK_PUSH(vm, child_object);
+                break;
+            }
+            case OP_BIND_METHOD: {
+                MargValue method = STACK_POP(vm);
+                MargValue object = STACK_PEEK(vm, 0);
+                table_set(&AS_OBJECT(object)->messages, AS_METHOD(method)->message_name, method);
+                AS_METHOD(method)->bound_object = AS_OBJECT(object);
+                table_set(&AS_METHOD(method)->bound_object->instance_variables, MARG_STRING("@self"), object);
+                break;
+            }
+            case OP_EXIT_ACTIVATION_RECORD: {
+                /* Reset proc's IP */
+                vm->current->ip = vm->current->bytecode->items;
+                /* Reset proc local and parameter table */
+                table_init(&vm->current->local_variables);
+                table_init(&vm->current->parameters);
+                /* Reset back to enclosing bound proc */
+                vm->current = vm->current->bound_proc;
+                break;
+            }
+
+            case OP_PRIM_MARGARET_PUTS: {
+                MargValue value = STACK_POP(vm);
+                MargValue object = STACK_POP(vm); // $Margaret
+                if(type_of_object_is(object, "$Margaret")) {
+                    printf("%s\n", string_get(marg_value_format(value)));
+                    STACK_PUSH(vm, value);
+                }
+                else {
+                    STACK_PUSH(vm, MARG_NIL);
+                }
+                break;
+            }
+
+            case OP_PRIM_PROC_CALL: {
+                MargValue proc = STACK_POP(vm);
+                if(IS_PROC(proc)) {
+                    table_add_all(&vm->current->local_variables, &AS_PROC(proc)->local_variables);
+                    vm->current = AS_PROC(proc);
+                }
+                break;
+            }
+            case OP_PRIM_PROC_CALL_PARAMS: {
+                MargHash *parameters = AS_HASH(STACK_POP(vm));
+                MargValue proc = STACK_POP(vm);
+
+                if(IS_PROC(proc)) {
+                    /* Close over local variables*/
+                    table_add_all(&vm->current->local_variables, &AS_PROC(proc)->local_variables);
+
+                    /* Inject proc parameters */
+                    for(size_t i = 0; i < parameters->alloced; i++) {
+                        MargHashEntry *entry = &parameters->entries[i];
+                        if(!IS_NOT_INTERNED(entry->key))
+                            table_set(&AS_PROC(proc)->local_variables, entry->key, entry->value);
+                    }
+
+                    vm->current = AS_PROC(proc);
+                }
                 break;
             }
 
