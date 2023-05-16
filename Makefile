@@ -30,4 +30,4 @@ test:
 	./$(TESTOUTPUT)
 
 clean:
-	$(RM) -r $(OUTPUT) $(TESTOUTPUT)
+	$(RM) -r $(OUTPUT) $(TESTOUTPUT) ./*.dSYM
