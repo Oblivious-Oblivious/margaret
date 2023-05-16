@@ -189,6 +189,8 @@ static void evaluator_run(VM *vm) {
             // case OP_JUMP: {break;}
             // case OP_JUMP_LOCAL: {break;}
             // case OP_PUT_LABEL: {break;}
+            // case OP_PUT_LABEL_WORD: {break;}
+            // case OP_PUT_LABEL_DWORD: {break;}
 
             case OP_SET_GLOBAL: {
                 table_set(&vm->global_variables, READ_TEMPORARY(), STACK_PEEK(vm, 0));
