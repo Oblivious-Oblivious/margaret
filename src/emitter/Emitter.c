@@ -357,7 +357,8 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
                     emit_byte(OP_PUT_2);
                 else {
                     char *end; long long integer = strtoll(string_get(number_of_parameters), &end, 10);
-                    emit_bytes2(OP_PUT_OBJECT, integer);
+                    emit_variable_length_op(OP_PUT_OBJECT);
+                    emit_temporary(MARG_INTEGER(integer));
                 }
 
                 emit_variable_length_op(OP_SEND);
