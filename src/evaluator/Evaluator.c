@@ -448,6 +448,30 @@ static void evaluator_run(VM *vm) {
                 }
                 break;
             }
+            case OP_PRIM_INTEGER_INCR: {
+                MargValue number = STACK_POP(vm);
+                if(type_of_object_is(number, "$Integer"))
+                    STACK_PUSH(vm, MARG_INTEGER(AS_INTEGER(number)->value + 1));
+                else
+                    STACK_PUSH(vm, MARG_NIL);
+                break;
+            }
+            case OP_PRIM_INTEGER_DECR: {
+                MargValue number = STACK_POP(vm);
+                if(type_of_object_is(number, "$Integer"))
+                    STACK_PUSH(vm, MARG_INTEGER(AS_INTEGER(number)->value - 1));
+                else
+                    STACK_PUSH(vm, MARG_NIL);
+                break;
+            }
+            case OP_PRIM_INTEGER_DOUBLE: {
+                MargValue number = STACK_POP(vm);
+                if(type_of_object_is(number, "$Integer"))
+                    STACK_PUSH(vm, MARG_INTEGER(AS_INTEGER(number)->value * 2));
+                else
+                    STACK_PUSH(vm, MARG_NIL);
+                break;
+            }
         }
     }
 }

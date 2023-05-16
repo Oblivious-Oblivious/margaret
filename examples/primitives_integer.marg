@@ -9,4 +9,7 @@
     puts: (h = e > d),
     puts: (i = 13 <= 13),
     puts: (j = 17 >= 17),
+    puts: 41 incr,
+    puts: 43 decr,
+    puts: 21 double,
 )

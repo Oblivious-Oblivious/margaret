@@ -288,6 +288,12 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
                 emit_byte(OP_PRIM_PROC_CALL);
             unary_case("abs")
                 emit_byte(OP_PRIM_INTEGER_ABS);
+            unary_case("incr")
+                emit_byte(OP_PRIM_INTEGER_INCR);
+            unary_case("decr")
+                emit_byte(OP_PRIM_INTEGER_DECR);
+            unary_case("double")
+                emit_byte(OP_PRIM_INTEGER_DOUBLE);
             default_unary_case {
                 emit_byte(OP_PUT_0);
                 emit_possible_long_op(OP_SEND);

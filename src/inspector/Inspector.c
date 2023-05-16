@@ -293,6 +293,12 @@ static size_t inspect_instruction(vector *res, chunk *chunk, size_t offset) {
             return instruction_single(res, "PRIM_INTEGER_LTE", chunk, offset);
         case OP_PRIM_INTEGER_GTE:
             return instruction_single(res, "PRIM_INTEGER_GTE", chunk, offset);
+        case OP_PRIM_INTEGER_INCR:
+            return instruction_single(res, "PRIM_INTEGER_INCR", chunk, offset);
+        case OP_PRIM_INTEGER_DECR:
+            return instruction_single(res, "PRIM_INTEGER_DECR", chunk, offset);
+        case OP_PRIM_INTEGER_DOUBLE:
+            return instruction_single(res, "PRIM_INTEGER_DOUBLE", chunk, offset);
 
         default: {
             string *unknown_opcode = string_new("");
