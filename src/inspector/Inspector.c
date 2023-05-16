@@ -120,7 +120,6 @@ static size_t instruction_object_word(vector *res, char *name, chunk *chunk, siz
     string_add(disassembled_instruction, marg_value_format(chunk_temporaries_get(chunk, temporary)));
     string_addf(disassembled_instruction, " @[%d]", temporary);
     vector_add(res, disassembled_instruction);
-    printf("OK\n");
 
     return offset + 3;
 }
