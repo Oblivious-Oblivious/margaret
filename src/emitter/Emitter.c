@@ -353,7 +353,7 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
             default_keyword_case {
                 if(string_equals(number_of_parameters, string_new("1")))
                     emit_byte(OP_PUT_1);
-                if(string_equals(number_of_parameters, string_new("2")))
+                else if(string_equals(number_of_parameters, string_new("2")))
                     emit_byte(OP_PUT_2);
                 else {
                     char *end; long long integer = strtoll(string_get(number_of_parameters), &end, 10);
