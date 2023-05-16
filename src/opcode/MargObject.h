@@ -16,6 +16,7 @@ typedef struct VM VM;
  * @param next -> Turns the struct into a linked list of objects
  * @param bound_vm -> A pointer to the current VM
  * @param name -> Name of the object
+ * @param parent -> Pointer to the parent object (Sets up delegation chain)
  * @param instance_variables -> Object scoped @variables
  * @param messages -> A table for messages pointing to a vector of methods
  */
@@ -26,6 +27,7 @@ struct MargObject {
     VM *bound_vm;
 
     char *name;
+    MargObject *parent;
     table instance_variables;
     table messages;
 };

@@ -1,0 +1,31 @@
+(
+    $Margaret bind: #self => @self,
+    $Margaret bind: #super => @super,
+
+    $Parent = $Margaret clone: "$Parent",
+    $Parent bind: #self => @self,
+    $Parent bind: #super => @super,
+
+    $Child = $Parent clone: "$Child",
+    $Child bind: #self => @self,
+    $Child bind: #super => @super,
+
+    puts: $Margaret self self self,
+    puts: $Parent self self self,
+    puts: $Child self self self,
+
+    puts: "",
+
+    puts: $Margaret super,
+
+    puts: "",
+
+    puts: $Parent super,
+    puts: $Parent super super,
+
+    puts: "",
+
+    puts: $Child super,
+    puts: $Child super super,
+    puts: $Child super super super,
+)

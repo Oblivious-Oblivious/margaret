@@ -205,6 +205,8 @@ static size_t inspect_instruction(vector *res, chunk *chunk, size_t offset) {
 
         case OP_PUT_SELF:
             return instruction_single(res, "PUT_SELF", chunk, offset);
+        case OP_PUT_SUPER:
+            return instruction_single(res, "PUT_SUPER", chunk, offset);
 
         case OP_PUT_MINUS_1:
             return instruction_single(res, "PUT_MINUS_1", chunk, offset);

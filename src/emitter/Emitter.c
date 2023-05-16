@@ -149,7 +149,7 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
             emit_byte(OP_PUT_SELF);
         }
         opcode_case(FM_SUPER) {
-            // TODO
+            emit_byte(OP_PUT_SUPER);
         }
 
         // TODO Distinguish normal number from big numbers

@@ -12,6 +12,7 @@
 #define OP_PUT_FALSE              0x03
 
 #define OP_PUT_SELF               0x42
+#define OP_PUT_SUPER              0x43
 
 #define OP_PUT_MINUS_1            0x04
 #define OP_PUT_0                  0x05

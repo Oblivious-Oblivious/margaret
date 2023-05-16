@@ -73,6 +73,10 @@ static void evaluator_run(VM *vm) {
                 STACK_PUSH(vm, table_get(&vm->current->bound_method->bound_object->instance_variables, MARG_STRING("@self")));
                 break;
             }
+            case OP_PUT_SUPER: {
+                STACK_PUSH(vm, table_get(&vm->current->bound_method->bound_object->instance_variables, MARG_STRING("@super")));
+                break;
+            }
 
             case OP_PUT_MINUS_1: {
                 STACK_PUSH(vm, MARG_MINUS_1);
@@ -299,7 +303,10 @@ static void evaluator_run(VM *vm) {
 
             case OP_CLONE_OBJECT: {
                 MargValue new_object_name = STACK_POP(vm);
-                STACK_PUSH(vm, MARG_OBJECT(AS_STRING(new_object_name)->chars));
+                MargValue parent_object = STACK_POP(vm);
+                MargValue child_object = MARG_OBJECT(AS_STRING(new_object_name)->chars);
+                table_set(&AS_OBJECT(child_object)->instance_variables, MARG_STRING("@super"), parent_object);
+                STACK_PUSH(vm, child_object);
                 break;
             }
 
