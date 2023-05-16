@@ -19,14 +19,25 @@
 #define OP_PUT_1                  0x06
 #define OP_PUT_2                  0x07
 
+// TODO OP_JUMP_LOCAL -> Jumps into a label in the same context (fast jump)
+// TODO OP_JUMP -> Jumps into a label on different context (searches object->message->method->proc->activation_record)
+// TODO Label, LabelLocal primitives that store position in bytecode
+// #define OP_JUMP                   0x??
+// #define OP_JUMP_LOCAL             0x??
+// #define OP_PUT_LABEL              0x??
+
 // TODO OP_PUT_OBJECT_WORD, OP_PUT_OBJECT_DWORD, OP_PUT_OBJECT_QWORD
 #define OP_PUT_OBJECT             0x08
 #define OP_PUT_OBJECT_LONG        0x09
 
 #define OP_PUT_TENSOR             0xef
 #define OP_PUT_TENSOR_LONG        0xee
+// #define OP_PUT_TUPLE              0x??
+// #define OP_PUT_TUPLE_LONG         0x??
 #define OP_PUT_HASH               0xed
 #define OP_PUT_HASH_LONG          0xec
+// #define OP_PUT_BITSTRING          0x??
+// #define OP_PUT_BITSTRING_LONG     0x??
 
 #define OP_SET_GLOBAL             0x0a
 #define OP_SET_GLOBAL_LONG        0x0b
@@ -67,13 +78,5 @@
 #define OP_PRIM_INTEGER_INCR      0x27
 #define OP_PRIM_INTEGER_DECR      0x28
 #define OP_PRIM_INTEGER_DOUBLE    0x29
-
-// TODO OP_JUMP_LOCAL -> Jumps into a label in the same context (fast jump)
-// TODO OP_JUMP -> Jumps into a label on different context (searches object->message->method->proc->activation_record)
-// TODO Label, LabelLocal primitives that store position in bytecode
-// #define OP_SUPER
-// #define OP_LABEL
-// #define OP_JUMP
-// #define OP_JUMP_LOCAL
 
 #endif
