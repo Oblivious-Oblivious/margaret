@@ -24,6 +24,8 @@ static const char REGEX_SYNTAX_SYMBOL[13] = {'_','(',')','[',']','{','}',',',':'
 static const char REGEX_SINGLE_QUOTE[2] = {'\'','\0'};
 static const char REGEX_DOUBLE_QUOTE[2] = {'"','\0'};
 
+// TODO ::label:: syntax with double colons
+
 /**
  * @brief Pattern matches a character in a matcher
  * @param c -> The character to match
