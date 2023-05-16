@@ -52,7 +52,7 @@ static size_t instruction_send(vector *res, char *name, chunk *chunk, size_t off
     return offset + 2;
 }
 
-static size_t instruction_send_long(vector *res, char *name, chunk *chunk, size_t offset) {
+static size_t instruction_send_dword(vector *res, char *name, chunk *chunk, size_t offset) {
     uint8_t opcode = chunk_get(chunk, offset);
     uint8_t bytes[4] = {
         chunk_get(chunk, offset + 1),
@@ -87,7 +87,7 @@ static size_t instruction_object(vector *res, char *name, chunk *chunk, size_t o
     return offset + 2;
 }
 
-static size_t instruction_object_long(vector *res, char *name, chunk *chunk, size_t offset) {
+static size_t instruction_object_dword(vector *res, char *name, chunk *chunk, size_t offset) {
     uint8_t opcode = chunk_get(chunk, offset);
     uint8_t bytes[4] = {
         chunk_get(chunk, offset + 1),
@@ -123,7 +123,7 @@ static size_t instruction_variable(vector *res, char *name, chunk *chunk, size_t
     return offset + 2;
 }
 
-static size_t instruction_variable_long(vector *res, char *name, chunk *chunk, size_t offset) {
+static size_t instruction_variable_dword(vector *res, char *name, chunk *chunk, size_t offset) {
     uint8_t opcode = chunk_get(chunk, offset);
     uint8_t bytes[4] = {
         chunk_get(chunk, offset + 1),
@@ -158,7 +158,7 @@ static size_t instruction_array_type(vector *res, char *name, chunk *chunk, size
     return offset + 2;
 }
 
-static size_t instruction_array_type_long(vector *res, char *name, chunk *chunk, size_t offset) {
+static size_t instruction_array_type_dword(vector *res, char *name, chunk *chunk, size_t offset) {
     uint8_t opcode = chunk_get(chunk, offset);
     uint8_t bytes[4] = {
         chunk_get(chunk, offset + 1),
@@ -216,48 +216,48 @@ static size_t inspect_instruction(vector *res, chunk *chunk, size_t offset) {
 
         case OP_PUT_OBJECT:
             return instruction_object(res, "PUT_OBJECT", chunk, offset);
-        case OP_PUT_OBJECT_LONG:
-            return instruction_object_long(res, "PUT_OBJECT_LONG", chunk, offset);
+        case OP_PUT_OBJECT_DWORD:
+            return instruction_object_dword(res, "PUT_OBJECT_DWORD", chunk, offset);
 
         case OP_PUT_TENSOR:
             return instruction_array_type(res, "PUT_TENSOR", chunk, offset);
-        case OP_PUT_TENSOR_LONG:
-            return instruction_array_type_long(res, "PUT_TENSOR_LONG", chunk, offset);
+        case OP_PUT_TENSOR_DWORD:
+            return instruction_array_type_dword(res, "PUT_TENSOR_DWORD", chunk, offset);
         case OP_PUT_HASH:
             return instruction_array_type(res, "PUT_HASH", chunk, offset);
-        case OP_PUT_HASH_LONG:
-            return instruction_array_type_long(res, "PUT_HASH_LONG", chunk, offset);
+        case OP_PUT_HASH_DWORD:
+            return instruction_array_type_dword(res, "PUT_HASH_DWORD", chunk, offset);
 
         case OP_SET_GLOBAL:
             return instruction_variable(res, "SET_GLOBAL", chunk, offset);
-        case OP_SET_GLOBAL_LONG:
-            return instruction_variable_long(res, "SET_GLOBAL_LONG", chunk, offset);
+        case OP_SET_GLOBAL_DWORD:
+            return instruction_variable_dword(res, "SET_GLOBAL_DWORD", chunk, offset);
         case OP_SET_INSTANCE:
             return instruction_variable(res, "SET_INSTANCE", chunk, offset);
-        case OP_SET_INSTANCE_LONG:
-            return instruction_variable_long(res, "SET_INSTANCE_LONG", chunk, offset);
+        case OP_SET_INSTANCE_DWORD:
+            return instruction_variable_dword(res, "SET_INSTANCE_DWORD", chunk, offset);
         case OP_SET_LOCAL:
             return instruction_variable(res, "SET_LOCAL", chunk, offset);
-        case OP_SET_LOCAL_LONG:
-            return instruction_variable_long(res, "SET_LOCAL_LONG", chunk, offset);
+        case OP_SET_LOCAL_DWORD:
+            return instruction_variable_dword(res, "SET_LOCAL_DWORD", chunk, offset);
 
         case OP_GET_GLOBAL:
             return instruction_variable(res, "GET_GLOBAL", chunk, offset);
-        case OP_GET_GLOBAL_LONG:
-            return instruction_variable_long(res, "GET_GLOBAL_LONG", chunk, offset);
+        case OP_GET_GLOBAL_DWORD:
+            return instruction_variable_dword(res, "GET_GLOBAL_DWORD", chunk, offset);
         case OP_GET_INSTANCE:
             return instruction_variable(res, "GET_INSTANCE", chunk, offset);
-        case OP_GET_INSTANCE_LONG:
-            return instruction_variable_long(res, "GET_INSTANCE_LONG", chunk, offset);
+        case OP_GET_INSTANCE_DWORD:
+            return instruction_variable_dword(res, "GET_INSTANCE_DWORD", chunk, offset);
         case OP_GET_LOCAL:
             return instruction_variable(res, "GET_LOCAL", chunk, offset);
-        case OP_GET_LOCAL_LONG:
-            return instruction_variable_long(res, "GET_LOCAL_LONG", chunk, offset);
+        case OP_GET_LOCAL_DWORD:
+            return instruction_variable_dword(res, "GET_LOCAL_DWORD", chunk, offset);
 
         case OP_SEND:
             return instruction_send(res, "SEND", chunk, offset);
-        case OP_SEND_LONG:
-            return instruction_send_long(res, "SEND_LONG", chunk, offset);
+        case OP_SEND_DWORD:
+            return instruction_send_dword(res, "SEND_DWORD", chunk, offset);
         case OP_CLONE_OBJECT:
             return instruction_single(res, "CLONE_OBJECT", chunk, offset);
         case OP_BIND_METHOD:

@@ -48,7 +48,7 @@ inline MargValue STACK_PEEK(VM *vm, int distance) {
 #define READ_QWORD() (bytes_to_qword((uint8_t[8]){READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE()}))
 
 #define READ_TEMPORARY() (chunk_temporaries_get(vm->current->bytecode, READ_BYTE()))
-#define READ_LONG_TEMPORARY() (chunk_temporaries_get(vm->current->bytecode, READ_DWORD()))
+#define READ_TEMPORARY_DWORD() (chunk_temporaries_get(vm->current->bytecode, READ_DWORD()))
 
 /**
  * @brief Creates a new VM instance

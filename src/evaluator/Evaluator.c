@@ -98,8 +98,8 @@ static void evaluator_run(VM *vm) {
                 STACK_PUSH(vm, READ_TEMPORARY());
                 break;
             }
-            case OP_PUT_OBJECT_LONG: {
-                STACK_PUSH(vm, READ_LONG_TEMPORARY());
+            case OP_PUT_OBJECT_DWORD: {
+                STACK_PUSH(vm, READ_TEMPORARY_DWORD());
                 break;
             }
 
@@ -114,8 +114,8 @@ static void evaluator_run(VM *vm) {
                 STACK_PUSH(vm, tensor_value);
                 break;
             }
-            case OP_PUT_TENSOR_LONG: {
-                int64_t number_of_elements = AS_INTEGER(READ_LONG_TEMPORARY())->value;
+            case OP_PUT_TENSOR_DWORD: {
+                int64_t number_of_elements = AS_INTEGER(READ_TEMPORARY_DWORD())->value;
                 MargValue tensor_value = MARG_TENSOR(number_of_elements);
                 MargTensor *tensor_object = AS_TENSOR(tensor_value);
 
@@ -126,7 +126,7 @@ static void evaluator_run(VM *vm) {
                 break;
             }
             // case OP_PUT_TUPLE: {break;}
-            // case OP_PUT_TUPLE_LONG: {break;}
+            // case OP_PUT_TUPLE_DWORD: {break;}
 
             case OP_PUT_HASH: {
                 int64_t number_of_elements = AS_INTEGER(READ_TEMPORARY())->value / 2;
@@ -142,8 +142,8 @@ static void evaluator_run(VM *vm) {
                 STACK_PUSH(vm, hash_value);
                 break;
             }
-            case OP_PUT_HASH_LONG: {
-                int64_t number_of_elements = AS_INTEGER(READ_LONG_TEMPORARY())->value / 2;
+            case OP_PUT_HASH_DWORD: {
+                int64_t number_of_elements = AS_INTEGER(READ_TEMPORARY_DWORD())->value / 2;
                 MargValue hash_value = MARG_HASH;
                 MargHash *hash_object = AS_HASH(hash_value);
 
@@ -157,30 +157,30 @@ static void evaluator_run(VM *vm) {
                 break;
             }
             // case OP_PUT_BITSTRING: {break;}
-            // case OP_PUT_BITSTRING_LONG: {break;}
+            // case OP_PUT_BITSTRING_DWORD: {break;}
 
             case OP_SET_GLOBAL: {
                 table_set(&vm->global_variables, READ_TEMPORARY(), STACK_PEEK(vm, 0));
                 break;
             }
-            case OP_SET_GLOBAL_LONG: {
-                table_set(&vm->global_variables, READ_LONG_TEMPORARY(), STACK_PEEK(vm, 0));
+            case OP_SET_GLOBAL_DWORD: {
+                table_set(&vm->global_variables, READ_TEMPORARY_DWORD(), STACK_PEEK(vm, 0));
                 break;
             }
             case OP_SET_INSTANCE: {
                 table_set(vm->current->instance_variables, READ_TEMPORARY(), STACK_PEEK(vm, 0));
                 break;
             }
-            case OP_SET_INSTANCE_LONG: {
-                table_set(vm->current->instance_variables, READ_LONG_TEMPORARY(), STACK_PEEK(vm, 0));
+            case OP_SET_INSTANCE_DWORD: {
+                table_set(vm->current->instance_variables, READ_TEMPORARY_DWORD(), STACK_PEEK(vm, 0));
                 break;
             }
             case OP_SET_LOCAL: {
                 table_set(&vm->current->local_variables, READ_TEMPORARY(), STACK_PEEK(vm, 0));
                 break;
             }
-            case OP_SET_LOCAL_LONG: {
-                table_set(&vm->current->local_variables, READ_LONG_TEMPORARY(), STACK_PEEK(vm, 0));
+            case OP_SET_LOCAL_DWORD: {
+                table_set(&vm->current->local_variables, READ_TEMPORARY_DWORD(), STACK_PEEK(vm, 0));
                 break;
             }
 
@@ -188,24 +188,24 @@ static void evaluator_run(VM *vm) {
                 STACK_PUSH(vm, table_get(&vm->global_variables, READ_TEMPORARY()));
                 break;
             }
-            case OP_GET_GLOBAL_LONG: {
-                STACK_PUSH(vm, table_get(&vm->global_variables, READ_LONG_TEMPORARY()));
+            case OP_GET_GLOBAL_DWORD: {
+                STACK_PUSH(vm, table_get(&vm->global_variables, READ_TEMPORARY_DWORD()));
                 break;
             }
             case OP_GET_INSTANCE: {
                 STACK_PUSH(vm, table_get(vm->current->instance_variables, READ_TEMPORARY()));
                 break;
             }
-            case OP_GET_INSTANCE_LONG: {
-                STACK_PUSH(vm, table_get(vm->current->instance_variables, READ_LONG_TEMPORARY()));
+            case OP_GET_INSTANCE_DWORD: {
+                STACK_PUSH(vm, table_get(vm->current->instance_variables, READ_TEMPORARY_DWORD()));
                 break;
             }
             case OP_GET_LOCAL: {
                 STACK_PUSH(vm, table_get(&vm->current->local_variables, READ_TEMPORARY()));
                 break;
             }
-            case OP_GET_LOCAL_LONG: {
-                STACK_PUSH(vm, table_get(&vm->current->local_variables, READ_LONG_TEMPORARY()));
+            case OP_GET_LOCAL_DWORD: {
+                STACK_PUSH(vm, table_get(&vm->current->local_variables, READ_TEMPORARY_DWORD()));
                 break;
             }
 
@@ -235,9 +235,9 @@ static void evaluator_run(VM *vm) {
                 vm->current = method->proc;
                 break;
             }
-            case OP_SEND_LONG: {
+            case OP_SEND_DWORD: {
                 /* Read temporary values */
-                MargValue message_name = READ_LONG_TEMPORARY();
+                MargValue message_name = READ_TEMPORARY_DWORD();
                 int64_t number_of_parameters = AS_INTEGER(STACK_POP(vm))->value;
 
                 /* Pop all parameters first */

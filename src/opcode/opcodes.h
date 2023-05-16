@@ -24,35 +24,35 @@
 // #define OP_JUMP_LOCAL             0x??
 // #define OP_PUT_LABEL              0x??
 
-// TODO OP_PUT_OBJECT_WORD, OP_PUT_OBJECT_DWORD, OP_PUT_OBJECT_QWORD
+// TODO OP_PUT_OBJECT_WORD, OP_PUT_OBJECT_QWORD
 #define OP_PUT_OBJECT             0x08
-#define OP_PUT_OBJECT_LONG        0x09
+#define OP_PUT_OBJECT_DWORD       0x09
 
 #define OP_PUT_TENSOR             0xef
-#define OP_PUT_TENSOR_LONG        0xee
+#define OP_PUT_TENSOR_DWORD       0xee
 // #define OP_PUT_TUPLE              0x??
-// #define OP_PUT_TUPLE_LONG         0x??
+// #define OP_PUT_TUPLE_DWORD        0x??
 #define OP_PUT_HASH               0xed
-#define OP_PUT_HASH_LONG          0xec
+#define OP_PUT_HASH_DWORD         0xec
 // #define OP_PUT_BITSTRING          0x??
-// #define OP_PUT_BITSTRING_LONG     0x??
+// #define OP_PUT_BITSTRING_DWORD    0x??
 
 #define OP_SET_GLOBAL             0x0a
-#define OP_SET_GLOBAL_LONG        0x0b
+#define OP_SET_GLOBAL_DWORD       0x0b
 #define OP_SET_INSTANCE           0x0c
-#define OP_SET_INSTANCE_LONG      0x0d
+#define OP_SET_INSTANCE_DWORD     0x0d
 #define OP_SET_LOCAL              0x0e
-#define OP_SET_LOCAL_LONG         0x0f
+#define OP_SET_LOCAL_DWORD        0x0f
 
 #define OP_GET_GLOBAL             0x10
-#define OP_GET_GLOBAL_LONG        0x11
+#define OP_GET_GLOBAL_DWORD       0x11
 #define OP_GET_INSTANCE           0x12
-#define OP_GET_INSTANCE_LONG      0x13
+#define OP_GET_INSTANCE_DWORD     0x13
 #define OP_GET_LOCAL              0x14
-#define OP_GET_LOCAL_LONG         0x15
+#define OP_GET_LOCAL_DWORD        0x15
 
 #define OP_SEND                   0x1a
-#define OP_SEND_LONG              0x1b
+#define OP_SEND_DWORD             0x1b
 #define OP_CLONE_OBJECT           0x1c
 #define OP_BIND_METHOD            0x19
 #define OP_EXIT_ACTIVATION_RECORD 0x18

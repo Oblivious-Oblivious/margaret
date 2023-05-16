@@ -50,11 +50,11 @@
     emit_byte((byte4)); \
 } while(0)
 
-#define emit_possible_long_op(opcode) do { \
+#define emit_variable_length_op(opcode) do { \
     if(chunk_temporaries_size(vm->current->bytecode) < 256) \
         chunk_add(vm->current->bytecode, (opcode), 123); \
     else \
-        chunk_add(vm->current->bytecode, (opcode##_LONG), 123); \
+        chunk_add(vm->current->bytecode, (opcode##_DWORD), 123); \
 } while(0)
 
 #define emit_temporary(temporary) do { \
@@ -103,35 +103,35 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
         opcode_case(FM_LOCAL) {
             string *variable_name = vector_get(formal_bytecode, ++ip);
             MargValue temporary = MARG_STRING(variable_name->str);
-            emit_possible_long_op(OP_GET_LOCAL);
+            emit_variable_length_op(OP_GET_LOCAL);
             emit_temporary(temporary);
         }
         opcode_case(FM_INSTANCE) {
             string *variable_name = vector_get(formal_bytecode, ++ip);
             MargValue temporary = MARG_STRING(variable_name->str);
-            emit_possible_long_op(OP_GET_INSTANCE);
+            emit_variable_length_op(OP_GET_INSTANCE);
             emit_temporary(temporary);
         }
         opcode_case(FM_GLOBAL) {
             string *variable_name = vector_get(formal_bytecode, ++ip);
             MargValue temporary = MARG_STRING(variable_name->str);
-            emit_possible_long_op(OP_GET_GLOBAL);
+            emit_variable_length_op(OP_GET_GLOBAL);
             emit_temporary(temporary);
         }
 
         opcode_case(FM_STORE_LOCAL) {
             string *variable_name = vector_get(formal_bytecode, ++ip);
-            emit_possible_long_op(OP_SET_LOCAL);
+            emit_variable_length_op(OP_SET_LOCAL);
             emit_temporary(MARG_STRING(variable_name->str));
         }
         opcode_case(FM_STORE_INSTANCE) {
             string *variable_name = vector_get(formal_bytecode, ++ip);
-            emit_possible_long_op(OP_SET_INSTANCE);
+            emit_variable_length_op(OP_SET_INSTANCE);
             emit_temporary(MARG_STRING(variable_name->str));
         }
         opcode_case(FM_STORE_GLOBAL) {
             string *variable_name = vector_get(formal_bytecode, ++ip);
-            emit_possible_long_op(OP_SET_GLOBAL);
+            emit_variable_length_op(OP_SET_GLOBAL);
             emit_temporary(MARG_STRING(variable_name->str));
         }
 
@@ -165,7 +165,7 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
             else if(integer == 2)
                 emit_byte(OP_PUT_2);
             else {
-                emit_possible_long_op(OP_PUT_OBJECT);
+                emit_variable_length_op(OP_PUT_OBJECT);
                 emit_temporary(MARG_INTEGER(integer));
             }
         }
@@ -173,7 +173,7 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
             char *end;
             string *temporary_str = vector_get(formal_bytecode, ++ip);
             MargValue temporary = MARG_FLOAT(strtold(string_get(temporary_str), &end));
-            emit_possible_long_op(OP_PUT_OBJECT);
+            emit_variable_length_op(OP_PUT_OBJECT);
             emit_temporary(temporary);
         }
 
@@ -183,7 +183,7 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
             size_t size = string_size(temporary_str);
 
             MargValue interned = MARG_STRING_INTERNED(chars, size);
-            emit_possible_long_op(OP_PUT_OBJECT);
+            emit_variable_length_op(OP_PUT_OBJECT);
 
             if(IS_NOT_INTERNED(interned)) {
                 interned = MARG_STRING(chars);
@@ -205,7 +205,7 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
             char *end;
             string *number_of_elements = vector_get(formal_bytecode, ++ip);
             MargValue temporary = MARG_INTEGER(strtoll(string_get(number_of_elements), &end, 10));
-            emit_possible_long_op(OP_PUT_TENSOR);
+            emit_variable_length_op(OP_PUT_TENSOR);
             emit_temporary(temporary);
         }
         opcode_case(FM_TUPLE) {}
@@ -213,7 +213,7 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
             char *end;
             string *number_of_elements = vector_get(formal_bytecode, ++ip);
             MargValue temporary = MARG_INTEGER(strtoll(string_get(number_of_elements), &end, 10));
-            emit_possible_long_op(OP_PUT_HASH);
+            emit_variable_length_op(OP_PUT_HASH);
             emit_temporary(temporary);
         }
         opcode_case(FM_BITSTRING) {}
@@ -221,7 +221,7 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
         opcode_case(FM_START_PROC) {
             MargValue new_proc = MARG_PROC(vm->current->bound_method);
             AS_PROC(new_proc)->bound_proc = vm->current;
-            emit_possible_long_op(OP_PUT_OBJECT);
+            emit_variable_length_op(OP_PUT_OBJECT);
             emit_temporary(new_proc);
 
             vm->current = AS_PROC(new_proc);
@@ -238,7 +238,7 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
         opcode_case(FM_START_UNARY_METHOD) {
             MargValue new_method = MARG_METHOD(vm->current->bound_method->bound_object, string_get(vector_get(formal_bytecode, ++ip)));
             AS_METHOD(new_method)->proc->bound_proc = vm->current;
-            emit_possible_long_op(OP_PUT_OBJECT);
+            emit_variable_length_op(OP_PUT_OBJECT);
             emit_temporary(new_method);
 
             vm->current = AS_METHOD(new_method)->proc;
@@ -251,7 +251,7 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
         opcode_case(FM_START_BINARY_METHOD) {
             MargValue new_method = MARG_METHOD(vm->current->bound_method->bound_object, string_get(vector_get(formal_bytecode, ++ip)));
             AS_METHOD(new_method)->proc->bound_proc = vm->current;
-            emit_possible_long_op(OP_PUT_OBJECT);
+            emit_variable_length_op(OP_PUT_OBJECT);
             emit_temporary(new_method);
 
             vm->current = AS_METHOD(new_method)->proc;
@@ -264,7 +264,7 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
         opcode_case(FM_START_KEYWORD_METHOD) {
             MargValue new_method = MARG_METHOD(vm->current->bound_method->bound_object, string_get(vector_get(formal_bytecode, ++ip)));
             AS_METHOD(new_method)->proc->bound_proc = vm->current;
-            emit_possible_long_op(OP_PUT_OBJECT);
+            emit_variable_length_op(OP_PUT_OBJECT);
             emit_temporary(new_method);
 
             vm->current = AS_METHOD(new_method)->proc;
@@ -296,7 +296,7 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
                 emit_byte(OP_PRIM_INTEGER_DOUBLE);
             default_unary_case {
                 emit_byte(OP_PUT_0);
-                emit_possible_long_op(OP_SEND);
+                emit_variable_length_op(OP_SEND);
                 emit_temporary(MARG_STRING(string_get(unary_name)));
             }
         }
@@ -325,7 +325,7 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
                 ;
             default_binary_case {
                 emit_byte(OP_PUT_1);
-                emit_possible_long_op(OP_SEND);
+                emit_variable_length_op(OP_SEND);
                 emit_temporary(MARG_STRING(string_get(binary_name)));
             }
         }
@@ -351,7 +351,7 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
                     emit_bytes2(OP_PUT_OBJECT, integer);
                 }
 
-                emit_possible_long_op(OP_SEND);
+                emit_variable_length_op(OP_SEND);
                 emit_temporary(MARG_STRING(string_get(keyword_name)));
             }
         }
