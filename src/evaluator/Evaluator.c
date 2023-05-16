@@ -90,6 +90,10 @@ static void evaluator_run(VM *vm) {
                 break;
             }
 
+            // case OP_JUMP: {break;}
+            // case OP_JUMP_LOCAL: {break;}
+            // case OP_PUT_LABEL: {break;}
+
             case OP_PUT_OBJECT: {
                 STACK_PUSH(vm, READ_TEMPORARY());
                 break;
@@ -121,6 +125,9 @@ static void evaluator_run(VM *vm) {
                 STACK_PUSH(vm, tensor_value);
                 break;
             }
+            // case OP_PUT_TUPLE: {break;}
+            // case OP_PUT_TUPLE_LONG: {break;}
+
             case OP_PUT_HASH: {
                 int64_t number_of_elements = AS_INTEGER(READ_TEMPORARY())->value / 2;
                 MargValue hash_value = MARG_HASH;
@@ -149,6 +156,8 @@ static void evaluator_run(VM *vm) {
                 STACK_PUSH(vm, hash_value);
                 break;
             }
+            // case OP_PUT_BITSTRING: {break;}
+            // case OP_PUT_BITSTRING_LONG: {break;}
 
             case OP_SET_GLOBAL: {
                 table_set(&vm->global_variables, READ_TEMPORARY(), STACK_PEEK(vm, 0));
