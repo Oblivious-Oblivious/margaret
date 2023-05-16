@@ -24,7 +24,7 @@
 // #define OP_JUMP_LOCAL             0x??
 // #define OP_PUT_LABEL              0x??
 
-// TODO OP_PUT_OBJECT_WORD, OP_PUT_OBJECT_QWORD
+// TODO OP_PUT_OBJECT_WORD
 #define OP_PUT_OBJECT             0x08
 #define OP_PUT_OBJECT_DWORD       0x09
 
