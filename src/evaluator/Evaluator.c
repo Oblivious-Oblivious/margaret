@@ -32,6 +32,57 @@ static bool type_of_object_is(MargValue object, char *type) {
     return !strncmp(AS_OBJECT(object)->name, type, strlen(type));
 }
 
+static void op_put_tensor_helper(VM *vm, MargValue temporary) {
+    int64_t number_of_elements = AS_INTEGER(temporary)->value;
+    MargValue tensor_value = MARG_TENSOR(number_of_elements);
+    MargTensor *tensor_object = AS_TENSOR(tensor_value);
+
+    for(int64_t i = number_of_elements-1; i >= 0; i--)
+        marg_tensor_add_at(tensor_object, STACK_POP(vm), i);
+
+    STACK_PUSH(vm, tensor_value);
+}
+
+static void op_put_hash_helper(VM *vm, MargValue temporary) {
+    int64_t number_of_elements = AS_INTEGER(temporary)->value / 2;
+    MargValue hash_value = MARG_HASH;
+    MargHash *hash_object = AS_HASH(hash_value);
+
+    for(int64_t i = 0; i < number_of_elements; i++) {
+        MargValue value = STACK_POP(vm);
+        MargValue key = STACK_POP(vm);
+        marg_hash_add(hash_object, key, value);
+    }
+
+    STACK_PUSH(vm, hash_value);
+}
+
+static void op_send_helper(VM *vm, MargValue temporary) {
+    /* Read temporary values */
+    MargValue message_name = temporary;
+    int64_t number_of_parameters = AS_INTEGER(STACK_POP(vm))->value;
+
+    /* Pop all parameters first */
+    MargValue *actual_parameters = collected_malloc(sizeof(MargValue) * number_of_parameters);
+    for(int64_t i = number_of_parameters-1; i >= 0; i--)
+        actual_parameters[i] = STACK_POP(vm);
+
+    /* Pop object after parameters */
+    MargObject *object = AS_OBJECT(STACK_POP(vm));
+    MargMethod *method = AS_METHOD(table_get(&object->messages, message_name));
+
+    /* Close over local variables */
+    table_add_all(&vm->current->local_variables, &method->proc->local_variables);
+
+    /* Inject method parameters */
+    for(int64_t i = 0; i < number_of_parameters; i++) {
+        MargValue parameter_name = marg_tensor_get(AS_TENSOR(method->parameter_names), i);
+        table_set(&method->proc->local_variables, parameter_name, actual_parameters[i]);
+    }
+
+    vm->current = method->proc;
+}
+
 /**
  * @brief Runs the iterator that evaluates
     the result of the generated opcodes
@@ -104,36 +155,15 @@ static void evaluator_run(VM *vm) {
             }
 
             case OP_PUT_TENSOR: {
-                int64_t number_of_elements = AS_INTEGER(READ_TEMPORARY())->value;
-                MargValue tensor_value = MARG_TENSOR(number_of_elements);
-                MargTensor *tensor_object = AS_TENSOR(tensor_value);
-
-                for(int64_t i = number_of_elements-1; i >= 0; i--)
-                    marg_tensor_add_at(tensor_object, STACK_POP(vm), i);
-
-                STACK_PUSH(vm, tensor_value);
+                op_put_tensor_helper(vm, READ_TEMPORARY());
                 break;
             }
             case OP_PUT_TENSOR_WORD: {
-                int64_t number_of_elements = AS_INTEGER(READ_TEMPORARY_WORD())->value;
-                MargValue tensor_value = MARG_TENSOR(number_of_elements);
-                MargTensor *tensor_object = AS_TENSOR(tensor_value);
-
-                for(int64_t i = number_of_elements-1; i >= 0; i--)
-                    marg_tensor_add_at(tensor_object, STACK_POP(vm), i);
-
-                STACK_PUSH(vm, tensor_value);
+                op_put_tensor_helper(vm, READ_TEMPORARY_WORD());
                 break;
             }
             case OP_PUT_TENSOR_DWORD: {
-                int64_t number_of_elements = AS_INTEGER(READ_TEMPORARY_DWORD())->value;
-                MargValue tensor_value = MARG_TENSOR(number_of_elements);
-                MargTensor *tensor_object = AS_TENSOR(tensor_value);
-
-                for(int64_t i = number_of_elements-1; i >= 0; i--)
-                    marg_tensor_add_at(tensor_object, STACK_POP(vm), i);
-
-                STACK_PUSH(vm, tensor_value);
+                op_put_tensor_helper(vm, READ_TEMPORARY_DWORD());
                 break;
             }
             // case OP_PUT_TUPLE: {break;}
@@ -141,45 +171,15 @@ static void evaluator_run(VM *vm) {
             // case OP_PUT_TUPLE_DWORD: {break;}
 
             case OP_PUT_HASH: {
-                int64_t number_of_elements = AS_INTEGER(READ_TEMPORARY())->value / 2;
-                MargValue hash_value = MARG_HASH;
-                MargHash *hash_object = AS_HASH(hash_value);
-
-                for(int64_t i = 0; i < number_of_elements; i++) {
-                    MargValue value = STACK_POP(vm);
-                    MargValue key = STACK_POP(vm);
-                    marg_hash_add(hash_object, key, value);
-                }
-
-                STACK_PUSH(vm, hash_value);
+                op_put_hash_helper(vm, READ_TEMPORARY());
                 break;
             }
             case OP_PUT_HASH_WORD: {
-                int64_t number_of_elements = AS_INTEGER(READ_TEMPORARY_WORD())->value / 2;
-                MargValue hash_value = MARG_HASH;
-                MargHash *hash_object = AS_HASH(hash_value);
-
-                for(int64_t i = 0; i < number_of_elements; i++) {
-                    MargValue value = STACK_POP(vm);
-                    MargValue key = STACK_POP(vm);
-                    marg_hash_add(hash_object, key, value);
-                }
-
-                STACK_PUSH(vm, hash_value);
+                op_put_hash_helper(vm, READ_TEMPORARY_WORD());
                 break;
             }
             case OP_PUT_HASH_DWORD: {
-                int64_t number_of_elements = AS_INTEGER(READ_TEMPORARY_DWORD())->value / 2;
-                MargValue hash_value = MARG_HASH;
-                MargHash *hash_object = AS_HASH(hash_value);
-
-                for(int64_t i = 0; i < number_of_elements; i++) {
-                    MargValue value = STACK_POP(vm);
-                    MargValue key = STACK_POP(vm);
-                    marg_hash_add(hash_object, key, value);
-                }
-
-                STACK_PUSH(vm, hash_value);
+                op_put_hash_helper(vm, READ_TEMPORARY_DWORD());
                 break;
             }
             // case OP_PUT_BITSTRING: {break;}
@@ -265,81 +265,15 @@ static void evaluator_run(VM *vm) {
             }
 
             case OP_SEND: {
-                /* Read temporary values */
-                MargValue message_name = READ_TEMPORARY();
-                int64_t number_of_parameters = AS_INTEGER(STACK_POP(vm))->value;
-
-                /* Pop all parameters first */
-                MargValue *actual_parameters = collected_malloc(sizeof(MargValue) * number_of_parameters);
-                for(int64_t i = number_of_parameters-1; i >= 0; i--)
-                    actual_parameters[i] = STACK_POP(vm);
-
-                /* Pop object after parameters */
-                MargObject *object = AS_OBJECT(STACK_POP(vm));
-                MargMethod *method = AS_METHOD(table_get(&object->messages, message_name));
-
-                /* Close over local variables */
-                table_add_all(&vm->current->local_variables, &method->proc->local_variables);
-
-                /* Inject method parameters */
-                for(int64_t i = 0; i < number_of_parameters; i++) {
-                    MargValue parameter_name = marg_tensor_get(AS_TENSOR(method->parameter_names), i);
-                    table_set(&method->proc->local_variables, parameter_name, actual_parameters[i]);
-                }
-
-                vm->current = method->proc;
+                op_send_helper(vm, READ_TEMPORARY());
                 break;
             }
             case OP_SEND_WORD: {
-                /* Read temporary values */
-                MargValue message_name = READ_TEMPORARY_WORD();
-                int64_t number_of_parameters = AS_INTEGER(STACK_POP(vm))->value;
-
-                /* Pop all parameters first */
-                MargValue *actual_parameters = collected_malloc(sizeof(MargValue) * number_of_parameters);
-                for(int64_t i = number_of_parameters-1; i >= 0; i--)
-                    actual_parameters[i] = STACK_POP(vm);
-
-                /* Pop object after parameters */
-                MargObject *object = AS_OBJECT(STACK_POP(vm));
-                MargMethod *method = AS_METHOD(table_get(&object->messages, message_name));
-
-                /* Close over local variables */
-                table_add_all(&vm->current->local_variables, &method->proc->local_variables);
-
-                /* Inject method parameters */
-                for(int64_t i = 0; i < number_of_parameters; i++) {
-                    MargValue parameter_name = marg_tensor_get(AS_TENSOR(method->parameter_names), i);
-                    table_set(&method->proc->local_variables, parameter_name, actual_parameters[i]);
-                }
-
-                vm->current = method->proc;
+                op_send_helper(vm, READ_TEMPORARY_WORD());
                 break;
             }
             case OP_SEND_DWORD: {
-                /* Read temporary values */
-                MargValue message_name = READ_TEMPORARY_DWORD();
-                int64_t number_of_parameters = AS_INTEGER(STACK_POP(vm))->value;
-
-                /* Pop all parameters first */
-                MargValue *actual_parameters = collected_malloc(sizeof(MargValue) * number_of_parameters);
-                for(int64_t i = number_of_parameters-1; i >= 0; i--)
-                    actual_parameters[i] = STACK_POP(vm);
-
-                /* Pop object after parameters */
-                MargObject *object = AS_OBJECT(STACK_POP(vm));
-                MargMethod *method = AS_METHOD(table_get(&object->messages, message_name));
-
-                /* Close over local variables */
-                table_add_all(&vm->current->local_variables, &method->proc->local_variables);
-
-                /* Inject method parameters */
-                for(int64_t i = 0; i < number_of_parameters; i++) {
-                    MargValue parameter_name = marg_tensor_get(AS_TENSOR(method->parameter_names), i);
-                    table_set(&method->proc->local_variables, parameter_name, actual_parameters[i]);
-                }
-
-                vm->current = method->proc;
+                op_send_helper(vm, READ_TEMPORARY_DWORD());
                 break;
             }
             case OP_CLONE_OBJECT: {
