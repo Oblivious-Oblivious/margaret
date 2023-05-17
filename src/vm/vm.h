@@ -8,23 +8,24 @@
 #include "../base/chunk.h"
 #include "../base/table.h"
 #include "../opcode/MargValue.h"
-#include "../opcode/MargProc.h"
 #include "byte_conversions.h"
 
 // TODO extern global VM instance
+
+typedef struct MargProc MargProc;
 
 /**
  * @brief Virtual Machine Engine
  * @param bytecode -> The list of emitted bytecode instructions
  * @param ip -> Instruction pointer that directly points into bytecode array
  */
-struct VM {
+typedef struct VM {
     MargValue stack[65536];
     MargValue *sp;
     table global_variables;
     table interned_strings;
     MargProc *current;
-};
+} VM;
 
 /** @brief Better assurances for inlining */
 #define inline __inline__

@@ -8,6 +8,7 @@
 
 #include "../opcode/opcodes.h"
 #include "../opcode/MargString.h"
+#include "../opcode/MargProc.h"
 #include "../vm/byte_conversions.h"
 
 static void write_offset_and_line_number_on(string *disassembled_instruction, chunk *chunk, size_t offset) {

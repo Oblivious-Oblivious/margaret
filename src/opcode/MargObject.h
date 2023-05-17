@@ -5,10 +5,10 @@
 #include "../base/boolean.h"
 #include "../base/table.h"
 
+#include "../vm/vm.h"
+
 typedef struct MargObject MargObject;
 typedef struct MargMethod MargMethod;
-typedef struct MargProc MargProc;
-typedef struct VM VM;
 
 /**
  * @brief A representation of user-defined object

@@ -2,6 +2,8 @@
 
 #include "../opcode/opcodes.h"
 
+#include "../opcode/MargProc.h"
+
 VM *optimizer_optimize(VM *vm) {
     vm->current->ip = vm->current->bytecode->items;
 
