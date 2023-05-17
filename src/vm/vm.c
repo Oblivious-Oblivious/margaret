@@ -14,6 +14,18 @@ static void define_main_method(VM *vm) {
     table_set(&vm->global_variables, MARG_STRING("$Margaret"), QNAN_BOX(margaret));
     vm->current = method->proc;
 
+    MargValue nil_singleton = MARG_OBJECT("$nil");
+    AS_OBJECT(nil_singleton)->parent = margaret;
+    table_set(&vm->global_variables, MARG_STRING("$nil"), nil_singleton);
+
+    MargValue false_singleton = MARG_OBJECT("$false");
+    AS_OBJECT(false_singleton)->parent = margaret;
+    table_set(&vm->global_variables, MARG_STRING("$false"), false_singleton);
+
+    MargValue true_singleton = MARG_OBJECT("$true");
+    AS_OBJECT(true_singleton)->parent = margaret;
+    table_set(&vm->global_variables, MARG_STRING("$true"), true_singleton);
+
     MargValue integer_proto = MARG_OBJECT("$IntegerProto");
     AS_OBJECT(integer_proto)->parent = margaret;
     table_set(&vm->global_variables, MARG_STRING("$IntegerProto"), integer_proto);

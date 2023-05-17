@@ -1,8 +1,7 @@
 #include "MargTrue.h"
 
-MargTrue *marg_true_new(VM *vm) {
-    MargObject *obj = (MargObject*)marg_object_new(vm, sizeof(MargTrue), "$true");
-    MargTrue *self = (MargTrue*)obj;
+#include "MargString.h"
 
-    return self;
+MargTrue *marg_true_new(VM *vm) {
+    return AS_TRUE(table_get(&vm->global_variables, MARG_STRING("$true")));
 }

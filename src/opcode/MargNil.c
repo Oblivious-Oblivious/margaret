@@ -1,8 +1,7 @@
 #include "MargNil.h"
 
-MargNil *marg_nil_new(VM *vm) {
-    MargObject *obj = (MargObject*)marg_object_new(vm, sizeof(MargNil), "$nil");
-    MargNil *self = (MargNil*)obj;
+#include "MargString.h"
 
-    return self;
+MargNil *marg_nil_new(VM *vm) {
+    return AS_NIL(table_get(&vm->global_variables, MARG_STRING("$nil")));
 }

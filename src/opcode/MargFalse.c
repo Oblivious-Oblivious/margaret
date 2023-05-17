@@ -1,8 +1,7 @@
 #include "MargFalse.h"
 
-MargFalse *marg_false_new(VM *vm) {
-    MargObject *obj = marg_object_new(vm, sizeof(MargFalse), "$false");
-    MargFalse *self = (MargFalse*)obj;
+#include "MargString.h"
 
-    return self;
+MargFalse *marg_false_new(VM *vm) {
+    return AS_FALSE(table_get(&vm->global_variables, MARG_STRING("$false")));
 }
