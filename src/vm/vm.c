@@ -8,14 +8,14 @@
  * @brief Defines the main entry point of execution
  */
 static void define_main_method(VM *vm) {
-    MargObject *object = AS_OBJECT(MARG_OBJECT("$Margaret"));
-    MargMethod *method = AS_METHOD(MARG_METHOD(object, "main:"));
-    table_set(&object->messages, MARG_STRING("main:"), QNAN_BOX(method));
-    table_set(&vm->global_variables, MARG_STRING("$Margaret"), QNAN_BOX(object));
+    MargObject *margaret = AS_OBJECT(MARG_OBJECT("$Margaret"));
+    MargMethod *method = AS_METHOD(MARG_METHOD(margaret, "main:"));
+    table_set(&margaret->messages, MARG_STRING("main:"), QNAN_BOX(method));
+    table_set(&vm->global_variables, MARG_STRING("$Margaret"), QNAN_BOX(margaret));
     vm->current = method->proc;
 
     MargValue integer_proto = MARG_OBJECT("$IntegerProto");
-    AS_OBJECT(integer_proto)->parent = object;
+    AS_OBJECT(integer_proto)->parent = margaret;
     table_set(&vm->global_variables, MARG_STRING("$IntegerProto"), integer_proto);
 }
 
