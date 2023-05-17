@@ -12,4 +12,12 @@
     puts: 41 incr,
     puts: 43 decr,
     puts: 21 double,
+
+    $IntegerProto bind: #test => 123,
+    puts: 0 test,
+    puts: 1 test,
+    puts: 2 test,
+    puts: 0 dnu,
+    puts: 1 dnu,
+    puts: 2 dnu,
 )
