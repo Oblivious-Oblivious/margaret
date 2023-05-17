@@ -57,6 +57,22 @@ static void op_put_hash_helper(VM *vm, MargValue temporary) {
     STACK_PUSH(vm, hash_value);
 }
 
+static MargMethod *dispatch_method_from_delegation_chain(MargObject *object, MargValue message_name) {
+    MargValue method_value = table_get(&object->messages, message_name);
+    if(IS_UNDEFINED(method_value)) {
+        if(!strncmp(object->name, "$Margaret", 10)) {
+            printf("no object in the delegation chain understands message: `%s`\n", AS_STRING(message_name)->chars);
+            exit(1);
+        }
+        else {
+            return dispatch_method_from_delegation_chain(object->parent, message_name);
+        }
+    }
+    else {
+        return AS_METHOD(table_get(&object->messages, message_name));
+    }
+}
+
 static void op_send_helper(VM *vm, MargValue temporary) {
     /* Read temporary values */
     MargValue message_name = temporary;
@@ -69,7 +85,7 @@ static void op_send_helper(VM *vm, MargValue temporary) {
 
     /* Pop object after parameters */
     MargObject *object = AS_OBJECT(STACK_POP(vm));
-    MargMethod *method = AS_METHOD(table_get(&object->messages, message_name));
+    MargMethod *method = dispatch_method_from_delegation_chain(object, message_name);
 
     /* Close over local variables */
     table_add_all(&vm->current->local_variables, &method->proc->local_variables);
@@ -282,6 +298,7 @@ static void evaluator_run(VM *vm) {
                 MargValue new_object_name = STACK_POP(vm);
                 MargValue parent_object = STACK_POP(vm);
                 MargValue child_object = MARG_OBJECT(AS_STRING(new_object_name)->chars);
+                AS_OBJECT(child_object)->parent = AS_OBJECT(parent_object);
                 table_set(&AS_OBJECT(child_object)->instance_variables, MARG_STRING("@super"), parent_object);
                 STACK_PUSH(vm, child_object);
                 break;
