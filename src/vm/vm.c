@@ -1,5 +1,7 @@
 #include "vm.h"
 
+#include "../opcode/MargObject.h"
+#include "../opcode/MargMethod.h"
 #include "../opcode/MargString.h"
 
 /**
@@ -11,6 +13,10 @@ static void define_main_method(VM *vm) {
     table_set(&object->messages, MARG_STRING("main:"), QNAN_BOX(method));
     table_set(&vm->global_variables, MARG_STRING("$Margaret"), QNAN_BOX(object));
     vm->current = method->proc;
+
+    MargValue integer_proto = MARG_OBJECT("$IntegerProto");
+    AS_OBJECT(integer_proto)->parent = object;
+    table_set(&vm->global_variables, MARG_STRING("$IntegerProto"), integer_proto);
 }
 
 VM *vm_new(void) {
