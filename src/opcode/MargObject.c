@@ -12,7 +12,7 @@ MargObject *marg_object_new(VM *bound_vm, size_t size, char *name) {
 
     self->bound_vm = bound_vm;
 
-    self->name = (char*)malloc(sizeof(char) * strlen(name));
+    self->name = (char*)collected_malloc(sizeof(char) * strlen(name));
     self->name = name;
     self->parent = self;
     table_init(&self->instance_variables);
