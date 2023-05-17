@@ -245,6 +245,7 @@ vector *ast_proc_literal(vector *param_list, vector *function) {
         vector_add(res, FM_POP);
     }
 
+    vector_remove(res, function_size-1);
     vector_add(res, FM_END_PROC);
     return res;
 }

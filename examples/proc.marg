@@ -16,4 +16,8 @@
     p0 call,
     puts: v,
     puts: p0,
+
+    p1 = { v | v * 2 },
+    res = p1 call: {v: 11},
+    puts: res,
 )
