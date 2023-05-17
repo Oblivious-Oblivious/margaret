@@ -29,6 +29,10 @@ static void define_main_method(VM *vm) {
     MargValue integer_proto = MARG_OBJECT("$IntegerProto");
     AS_OBJECT(integer_proto)->parent = margaret;
     table_set(&vm->global_variables, MARG_STRING("$IntegerProto"), integer_proto);
+
+    MargValue float_proto = MARG_OBJECT("$FloatProto");
+    AS_OBJECT(float_proto)->parent = margaret;
+    table_set(&vm->global_variables, MARG_STRING("$FloatProto"), float_proto);
 }
 
 VM *vm_new(void) {
