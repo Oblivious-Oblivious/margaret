@@ -1,7 +1,5 @@
 #include "MargProc.h"
 
-#include "../vm/vm.h"
-
 MargProc *marg_proc_new(VM *vm, MargMethod *bound_method) {
     MargObject *obj = marg_object_new(vm, sizeof(MargProc), "$Proc");
     MargProc *self = (MargProc*)obj;
