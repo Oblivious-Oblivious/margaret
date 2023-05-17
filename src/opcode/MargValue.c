@@ -24,7 +24,7 @@ string *marg_value_format(MargValue self) {
     string *res = string_new("");
 
     if(IS_UNDEFINED(self))
-        string_add_str(res, "$nil");
+        string_add_str(res, "<unbound>");
 
     else if(IS_NIL(self))
         string_add_str(res, "$nil");
@@ -74,9 +74,9 @@ string *marg_value_format(MargValue self) {
     else if(IS_OBJECT(self))
         string_add_str(res, AS_OBJECT(self)->name);
     else if(IS_METHOD(self))
-        string_add_str(res, "<method>");
+        string_addf(res, "< %s#%s >", AS_METHOD(self)->bound_object->name, AS_STRING(AS_METHOD(self)->message_name)->chars);
     else if(IS_PROC(self))
-        string_add_str(res, "<proc>");
+        string_addf(res, "< %s:proc >", AS_PROC(self)->bound_method->bound_object->name);
 
     else
         string_add_str(res, AS_OBJECT(self)->name);
