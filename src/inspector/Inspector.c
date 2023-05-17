@@ -387,26 +387,26 @@ static size_t inspect_instruction(vector *res, chunk *chunk, size_t offset) {
         case OP_PRIM_PROC_CALL_PARAMS:
             return instruction_single(res, "PRIM_PROC_CALL_PARAMS", chunk, offset);
 
-        case OP_PRIM_INTEGER_ADD:
-            return instruction_single(res, "PRIM_INTEGER_ADD", chunk, offset);
-        case OP_PRIM_INTEGER_SUB:
-            return instruction_single(res, "PRIM_INTEGER_SUB", chunk, offset);
-        case OP_PRIM_INTEGER_MUL:
-            return instruction_single(res, "PRIM_INTEGER_MUL", chunk, offset);
-        case OP_PRIM_INTEGER_DIV:
-            return instruction_single(res, "PRIM_INTEGER_DIV", chunk, offset);
-        case OP_PRIM_INTEGER_ABS:
-            return instruction_single(res, "PRIM_INTEGER_ABS", chunk, offset);
-        case OP_PRIM_INTEGER_EQUALS:
-            return instruction_single(res, "PRIM_INTEGER_EQUALS", chunk, offset);
-        case OP_PRIM_INTEGER_LT:
-            return instruction_single(res, "PRIM_INTEGER_LT", chunk, offset);
-        case OP_PRIM_INTEGER_GT:
-            return instruction_single(res, "PRIM_INTEGER_GT", chunk, offset);
-        case OP_PRIM_INTEGER_LTE:
-            return instruction_single(res, "PRIM_INTEGER_LTE", chunk, offset);
-        case OP_PRIM_INTEGER_GTE:
-            return instruction_single(res, "PRIM_INTEGER_GTE", chunk, offset);
+        case OP_PRIM_NUMERIC_ADD:
+            return instruction_single(res, "PRIM_NUMERIC_ADD", chunk, offset);
+        case OP_PRIM_NUMERIC_SUB:
+            return instruction_single(res, "PRIM_NUMERIC_SUB", chunk, offset);
+        case OP_PRIM_NUMERIC_MUL:
+            return instruction_single(res, "PRIM_NUMERIC_MUL", chunk, offset);
+        case OP_PRIM_NUMERIC_DIV:
+            return instruction_single(res, "PRIM_NUMERIC_DIV", chunk, offset);
+        case OP_PRIM_NUMERIC_ABS:
+            return instruction_single(res, "PRIM_NUMERIC_ABS", chunk, offset);
+        case OP_PRIM_NUMERIC_EQUALS:
+            return instruction_single(res, "PRIM_NUMERIC_EQUALS", chunk, offset);
+        case OP_PRIM_NUMERIC_LT:
+            return instruction_single(res, "PRIM_NUMERIC_LT", chunk, offset);
+        case OP_PRIM_NUMERIC_GT:
+            return instruction_single(res, "PRIM_NUMERIC_GT", chunk, offset);
+        case OP_PRIM_NUMERIC_LTE:
+            return instruction_single(res, "PRIM_NUMERIC_LTE", chunk, offset);
+        case OP_PRIM_NUMERIC_GTE:
+            return instruction_single(res, "PRIM_NUMERIC_GTE", chunk, offset);
         case OP_PRIM_INTEGER_INCR:
             return instruction_single(res, "PRIM_INTEGER_INCR", chunk, offset);
         case OP_PRIM_INTEGER_DECR:

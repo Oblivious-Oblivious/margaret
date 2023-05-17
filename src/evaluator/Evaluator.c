@@ -9,6 +9,7 @@
 #include "../opcode/MargFalse.h"
 #include "../opcode/MargTrue.h"
 #include "../opcode/MargInteger.h"
+#include "../opcode/MargFloat.h"
 #include "../opcode/MargString.h"
 
 #include "../opcode/MargTensor.h"
@@ -98,6 +99,52 @@ static void op_send_helper(VM *vm, MargValue temporary) {
 
     vm->current = method->proc;
 }
+
+#define numeric_binary_operation_helper(operation) do { \
+    MargValue op2 = STACK_POP(vm); \
+    MargValue op1 = STACK_POP(vm); \
+    if(type_of_object_is(op1, "$Integer") && type_of_object_is(op2, "$Integer")) \
+        STACK_PUSH(vm, MARG_INTEGER(AS_INTEGER(op1)->value operation AS_INTEGER(op2)->value)); \
+    else if(type_of_object_is(op1, "$Integer") && type_of_object_is(op2, "$Float")) \
+        STACK_PUSH(vm, MARG_FLOAT(AS_INTEGER(op1)->value operation AS_FLOAT(op2)->value)); \
+    else if(type_of_object_is(op1, "$Float") && type_of_object_is(op2, "$Integer")) \
+        STACK_PUSH(vm, MARG_FLOAT(AS_FLOAT(op1)->value operation AS_INTEGER(op2)->value)); \
+    else if(type_of_object_is(op1, "$Float") && type_of_object_is(op2, "$Float")) \
+        STACK_PUSH(vm, MARG_FLOAT(AS_FLOAT(op1)->value operation AS_FLOAT(op2)->value)); \
+    else \
+        STACK_PUSH(vm, MARG_NIL); \
+} while(0)
+
+#define numeric_binary_comparison_helper(operation) do { \
+    MargValue op2 = STACK_POP(vm); \
+    MargValue op1 = STACK_POP(vm); \
+    if(type_of_object_is(op1, "$Integer") && type_of_object_is(op2, "$Integer")) { \
+        if(AS_INTEGER(op1)->value operation AS_INTEGER(op2)->value) \
+            STACK_PUSH(vm, MARG_TRUE); \
+        else \
+            STACK_PUSH(vm, MARG_FALSE); \
+    } \
+    else if(type_of_object_is(op1, "$Integer") && type_of_object_is(op2, "$Float")) { \
+        if(AS_INTEGER(op1)->value operation AS_FLOAT(op2)->value) \
+            STACK_PUSH(vm, MARG_TRUE); \
+        else \
+            STACK_PUSH(vm, MARG_FALSE); \
+    } \
+    else if(type_of_object_is(op1, "$Float") && type_of_object_is(op2, "$Integer")) { \
+        if(AS_FLOAT(op1)->value operation AS_INTEGER(op2)->value) \
+            STACK_PUSH(vm, MARG_TRUE); \
+        else \
+            STACK_PUSH(vm, MARG_FALSE); \
+    } \
+    else if(type_of_object_is(op1, "$Float") && type_of_object_is(op2, "$Float")) { \
+        if(AS_FLOAT(op1)->value operation AS_FLOAT(op2)->value) \
+            STACK_PUSH(vm, MARG_TRUE); \
+        else \
+            STACK_PUSH(vm, MARG_FALSE); \
+    } \
+    else \
+        STACK_PUSH(vm, MARG_NIL); \
+} while(0)
 
 /**
  * @brief Runs the iterator that evaluates
@@ -363,125 +410,53 @@ static void evaluator_run(VM *vm) {
                 break;
             }
 
-            case OP_PRIM_INTEGER_ADD: {
-                MargValue op2 = STACK_POP(vm);
-                MargValue op1 = STACK_POP(vm);
-                if(type_of_object_is(op1, "$Integer"))
-                    STACK_PUSH(vm, MARG_INTEGER(AS_INTEGER(op1)->value + AS_INTEGER(op2)->value));
-                else
-                    STACK_PUSH(vm, MARG_NIL);
+            case OP_PRIM_NUMERIC_ADD: {
+                numeric_binary_operation_helper(+);
                 break;
             }
-            case OP_PRIM_INTEGER_SUB: {
-                MargValue op2 = STACK_POP(vm);
-                MargValue op1 = STACK_POP(vm);
-                if(type_of_object_is(op1, "$Integer"))
-                    STACK_PUSH(vm, MARG_INTEGER(AS_INTEGER(op1)->value - AS_INTEGER(op2)->value));
-                else
-                    STACK_PUSH(vm, MARG_NIL);
+            case OP_PRIM_NUMERIC_SUB: {
+                numeric_binary_operation_helper(-);
                 break;
             }
-            case OP_PRIM_INTEGER_MUL: {
-                MargValue op2 = STACK_POP(vm);
-                MargValue op1 = STACK_POP(vm);
-                if(type_of_object_is(op1, "$Integer"))
-                    STACK_PUSH(vm, MARG_INTEGER(AS_INTEGER(op1)->value * AS_INTEGER(op2)->value));
-                else
-                    STACK_PUSH(vm, MARG_NIL);
+            case OP_PRIM_NUMERIC_MUL: {
+                numeric_binary_operation_helper(*);
                 break;
             }
-            case OP_PRIM_INTEGER_DIV: {
-                MargValue op2 = STACK_POP(vm);
-                MargValue op1 = STACK_POP(vm);
-                if(type_of_object_is(op1, "$Integer")) {
-                    if(op2 == 0)
-                        STACK_PUSH(vm, MARG_NIL);
-                    else
-                        STACK_PUSH(vm, MARG_INTEGER(AS_INTEGER(op1)->value / AS_INTEGER(op2)->value));
-                }
-                else {
-                    STACK_PUSH(vm, MARG_NIL);
-                }
+            case OP_PRIM_NUMERIC_DIV: {
+                numeric_binary_operation_helper(/);
                 break;
             }
-            case OP_PRIM_INTEGER_ABS: {
+            case OP_PRIM_NUMERIC_ABS: {
                 MargValue number = STACK_POP(vm);
                 if(type_of_object_is(number, "$Integer"))
                     STACK_PUSH(vm, MARG_INTEGER((AS_INTEGER(number)->value < 0) ? -AS_INTEGER(number)->value : AS_INTEGER(number)->value));
+                else if(type_of_object_is(number, "$Float"))
+                    STACK_PUSH(vm, MARG_FLOAT((AS_FLOAT(number)->value < 0) ? -AS_FLOAT(number)->value : AS_FLOAT(number)->value));
                 else
                     STACK_PUSH(vm, MARG_NIL);
                 break;
             }
-            case OP_PRIM_INTEGER_EQUALS: {
-                MargValue op2 = STACK_POP(vm);
-                MargValue op1 = STACK_POP(vm);
-                if(type_of_object_is(op1, "$Integer")) {
-                    if(AS_INTEGER(op1)->value == AS_INTEGER(op2)->value)
-                        STACK_PUSH(vm, MARG_TRUE);
-                    else
-                        STACK_PUSH(vm, MARG_FALSE);
-                }
-                else {
-                    STACK_PUSH(vm, MARG_NIL);
-                }
+            case OP_PRIM_NUMERIC_EQUALS: {
+                numeric_binary_comparison_helper(==);
                 break;
             }
-            case OP_PRIM_INTEGER_LT: {
-                MargValue op2 = STACK_POP(vm);
-                MargValue op1 = STACK_POP(vm);
-                if(type_of_object_is(op1, "$Integer")) {
-                    if(AS_INTEGER(op1)->value < AS_INTEGER(op2)->value)
-                        STACK_PUSH(vm, MARG_TRUE);
-                    else
-                        STACK_PUSH(vm, MARG_FALSE);
-                }
-                else {
-                    STACK_PUSH(vm, MARG_NIL);
-                }
+            case OP_PRIM_NUMERIC_LT: {
+                numeric_binary_comparison_helper(<);
                 break;
             }
-            case OP_PRIM_INTEGER_GT: {
-                MargValue op2 = STACK_POP(vm);
-                MargValue op1 = STACK_POP(vm);
-                if(type_of_object_is(op1, "$Integer")) {
-                    if(AS_INTEGER(op1)->value > AS_INTEGER(op2)->value)
-                        STACK_PUSH(vm, MARG_TRUE);
-                    else
-                        STACK_PUSH(vm, MARG_FALSE);
-                }
-                else {
-                    STACK_PUSH(vm, MARG_NIL);
-                }
+            case OP_PRIM_NUMERIC_GT: {
+                numeric_binary_comparison_helper(>);
                 break;
             }
-            case OP_PRIM_INTEGER_LTE: {
-                MargValue op2 = STACK_POP(vm);
-                MargValue op1 = STACK_POP(vm);
-                if(type_of_object_is(op1, "$Integer")) {
-                    if(AS_INTEGER(op1)->value <= AS_INTEGER(op2)->value)
-                        STACK_PUSH(vm, MARG_TRUE);
-                    else
-                        STACK_PUSH(vm, MARG_FALSE);
-                }
-                else {
-                    STACK_PUSH(vm, MARG_NIL);
-                }
+            case OP_PRIM_NUMERIC_LTE: {
+                numeric_binary_comparison_helper(<=);
                 break;
             }
-            case OP_PRIM_INTEGER_GTE: {
-                MargValue op2 = STACK_POP(vm);
-                MargValue op1 = STACK_POP(vm);
-                if(type_of_object_is(op1, "$Integer")) {
-                    if(AS_INTEGER(op1)->value >= AS_INTEGER(op2)->value)
-                        STACK_PUSH(vm, MARG_TRUE);
-                    else
-                        STACK_PUSH(vm, MARG_FALSE);
-                }
-                else {
-                    STACK_PUSH(vm, MARG_NIL);
-                }
+            case OP_PRIM_NUMERIC_GTE: {
+                numeric_binary_comparison_helper(>=);
                 break;
             }
+
             case OP_PRIM_INTEGER_INCR: {
                 MargValue number = STACK_POP(vm);
                 if(type_of_object_is(number, "$Integer"))

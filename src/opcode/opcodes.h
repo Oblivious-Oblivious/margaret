@@ -74,17 +74,19 @@
 #define OP_PRIM_PROC_CALL         0x36
 #define OP_PRIM_PROC_CALL_PARAMS  0x37
 
+// $NumericProto
+#define OP_PRIM_NUMERIC_ADD       0x38
+#define OP_PRIM_NUMERIC_SUB       0x39
+#define OP_PRIM_NUMERIC_MUL       0x3a
+#define OP_PRIM_NUMERIC_DIV       0x3b
+#define OP_PRIM_NUMERIC_ABS       0x3c
+#define OP_PRIM_NUMERIC_EQUALS    0x3d
+#define OP_PRIM_NUMERIC_LT        0x3e
+#define OP_PRIM_NUMERIC_GT        0x3f
+#define OP_PRIM_NUMERIC_LTE       0x40
+#define OP_PRIM_NUMERIC_GTE       0x41
+
 // $Integer
-#define OP_PRIM_INTEGER_ADD       0x38
-#define OP_PRIM_INTEGER_SUB       0x39
-#define OP_PRIM_INTEGER_MUL       0x3a
-#define OP_PRIM_INTEGER_DIV       0x3b
-#define OP_PRIM_INTEGER_ABS       0x3c
-#define OP_PRIM_INTEGER_EQUALS    0x3d
-#define OP_PRIM_INTEGER_LT        0x3e
-#define OP_PRIM_INTEGER_GT        0x3f
-#define OP_PRIM_INTEGER_LTE       0x40
-#define OP_PRIM_INTEGER_GTE       0x41
 #define OP_PRIM_INTEGER_INCR      0x42
 #define OP_PRIM_INTEGER_DECR      0x43
 #define OP_PRIM_INTEGER_DOUBLE    0x44

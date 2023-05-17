@@ -296,7 +296,7 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
             switch_unary_case("call")
                 emit_byte(OP_PRIM_PROC_CALL);
             unary_case("abs")
-                emit_byte(OP_PRIM_INTEGER_ABS);
+                emit_byte(OP_PRIM_NUMERIC_ABS);
             unary_case("incr")
                 emit_byte(OP_PRIM_INTEGER_INCR);
             unary_case("decr")
@@ -313,23 +313,23 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
             string *binary_name = vector_get(formal_bytecode, ++ip);
 
             switch_binary_case("+")
-                emit_byte(OP_PRIM_INTEGER_ADD);
+                emit_byte(OP_PRIM_NUMERIC_ADD);
             binary_case("-")
-                emit_byte(OP_PRIM_INTEGER_SUB);
+                emit_byte(OP_PRIM_NUMERIC_SUB);
             binary_case("*")
-                emit_byte(OP_PRIM_INTEGER_MUL);
+                emit_byte(OP_PRIM_NUMERIC_MUL);
             binary_case("/")
-                emit_byte(OP_PRIM_INTEGER_DIV);
+                emit_byte(OP_PRIM_NUMERIC_DIV);
             binary_case("==")
-                emit_byte(OP_PRIM_INTEGER_EQUALS);
+                emit_byte(OP_PRIM_NUMERIC_EQUALS);
             binary_case("<")
-                emit_byte(OP_PRIM_INTEGER_LT);
+                emit_byte(OP_PRIM_NUMERIC_LT);
             binary_case(">")
-                emit_byte(OP_PRIM_INTEGER_GT);
+                emit_byte(OP_PRIM_NUMERIC_GT);
             binary_case("<=")
-                emit_byte(OP_PRIM_INTEGER_LTE);
+                emit_byte(OP_PRIM_NUMERIC_LTE);
             binary_case(">=")
-                emit_byte(OP_PRIM_INTEGER_GTE);
+                emit_byte(OP_PRIM_NUMERIC_GTE);
             binary_case("++")
                 ;
             default_binary_case {
