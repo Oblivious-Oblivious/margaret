@@ -352,10 +352,11 @@ static void evaluator_run(VM *vm) {
             }
             case OP_BIND_METHOD: {
                 MargValue method = STACK_POP(vm);
-                MargValue object = STACK_PEEK(vm, 0);
+                MargValue object = STACK_POP(vm);
                 table_set(&AS_OBJECT(object)->messages, AS_METHOD(method)->message_name, method);
                 AS_METHOD(method)->bound_object = AS_OBJECT(object);
                 table_set(&AS_METHOD(method)->bound_object->instance_variables, MARG_STRING("@self"), object);
+                STACK_PUSH(vm, method);
                 break;
             }
             case OP_EXIT_ACTIVATION_RECORD: {
