@@ -26,12 +26,16 @@ static void define_main_method(VM *vm) {
     AS_OBJECT(true_singleton)->parent = margaret;
     table_set(&vm->global_variables, MARG_STRING("$true"), true_singleton);
 
+    MargValue numeric_proto = MARG_OBJECT("$NumericProto");
+    AS_OBJECT(numeric_proto)->parent = margaret;
+    table_set(&vm->global_variables, MARG_STRING("$NumericProto"), numeric_proto);
+
     MargValue integer_proto = MARG_OBJECT("$IntegerProto");
-    AS_OBJECT(integer_proto)->parent = margaret;
+    AS_OBJECT(integer_proto)->parent = AS_OBJECT(numeric_proto);
     table_set(&vm->global_variables, MARG_STRING("$IntegerProto"), integer_proto);
 
     MargValue float_proto = MARG_OBJECT("$FloatProto");
-    AS_OBJECT(float_proto)->parent = margaret;
+    AS_OBJECT(float_proto)->parent = AS_OBJECT(numeric_proto);
     table_set(&vm->global_variables, MARG_STRING("$FloatProto"), float_proto);
 }
 
