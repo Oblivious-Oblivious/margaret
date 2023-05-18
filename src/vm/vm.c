@@ -1,16 +1,37 @@
 #include "vm.h"
 
+#include "../opcode/MargObject.h"
 #include "../opcode/MargMethod.h"
+#include "../opcode/MargString.h"
 
-#include "Margaret.h"
+/**
+ * @brief Creates a proto object with a predefined parent slot.
+    Sets up @self and @super instances and initially has no methods.
+    Proto chain is always global.
+ * @param vm -> Current vm
+ * @param parent -> Parent object to bind to
+ * @param name -> Name of the new proto
+ * @return MargValue -> New object value
+ */
+MargValue create_new_proto_object(VM *vm, MargValue parent, char *name) {
+    MargValue proto_object = MARG_OBJECT(name);
+    AS_OBJECT(proto_object)->parent = AS_OBJECT(parent);
+    table_set(&AS_OBJECT(proto_object)->instance_variables, MARG_STRING("@self"), proto_object);
+    table_set(&AS_OBJECT(proto_object)->instance_variables, MARG_STRING("@super"), parent);
+    table_set(&vm->global_variables, MARG_STRING(name), proto_object);
 
-#include "NilSingleton.h"
-#include "FalseSingleton.h"
-#include "TrueSingleton.h"
+    return proto_object;
+}
 
-#include "NumericProto.h"
-#include "IntegerProto.h"
-#include "FloatProto.h"
+MargValue margaret_setup(VM *vm) {
+    MargValue margaret = MARG_OBJECT("$Margaret");
+    AS_OBJECT(margaret)->parent = AS_OBJECT(margaret);
+    table_set(&AS_OBJECT(margaret)->instance_variables, MARG_STRING("@super"), margaret);
+    table_set(&AS_OBJECT(margaret)->instance_variables, MARG_STRING("@self"), margaret);
+    table_set(&vm->global_variables, MARG_STRING("$Margaret"), margaret);
+
+    return margaret;
+}
 
 /**
  * @brief Sets up the delegation chain of proto objects
@@ -20,13 +41,13 @@
 static void setup_proto_object_chain(VM *vm) {
     MargValue margaret = margaret_setup(vm);
 
-    nil_singleton_setup(vm, margaret);
-    false_singleton_setup(vm, margaret);
-    true_singleton_setup(vm, margaret);
+    create_new_proto_object(vm, margaret, "$nil");
+    create_new_proto_object(vm, margaret, "$false");
+    create_new_proto_object(vm, margaret, "$true");
 
-    MargValue numeric_proto = numeric_proto_setup(vm, margaret);
-    integer_proto_setup(vm, numeric_proto);
-    float_proto_setup(vm, numeric_proto);
+    MargValue numeric_proto = create_new_proto_object(vm, margaret, "$NumericProto");
+    create_new_proto_object(vm, numeric_proto, "$IntegerProto");
+    create_new_proto_object(vm, numeric_proto, "$FloatProto");
 }
 
 /**
