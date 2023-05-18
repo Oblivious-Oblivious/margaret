@@ -48,6 +48,17 @@ static void setup_proto_object_chain(VM *vm) {
     MargValue numeric_proto = create_new_proto_object(vm, margaret, "$NumericProto");
     create_new_proto_object(vm, numeric_proto, "$IntegerProto");
     create_new_proto_object(vm, numeric_proto, "$FloatProto");
+
+    create_new_proto_object(vm, margaret,  "$StringProto");
+
+    MargValue enumerable_proto = create_new_proto_object(vm, margaret, "$EnumerableProto");
+    create_new_proto_object(vm, enumerable_proto, "$TensorProto");
+    // create_new_proto_object(vm, tensor_proto, "$TupleProto");
+    create_new_proto_object(vm, enumerable_proto, "$HashProto");
+    // create_new_proto_object(vm, enumerable_proto, "$BitstringProto");
+
+    create_new_proto_object(vm, margaret, "$MethodProto");
+    create_new_proto_object(vm, margaret, "$ProcProto");
 }
 
 /**

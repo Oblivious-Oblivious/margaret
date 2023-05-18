@@ -62,7 +62,6 @@ typedef uint64_t MargValue;
 #define AS_PROC(value)                               ((MargProc*)QNAN_UNBOX(value))
 
 // TODO Eventually remove predefined types
-// TODO $nil, $true, $false -> Singleton objects
 #define IS_NIL(value)                                (!strcmp(QNAN_UNBOX(value)->name, "$nil"))
 #define IS_FALSE(value)                              (!strcmp(QNAN_UNBOX(value)->name, "$false"))
 #define IS_TRUE(value)                               (!strcmp(QNAN_UNBOX(value)->name, "$true"))

@@ -70,6 +70,9 @@ MargHash *marg_hash_new(VM *vm) {
     MargObject *obj = (MargObject*)marg_object_new(vm, sizeof(MargHash), "$Hash");
     MargHash *self = (MargHash*)obj;
 
+    MargValue proto_object = table_get(&vm->global_variables, MARG_STRING("$HashProto"));
+    obj->parent = AS_OBJECT(proto_object);
+
     self->alloced = 0;
     self->size = 0;
     self->entries = NULL;
