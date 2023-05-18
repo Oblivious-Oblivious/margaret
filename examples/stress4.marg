@@ -1,5 +1,6 @@
 (
     $Margaret bind: # test => 42,
+    $Margaret bind: #puts: object => primitive_6_puts: object,
     puts: $Margaret test,puts: $Margaret test,puts: $Margaret test,puts: $Margaret test,
     puts: $Margaret test,puts: $Margaret test,puts: $Margaret test,puts: $Margaret test,
 

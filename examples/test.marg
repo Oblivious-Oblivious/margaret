@@ -1,4 +1,6 @@
 (
+    $Margaret bind: #puts: object => primitive_6_puts: object,
+
     puts: $nil,
     puts: $true,
     puts: $false,

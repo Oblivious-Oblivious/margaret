@@ -1,4 +1,6 @@
 (
+    $Margaret bind: #puts: object => primitive_6_puts: object,
+
     puts: (a = 2 + 3),
     puts: (b = 7 - 5),
     puts: (c = a * b),

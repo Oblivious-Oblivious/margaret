@@ -68,7 +68,7 @@
 #define OP_EXIT_ACTIVATION_RECORD 0x34
 
 // $Margaret
-#define OP_PRIM_MARGARET_PUTS     0x35
+#define OP_PRIM_6_PUTS            0xfa
 
 // $Proc
 #define OP_PRIM_PROC_CALL         0x36

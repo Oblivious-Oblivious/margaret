@@ -1,4 +1,6 @@
 (
+    $Margaret bind: #puts: object => primitive_6_puts: object,
+
     v = 0,
     p0 = {(
         v = 1,

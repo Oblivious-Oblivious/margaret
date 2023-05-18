@@ -367,12 +367,12 @@ static void evaluator_run(VM *vm) {
                 break;
             }
 
-            case OP_PRIM_MARGARET_PUTS: {
-                MargValue value = STACK_POP(vm);
-                MargValue object = STACK_POP(vm); // $Margaret
-                if(type_of_object_is(object, "$Margaret")) {
-                    printf("%s\n", string_get(marg_value_format(value)));
-                    STACK_PUSH(vm, value);
+            case OP_PRIM_6_PUTS: {
+                MargValue object = STACK_POP(vm);
+                STACK_POP(vm);
+                if(!IS_UNDEFINED(object)) {
+                    printf("%s\n", string_get(marg_value_format(object)));
+                    STACK_PUSH(vm, object);
                 }
                 else {
                     STACK_PUSH(vm, MARG_NIL);

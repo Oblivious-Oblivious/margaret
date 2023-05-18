@@ -1,4 +1,6 @@
 (
+    $Margaret bind: #puts: object => primitive_6_puts: object,
+
     $Margaret bind: #a => @a,
     $NumericProto bind: #a => @a,
 

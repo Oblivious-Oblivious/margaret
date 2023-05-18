@@ -1,6 +1,7 @@
 (
     $Margaret bind: #self => @self,
     $Margaret bind: #super => @super,
+    $Margaret bind: #puts: object => primitive_6_puts: object,
 
     $nil bind: #self => @self,
     $nil bind: #super => @super,
