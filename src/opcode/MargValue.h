@@ -32,9 +32,9 @@ typedef uint64_t MargValue;
 #define IS_NOT_INTERNED(value)                       ((value) == MARG_NOT_INTERNED)
 
 // Objects
-#define MARG_NIL                                     (QNAN_BOX(marg_nil_new(vm)))
-#define MARG_FALSE                                   (QNAN_BOX(marg_false_new(vm)))
-#define MARG_TRUE                                    (QNAN_BOX(marg_true_new(vm)))
+#define MARG_NIL                                     (table_get(&vm->global_variables, MARG_STRING("$nil")))
+#define MARG_FALSE                                   (table_get(&vm->global_variables, MARG_STRING("$false")))
+#define MARG_TRUE                                    (table_get(&vm->global_variables, MARG_STRING("$true")))
 #define MARG_INTEGER(number)                         (QNAN_BOX(marg_integer_new(vm, (number))))
 #define MARG_MINUS_1                                 (QNAN_BOX(marg_integer_new(vm, -1)))
 #define MARG_0                                       (QNAN_BOX(marg_integer_new(vm, 0)))

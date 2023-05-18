@@ -68,17 +68,14 @@
 #include "loader/file_loader.spec.h"
 
 // opcode
-#include "opcode/MargFalse.spec.h"
 #include "opcode/MargFloat.spec.h"
 #include "opcode/MargHash.spec.h"
 #include "opcode/MargInteger.spec.h"
 #include "opcode/MargMethod.spec.h"
-#include "opcode/MargNil.spec.h"
 #include "opcode/MargObject.spec.h"
 #include "opcode/MargProc.spec.h"
 #include "opcode/MargString.spec.h"
 #include "opcode/MargTensor.spec.h"
-#include "opcode/MargTrue.spec.h"
 #include "opcode/MargValue.spec.h"
 
 // optimizer
@@ -159,17 +156,14 @@ spec_suite({
 
     file_loader_spec();
 
-    MargFalseSpec();
     MargFloatSpec();
     MargHashSpec();
     MargIntegerSpec();
     MargMethodSpec();
-    MargNilSpec();
     MargObjectSpec();
     MargProcSpec();
     MargStringSpec();
     MargTensorSpec();
-    MargTrueSpec();
     MargValueSpec();
 
     OptimizerSpec();
