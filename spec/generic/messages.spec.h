@@ -70,7 +70,7 @@ module(messages_spec, {
                 if_true: { out goto } \
                 if_false: { $false return }, \
             out = Label new \
-        )", vector_new(FM_LOCAL, string_new("origin"), FM_LOCAL, string_new("point"), FM_BINARY, string_new("<="), FM_START_PROC, FM_LOCAL, string_new("out"), FM_UNARY, string_new("goto"), FM_POP, FM_END_PROC, FM_START_PROC, FM_FALSE, FM_UNARY, string_new("return"), FM_POP, FM_END_PROC, FM_KEYWORD, string_new("if_true:if_false:"), string_new("2"), FM_POP, FM_LOCAL, string_new("Label"), FM_UNARY, string_new("new"), FM_STORE_LOCAL, string_new("out"), FM_POP));
+        )", vector_new(FM_LOCAL, string_new("origin"), FM_LOCAL, string_new("point"), FM_BINARY, string_new("<="), FM_START_PROC, FM_LOCAL, string_new("out"), FM_UNARY, string_new("goto"), FM_END_PROC, FM_START_PROC, FM_FALSE, FM_UNARY, string_new("return"), FM_END_PROC, FM_KEYWORD, string_new("if_true:if_false:"), string_new("2"), FM_POP, FM_LOCAL, string_new("Label"), FM_UNARY, string_new("new"), FM_STORE_LOCAL, string_new("out"), FM_POP));
     });
 })
 

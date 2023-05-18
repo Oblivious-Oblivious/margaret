@@ -233,12 +233,10 @@ module(method_definition_spec, {
                     FM_STORE_LOCAL, string_new("remaining"), \
                     FM_INTEGER, string_new("0"), \
                     FM_BINARY, string_new(">="), \
-                    FM_POP, \
                 FM_END_PROC, \
                 FM_START_PROC, \
                     FM_LOCAL, string_new("a_block"), \
                     FM_UNARY, string_new("value"), \
-                    FM_POP, \
                 FM_END_PROC, \
                 FM_KEYWORD, string_new("while_true:"), string_new("1"), \
             FM_END_KEYWORD_METHOD, \

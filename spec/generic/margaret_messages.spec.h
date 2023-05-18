@@ -10,11 +10,9 @@ module(margaret_messages_spec, {
             FM_TRUE, \
             FM_START_PROC, \
                 FM_NIL, \
-                FM_POP, \
             FM_END_PROC, \
             FM_START_PROC, \
                 FM_NIL, \
-                FM_POP, \
             FM_END_PROC, \
             FM_KEYWORD, string_new("if:then:else:"), string_new("3"), \
             FM_POP \
@@ -58,7 +56,6 @@ module(margaret_messages_spec, {
                     FM_LOCAL, string_new("condition_block"), \
                     FM_LOCAL, string_new("block"), \
                     FM_KEYWORD, string_new("while:do:"), string_new("2"), \
-                    FM_POP, \
                 FM_END_PROC, \
                 FM_KEYWORD, string_new("if:then:"), string_new("2"), \
             FM_END_KEYWORD_METHOD, \
