@@ -1,56 +1,43 @@
 #include "vm.h"
 
-#include "../opcode/MargObject.h"
 #include "../opcode/MargMethod.h"
-#include "../opcode/MargString.h"
+
+#include "Margaret.h"
+
+#include "NilSingleton.h"
+#include "FalseSingleton.h"
+#include "TrueSingleton.h"
+
+#include "NumericProto.h"
+#include "IntegerProto.h"
+#include "FloatProto.h"
+
+/**
+ * @brief Sets up the delegation chain of proto objects
+    and defines rudimentary messages like self and super
+ * @param vm -> Current vm
+ */
+static void setup_proto_object_chain(VM *vm) {
+    MargValue margaret = margaret_setup(vm);
+
+    nil_singleton_setup(vm, margaret);
+    false_singleton_setup(vm, margaret);
+    true_singleton_setup(vm, margaret);
+
+    MargValue numeric_proto = numeric_proto_setup(vm, margaret);
+    integer_proto_setup(vm, numeric_proto);
+    float_proto_setup(vm, numeric_proto);
+}
 
 /**
  * @brief Defines the main entry point of execution
+ * @param vm -> Current vm
  */
 static void define_main_method(VM *vm) {
-    MargObject *margaret = AS_OBJECT(MARG_OBJECT("$Margaret"));
+    MargObject *margaret = AS_OBJECT(table_get(&vm->global_variables, MARG_STRING("$Margaret")));
     MargMethod *method = AS_METHOD(MARG_METHOD(margaret, "main:"));
-    table_set(&margaret->instance_variables, MARG_STRING("@self"), QNAN_BOX(margaret));
-    table_set(&margaret->instance_variables, MARG_STRING("@super"), QNAN_BOX(margaret));
     table_set(&margaret->messages, MARG_STRING("main:"), QNAN_BOX(method));
-    table_set(&vm->global_variables, MARG_STRING("$Margaret"), QNAN_BOX(margaret));
     vm->current = method->proc;
-
-    MargValue nil_singleton = MARG_OBJECT("$nil");
-    AS_OBJECT(nil_singleton)->parent = margaret;
-    table_set(&AS_OBJECT(nil_singleton)->instance_variables, MARG_STRING("@self"), nil_singleton);
-    table_set(&AS_OBJECT(nil_singleton)->instance_variables, MARG_STRING("@super"), QNAN_BOX(margaret));
-    table_set(&vm->global_variables, MARG_STRING("$nil"), nil_singleton);
-
-    MargValue false_singleton = MARG_OBJECT("$false");
-    AS_OBJECT(false_singleton)->parent = margaret;
-    table_set(&AS_OBJECT(false_singleton)->instance_variables, MARG_STRING("@self"), false_singleton);
-    table_set(&AS_OBJECT(false_singleton)->instance_variables, MARG_STRING("@super"), QNAN_BOX(margaret));
-    table_set(&vm->global_variables, MARG_STRING("$false"), false_singleton);
-
-    MargValue true_singleton = MARG_OBJECT("$true");
-    AS_OBJECT(true_singleton)->parent = margaret;
-    table_set(&AS_OBJECT(true_singleton)->instance_variables, MARG_STRING("@self"), true_singleton);
-    table_set(&AS_OBJECT(true_singleton)->instance_variables, MARG_STRING("@super"), QNAN_BOX(margaret));
-    table_set(&vm->global_variables, MARG_STRING("$true"), true_singleton);
-
-    MargValue numeric_proto = MARG_OBJECT("$NumericProto");
-    AS_OBJECT(numeric_proto)->parent = margaret;
-    table_set(&AS_OBJECT(numeric_proto)->instance_variables, MARG_STRING("@self"), numeric_proto);
-    table_set(&AS_OBJECT(numeric_proto)->instance_variables, MARG_STRING("@super"), QNAN_BOX(margaret));
-    table_set(&vm->global_variables, MARG_STRING("$NumericProto"), numeric_proto);
-
-    MargValue integer_proto = MARG_OBJECT("$IntegerProto");
-    AS_OBJECT(integer_proto)->parent = AS_OBJECT(numeric_proto);
-    table_set(&AS_OBJECT(integer_proto)->instance_variables, MARG_STRING("@self"), integer_proto);
-    table_set(&AS_OBJECT(integer_proto)->instance_variables, MARG_STRING("@super"), numeric_proto);
-    table_set(&vm->global_variables, MARG_STRING("$IntegerProto"), integer_proto);
-
-    MargValue float_proto = MARG_OBJECT("$FloatProto");
-    AS_OBJECT(float_proto)->parent = AS_OBJECT(numeric_proto);
-    table_set(&AS_OBJECT(float_proto)->instance_variables, MARG_STRING("@self"), float_proto);
-    table_set(&AS_OBJECT(float_proto)->instance_variables, MARG_STRING("@super"), numeric_proto);
-    table_set(&vm->global_variables, MARG_STRING("$FloatProto"), float_proto);
 }
 
 VM *vm_new(void) {
@@ -60,6 +47,7 @@ VM *vm_new(void) {
     table_init(&vm->global_variables);
     table_init(&vm->interned_strings);
 
+    setup_proto_object_chain(vm);
     define_main_method(vm);
 
     return vm;
