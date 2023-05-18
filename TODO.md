@@ -54,6 +54,7 @@
        Tensor, Hash, Tuple, BitString are `OBJECTS`          (can change self)
     🟩 Procs, methods and functions return tensors of bytecodes.
     🟥 Add primitives for `while:` to avoid endless recursion.
+    🟥 Add a Module proto that stores a tensor of unbound methods.  `$Object extend: a_module` binds those methods into $Object.
     🟥 Add a switch matcher -> `obj match: [[1, 100], [2, 200], [3, 300],]`.
     🟥 Make bang (!) messages denote persistant changes in object state.
     🟥 Add complex numbers `(0+2i)`, and rational numbers `(1/2r)` -> unary messages.
