@@ -6,6 +6,7 @@
 
 #include "../../src/opcode/opcodes.h"
 #include "../../src/opcode/MargFloat.h"
+#include "../../src/opcode/MargProc.h"
 #include "../../src/vm/byte_conversions.h"
 
 module(InspectorSpec, {
