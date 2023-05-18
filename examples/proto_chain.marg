@@ -18,14 +18,14 @@
 
     puts: $Margaret self,
     puts: $Margaret super,
-
+    puts: "",
     puts: $nil self,
     puts: $nil super,
     puts: $false self,
     puts: $false super,
     puts: $true self,
     puts: $true super,
-
+    puts: "",
     puts: $NumericProto self,
     puts: $NumericProto super,
     puts: $IntegerProto self,
