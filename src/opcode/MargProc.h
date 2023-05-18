@@ -13,8 +13,6 @@
  * @param bound_method -> Pointer to the method in which this proc resides
  * @param bound_proc -> Enclosing proc (for closures)
  * @param parameters -> Table of actual parameters
- * @param global_variables -> Pointer to VM's global variables
- * @param instance_variables -> Pointer to bound object's instance variables
  * @param local_variables -> Table for method-local variables
  * @param bytecode -> List of bytecode
  * @param ip -> Instruction Pointer
@@ -25,8 +23,6 @@ struct MargProc {
     MargProc *bound_proc;
 
     table parameters;
-    table *global_variables;
-    table *instance_variables;
     table local_variables;
 
     chunk *bytecode;

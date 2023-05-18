@@ -268,15 +268,15 @@ static void evaluator_run(VM *vm) {
                 break;
             }
             case OP_SET_INSTANCE: {
-                table_set(vm->current->instance_variables, READ_TEMPORARY(), STACK_PEEK(vm, 0));
+                table_set(&vm->current->bound_method->bound_object->instance_variables, READ_TEMPORARY(), STACK_PEEK(vm, 0));
                 break;
             }
             case OP_SET_INSTANCE_WORD: {
-                table_set(vm->current->instance_variables, READ_TEMPORARY_WORD(), STACK_PEEK(vm, 0));
+                table_set(&vm->current->bound_method->bound_object->instance_variables, READ_TEMPORARY_WORD(), STACK_PEEK(vm, 0));
                 break;
             }
             case OP_SET_INSTANCE_DWORD: {
-                table_set(vm->current->instance_variables, READ_TEMPORARY_DWORD(), STACK_PEEK(vm, 0));
+                table_set(&vm->current->bound_method->bound_object->instance_variables, READ_TEMPORARY_DWORD(), STACK_PEEK(vm, 0));
                 break;
             }
             case OP_SET_LOCAL: {
@@ -305,15 +305,15 @@ static void evaluator_run(VM *vm) {
                 break;
             }
             case OP_GET_INSTANCE: {
-                STACK_PUSH(vm, table_get(vm->current->instance_variables, READ_TEMPORARY()));
+                STACK_PUSH(vm, table_get(&vm->current->bound_method->bound_object->instance_variables, READ_TEMPORARY()));
                 break;
             }
             case OP_GET_INSTANCE_WORD: {
-                STACK_PUSH(vm, table_get(vm->current->instance_variables, READ_TEMPORARY_WORD()));
+                STACK_PUSH(vm, table_get(&vm->current->bound_method->bound_object->instance_variables, READ_TEMPORARY_WORD()));
                 break;
             }
             case OP_GET_INSTANCE_DWORD: {
-                STACK_PUSH(vm, table_get(vm->current->instance_variables, READ_TEMPORARY_DWORD()));
+                STACK_PUSH(vm, table_get(&vm->current->bound_method->bound_object->instance_variables, READ_TEMPORARY_DWORD()));
                 break;
             }
             case OP_GET_LOCAL: {

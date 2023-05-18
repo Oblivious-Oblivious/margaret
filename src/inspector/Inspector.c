@@ -442,13 +442,13 @@ void inspect_and_print_vm_bytecode(VM *vm) {
 }
 
 void inspect_and_print_proc(VM *vm) {
-    printf("\n/-------------- Disassembly: < %s:proc > ------------\\\n", vm->current->bound_method->bound_object->name);
+    printf("\n/-------------- Disassembly: <proc> ------------\\\n");
     inspect_and_print_vm_bytecode(vm);
     printf("\\-----------------------------------------------/\n\n");
 }
 
 void inspect_and_print_method(VM *vm) {
-    printf("\n/--------------- Disassembly: < %s#%s > ---------\\\n", vm->current->bound_method->bound_object->name, AS_STRING(vm->current->bound_method->message_name)->chars);
+    printf("\n/--------------- Disassembly: < #%s > ---------\\\n", AS_STRING(vm->current->bound_method->message_name)->chars);
     inspect_and_print_vm_bytecode(vm);
     printf("\\-----------------------------------------------/\n\n");
 }

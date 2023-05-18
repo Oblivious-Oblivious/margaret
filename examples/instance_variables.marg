@@ -1,0 +1,49 @@
+(
+    $Margaret bind: #a => @a,
+    $NumericProto bind: #a => @a,
+
+    $IntegerProto bind: #something => (
+        @a = 42,
+        p0 = {(
+            puts: "inside p0 inside of $IntegerProto",
+            puts: "self:",
+            puts: @self,
+            puts: @a,
+        )},
+    ),
+
+    123 something call,
+
+    puts: "Below should be <unbound>",
+    puts: @a,
+    puts: $Margaret a,
+    puts: $NumericProto a,
+    puts: $IntegerProto a,
+    puts: $FloatProto a,
+
+    $FloatProto bind: #setup_instances => (@x = 41, @y = 42),
+    $FloatProto setup_instances,
+    $Margaret bind: #x => @x,
+    $Margaret bind: #y => @y,
+    $NumericProto bind: #x => @x,
+    $NumericProto bind: #y => @y,
+
+    puts: 123 x,
+    puts: 123 y,
+    puts: 0.85 x,
+    puts: 0.85 y,
+    puts: @x,
+    puts: @y,
+    puts: $Margaret x,
+    puts: $Margaret y,
+
+    $IntegerProto bind: #x => @x,
+    $IntegerProto bind: #y => @y,
+    puts: 123 x,
+    puts: 123 y,
+
+    $FloatProto bind: #x => @x,
+    $FloatProto bind: #y => @y,
+    puts: 0.65 x,
+    puts: 0.65 y,
+)

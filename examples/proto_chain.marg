@@ -1,0 +1,35 @@
+(
+    $Margaret bind: #self => @self,
+    $Margaret bind: #super => @super,
+
+    $nil bind: #self => @self,
+    $nil bind: #super => @super,
+    $false bind: #self => @self,
+    $false bind: #super => @super,
+    $true bind: #self => @self,
+    $true bind: #super => @super,
+
+    $NumericProto bind: #self => @self,
+    $NumericProto bind: #super => @super,
+    $IntegerProto bind: #self => @self,
+    $IntegerProto bind: #super => @super,
+    $FloatProto bind: #self => @self,
+    $FloatProto bind: #super => @super,
+
+    puts: $Margaret self,
+    puts: $Margaret super,
+
+    puts: $nil self,
+    puts: $nil super,
+    puts: $false self,
+    puts: $false super,
+    puts: $true self,
+    puts: $true super,
+
+    puts: $NumericProto self,
+    puts: $NumericProto super,
+    puts: $IntegerProto self,
+    puts: $IntegerProto super,
+    puts: $FloatProto self,
+    puts: $FloatProto super,
+)
