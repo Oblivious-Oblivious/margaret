@@ -379,6 +379,8 @@ static size_t inspect_instruction(vector *res, chunk *chunk, size_t offset) {
         case OP_EXIT_ACTIVATION_RECORD:
             return instruction_single(res, "EXIT_ACTIVATION_RECORD", chunk, offset);
 
+        case OP_PRIM_1_MESSAGES:
+            return instruction_single(res, "PRIM_1_MESSAGES", chunk, offset);
         case OP_PRIM_6_PUTS:
             return instruction_single(res, "PRIM_6_PUTS", chunk, offset);
 

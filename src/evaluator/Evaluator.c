@@ -368,6 +368,25 @@ static void evaluator_run(VM *vm) {
                 break;
             }
 
+            case OP_PRIM_1_MESSAGES: {
+                MargValue object = STACK_POP(vm);
+                STACK_POP(vm);
+                if(!IS_UNDEFINED(object)) {
+                    MargValue messages_tensor = MARG_TENSOR(32);
+                    table *messages = &vm->current->bound_method->bound_object->messages;
+                    for(size_t i = 0; i < messages->capacity; i++) {
+                        table_entry *entry = &messages->entries[i];
+                        if(!IS_NOT_INTERNED(entry->key))
+                            marg_tensor_add(AS_TENSOR(messages_tensor), entry->key);
+                    }
+                    STACK_PUSH(vm, messages_tensor);
+                }
+                else {
+                    STACK_PUSH(vm, MARG_NIL);
+                }
+                break;
+            }
+
             case OP_PRIM_6_PUTS: {
                 MargValue object = STACK_POP(vm);
                 STACK_POP(vm);
@@ -409,6 +428,11 @@ static void evaluator_run(VM *vm) {
                 break;
             }
 
+            // prim_1: op1, add: op2 => OP_PRIM_NUMERIC_ADD
+            // prim_2: op1, sub: op2 => OP_PRIM_NUMERIC_SUB
+            // $NumericProto bind: # + other => nil
+            // $IntegerProto bind: # + other => prim_1: @self add: other  -> (SPECIALIZES FOR INTS)
+            // $FloatProto bind: # + other => prim_1: @self add: other    -> (SPECIALIZES FOR FLOATS)
             case OP_PRIM_NUMERIC_ADD: {
                 numeric_binary_operation_helper(+);
                 break;

@@ -346,6 +346,8 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
                 emit_byte(OP_CLONE_OBJECT);
             keyword_case("bind:")
                 emit_byte(OP_BIND_METHOD);
+            keyword_case("primitive_1_messages:")
+                emit_byte(OP_PRIM_1_MESSAGES);
             keyword_case("primitive_6_puts:")
                 emit_byte(OP_PRIM_6_PUTS);
             keyword_case("call:")
