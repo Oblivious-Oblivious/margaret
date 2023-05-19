@@ -97,4 +97,11 @@ MargTensor *marg_tensor_new(VM *vm, size_t initial_size);
 #define marg_tensor_size(self) \
     (self)->size
 
+/**
+ * @brief String representation for tensor literals in the Java style
+ * @param object -> The tensor object as a MargValue
+ * @return char*
+ */
+char *marg_tensor_to_string(MargValue object);
+
 #endif

@@ -30,4 +30,11 @@ struct MargMethod {
  */
 MargMethod *marg_method_new(VM *vm, MargObject *bound_object, char *message_name);
 
+/**
+ * @brief Constructs a primitive string representation for method literals
+ * @param object -> The method object as a MargValue
+ * @return char*
+ */
+char *marg_method_to_string(MargValue object);
+
 #endif

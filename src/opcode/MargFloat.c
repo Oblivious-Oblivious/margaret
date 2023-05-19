@@ -1,5 +1,7 @@
 #include "MargFloat.h"
 
+#include <float.h>  /* LDBL_DIG */
+
 #include "MargString.h"
 
 MargFloat *marg_float_new(VM *vm, double value) {
@@ -12,4 +14,10 @@ MargFloat *marg_float_new(VM *vm, double value) {
     self->value = value;
 
     return self;
+}
+
+char *marg_float_to_string(MargValue object) {
+    string *res = string_new("");
+    string_addf(res, "%.*Lg", LDBL_DIG, AS_FLOAT(object)->value);
+    return string_get(res);
 }

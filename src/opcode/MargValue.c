@@ -1,6 +1,5 @@
 #include "MargValue.h"
 
-#include <math.h>   /* floor */
 #include <float.h>  /* LDBL_DIG */
 
 #include "../base/memory.h"
@@ -17,67 +16,27 @@
 #include "MargProc.h"
 
 string *marg_value_format(MargValue self) {
-    string *res = string_new("");
-
     if(IS_UNDEFINED(self))
-        string_add_str(res, "<unbound>");
-
-    else if(IS_NIL(self))
-        string_add_str(res, "$nil");
-    else if(IS_FALSE(self))
-        string_add_str(res, "$false");
-    else if(IS_TRUE(self))
-        string_add_str(res, "$true");
-
+        return string_new("<unbound>");
     else if(IS_INTEGER(self))
-        string_addf(res, "%lld", AS_INTEGER(self)->value);
+        return string_new(marg_integer_to_string(self));
     else if(IS_FLOAT(self))
-        string_addf(res, "%.*Lg", LDBL_DIG, AS_FLOAT(self)->value);
-    else if(IS_STRING(self))
+        return string_new(marg_float_to_string(self));
+    else if(IS_STRING(self)) {
+        string *res = string_new("");
         string_addf(res, "\"%s\"", AS_STRING(self)->chars);
-
-    else if(IS_TENSOR(self)) {
-        MargTensor *tensor = AS_TENSOR(self);
-
-        string_add_str(res, "[");
-        size_t tensor_size = marg_tensor_size(tensor);
-        if(tensor_size > 0) {
-            for(size_t i = 0; i < tensor_size-1; i++)
-                string_addf(res, "%s, ", string_get(marg_value_format(marg_tensor_get(tensor, i))));
-            string_addf(res, "%s]", string_get(marg_value_format(marg_tensor_get(tensor, tensor_size-1))));
-        }
-        else {
-            string_addf(res, "]");
-        }
+        return res;
     }
-    else if(IS_HASH(self)) {
-        MargHash *hash = AS_HASH(self);
-
-        string_add_str(res, "{");
-        size_t hash_size = marg_hash_size(hash);
-        if(hash_size > 0) {
-            for(size_t i = 0; i < hash->alloced; i++) {
-                MargHashEntry *entry = &hash->entries[i];
-                if(!IS_NOT_INTERNED(entry->key))
-                    string_addf(res, "%s: %s, ", string_get(marg_value_format(entry->key)), string_get(marg_value_format(entry->value)));
-            }
-            string_shorten(res, string_size(res)-2);
-        }
-
-        string_addf(res, "}");
-    }
-
-    else if(IS_OBJECT(self))
-        string_add_str(res, AS_OBJECT(self)->name);
     else if(IS_METHOD(self))
-        string_addf(res, "< %s#%s >", AS_METHOD(self)->bound_object->name, AS_STRING(AS_METHOD(self)->message_name)->chars);
+        return string_new(marg_method_to_string(self));
     else if(IS_PROC(self))
-        string_addf(res, "< %s:proc >", AS_PROC(self)->bound_method->bound_object->name);
-
+        return string_new(marg_proc_to_string(self));
+    else if(IS_TENSOR(self))
+        return string_new(marg_tensor_to_string(self));
+    else if(IS_HASH(self))
+        return string_new(marg_hash_to_string(self));
     else
-        string_add_str(res, AS_OBJECT(self)->name);
-
-    return res;
+        return string_new(AS_OBJECT(self)->name);
 }
 
 string *marg_value_as_variable(MargValue self) {

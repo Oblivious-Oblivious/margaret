@@ -1,7 +1,9 @@
 #ifndef __MARG_OBJECT_H_
 #define __MARG_OBJECT_H_
 
+#include <string.h> /* strlen */
 #include <stdlib.h> /* size_t */
+
 #include "../base/boolean.h"
 #include "../base/table.h"
 
@@ -39,5 +41,12 @@ struct MargObject {
  * @return MargObject*
  */
 MargObject *marg_object_new(VM *bound_vm, size_t size, char *name);
+
+/**
+ * @brief String representation for object literals in the Java style
+ * @param object -> The `object` object as a MargValue
+ * @return char*
+ */
+char *marg_object_to_string_with_hash(MargValue object);
 
 #endif
