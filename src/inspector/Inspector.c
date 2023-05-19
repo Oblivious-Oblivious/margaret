@@ -383,6 +383,8 @@ static size_t inspect_instruction(vector *res, chunk *chunk, size_t offset) {
             return instruction_single(res, "PRIM_1_MESSAGES", chunk, offset);
         case OP_PRIM_2_OBJECT_ID:
             return instruction_single(res, "PRIM_2_OBJECT_ID", chunk, offset);
+        case OP_PRIM_3_TO_STRING:
+            return instruction_single(res, "PRIM_3_TO_STRING", chunk, offset);
         case OP_PRIM_6_PUTS:
             return instruction_single(res, "PRIM_6_PUTS", chunk, offset);
 
