@@ -185,12 +185,13 @@ static bool op_prim_to_string_helper(VM *vm, MargValue object) {
  * @param vm -> result enum
  */
 static void evaluator_run(VM *vm) {
+    bool on_explicit_send = false;
     vm->current->ip = vm->current->bytecode->items;
 
     // TODO Branch table, computed goto
     while(1) {
-        uint8_t instruction;
-        switch(instruction = READ_BYTE()) {
+        enter_explicit_send:;
+        switch(READ_BYTE()) {
             case OP_HALT:
                 return;
             case OP_POP: {
@@ -400,6 +401,8 @@ static void evaluator_run(VM *vm) {
                 table_init(&vm->current->parameters);
                 /* Reset back to enclosing bound proc */
                 vm->current = vm->current->bound_proc;
+                if(on_explicit_send)
+                    goto exit_explicit_send;
                 break;
             }
 
@@ -446,13 +449,24 @@ static void evaluator_run(VM *vm) {
             case OP_PRIM_6_PUTS: {
                 MargValue object = STACK_POP(vm);
                 STACK_POP(vm);
-                if(!IS_UNDEFINED(object)) {
-                    printf("%s\n", string_get(marg_value_format(object)));
-                    STACK_PUSH(vm, object);
+                if(!IS_UNDEFINED(object) && IS_STRING(object)) {
+                    printf("%s\n", AS_STRING(object)->chars);
                 }
                 else {
-                    STACK_PUSH(vm, MARG_NIL);
+                    // TODO Explain nasty code below
+                    if(op_prim_to_string_helper(vm, object)) {
+                        STACK_PUSH(vm, object);
+                        STACK_PUSH(vm, MARG_0);
+                        op_send_helper(vm, MARG_STRING("to_string"));
+
+                        on_explicit_send = true;
+                        goto enter_explicit_send;
+                        exit_explicit_send:;
+                        on_explicit_send = false;
+                    }
+                    printf("%s\n", AS_STRING(STACK_POP(vm))->chars);
                 }
+                STACK_PUSH(vm, object);
                 break;
             }
 
