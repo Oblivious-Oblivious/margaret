@@ -350,6 +350,8 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
                 emit_byte(OP_PRIM_1_MESSAGES);
             keyword_case("primitive_2_object_id:")
                 emit_byte(OP_PRIM_2_OBJECT_ID);
+            keyword_case("primitive_3_to_string:")
+                emit_byte(OP_PRIM_3_TO_STRING);
             keyword_case("primitive_6_puts:")
                 emit_byte(OP_PRIM_6_PUTS);
             keyword_case("call:")

@@ -3,6 +3,8 @@
     $Margaret bind: #super => @super,
     $Margaret bind: #messages => primitive_1_messages: @self,
     $Margaret bind: #object_id: object => primitive_2_object_id: object,
+    $Margaret bind: #to_string: object => primitive_3_to_string: object,
+    $Margaret bind: #to_string => to_string: @self,
     $Margaret bind: #puts: object => primitive_6_puts: object,
 
     puts: $Margaret messages,
@@ -20,4 +22,24 @@
     puts: (object_id: $true),
     puts: (object_id: "str"),
     puts: (object_id: "str"),
+
+    puts: "",
+
+    puts: $nil,
+    puts: $false,
+    puts: $true,
+    puts: 123,
+    puts: 42.17,
+    puts: "str",
+    puts: #test => (),
+    puts: {|},
+
+    puts: [1,2,3],
+    puts: {a: {}, b: {}},
+
+    test = $Margaret clone: "test",
+    test bind: #to_string => to_string: @self,
+    test bind: #to_string => "my test object",
+
+    puts: test,
 )

@@ -145,6 +145,40 @@ static void op_send_helper(VM *vm, MargValue temporary) {
         STACK_PUSH(vm, MARG_NIL); \
 } while(0)
 
+static bool op_prim_to_string_helper(VM *vm, MargValue object) {
+    if(IS_UNDEFINED(object))
+        STACK_PUSH(vm, MARG_STRING("<unbound>"));
+    else if(IS_NIL(object))
+        STACK_PUSH(vm, MARG_STRING(AS_OBJECT(object)->name));
+    else if(IS_FALSE(object))
+        STACK_PUSH(vm, MARG_STRING(AS_OBJECT(object)->name));
+    else if(IS_TRUE(object))
+        STACK_PUSH(vm, MARG_STRING(AS_OBJECT(object)->name));
+    else if(IS_INTEGER(object))
+        STACK_PUSH(vm, MARG_STRING(marg_integer_to_string(object)));
+    else if(IS_FLOAT(object))
+        STACK_PUSH(vm, MARG_STRING(marg_float_to_string(object)));
+    else if(IS_STRING(object))
+        STACK_PUSH(vm, object);
+    else if(IS_METHOD(object))
+        STACK_PUSH(vm, MARG_STRING(marg_method_to_string(object)));
+    else if(IS_PROC(object))
+        STACK_PUSH(vm, MARG_STRING(marg_proc_to_string(object)));
+
+    // TODO Implement inside of $Tensor and $Hash
+    else if(IS_TENSOR(object))
+        STACK_PUSH(vm, MARG_STRING(marg_tensor_to_string(object)));
+    else if(IS_HASH(object))
+        STACK_PUSH(vm, MARG_STRING(marg_hash_to_string(object)));
+
+    else {
+        STACK_PUSH(vm, MARG_STRING(marg_object_to_string_with_hash(object)));
+        return true;
+    }
+    
+    return false;
+}
+
 /**
  * @brief Runs the iterator that evaluates
     the result of the generated opcodes
@@ -399,6 +433,13 @@ static void evaluator_run(VM *vm) {
                 else {
                     STACK_PUSH(vm, MARG_NIL);
                 }
+                break;
+            }
+
+            case OP_PRIM_3_TO_STRING: {
+                MargValue object = STACK_POP(vm);
+                STACK_POP(vm);
+                op_prim_to_string_helper(vm, object);
                 break;
             }
 
