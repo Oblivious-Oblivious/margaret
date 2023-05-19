@@ -2,7 +2,22 @@
     $Margaret bind: #self => @self,
     $Margaret bind: #super => @super,
     $Margaret bind: #messages => primitive_1_messages: @self,
+    $Margaret bind: #object_id: object => primitive_2_object_id: object,
     $Margaret bind: #puts: object => primitive_6_puts: object,
 
     puts: $Margaret messages,
+
+    puts: (object_id: $IntegerProto),
+    puts: (object_id: $IntegerProto),
+    puts: (object_id: 1),
+    puts: (object_id: 1),
+    puts: "Singleton and interned values",
+    puts: (object_id: $nil),
+    puts: (object_id: $nil),
+    puts: (object_id: $false),
+    puts: (object_id: $false),
+    puts: (object_id: $true),
+    puts: (object_id: $true),
+    puts: (object_id: "str"),
+    puts: (object_id: "str"),
 )

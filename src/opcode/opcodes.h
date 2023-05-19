@@ -69,6 +69,7 @@
 
 // $Margaret
 #define OP_PRIM_1_MESSAGES        0xff
+#define OP_PRIM_2_OBJECT_ID       0xfe
 #define OP_PRIM_6_PUTS            0xfa
 
 // $Proc

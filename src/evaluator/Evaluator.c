@@ -1,6 +1,7 @@
 #include "Evaluator.h"
 
-#include <stdio.h>
+#include <stdio.h> /* printf, snprintf */
+#include <inttypes.h> /* PRIx64 */
 
 #include "../opcode/opcodes.h"
 #include "../opcode/MargValue.h"
@@ -380,6 +381,20 @@ static void evaluator_run(VM *vm) {
                             marg_tensor_add(AS_TENSOR(messages_tensor), entry->key);
                     }
                     STACK_PUSH(vm, messages_tensor);
+                }
+                else {
+                    STACK_PUSH(vm, MARG_NIL);
+                }
+                break;
+            }
+
+            case OP_PRIM_2_OBJECT_ID: {
+                MargValue object = STACK_POP(vm);
+                STACK_POP(vm);
+                if(!IS_UNDEFINED(object)) {
+                    char qnan_encoded_value[20];
+                    sprintf(qnan_encoded_value, "0x%016" PRIx64, (uint64_t)object);
+                    STACK_PUSH(vm, MARG_STRING(qnan_encoded_value));
                 }
                 else {
                     STACK_PUSH(vm, MARG_NIL);
