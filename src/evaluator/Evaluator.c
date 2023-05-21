@@ -65,6 +65,7 @@ static MargMethod *dispatch_method_from_delegation_chain(MargObject *object, Mar
         }
         else {
             return dispatch_method_from_delegation_chain(object->parent, message_name);
+            // MAYBE ADD PROTO MESSAGES AS LOCAL MESSAGES FOR COMMON BEHAVIOUR ON CLONED OBJECTS
         }
     }
     else {
