@@ -320,8 +320,8 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
                 emit_byte(OP_PRIM_NUMERIC_MUL);
             binary_case("/")
                 emit_byte(OP_PRIM_NUMERIC_DIV);
-            binary_case("==")
-                emit_byte(OP_PRIM_NUMERIC_EQUALS);
+            // binary_case("==")
+            //     emit_byte(OP_PRIM_NUMERIC_EQUALS);
             binary_case("<")
                 emit_byte(OP_PRIM_NUMERIC_LT);
             binary_case(">")
@@ -346,14 +346,18 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
                 emit_byte(OP_CLONE_OBJECT);
             keyword_case("bind:")
                 emit_byte(OP_BIND_METHOD);
+            keyword_case("primitive_puts:")
+                emit_byte(OP_PRIM_PUTS);
             keyword_case("primitive_1_messages:")
                 emit_byte(OP_PRIM_1_MESSAGES);
             keyword_case("primitive_2_object_id:")
                 emit_byte(OP_PRIM_2_OBJECT_ID);
             keyword_case("primitive_3_to_string:")
                 emit_byte(OP_PRIM_3_TO_STRING);
-            keyword_case("primitive_6_puts:")
-                emit_byte(OP_PRIM_6_PUTS);
+            keyword_case("primitive_4_equals?:with:")
+                emit_byte(OP_PRIM_4_EQUALS);
+            keyword_case("primitive_5_equals_numeric?:with:")
+                emit_byte(OP_PRIM_5_EQUALS_NUMERIC);
             keyword_case("call:")
                 emit_byte(OP_PRIM_PROC_CALL_PARAMS);
             default_keyword_case {

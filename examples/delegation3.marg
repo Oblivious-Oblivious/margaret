@@ -1,0 +1,21 @@
+(
+    $Margaret bind: #self => @self,
+    $Margaret bind: #super => @super,
+    $Margaret bind: #to_string => primitive_3_to_string: @self,
+    $Margaret bind: #puts: object => primitive_puts: object,
+
+    $StringProto bind: #== other => (
+        puts: @self,
+        puts: other,
+        primitive_4_equals?: @self with: other,
+    ),
+
+    puts: "str" == "str",
+    puts: "",
+    puts: "str1" == "str",
+    puts: "",
+    puts: "" == "",
+
+    puts: "" self,
+    puts: "" super,
+)

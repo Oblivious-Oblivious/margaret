@@ -1,8 +1,9 @@
 (
     $Margaret bind: #self => @self,
     $Margaret bind: #super => @super,
-    $Margaret bind: #delegated => 42,
-    $Margaret bind: #puts: object => primitive_6_puts: object,
+    $Margaret bind: #delegated => @self,
+    $Margaret bind: #to_string => primitive_3_to_string: @self,
+    $Margaret bind: #puts: object => primitive_puts: object,
 
     $Parent = $Margaret clone: "$Parent",
     $Parent bind: #self => @self,

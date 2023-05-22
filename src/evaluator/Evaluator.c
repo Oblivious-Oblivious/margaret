@@ -72,6 +72,20 @@ static MargMethod *dispatch_method_from_delegation_chain(MargObject *object, Mar
     }
 }
 
+static MargValue retrieve_all_messages_in_delegation_chain(VM *vm, MargValue messages_tensor, MargObject *object) {
+    table *messages = &object->messages;
+    for(size_t i = 0; i < messages->capacity; i++) {
+        table_entry *entry = &messages->entries[i];
+        if(!IS_NOT_INTERNED(entry->key))
+            marg_tensor_add(AS_TENSOR(messages_tensor), entry->key);
+    }
+
+    if(!strncmp(object->name, "$Margaret", 10))
+        return messages_tensor;
+    else
+        return retrieve_all_messages_in_delegation_chain(vm, messages_tensor, object->parent);
+}
+
 static void op_send_helper(VM *vm, MargValue temporary) {
     /* Read temporary values */
     MargValue message_name = temporary;
@@ -405,22 +419,37 @@ static void evaluator_run(VM *vm) {
                 break;
             }
 
+            case OP_PRIM_PUTS: {
+                MargValue object = STACK_POP(vm);
+                STACK_POP(vm);
+                if(!IS_UNDEFINED(object) && IS_STRING(object)) {
+                    printf("%s\n", AS_STRING(object)->chars);
+                }
+                else {
+                    // TODO Explain nasty code below
+                    if(op_prim_to_string_helper(vm, object)) {
+                        STACK_PUSH(vm, object);
+                        STACK_PUSH(vm, MARG_0);
+                        op_send_helper(vm, MARG_STRING("to_string"));
+
+                        on_explicit_send = true;
+                        goto enter_explicit_send;
+                        exit_explicit_send:;
+                        on_explicit_send = false;
+                    }
+                    printf("%s\n", AS_STRING(STACK_POP(vm))->chars);
+                }
+                STACK_PUSH(vm, object);
+                break;
+            }
+
             case OP_PRIM_1_MESSAGES: {
                 MargValue object = STACK_POP(vm);
                 STACK_POP(vm);
-                if(!IS_UNDEFINED(object)) {
-                    MargValue messages_tensor = MARG_TENSOR(32);
-                    table *messages = &vm->current->bound_method->bound_object->messages;
-                    for(size_t i = 0; i < messages->capacity; i++) {
-                        table_entry *entry = &messages->entries[i];
-                        if(!IS_NOT_INTERNED(entry->key))
-                            marg_tensor_add(AS_TENSOR(messages_tensor), entry->key);
-                    }
-                    STACK_PUSH(vm, messages_tensor);
-                }
-                else {
+                if(!IS_UNDEFINED(object))
+                    STACK_PUSH(vm, retrieve_all_messages_in_delegation_chain(vm, MARG_TENSOR(32), AS_OBJECT(object)));
+                else
                     STACK_PUSH(vm, MARG_NIL);
-                }
                 break;
             }
 
@@ -445,27 +474,16 @@ static void evaluator_run(VM *vm) {
                 break;
             }
 
-            case OP_PRIM_6_PUTS: {
-                MargValue object = STACK_POP(vm);
+            case OP_PRIM_4_EQUALS: {
+                MargValue obj1 = STACK_POP(vm);
+                MargValue obj2 = STACK_POP(vm);
                 STACK_POP(vm);
-                if(!IS_UNDEFINED(object) && IS_STRING(object)) {
-                    printf("%s\n", AS_STRING(object)->chars);
-                }
-                else {
-                    // TODO Explain nasty code below
-                    if(op_prim_to_string_helper(vm, object)) {
-                        STACK_PUSH(vm, object);
-                        STACK_PUSH(vm, MARG_0);
-                        op_send_helper(vm, MARG_STRING("to_string"));
+                obj1 == obj2 ? STACK_PUSH(vm, MARG_TRUE) : STACK_PUSH(vm, MARG_FALSE);
+                break;
+            }
 
-                        on_explicit_send = true;
-                        goto enter_explicit_send;
-                        exit_explicit_send:;
-                        on_explicit_send = false;
-                    }
-                    printf("%s\n", AS_STRING(STACK_POP(vm))->chars);
-                }
-                STACK_PUSH(vm, object);
+            case OP_PRIM_5_EQUALS_NUMERIC: {
+                numeric_binary_comparison_helper(==);
                 break;
             }
 

@@ -1,5 +1,5 @@
 (
-    $Margaret bind: #puts: object => primitive_6_puts: object,
+    $Margaret bind: #puts: object => primitive_puts: object,
 
     puts: $nil,
     puts: $true,

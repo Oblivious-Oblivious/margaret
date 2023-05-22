@@ -68,10 +68,12 @@
 #define OP_EXIT_ACTIVATION_RECORD 0x34
 
 // $Margaret
-#define OP_PRIM_1_MESSAGES        0xff
-#define OP_PRIM_2_OBJECT_ID       0xfe
-#define OP_PRIM_3_TO_STRING       0xfd
-#define OP_PRIM_6_PUTS            0xfa
+#define OP_PRIM_PUTS              0xff
+#define OP_PRIM_1_MESSAGES        0xfe
+#define OP_PRIM_2_OBJECT_ID       0xfd
+#define OP_PRIM_3_TO_STRING       0xfc
+#define OP_PRIM_4_EQUALS          0xfb
+#define OP_PRIM_5_EQUALS_NUMERIC  0xfa
 
 // $Proc
 #define OP_PRIM_PROC_CALL         0x36
