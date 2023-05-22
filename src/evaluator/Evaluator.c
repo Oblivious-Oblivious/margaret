@@ -85,6 +85,7 @@ static void op_send_helper(VM *vm, MargValue temporary) {
     /* Pop object after parameters */
     MargObject *object = AS_OBJECT(STACK_POP(vm));
     MargMethod *method = dispatch_method_from_delegation_chain(object, message_name);
+    method->bound_object = object;
 
     /* Close over local variables */
     table_add_all(&vm->current->local_variables, &method->proc->local_variables);
