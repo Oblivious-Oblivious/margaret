@@ -380,8 +380,6 @@ static void evaluator_run(VM *vm) {
                 MargValue parent_object = STACK_POP(vm);
                 MargValue child_object = MARG_OBJECT(AS_STRING(new_object_name)->chars);
                 AS_OBJECT(child_object)->parent = AS_OBJECT(parent_object);
-                table_set(&AS_OBJECT(child_object)->instance_variables, MARG_STRING("@self"), child_object);
-                table_set(&AS_OBJECT(child_object)->instance_variables, MARG_STRING("@super"), parent_object);
                 STACK_PUSH(vm, child_object);
                 break;
             }
