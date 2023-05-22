@@ -37,9 +37,6 @@ MargObject *marg_object_new(VM *bound_vm, size_t size, char *name) {
     table_init(&self->instance_variables);
     table_init(&self->messages);
 
-    table_set(&self->instance_variables, orphan_marg_string_new(self->bound_vm, "@self"), QNAN_BOX(self));
-    table_set(&self->instance_variables, orphan_marg_string_new(self->bound_vm, "@super"), QNAN_BOX(self->parent));
-
     return self;
 }
 
