@@ -73,6 +73,9 @@ MargHash *marg_hash_new(VM *vm) {
     MargValue proto_object = table_get(&vm->global_variables, MARG_STRING("$HashProto"));
     obj->parent = AS_OBJECT(proto_object);
 
+    table_set(&obj->instance_variables, MARG_STRING("@self"), QNAN_BOX(obj));
+    table_set(&obj->instance_variables, MARG_STRING("@super"), QNAN_BOX(obj->parent));
+
     self->alloced = 0;
     self->size = 0;
     self->entries = NULL;

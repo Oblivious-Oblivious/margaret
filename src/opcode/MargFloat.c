@@ -11,6 +11,9 @@ MargFloat *marg_float_new(VM *vm, double value) {
     MargValue proto_object = table_get(&vm->global_variables, MARG_STRING("$FloatProto"));
     obj->parent = AS_OBJECT(proto_object);
 
+    table_set(&obj->instance_variables, MARG_STRING("@self"), QNAN_BOX(obj));
+    table_set(&obj->instance_variables, MARG_STRING("@super"), QNAN_BOX(obj->parent));
+
     self->value = value;
 
     return self;
