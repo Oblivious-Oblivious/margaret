@@ -20,15 +20,6 @@ typedef struct MargString {
 } MargString;
 
 /**
- * @brief Creates a string without dependencies on MargObject
- * 
- * @param vm 
- * @param chars 
- * @return MargValue 
- */
-MargValue orphan_marg_string_new(VM *vm, char *chars);
-
-/**
  * @brief Creates a new MargString as an object
  * @param vm -> Current VM
  * @param chars -> Initial characters

@@ -4,7 +4,13 @@
 
 #include "../base/fnv_1a_64_hash.h"
 
-MargValue orphan_marg_string_new(VM *vm, char *chars) {
+/**
+ * @brief Creates a string without dependencies on MargObject
+ * @param vm 
+ * @param chars 
+ * @return MargValue 
+ */
+static MargValue orphan_marg_string_new(VM *vm, char *chars) {
     size_t size = strlen(chars);
     MargString *self = (MargString*)(MargObject*)orphan_marg_object_new(vm, sizeof(MargString) + size, "");
     self->hash = fnv_1a_64_hash(chars, size);
