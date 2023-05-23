@@ -74,6 +74,7 @@
 #define OP_PRIM_3_TO_STRING       0xfc
 #define OP_PRIM_4_EQUALS          0xfb
 #define OP_PRIM_5_EQUALS_NUMERIC  0xfa
+#define OP_PRIM_6_DNU             0xf9
 
 // $Proc
 #define OP_PRIM_PROC_CALL         0x36

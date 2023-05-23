@@ -56,19 +56,18 @@ static void op_put_hash_helper(VM *vm, MargValue temporary) {
     STACK_PUSH(vm, hash_value);
 }
 
-static MargMethod *dispatch_method_from_delegation_chain(MargObject *object, MargValue message_name) {
+static MargValue dispatch_method_from_delegation_chain(MargObject *object, MargValue message_name) {
     MargValue method_value = table_get(&object->messages, message_name);
     if(IS_UNDEFINED(method_value)) {
         if(!strncmp(object->name, "$Margaret", 10)) {
-            printf("no object in the delegation chain understands message: `%s`\n", AS_STRING(message_name)->chars);
-            exit(1);
+            return method_value;
         }
         else {
             return dispatch_method_from_delegation_chain(object->parent, message_name);
         }
     }
     else {
-        return AS_METHOD(table_get(&object->messages, message_name));
+        return table_get(&object->messages, message_name);
     }
 }
 
@@ -86,9 +85,8 @@ static MargValue retrieve_all_messages_in_delegation_chain(VM *vm, MargValue mes
         return retrieve_all_messages_in_delegation_chain(vm, messages_tensor, object->parent);
 }
 
-static void op_send_helper(VM *vm, MargValue temporary) {
+static void op_send_helper(VM *vm, MargValue message_name) {
     /* Read temporary values */
-    MargValue message_name = temporary;
     int64_t number_of_parameters = AS_INTEGER(STACK_POP(vm))->value;
 
     /* Pop all parameters first */
@@ -98,20 +96,30 @@ static void op_send_helper(VM *vm, MargValue temporary) {
 
     /* Pop object after parameters */
     MargObject *object = AS_OBJECT(STACK_POP(vm));
-    MargMethod *method = dispatch_method_from_delegation_chain(object, message_name);
-    method->bound_object = object;
-
-    /* Close over local variables */
-    table_add_all(&vm->current->local_variables, &method->proc->local_variables);
-
-    /* Inject method parameters */
-    for(int64_t i = 0; i < number_of_parameters; i++) {
-        MargValue parameter_name = marg_tensor_get(AS_TENSOR(method->parameter_names), i);
-        table_set(&method->proc->local_variables, parameter_name, actual_parameters[i]);
+    MargValue method_value = dispatch_method_from_delegation_chain(object, message_name);
+    MargMethod *method = NULL;
+    if(IS_UNDEFINED(method_value)) {
+        STACK_PUSH(vm, QNAN_BOX(object));
+        STACK_PUSH(vm, message_name);
+        STACK_PUSH(vm, MARG_INTEGER(1));
+        op_send_helper(vm, MARG_STRING("dnu:"));
     }
+    else {
+        method = AS_METHOD(method_value);
+        method->bound_object = object;
 
-    method->proc->bound_proc = vm->current;
-    vm->current = method->proc;
+        /* Close over local variables */
+        table_add_all(&vm->current->local_variables, &method->proc->local_variables);
+
+        /* Inject method parameters */
+        for(int64_t i = 0; i < number_of_parameters; i++) {
+            MargValue parameter_name = marg_tensor_get(AS_TENSOR(method->parameter_names), i);
+            table_set(&method->proc->local_variables, parameter_name, actual_parameters[i]);
+        }
+
+        method->proc->bound_proc = vm->current;
+        vm->current = method->proc;
+    }
 }
 
 #define numeric_binary_operation_helper(operation) do { \
@@ -486,6 +494,16 @@ static void evaluator_run(VM *vm) {
 
             case OP_PRIM_5_EQUALS_NUMERIC: {
                 numeric_binary_comparison_helper(==);
+                break;
+            }
+
+            case OP_PRIM_6_DNU: {
+                MargValue message_name = STACK_POP(vm);
+                MargValue object = STACK_POP(vm);
+                STACK_POP(vm);
+                string *dnu_message = string_new("");
+                string_addf(dnu_message, "Object `%s` or any other object in the delegation chain does not understand: `%s`\n", AS_OBJECT(object)->name, AS_STRING(message_name)->chars);
+                STACK_PUSH(vm, MARG_STRING(string_get(dnu_message)));
                 break;
             }
 

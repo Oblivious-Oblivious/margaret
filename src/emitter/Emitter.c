@@ -358,6 +358,8 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
                 emit_byte(OP_PRIM_4_EQUALS);
             keyword_case("primitive_5_equals_numeric?:with:")
                 emit_byte(OP_PRIM_5_EQUALS_NUMERIC);
+            keyword_case("primitive_6_dnu:msg:")
+                emit_byte(OP_PRIM_6_DNU);
             keyword_case("call:")
                 emit_byte(OP_PRIM_PROC_CALL_PARAMS);
             default_keyword_case {

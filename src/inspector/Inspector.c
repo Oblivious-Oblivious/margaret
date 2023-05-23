@@ -391,6 +391,8 @@ static size_t inspect_instruction(vector *res, chunk *chunk, size_t offset) {
             return instruction_single(res, "PRIM_4_EQUALS", chunk, offset);
         case OP_PRIM_5_EQUALS_NUMERIC:
             return instruction_single(res, "PRIM_5_EQUALS_NUMERIC", chunk, offset);
+        case OP_PRIM_6_DNU:
+            return instruction_single(res, "PRIM_6_DNU", chunk, offset);
 
         case OP_PRIM_PROC_CALL:
             return instruction_single(res, "PRIM_PROC_CALL", chunk, offset);
