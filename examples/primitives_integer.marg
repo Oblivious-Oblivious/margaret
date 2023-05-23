@@ -1,5 +1,5 @@
 (
-    $Margaret bind: #puts: object => primitive_6_puts: object,
+    $Margaret bind: #puts: object => primitive_puts: object,
 
     puts: (a = 2 + 3),
     puts: (b = 7 - 5),
@@ -15,7 +15,7 @@
     puts: 43 decr,
     puts: 21 double,
 
-    $IntegerProto bind: #test => 123,
+    $Integer bind: #test => 123,
     puts: 0 test,
     puts: 1 test,
     puts: 2 test,

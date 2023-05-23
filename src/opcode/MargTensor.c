@@ -3,10 +3,10 @@
 #include "../opcode/MargString.h"
 
 MargTensor *marg_tensor_new(VM *vm, size_t initial_alloced) {
-    MargObject *obj = (MargObject*)marg_object_new(vm, sizeof(MargTensor), "$Tensor");
+    MargObject *obj = (MargObject*)marg_object_new(vm, sizeof(MargTensor), "$TensorClone");
     MargTensor *self = (MargTensor*)obj;
 
-    MargValue proto_object = table_get(&vm->global_variables, MARG_STRING("$TensorProto"));
+    MargValue proto_object = table_get(&vm->global_variables, MARG_STRING("$Tensor"));
     obj->parent = AS_OBJECT(proto_object);
 
     table_set(&obj->instance_variables, MARG_STRING("@self"), QNAN_BOX(obj));

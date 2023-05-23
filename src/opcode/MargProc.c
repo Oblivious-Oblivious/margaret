@@ -3,10 +3,10 @@
 #include "../opcode/MargString.h"
 
 MargProc *marg_proc_new(VM *vm, MargMethod *bound_method) {
-    MargObject *obj = marg_object_new(vm, sizeof(MargProc), "$Proc");
+    MargObject *obj = marg_object_new(vm, sizeof(MargProc), "$ProcClone");
     MargProc *self = (MargProc*)obj;
 
-    MargValue proto_object = table_get(&vm->global_variables, MARG_STRING("$ProcProto"));
+    MargValue proto_object = table_get(&vm->global_variables, MARG_STRING("$Proc"));
     obj->parent = AS_OBJECT(proto_object);
 
     table_set(&obj->instance_variables, MARG_STRING("@self"), QNAN_BOX(obj));

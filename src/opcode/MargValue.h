@@ -65,14 +65,14 @@ typedef uint64_t MargValue;
 #define IS_NIL(value)                                (!strcmp(QNAN_UNBOX(value)->name, "$nil"))
 #define IS_FALSE(value)                              (!strcmp(QNAN_UNBOX(value)->name, "$false"))
 #define IS_TRUE(value)                               (!strcmp(QNAN_UNBOX(value)->name, "$true"))
-#define IS_INTEGER(value)                            (!strcmp(QNAN_UNBOX(value)->name, "$Integer"))
-#define IS_FLOAT(value)                              (!strcmp(QNAN_UNBOX(value)->name, "$Float"))
-#define IS_STRING(value)                             (!strcmp(QNAN_UNBOX(value)->name, "$String"))
-#define IS_TENSOR(value)                             (!strcmp(QNAN_UNBOX(value)->name, "$Tensor"))
-#define IS_HASH(value)                               (!strcmp(QNAN_UNBOX(value)->name, "$Hash"))
-#define IS_OBJECT(value)                             (!strcmp(QNAN_UNBOX(value)->name, "$Object"))
-#define IS_METHOD(value)                             (!strcmp(QNAN_UNBOX(value)->name, "$Method"))
-#define IS_PROC(value)                               (!strcmp(QNAN_UNBOX(value)->name, "$Proc"))
+#define IS_INTEGER(value)                            (!strcmp(QNAN_UNBOX(value)->name, "$IntegerClone"))
+#define IS_FLOAT(value)                              (!strcmp(QNAN_UNBOX(value)->name, "$FloatClone"))
+#define IS_STRING(value)                             (!strcmp(QNAN_UNBOX(value)->name, "$StringClone"))
+#define IS_TENSOR(value)                             (!strcmp(QNAN_UNBOX(value)->name, "$TensorClone"))
+#define IS_HASH(value)                               (!strcmp(QNAN_UNBOX(value)->name, "$HashClone"))
+#define IS_OBJECT(value)                             (!strcmp(QNAN_UNBOX(value)->name, "$ObjectClone"))
+#define IS_METHOD(value)                             (!strcmp(QNAN_UNBOX(value)->name, "$MethodClone"))
+#define IS_PROC(value)                               (!strcmp(QNAN_UNBOX(value)->name, "$ProcClone"))
 
 /**
  * @brief Formats a marg value using QNAN boxing

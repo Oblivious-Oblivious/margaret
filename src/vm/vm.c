@@ -45,20 +45,20 @@ static void setup_proto_object_chain(VM *vm) {
     create_new_proto_object(vm, margaret, "$false");
     create_new_proto_object(vm, margaret, "$true");
 
-    MargValue numeric_proto = create_new_proto_object(vm, margaret, "$NumericProto");
-    create_new_proto_object(vm, numeric_proto, "$IntegerProto");
-    create_new_proto_object(vm, numeric_proto, "$FloatProto");
+    MargValue numeric_proto = create_new_proto_object(vm, margaret, "$Numeric");
+    create_new_proto_object(vm, numeric_proto, "$Integer");
+    create_new_proto_object(vm, numeric_proto, "$Float");
 
-    create_new_proto_object(vm, margaret,  "$StringProto");
+    create_new_proto_object(vm, margaret,  "$String");
 
-    MargValue enumerable_proto = create_new_proto_object(vm, margaret, "$EnumerableProto");
-    create_new_proto_object(vm, enumerable_proto, "$TensorProto");
-    // create_new_proto_object(vm, tensor_proto, "$TupleProto");
-    create_new_proto_object(vm, enumerable_proto, "$HashProto");
-    // create_new_proto_object(vm, enumerable_proto, "$BitstringProto");
+    MargValue enumerable_proto = create_new_proto_object(vm, margaret, "$Enumerable");
+    create_new_proto_object(vm, enumerable_proto, "$Tensor");
+    // create_new_proto_object(vm, tensor_proto, "$Tuple");
+    create_new_proto_object(vm, enumerable_proto, "$Hash");
+    // create_new_proto_object(vm, enumerable_proto, "$Bitstring");
 
-    create_new_proto_object(vm, margaret, "$MethodProto");
-    create_new_proto_object(vm, margaret, "$ProcProto");
+    create_new_proto_object(vm, margaret, "$Method");
+    create_new_proto_object(vm, margaret, "$Proc");
 }
 
 /**

@@ -5,12 +5,7 @@
     $Margaret bind: #puts: object => primitive_puts: object,
 
     $Parent = $Margaret clone: "$Parent",
-    $Parent bind: #self => @self,
-    $Parent bind: #super => @super,
-
     $Child = $Parent clone: "$Child",
-    $Child bind: #self => @self,
-    $Child bind: #super => @super,
 
     puts: $Margaret self self self,
     puts: $Parent self self self,

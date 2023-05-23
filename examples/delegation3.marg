@@ -4,7 +4,7 @@
     $Margaret bind: #to_string => primitive_3_to_string: @self,
     $Margaret bind: #puts: object => primitive_puts: object,
 
-    $StringProto bind: #== other => (
+    $String bind: #== other => (
         puts: @self,
         puts: other,
         primitive_4_equals?: @self with: other,

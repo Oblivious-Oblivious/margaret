@@ -19,10 +19,10 @@ static MargValue orphan_marg_string_new(VM *vm, char *chars) {
 
 MargString *marg_string_new(VM *vm, char *chars) {
     size_t size = strlen(chars);
-    MargObject *obj = (MargObject*)marg_object_new(vm, sizeof(MargString) + size + 1, "$String");
+    MargObject *obj = (MargObject*)marg_object_new(vm, sizeof(MargString) + size + 1, "$StringClone");
     MargString *self = (MargString*)obj;
 
-    MargValue proto_object = table_get(&vm->global_variables, orphan_marg_string_new(vm, "$StringProto"));
+    MargValue proto_object = table_get(&vm->global_variables, orphan_marg_string_new(vm, "$String"));
     obj->parent = AS_OBJECT(proto_object);
 
     table_set(&obj->instance_variables, orphan_marg_string_new(vm, "@self"), QNAN_BOX(obj));

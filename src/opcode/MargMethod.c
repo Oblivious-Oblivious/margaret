@@ -4,10 +4,10 @@
 #include "MargTensor.h"
 
 MargMethod *marg_method_new(VM *vm, MargObject *bound_object, char *message_name) {
-    MargObject *obj = marg_object_new(vm, sizeof(MargMethod), "$Method");
+    MargObject *obj = marg_object_new(vm, sizeof(MargMethod), "$MethodClone");
     MargMethod *self = (MargMethod*)obj;
 
-    MargValue proto_object = table_get(&vm->global_variables, MARG_STRING("$MethodProto"));
+    MargValue proto_object = table_get(&vm->global_variables, MARG_STRING("$Method"));
     obj->parent = AS_OBJECT(proto_object);
 
     table_set(&obj->instance_variables, MARG_STRING("@self"), QNAN_BOX(obj));

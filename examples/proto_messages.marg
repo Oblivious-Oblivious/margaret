@@ -3,17 +3,15 @@
     $Margaret bind: #super => @super,
     $Margaret bind: #messages => primitive_1_messages: @self,
     $Margaret bind: #object_id: object => primitive_2_object_id: object,
-    $Margaret bind: #to_string: object => primitive_3_to_string: object,
-    $Margaret bind: #equals?: obj => primitive_4_equals?: @self with: obj,
-
-    $Margaret bind: #to_string => to_string: @self,
-    $Margaret bind: #== other => @self equals?: other,
+    $Margaret bind: #to_string => primitive_3_to_string: @self,
+    $Margaret bind: #== other => primitive_4_equals?: @self with: other,
     $Margaret bind: #puts: object => primitive_puts: object,
+    $Numeric bind: #== other => primitive_5_equals_numeric?: @self with: other,
 
     puts: $Margaret messages,
 
-    puts: (object_id: $IntegerProto),
-    puts: (object_id: $IntegerProto),
+    puts: (object_id: $Integer),
+    puts: (object_id: $Integer),
     puts: (object_id: 1),
     puts: (object_id: 1),
     puts: "Singleton and interned values",
@@ -54,8 +52,6 @@
     puts: (primitive_4_equals?: $true with: $true),
     puts: (primitive_4_equals?: "str" with: "str"),
 
-    $IntegerProto bind: #== other => primitive_5_equals_numeric?: @self with: other,
-    $FloatProto bind: #== other => primitive_5_equals_numeric?: @self with: other,
     puts: "Integer equality:",
     puts: 1 == 1,
     puts: 1 == 2,
