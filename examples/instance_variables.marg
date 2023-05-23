@@ -5,8 +5,9 @@
     $Margaret bind: #object_id: object => primitive_2_object_id: object,
     $Margaret bind: #to_string => primitive_3_to_string: @self,
     $Margaret bind: #== other => primitive_4_equals?: @self with: other,
-    $Margaret bind: #puts: object => primitive_puts: object,
     $Numeric bind: #== other => primitive_5_equals_numeric?: @self with: other,
+    $Margaret bind: #dnu: message_name => primitive_6_dnu: @self msg: message_name,
+    $Margaret bind: #puts: object => primitive_puts: object,
 
     $Margaret bind: #a => @a,
     $Numeric bind: #a => @a,
