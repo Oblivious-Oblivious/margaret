@@ -1,8 +1,12 @@
 (
     $Margaret bind: #self => @self,
     $Margaret bind: #super => @super,
+    $Margaret bind: #messages => primitive_1_messages: @self,
+    $Margaret bind: #object_id: object => primitive_2_object_id: object,
     $Margaret bind: #to_string => primitive_3_to_string: @self,
+    $Margaret bind: #== other => primitive_4_equals?: @self with: other,
     $Margaret bind: #puts: object => primitive_puts: object,
+    $Numeric bind: #== other => primitive_5_equals_numeric?: @self with: other,
 
     $Parent = $Margaret clone: "$Parent",
     $Child = $Parent clone: "$Child",
