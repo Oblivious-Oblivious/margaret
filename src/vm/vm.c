@@ -67,8 +67,8 @@ static void setup_proto_object_chain(VM *vm) {
  */
 static void define_main_method(VM *vm) {
     MargObject *margaret = AS_OBJECT(table_get(&vm->global_variables, MARG_STRING("$Margaret")));
-    MargMethod *method = AS_METHOD(MARG_METHOD(margaret, "main:"));
-    table_set(&margaret->messages, MARG_STRING("main:"), QNAN_BOX(method));
+    MargMethod *method = AS_METHOD(MARG_METHOD(margaret, ""));
+    table_set(&margaret->messages, MARG_STRING(""), QNAN_BOX(method));
     vm->current = method->proc;
 }
 

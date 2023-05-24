@@ -75,7 +75,7 @@ static MargValue retrieve_all_messages_in_delegation_chain(VM *vm, MargValue mes
     table *messages = &object->messages;
     for(size_t i = 0; i < messages->capacity; i++) {
         table_entry *entry = &messages->entries[i];
-        if(!IS_NOT_INTERNED(entry->key))
+        if(!IS_NOT_INTERNED(entry->key) && !strncmp(AS_STRING(entry->key)->chars, "", 1))
             marg_tensor_add(AS_TENSOR(messages_tensor), entry->key);
     }
 
