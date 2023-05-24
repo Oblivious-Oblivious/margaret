@@ -9,28 +9,19 @@
     Sets up @self and @super instances and initially has no methods.
     Proto chain is always global.
  * @param vm -> Current vm
- * @param parent -> Parent object to bind to
+ * @param parent_name -> Name of parent object to bind to
  * @param name -> Name of the new proto
  * @return MargValue -> New object value
  */
-MargValue create_new_proto_object(VM *vm, MargValue parent, char *name) {
+MargValue create_new_proto_object(VM *vm, char *parent_name, char *name) {
     MargValue proto_object = MARG_OBJECT(name);
-    AS_OBJECT(proto_object)->parent = AS_OBJECT(parent);
-    table_set(&AS_OBJECT(proto_object)->instance_variables, MARG_STRING("@self"), proto_object);
-    table_set(&AS_OBJECT(proto_object)->instance_variables, MARG_STRING("@super"), parent);
     table_set(&vm->global_variables, MARG_STRING(name), proto_object);
+    table_set(&AS_OBJECT(proto_object)->instance_variables, MARG_STRING("@self"), proto_object);
+    MargValue parent_object = table_get(&vm->global_variables, MARG_STRING(parent_name));
+    table_set(&AS_OBJECT(proto_object)->instance_variables, MARG_STRING("@super"), parent_object);
+    AS_OBJECT(proto_object)->parent = AS_OBJECT(parent_object);
 
     return proto_object;
-}
-
-MargValue margaret_setup(VM *vm) {
-    MargValue margaret = MARG_OBJECT("$Margaret");
-    AS_OBJECT(margaret)->parent = AS_OBJECT(margaret);
-    table_set(&AS_OBJECT(margaret)->instance_variables, MARG_STRING("@super"), margaret);
-    table_set(&AS_OBJECT(margaret)->instance_variables, MARG_STRING("@self"), margaret);
-    table_set(&vm->global_variables, MARG_STRING("$Margaret"), margaret);
-
-    return margaret;
 }
 
 /**
@@ -39,26 +30,26 @@ MargValue margaret_setup(VM *vm) {
  * @param vm -> Current vm
  */
 static void setup_proto_object_chain(VM *vm) {
-    MargValue margaret = margaret_setup(vm);
+    create_new_proto_object(vm, "$Margaret", "$Margaret");
 
-    create_new_proto_object(vm, margaret, "$nil");
-    create_new_proto_object(vm, margaret, "$false");
-    create_new_proto_object(vm, margaret, "$true");
+    create_new_proto_object(vm, "$Margaret", "$nil");
+    create_new_proto_object(vm, "$Margaret", "$false");
+    create_new_proto_object(vm, "$Margaret", "$true");
 
-    MargValue numeric_proto = create_new_proto_object(vm, margaret, "$Numeric");
-    create_new_proto_object(vm, numeric_proto, "$Integer");
-    create_new_proto_object(vm, numeric_proto, "$Float");
+    create_new_proto_object(vm, "$Margaret", "$Numeric");
+    create_new_proto_object(vm, "$Numeric", "$Integer");
+    create_new_proto_object(vm, "$Numeric", "$Float");
 
-    create_new_proto_object(vm, margaret,  "$String");
+    create_new_proto_object(vm, "$Margaret",  "$String");
 
-    MargValue enumerable_proto = create_new_proto_object(vm, margaret, "$Enumerable");
-    create_new_proto_object(vm, enumerable_proto, "$Tensor");
-    // create_new_proto_object(vm, tensor_proto, "$Tuple");
-    create_new_proto_object(vm, enumerable_proto, "$Hash");
-    // create_new_proto_object(vm, enumerable_proto, "$Bitstring");
+    create_new_proto_object(vm, "$Margaret", "$Enumerable");
+    create_new_proto_object(vm, "$Enumerable", "$Tensor");
+    // create_new_proto_object(vm, "$Tensor", "$Tuple");
+    create_new_proto_object(vm, "$Enumerable", "$Hash");
+    // create_new_proto_object(vm, "$Enumerable", "$Bitstring");
 
-    create_new_proto_object(vm, margaret, "$Method");
-    create_new_proto_object(vm, margaret, "$Proc");
+    create_new_proto_object(vm, "$Margaret", "$Method");
+    create_new_proto_object(vm, "$Margaret", "$Proc");
 }
 
 /**
