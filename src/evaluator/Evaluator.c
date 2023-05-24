@@ -17,6 +17,8 @@
 #include "../opcode/MargMethod.h"
 #include "../opcode/MargProc.h"
 
+#include "../vm/on_demand_compilation_pipeline.h"
+
 /**
  * @brief Typechecks object that came from primitive.  Primitives
     neither send nor execute any bytecode so we have to ensure
@@ -450,6 +452,25 @@ static void evaluator_run(VM *vm) {
                     printf("%s\n", AS_STRING(STACK_POP(vm))->chars);
                 }
                 STACK_PUSH(vm, object);
+                break;
+            }
+
+            case OP_PRIM_INCLUDE: {
+                chunk *previous_bytecode = vm->current->bytecode;
+                uint8_t *previous_position = vm->current->ip;
+
+                MargValue filename = STACK_POP(vm);
+                STACK_POP(vm);
+                string *chars = LOAD(AS_STRING(filename)->chars);
+                TokenTable *tokens = READ(chars);
+                vector *formal_bytecode = FORMALIZE(tokens);
+                vm->current->bytecode = chunk_new();
+                vm = EMIT(vm, formal_bytecode);
+                vm = OPTIMIZE(vm);
+                EVAL(vm);
+
+                vm->current->bytecode = previous_bytecode;
+                vm->current->ip = previous_position;
                 break;
             }
 

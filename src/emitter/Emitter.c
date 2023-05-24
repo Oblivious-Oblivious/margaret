@@ -345,6 +345,8 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
                 emit_byte(OP_BIND_METHOD);
             keyword_case("primitive_puts:")
                 emit_byte(OP_PRIM_PUTS);
+            keyword_case("include:")
+                emit_byte(OP_PRIM_INCLUDE);
             keyword_case("primitive_1_messages:")
                 emit_byte(OP_PRIM_1_MESSAGES);
             keyword_case("primitive_2_object_id:")

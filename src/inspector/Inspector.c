@@ -381,6 +381,8 @@ static size_t inspect_instruction(vector *res, chunk *chunk, size_t offset) {
 
         case OP_PRIM_PUTS:
             return instruction_single(res, "PRIM_PUTS", chunk, offset);
+        case OP_PRIM_INCLUDE:
+            return instruction_single(res, "PRIM_INCLUDE", chunk, offset);
         case OP_PRIM_1_MESSAGES:
             return instruction_single(res, "PRIM_1_MESSAGES", chunk, offset);
         case OP_PRIM_2_OBJECT_ID:
