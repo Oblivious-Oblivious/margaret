@@ -4,42 +4,11 @@
 
 #include "src/base/string.h"
 #include "src/base/vector.h"
-#include "src/emitter/Emitter.h"
-#include "src/evaluator/Evaluator.h"
-#include "src/inspector/Inspector.h"
-#include "src/lexer/Lexer.h"
-#include "src/loader/file_loader.h"
-#include "src/optimizer/Optimizer.h"
-#include "src/parser/Parser.h"
 #include "src/scanner/Scanner.h"
-#include "src/vm/vm.h"
-
-static string *LOAD(char *filename) {
-    return file_loader_load(file_loader_new(), filename);
-}
+#include "src/vm/on_demand_compilation_pipeline.h"
 
 static string *SCAN(char *prompt) {
     return scanner_scan(prompt);
-}
-
-static TokenTable *READ(string *chars) {
-    return lexer_make_tokens(lexer_new("repl", chars));
-}
-
-static vector *FORMALIZE(TokenTable *tokens) {
-    return parser_analyze_syntax(parser_new(tokens));
-}
-
-static VM *EMIT(VM *vm, vector *formal_bytecode) {
-    return emitter_emit(vm, formal_bytecode);
-}
-
-static VM *OPTIMIZE(VM *vm) {
-    return optimizer_optimize(vm);
-}
-
-static MargValue EVAL(VM *vm) {
-    return evaluator_evaluate(vm);
 }
 
 static void PRINT(MargValue evaluated) {
