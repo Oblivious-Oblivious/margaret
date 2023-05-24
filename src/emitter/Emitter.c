@@ -96,6 +96,7 @@ static void __add_temporary_function(VM *vm, uint32_t temporary_index, uint16_t 
 }
 
 VM *emitter_emit(VM *vm, vector *formal_bytecode) {
+    vm->current->ip = vm->current->bytecode->items;
 
     size_t bytecode_size = vector_size(formal_bytecode);
     for(size_t ip = 0; ip < bytecode_size; ip++) {
