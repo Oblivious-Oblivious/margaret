@@ -502,7 +502,7 @@ static void evaluator_run(VM *vm) {
                 MargValue object = STACK_POP(vm);
                 STACK_POP(vm);
                 string *dnu_message = string_new("");
-                string_addf(dnu_message, "Object `%s` or any other object in the delegation chain does not understand: `%s`\n", AS_OBJECT(object)->name, AS_STRING(message_name)->chars);
+                string_addf(dnu_message, "Object `%s` or any other object in the delegation chain does not understand: `%s`", AS_OBJECT(object)->name, AS_STRING(message_name)->chars);
                 STACK_PUSH(vm, MARG_STRING(string_get(dnu_message)));
                 break;
             }
