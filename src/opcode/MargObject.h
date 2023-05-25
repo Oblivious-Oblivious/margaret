@@ -35,15 +35,6 @@ struct MargObject {
 };
 
 /**
- * @brief Creates an object without dependencies to MargString
- * @param bound_vm 
- * @param size 
- * @param name 
- * @return MargObject* 
- */
-MargObject *orphan_marg_object_new(VM *bound_vm, size_t size, char *name);
-
-/**
  * @brief Creates a new object instance
  * @param size -> Size of the pointer
  * @param name -> Name of the object
