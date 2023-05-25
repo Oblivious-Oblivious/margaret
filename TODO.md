@@ -24,6 +24,7 @@
     🟥 Optimize hash function for better string interning.
     🟥 Add a character literal.
     🟥 Add big integers and big floats.
+    🟥 Refactor `include:`, `call` and `call:` into primitive messages
     🟥 Implement precedent rules on multibound method dispatch (not just order of definition)
     🟥 Add visual literals of trees, graphs and matrices (2-dimentional data representation).
     🟥 Use comments for docs or TODO graphs.
