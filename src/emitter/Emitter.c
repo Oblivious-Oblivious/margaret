@@ -294,7 +294,7 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
             string *unary_name = vector_get(formal_bytecode, ++ip);
 
             switch_unary_case("call")
-                emit_byte(OP_PRIM_9_CALL);
+                emit_byte(OP_PROC_CALL);
             default_unary_case {
                 emit_byte(OP_PUT_0);
                 emit_variable_length_op(OP_SEND);
@@ -311,10 +311,12 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
             string *keyword_name = vector_get(formal_bytecode, ++ip);
             string *number_of_parameters = vector_get(formal_bytecode, ++ip);
 
-            switch_keyword_case("primitive_puts:")
-                emit_byte(OP_PRIM_PUTS);
+            switch_keyword_case("puts:")
+                emit_byte(OP_PUTS);
             keyword_case("include:")
-                emit_byte(OP_PRIM_INCLUDE);
+                emit_byte(OP_INCLUDE);
+            keyword_case("call:")
+                emit_byte(OP_PROC_CALL_PARAMS);
             keyword_case("primitive_1_messages:")
                 emit_byte(OP_PRIM_1_MESSAGES);
             keyword_case("primitive_2_object_id:")
@@ -331,8 +333,6 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
                 emit_byte(OP_PRIM_7_CLONE_OBJECT);
             keyword_case("primitive_8_bind_method:to:")
                 emit_byte(OP_PRIM_8_BIND_METHOD);
-            keyword_case("call:")
-                emit_byte(OP_PRIM_10_CALL_PARAMS);
             keyword_case("primitive_11_add:with:")
                 emit_byte(OP_PRIM_11_ADD);
             keyword_case("primitive_12_sub:with:")

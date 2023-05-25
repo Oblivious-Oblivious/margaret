@@ -415,7 +415,7 @@ static void evaluator_run(VM *vm) {
                 break;
             }
 
-            case OP_PRIM_PUTS: {
+            case OP_PUTS: {
                 MargValue object = STACK_POP(vm);
                 STACK_POP(vm);
                 if(!IS_UNDEFINED(object) && IS_STRING(object)) {
@@ -439,7 +439,7 @@ static void evaluator_run(VM *vm) {
                 break;
             }
 
-            case OP_PRIM_INCLUDE: {
+            case OP_INCLUDE: {
                 chunk *previous_bytecode = vm->current->bytecode;
                 uint8_t *previous_position = vm->current->ip;
 
@@ -456,6 +456,37 @@ static void evaluator_run(VM *vm) {
                 vm->current->bytecode = previous_bytecode;
                 vm->current->ip = previous_position;
                 vm->sp++;
+                break;
+            }
+
+            case OP_PROC_CALL: {
+                MargValue proc = STACK_POP(vm);
+                // STACK_POP(vm);
+                if(IS_PROC(proc)) {
+                    table_add_all(&vm->current->local_variables, &AS_PROC(proc)->local_variables);
+                    vm->current = AS_PROC(proc);
+                }
+                break;
+            }
+
+            case OP_PROC_CALL_PARAMS: {
+                MargHash *parameters = AS_HASH(STACK_POP(vm));
+                MargValue proc = STACK_POP(vm);
+                // STACK_POP(vm);
+
+                if(IS_PROC(proc)) {
+                    /* Close over local variables*/
+                    table_add_all(&vm->current->local_variables, &AS_PROC(proc)->local_variables);
+
+                    /* Inject proc parameters */
+                    for(size_t i = 0; i < parameters->alloced; i++) {
+                        MargHashEntry *entry = &parameters->entries[i];
+                        if(!IS_NOT_INTERNED(entry->key))
+                            table_set(&AS_PROC(proc)->local_variables, entry->key, entry->value);
+                    }
+
+                    vm->current = AS_PROC(proc);
+                }
                 break;
             }
 
@@ -532,37 +563,6 @@ static void evaluator_run(VM *vm) {
                 table_set(&AS_OBJECT(object)->messages, AS_METHOD(method)->message_name, method);
                 AS_METHOD(method)->bound_object = AS_OBJECT(object);
                 STACK_PUSH(vm, method);
-                break;
-            }
-
-            case OP_PRIM_9_CALL: {
-                MargValue proc = STACK_POP(vm);
-                // STACK_POP(vm);
-                if(IS_PROC(proc)) {
-                    table_add_all(&vm->current->local_variables, &AS_PROC(proc)->local_variables);
-                    vm->current = AS_PROC(proc);
-                }
-                break;
-            }
-
-            case OP_PRIM_10_CALL_PARAMS: {
-                MargHash *parameters = AS_HASH(STACK_POP(vm));
-                MargValue proc = STACK_POP(vm);
-                // STACK_POP(vm);
-
-                if(IS_PROC(proc)) {
-                    /* Close over local variables*/
-                    table_add_all(&vm->current->local_variables, &AS_PROC(proc)->local_variables);
-
-                    /* Inject proc parameters */
-                    for(size_t i = 0; i < parameters->alloced; i++) {
-                        MargHashEntry *entry = &parameters->entries[i];
-                        if(!IS_NOT_INTERNED(entry->key))
-                            table_set(&AS_PROC(proc)->local_variables, entry->key, entry->value);
-                    }
-
-                    vm->current = AS_PROC(proc);
-                }
                 break;
             }
 

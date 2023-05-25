@@ -65,9 +65,12 @@
 #define OP_SEND_DWORD             0x31
 #define OP_EXIT_ACTIVATION_RECORD 0x34
 
+#define OP_PUTS                   0xff
+#define OP_INCLUDE                0xfe
+#define OP_PROC_CALL              0x36
+#define OP_PROC_CALL_PARAMS       0x37
+
 // primitives
-#define OP_PRIM_PUTS              0xff
-#define OP_PRIM_INCLUDE           0xfe
 #define OP_PRIM_1_MESSAGES        0xfd
 #define OP_PRIM_2_OBJECT_ID       0xfc
 #define OP_PRIM_3_TO_STRING       0xfb
@@ -76,8 +79,6 @@
 #define OP_PRIM_6_DNU             0xf8
 #define OP_PRIM_7_CLONE_OBJECT    0x32
 #define OP_PRIM_8_BIND_METHOD     0x33
-#define OP_PRIM_9_CALL            0x36
-#define OP_PRIM_10_CALL_PARAMS    0x37
 #define OP_PRIM_11_ADD            0x38
 #define OP_PRIM_12_SUB            0x39
 #define OP_PRIM_13_MUL            0x3a

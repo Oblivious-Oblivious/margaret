@@ -375,10 +375,15 @@ static size_t inspect_instruction(vector *res, chunk *chunk, size_t offset) {
         case OP_EXIT_ACTIVATION_RECORD:
             return instruction_single(res, "EXIT_ACTIVATION_RECORD", chunk, offset);
 
-        case OP_PRIM_PUTS:
-            return instruction_single(res, "PRIM_PUTS", chunk, offset);
-        case OP_PRIM_INCLUDE:
-            return instruction_single(res, "PRIM_INCLUDE", chunk, offset);
+        case OP_PUTS:
+            return instruction_single(res, "PUTS", chunk, offset);
+        case OP_INCLUDE:
+            return instruction_single(res, "INCLUDE", chunk, offset);
+        case OP_PROC_CALL:
+            return instruction_single(res, "PROC_CALL", chunk, offset);
+        case OP_PROC_CALL_PARAMS:
+            return instruction_single(res, "PROC_CALL_PARAMS", chunk, offset);
+
         case OP_PRIM_1_MESSAGES:
             return instruction_single(res, "PRIM_1_MESSAGES", chunk, offset);
         case OP_PRIM_2_OBJECT_ID:
@@ -395,10 +400,6 @@ static size_t inspect_instruction(vector *res, chunk *chunk, size_t offset) {
             return instruction_single(res, "PRIM_7_CLONE_OBJECT", chunk, offset);
         case OP_PRIM_8_BIND_METHOD:
             return instruction_single(res, "PRIM_8_BIND_METHOD", chunk, offset);
-        case OP_PRIM_9_CALL:
-            return instruction_single(res, "PRIM_9_CALL", chunk, offset);
-        case OP_PRIM_10_CALL_PARAMS:
-            return instruction_single(res, "PRIM_10_CALL_PARAMS", chunk, offset);
         case OP_PRIM_11_ADD:
             return instruction_single(res, "PRIM_11_ADD", chunk, offset);
         case OP_PRIM_12_SUB:
@@ -464,7 +465,7 @@ void inspect_and_print_method(VM *vm) {
 }
 
 void inspect_and_print_main(VM *vm) {
-    printf("\n/-------------- Disassembly: < $Margaret#main: > ------------\\\n");
+    printf("\n/-------------- Disassembly: <main> ------------\\\n");
     inspect_and_print_vm_bytecode(vm);
     printf("\\-----------------------------------------------/\n\n");
 }

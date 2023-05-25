@@ -7,7 +7,6 @@
     $Margaret bind: #messages => primitive_1_messages: @self,
     $Margaret bind: #object_id: object => primitive_2_object_id: object,
     $Margaret bind: #to_string => primitive_3_to_string: @self,
-    $Margaret bind: #puts: object => primitive_puts: object,
     $Margaret bind: #== other => primitive_4_equals?: @self with: other,
     $Margaret bind: #dnu: message_name => puts: (primitive_6_dnu: @self msg: message_name),
     $Margaret bind: #clone: name => primitive_7_clone_object: @self with_name: name,
