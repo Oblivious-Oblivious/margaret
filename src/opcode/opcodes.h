@@ -63,11 +63,9 @@
 #define OP_SEND                   0x2f
 #define OP_SEND_WORD              0x30
 #define OP_SEND_DWORD             0x31
-#define OP_CLONE_OBJECT           0x32
-#define OP_BIND_METHOD            0x33
 #define OP_EXIT_ACTIVATION_RECORD 0x34
 
-// $Margaret
+// primitives
 #define OP_PRIM_PUTS              0xff
 #define OP_PRIM_INCLUDE           0xfe
 #define OP_PRIM_1_MESSAGES        0xfd
@@ -76,26 +74,21 @@
 #define OP_PRIM_4_EQUALS          0xfa
 #define OP_PRIM_5_EQUALS_NUMERIC  0xf9
 #define OP_PRIM_6_DNU             0xf8
-
-// $Proc
-#define OP_PRIM_PROC_CALL         0x36
-#define OP_PRIM_PROC_CALL_PARAMS  0x37
-
-// $NumericProto
-#define OP_PRIM_NUMERIC_ADD       0x38
-#define OP_PRIM_NUMERIC_SUB       0x39
-#define OP_PRIM_NUMERIC_MUL       0x3a
-#define OP_PRIM_NUMERIC_DIV       0x3b
-#define OP_PRIM_NUMERIC_ABS       0x3c
-#define OP_PRIM_NUMERIC_EQUALS    0x3d
-#define OP_PRIM_NUMERIC_LT        0x3e
-#define OP_PRIM_NUMERIC_GT        0x3f
-#define OP_PRIM_NUMERIC_LTE       0x40
-#define OP_PRIM_NUMERIC_GTE       0x41
-
-// $Integer
-#define OP_PRIM_INTEGER_INCR      0x42
-#define OP_PRIM_INTEGER_DECR      0x43
-#define OP_PRIM_INTEGER_DOUBLE    0x44
+#define OP_PRIM_7_CLONE_OBJECT    0x32
+#define OP_PRIM_8_BIND_METHOD     0x33
+#define OP_PRIM_9_CALL            0x36
+#define OP_PRIM_10_CALL_PARAMS    0x37
+#define OP_PRIM_11_ADD            0x38
+#define OP_PRIM_12_SUB            0x39
+#define OP_PRIM_13_MUL            0x3a
+#define OP_PRIM_14_DIV            0x3b
+#define OP_PRIM_15_ABS            0x3c
+#define OP_PRIM_16_LT             0x3e
+#define OP_PRIM_17_GT             0x3f
+#define OP_PRIM_18_LTE            0x40
+#define OP_PRIM_19_GTE            0x41
+#define OP_PRIM_20_INCR           0x42
+#define OP_PRIM_21_DECR           0x43
+#define OP_PRIM_22_DOUBLE         0x44
 
 #endif

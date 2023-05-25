@@ -127,6 +127,7 @@ static void op_send_helper(VM *vm, MargValue message_name) {
 #define numeric_binary_operation_helper(operation) do { \
     MargValue op2 = STACK_POP(vm); \
     MargValue op1 = STACK_POP(vm); \
+    STACK_POP(vm); \
     if(type_of_object_is(op1, "$Integer") && type_of_object_is(op2, "$Integer")) \
         STACK_PUSH(vm, MARG_INTEGER(AS_INTEGER(op1)->value operation AS_INTEGER(op2)->value)); \
     else if(type_of_object_is(op1, "$Integer") && type_of_object_is(op2, "$Float")) \
@@ -142,6 +143,7 @@ static void op_send_helper(VM *vm, MargValue message_name) {
 #define numeric_binary_comparison_helper(operation) do { \
     MargValue op2 = STACK_POP(vm); \
     MargValue op1 = STACK_POP(vm); \
+    STACK_POP(vm); \
     if(type_of_object_is(op1, "$Integer") && type_of_object_is(op2, "$Integer")) { \
         if(AS_INTEGER(op1)->value operation AS_INTEGER(op2)->value) \
             STACK_PUSH(vm, MARG_TRUE); \
@@ -400,24 +402,6 @@ static void evaluator_run(VM *vm) {
                 op_send_helper(vm, READ_TEMPORARY_DWORD());
                 break;
             }
-            case OP_CLONE_OBJECT: {
-                MargValue new_object_name = STACK_POP(vm);
-                MargValue parent_object = STACK_POP(vm);
-                MargValue child_object = MARG_OBJECT(AS_STRING(new_object_name)->chars);
-                AS_OBJECT(child_object)->parent = AS_OBJECT(parent_object);
-                table_set(&AS_OBJECT(child_object)->instance_variables, MARG_STRING("@self"), child_object);
-                table_set(&AS_OBJECT(child_object)->instance_variables, MARG_STRING("@super"), parent_object);
-                STACK_PUSH(vm, child_object);
-                break;
-            }
-            case OP_BIND_METHOD: {
-                MargValue method = STACK_POP(vm);
-                MargValue object = STACK_POP(vm);
-                table_set(&AS_OBJECT(object)->messages, AS_METHOD(method)->message_name, method);
-                AS_METHOD(method)->bound_object = AS_OBJECT(object);
-                STACK_PUSH(vm, method);
-                break;
-            }
             case OP_EXIT_ACTIVATION_RECORD: {
                 /* Reset proc's IP */
                 vm->current->ip = vm->current->bytecode->items;
@@ -529,17 +513,42 @@ static void evaluator_run(VM *vm) {
                 break;
             }
 
-            case OP_PRIM_PROC_CALL: {
+            case OP_PRIM_7_CLONE_OBJECT: {
+                MargValue new_object_name = STACK_POP(vm);
+                MargValue parent_object = STACK_POP(vm);
+                STACK_POP(vm);
+                MargValue child_object = MARG_OBJECT(AS_STRING(new_object_name)->chars);
+                AS_OBJECT(child_object)->parent = AS_OBJECT(parent_object);
+                table_set(&AS_OBJECT(child_object)->instance_variables, MARG_STRING("@self"), child_object);
+                table_set(&AS_OBJECT(child_object)->instance_variables, MARG_STRING("@super"), parent_object);
+                STACK_PUSH(vm, child_object);
+                break;
+            }
+
+            case OP_PRIM_8_BIND_METHOD: {
+                MargValue object = STACK_POP(vm);
+                MargValue method = STACK_POP(vm);
+                STACK_POP(vm);
+                table_set(&AS_OBJECT(object)->messages, AS_METHOD(method)->message_name, method);
+                AS_METHOD(method)->bound_object = AS_OBJECT(object);
+                STACK_PUSH(vm, method);
+                break;
+            }
+
+            case OP_PRIM_9_CALL: {
                 MargValue proc = STACK_POP(vm);
+                // STACK_POP(vm);
                 if(IS_PROC(proc)) {
                     table_add_all(&vm->current->local_variables, &AS_PROC(proc)->local_variables);
                     vm->current = AS_PROC(proc);
                 }
                 break;
             }
-            case OP_PRIM_PROC_CALL_PARAMS: {
+
+            case OP_PRIM_10_CALL_PARAMS: {
                 MargHash *parameters = AS_HASH(STACK_POP(vm));
                 MargValue proc = STACK_POP(vm);
+                // STACK_POP(vm);
 
                 if(IS_PROC(proc)) {
                     /* Close over local variables*/
@@ -557,29 +566,29 @@ static void evaluator_run(VM *vm) {
                 break;
             }
 
-            // prim_1: op1, add: op2 => OP_PRIM_NUMERIC_ADD
-            // prim_2: op1, sub: op2 => OP_PRIM_NUMERIC_SUB
-            // $NumericProto bind: # + other => nil
-            // $IntegerProto bind: # + other => prim_1: @self add: other  -> (SPECIALIZES FOR INTS)
-            // $FloatProto bind: # + other => prim_1: @self add: other    -> (SPECIALIZES FOR FLOATS)
-            case OP_PRIM_NUMERIC_ADD: {
+            case OP_PRIM_11_ADD: {
                 numeric_binary_operation_helper(+);
                 break;
             }
-            case OP_PRIM_NUMERIC_SUB: {
+
+            case OP_PRIM_12_SUB: {
                 numeric_binary_operation_helper(-);
                 break;
             }
-            case OP_PRIM_NUMERIC_MUL: {
+
+            case OP_PRIM_13_MUL: {
                 numeric_binary_operation_helper(*);
                 break;
             }
-            case OP_PRIM_NUMERIC_DIV: {
+
+            case OP_PRIM_14_DIV: {
                 numeric_binary_operation_helper(/);
                 break;
             }
-            case OP_PRIM_NUMERIC_ABS: {
+
+            case OP_PRIM_15_ABS: {
                 MargValue number = STACK_POP(vm);
+                STACK_POP(vm);
                 if(type_of_object_is(number, "$Integer"))
                     STACK_PUSH(vm, MARG_INTEGER((AS_INTEGER(number)->value < 0) ? -AS_INTEGER(number)->value : AS_INTEGER(number)->value));
                 else if(type_of_object_is(number, "$Float"))
@@ -588,45 +597,50 @@ static void evaluator_run(VM *vm) {
                     STACK_PUSH(vm, MARG_NIL);
                 break;
             }
-            case OP_PRIM_NUMERIC_EQUALS: {
-                numeric_binary_comparison_helper(==);
-                break;
-            }
-            case OP_PRIM_NUMERIC_LT: {
+
+            case OP_PRIM_16_LT: {
                 numeric_binary_comparison_helper(<);
                 break;
             }
-            case OP_PRIM_NUMERIC_GT: {
+
+            case OP_PRIM_17_GT: {
                 numeric_binary_comparison_helper(>);
                 break;
             }
-            case OP_PRIM_NUMERIC_LTE: {
+
+            case OP_PRIM_18_LTE: {
                 numeric_binary_comparison_helper(<=);
                 break;
             }
-            case OP_PRIM_NUMERIC_GTE: {
+
+            case OP_PRIM_19_GTE: {
                 numeric_binary_comparison_helper(>=);
                 break;
             }
 
-            case OP_PRIM_INTEGER_INCR: {
+            case OP_PRIM_20_INCR: {
                 MargValue number = STACK_POP(vm);
+                STACK_POP(vm);
                 if(type_of_object_is(number, "$Integer"))
                     STACK_PUSH(vm, MARG_INTEGER(AS_INTEGER(number)->value + 1));
                 else
                     STACK_PUSH(vm, MARG_NIL);
                 break;
             }
-            case OP_PRIM_INTEGER_DECR: {
+
+            case OP_PRIM_21_DECR: {
                 MargValue number = STACK_POP(vm);
+                STACK_POP(vm);
                 if(type_of_object_is(number, "$Integer"))
                     STACK_PUSH(vm, MARG_INTEGER(AS_INTEGER(number)->value - 1));
                 else
                     STACK_PUSH(vm, MARG_NIL);
                 break;
             }
-            case OP_PRIM_INTEGER_DOUBLE: {
+
+            case OP_PRIM_22_DOUBLE: {
                 MargValue number = STACK_POP(vm);
+                STACK_POP(vm);
                 if(type_of_object_is(number, "$Integer"))
                     STACK_PUSH(vm, MARG_INTEGER(AS_INTEGER(number)->value * 2));
                 else

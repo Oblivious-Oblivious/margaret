@@ -372,10 +372,6 @@ static size_t inspect_instruction(vector *res, chunk *chunk, size_t offset) {
             return instruction_send_word(res, "SEND_WORD", chunk, offset);
         case OP_SEND_DWORD:
             return instruction_send_dword(res, "SEND_DWORD", chunk, offset);
-        case OP_CLONE_OBJECT:
-            return instruction_single(res, "CLONE_OBJECT", chunk, offset);
-        case OP_BIND_METHOD:
-            return instruction_single(res, "BIND_METHOD", chunk, offset);
         case OP_EXIT_ACTIVATION_RECORD:
             return instruction_single(res, "EXIT_ACTIVATION_RECORD", chunk, offset);
 
@@ -395,38 +391,38 @@ static size_t inspect_instruction(vector *res, chunk *chunk, size_t offset) {
             return instruction_single(res, "PRIM_5_EQUALS_NUMERIC", chunk, offset);
         case OP_PRIM_6_DNU:
             return instruction_single(res, "PRIM_6_DNU", chunk, offset);
-
-        case OP_PRIM_PROC_CALL:
-            return instruction_single(res, "PRIM_PROC_CALL", chunk, offset);
-        case OP_PRIM_PROC_CALL_PARAMS:
-            return instruction_single(res, "PRIM_PROC_CALL_PARAMS", chunk, offset);
-
-        case OP_PRIM_NUMERIC_ADD:
-            return instruction_single(res, "PRIM_NUMERIC_ADD", chunk, offset);
-        case OP_PRIM_NUMERIC_SUB:
-            return instruction_single(res, "PRIM_NUMERIC_SUB", chunk, offset);
-        case OP_PRIM_NUMERIC_MUL:
-            return instruction_single(res, "PRIM_NUMERIC_MUL", chunk, offset);
-        case OP_PRIM_NUMERIC_DIV:
-            return instruction_single(res, "PRIM_NUMERIC_DIV", chunk, offset);
-        case OP_PRIM_NUMERIC_ABS:
-            return instruction_single(res, "PRIM_NUMERIC_ABS", chunk, offset);
-        case OP_PRIM_NUMERIC_EQUALS:
-            return instruction_single(res, "PRIM_NUMERIC_EQUALS", chunk, offset);
-        case OP_PRIM_NUMERIC_LT:
-            return instruction_single(res, "PRIM_NUMERIC_LT", chunk, offset);
-        case OP_PRIM_NUMERIC_GT:
-            return instruction_single(res, "PRIM_NUMERIC_GT", chunk, offset);
-        case OP_PRIM_NUMERIC_LTE:
-            return instruction_single(res, "PRIM_NUMERIC_LTE", chunk, offset);
-        case OP_PRIM_NUMERIC_GTE:
-            return instruction_single(res, "PRIM_NUMERIC_GTE", chunk, offset);
-        case OP_PRIM_INTEGER_INCR:
-            return instruction_single(res, "PRIM_INTEGER_INCR", chunk, offset);
-        case OP_PRIM_INTEGER_DECR:
-            return instruction_single(res, "PRIM_INTEGER_DECR", chunk, offset);
-        case OP_PRIM_INTEGER_DOUBLE:
-            return instruction_single(res, "PRIM_INTEGER_DOUBLE", chunk, offset);
+        case OP_PRIM_7_CLONE_OBJECT:
+            return instruction_single(res, "PRIM_7_CLONE_OBJECT", chunk, offset);
+        case OP_PRIM_8_BIND_METHOD:
+            return instruction_single(res, "PRIM_8_BIND_METHOD", chunk, offset);
+        case OP_PRIM_9_CALL:
+            return instruction_single(res, "PRIM_9_CALL", chunk, offset);
+        case OP_PRIM_10_CALL_PARAMS:
+            return instruction_single(res, "PRIM_10_CALL_PARAMS", chunk, offset);
+        case OP_PRIM_11_ADD:
+            return instruction_single(res, "PRIM_11_ADD", chunk, offset);
+        case OP_PRIM_12_SUB:
+            return instruction_single(res, "PRIM_12_SUB", chunk, offset);
+        case OP_PRIM_13_MUL:
+            return instruction_single(res, "PRIM_13_MUL", chunk, offset);
+        case OP_PRIM_14_DIV:
+            return instruction_single(res, "PRIM_14_DIV", chunk, offset);
+        case OP_PRIM_15_ABS:
+            return instruction_single(res, "PRIM_15_ABS", chunk, offset);
+        case OP_PRIM_16_LT:
+            return instruction_single(res, "PRIM_16_LT", chunk, offset);
+        case OP_PRIM_17_GT:
+            return instruction_single(res, "PRIM_17_GT", chunk, offset);
+        case OP_PRIM_18_LTE:
+            return instruction_single(res, "PRIM_18_LTE", chunk, offset);
+        case OP_PRIM_19_GTE:
+            return instruction_single(res, "PRIM_19_GTE", chunk, offset);
+        case OP_PRIM_20_INCR:
+            return instruction_single(res, "PRIM_20_INCR", chunk, offset);
+        case OP_PRIM_21_DECR:
+            return instruction_single(res, "PRIM_21_DECR", chunk, offset);
+        case OP_PRIM_22_DOUBLE:
+            return instruction_single(res, "PRIM_22_DOUBLE", chunk, offset);
 
         default: {
             string *unknown_opcode = string_new("");

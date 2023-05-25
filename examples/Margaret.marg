@@ -1,4 +1,6 @@
 (
+    $Margaret primitive_8_bind_method: (#bind: method => primitive_8_bind_method: method to: @self) to: @self,
+
     $Margaret bind: #self => @self,
     $Margaret bind: #super => @super,
 
@@ -8,6 +10,20 @@
     $Margaret bind: #puts: object => primitive_puts: object,
     $Margaret bind: #== other => primitive_4_equals?: @self with: other,
     $Margaret bind: #dnu: message_name => puts: (primitive_6_dnu: @self msg: message_name),
+    $Margaret bind: #clone: name => primitive_7_clone_object: @self with_name: name,
 
     $Numeric bind: #== other => primitive_5_equals_numeric?: @self with: other,
+    $Numeric bind: #+ other => primitive_11_add: @self with: other,
+    $Numeric bind: #- other => primitive_12_sub: @self with: other,
+    $Numeric bind: #* other => primitive_13_mul: @self with: other,
+    $Numeric bind: #/ other => primitive_14_div: @self with: other,
+    $Numeric bind: #abs => primitive_15_abs: @self,
+    $Numeric bind: #< other => primitive_16_less: @self than: other,
+    $Numeric bind: #> other => primitive_17_greater: @self than: other,
+    $Numeric bind: #<= other => primitive_18_less_or_equals: @self than: other,
+    $Numeric bind: #>= other => primitive_19_greater_or_equals: @self than: other,
+
+    $Integer bind: #incr => primitive_20_incr: @self,
+    $Integer bind: #decr => primitive_21_decr: @self,
+    $Integer bind: #double => primitive_22_double: @self,
 )

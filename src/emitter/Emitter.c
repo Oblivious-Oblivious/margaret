@@ -294,15 +294,7 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
             string *unary_name = vector_get(formal_bytecode, ++ip);
 
             switch_unary_case("call")
-                emit_byte(OP_PRIM_PROC_CALL);
-            unary_case("abs")
-                emit_byte(OP_PRIM_NUMERIC_ABS);
-            unary_case("incr")
-                emit_byte(OP_PRIM_INTEGER_INCR);
-            unary_case("decr")
-                emit_byte(OP_PRIM_INTEGER_DECR);
-            unary_case("double")
-                emit_byte(OP_PRIM_INTEGER_DOUBLE);
+                emit_byte(OP_PRIM_9_CALL);
             default_unary_case {
                 emit_byte(OP_PUT_0);
                 emit_variable_length_op(OP_SEND);
@@ -311,42 +303,15 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
         }
         opcode_case(FM_BINARY) {
             string *binary_name = vector_get(formal_bytecode, ++ip);
-
-            switch_binary_case("+")
-                emit_byte(OP_PRIM_NUMERIC_ADD);
-            binary_case("-")
-                emit_byte(OP_PRIM_NUMERIC_SUB);
-            binary_case("*")
-                emit_byte(OP_PRIM_NUMERIC_MUL);
-            binary_case("/")
-                emit_byte(OP_PRIM_NUMERIC_DIV);
-            // binary_case("==")
-            //     emit_byte(OP_PRIM_NUMERIC_EQUALS);
-            binary_case("<")
-                emit_byte(OP_PRIM_NUMERIC_LT);
-            binary_case(">")
-                emit_byte(OP_PRIM_NUMERIC_GT);
-            binary_case("<=")
-                emit_byte(OP_PRIM_NUMERIC_LTE);
-            binary_case(">=")
-                emit_byte(OP_PRIM_NUMERIC_GTE);
-            binary_case("++")
-                ;
-            default_binary_case {
-                emit_byte(OP_PUT_1);
-                emit_variable_length_op(OP_SEND);
-                emit_temporary(MARG_STRING(string_get(binary_name)));
-            }
+            emit_byte(OP_PUT_1);
+            emit_variable_length_op(OP_SEND);
+            emit_temporary(MARG_STRING(string_get(binary_name)));
         }
         opcode_case(FM_KEYWORD) {
             string *keyword_name = vector_get(formal_bytecode, ++ip);
             string *number_of_parameters = vector_get(formal_bytecode, ++ip);
 
-            switch_keyword_case("clone:")
-                emit_byte(OP_CLONE_OBJECT);
-            keyword_case("bind:")
-                emit_byte(OP_BIND_METHOD);
-            keyword_case("primitive_puts:")
+            switch_keyword_case("primitive_puts:")
                 emit_byte(OP_PRIM_PUTS);
             keyword_case("include:")
                 emit_byte(OP_PRIM_INCLUDE);
@@ -362,8 +327,36 @@ VM *emitter_emit(VM *vm, vector *formal_bytecode) {
                 emit_byte(OP_PRIM_5_EQUALS_NUMERIC);
             keyword_case("primitive_6_dnu:msg:")
                 emit_byte(OP_PRIM_6_DNU);
+            keyword_case("primitive_7_clone_object:with_name:")
+                emit_byte(OP_PRIM_7_CLONE_OBJECT);
+            keyword_case("primitive_8_bind_method:to:")
+                emit_byte(OP_PRIM_8_BIND_METHOD);
             keyword_case("call:")
-                emit_byte(OP_PRIM_PROC_CALL_PARAMS);
+                emit_byte(OP_PRIM_10_CALL_PARAMS);
+            keyword_case("primitive_11_add:with:")
+                emit_byte(OP_PRIM_11_ADD);
+            keyword_case("primitive_12_sub:with:")
+                emit_byte(OP_PRIM_12_SUB);
+            keyword_case("primitive_13_mul:with:")
+                emit_byte(OP_PRIM_13_MUL);
+            keyword_case("primitive_14_div:with:")
+                emit_byte(OP_PRIM_14_DIV);
+            keyword_case("primitive_15_abs:")
+                emit_byte(OP_PRIM_15_ABS);
+            keyword_case("primitive_16_less:than:")
+                emit_byte(OP_PRIM_16_LT);
+            keyword_case("primitive_17_greater:than:")
+                emit_byte(OP_PRIM_17_GT);
+            keyword_case("primitive_18_less_or_equals:than:")
+                emit_byte(OP_PRIM_18_LTE);
+            keyword_case("primitive_19_greater_or_equals:than:")
+                emit_byte(OP_PRIM_19_GTE);
+            keyword_case("primitive_20_incr:")
+                emit_byte(OP_PRIM_20_INCR);
+            keyword_case("primitive_21_decr:")
+                emit_byte(OP_PRIM_21_DECR);
+            keyword_case("primitive_22_double:")
+                emit_byte(OP_PRIM_22_DOUBLE);
             default_keyword_case {
                 if(string_equals(number_of_parameters, string_new("1")))
                     emit_byte(OP_PUT_1);
