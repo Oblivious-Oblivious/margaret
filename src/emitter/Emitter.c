@@ -96,7 +96,10 @@ static void __add_temporary_function(VM *vm, uint32_t temporary_index, uint16_t 
 }
 
 VM *emitter_emit(VM *vm, vector *formal_bytecode) {
-    vm->current->ip = vm->current->bytecode->items;
+    MargObject *marg_object = AS_OBJECT(table_get(&vm->global_variables, MARG_STRING("$Margaret")));
+    MargMethod *main_method = AS_METHOD(table_get(&marg_object->messages, MARG_STRING("")));
+    vm->current->bytecode = chunk_new();
+    vm->current = main_method->proc;
 
     size_t bytecode_size = vector_size(formal_bytecode);
     for(size_t ip = 0; ip < bytecode_size; ip++) {
