@@ -471,6 +471,7 @@ static void evaluator_run(VM *vm) {
 
                 vm->current->bytecode = previous_bytecode;
                 vm->current->ip = previous_position;
+                vm->sp++;
                 break;
             }
 
