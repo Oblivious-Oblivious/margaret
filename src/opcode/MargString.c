@@ -25,8 +25,6 @@ MargString *marg_string_new(VM *vm, char *chars) {
     MargValue proto_object = table_get(&vm->global_variables, orphan_marg_string_new(vm, "$String"));
     obj->parent = AS_OBJECT(proto_object);
 
-    table_set(&obj->instance_variables, orphan_marg_string_new(vm, "@self"), QNAN_BOX(obj));
-    table_set(&obj->instance_variables, orphan_marg_string_new(vm, "@super"), QNAN_BOX(obj->parent));
 
     self->size = size;
     self->hash = fnv_1a_64_hash(chars, size);

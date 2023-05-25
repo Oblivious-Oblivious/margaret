@@ -238,11 +238,11 @@ static void evaluator_run(VM *vm) {
             }
 
             case OP_PUT_SELF: {
-                STACK_PUSH(vm, table_get(&vm->current->bound_method->bound_object->instance_variables, MARG_STRING("@self")));
+                STACK_PUSH(vm, QNAN_BOX(vm->current->bound_method->bound_object));
                 break;
             }
             case OP_PUT_SUPER: {
-                STACK_PUSH(vm, table_get(&vm->current->bound_method->bound_object->instance_variables, MARG_STRING("@super")));
+                STACK_PUSH(vm, QNAN_BOX(vm->current->bound_method->bound_object->parent));
                 break;
             }
 
