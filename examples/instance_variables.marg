@@ -14,13 +14,19 @@
         )},
     ),
 
+    $Integer bind: #calculation: other => @self + @a + other,
+
     123 something call,
 
-    puts: "Below should be <unbound>",
+    puts: (-20 calculation: 20),
+
+    puts: "-> should be unbound",
     puts: @a,
     puts: $Margaret a,
     puts: $Numeric a,
+    puts: "-> should be 42",
     puts: $Integer a,
+    puts: "-> should be unbound",
     puts: $Float a,
 
     $Float bind: #setup_instances => (@x = 41, @y = 42),
@@ -30,22 +36,27 @@
     $Numeric bind: #x => @x,
     $Numeric bind: #y => @y,
 
+    puts: "-> should be unbound, unbound",
     puts: 123 x,
     puts: 123 y,
+    puts: "-> should be 41, 42",
     puts: 0.85 x,
     puts: 0.85 y,
+    puts: $Float x,
+    puts: $Float y,
+    puts: "-> should be unbound, unbound",
     puts: @x,
     puts: @y,
     puts: $Margaret x,
     puts: $Margaret y,
 
-    $Integer bind: #x => @x,
-    $Integer bind: #y => @y,
-    puts: 123 x,
-    puts: 123 y,
+    $Integer bind: #something_else => (
+        @a = 44,
+        @b = 41,
+        puts: "OK -> ",
+        puts: @self,
+        puts: @super,
+    ),
 
-    $Float bind: #x => @x,
-    $Float bind: #y => @y,
-    puts: 0.65 x,
-    puts: 0.65 y,
+    55 something_else,
 )
