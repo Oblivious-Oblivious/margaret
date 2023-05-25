@@ -10,6 +10,7 @@ MargMethod *marg_method_new(VM *vm, MargObject *bound_object, char *message_name
     MargValue proto_object = table_get(&vm->global_variables, MARG_STRING("$Method"));
     obj->parent = AS_OBJECT(proto_object);
 
+    obj->instance_variables = obj->parent->instance_variables;
 
     self->bound_object = bound_object;
 

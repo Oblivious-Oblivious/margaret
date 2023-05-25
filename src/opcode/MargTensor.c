@@ -9,6 +9,7 @@ MargTensor *marg_tensor_new(VM *vm, size_t initial_alloced) {
     MargValue proto_object = table_get(&vm->global_variables, MARG_STRING("$Tensor"));
     obj->parent = AS_OBJECT(proto_object);
 
+    obj->instance_variables = obj->parent->instance_variables;
 
     self->alloced = initial_alloced;
     self->size = 0;

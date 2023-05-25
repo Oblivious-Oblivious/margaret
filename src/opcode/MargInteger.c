@@ -9,6 +9,7 @@ MargInteger *marg_integer_new(VM *vm, int64_t value) {
     MargValue proto_object = table_get(&vm->global_variables, MARG_STRING("$Integer"));
     obj->parent = AS_OBJECT(proto_object);
 
+    obj->instance_variables = obj->parent->instance_variables;
 
     self->value = value;
 

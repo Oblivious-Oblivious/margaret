@@ -9,6 +9,7 @@ MargProc *marg_proc_new(VM *vm, MargMethod *bound_method) {
     MargValue proto_object = table_get(&vm->global_variables, MARG_STRING("$Proc"));
     obj->parent = AS_OBJECT(proto_object);
 
+    obj->instance_variables = obj->parent->instance_variables;
 
     self->bound_method = bound_method;
     self->bound_proc = bound_method->proc;
