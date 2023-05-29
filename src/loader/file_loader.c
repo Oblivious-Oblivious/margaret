@@ -1,6 +1,13 @@
 #include "file_loader.h"
 
-#include <stdio.h>  /* FILE, fopen, fclose, printf */
+#include <stdio.h>  /* FILE, fopen, fclose, FILENAME_MAX, printf */
+#ifdef ON_WINDOWS
+    #include <direct.h> /* _getcwd */
+    #define present_working_directory _getcwd
+#else
+    #include <unistd.h> /* getcwd */
+    #define present_working_directory getcwd
+#endif
 
 #include "../base/memory.h"
 
@@ -58,4 +65,10 @@ string *file_loader_load(file_loader *self, char *filepath) {
         string_add_char(result, ch);
 
     return result;
+}
+
+char *file_loader_present_working_directory(void) {
+    char *pwd = (char*)collected_malloc(sizeof(char) * FILENAME_MAX);
+    present_working_directory(pwd, FILENAME_MAX);
+    return pwd;
 }

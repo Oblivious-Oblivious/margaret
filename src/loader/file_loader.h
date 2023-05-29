@@ -46,4 +46,10 @@ int file_loader_close(file_loader *self);
  */
 string *file_loader_load(file_loader *self, char *filepath);
 
+/**
+ * @brief Finds the system specific pwd
+ * @return char*
+ */
+char *file_loader_present_working_directory(void);
+
 #endif
