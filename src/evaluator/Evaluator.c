@@ -257,19 +257,19 @@ static void evaluator_run(VM *vm) {
             }
 
             case OP_PUT_MINUS_1: {
-                STACK_PUSH(vm, MARG_MINUS_1);
+                STACK_PUSH(vm, MARG_INTEGER(-1));
                 break;
             }
             case OP_PUT_0: {
-                STACK_PUSH(vm, MARG_0);
+                STACK_PUSH(vm, MARG_INTEGER(0));
                 break;
             }
             case OP_PUT_1: {
-                STACK_PUSH(vm, MARG_1);
+                STACK_PUSH(vm, MARG_INTEGER(1));
                 break;
             }
             case OP_PUT_2: {
-                STACK_PUSH(vm, MARG_2);
+                STACK_PUSH(vm, MARG_INTEGER(2));
                 break;
             }
 
