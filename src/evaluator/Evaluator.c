@@ -123,6 +123,15 @@ static void op_send_helper(VM *vm, MargValue message_name) {
     }
 }
 
+#define integer_unary_operation_helper(operation) do { \
+    MargValue number = STACK_POP(vm); \
+    STACK_POP(vm); \
+    if(type_of_object_is(number, "$Integer")) \
+        STACK_PUSH(vm, MARG_INTEGER(AS_INTEGER(number)->value operation)); \
+    else \
+        STACK_PUSH(vm, MARG_NIL); \
+} while(0)
+
 #define numeric_binary_operation_helper(operation) do { \
     MargValue op2 = STACK_POP(vm); \
     MargValue op1 = STACK_POP(vm); \
@@ -618,32 +627,17 @@ static void evaluator_run(VM *vm) {
             }
 
             case OP_PRIM_20_INCR: {
-                MargValue number = STACK_POP(vm);
-                STACK_POP(vm);
-                if(type_of_object_is(number, "$Integer"))
-                    STACK_PUSH(vm, MARG_INTEGER(AS_INTEGER(number)->value + 1));
-                else
-                    STACK_PUSH(vm, MARG_NIL);
+                integer_unary_operation_helper(+ 1);
                 break;
             }
 
             case OP_PRIM_21_DECR: {
-                MargValue number = STACK_POP(vm);
-                STACK_POP(vm);
-                if(type_of_object_is(number, "$Integer"))
-                    STACK_PUSH(vm, MARG_INTEGER(AS_INTEGER(number)->value - 1));
-                else
-                    STACK_PUSH(vm, MARG_NIL);
+                integer_unary_operation_helper(- 1);
                 break;
             }
 
             case OP_PRIM_22_DOUBLE: {
-                MargValue number = STACK_POP(vm);
-                STACK_POP(vm);
-                if(type_of_object_is(number, "$Integer"))
-                    STACK_PUSH(vm, MARG_INTEGER(AS_INTEGER(number)->value * 2));
-                else
-                    STACK_PUSH(vm, MARG_NIL);
+                integer_unary_operation_helper(* 2);
                 break;
             }
         }
