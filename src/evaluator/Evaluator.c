@@ -19,20 +19,6 @@
 
 #include "../vm/on_demand_compilation_pipeline.h"
 
-/**
- * @brief Typechecks object that came from primitive.  Primitives
-    neither send nor execute any bytecode so we have to ensure
-    we send to the appropriate object at runtime.
- * 
- * @param object -> Object to typecheck
- * @param type -> String version of type (we check MargObject name)
- * @param true
- * @param false
- */
-static bool type_of_object_is(MargValue object, char *type) {
-    return !strncmp(AS_OBJECT(object)->name, type, strlen(type));
-}
-
 static void op_put_tensor_helper(VM *vm, MargValue temporary) {
     int64_t number_of_elements = AS_INTEGER(temporary)->value;
     MargValue tensor_value = MARG_TENSOR(number_of_elements);
@@ -126,7 +112,7 @@ static void op_send_helper(VM *vm, MargValue message_name) {
 #define integer_unary_operation_helper(operation) do { \
     MargValue number = STACK_POP(vm); \
     STACK_POP(vm); \
-    if(type_of_object_is(number, "$Integer")) \
+    if(IS_INTEGER(number)) \
         STACK_PUSH(vm, MARG_INTEGER(AS_INTEGER(number)->value operation)); \
     else \
         STACK_PUSH(vm, MARG_NIL); \
@@ -136,13 +122,13 @@ static void op_send_helper(VM *vm, MargValue message_name) {
     MargValue op2 = STACK_POP(vm); \
     MargValue op1 = STACK_POP(vm); \
     STACK_POP(vm); \
-    if(type_of_object_is(op1, "$Integer") && type_of_object_is(op2, "$Integer")) \
+    if(IS_INTEGER(op1) && IS_INTEGER(op2)) \
         STACK_PUSH(vm, MARG_INTEGER(AS_INTEGER(op1)->value operation AS_INTEGER(op2)->value)); \
-    else if(type_of_object_is(op1, "$Integer") && type_of_object_is(op2, "$Float")) \
+    else if(IS_INTEGER(op1) && IS_FLOAT(op2)) \
         STACK_PUSH(vm, MARG_FLOAT(AS_INTEGER(op1)->value operation AS_FLOAT(op2)->value)); \
-    else if(type_of_object_is(op1, "$Float") && type_of_object_is(op2, "$Integer")) \
+    else if(IS_FLOAT(op1) && IS_INTEGER(op2)) \
         STACK_PUSH(vm, MARG_FLOAT(AS_FLOAT(op1)->value operation AS_INTEGER(op2)->value)); \
-    else if(type_of_object_is(op1, "$Float") && type_of_object_is(op2, "$Float")) \
+    else if(IS_FLOAT(op1) && IS_FLOAT(op2)) \
         STACK_PUSH(vm, MARG_FLOAT(AS_FLOAT(op1)->value operation AS_FLOAT(op2)->value)); \
     else \
         STACK_PUSH(vm, MARG_NIL); \
@@ -152,25 +138,25 @@ static void op_send_helper(VM *vm, MargValue message_name) {
     MargValue op2 = STACK_POP(vm); \
     MargValue op1 = STACK_POP(vm); \
     STACK_POP(vm); \
-    if(type_of_object_is(op1, "$Integer") && type_of_object_is(op2, "$Integer")) { \
+    if(IS_INTEGER(op1) && IS_INTEGER(op2)) { \
         if(AS_INTEGER(op1)->value operation AS_INTEGER(op2)->value) \
             STACK_PUSH(vm, MARG_TRUE); \
         else \
             STACK_PUSH(vm, MARG_FALSE); \
     } \
-    else if(type_of_object_is(op1, "$Integer") && type_of_object_is(op2, "$Float")) { \
+    else if(IS_INTEGER(op1) && IS_FLOAT(op2)) { \
         if(AS_INTEGER(op1)->value operation AS_FLOAT(op2)->value) \
             STACK_PUSH(vm, MARG_TRUE); \
         else \
             STACK_PUSH(vm, MARG_FALSE); \
     } \
-    else if(type_of_object_is(op1, "$Float") && type_of_object_is(op2, "$Integer")) { \
+    else if(IS_FLOAT(op1) && IS_INTEGER(op2)) { \
         if(AS_FLOAT(op1)->value operation AS_INTEGER(op2)->value) \
             STACK_PUSH(vm, MARG_TRUE); \
         else \
             STACK_PUSH(vm, MARG_FALSE); \
     } \
-    else if(type_of_object_is(op1, "$Float") && type_of_object_is(op2, "$Float")) { \
+    else if(IS_FLOAT(op1) && IS_FLOAT(op2)) { \
         if(AS_FLOAT(op1)->value operation AS_FLOAT(op2)->value) \
             STACK_PUSH(vm, MARG_TRUE); \
         else \
@@ -183,27 +169,27 @@ static void op_send_helper(VM *vm, MargValue message_name) {
 static bool op_prim_to_string_helper(VM *vm, MargValue object) {
     if(IS_UNDEFINED(object))
         STACK_PUSH(vm, MARG_STRING("<unbound>"));
-    else if(IS_NIL(object))
+    else if(IS_NIL_CLONE(object))
         STACK_PUSH(vm, MARG_STRING(AS_OBJECT(object)->name));
-    else if(IS_FALSE(object))
+    else if(IS_FALSE_CLONE(object))
         STACK_PUSH(vm, MARG_STRING(AS_OBJECT(object)->name));
-    else if(IS_TRUE(object))
+    else if(IS_TRUE_CLONE(object))
         STACK_PUSH(vm, MARG_STRING(AS_OBJECT(object)->name));
-    else if(IS_INTEGER(object))
+    else if(IS_INTEGER_CLONE(object))
         STACK_PUSH(vm, MARG_STRING(marg_integer_to_string(object)));
-    else if(IS_FLOAT(object))
+    else if(IS_FLOAT_CLONE(object))
         STACK_PUSH(vm, MARG_STRING(marg_float_to_string(object)));
-    else if(IS_STRING(object))
+    else if(IS_STRING_CLONE(object))
         STACK_PUSH(vm, object);
-    else if(IS_METHOD(object))
+    else if(IS_METHOD_CLONE(object))
         STACK_PUSH(vm, MARG_STRING(marg_method_to_string(object)));
-    else if(IS_PROC(object))
+    else if(IS_PROC_CLONE(object))
         STACK_PUSH(vm, MARG_STRING(marg_proc_to_string(object)));
 
     // TODO Implement inside of $Tensor and $Hash
-    else if(IS_TENSOR(object))
+    else if(IS_TENSOR_CLONE(object))
         STACK_PUSH(vm, MARG_STRING(marg_tensor_to_string(object)));
-    else if(IS_HASH(object))
+    else if(IS_HASH_CLONE(object))
         STACK_PUSH(vm, MARG_STRING(marg_hash_to_string(object)));
 
     else {
@@ -426,14 +412,14 @@ static void evaluator_run(VM *vm) {
             case OP_PUTS: {
                 MargValue object = STACK_POP(vm);
                 STACK_POP(vm);
-                if(!IS_UNDEFINED(object) && IS_STRING(object)) {
+                if(!IS_UNDEFINED(object) && IS_STRING_CLONE(object)) {
                     printf("%s\n", AS_STRING(object)->chars);
                 }
                 else {
                     // TODO Explain nasty code below
                     if(op_prim_to_string_helper(vm, object)) {
                         STACK_PUSH(vm, object);
-                        STACK_PUSH(vm, MARG_0);
+                        STACK_PUSH(vm, MARG_INTEGER(0));
                         op_send_helper(vm, MARG_STRING("to_string"));
 
                         on_explicit_send = true;
@@ -470,7 +456,7 @@ static void evaluator_run(VM *vm) {
             case OP_PROC_CALL: {
                 MargValue proc = STACK_POP(vm);
                 // STACK_POP(vm);
-                if(IS_PROC(proc)) {
+                if(IS_PROC_CLONE(proc)) {
                     table_add_all(&vm->current->local_variables, &AS_PROC(proc)->local_variables);
                     vm->current = AS_PROC(proc);
                 }
@@ -482,7 +468,7 @@ static void evaluator_run(VM *vm) {
                 MargValue proc = STACK_POP(vm);
                 // STACK_POP(vm);
 
-                if(IS_PROC(proc)) {
+                if(IS_PROC_CLONE(proc)) {
                     /* Close over local variables*/
                     table_add_all(&vm->current->local_variables, &AS_PROC(proc)->local_variables);
 
@@ -597,9 +583,9 @@ static void evaluator_run(VM *vm) {
             case OP_PRIM_15_ABS: {
                 MargValue number = STACK_POP(vm);
                 STACK_POP(vm);
-                if(type_of_object_is(number, "$Integer"))
+                if(IS_INTEGER(number))
                     STACK_PUSH(vm, MARG_INTEGER((AS_INTEGER(number)->value < 0) ? -AS_INTEGER(number)->value : AS_INTEGER(number)->value));
-                else if(type_of_object_is(number, "$Float"))
+                else if(IS_FLOAT(number))
                     STACK_PUSH(vm, MARG_FLOAT((AS_FLOAT(number)->value < 0) ? -AS_FLOAT(number)->value : AS_FLOAT(number)->value));
                 else
                     STACK_PUSH(vm, MARG_NIL);
