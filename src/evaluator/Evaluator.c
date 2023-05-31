@@ -119,7 +119,6 @@ static void op_send_helper(VM *vm, MargValue message_name) {
             table_set(&method->proc->local_variables, parameter_name, actual_parameters[i]);
         }
 
-        method->proc->bound_proc = vm->current;
         vm->current = method->proc;
     }
 }
