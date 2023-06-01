@@ -361,7 +361,6 @@ vector *parser_literal(Parser *self) {
     else if(lookahead_1_value_equals("-"))
         sign = ensure_value("-", "expected '-' on literal.");
 
-    // TODO Add different integer sizes
     if(lookahead_1_value_equals("$") && lookahead_2_value_equals("nil"))
         return ast_literal(parser_nil_literal(self));
     else if(lookahead_1_value_equals("$") && lookahead_2_value_equals("false"))

@@ -7,7 +7,6 @@
 /**
  * @brief
     TODO Abstract error somewhere closer to boundary
-    TODO Gather a list of errors and output after parsing all code
     TODO Name error messages or abstract to macros
  * @param token -> The token where the error occured at
  * @param message -> The message to display

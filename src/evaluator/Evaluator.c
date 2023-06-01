@@ -416,12 +416,26 @@ static void evaluator_run(VM *vm) {
                     printf("%s\n", AS_STRING(object)->chars);
                 }
                 else {
-                    // TODO Explain nasty code below
                     if(op_prim_to_string_helper(vm, object)) {
                         STACK_PUSH(vm, object);
                         STACK_PUSH(vm, MARG_INTEGER(0));
                         op_send_helper(vm, MARG_STRING("to_string"));
 
+                        /**
+                        * `puts` either prints the characters of a string or
+                        * tries to send `to_string` to the object in question.
+                        * When sending a new message in the middle of execution
+                        * of an opcode, we need to store a panic state where
+                        * sending the `to_string` message modifies the stack
+                        * and then returns back to finish execution of `puts`.
+                        * We first enable an `explicit_send` flag before
+                        * directly jumping to the beginning of the jump table
+                        * executing `to_string`, and then we jump back to
+                        * continue with printf'ing the top of the stack.
+                        * We make sure that OP_EXIT_ACTIVATION_RECORD checks
+                        * for an explicit_send state to either jump here or
+                        * continue normally.
+                        */
                         on_explicit_send = true;
                         goto enter_explicit_send;
                         exit_explicit_send:;

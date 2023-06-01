@@ -10,8 +10,6 @@
 #include "../opcode/MargValue.h"
 #include "byte_conversions.h"
 
-// TODO extern global VM instance
-
 typedef struct MargProc MargProc;
 
 /**
