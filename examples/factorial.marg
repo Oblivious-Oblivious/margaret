@@ -1,6 +1,6 @@
-{ argc, argv | (
-    Numeric bind: # 0 fact => 1,
-    Numeric bind: # _ fact => self * (self-1) fact,
+(
+    $Integer bind: # 0 fact => 1,
+    $Integer bind: # _ fact => @self * (@self-1) fact,
 
-    5 factorial puts, Comment new: "120",
-)} eval
+    puts: 5 factorial, Comment new: "120",
+)
