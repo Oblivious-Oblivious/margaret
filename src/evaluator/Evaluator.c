@@ -412,7 +412,7 @@ static void evaluator_run(VM *vm) {
             case OP_PUTS: {
                 MargValue object = STACK_POP(vm);
                 STACK_POP(vm);
-                if(!IS_UNDEFINED(object) && IS_STRING_CLONE(object)) {
+                if(IS_STRING_CLONE(object)) {
                     printf("%s\n", AS_STRING(object)->chars);
                 }
                 else {
