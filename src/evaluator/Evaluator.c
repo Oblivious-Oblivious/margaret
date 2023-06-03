@@ -480,6 +480,7 @@ static void evaluator_run(VM *vm) {
                 MargValue proc = STACK_POP(vm);
                 // STACK_POP(vm);
                 if(IS_PROC_CLONE(proc)) {
+                    AS_PROC(proc)->bound_proc = vm->current;
                     vm->current = AS_PROC(proc);
                 }
                 else {
@@ -494,6 +495,7 @@ static void evaluator_run(VM *vm) {
                 // STACK_POP(vm);
 
                 if(IS_PROC_CLONE(proc)) {
+                    AS_PROC(proc)->bound_proc = vm->current;
 
                     /* Inject proc parameters */
                     for(size_t i = 0; i < parameters->alloced; i++) {
