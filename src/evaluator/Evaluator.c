@@ -474,6 +474,9 @@ static void evaluator_run(VM *vm) {
                     table_add_all(&vm->current->local_variables, &AS_PROC(proc)->local_variables);
                     vm->current = AS_PROC(proc);
                 }
+                else {
+                    STACK_PUSH(vm, MARG_NIL);
+                }
                 break;
             }
 
@@ -494,6 +497,9 @@ static void evaluator_run(VM *vm) {
                     }
 
                     vm->current = AS_PROC(proc);
+                }
+                else {
+                    STACK_PUSH(vm, MARG_NIL);
                 }
                 break;
             }
@@ -546,9 +552,15 @@ static void evaluator_run(VM *vm) {
                 MargValue message_name = STACK_POP(vm);
                 MargValue object = STACK_POP(vm);
                 STACK_POP(vm);
-                string *dnu_message = string_new("");
-                string_addf(dnu_message, "Object `%s` or any other object in the delegation chain does not understand: `%s`", AS_OBJECT(object)->name, AS_STRING(message_name)->chars);
-                STACK_PUSH(vm, MARG_STRING(string_get(dnu_message)));
+                if(!IS_UNDEFINED(object) && IS_STRING_CLONE(message_name)) {
+                    string *dnu_message = string_new("");
+                    string_addf(dnu_message, "Object `%s` or any other object in the delegation chain does not understand: `%s`", AS_OBJECT(object)->name, AS_STRING(message_name)->chars);
+                    STACK_PUSH(vm, MARG_STRING(string_get(dnu_message)));
+                }
+                else {
+                    // TODO Instead of pushing a nil, we should throw an error.
+                    STACK_PUSH(vm, MARG_NIL);
+                }
                 break;
             }
 
@@ -556,11 +568,16 @@ static void evaluator_run(VM *vm) {
                 MargValue new_object_name = STACK_POP(vm);
                 MargValue parent_object = STACK_POP(vm);
                 STACK_POP(vm);
-                MargValue child_object = MARG_OBJECT(AS_STRING(new_object_name)->chars);
-                AS_OBJECT(child_object)->parent = AS_OBJECT(parent_object);
-                table_set(&AS_OBJECT(child_object)->instance_variables, MARG_STRING("@self"), child_object);
-                table_set(&AS_OBJECT(child_object)->instance_variables, MARG_STRING("@super"), parent_object);
-                STACK_PUSH(vm, child_object);
+                if(!IS_UNDEFINED(parent_object) && IS_STRING_CLONE(new_object_name)) {
+                    MargValue child_object = MARG_OBJECT(AS_STRING(new_object_name)->chars);
+                    AS_OBJECT(child_object)->parent = AS_OBJECT(parent_object);
+                    table_set(&AS_OBJECT(child_object)->instance_variables, MARG_STRING("@self"), child_object);
+                    table_set(&AS_OBJECT(child_object)->instance_variables, MARG_STRING("@super"), parent_object);
+                    STACK_PUSH(vm, child_object);
+                }
+                else {
+                    STACK_PUSH(vm, MARG_NIL);
+                }
                 break;
             }
 
@@ -568,9 +585,14 @@ static void evaluator_run(VM *vm) {
                 MargValue object = STACK_POP(vm);
                 MargValue method = STACK_POP(vm);
                 STACK_POP(vm);
-                table_set(&AS_OBJECT(object)->messages, AS_METHOD(method)->message_name, method);
-                AS_METHOD(method)->bound_object = AS_OBJECT(object);
-                STACK_PUSH(vm, method);
+                if(!IS_UNDEFINED(object) && IS_METHOD_CLONE(method)) {
+                    table_set(&AS_OBJECT(object)->messages, AS_METHOD(method)->message_name, method);
+                    AS_METHOD(method)->bound_object = AS_OBJECT(object);
+                    STACK_PUSH(vm, method);
+                }
+                else {
+                    STACK_PUSH(vm, MARG_NIL);
+                }
                 break;
             }
 
