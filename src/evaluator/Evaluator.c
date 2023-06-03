@@ -409,8 +409,7 @@ static void evaluator_run(VM *vm) {
             case OP_EXIT_ACTIVATION_RECORD: {
                 /* Reset proc's IP */
                 vm->current->ip = vm->current->bytecode->items;
-                /* Reset proc local and parameter table */
-                table_init(&vm->current->local_variables);
+                /* Reset parameter table */
                 table_init(&vm->current->parameters);
                 /* Reset back to enclosing bound proc */
                 vm->current = vm->current->bound_proc;
