@@ -25,4 +25,10 @@
     $Integer bind: #incr => primitive_incr: @self,
     $Integer bind: #decr => primitive_decr: @self,
     $Integer bind: #double => primitive_double: @self,
+
+    $true bind: #not => $false,
+    $false bind: #not => $true,
+
+    $Numeric bind: #!= other => (@self == other) not,
+
 )
