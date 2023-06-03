@@ -37,13 +37,13 @@
 
     puts: test,
 
-    puts: (primitive_4_equals?: 1 with: 1),
-    puts: (primitive_4_equals?: 1 with: 2),
+    puts: (primitive_equals?: 1 with: 1),
+    puts: (primitive_equals?: 1 with: 2),
     puts: "True equality on singleton intenred values",
-    puts: (primitive_4_equals?: $nil with: $nil),
-    puts: (primitive_4_equals?: $false with: $false),
-    puts: (primitive_4_equals?: $true with: $true),
-    puts: (primitive_4_equals?: "str" with: "str"),
+    puts: (primitive_equals?: $nil with: $nil),
+    puts: (primitive_equals?: $false with: $false),
+    puts: (primitive_equals?: $true with: $true),
+    puts: (primitive_equals?: "str" with: "str"),
 
     puts: "Integer equality:",
     puts: 1 == 1,
