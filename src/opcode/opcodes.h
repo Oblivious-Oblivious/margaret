@@ -71,25 +71,25 @@
 #define OP_PROC_CALL_PARAMS       0xfc
 
 // primitives
-#define OP_PRIM_1_MESSAGES        0x33
-#define OP_PRIM_2_OBJECT_ID       0x34
-#define OP_PRIM_3_TO_STRING       0x35
-#define OP_PRIM_4_EQUALS          0x36
-#define OP_PRIM_5_EQUALS_NUMERIC  0x37
-#define OP_PRIM_6_DNU             0x38
-#define OP_PRIM_7_CLONE_OBJECT    0x39
-#define OP_PRIM_8_BIND_METHOD     0x3a
-#define OP_PRIM_11_ADD            0x3b
-#define OP_PRIM_12_SUB            0x3c
-#define OP_PRIM_13_MUL            0x3d
-#define OP_PRIM_14_DIV            0x3e
-#define OP_PRIM_15_ABS            0x3f
-#define OP_PRIM_16_LT             0x40
-#define OP_PRIM_17_GT             0x41
-#define OP_PRIM_18_LTE            0x42
-#define OP_PRIM_19_GTE            0x43
-#define OP_PRIM_20_INCR           0x44
-#define OP_PRIM_21_DECR           0x45
-#define OP_PRIM_22_DOUBLE         0x46
+#define OP_PRIM_MESSAGES          0x33
+#define OP_PRIM_OBJECT_ID         0x34
+#define OP_PRIM_TO_STRING         0x35
+#define OP_PRIM_EQUALS            0x36
+#define OP_PRIM_EQUALS_NUMERIC    0x37
+#define OP_PRIM_DNU               0x38
+#define OP_PRIM_CLONE_OBJECT      0x39
+#define OP_PRIM_BIND_METHOD       0x3a
+#define OP_PRIM_ADD               0x3b
+#define OP_PRIM_SUB               0x3c
+#define OP_PRIM_MUL               0x3d
+#define OP_PRIM_DIV               0x3e
+#define OP_PRIM_ABS               0x3f
+#define OP_PRIM_LT                0x40
+#define OP_PRIM_GT                0x41
+#define OP_PRIM_LTE               0x42
+#define OP_PRIM_GTE               0x43
+#define OP_PRIM_INCR              0x44
+#define OP_PRIM_DECR              0x45
+#define OP_PRIM_DOUBLE            0x46
 
 #endif

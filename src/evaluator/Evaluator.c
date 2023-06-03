@@ -504,7 +504,7 @@ static void evaluator_run(VM *vm) {
                 break;
             }
 
-            case OP_PRIM_1_MESSAGES: {
+            case OP_PRIM_MESSAGES: {
                 MargValue object = STACK_POP(vm);
                 STACK_POP(vm);
                 if(!IS_UNDEFINED(object))
@@ -514,7 +514,7 @@ static void evaluator_run(VM *vm) {
                 break;
             }
 
-            case OP_PRIM_2_OBJECT_ID: {
+            case OP_PRIM_OBJECT_ID: {
                 MargValue object = STACK_POP(vm);
                 STACK_POP(vm);
                 if(!IS_UNDEFINED(object)) {
@@ -528,14 +528,14 @@ static void evaluator_run(VM *vm) {
                 break;
             }
 
-            case OP_PRIM_3_TO_STRING: {
+            case OP_PRIM_TO_STRING: {
                 MargValue object = STACK_POP(vm);
                 STACK_POP(vm);
                 op_prim_to_string_helper(vm, object);
                 break;
             }
 
-            case OP_PRIM_4_EQUALS: {
+            case OP_PRIM_EQUALS: {
                 MargValue obj1 = STACK_POP(vm);
                 MargValue obj2 = STACK_POP(vm);
                 STACK_POP(vm);
@@ -543,12 +543,12 @@ static void evaluator_run(VM *vm) {
                 break;
             }
 
-            case OP_PRIM_5_EQUALS_NUMERIC: {
+            case OP_PRIM_EQUALS_NUMERIC: {
                 numeric_binary_comparison_helper(==);
                 break;
             }
 
-            case OP_PRIM_6_DNU: {
+            case OP_PRIM_DNU: {
                 MargValue message_name = STACK_POP(vm);
                 MargValue object = STACK_POP(vm);
                 STACK_POP(vm);
@@ -564,7 +564,7 @@ static void evaluator_run(VM *vm) {
                 break;
             }
 
-            case OP_PRIM_7_CLONE_OBJECT: {
+            case OP_PRIM_CLONE_OBJECT: {
                 MargValue new_object_name = STACK_POP(vm);
                 MargValue parent_object = STACK_POP(vm);
                 STACK_POP(vm);
@@ -581,7 +581,7 @@ static void evaluator_run(VM *vm) {
                 break;
             }
 
-            case OP_PRIM_8_BIND_METHOD: {
+            case OP_PRIM_BIND_METHOD: {
                 MargValue object = STACK_POP(vm);
                 MargValue method = STACK_POP(vm);
                 STACK_POP(vm);
@@ -596,27 +596,27 @@ static void evaluator_run(VM *vm) {
                 break;
             }
 
-            case OP_PRIM_11_ADD: {
+            case OP_PRIM_ADD: {
                 numeric_binary_operation_helper(+);
                 break;
             }
 
-            case OP_PRIM_12_SUB: {
+            case OP_PRIM_SUB: {
                 numeric_binary_operation_helper(-);
                 break;
             }
 
-            case OP_PRIM_13_MUL: {
+            case OP_PRIM_MUL: {
                 numeric_binary_operation_helper(*);
                 break;
             }
 
-            case OP_PRIM_14_DIV: {
+            case OP_PRIM_DIV: {
                 numeric_binary_operation_helper(/);
                 break;
             }
 
-            case OP_PRIM_15_ABS: {
+            case OP_PRIM_ABS: {
                 MargValue number = STACK_POP(vm);
                 STACK_POP(vm);
                 if(IS_INTEGER(number))
@@ -628,37 +628,37 @@ static void evaluator_run(VM *vm) {
                 break;
             }
 
-            case OP_PRIM_16_LT: {
+            case OP_PRIM_LT: {
                 numeric_binary_comparison_helper(<);
                 break;
             }
 
-            case OP_PRIM_17_GT: {
+            case OP_PRIM_GT: {
                 numeric_binary_comparison_helper(>);
                 break;
             }
 
-            case OP_PRIM_18_LTE: {
+            case OP_PRIM_LTE: {
                 numeric_binary_comparison_helper(<=);
                 break;
             }
 
-            case OP_PRIM_19_GTE: {
+            case OP_PRIM_GTE: {
                 numeric_binary_comparison_helper(>=);
                 break;
             }
 
-            case OP_PRIM_20_INCR: {
+            case OP_PRIM_INCR: {
                 integer_unary_operation_helper(+ 1);
                 break;
             }
 
-            case OP_PRIM_21_DECR: {
+            case OP_PRIM_DECR: {
                 integer_unary_operation_helper(- 1);
                 break;
             }
 
-            case OP_PRIM_22_DOUBLE: {
+            case OP_PRIM_DOUBLE: {
                 integer_unary_operation_helper(* 2);
                 break;
             }
