@@ -23,4 +23,43 @@
     res = p1 call: {v: 11},
     puts: res,
 
+    external_proc = {(
+        {(
+            value = 42,
+            puts: "calling internal proc",
+            {(
+                puts: "double internal proc",
+            )} call,
+            { param | (
+                puts: "internal with param(42):",
+                puts: param,
+            )} call: {param: value},
+            puts: value,
+        )},
+    )},
+
+    internal_proc = external_proc call,
+    internal_proc call,
+    internal_proc call,
+    internal_proc call,
+
+    puts: "",
+
+    outer_closure = {(
+        value = 42,
+        inner_closure = {( puts: "inner:", puts: value )},
+        value = 47,
+        inner_closure,
+    )},
+
+    inner_closure = outer_closure call,
+    puts: "-------",
+    puts: "",
+    inner_closure call,
+    puts: "",
+    inner_closure call,
+    puts: "",
+    inner_closure call,
+    puts: "",
+    inner_closure call,
 )

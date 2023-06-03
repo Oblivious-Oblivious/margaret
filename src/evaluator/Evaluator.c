@@ -95,6 +95,7 @@ static void op_send_helper(VM *vm, MargValue message_name) {
     else {
         method = AS_METHOD(method_value);
         method->bound_object = object;
+        method->proc->bound_proc = vm->current;
 
         /* Close over local variables */
         table_add_all(&vm->current->local_variables, &method->proc->local_variables);
@@ -260,15 +261,24 @@ static void evaluator_run(VM *vm) {
             }
 
             case OP_PUT_OBJECT: {
-                STACK_PUSH(vm, READ_TEMPORARY());
+                MargValue object = READ_TEMPORARY();
+                if(IS_PROC(object))
+                    table_add_all(&vm->current->local_variables, &AS_PROC(object)->local_variables);
+                STACK_PUSH(vm, object);
                 break;
             }
             case OP_PUT_OBJECT_WORD: {
-                STACK_PUSH(vm, READ_TEMPORARY_WORD());
+                MargValue object = READ_TEMPORARY_WORD();
+                if(IS_PROC(object))
+                    table_add_all(&vm->current->local_variables, &AS_PROC(object)->local_variables);
+                STACK_PUSH(vm, object);
                 break;
             }
             case OP_PUT_OBJECT_DWORD: {
-                STACK_PUSH(vm, READ_TEMPORARY_DWORD());
+                MargValue object = READ_TEMPORARY_DWORD();
+                if(IS_PROC(object))
+                    table_add_all(&vm->current->local_variables, &AS_PROC(object)->local_variables);
+                STACK_PUSH(vm, object);
                 break;
             }
 
@@ -471,7 +481,6 @@ static void evaluator_run(VM *vm) {
                 MargValue proc = STACK_POP(vm);
                 // STACK_POP(vm);
                 if(IS_PROC_CLONE(proc)) {
-                    table_add_all(&vm->current->local_variables, &AS_PROC(proc)->local_variables);
                     vm->current = AS_PROC(proc);
                 }
                 else {
@@ -486,8 +495,6 @@ static void evaluator_run(VM *vm) {
                 // STACK_POP(vm);
 
                 if(IS_PROC_CLONE(proc)) {
-                    /* Close over local variables*/
-                    table_add_all(&vm->current->local_variables, &AS_PROC(proc)->local_variables);
 
                     /* Inject proc parameters */
                     for(size_t i = 0; i < parameters->alloced; i++) {
