@@ -1,4 +1,6 @@
 (
+    include: "examples/Margaret.marg",
+
     $Integer bind: # 0 fact => 1,
     $Integer bind: # _ fact => @self * (@self-1) fact,
 

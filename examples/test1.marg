@@ -1,4 +1,6 @@
 (
+    include: "examples/Margaret.marg",
+
     $Numeric bind: #0 fact => 1,
     $Numeric bind: #fact => @self * (@self-1) fact,
 
