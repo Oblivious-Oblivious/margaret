@@ -13,17 +13,15 @@
 
     $Point bind: #calc => @x + @y,
 
-    $Point bind: #+ other => (
-        @x = @x + other x,
-        @y = @y + other y,
-        @self,
-    ),
+    $Point bind: #+ other => $Point x: @x + other x y: @y + other y,
 
     $Point3D = $Point clone: "$Point3D",
     $Point3D bind: #z => @z,
 
     $Point3D bind: #x: x y: y z: z => (
-        @super x: @x y: @y,
+        @super x: x y: y,
+        @x = x,
+        @y = y,
         @z = z,
         @self,
     ),
@@ -31,9 +29,8 @@
     $Point3D bind: #calc => @super calc + @z,
 
     $Point3D bind: #+ other => (
-        @super + other,
-        @z = @z + other z,
-        @self,
+        point = @super + other super,
+        $Point3D x: point x, y: point y, z: @z + other z,
     ),
 
     p1 = $Point3D x: 10 y: 20 z: 30,
@@ -43,6 +40,13 @@
     puts: p2,
 
     puts: p1 calc,
+    puts: "should be 60",
     puts: p2 calc,
-    puts: (p1 + p2 calc),
+    puts: "should be 12",
+    puts: (p1 + p2) calc,
+    puts: "should be 72",
+    puts: p1 calc,
+    puts: "should be 60",
+    puts: p2 calc,
+    puts: "should be 12",
 )
