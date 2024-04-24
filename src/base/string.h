@@ -2,7 +2,7 @@
 #define __STRING_H_
 
 #include <stdlib.h> /* size_t */
-#include "boolean.h"
+#include <stdbool.h> /* bool */
 
 /**
  * @brief A mutable string of characters used to dynamically build a string.
@@ -21,7 +21,7 @@ typedef struct string {
  * @param initial_string -> The initial string to set
  * @return The str builder
  */
-string *string_new(char *initial_string);
+string *string_new(const char *initial_string);
 
 /**
  * @brief Adds a formatted string into the builder

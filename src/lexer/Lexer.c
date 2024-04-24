@@ -6,7 +6,7 @@
 #include "../base/memory.h"
 #include "../tokens/Type.h"
 
-Lexer *lexer_new(char *filename, string *text) {
+Lexer *lexer_new(const char *filename, string *text) {
     Lexer *self = (Lexer*)collected_malloc(sizeof(Lexer));
 
     self->filename = filename;
@@ -17,7 +17,7 @@ Lexer *lexer_new(char *filename, string *text) {
     return self;
 }
 
-void *lexer_error(Lexer *self, char *message, string *token) {
+void *lexer_error(Lexer *self, const char *message, string *token) {
     fprintf(stderr, "%s:%zu: \033[1;31merror:\033[0m %s on `%s`\n", self->filename, self->lineno, message, string_get(token));
     return NULL;
 }

@@ -3,7 +3,7 @@
 
 #include <stdlib.h> /* size_t */
 
-#include "boolean.h"
+#include <stdbool.h> /* bool */
 #include "../opcode/MargValue.h"
 
 // TODO Implement data-oriented approach by separating keys with values

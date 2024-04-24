@@ -49,7 +49,7 @@ static int regex_matches(char c, const char *matcher) {
  * @param lineno -> Counter for line numbers
  */
 typedef struct Lexer {
-    char *filename;
+    const char *filename;
     string *text;
     size_t pos;
     size_t lineno;
@@ -61,7 +61,7 @@ typedef struct Lexer {
  * @param text -> The text we read
  * @return Lexer*
  */
-Lexer *lexer_new(char *filename, string *text);
+Lexer *lexer_new(const char *filename, string *text);
 
 /**
  * @brief Reports an error to stderrr
@@ -70,7 +70,7 @@ Lexer *lexer_new(char *filename, string *text);
  * @param token -> The token where the error occurred at
  * @return void* -> NULL
  */
-void *lexer_error(Lexer *self, char *message, string *token);
+void *lexer_error(Lexer *self, const char *message, string *token);
 
 /**
  * @brief Get the next character from the input stream

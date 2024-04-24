@@ -4,7 +4,7 @@
 #include <string.h> /* strlen */
 #include <stdlib.h> /* size_t */
 
-#include "../base/boolean.h"
+#include <stdbool.h> /* bool */
 #include "../base/table.h"
 
 #include "../vm/vm.h"

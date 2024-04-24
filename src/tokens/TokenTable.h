@@ -76,7 +76,7 @@ Token *token_table_consume(TokenTable *self);
  * @param error_message -> An error message that prints in case of consumption of wrong value
  * @return string* -> The found token
  */
-string *token_table_ensure_value(TokenTable *self, char *value, char *error_message);
+string *token_table_ensure_value(TokenTable *self, const char *value, const char *error_message);
 
 /**
  * @brief Consumes token by type
@@ -85,6 +85,6 @@ string *token_table_ensure_value(TokenTable *self, char *value, char *error_mess
  * @param error_message -> An error message that prints in case of consumption of wrong type
  * @return string* 
  */
-string *token_table_ensure_type(TokenTable *self, Type type, char *error_message);
+string *token_table_ensure_type(TokenTable *self, Type type, const char *error_message);
 
 #endif

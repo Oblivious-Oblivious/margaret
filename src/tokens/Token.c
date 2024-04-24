@@ -2,7 +2,7 @@
 
 #include "../base/memory.h"
 
-Token *token_new(string *value, Type type, size_t line_number, char *filename) {
+Token *token_new(string *value, Type type, size_t line_number, const char *filename) {
     Token *t = (Token*)collected_malloc(sizeof(Token));
 
     t->value = value;

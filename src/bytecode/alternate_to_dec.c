@@ -14,7 +14,7 @@ static char *__int_to_str(uint64_t dec) {
     return res;
 }
 
-char *bin_to_dec(char *bin) {
+char *bin_to_dec(const char *bin) {
     uint64_t dec = 0;
     int len = strlen(bin);
 
@@ -24,7 +24,7 @@ char *bin_to_dec(char *bin) {
     return __int_to_str(dec);
 }
 
-char *oct_to_dec(char *oct) {
+char *oct_to_dec(const char *oct) {
     uint64_t dec = 0;
     int len = strlen(oct);
 
@@ -34,7 +34,7 @@ char *oct_to_dec(char *oct) {
     return __int_to_str(dec);
 }
 
-char *hex_to_dec(char *hex) {
+char *hex_to_dec(const char *hex) {
     uint64_t dec = 0;
     int len = strlen(hex);
 

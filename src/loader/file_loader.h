@@ -13,7 +13,7 @@
  */
 typedef struct file_loader {
     FILE *fd;
-    char *filepath;
+    const char *filepath;
 } file_loader;
 
 /**
@@ -29,7 +29,7 @@ file_loader *file_loader_new(void);
  * @param filepath -> The path to open
  * @return a boolean signaling if the opening was successful
  */
-int file_loader_open(file_loader *self, char *filepath);
+int file_loader_open(file_loader *self, const char *filepath);
 
 /**
  * @brief Attempts to close the buffers to avoid memory overflows
@@ -44,7 +44,7 @@ int file_loader_close(file_loader *self);
  * @param filepath -> The name of the file to read from
  * @return string* 
  */
-string *file_loader_load(file_loader *self, char *filepath);
+string *file_loader_load(file_loader *self, const char *filepath);
 
 /**
  * @brief Finds the system specific pwd

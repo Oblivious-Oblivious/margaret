@@ -27,13 +27,13 @@ static void string_ensure_space(string *self, size_t add_len) {
     }
 }
 
-string *string_new(char *initial_string) {
+string *string_new(const char *initial_string) {
     string *self = (string*)collected_malloc(sizeof(string));
 
     self->str = (char*)collected_malloc(sizeof(char) * 1024);
     self->alloced = 1024;
     self->size = 0;
-    string_add_str(self, initial_string);
+    string_add_str(self, (char*)initial_string);
 
     return self;
 }

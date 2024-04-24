@@ -35,7 +35,7 @@ file_loader *file_loader_new(void) {
     return self;
 }
 
-int file_loader_open(file_loader *self, char *filepath) {
+int file_loader_open(file_loader *self, const char *filepath) {
     self->filepath = filepath;
 
     if(file_loader_file_does_not_exist(self))
@@ -56,7 +56,7 @@ int file_loader_close(file_loader *self) {
     return 1;
 }
 
-string *file_loader_load(file_loader *self, char *filepath) {
+string *file_loader_load(file_loader *self, const char *filepath) {
     file_loader_open(self, filepath);
     string *result = string_new("");
 

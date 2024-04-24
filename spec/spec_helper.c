@@ -5,7 +5,6 @@
 #include "version.spec.h"
 
 // base
-#include "base/boolean.spec.h"
 #include "base/chunk.spec.h"
 #include "base/fnv_1a_64_hash.spec.h"
 #include "base/memory.spec.h"
@@ -101,7 +100,6 @@
 spec_suite({
     VersionSpec();
 
-    boolean_spec();
     chunk_spec();
     fnv_1a_64_hash_spec();
     memory_spec();

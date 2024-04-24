@@ -3,7 +3,7 @@ TEST = spec_helper
 
 CC = clang
 OPT = -O3
-VERSION = -std=c99
+VERSION = -std=c2x
 
 FLAGS = -Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic
 WARNINGS = -Wno-strict-prototypes -Wno-unused-function
