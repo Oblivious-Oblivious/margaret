@@ -1,7 +1,7 @@
 /**
  * An object oriented language system based on ruby and smalltalk.
  *
- * Copyright (C) 2024 oblivious
+ * Copyright (C) 2024 Athanasios Papapostolou (oblivious)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
