@@ -1,4 +1,4 @@
-// Copyright (©) 2024 Thanasis Papapostolou (Oblivious)
+// Copyright (C) 2024 Athanasios Papapostolou (oblivious)
 
 #include <stdio.h> /* printf */
 
