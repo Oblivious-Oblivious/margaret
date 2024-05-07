@@ -40,9 +40,9 @@ MargProc *marg_proc_new(VM *vm, MargMethod *bound_method);
 
 /**
  * @brief Constructs a primitive string representation for proc literals
- * @param object -> The proc object as a MargValue
+ * @param object -> The proc object
  * @return char*
  */
-char *marg_proc_to_string(MargValue object);
+char *marg_proc_to_string(MargProc *object);
 
 #endif

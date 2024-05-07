@@ -36,9 +36,9 @@ marg_method_new(VM *vm, MargObject *bound_object, char *message_name);
 
 /**
  * @brief Constructs a primitive string representation for method literals
- * @param object -> The method object as a MargValue
+ * @param object -> The method object
  * @return char*
  */
-char *marg_method_to_string(MargValue object);
+char *marg_method_to_string(MargMethod *object);
 
 #endif

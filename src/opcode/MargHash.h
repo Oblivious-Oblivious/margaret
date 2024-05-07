@@ -74,9 +74,9 @@ void marg_hash_delete(MargHash *self, MargValue key);
 
 /**
  * @brief String representation for hash literals in the Java style
- * @param object -> The hash object as a MargValue
+ * @param object -> The hash object
  * @return char*
  */
-char *marg_hash_to_string(MargValue object);
+char *marg_hash_to_string(MargHash *object);
 
 #endif

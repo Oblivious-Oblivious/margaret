@@ -1,11 +1,11 @@
 #include "Evaluator.h"
 
-#include <stdio.h> /* pritnf, sprintf */
 #include "../opcode/MargValue.h"
 #include "../opcode/opcodes.h"
 #include "../vm/on_demand_compilation_pipeline.h"
 
 #include <inttypes.h> /* PRIx64 */
+#include <stdio.h>    /* pritnf, sprintf */
 
 static void op_put_tensor_helper(VM *vm, MargValue temporary) {
   int64_t number_of_elements = AS_INTEGER(temporary)->value;
@@ -189,22 +189,22 @@ static bool op_prim_to_string_helper(VM *vm, MargValue object) {
   } else if(IS_TRUE_CLONE(object)) {
     STACK_PUSH(vm, MARG_STRING(AS_OBJECT(object)->name));
   } else if(IS_INTEGER_CLONE(object)) {
-    STACK_PUSH(vm, MARG_STRING(marg_integer_to_string(object)));
+    STACK_PUSH(vm, MARG_STRING(marg_integer_to_string(AS_INTEGER(object))));
   } else if(IS_FLOAT_CLONE(object)) {
-    STACK_PUSH(vm, MARG_STRING(marg_float_to_string(object)));
+    STACK_PUSH(vm, MARG_STRING(marg_float_to_string(AS_FLOAT(object))));
   } else if(IS_STRING_CLONE(object)) {
     STACK_PUSH(vm, object);
   } else if(IS_METHOD_CLONE(object)) {
-    STACK_PUSH(vm, MARG_STRING(marg_method_to_string(object)));
+    STACK_PUSH(vm, MARG_STRING(marg_method_to_string(AS_METHOD(object))));
   } else if(IS_PROC_CLONE(object)) {
-    STACK_PUSH(vm, MARG_STRING(marg_proc_to_string(object)));
+    STACK_PUSH(vm, MARG_STRING(marg_proc_to_string(AS_PROC(object))));
   }
 
   // TODO Implement inside of $Tensor and $Hash
   else if(IS_TENSOR_CLONE(object)) {
-    STACK_PUSH(vm, MARG_STRING(marg_tensor_to_string(object)));
+    STACK_PUSH(vm, MARG_STRING(marg_tensor_to_string(AS_TENSOR(object))));
   } else if(IS_HASH_CLONE(object)) {
-    STACK_PUSH(vm, MARG_STRING(marg_hash_to_string(object)));
+    STACK_PUSH(vm, MARG_STRING(marg_hash_to_string(AS_HASH(object))));
   }
 
   else {

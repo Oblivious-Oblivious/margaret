@@ -21,22 +21,21 @@ MargTensor *marg_tensor_new(VM *vm, size_t initial_alloced) {
   return self;
 }
 
-char *marg_tensor_to_string(MargValue object) {
-  MargTensor *tensor = AS_TENSOR(object);
+char *marg_tensor_to_string(MargTensor *object) {
   string *res        = string_new("");
 
   string_add_str(res, "[");
-  size_t tensor_size = marg_tensor_size(tensor);
+  size_t tensor_size = marg_tensor_size(object);
   if(tensor_size > 0) {
     for(size_t i = 0; i < tensor_size - 1; i++) {
       string_addf(
-        res, "%s, ", string_get(marg_value_format(marg_tensor_get(tensor, i)))
+        res, "%s, ", string_get(marg_value_format(marg_tensor_get(object, i)))
       );
     }
     string_addf(
       res,
       "%s]",
-      string_get(marg_value_format(marg_tensor_get(tensor, tensor_size - 1)))
+      string_get(marg_value_format(marg_tensor_get(object, tensor_size - 1)))
     );
   } else {
     string_addf(res, "]");

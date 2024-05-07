@@ -23,9 +23,9 @@ MargFloat *marg_float_new(VM *vm, double value);
 
 /**
  * @brief Constructs a primitive string representation for float literals
- * @param object -> The float object as a MargValue
+ * @param object -> The float object
  * @return char*
  */
-char *marg_float_to_string(MargValue object);
+char *marg_float_to_string(MargFloat *object);
 
 #endif

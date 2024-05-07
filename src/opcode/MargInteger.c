@@ -18,8 +18,8 @@ MargInteger *marg_integer_new(VM *vm, int64_t value) {
   return self;
 }
 
-char *marg_integer_to_string(MargValue object) {
+char *marg_integer_to_string(MargInteger *object) {
   string *res = string_new("");
-  string_addf(res, "%lld", AS_INTEGER(object)->value);
+  string_addf(res, "%lld", object->value);
   return string_get(res);
 }

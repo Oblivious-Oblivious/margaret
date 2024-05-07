@@ -134,14 +134,13 @@ void marg_hash_delete(MargHash *self, MargValue key) {
   entry->value = MARG_UNDEFINED;
 }
 
-char *marg_hash_to_string(MargValue object) {
-  MargHash *hash = AS_HASH(object);
+char *marg_hash_to_string(MargHash *object) {
   string *res    = string_new("");
   string_add_str(res, "{");
-  size_t hash_size = marg_hash_size(hash);
+  size_t hash_size = marg_hash_size(object);
   if(hash_size > 0) {
-    for(size_t i = 0; i < hash->alloced; i++) {
-      MargHashEntry *entry = &hash->entries[i];
+    for(size_t i = 0; i < object->alloced; i++) {
+      MargHashEntry *entry = &object->entries[i];
       if(!IS_NOT_INTERNED(entry->key)) {
         string_addf(
           res,

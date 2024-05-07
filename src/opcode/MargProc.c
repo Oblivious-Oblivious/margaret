@@ -24,10 +24,10 @@ MargProc *marg_proc_new(VM *vm, MargMethod *bound_method) {
   return self;
 }
 
-char *marg_proc_to_string(MargValue object) {
+char *marg_proc_to_string(MargProc *object) {
   string *res = string_new("");
   string_addf(
-    res, "< %s:proc >", AS_PROC(object)->bound_method->bound_object->name
+    res, "< %s:proc >", object->bound_method->bound_object->name
   );
   return string_get(res);
 }

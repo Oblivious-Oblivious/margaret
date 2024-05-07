@@ -22,9 +22,9 @@ MargInteger *marg_integer_new(VM *vm, int64_t value);
 
 /**
  * @brief Constructs a primitive string representation for integer literals
- * @param object -> The integer object as a MargValue
+ * @param object -> The integer object
  * @return char*
  */
-char *marg_integer_to_string(MargValue object);
+char *marg_integer_to_string(MargInteger *object);
 
 #endif
