@@ -3,8 +3,11 @@
 
 #include "../_helpers.h"
 
-module(MargStringSpec, {
+module(
+  MargStringSpec,
+  {
     // TODO Test for MargString internal primitive messages
-})
+  }
+)
 
 #endif

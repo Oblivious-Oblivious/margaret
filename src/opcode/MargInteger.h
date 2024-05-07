@@ -1,8 +1,6 @@
 #ifndef __MARG_INTEGER_H_
 #define __MARG_INTEGER_H_
 
-#include <stdint.h> /* int64_t */
-
 #include "MargObject.h"
 
 /**
@@ -10,8 +8,8 @@
  * @param _ -> Inherted object properties
  */
 typedef struct MargInteger {
-    MargObject _;
-    int64_t value;
+  MargObject _;
+  int64_t value;
 } MargInteger;
 
 /**

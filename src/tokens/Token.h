@@ -1,12 +1,8 @@
 #ifndef __TOKEN_H_
 #define __TOKEN_H_
 
-#include <stdlib.h> /* size_t */
-#include <string.h> /* strncmp, strlen */
-
-#include "Type.h"
-
 #include "../base/string.h"
+#include "Type.h"
 
 /**
  * @brief Describes a Token data structure that
@@ -17,10 +13,10 @@
  * @param filename -> Filename this token was found on
  */
 typedef struct Token {
-    string *value;
-    Type type;
-    size_t line_number;
-    const char *filename;
+  string *value;
+  Type type;
+  size_t line_number;
+  const char *filename;
 } Token;
 
 /**
@@ -31,7 +27,8 @@ typedef struct Token {
  * @param filename -> The current line which the token was consumed at
  * @return Token
  */
-Token *token_new(string *value, Type type, size_t line_number, const char *filename);
+Token *
+token_new(string *value, Type type, size_t line_number, const char *filename);
 
 /**
  * @brief Checks for equality between a token and a string value

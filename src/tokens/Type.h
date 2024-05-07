@@ -11,18 +11,18 @@
     by assigning different values for each token.
  */
 typedef enum Type {
-    TOKEN_EOF = 0,
+  TOKEN_EOF = 0,
 
-    TOKEN_MESSAGE_SYMBOL = 1,
-    TOKEN_ID_SYMBOL = 2,
-    TOKEN_SYNTAX_SYMBOL = 3,
+  TOKEN_MESSAGE_SYMBOL = 1,
+  TOKEN_ID_SYMBOL      = 2,
+  TOKEN_SYNTAX_SYMBOL  = 3,
 
-    TOKEN_INTEGER = 11,
-    TOKEN_FLOAT = 12,
+  TOKEN_INTEGER = 11,
+  TOKEN_FLOAT   = 12,
 
-    TOKEN_STRING = 111,
+  TOKEN_STRING = 111,
 
-    TOKEN_IDENTIFIER = 201,
+  TOKEN_IDENTIFIER = 201,
 } Type;
 
 #endif

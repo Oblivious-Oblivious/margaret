@@ -1,12 +1,8 @@
 #ifndef __TOKEN_TABLE_H_
 #define __TOKEN_TABLE_H_
 
-#include <stdlib.h> /* size_t */
-#include <stdint.h> /* int64_t */
-
-#include "Token.h"
-#include "../base/string.h"
 #include "../base/vector.h"
+#include "Token.h"
 
 /**
  * @brief Defines a token table (array-like) data structure.
@@ -16,8 +12,8 @@
  * @param pos -> Current position of table pointer
  */
 typedef struct TokenTable {
-    vector *token_list;
-    size_t pos;
+  vector *token_list;
+  size_t pos;
 } TokenTable;
 
 /**
@@ -73,18 +69,23 @@ Token *token_table_consume(TokenTable *self);
  * @brief Consumes token by value
  * @param self -> The table to consume from
  * @param value -> The value expecting to consume
- * @param error_message -> An error message that prints in case of consumption of wrong value
+ * @param error_message -> An error message that prints in case of consumption
+ * of wrong value
  * @return string* -> The found token
  */
-string *token_table_ensure_value(TokenTable *self, const char *value, const char *error_message);
+string *token_table_ensure_value(
+  TokenTable *self, const char *value, const char *error_message
+);
 
 /**
  * @brief Consumes token by type
  * @param self -> The table to consume from
  * @param type -> The type expecting to consume
- * @param error_message -> An error message that prints in case of consumption of wrong type
- * @return string* 
+ * @param error_message -> An error message that prints in case of consumption
+ * of wrong type
+ * @return string*
  */
-string *token_table_ensure_type(TokenTable *self, Type type, const char *error_message);
+string *
+token_table_ensure_type(TokenTable *self, Type type, const char *error_message);
 
 #endif

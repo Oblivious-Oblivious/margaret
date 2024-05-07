@@ -3,8 +3,11 @@
 
 #include "../_helpers.h"
 
-module(MargIntegerSpec, {
+module(
+  MargIntegerSpec,
+  {
     // TODO
-})
+  }
+)
 
 #endif

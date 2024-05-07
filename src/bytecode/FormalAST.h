@@ -19,17 +19,32 @@ vector *ast_binary_object(vector *object);
 vector *ast_binary_selector(string *sel, vector *obj);
 vector *ast_keyword_message(vector *object, vector *selectors);
 vector *ast_keyword_object(vector *object);
-vector *ast_keyword_selector(string *id, string *optional_symbol, string *delim, vector *obj);
+vector *ast_keyword_selector(
+  string *id, string *optional_symbol, string *delim, vector *obj
+);
 
 vector *ast_expression(vector *unit);
 vector *ast_margaret_object(void);
 vector *ast_group(vector *unit_list);
 vector *ast_variable(string *optional_instance_symbol, string *name);
 vector *ast_proc_literal(vector *param_list, vector *function);
-vector *ast_c_function_declaration(string *return_type, string *name, vector *params);
-vector *ast_unary_method_definition(vector *multimethod_object_default_value, string *selector, vector *function);
-vector *ast_binary_method_definition(vector *multimethod_object_default_value, string *selector, vector *param, vector *function);
-vector *ast_keyword_method_definition(vector *multimethod_object_default_value, string *selector, vector *params, vector *function);
+vector *
+ast_c_function_declaration(string *return_type, string *name, vector *params);
+vector *ast_unary_method_definition(
+  vector *multimethod_object_default_value, string *selector, vector *function
+);
+vector *ast_binary_method_definition(
+  vector *multimethod_object_default_value,
+  string *selector,
+  vector *param,
+  vector *function
+);
+vector *ast_keyword_method_definition(
+  vector *multimethod_object_default_value,
+  string *selector,
+  vector *params,
+  vector *function
+);
 vector *ast_any_object(void);
 
 vector *ast_literal(vector *unit);

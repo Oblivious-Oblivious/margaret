@@ -1,11 +1,11 @@
 #ifndef __MARG_PROC_H_
 #define __MARG_PROC_H_
 
-#include "../base/chunk.h"
-#include "../base/table.h"
+typedef struct MargProc MargProc;
 
-#include "MargObject.h"
+#include "../base/chunk.h"
 #include "MargMethod.h"
+#include "MargObject.h"
 
 /**
  * @brief Defines a MargProc structure
@@ -18,22 +18,23 @@
  * @param ip -> Instruction Pointer
  */
 struct MargProc {
-    MargObject _;
-    MargMethod *bound_method;
-    MargProc *bound_proc;
+  MargObject _;
+  MargMethod *bound_method;
+  MargProc *bound_proc;
 
-    table parameters;
-    table local_variables;
+  table parameters;
+  table local_variables;
 
-    chunk *bytecode;
-    uint8_t *ip;
+  chunk *bytecode;
+  uint8_t *ip;
 };
 
 /**
  * @brief Creates a new MargProc object
  * @param vm -> Currect VM
- * @param bound_method -> Pointer to the bound method that this procs is defined under
- * @return MargProc* 
+ * @param bound_method -> Pointer to the bound method that this procs is defined
+ * under
+ * @return MargProc*
  */
 MargProc *marg_proc_new(VM *vm, MargMethod *bound_method);
 

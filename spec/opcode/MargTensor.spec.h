@@ -3,8 +3,11 @@
 
 #include "../_helpers.h"
 
-module(MargTensorSpec, {
+module(
+  MargTensorSpec,
+  {
     // TODO Test for MargTensor internal primitive messages
-})
+  }
+)
 
 #endif

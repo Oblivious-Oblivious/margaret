@@ -1,9 +1,6 @@
 #ifndef __MARG_STRING_H_
 #define __MARG_STRING_H_
 
-#include <stdlib.h> /* size_t */
-#include <stdint.h> /* uint64_t */
-
 #include "MargObject.h"
 
 /**
@@ -13,10 +10,10 @@
  * @param chars -> Actual character array
  */
 typedef struct MargString {
-    MargObject _;
-    size_t size;
-    uint64_t hash;
-    char chars[];
+  MargObject _;
+  size_t size;
+  uint64_t hash;
+  char chars[];
 } MargString;
 
 /**

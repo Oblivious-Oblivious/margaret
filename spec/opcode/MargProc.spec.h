@@ -3,8 +3,11 @@
 
 #include "../_helpers.h"
 
-module(MargProcSpec, {
+module(
+  MargProcSpec,
+  {
     // TODO
-})
+  }
+)
 
 #endif

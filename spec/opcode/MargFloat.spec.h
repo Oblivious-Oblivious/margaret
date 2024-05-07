@@ -3,8 +3,11 @@
 
 #include "../_helpers.h"
 
-module(MargFloatSpec, {
+module(
+  MargFloatSpec,
+  {
     // TODO
-})
+  }
+)
 
 #endif

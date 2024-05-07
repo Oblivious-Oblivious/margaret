@@ -3,8 +3,11 @@
 
 #include "../_helpers.h"
 
-module(table_spec, {
+module(
+  table_spec,
+  {
     // TODO
-})
+  }
+)
 
 #endif

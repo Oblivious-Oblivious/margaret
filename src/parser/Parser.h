@@ -1,8 +1,6 @@
 #ifndef __PARSER_H_
 #define __PARSER_H_
 
-#include "../base/string.h"
-#include "../base/vector.h"
 #include "../tokens/TokenTable.h"
 
 /**
@@ -11,13 +9,13 @@
     namespace with `Parser` for code clarity
  */
 typedef struct Parser {
-    TokenTable *table;
+  TokenTable *table;
 } Parser;
 
 /**
  * @brief Constructs a new Parser object
  * @param tokens -> The list of tokens analyzed in the lexer
- * @return Parser* 
+ * @return Parser*
  */
 Parser *parser_new(TokenTable *tokens);
 
@@ -50,9 +48,15 @@ vector *parser_variable(Parser *self);
 vector *parser_proc_literal(Parser *self);
 vector *parser_c_function_declaration(Parser *self);
 vector *parser_method_definition_literal(Parser *self);
-vector *parser_unary_method_definition(Parser *self, vector *multimethod_object_default_value);
-vector *parser_binary_method_definition(Parser *self, vector *multimethod_object_default_value);
-vector *parser_keyword_method_definition(Parser *self, vector *multimethod_object_default_value);
+vector *parser_unary_method_definition(
+  Parser *self, vector *multimethod_object_default_value
+);
+vector *parser_binary_method_definition(
+  Parser *self, vector *multimethod_object_default_value
+);
+vector *parser_keyword_method_definition(
+  Parser *self, vector *multimethod_object_default_value
+);
 vector *parser_any_object(void);
 
 vector *parser_literal(Parser *self);

@@ -4,70 +4,269 @@
 #include "../_helpers.h"
 
 module(numeric_spec, {
-    it("parses numeric expressions", {
-        parse("(0)", vector_new(FM_INTEGER, string_new("0"), FM_POP));
-        parse("(0,0,0)", vector_new(FM_INTEGER, string_new("0"), FM_POP, FM_INTEGER, string_new("0"), FM_POP, FM_INTEGER, string_new("0"), FM_POP));
-        parse("(42)", vector_new(FM_INTEGER, string_new("42"), FM_POP));
-        parse("(41, 42, 43)", vector_new(FM_INTEGER, string_new("41"), FM_POP, FM_INTEGER, string_new("42"), FM_POP, FM_INTEGER, string_new("43"), FM_POP));
-        parse("(41, (42), 43)", vector_new(FM_INTEGER, string_new("41"), FM_POP, FM_INTEGER, string_new("42"), FM_POP, FM_INTEGER, string_new("43"), FM_POP));
-        parse("(-41 - (-42))", vector_new(FM_INTEGER, string_new("-41"), FM_INTEGER, string_new("-42"), FM_BINARY, string_new("-"), FM_POP));
-        parse("((-41), (-42))", vector_new(FM_INTEGER, string_new("-41"), FM_POP, FM_INTEGER, string_new("-42"), FM_POP));
-        parse("(42 - 41)", vector_new(FM_INTEGER, string_new("42"), FM_INTEGER, string_new("41"), FM_BINARY, string_new("-"), FM_POP));
-    });
+  it("parses numeric expressions", {
+    parse("(0)", vector_new(FM_INTEGER, string_new("0"), FM_POP));
+    parse(
+      "(0,0,0)",
+      vector_new(
+        FM_INTEGER,
+        string_new("0"),
+        FM_POP,
+        FM_INTEGER,
+        string_new("0"),
+        FM_POP,
+        FM_INTEGER,
+        string_new("0"),
+        FM_POP
+      )
+    );
+    parse("(42)", vector_new(FM_INTEGER, string_new("42"), FM_POP));
+    parse(
+      "(41, 42, 43)",
+      vector_new(
+        FM_INTEGER,
+        string_new("41"),
+        FM_POP,
+        FM_INTEGER,
+        string_new("42"),
+        FM_POP,
+        FM_INTEGER,
+        string_new("43"),
+        FM_POP
+      )
+    );
+    parse(
+      "(41, (42), 43)",
+      vector_new(
+        FM_INTEGER,
+        string_new("41"),
+        FM_POP,
+        FM_INTEGER,
+        string_new("42"),
+        FM_POP,
+        FM_INTEGER,
+        string_new("43"),
+        FM_POP
+      )
+    );
+    parse(
+      "(-41 - (-42))",
+      vector_new(
+        FM_INTEGER,
+        string_new("-41"),
+        FM_INTEGER,
+        string_new("-42"),
+        FM_BINARY,
+        string_new("-"),
+        FM_POP
+      )
+    );
+    parse(
+      "((-41), (-42))",
+      vector_new(
+        FM_INTEGER,
+        string_new("-41"),
+        FM_POP,
+        FM_INTEGER,
+        string_new("-42"),
+        FM_POP
+      )
+    );
+    parse(
+      "(42 - 41)",
+      vector_new(
+        FM_INTEGER,
+        string_new("42"),
+        FM_INTEGER,
+        string_new("41"),
+        FM_BINARY,
+        string_new("-"),
+        FM_POP
+      )
+    );
+  });
 
-    it("parses integers literals", {
-        parse("42", vector_new(FM_INTEGER, string_new("42"), FM_POP));
-        parse("-42", vector_new(FM_INTEGER, string_new("-42"), FM_POP));
-        parse("+42", vector_new(FM_INTEGER, string_new("42"), FM_POP));
+  it("parses integers literals", {
+    parse("42", vector_new(FM_INTEGER, string_new("42"), FM_POP));
+    parse("-42", vector_new(FM_INTEGER, string_new("-42"), FM_POP));
+    parse("+42", vector_new(FM_INTEGER, string_new("42"), FM_POP));
 
-        parse("4_200", vector_new(FM_INTEGER, string_new("4200"), FM_POP));
-        parse("-4_200", vector_new(FM_INTEGER, string_new("-4200"), FM_POP));
-    });
+    parse("4_200", vector_new(FM_INTEGER, string_new("4200"), FM_POP));
+    parse("-4_200", vector_new(FM_INTEGER, string_new("-4200"), FM_POP));
+  });
 
-    it("parses float literals", {
-        parse("42.0", vector_new(FM_FLOAT, string_new("42.0"), FM_POP));
-        parse("-42.0", vector_new(FM_FLOAT, string_new("-42.0"), FM_POP));
-        parse("986513.00056129", vector_new(FM_FLOAT, string_new("986513.00056129"), FM_POP));
-        parse("-986513.00056129", vector_new(FM_FLOAT, string_new("-986513.00056129"), FM_POP));
-        parse("1234 e: -2", vector_new(FM_INTEGER, string_new("1234"), FM_INTEGER, string_new("-2"), FM_KEYWORD, string_new("e:"), string_new("1"), FM_POP));
-        parse("1234 E: -2", vector_new(FM_INTEGER, string_new("1234"), FM_INTEGER, string_new("-2"), FM_KEYWORD, string_new("E:"), string_new("1"), FM_POP));
-        parse("1.234 e: 1", vector_new(FM_FLOAT, string_new("1.234"), FM_INTEGER, string_new("1"), FM_KEYWORD, string_new("e:"), string_new("1"), FM_POP));
-        parse("1.234 E: 1", vector_new(FM_FLOAT, string_new("1.234"), FM_INTEGER, string_new("1"), FM_KEYWORD, string_new("E:"), string_new("1"), FM_POP));
-    });
+  it("parses float literals", {
+    parse("42.0", vector_new(FM_FLOAT, string_new("42.0"), FM_POP));
+    parse("-42.0", vector_new(FM_FLOAT, string_new("-42.0"), FM_POP));
+    parse(
+      "986513.00056129",
+      vector_new(FM_FLOAT, string_new("986513.00056129"), FM_POP)
+    );
+    parse(
+      "-986513.00056129",
+      vector_new(FM_FLOAT, string_new("-986513.00056129"), FM_POP)
+    );
+    parse(
+      "1234 e: -2",
+      vector_new(
+        FM_INTEGER,
+        string_new("1234"),
+        FM_INTEGER,
+        string_new("-2"),
+        FM_KEYWORD,
+        string_new("e:"),
+        string_new("1"),
+        FM_POP
+      )
+    );
+    parse(
+      "1234 E: -2",
+      vector_new(
+        FM_INTEGER,
+        string_new("1234"),
+        FM_INTEGER,
+        string_new("-2"),
+        FM_KEYWORD,
+        string_new("E:"),
+        string_new("1"),
+        FM_POP
+      )
+    );
+    parse(
+      "1.234 e: 1",
+      vector_new(
+        FM_FLOAT,
+        string_new("1.234"),
+        FM_INTEGER,
+        string_new("1"),
+        FM_KEYWORD,
+        string_new("e:"),
+        string_new("1"),
+        FM_POP
+      )
+    );
+    parse(
+      "1.234 E: 1",
+      vector_new(
+        FM_FLOAT,
+        string_new("1.234"),
+        FM_INTEGER,
+        string_new("1"),
+        FM_KEYWORD,
+        string_new("E:"),
+        string_new("1"),
+        FM_POP
+      )
+    );
+  });
 
-    it("parses binary literals", {
-        parse("0b0110", vector_new(FM_INTEGER, string_new("6"), FM_POP));
-        parse("0B10", vector_new(FM_INTEGER, string_new("2"), FM_POP));
-        parse("-0b0110", vector_new(FM_INTEGER, string_new("-6"), FM_POP));
-        parse("-0B10", vector_new(FM_INTEGER, string_new("-2"), FM_POP));
-        parse("( \
+  it("parses binary literals", {
+    parse("0b0110", vector_new(FM_INTEGER, string_new("6"), FM_POP));
+    parse("0B10", vector_new(FM_INTEGER, string_new("2"), FM_POP));
+    parse("-0b0110", vector_new(FM_INTEGER, string_new("-6"), FM_POP));
+    parse("-0B10", vector_new(FM_INTEGER, string_new("-2"), FM_POP));
+    parse(
+      "( \
             x = 0b0101 + 0b1011, \
             x to_int puts, \
-        )", vector_new(FM_INTEGER, string_new("5"), FM_INTEGER, string_new("11"), FM_BINARY, string_new("+"), FM_STORE_LOCAL, string_new("x"), FM_POP, FM_LOCAL, string_new("x"), FM_UNARY, string_new("to_int"), FM_UNARY, string_new("puts"), FM_POP));
-    });
+        )",
+      vector_new(
+        FM_INTEGER,
+        string_new("5"),
+        FM_INTEGER,
+        string_new("11"),
+        FM_BINARY,
+        string_new("+"),
+        FM_STORE_LOCAL,
+        string_new("x"),
+        FM_POP,
+        FM_LOCAL,
+        string_new("x"),
+        FM_UNARY,
+        string_new("to_int"),
+        FM_UNARY,
+        string_new("puts"),
+        FM_POP
+      )
+    );
+  });
 
-    it("parses hexadecimal literals", {
-        parse("0xbeef", vector_new(FM_INTEGER, string_new("48879"), FM_POP));
-        parse("-0xbeEf", vector_new(FM_INTEGER, string_new("-48879"), FM_POP));
-        parse("0X0427", vector_new(FM_INTEGER, string_new("1063"), FM_POP));
-        parse("-0X0427", vector_new(FM_INTEGER, string_new("-1063"), FM_POP));
-        parse("(x = 0xbeef to_bin to_int puts)", vector_new(FM_INTEGER, string_new("48879"), FM_UNARY, string_new("to_bin"), FM_UNARY, string_new("to_int"), FM_UNARY, string_new("puts"), FM_STORE_LOCAL, string_new("x"), FM_POP));
-        parse("(0xbeef - 0xabb2)", vector_new(FM_INTEGER, string_new("48879"), FM_INTEGER, string_new("43954"), FM_BINARY, string_new("-"), FM_POP));
-    });
+  it("parses hexadecimal literals", {
+    parse("0xbeef", vector_new(FM_INTEGER, string_new("48879"), FM_POP));
+    parse("-0xbeEf", vector_new(FM_INTEGER, string_new("-48879"), FM_POP));
+    parse("0X0427", vector_new(FM_INTEGER, string_new("1063"), FM_POP));
+    parse("-0X0427", vector_new(FM_INTEGER, string_new("-1063"), FM_POP));
+    parse(
+      "(x = 0xbeef to_bin to_int puts)",
+      vector_new(
+        FM_INTEGER,
+        string_new("48879"),
+        FM_UNARY,
+        string_new("to_bin"),
+        FM_UNARY,
+        string_new("to_int"),
+        FM_UNARY,
+        string_new("puts"),
+        FM_STORE_LOCAL,
+        string_new("x"),
+        FM_POP
+      )
+    );
+    parse(
+      "(0xbeef - 0xabb2)",
+      vector_new(
+        FM_INTEGER,
+        string_new("48879"),
+        FM_INTEGER,
+        string_new("43954"),
+        FM_BINARY,
+        string_new("-"),
+        FM_POP
+      )
+    );
+  });
 
-    it("parses octal literals", {
-        parse("0o741", vector_new(FM_INTEGER, string_new("481"), FM_POP));
-        parse("-0o741", vector_new(FM_INTEGER, string_new("-481"), FM_POP));
-        parse("0O0210", vector_new(FM_INTEGER, string_new("136"), FM_POP));
-        parse("-0O0210", vector_new(FM_INTEGER, string_new("-136"), FM_POP));
-        parse("(x = 0o751 to_hex to_bin to_int puts)", vector_new(FM_INTEGER, string_new("489"), FM_UNARY, string_new("to_hex"), FM_UNARY, string_new("to_bin"), FM_UNARY, string_new("to_int"), FM_UNARY, string_new("puts"), FM_STORE_LOCAL, string_new("x"), FM_POP));
-        parse("(0O541 + 0o777)", vector_new(FM_INTEGER, string_new("353"), FM_INTEGER, string_new("511"), FM_BINARY, string_new("+"), FM_POP));
-    });
+  it("parses octal literals", {
+    parse("0o741", vector_new(FM_INTEGER, string_new("481"), FM_POP));
+    parse("-0o741", vector_new(FM_INTEGER, string_new("-481"), FM_POP));
+    parse("0O0210", vector_new(FM_INTEGER, string_new("136"), FM_POP));
+    parse("-0O0210", vector_new(FM_INTEGER, string_new("-136"), FM_POP));
+    parse(
+      "(x = 0o751 to_hex to_bin to_int puts)",
+      vector_new(
+        FM_INTEGER,
+        string_new("489"),
+        FM_UNARY,
+        string_new("to_hex"),
+        FM_UNARY,
+        string_new("to_bin"),
+        FM_UNARY,
+        string_new("to_int"),
+        FM_UNARY,
+        string_new("puts"),
+        FM_STORE_LOCAL,
+        string_new("x"),
+        FM_POP
+      )
+    );
+    parse(
+      "(0O541 + 0o777)",
+      vector_new(
+        FM_INTEGER,
+        string_new("353"),
+        FM_INTEGER,
+        string_new("511"),
+        FM_BINARY,
+        string_new("+"),
+        FM_POP
+      )
+    );
+  });
 
-    it("parses negative characters", {
-        parse("-'a'", vector_new(FM_STRING, string_new("a"), FM_POP));
-        parse("-'æ'", vector_new(FM_STRING, string_new("æ"), FM_POP));
-    });
+  it("parses negative characters", {
+    parse("-'a'", vector_new(FM_STRING, string_new("a"), FM_POP));
+    parse("-'æ'", vector_new(FM_STRING, string_new("æ"), FM_POP));
+  });
 })
 
 #endif

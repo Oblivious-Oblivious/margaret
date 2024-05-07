@@ -1,8 +1,8 @@
 #ifndef __FNV_1A_64_HASH_H_
 #define __FNV_1A_64_HASH_H_
 
-#include <stdlib.h> /* size_t */
 #include <stdint.h> /* uint64_t */
+#include <stdlib.h> /* size_t */
 
 /**
  * @brief Implementation of the fnv reverse (xor first, mult later)

@@ -3,8 +3,11 @@
 
 #include "../_helpers.h"
 
-module(MargValueSpec, {
+module(
+  MargValueSpec,
+  {
     // TODO Test for QNAN values
-})
+  }
+)
 
 #endif

@@ -1,8 +1,8 @@
 #ifndef __STRING_H_
 #define __STRING_H_
 
-#include <stdlib.h> /* size_t */
 #include <stdbool.h> /* bool */
+#include <stdlib.h>  /* size_t */
 
 /**
  * @brief A mutable string of characters used to dynamically build a string.
@@ -11,9 +11,9 @@
  * @param size -> The total size of the string
  */
 typedef struct string {
-    char *str;
-    size_t alloced;
-    size_t size;
+  char *str;
+  size_t alloced;
+  size_t size;
 } string;
 
 /**
@@ -41,7 +41,7 @@ void string_add_str(string *self, const char *str);
 /**
  * @brief Add a character to the builder
  * @param self -> The string builder to use
- * @param c -> The character to add 
+ * @param c -> The character to add
  */
 void string_add_char(string *self, char c);
 
@@ -83,7 +83,8 @@ void string_delete(string *self);
 /**
  * @brief Remove data from the end of the builder
  * @param self -> The string builder to use
- * @param len -> The new length of the string, anything after this length is removed
+ * @param len -> The new length of the string, anything after this length is
+ * removed
  */
 void string_shorten(string *self, size_t len);
 
@@ -102,13 +103,16 @@ void string_skip(string *self, size_t len);
 string *string_remove_underscores(string *self);
 
 /**
- * @brief Return a substring of our current string without modifying the original
+ * @brief Return a substring of our current string without modifying the
+ * original
  * @param self -> The string builder we are using
  * @param str_position_from -> The point where we start our substring
  * @param str_position_to -> The point where we end our substring
  * @return A substring of a copy of the original string
  */
-string *string_substring(string *self, size_t str_position_from, size_t str_position_to);
+string *string_substring(
+  string *self, size_t str_position_from, size_t str_position_to
+);
 
 /**
  * @brief The size of the string contained in the builder

@@ -1,0 +1,40 @@
+{
+  "name": "maragret",
+
+  "version": "0.0.1",
+
+  "dependencies": {},
+
+  "dev-dependencies": {
+    "cSpec": "Oblivious-Oblivious/cSpec"
+  },
+
+  "build": "",
+
+  "compile-flags": {
+    "cc": "clang",
+    "debug": {
+      "opt": "-Og -g",
+      "version": "-std=c99",
+      "flags": "-Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic",
+      "warnings": "-Wno-comment -Wno-implicit-function-declaration -Wno-unused-function -Wno-strict-prototypes",
+      "libs": "libs/readline/libreadline.dylib"
+    },
+    "release": {
+      "opt": "-O2",
+      "version": "-std=c2x",
+      "flags": "",
+      "warnings": "",
+      "libs": "libs/readline/libreadline.dylib"
+    },
+    "test": {
+      "opt": "-O2",
+      "version": "-std=c2x",
+      "flags": "",
+      "warnings": "",
+      "libs": "libs/readline/libreadline.dylib"
+    }
+  },
+
+  "license": "gpl-v3"
+}

@@ -3,8 +3,11 @@
 
 #include "../_helpers.h"
 
-module(MargHashSpec, {
+module(
+  MargHashSpec,
+  {
     // TODO Test for MargHash internal primitive messages
-})
+  }
+)
 
 #endif

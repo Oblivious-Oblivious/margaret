@@ -1,5 +1,3 @@
-#include <stdlib.h> /* uint64_t */
-
 /**
  * @brief Converts character representations
     of non base 10 numbers into base 10 ones

@@ -1,20 +1,14 @@
 #ifndef __MARG_OBJECT_H_
 #define __MARG_OBJECT_H_
 
-#include <string.h> /* strlen */
-#include <stdlib.h> /* size_t */
-
-#include <stdbool.h> /* bool */
-#include "../base/table.h"
+typedef struct MargObject MargObject;
 
 #include "../vm/vm.h"
 
-typedef struct MargObject MargObject;
-typedef struct MargMethod MargMethod;
-
 /**
  * @brief A representation of user-defined object
- * @param is_marked -> Flag signaling if the object is marked for garbage collection
+ * @param is_marked -> Flag signaling if the object is marked for garbage
+ * collection
  * @param next -> Turns the struct into a linked list of objects
  * @param bound_vm -> A pointer to the current VM
  * @param name -> Name of the object
@@ -23,15 +17,15 @@ typedef struct MargMethod MargMethod;
  * @param messages -> A table for messages pointing to a vector of methods
  */
 struct MargObject {
-    bool is_marked;
-    MargObject *next;
+  bool is_marked;
+  MargObject *next;
 
-    VM *bound_vm;
+  VM *bound_vm;
 
-    char *name;
-    MargObject *parent;
-    table instance_variables;
-    table messages;
+  char *name;
+  MargObject *parent;
+  table instance_variables;
+  table messages;
 };
 
 /**

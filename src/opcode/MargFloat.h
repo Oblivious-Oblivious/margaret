@@ -9,8 +9,8 @@
  * @param value -> Actual double value of Float object
  */
 typedef struct MargFloat {
-    MargObject _;
-    double value;
+  MargObject _;
+  double value;
 } MargFloat;
 
 /**
@@ -20,7 +20,6 @@ typedef struct MargFloat {
  * @return MargFloat*
  */
 MargFloat *marg_float_new(VM *vm, double value);
-
 
 /**
  * @brief Constructs a primitive string representation for float literals

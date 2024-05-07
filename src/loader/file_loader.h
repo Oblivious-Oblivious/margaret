@@ -1,9 +1,9 @@
 #ifndef __FILE_LOADER_H_
 #define __FILE_LOADER_H_
 
-#include <stdio.h>  /* FILE */
-
 #include "../base/string.h"
+
+#include <stdio.h> /* FILE */
 
 /**
  * @struct file_loader
@@ -12,8 +12,8 @@
  * @param filepath -> The name of the file to read from
  */
 typedef struct file_loader {
-    FILE *fd;
-    const char *filepath;
+  FILE *fd;
+  const char *filepath;
 } file_loader;
 
 /**
@@ -42,7 +42,7 @@ int file_loader_close(file_loader *self);
  * @brief Loads each character into a vector
  * @param self -> The file_loader to read from
  * @param filepath -> The name of the file to read from
- * @return string* 
+ * @return string*
  */
 string *file_loader_load(file_loader *self, const char *filepath);
 

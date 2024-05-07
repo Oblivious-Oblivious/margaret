@@ -4,8 +4,11 @@
 #include "../../src/base/memory.h"
 #include "../cSpec.h"
 
-module(memory_spec, {
+module(
+  memory_spec,
+  {
     // TODO garbage collector stress tests
-})
+  }
+)
 
 #endif

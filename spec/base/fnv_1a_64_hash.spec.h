@@ -4,8 +4,11 @@
 #include "../../src/base/fnv_1a_64_hash.h"
 #include "../cSpec.h"
 
-module(fnv_1a_64_hash_spec, {
+module(
+  fnv_1a_64_hash_spec,
+  {
     // TODO
-})
+  }
+)
 
 #endif

@@ -4,8 +4,11 @@
 #include "../../src/vm/byte_conversions.h"
 #include "../cSpec.h"
 
-module(byte_conversions_spec, {
+module(
+  byte_conversions_spec,
+  {
     // TODO
-})
+  }
+)
 
 #endif

@@ -1,24 +1,23 @@
 #ifndef __TABLE_H_
 #define __TABLE_H_
 
-#include <stdlib.h> /* size_t */
+#include "../opcode/MargValueType.h"
 
-#include <stdbool.h> /* bool */
-#include "../opcode/MargValue.h"
+#include <stdbool.h>
 
 // TODO Implement data-oriented approach by separating keys with values
 //      for better memory compaction, and less cache misses
 // TableKeys -> table -> {key1: index1, key2: index2, ...}
 // TableValues -> vector -> [index1, index2, ...]
 typedef struct table_entry {
-    MargValue key;
-    MargValue value;
+  MargValue key;
+  MargValue value;
 } table_entry;
 
 typedef struct table {
-    size_t count;
-    size_t capacity;
-    table_entry *entries;
+  size_t count;
+  size_t capacity;
+  table_entry *entries;
 } table;
 
 /**
@@ -32,7 +31,7 @@ void table_init(table *self);
         Overrites value if the key exists
  * @param self -> Current table
  * @param key
- * @param value 
+ * @param value
  * @return true -> Insertion succeeded
  * @return false -> Insertion failed
  */
@@ -73,6 +72,7 @@ void table_add_all(table *src, table *dest);
  * @param hash
  * @return MargValue
  */
-MargValue table_find_string(table *self, char *chars, size_t size, uint64_t hash);
+MargValue
+table_find_string(table *self, char *chars, size_t size, uint64_t hash);
 
 #endif

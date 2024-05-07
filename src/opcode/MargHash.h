@@ -1,10 +1,7 @@
 #ifndef __MARG_HASH_H_
 #define __MARG_HASH_H_
 
-#include <stdlib.h> /* size_t */
-
 #include "MargObject.h"
-#include "MargValue.h"
 
 // TODO Implement data-oriented approach by separating keys with values
 //      for better memory compaction, and less cache misses
@@ -17,8 +14,8 @@
  * @param value
  */
 typedef struct MargHashEntry {
-    MargValue key;
-    MargValue value;
+  MargValue key;
+  MargValue value;
 } MargHashEntry;
 
 /**
@@ -29,11 +26,11 @@ typedef struct MargHashEntry {
  * @param entires -> A MargHashEntry pointer array
  */
 typedef struct MargHash {
-    MargObject _;
+  MargObject _;
 
-    size_t alloced;
-    size_t size;
-    MargHashEntry *entries;
+  size_t alloced;
+  size_t size;
+  MargHashEntry *entries;
 } MargHash;
 
 /**
@@ -73,8 +70,7 @@ void marg_hash_delete(MargHash *self, MargValue key);
  * @param self -> Current MargHash
  * @return size_t -> Number of entries
  */
-#define marg_hash_size(self) \
-    (self)->size;
+#define marg_hash_size(self) (self)->size;
 
 /**
  * @brief String representation for hash literals in the Java style

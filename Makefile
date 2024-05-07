@@ -6,12 +6,12 @@ OPT = -O3
 VERSION = -std=c2x
 
 FLAGS = -Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic
-WARNINGS = -Wno-strict-prototypes -Wno-unused-function
+WARNINGS = -Wno-strict-prototypes -Wno-unused-function -Wno-unused-parameter -Wno-keyword-macro -Wno-extra-semi
 HEADERS =
 LIBS = libs/readline/libreadline.dylib
 
 SRC = src/**/*.c
-INPUT = $(SRC) $(NAME).c
+INPUT = $(SRC) src/$(NAME).c
 OUTPUT = $(NAME)
 
 TESTINPUT = spec/$(TEST).c $(SRC)

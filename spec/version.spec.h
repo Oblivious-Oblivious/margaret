@@ -5,9 +5,9 @@
 #include "cSpec.h"
 
 module(VersionSpec, {
-    it("checks that latest version number", {
-        assert_that_charptr(MARGARET_VERSION equals to "0.0.1");
-    });
+  it("checks that latest version number", {
+    assert_that_charptr(MARGARET_VERSION equals to "0.0.1");
+  });
 })
 
 #endif

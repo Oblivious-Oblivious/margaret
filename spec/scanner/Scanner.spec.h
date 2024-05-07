@@ -4,8 +4,11 @@
 #include "../../src/scanner/Scanner.h"
 #include "../cSpec.h"
 
-module(ScannerSpec, {
+module(
+  ScannerSpec,
+  {
     // TODO
-})
+  }
+)
 
 #endif

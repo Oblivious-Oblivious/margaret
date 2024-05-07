@@ -1,12 +1,8 @@
 #ifndef __CHUNK_H_
 #define __CHUNK_H_
 
-#include <stdlib.h> /* size_t */
-#include <stdint.h> /* uint8_t */
-
 #include "memory.h"
 #include "temporaries.h"
-#include "../opcode/MargValue.h"
 
 #define CHUNK_GROW_FACTOR 1.618
 
@@ -15,16 +11,18 @@
  * @param items -> A 8-bit integer array for storing opcodes and stack indices
  * @param alloced -> The total memory capacity of the vector
  * @param size -> The total number of values
- * @param lines -> An array which indices map with those of `items`, storing line information for each opcode
- * @param temporaries -> A vector storing actual MargValues of created temporaries
+ * @param lines -> An array which indices map with those of `items`, storing
+ * line information for each opcode
+ * @param temporaries -> A vector storing actual MargValues of created
+ * temporaries
  */
 typedef struct chunk {
-    uint8_t *items;
-    size_t alloced;
-    size_t size;
+  uint8_t *items;
+  size_t alloced;
+  size_t size;
 
-    size_t *lines;
-    temporaries temp_vector;
+  size_t *lines;
+  temporaries temp_vector;
 } chunk;
 
 /**
@@ -37,18 +35,23 @@ chunk *chunk_new(void);
  * @desc: Ensure there is enough space for values in the chunk
  * @param self -> The vector to use
  **/
-#define chunk_ensure_space(self) do { \
+#define chunk_ensure_space(self)                               \
+  do {                                                         \
     size_t new_capacity = (self)->alloced * CHUNK_GROW_FACTOR; \
-    uint8_t *new_items = (uint8_t*)collected_realloc((self)->items, sizeof(uint8_t) * new_capacity); \
-    size_t *new_lines = (size_t*)collected_realloc((self)->lines, sizeof(size_t) * new_capacity); \
-    \
-    if(new_items) { \
-        (self)->alloced = new_capacity; \
-        (self)->items = new_items; \
-    } \
-    if(new_lines) \
-        (self)->lines = new_lines; \
-} while(0)
+    uint8_t *new_items  = (uint8_t *)collected_realloc(        \
+      (self)->items, sizeof(uint8_t) * new_capacity           \
+    );                                                        \
+    size_t *new_lines = (size_t *)collected_realloc(           \
+      (self)->lines, sizeof(size_t) * new_capacity             \
+    );                                                         \
+                                                               \
+    if(new_items) {                                            \
+      (self)->alloced = new_capacity;                          \
+      (self)->items   = new_items;                             \
+    }                                                          \
+    if(new_lines)                                              \
+      (self)->lines = new_lines;                               \
+  } while(0)
 
 /**
  * @brief Adds a new item in the vector,
@@ -57,14 +60,15 @@ chunk *chunk_new(void);
  * @param item -> Item to add
  * @param line -> Line number the bytecode was emitted from
  */
-#define chunk_add(self, item, line) do { \
-    if((self)->alloced == (self)->size) \
-        chunk_ensure_space((self)); \
-    \
+#define chunk_add(self, item, line)       \
+  do {                                    \
+    if((self)->alloced == (self)->size)   \
+      chunk_ensure_space((self));         \
+                                          \
     (self)->items[(self)->size] = (item); \
     (self)->lines[(self)->size] = (line); \
-    (self)->size++; \
-} while(0)
+    (self)->size++;                       \
+  } while(0)
 
 /**
  * @brief Get the value of a specific chunk index
@@ -88,10 +92,11 @@ chunk *chunk_new(void);
  * @param value -> MargValue
  * @return size_t -> The index the temporary was appended to
  */
-#define chunk_temporaries_add(chunk, value, index) do { \
-    temporaries_add(&(chunk)->temp_vector, (value)); \
+#define chunk_temporaries_add(chunk, value, index)          \
+  do {                                                      \
+    temporaries_add(&(chunk)->temp_vector, (value));        \
     *(index) = temporaries_size(&(chunk)->temp_vector) - 1; \
-} while(0)
+  } while(0)
 
 /**
  * @brief Helper for retrieving a temporary from the
@@ -101,7 +106,7 @@ chunk *chunk_new(void);
  * @return MargValue -> The value of the temporary
  */
 #define chunk_temporaries_get(chunk, index) \
-    temporaries_get(&(chunk)->temp_vector, (index))
+  temporaries_get(&(chunk)->temp_vector, (index))
 
 /**
  * @brief Helper for retrieving the number of elements
@@ -109,7 +114,6 @@ chunk *chunk_new(void);
  * @param chunk -> Current chunk
  * @return size_t -> Number of elements
  */
-#define chunk_temporaries_size(chunk) \
-    temporaries_size(&(chunk)->temp_vector)
+#define chunk_temporaries_size(chunk) temporaries_size(&(chunk)->temp_vector)
 
 #endif

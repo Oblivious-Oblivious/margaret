@@ -4,8 +4,11 @@
 #include "../../src/vm/vm.h"
 #include "../cSpec.h"
 
-module(VmSpec, {
+module(
+  VmSpec,
+  {
     // TODO Stack tests and vm data tests
-})
+  }
+)
 
 #endif

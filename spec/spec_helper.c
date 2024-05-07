@@ -1,6 +1,9 @@
 #ifndef __SPEC_HELPER_H_
 #define __SPEC_HELPER_H_
 
+// cspec
+#include "cSpec.h"
+
 // margaret
 #include "version.spec.h"
 
@@ -95,91 +98,87 @@
 #include "vm/byte_conversions.spec.h"
 #include "vm/vm.spec.h"
 
-#include "cSpec.h"
-
 spec_suite({
-    VersionSpec();
+  VersionSpec();
 
-    chunk_spec();
-    fnv_1a_64_hash_spec();
-    memory_spec();
-    string_spec();
-    table_spec();
-    temporaries_spec();
-    vector_spec();
+  chunk_spec();
+  fnv_1a_64_hash_spec();
+  memory_spec();
+  string_spec();
+  table_spec();
+  temporaries_spec();
+  vector_spec();
 
-    alternate_to_dec_spec();
-    FormalASTSpec();
+  alternate_to_dec_spec();
+  FormalASTSpec();
 
-    EmitterSpec();
+  EmitterSpec();
 
-    EvaluatorSpec();
+  EvaluatorSpec();
 
-    arithmetic_spec();
-    assignments_spec();
-    bitstrings_spec();
-    bitwise_spec();
-    booleans_spec();
-    c_functions_spec();
-    characters_spec();
-    classes_spec();
-    code_as_data_spec();
-    complex_spec();
-    conditionals_spec();
-    constants_spec();
-    conversions_spec();
-    date_time_spec();
-    errors_spec();
-    groups_spec();
-    hashes_spec();
-    identifiers_spec();
-    intervals_spec();
-    iterations_spec();
-    margaret_messages_spec();
-    messages_spec();
-    meta_evaluation_spec();
-    method_definition_spec();
-    numeric_spec();
-    procs_spec();
-    rational_spec();
-    strings_spec();
-    symbols_spec();
-    tensors_spec();
-    tuples_spec();
-    variables_spec();
+  arithmetic_spec();
+  assignments_spec();
+  bitstrings_spec();
+  bitwise_spec();
+  booleans_spec();
+  c_functions_spec();
+  characters_spec();
+  classes_spec();
+  code_as_data_spec();
+  complex_spec();
+  conditionals_spec();
+  constants_spec();
+  conversions_spec();
+  date_time_spec();
+  errors_spec();
+  groups_spec();
+  hashes_spec();
+  identifiers_spec();
+  intervals_spec();
+  iterations_spec();
+  margaret_messages_spec();
+  messages_spec();
+  meta_evaluation_spec();
+  method_definition_spec();
+  numeric_spec();
+  procs_spec();
+  rational_spec();
+  strings_spec();
+  symbols_spec();
+  tensors_spec();
+  tuples_spec();
+  variables_spec();
 
-    InspectorSpec();
+  InspectorSpec();
 
-    LexerSpec();
+  LexerSpec();
 
-    file_loader_spec();
+  file_loader_spec();
 
-    MargFloatSpec();
-    MargHashSpec();
-    MargIntegerSpec();
-    MargMethodSpec();
-    MargObjectSpec();
-    MargProcSpec();
-    MargStringSpec();
-    MargTensorSpec();
-    MargValueSpec();
+  MargFloatSpec();
+  MargHashSpec();
+  MargIntegerSpec();
+  MargMethodSpec();
+  MargObjectSpec();
+  MargProcSpec();
+  MargStringSpec();
+  MargTensorSpec();
+  MargValueSpec();
 
-    OptimizerSpec();
+  OptimizerSpec();
 
-    ParserSpec();
+  ParserSpec();
 
-    ScannerSpec();
+  ScannerSpec();
 
-    TokenSpec();
-    TokenTableSpec();
-    TypeSpec();
+  TokenSpec();
+  TokenTableSpec();
+  TypeSpec();
 
-    byte_conversions_spec();
-    VmSpec();
-})
+  byte_conversions_spec();
+  VmSpec();
+});
 
-int main(void) {
-    run_spec_suite("failing");
-}
+int main(void) { run_spec_suite("failing"); }
 
 #endif
