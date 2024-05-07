@@ -1,16 +1,16 @@
-# Margaret
+# margaret
 
 [![GPLv3 License](https://img.shields.io/badge/license-GPL%20v3-yellow.svg)](./LICENSE)
 
 Margaret is a modern programming language focused around objects and messages.
 It offers powerful literals, easy to use objects and smalltalk-like message structures.
 
-* Every value in Margaret is treated as an object.
-* There are no reserved words and no explicit syntax apart from message sends.
-* Uses prototype based objects in the likes of Self or Javascript.
-* Uses C-style literals like int, float, string.
-* Implements tensors, hashes, tuples as modern built-in data structures.
-* Runs on a portable, lightweight and embeddable stack based VM.
+- Every value in margaret is treated as an object.
+- There are no reserved words and no explicit syntax apart from message sends.
+- Uses prototype based objects in the likes of Self or Javascript.
+- Uses C-style literals like int, float, string.
+- Implements tensors, hashes, tuples as modern built-in data structures.
+- Runs on a portable, lightweight and embeddable stack based VM.
 
 ## Installation
 
@@ -46,4 +46,4 @@ puts: (ultimate_answer: 42))
 
 ## Contributors
 
-- [Oblivious](https://github.com/Oblivious-Oblivious) - creator and maintainer
+- [oblivious](https://github.com/Oblivious-Oblivious) - creator and maintainer
