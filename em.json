@@ -17,11 +17,11 @@
       "opt": "-Og -g",
       "version": "-std=c99",
       "flags": "-Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic",
-      "warnings": "-Wno-comment -Wno-implicit-function-declaration -Wno-unused-function -Wno-strict-prototypes",
+      "warnings": "-Wno-unused-function -Wno-strict-prototypes",
       "libs": "libs/readline/libreadline.dylib"
     },
     "release": {
-      "opt": "-O2",
+      "opt": "-O3",
       "version": "-std=c2x",
       "flags": "",
       "warnings": "",

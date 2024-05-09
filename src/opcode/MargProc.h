@@ -1,8 +1,6 @@
 #ifndef __MARG_PROC_H_
 #define __MARG_PROC_H_
 
-typedef struct MargProc MargProc;
-
 #include "../base/chunk.h"
 #include "MargMethod.h"
 #include "MargObject.h"
