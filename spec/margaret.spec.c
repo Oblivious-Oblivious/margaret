@@ -11,7 +11,6 @@
 #include "base/string.spec.h"
 #include "base/table.spec.h"
 #include "base/temporaries.spec.h"
-#include "base/vector.spec.h"
 
 // bytecode
 #include "bytecode/alternate_to_dec.spec.h"
@@ -104,7 +103,6 @@ spec_suite({
   string_spec();
   table_spec();
   temporaries_spec();
-  vector_spec();
 
   alternate_to_dec_spec();
   FormalASTSpec();

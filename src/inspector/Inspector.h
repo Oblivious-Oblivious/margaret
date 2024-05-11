@@ -9,7 +9,7 @@
  * @return vector* -> The list of disassembled
     instructions as marg_strings (for testing)
  */
-vector *inspect_vm_bytecode(VM *vm);
+EmeraldsVector *inspect_vm_bytecode(VM *vm);
 
 /**
  * @brief Prints without returning inspection results

@@ -93,7 +93,7 @@ static void __add_temporary_function(
   }
 }
 
-VM *emitter_emit(VM *vm, vector *formal_bytecode) {
+VM *emitter_emit(VM *vm, EmeraldsVector *formal_bytecode) {
   MargObject *marg_object =
     AS_OBJECT(table_get(&vm->global_variables, MARG_STRING("$Margaret")));
   MargMethod *main_method =

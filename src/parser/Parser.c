@@ -1,5 +1,6 @@
 #include "Parser.h"
 
+#include "../base/memory.h"
 #include "../bytecode/FormalAST.h"
 
 #define lookahead_1_value_equals(token)                        \
@@ -46,7 +47,7 @@
 #define __chain_of(selector)                                      \
   do {                                                            \
     while(1) {                                                    \
-      vector *chain = selector(self);                             \
+      EmeraldsVector *chain = selector(self);                     \
       if(vector_size(chain) == 1 && vector_get(chain, 0) == NULL) \
         break;                                                    \
       vector_add(sel, chain);                                     \
@@ -61,9 +62,11 @@ Parser *parser_new(TokenTable *tokens) {
   return self;
 }
 
-vector *parser_analyze_syntax(Parser *self) { return parser_first_unit(self); }
+EmeraldsVector *parser_analyze_syntax(Parser *self) {
+  return parser_first_unit(self);
+}
 
-vector *parser_first_unit(Parser *self) {
+EmeraldsVector *parser_first_unit(Parser *self) {
   if(lookahead_1_value_equals(")")) {
     return parser_group(self);
   } else if(lookahead_1_value_equals("]")) {
@@ -71,20 +74,20 @@ vector *parser_first_unit(Parser *self) {
   } else if(lookahead_1_value_equals("}")) {
     return parser_hash_literal(self);
   } else {
-    vector *result = parser_translation_unit(self);
+    EmeraldsVector *result = parser_translation_unit(self);
     ensure_value("eof", "reached end of program.");
     return ast_first_unit(result);
   }
 }
 
-vector *parser_translation_unit(Parser *self) {
+EmeraldsVector *parser_translation_unit(Parser *self) {
   return ast_translation_unit(
     parser_assignment_chain(self), parser_message(self)
   );
 }
 
-vector *parser_assignment_chain(Parser *self) {
-  vector *optional_assignment_list = vector_new_empty();
+EmeraldsVector *parser_assignment_chain(Parser *self) {
+  EmeraldsVector *optional_assignment_list = vector_new_empty();
   while((lookahead_1_type_equals(TOKEN_IDENTIFIER) &&
          lookahead_2_value_equals("=")) ||
         (lookahead_1_value_equals("@") &&
@@ -99,19 +102,19 @@ vector *parser_assignment_chain(Parser *self) {
   return optional_assignment_list;
 }
 
-vector *parser_assignment(Parser *self) {
-  vector *var = parser_variable(self);
+EmeraldsVector *parser_assignment(Parser *self) {
+  EmeraldsVector *var = parser_variable(self);
   ensure_value("=", "expected '=' on assignment message.");
   return ast_assignment(var);
 }
 
-vector *parser_message(Parser *self) {
+EmeraldsVector *parser_message(Parser *self) {
   return ast_message(parser_keyword_message(self));
 }
 
-vector *parser_unary_message(Parser *self) {
-  vector *obj = parser_unary_object(self);
-  vector *sel = vector_new_empty();
+EmeraldsVector *parser_unary_message(Parser *self) {
+  EmeraldsVector *obj = parser_unary_object(self);
+  EmeraldsVector *sel = vector_new_empty();
   __chain_of(parser_unary_selector);
 
   if(vector_size(sel) == 0) {
@@ -121,11 +124,11 @@ vector *parser_unary_message(Parser *self) {
   }
 }
 
-vector *parser_unary_object(Parser *self) {
+EmeraldsVector *parser_unary_object(Parser *self) {
   return ast_unary_object(parser_expression(self));
 }
 
-vector *parser_unary_selector(Parser *self) {
+EmeraldsVector *parser_unary_selector(Parser *self) {
   if(lookahead_1_type_equals(TOKEN_IDENTIFIER) &&
      (lookahead_2_value_equals(":") ||
       (lookahead_2_type_equals(TOKEN_ID_SYMBOL) && lookahead_3_value_equals(":")
@@ -146,9 +149,9 @@ vector *parser_unary_selector(Parser *self) {
   }
 }
 
-vector *parser_binary_message(Parser *self) {
-  vector *obj = parser_binary_object(self);
-  vector *sel = vector_new_empty();
+EmeraldsVector *parser_binary_message(Parser *self) {
+  EmeraldsVector *obj = parser_binary_object(self);
+  EmeraldsVector *sel = vector_new_empty();
   __chain_of(parser_binary_selector);
 
   if(vector_size(sel) == 0) {
@@ -158,16 +161,16 @@ vector *parser_binary_message(Parser *self) {
   }
 }
 
-vector *parser_binary_object(Parser *self) {
+EmeraldsVector *parser_binary_object(Parser *self) {
   return ast_binary_object(parser_unary_message(self));
 }
 
-vector *parser_binary_selector(Parser *self) {
+EmeraldsVector *parser_binary_selector(Parser *self) {
   if(lookahead_1_type_equals(TOKEN_MESSAGE_SYMBOL)) {
     string *sel = ensure_type(
       TOKEN_MESSAGE_SYMBOL, "expected message symbol on binary selector."
     );
-    vector *obj = parser_unary_message(self);
+    EmeraldsVector *obj = parser_unary_message(self);
 
     if(vector_size(obj) == 1 && vector_get(obj, 0) == NULL) {
       return ast_empty();
@@ -179,9 +182,9 @@ vector *parser_binary_selector(Parser *self) {
   }
 }
 
-vector *parser_keyword_message(Parser *self) {
-  vector *obj = parser_keyword_object(self);
-  vector *sel = vector_new_empty();
+EmeraldsVector *parser_keyword_message(Parser *self) {
+  EmeraldsVector *obj = parser_keyword_object(self);
+  EmeraldsVector *sel = vector_new_empty();
   __chain_of(parser_keyword_selector);
 
   if(vector_size(sel) == 0) {
@@ -191,11 +194,11 @@ vector *parser_keyword_message(Parser *self) {
   }
 }
 
-vector *parser_keyword_object(Parser *self) {
+EmeraldsVector *parser_keyword_object(Parser *self) {
   return ast_keyword_object(parser_binary_message(self));
 }
 
-vector *parser_keyword_selector(Parser *self) {
+EmeraldsVector *parser_keyword_selector(Parser *self) {
   if(lookahead_1_type_equals(TOKEN_IDENTIFIER) &&
      (lookahead_2_value_equals(":") ||
       (lookahead_2_type_equals(TOKEN_ID_SYMBOL) && lookahead_3_value_equals(":")
@@ -209,7 +212,7 @@ vector *parser_keyword_selector(Parser *self) {
       );
     }
     string *delim = ensure_value(":", "expected ':' on keyword selector.");
-    vector *obj   = parser_binary_message(self);
+    EmeraldsVector *obj = parser_binary_message(self);
 
     if(vector_size(obj) == 1 && vector_get(obj, 0) == NULL) {
       return ast_empty();
@@ -221,7 +224,7 @@ vector *parser_keyword_selector(Parser *self) {
   }
 }
 
-vector *parser_expression(Parser *self) {
+EmeraldsVector *parser_expression(Parser *self) {
   if(lookahead_1_value_equals("(")) {
     return ast_expression(parser_group(self));
   } else if(lookahead_1_type_equals(TOKEN_IDENTIFIER) &&
@@ -251,10 +254,10 @@ vector *parser_expression(Parser *self) {
   }
 }
 
-vector *parser_group(Parser *self) {
+EmeraldsVector *parser_group(Parser *self) {
   ensure_value("(", "missing opening parenthesis on group.");
 
-  vector *__items = vector_new_empty();
+  EmeraldsVector *__items = vector_new_empty();
   while(!lookahead_1_value_equals(")") && !lookahead_1_value_equals("eof")) {
     vector_add(__items, parser_translation_unit(self));
 
@@ -267,7 +270,7 @@ vector *parser_group(Parser *self) {
   return ast_group(__items);
 }
 
-vector *parser_variable(Parser *self) {
+EmeraldsVector *parser_variable(Parser *self) {
   if(lookahead_1_value_equals("@")) {
     return ast_variable(
       ensure_value("@", "expected '@' on instance variable declaration."),
@@ -292,10 +295,10 @@ vector *parser_variable(Parser *self) {
   }
 }
 
-vector *parser_proc_literal(Parser *self) {
+EmeraldsVector *parser_proc_literal(Parser *self) {
   ensure_value("{", "missing opening curly on proc literal.");
 
-  vector *__params = vector_new_empty();
+  EmeraldsVector *__params = vector_new_empty();
   while(lookahead_1_type_equals(TOKEN_IDENTIFIER) &&
         (lookahead_2_value_equals(",") || lookahead_2_value_equals("|"))) {
     vector_add(
@@ -311,13 +314,13 @@ vector *parser_proc_literal(Parser *self) {
   if(lookahead_1_value_equals("|")) {
     ensure_value("|", "missing '|' symbol on proc literal.");
   }
-  vector *function = parser_translation_unit(self);
+  EmeraldsVector *function = parser_translation_unit(self);
 
   ensure_value("}", "missing closing curly on proc literal.");
   return ast_proc_literal(__params, function);
 }
 
-vector *parser_c_function_declaration(Parser *self) {
+EmeraldsVector *parser_c_function_declaration(Parser *self) {
   ensure_value("#", "missing '###' on C function declaration.");
   ensure_value("#", "missing '###' on C function declaration.");
   ensure_value("#", "missing '###' on C function declaration.");
@@ -336,7 +339,7 @@ vector *parser_c_function_declaration(Parser *self) {
   string *name =
     ensure_type(TOKEN_IDENTIFIER, "expected identifier on C function name.");
 
-  vector *__params = vector_new_empty();
+  EmeraldsVector *__params = vector_new_empty();
   ensure_value("(", "missing opening parenthesis on C function declaration");
   while(lookahead_1_type_equals(TOKEN_IDENTIFIER)) {
     if(lookahead_1_value_equals("void") && lookahead_2_value_equals(")")) {
@@ -358,7 +361,7 @@ vector *parser_c_function_declaration(Parser *self) {
     string *param_name = ensure_type(
       TOKEN_IDENTIFIER, "expected identifier on C function param name."
     );
-    vector *param = vector_new(param_type, param_name);
+    EmeraldsVector *param = vector_new(param_type, param_name);
     vector_add(__params, param);
     if(!lookahead_1_value_equals(")") && !lookahead_1_value_equals("eof")) {
       ensure_value(",", "C function parameters should be separated by commas.");
@@ -369,10 +372,10 @@ vector *parser_c_function_declaration(Parser *self) {
   return ast_c_function_declaration(return_type, name, __params);
 }
 
-vector *parser_method_definition_literal(Parser *self) {
+EmeraldsVector *parser_method_definition_literal(Parser *self) {
   ensure_value("#", "missing '#' on method definition.");
 
-  vector *multimethod_object_default_value = NULL;
+  EmeraldsVector *multimethod_object_default_value = NULL;
   if(lookahead_1_type_not_equals(TOKEN_IDENTIFIER) &&
      lookahead_1_type_not_equals(TOKEN_MESSAGE_SYMBOL)) {
     multimethod_object_default_value = parser_literal(self);
@@ -403,8 +406,8 @@ vector *parser_method_definition_literal(Parser *self) {
   }
 }
 
-vector *parser_unary_method_definition(
-  Parser *self, vector *multimethod_object_default_value
+EmeraldsVector *parser_unary_method_definition(
+  Parser *self, EmeraldsVector *multimethod_object_default_value
 ) {
   string *selector = ensure_type(
     TOKEN_IDENTIFIER, "expected identifier on unary method definition."
@@ -416,20 +419,20 @@ vector *parser_unary_method_definition(
     );
   }
   ensure_value("=>", "missing '=>' on unary method definition.");
-  vector *function = parser_translation_unit(self);
+  EmeraldsVector *function = parser_translation_unit(self);
   return ast_unary_method_definition(
     multimethod_object_default_value, selector, function
   );
 }
 
-vector *parser_binary_method_definition(
-  Parser *self, vector *multimethod_object_default_value
+EmeraldsVector *parser_binary_method_definition(
+  Parser *self, EmeraldsVector *multimethod_object_default_value
 ) {
   string *selector = ensure_type(
     TOKEN_MESSAGE_SYMBOL, "expected message symbol on binary method definition."
   );
 
-  vector *param = NULL;
+  EmeraldsVector *param = NULL;
   if(lookahead_1_value_equals("_")) {
     ensure_value("_", "missing '_' on multimethod default parameter");
     param = parser_any_object();
@@ -440,17 +443,17 @@ vector *parser_binary_method_definition(
   }
 
   ensure_value("=>", "missing '=>' on binary method definition.");
-  vector *function = parser_translation_unit(self);
+  EmeraldsVector *function = parser_translation_unit(self);
   return ast_binary_method_definition(
     multimethod_object_default_value, selector, param, function
   );
 }
 
-vector *parser_keyword_method_definition(
-  Parser *self, vector *multimethod_object_default_value
+EmeraldsVector *parser_keyword_method_definition(
+  Parser *self, EmeraldsVector *multimethod_object_default_value
 ) {
-  string *selector = string_new("");
-  vector *params   = vector_new_empty();
+  string *selector       = string_new("");
+  EmeraldsVector *params = vector_new_empty();
   while(lookahead_1_type_equals(TOKEN_IDENTIFIER)) {
     string *key = ensure_type(
       TOKEN_IDENTIFIER, "expected identifier on keyword method selector."
@@ -478,15 +481,15 @@ vector *parser_keyword_method_definition(
     }
   }
   ensure_value("=>", "missing '=>' on keyword method definition.");
-  vector *function = parser_translation_unit(self);
+  EmeraldsVector *function = parser_translation_unit(self);
   return ast_keyword_method_definition(
     multimethod_object_default_value, selector, params, function
   );
 }
 
-vector *parser_any_object(void) { return ast_any_object(); }
+EmeraldsVector *parser_any_object(void) { return ast_any_object(); }
 
-vector *parser_literal(Parser *self) {
+EmeraldsVector *parser_literal(Parser *self) {
   string *sign = string_new("");
   if(lookahead_1_value_equals("+")) {
     sign = ensure_value("+", "expected '+' on literal.");
@@ -527,7 +530,7 @@ vector *parser_literal(Parser *self) {
   }
 }
 
-vector *parser_nil_literal(Parser *self) {
+EmeraldsVector *parser_nil_literal(Parser *self) {
   ensure_value(
     "$", "primitive '$nil' is global and requires '$' for reference."
   );
@@ -535,7 +538,7 @@ vector *parser_nil_literal(Parser *self) {
   return ast_nil_literal();
 }
 
-vector *parser_false_literal(Parser *self) {
+EmeraldsVector *parser_false_literal(Parser *self) {
   ensure_value(
     "$", "primitive '$false' is global and requires '$' for reference."
   );
@@ -543,7 +546,7 @@ vector *parser_false_literal(Parser *self) {
   return ast_false_literal();
 }
 
-vector *parser_true_literal(Parser *self) {
+EmeraldsVector *parser_true_literal(Parser *self) {
   ensure_value(
     "$", "primitive '$true' is global and requires '$' for reference."
   );
@@ -551,28 +554,28 @@ vector *parser_true_literal(Parser *self) {
   return ast_true_literal();
 }
 
-vector *parser_integer_literal(Parser *self, string *sign) {
+EmeraldsVector *parser_integer_literal(Parser *self, string *sign) {
   return ast_integer_literal(
     sign, ensure_type(TOKEN_INTEGER, "expected integer literal.")
   );
 }
 
-vector *parser_float_literal(Parser *self, string *sign) {
+EmeraldsVector *parser_float_literal(Parser *self, string *sign) {
   return ast_float_literal(
     sign, ensure_type(TOKEN_FLOAT, "expected float literal.")
   );
 }
 
-vector *parser_string_literal(Parser *self) {
+EmeraldsVector *parser_string_literal(Parser *self) {
   return ast_string_literal(
     ensure_type(TOKEN_STRING, "expected string literal.")
   );
 }
 
-vector *parser_tensor_literal(Parser *self) {
+EmeraldsVector *parser_tensor_literal(Parser *self) {
   ensure_value("[", "missing opening bracket on tensor.");
 
-  vector *__items = vector_new_empty();
+  EmeraldsVector *__items = vector_new_empty();
   while(!lookahead_1_value_equals("]") && !lookahead_1_value_equals("eof")) {
     vector_add(__items, parser_translation_unit(self));
     if(!lookahead_1_value_equals("]") && !lookahead_1_value_equals("eof")) {
@@ -584,11 +587,11 @@ vector *parser_tensor_literal(Parser *self) {
   return ast_tensor_literal(__items);
 }
 
-vector *parser_tuple_literal(Parser *self) {
+EmeraldsVector *parser_tuple_literal(Parser *self) {
   ensure_value("[", "missing opening bracket on tuple.");
   ensure_value("<", "missing opening tag on tuple.");
 
-  vector *__items = vector_new_empty();
+  EmeraldsVector *__items = vector_new_empty();
   while(!lookahead_1_value_equals("]") && !lookahead_1_value_equals("eof")) {
     vector_add(__items, parser_translation_unit(self));
     if(!lookahead_1_value_equals("]") && !lookahead_1_value_equals("eof")) {
@@ -600,10 +603,10 @@ vector *parser_tuple_literal(Parser *self) {
   return ast_tuple_literal(__items);
 }
 
-vector *parser_hash_literal(Parser *self) {
+EmeraldsVector *parser_hash_literal(Parser *self) {
   ensure_value("{", "missing opening curly brace on hash.");
 
-  vector *__items = vector_new_empty();
+  EmeraldsVector *__items = vector_new_empty();
   while(!lookahead_1_value_equals("}") && !lookahead_1_value_equals("eof")) {
     vector_add(__items, parser_association_literal(self));
     if(!lookahead_1_value_equals("}") && !lookahead_1_value_equals("eof")) {
@@ -615,29 +618,29 @@ vector *parser_hash_literal(Parser *self) {
   return ast_hash_literal(__items);
 }
 
-vector *parser_association_literal(Parser *self) {
+EmeraldsVector *parser_association_literal(Parser *self) {
   if(lookahead_1_type_equals(TOKEN_IDENTIFIER)) {
     string *key = ensure_type(
       TOKEN_IDENTIFIER, "expected identifier on association literal."
     );
     ensure_value(":", "hash keys should be denoted by colons.");
-    vector *value = parser_translation_unit(self);
+    EmeraldsVector *value = parser_translation_unit(self);
     return ast_json_association(key, value);
   } else if(lookahead_1_type_equals(TOKEN_STRING)) {
-    vector *key = parser_string_literal(self);
+    EmeraldsVector *key = parser_string_literal(self);
     ensure_value(":", "hash keys should be denoted by colons.");
-    vector *value = parser_translation_unit(self);
+    EmeraldsVector *value = parser_translation_unit(self);
     return ast_association(key, value);
   } else {
     return ast_empty();
   }
 }
 
-vector *parser_bitstring_literal(Parser *self) {
+EmeraldsVector *parser_bitstring_literal(Parser *self) {
   ensure_value("{", "missing opening curly brace on bitstring");
   ensure_value("<", "missing opening tag on bitstring");
 
-  vector *__items = vector_new_empty();
+  EmeraldsVector *__items = vector_new_empty();
   while(!lookahead_1_value_equals("}") && !lookahead_1_value_equals("eof")) {
     vector_add(__items, parser_bit_literal(self));
     if(!lookahead_1_value_equals("}") && !lookahead_1_value_equals("eof")) {
@@ -649,8 +652,8 @@ vector *parser_bitstring_literal(Parser *self) {
   return ast_bitstring_literal(__items);
 }
 
-vector *parser_bit_literal(Parser *self) {
-  vector *bit = NULL;
+EmeraldsVector *parser_bit_literal(Parser *self) {
+  EmeraldsVector *bit = NULL;
   if(lookahead_1_type_equals(TOKEN_IDENTIFIER)) {
     bit = parser_variable(self);
   } else {
@@ -659,7 +662,7 @@ vector *parser_bit_literal(Parser *self) {
 
   if(lookahead_1_value_equals(":") && lookahead_2_type_equals(TOKEN_INTEGER)) {
     ensure_value(":", "bit size should be denoted by colons on bitstrings.");
-    vector *size = parser_integer_literal(self, string_new("+"));
+    EmeraldsVector *size = parser_integer_literal(self, string_new("+"));
     return ast_bit_size_literal(bit, size);
   } else {
     return ast_bit_literal(bit);

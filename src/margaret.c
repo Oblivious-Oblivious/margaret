@@ -18,7 +18,6 @@
  */
 
 #include "base/string.h"
-#include "base/vector.h"
 #include "opcode/MargValue.h"
 #include "scanner/Scanner.h"
 #include "vm/on_demand_compilation_pipeline.h"
@@ -31,7 +30,7 @@ static void PRINT(MargValue evaluated) {
   printf("%s\n", string_get(marg_value_format(evaluated)));
 }
 
-static void PRINT_FORMAL(vector *formal_bytecode) {
+static void PRINT_FORMAL(EmeraldsVector *formal_bytecode) {
   printf("[");
   size_t formal_bytecode_size = vector_size(formal_bytecode);
   if(formal_bytecode_size > 0) {
@@ -47,19 +46,19 @@ static void PRINT_FORMAL(vector *formal_bytecode) {
 
 static void margaret_repl(VM *vm) {
   while(1) {
-    vector *formal_bytecode = FORMALIZE(READ(SCAN("$> ")));
+    EmeraldsVector *formal_bytecode = FORMALIZE(READ(SCAN("$> ")));
     // PRINT_FORMAL(formal_bytecode);
     PRINT(EVAL(OPTIMIZE(EMIT(vm, formal_bytecode))));
   }
 }
 
 static void margaret_run_file(VM *vm, char *filename) {
-  string *chars           = LOAD(filename);
-  TokenTable *tokens      = READ(chars);
-  vector *formal_bytecode = FORMALIZE(tokens);
+  string *chars                   = LOAD(filename);
+  TokenTable *tokens              = READ(chars);
+  EmeraldsVector *formal_bytecode = FORMALIZE(tokens);
   // PRINT_FORMAL(formal_bytecode);
-  vm                      = EMIT(vm, formal_bytecode);
-  vm                      = OPTIMIZE(vm);
+  vm                              = EMIT(vm, formal_bytecode);
+  vm                              = OPTIMIZE(vm);
   EVAL(vm);
 }
 

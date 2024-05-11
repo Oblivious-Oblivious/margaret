@@ -1,7 +1,7 @@
 #ifndef __EMITTER_H_
 #define __EMITTER_H_
 
-#include "../base/vector.h"
+#include "../../libs/EmeraldsVector/export/EmeraldsVector.h"
 #include "../vm/vm.h"
 
 /**
@@ -11,6 +11,6 @@
  * @param vm -> The new vm object
  * @return VM* -> The modified VM object
  */
-VM *emitter_emit(VM *vm, vector *formal_bytecode);
+VM *emitter_emit(VM *vm, EmeraldsVector *formal_bytecode);
 
 #endif

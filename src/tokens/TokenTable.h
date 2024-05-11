@@ -1,7 +1,7 @@
 #ifndef __TOKEN_TABLE_H_
 #define __TOKEN_TABLE_H_
 
-#include "../base/vector.h"
+#include "../../libs/EmeraldsVector/export/EmeraldsVector.h"
 #include "Token.h"
 
 /**
@@ -12,7 +12,7 @@
  * @param pos -> Current position of table pointer
  */
 typedef struct TokenTable {
-  vector *token_list;
+  EmeraldsVector *token_list;
   size_t pos;
 } TokenTable;
 

@@ -24,8 +24,9 @@ static void write_offset_and_line_number_on(
  * @param offset -> Current offset
  * @return size_t -> Newly calculated offset
  */
-static size_t
-instruction_single(vector *res, char *name, chunk *chunk, size_t offset) {
+static size_t instruction_single(
+  EmeraldsVector *res, char *name, chunk *chunk, size_t offset
+) {
   uint8_t opcode = chunk_get(chunk, offset);
 
   string *disassembled_instruction = string_new("");
@@ -38,7 +39,7 @@ instruction_single(vector *res, char *name, chunk *chunk, size_t offset) {
 }
 
 static size_t
-instruction_send(vector *res, char *name, chunk *chunk, size_t offset) {
+instruction_send(EmeraldsVector *res, char *name, chunk *chunk, size_t offset) {
   uint8_t opcode             = chunk_get(chunk, offset);
   uint8_t message_name_index = chunk_get(chunk, offset + 1);
 
@@ -60,8 +61,9 @@ instruction_send(vector *res, char *name, chunk *chunk, size_t offset) {
   return offset + 2;
 }
 
-static size_t
-instruction_send_word(vector *res, char *name, chunk *chunk, size_t offset) {
+static size_t instruction_send_word(
+  EmeraldsVector *res, char *name, chunk *chunk, size_t offset
+) {
   uint8_t opcode   = chunk_get(chunk, offset);
   uint8_t bytes[2] = {
     chunk_get(chunk, offset + 1),
@@ -88,8 +90,9 @@ instruction_send_word(vector *res, char *name, chunk *chunk, size_t offset) {
   return offset + 3;
 }
 
-static size_t
-instruction_send_dword(vector *res, char *name, chunk *chunk, size_t offset) {
+static size_t instruction_send_dword(
+  EmeraldsVector *res, char *name, chunk *chunk, size_t offset
+) {
   uint8_t opcode   = chunk_get(chunk, offset);
   uint8_t bytes[4] = {
     chunk_get(chunk, offset + 1),
@@ -120,8 +123,9 @@ instruction_send_dword(vector *res, char *name, chunk *chunk, size_t offset) {
   return offset + 5;
 }
 
-static size_t
-instruction_object(vector *res, char *name, chunk *chunk, size_t offset) {
+static size_t instruction_object(
+  EmeraldsVector *res, char *name, chunk *chunk, size_t offset
+) {
   uint8_t opcode    = chunk_get(chunk, offset);
   uint8_t temporary = chunk_get(chunk, offset + 1);
 
@@ -141,8 +145,9 @@ instruction_object(vector *res, char *name, chunk *chunk, size_t offset) {
   return offset + 2;
 }
 
-static size_t
-instruction_object_word(vector *res, char *name, chunk *chunk, size_t offset) {
+static size_t instruction_object_word(
+  EmeraldsVector *res, char *name, chunk *chunk, size_t offset
+) {
   uint8_t opcode   = chunk_get(chunk, offset);
   uint8_t bytes[2] = {
     chunk_get(chunk, offset + 1),
@@ -170,8 +175,9 @@ instruction_object_word(vector *res, char *name, chunk *chunk, size_t offset) {
   return offset + 3;
 }
 
-static size_t
-instruction_object_dword(vector *res, char *name, chunk *chunk, size_t offset) {
+static size_t instruction_object_dword(
+  EmeraldsVector *res, char *name, chunk *chunk, size_t offset
+) {
   uint8_t opcode   = chunk_get(chunk, offset);
   uint8_t bytes[4] = {
     chunk_get(chunk, offset + 1),
@@ -203,8 +209,9 @@ instruction_object_dword(vector *res, char *name, chunk *chunk, size_t offset) {
   return offset + 5;
 }
 
-static size_t
-instruction_variable(vector *res, char *name, chunk *chunk, size_t offset) {
+static size_t instruction_variable(
+  EmeraldsVector *res, char *name, chunk *chunk, size_t offset
+) {
   uint8_t opcode   = chunk_get(chunk, offset);
   uint8_t variable = chunk_get(chunk, offset + 1);
 
@@ -225,7 +232,7 @@ instruction_variable(vector *res, char *name, chunk *chunk, size_t offset) {
 }
 
 static size_t instruction_variable_word(
-  vector *res, char *name, chunk *chunk, size_t offset
+  EmeraldsVector *res, char *name, chunk *chunk, size_t offset
 ) {
   uint8_t opcode   = chunk_get(chunk, offset);
   uint8_t bytes[2] = {
@@ -255,7 +262,7 @@ static size_t instruction_variable_word(
 }
 
 static size_t instruction_variable_dword(
-  vector *res, char *name, chunk *chunk, size_t offset
+  EmeraldsVector *res, char *name, chunk *chunk, size_t offset
 ) {
   uint8_t opcode   = chunk_get(chunk, offset);
   uint8_t bytes[4] = {
@@ -288,8 +295,9 @@ static size_t instruction_variable_dword(
   return offset + 5;
 }
 
-static size_t
-instruction_array_type(vector *res, char *name, chunk *chunk, size_t offset) {
+static size_t instruction_array_type(
+  EmeraldsVector *res, char *name, chunk *chunk, size_t offset
+) {
   uint8_t opcode             = chunk_get(chunk, offset);
   uint8_t number_of_elements = chunk_get(chunk, offset + 1);
 
@@ -312,7 +320,7 @@ instruction_array_type(vector *res, char *name, chunk *chunk, size_t offset) {
 }
 
 static size_t instruction_array_type_word(
-  vector *res, char *name, chunk *chunk, size_t offset
+  EmeraldsVector *res, char *name, chunk *chunk, size_t offset
 ) {
   uint8_t opcode   = chunk_get(chunk, offset);
   uint8_t bytes[2] = {
@@ -341,7 +349,7 @@ static size_t instruction_array_type_word(
 }
 
 static size_t instruction_array_type_dword(
-  vector *res, char *name, chunk *chunk, size_t offset
+  EmeraldsVector *res, char *name, chunk *chunk, size_t offset
 ) {
   uint8_t opcode   = chunk_get(chunk, offset);
   uint8_t bytes[4] = {
@@ -380,7 +388,8 @@ static size_t instruction_array_type_dword(
  * @param offset -> The current offset of the bytecode in the array
  * @return size_t -> The newly calculated offset
  */
-static size_t inspect_instruction(vector *res, chunk *chunk, size_t offset) {
+static size_t
+inspect_instruction(EmeraldsVector *res, chunk *chunk, size_t offset) {
   uint8_t instruction = chunk_get(chunk, offset);
   switch(instruction) {
   case OP_HALT:
@@ -558,8 +567,8 @@ static size_t inspect_instruction(vector *res, chunk *chunk, size_t offset) {
   }
 }
 
-vector *inspect_vm_bytecode(VM *vm) {
-  vector *res = vector_new_empty();
+EmeraldsVector *inspect_vm_bytecode(VM *vm) {
+  EmeraldsVector *res = vector_new_empty();
 
   size_t number_of_bytecodes = chunk_size(vm->current->bytecode);
   for(size_t offset = 0; offset < number_of_bytecodes;) {
@@ -570,7 +579,7 @@ vector *inspect_vm_bytecode(VM *vm) {
 }
 
 void inspect_and_print_vm_bytecode(VM *vm) {
-  vector *disassembled = inspect_vm_bytecode(vm);
+  EmeraldsVector *disassembled = inspect_vm_bytecode(vm);
 
   size_t disassembled_size = vector_size(disassembled);
   for(size_t i = 0; i < disassembled_size; i++) {

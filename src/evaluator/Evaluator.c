@@ -531,12 +531,12 @@ static void evaluator_run(VM *vm) {
 
       MargValue filename = STACK_POP(vm);
       STACK_POP(vm);
-      string *chars           = LOAD(AS_STRING(filename)->chars);
-      TokenTable *tokens      = READ(chars);
-      vector *formal_bytecode = FORMALIZE(tokens);
-      vm->current->bytecode   = chunk_new();
-      vm                      = EMIT(vm, formal_bytecode);
-      vm                      = OPTIMIZE(vm);
+      string *chars                   = LOAD(AS_STRING(filename)->chars);
+      TokenTable *tokens              = READ(chars);
+      EmeraldsVector *formal_bytecode = FORMALIZE(tokens);
+      vm->current->bytecode           = chunk_new();
+      vm                              = EMIT(vm, formal_bytecode);
+      vm                              = OPTIMIZE(vm);
       EVAL(vm);
 
       vm->current->bytecode = previous_bytecode;

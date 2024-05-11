@@ -1,5 +1,7 @@
 #include "TokenTable.h"
 
+#include "../base/memory.h"
+
 #include <stdio.h> /* fprintf */
 
 /**

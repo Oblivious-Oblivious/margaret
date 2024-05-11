@@ -6,8 +6,8 @@
 
 string *LOAD(char *filename);
 TokenTable *READ(string *chars);
-vector *FORMALIZE(TokenTable *tokens);
-VM *EMIT(VM *vm, vector *formal_bytecode);
+EmeraldsVector *FORMALIZE(TokenTable *tokens);
+VM *EMIT(VM *vm, EmeraldsVector *formal_bytecode);
 VM *OPTIMIZE(VM *vm);
 MargValue EVAL(VM *vm);
 

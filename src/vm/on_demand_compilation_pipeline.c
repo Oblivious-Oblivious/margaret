@@ -14,11 +14,11 @@ TokenTable *READ(string *chars) {
   return lexer_make_tokens(lexer_new("repl", chars));
 }
 
-vector *FORMALIZE(TokenTable *tokens) {
+EmeraldsVector *FORMALIZE(TokenTable *tokens) {
   return parser_analyze_syntax(parser_new(tokens));
 }
 
-VM *EMIT(VM *vm, vector *formal_bytecode) {
+VM *EMIT(VM *vm, EmeraldsVector *formal_bytecode) {
   return emitter_emit(vm, formal_bytecode);
 }
 

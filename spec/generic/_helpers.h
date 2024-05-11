@@ -2,16 +2,16 @@
 #define ___HELPERS_H_
 
 #include "../../libs/cSpec/export/cSpec.h"
+#include "../../libs/EmeraldsVector/export/EmeraldsVector.h"
 #include "../../src/base/string.h"
-#include "../../src/base/vector.h"
 #include "../../src/lexer/Lexer.h"
 #include "../../src/opcode/fmcodes.h"
 #include "../../src/parser/Parser.h"
 
-void parse(const char *code, vector *expected_result) {
+void parse(const char *code, EmeraldsVector *expected_result) {
   Lexer *l                         = lexer_new("file.marg", string_new(code));
   Parser *p                        = parser_new(lexer_make_tokens(l));
-  vector *res                      = parser_analyze_syntax(p);
+  EmeraldsVector *res              = parser_analyze_syntax(p);
   size_t size_of_res               = vector_size(res);
   size_t the_same_size_as_expected = vector_size(expected_result);
 
@@ -25,10 +25,10 @@ void parse(const char *code, vector *expected_result) {
   }
 }
 
-void debug(const char *code, vector *expected_result) {
+void debug(const char *code, EmeraldsVector *expected_result) {
   Lexer *l                         = lexer_new("file.marg", string_new(code));
   Parser *p                        = parser_new(lexer_make_tokens(l));
-  vector *res                      = parser_analyze_syntax(p);
+  EmeraldsVector *res              = parser_analyze_syntax(p);
   size_t size_of_res               = vector_size(res);
   size_t the_same_size_as_expected = vector_size(expected_result);
   printf("[");
@@ -58,9 +58,9 @@ void debug(const char *code, vector *expected_result) {
 }
 
 void error(const char *code, const char *error_message) {
-  Lexer *l    = lexer_new("file.marg", string_new(code));
-  Parser *p   = parser_new(lexer_make_tokens(l));
-  vector *res = parser_analyze_syntax(p);
+  Lexer *l            = lexer_new("file.marg", string_new(code));
+  Parser *p           = parser_new(lexer_make_tokens(l));
+  EmeraldsVector *res = parser_analyze_syntax(p);
   (void)res;
 }
 

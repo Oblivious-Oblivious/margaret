@@ -6,6 +6,7 @@
   "dependencies": {
     "EmeraldsBool": "Oblivious-Oblivious/EmeraldsBool",
     "EmeraldsCrossline": "Oblivious-Oblivious/EmeraldsCrossline",
+    "EmeraldsVector": "Oblivious-Oblivious/EmeraldsVector"
   },
 
   "dev-dependencies": {

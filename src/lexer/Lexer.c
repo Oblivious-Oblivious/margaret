@@ -1,5 +1,7 @@
 #include "Lexer.h"
 
+#include "../base/memory.h"
+
 #include <ctype.h> /* tolower */
 #include <stdio.h> /* fprintf */
 

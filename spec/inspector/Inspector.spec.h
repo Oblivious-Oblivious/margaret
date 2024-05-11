@@ -1,10 +1,10 @@
 #ifndef __INSPECTOR_SPEC_H_
 #define __INSPECTOR_SPEC_H_
 
+#include "../../libs/cSpec/export/cSpec.h"
 #include "../../src/inspector/Inspector.h"
 #include "../../src/opcode/MargValue.h"
 #include "../../src/opcode/opcodes.h"
-#include "../../libs/cSpec/export/cSpec.h"
 
 module(InspectorSpec, {
   // TODO Test for a `postcard` type mini program that includes every single
@@ -22,7 +22,7 @@ module(InspectorSpec, {
       chunk_add(bytecode, temporary_in_bytes[1], 123);
     }
 
-    vector *res = inspect_vm_bytecode(vm);
+    EmeraldsVector *res = inspect_vm_bytecode(vm);
     assert_that_charptr(string_get((string *)vector_get(res, 4000)) equals to
                         "2ee0         |      0c 0f a0            "
                         "PUT_OBJECT_WORD          42.42 @[4000]");
