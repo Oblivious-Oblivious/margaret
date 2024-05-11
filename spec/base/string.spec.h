@@ -1,8 +1,8 @@
 #ifndef __STRING_SPEC_H_
 #define __STRING_SPEC_H_
 
+#include "../../libs/cSpec/export/cSpec.h"
 #include "../../src/base/string.h"
-#include "../cSpec.h"
 
 module(string_spec, {
   describe("string", {

@@ -1,9 +1,9 @@
 #ifndef __PARSER_SPEC_H_
 #define __PARSER_SPEC_H_
 
+#include "../../libs/cSpec/export/cSpec.h"
 #include "../../src/lexer/Lexer.h"
 #include "../../src/parser/Parser.h"
-#include "../cSpec.h"
 
 module(ParserSpec, {
   it("creates a Parser object with Lexer as a parameter", {

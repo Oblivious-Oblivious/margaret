@@ -1,7 +1,7 @@
 #ifndef __ASSIGNMENTS_SPEC_H_
 #define __ASSIGNMENTS_SPEC_H_
 
-#include "../_helpers.h"
+#include "_helpers.h"
 
 module(assignments_spec, {
   it("parses assignments", {

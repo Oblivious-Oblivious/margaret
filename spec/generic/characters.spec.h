@@ -1,7 +1,7 @@
 #ifndef __CHARACTERS_SPEC_H_
 #define __CHARACTERS_SPEC_H_
 
-#include "../_helpers.h"
+#include "_helpers.h"
 
 module(characters_spec, {
   it("parses character literals", {

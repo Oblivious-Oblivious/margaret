@@ -1,8 +1,8 @@
 #ifndef __TOKEN_TABLE_SPEC_H_
 #define __TOKEN_TABLE_SPEC_H_
 
+#include "../../libs/cSpec/export/cSpec.h"
 #include "../../src/tokens/TokenTable.h"
-#include "../cSpec.h"
 
 TokenTable *t;
 void token_table_spec_setup(void) {

@@ -1,7 +1,7 @@
 #ifndef __MARG_TENSOR_SPEC_H_
 #define __MARG_TENSOR_SPEC_H_
 
-#include "../_helpers.h"
+#include "../../libs/cSpec/export/cSpec.h"
 
 module(
   MargTensorSpec,

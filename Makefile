@@ -1,33 +1,5 @@
-NAME = margaret
-TEST = spec_helper
+all: run_example
 
-CC = clang
-OPT = -O3
-VERSION = -std=c2x
-
-FLAGS = -Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic
-WARNINGS = -Wno-strict-prototypes -Wno-unused-function -Wno-unused-parameter -Wno-keyword-macro -Wno-extra-semi
-HEADERS =
-LIBS = libs/readline/libreadline.dylib
-
-SRC = src/**/*.c
-INPUT = $(SRC) src/$(NAME).c
-OUTPUT = $(NAME)
-
-TESTINPUT = spec/$(TEST).c $(SRC)
-TESTOUTPUT = spec/$(TEST)
-
-all: compiler
-
-compiler:
-	$(CC) $(OPT) $(VERSION) $(HEADERS) $(FLAGS) $(WARNINGS) $(REMOVE_WARN) $(LIBS) -o $(OUTPUT) $(INPUT)
-	@echo
-	./$(OUTPUT) examples/test.marg
-
-test:
-	$(CC) $(OPT) $(VERSION) $(HEADERS) $(FLAGS) $(WARNINGS) $(LIBS) -o $(TESTOUTPUT) $(TESTINPUT)
-	@echo
-	./$(TESTOUTPUT)
-
-clean:
-	$(RM) -r $(OUTPUT) $(TESTOUTPUT) ./*.dSYM
+run_example:
+	em build app debug
+	./export/margaret examples/test.marg

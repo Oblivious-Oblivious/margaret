@@ -1,8 +1,8 @@
 #ifndef __VECTOR_SPEC_H_
 #define __VECTOR_SPEC_H_
 
+#include "../../libs/cSpec/export/cSpec.h"
 #include "../../src/base/vector.h"
-#include "../cSpec.h"
 
 module(vector_spec, {
   describe("vector", {

@@ -1,8 +1,8 @@
 #ifndef __FORMAL_AST_SPEC_H_
 #define __FORMAL_AST_SPEC_H_
 
+#include "../../libs/cSpec/export/cSpec.h"
 #include "../../src/bytecode/FormalAST.h"
-#include "../_helpers.h"
 
 module(
   FormalASTSpec,

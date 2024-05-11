@@ -2,7 +2,7 @@
 #define __FILE_LOADER_SPEC_H_
 
 #include "../../src/loader/file_loader.h"
-#include "../cSpec.h"
+#include "../../libs/cSpec/export/cSpec.h"
 
 file_loader *loader;
 void setup_file_loader(void) { loader = file_loader_new(); }

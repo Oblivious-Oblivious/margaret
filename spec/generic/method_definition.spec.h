@@ -1,7 +1,7 @@
 #ifndef __METHOD_DEFINITION_SPEC_H_
 #define __METHOD_DEFINITION_SPEC_H_
 
-#include "../_helpers.h"
+#include "_helpers.h"
 
 module(method_definition_spec, {
   it("parses unary methods", {

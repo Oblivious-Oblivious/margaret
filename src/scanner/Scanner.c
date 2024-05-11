@@ -1,13 +1,13 @@
 #include "Scanner.h"
 
+#include <string.h>
+
 string *scanner_scan(char *prompt) {
-  char *line = readline(prompt);
+  char bounds_buf[4096];
+  char *line = crossline_readline(prompt, bounds_buf, sizeof(bounds_buf));
   if(!strcmp(line, "")) {
     return string_new("()");
-  } else if(!strcmp(line, "<<exit>>") || !strcmp(line, "<<quit>>")) {
-    exit(0);
   } else {
-    add_history(line);
     return string_new(line);
   }
 }

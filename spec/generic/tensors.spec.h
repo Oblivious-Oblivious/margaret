@@ -1,7 +1,7 @@
 #ifndef __TENSORS_SPEC_H_
 #define __TENSORS_SPEC_H_
 
-#include "../_helpers.h"
+#include "_helpers.h"
 
 module(tensors_spec, {
   it("parses tensor literals", {

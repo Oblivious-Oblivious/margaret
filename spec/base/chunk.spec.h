@@ -1,8 +1,8 @@
 #ifndef __CHUNK_SPEC_H_
 #define __CHUNK_SPEC_H_
 
+#include "../../libs/cSpec/export/cSpec.h"
 #include "../../src/base/chunk.h"
-#include "../cSpec.h"
 
 static chunk *c = NULL;
 static void create_new_chunk(void) { c = chunk_new(); }

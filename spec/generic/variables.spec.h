@@ -1,7 +1,7 @@
 #ifndef __VARIABLES_SPEC_H_
 #define __VARIABLES_SPEC_H_
 
-#include "../_helpers.h"
+#include "_helpers.h"
 
 module(variables_spec, {
   it("parses local variables", {

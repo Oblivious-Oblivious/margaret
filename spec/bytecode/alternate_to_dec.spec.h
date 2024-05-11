@@ -1,8 +1,8 @@
 #ifndef __ALTERNATE_TO_DEC_SPEC_H_
 #define __ALTERNATE_TO_DEC_SPEC_H_
 
+#include "../../libs/cSpec/export/cSpec.h"
 #include "../../src/bytecode/alternate_to_dec.h"
-#include "../cSpec.h"
 
 module(alternate_to_dec_spec, {
   it("converts from binary to decimal", {

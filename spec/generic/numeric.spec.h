@@ -1,7 +1,7 @@
 #ifndef __NUMERIC_SPEC_H_
 #define __NUMERIC_SPEC_H_
 
-#include "../_helpers.h"
+#include "_helpers.h"
 
 module(numeric_spec, {
   it("parses numeric expressions", {

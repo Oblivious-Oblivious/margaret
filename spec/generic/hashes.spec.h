@@ -1,7 +1,7 @@
 #ifndef __HASHES_SPEC_H_
 #define __HASHES_SPEC_H_
 
-#include "../_helpers.h"
+#include "_helpers.h"
 
 module(hashes_spec, {
   it("parses hash literals", {

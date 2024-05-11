@@ -1,7 +1,7 @@
 #ifndef __BOOLEANS_SPEC_H_
 #define __BOOLEANS_SPEC_H_
 
-#include "../_helpers.h"
+#include "_helpers.h"
 
 module(booleans_spec, {
   it("parses boolean methods", {

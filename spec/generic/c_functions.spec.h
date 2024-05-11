@@ -1,7 +1,7 @@
 #ifndef __C_FUNCTIONS_SPEC_H_
 #define __C_FUNCTIONS_SPEC_H_
 
-#include "../_helpers.h"
+#include "_helpers.h"
 
 module(c_functions_spec, {
   it("parses C function definitions", {

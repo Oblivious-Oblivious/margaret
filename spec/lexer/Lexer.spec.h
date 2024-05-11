@@ -2,7 +2,7 @@
 #define __LEXER_SPEC_H_
 
 #include "../../src/lexer/Lexer.h"
-#include "../cSpec.h"
+#include "../../libs/cSpec/export/cSpec.h"
 
 module(LexerSpec, {
   describe("Lexer", {

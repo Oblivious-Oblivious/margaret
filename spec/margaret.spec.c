@@ -1,8 +1,5 @@
-#ifndef __SPEC_HELPER_H_
-#define __SPEC_HELPER_H_
-
 // cspec
-#include "cSpec.h"
+#include "../libs/cSpec/export/cSpec.h"
 
 // margaret
 #include "version.spec.h"
@@ -180,5 +177,3 @@ spec_suite({
 });
 
 int main(void) { run_spec_suite("failing"); }
-
-#endif

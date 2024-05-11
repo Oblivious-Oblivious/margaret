@@ -1,7 +1,7 @@
 #ifndef __IDENTIFIERS_SPEC_H_
 #define __IDENTIFIERS_SPEC_H_
 
-#include "../_helpers.h"
+#include "_helpers.h"
 
 module(identifiers_spec, {
   it("parses identifiers", {

@@ -1,7 +1,7 @@
 #ifndef __BITWISE_SPEC_H_
 #define __BITWISE_SPEC_H_
 
-#include "../_helpers.h"
+#include "_helpers.h"
 
 module(bitwise_spec, {
   it("parses bitwise operations", {

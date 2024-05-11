@@ -1,7 +1,7 @@
 #ifndef __CONVERSIONS_SPEC_H_
 #define __CONVERSIONS_SPEC_H_
 
-#include "../_helpers.h"
+#include "_helpers.h"
 
 module(conversions_spec, {
   it("parses object conversion", {

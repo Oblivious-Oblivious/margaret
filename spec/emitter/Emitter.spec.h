@@ -1,8 +1,8 @@
 #ifndef __EMITTER_SPEC_H_
 #define __EMITTER_SPEC_H_
 
+#include "../../libs/cSpec/export/cSpec.h"
 #include "../../src/emitter/Emitter.h"
-#include "../_helpers.h"
 
 module(
   EmitterSpec,

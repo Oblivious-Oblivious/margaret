@@ -1,7 +1,7 @@
 #ifndef __INTERVALS_SPEC_H_
 #define __INTERVALS_SPEC_H_
 
-#include "../_helpers.h"
+#include "_helpers.h"
 
 module(intervals_spec, {
   it("parses intervals", {

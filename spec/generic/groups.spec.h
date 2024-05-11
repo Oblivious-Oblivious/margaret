@@ -1,7 +1,7 @@
 #ifndef __GROUPS_SPEC_H_
 #define __GROUPS_SPEC_H_
 
-#include "../_helpers.h"
+#include "_helpers.h"
 
 module(groups_spec, {
   it("parses an empty group as a first unit", {

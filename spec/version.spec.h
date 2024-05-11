@@ -1,8 +1,8 @@
 #ifndef __VERSION_SPEC_H_
 #define __VERSION_SPEC_H_
 
+#include "../libs/cSpec/export/cSpec.h"
 #include "../src/version.h"
-#include "cSpec.h"
 
 module(VersionSpec, {
   it("checks that latest version number", {

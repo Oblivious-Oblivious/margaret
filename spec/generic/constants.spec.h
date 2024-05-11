@@ -1,7 +1,7 @@
 #ifndef __CONSTANTS_SPEC_H_
 #define __CONSTANTS_SPEC_H_
 
-#include "../_helpers.h"
+#include "_helpers.h"
 
 module(constants_spec, {
   it("parses constants", {

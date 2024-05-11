@@ -1,7 +1,7 @@
 #ifndef __CONDITIONALS_SPEC_H_
 #define __CONDITIONALS_SPEC_H_
 
-#include "../_helpers.h"
+#include "_helpers.h"
 
 module(conditionals_spec, {
   it("parses conditional statements", {

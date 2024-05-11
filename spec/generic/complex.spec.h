@@ -1,7 +1,7 @@
 #ifndef __COMPLEX_SPEC_H_
 #define __COMPLEX_SPEC_H_
 
-#include "../_helpers.h"
+#include "_helpers.h"
 
 module(complex_spec, {
   it("parses complex literals", {

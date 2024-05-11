@@ -1,7 +1,7 @@
 #ifndef __TUPLES_SPEC_H_
 #define __TUPLES_SPEC_H_
 
-#include "../_helpers.h"
+#include "_helpers.h"
 
 module(tuples_spec, {
   it("parses tuple literals", {

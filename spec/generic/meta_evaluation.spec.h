@@ -1,7 +1,7 @@
 #ifndef __META_EVALUATION_SPEC_H_
 #define __META_EVALUATION_SPEC_H_
 
-#include "../_helpers.h"
+#include "_helpers.h"
 
 module(meta_evaluation_spec, {
   it(

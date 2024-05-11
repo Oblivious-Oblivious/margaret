@@ -28,8 +28,8 @@
       "warnings": ""
     },
     "test": {
-      "opt": "-O2",
-      "version": "-std=c2x",
+      "opt": "-Og -g",
+      "version": "-std=c99",
       "flags": "",
       "warnings": ""
     }

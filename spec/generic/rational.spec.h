@@ -1,7 +1,7 @@
 #ifndef __RATIONAL_SPEC_H_
 #define __RATIONAL_SPEC_H_
 
-#include "../_helpers.h"
+#include "_helpers.h"
 
 module(rational_spec, {
   it("parses rational literals", {

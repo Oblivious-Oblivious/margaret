@@ -1,8 +1,8 @@
 #ifndef __TYPE_SPEC_H_
 #define __TYPE_SPEC_H_
 
+#include "../../libs/cSpec/export/cSpec.h"
 #include "../../src/tokens/Type.h"
-#include "../cSpec.h"
 
 module(TypeSpec, {
   it("contains an EOF syntax symbol", {

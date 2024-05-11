@@ -1,7 +1,7 @@
 #ifndef __MARGARET_MESSAGES_SPEC_H_
 #define __MARGARET_MESSAGES_SPEC_H_
 
-#include "../_helpers.h"
+#include "_helpers.h"
 
 module(margaret_messages_spec, {
   it("parses messages without an object", {

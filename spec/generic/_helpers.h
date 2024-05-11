@@ -1,12 +1,12 @@
 #ifndef ___HELPERS_H_
 #define ___HELPERS_H_
 
-#include "../src/base/string.h"
-#include "../src/base/vector.h"
-#include "../src/lexer/Lexer.h"
-#include "../src/opcode/fmcodes.h"
-#include "../src/parser/Parser.h"
-#include "cSpec.h"
+#include "../../libs/cSpec/export/cSpec.h"
+#include "../../src/base/string.h"
+#include "../../src/base/vector.h"
+#include "../../src/lexer/Lexer.h"
+#include "../../src/opcode/fmcodes.h"
+#include "../../src/parser/Parser.h"
 
 void parse(const char *code, vector *expected_result) {
   Lexer *l                         = lexer_new("file.marg", string_new(code));

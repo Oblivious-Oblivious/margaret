@@ -4,7 +4,7 @@
 #include "../../src/inspector/Inspector.h"
 #include "../../src/opcode/MargValue.h"
 #include "../../src/opcode/opcodes.h"
-#include "../cSpec.h"
+#include "../../libs/cSpec/export/cSpec.h"
 
 module(InspectorSpec, {
   // TODO Test for a `postcard` type mini program that includes every single

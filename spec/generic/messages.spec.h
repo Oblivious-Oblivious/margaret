@@ -1,7 +1,7 @@
 #ifndef __MESSAGES_SPEC_H_
 #define __MESSAGES_SPEC_H_
 
-#include "../_helpers.h"
+#include "_helpers.h"
 
 module(messages_spec, {
   it("parses unary messages", {

@@ -1,7 +1,7 @@
 #ifndef __CLASSES_SPEC_H_
 #define __CLASSES_SPEC_H_
 
-#include "../_helpers.h"
+#include "_helpers.h"
 
 module(classes_spec, {
   it("parses generating an object with inheritance", {

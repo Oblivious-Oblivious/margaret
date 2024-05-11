@@ -1,7 +1,7 @@
 #ifndef __PROCS_SPEC_H_
 #define __PROCS_SPEC_H_
 
-#include "../_helpers.h"
+#include "_helpers.h"
 
 module(procs_spec, {
   it("parses procs", {

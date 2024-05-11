@@ -1,7 +1,7 @@
 #ifndef __ERRORS_SPEC_H_
 #define __ERRORS_SPEC_H_
 
-#include "../_helpers.h"
+#include "_helpers.h"
 
 module(errors_spec, {
   it("enumerable literal errors", {

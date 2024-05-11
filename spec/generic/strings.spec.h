@@ -1,7 +1,7 @@
 #ifndef __STRINGS_SPEC_H_
 #define __STRINGS_SPEC_H_
 
-#include "../_helpers.h"
+#include "_helpers.h"
 
 module(strings_spec, {
   it("parses string literals", {

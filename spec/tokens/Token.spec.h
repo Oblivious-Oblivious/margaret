@@ -1,8 +1,8 @@
 #ifndef __TOKEN_SPEC_H_
 #define __TOKEN_SPEC_H_
 
+#include "../../libs/cSpec/export/cSpec.h"
 #include "../../src/tokens/Token.h"
-#include "../cSpec.h"
 
 module(TokenSpec, {
   it("has a type and a value", {

@@ -1,7 +1,7 @@
 #ifndef __BITSTRINGS_SPEC_H_
 #define __BITSTRINGS_SPEC_H_
 
-#include "../_helpers.h"
+#include "_helpers.h"
 
 module(bitstrings_spec, {
   it("parses bitstrings literals", {

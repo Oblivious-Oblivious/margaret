@@ -1,8 +1,8 @@
 #ifndef __EVALUATOR_SPEC_H_
 #define __EVALUATOR_SPEC_H_
 
+#include "../../libs/cSpec/export/cSpec.h"
 #include "../../src/evaluator/Evaluator.h"
-#include "../_helpers.h"
 
 module(
   EvaluatorSpec,

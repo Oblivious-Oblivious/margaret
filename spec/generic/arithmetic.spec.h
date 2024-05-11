@@ -1,7 +1,7 @@
 #ifndef __ARITHMETIC_SPEC_H_
 #define __ARITHMETIC_SPEC_H_
 
-#include "../_helpers.h"
+#include "_helpers.h"
 
 module(arithmetic_spec, {
   it("parses arithmetic expressions", {
