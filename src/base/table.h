@@ -1,9 +1,8 @@
 #ifndef __TABLE_H_
 #define __TABLE_H_
 
+#include "../../libs/EmeraldsBool/export/EmeraldsBool.h"
 #include "../opcode/MargValueType.h"
-
-#include <stdbool.h>
 
 // TODO Implement data-oriented approach by separating keys with values
 //      for better memory compaction, and less cache misses

@@ -4,7 +4,8 @@
   "version": "0.0.1",
 
   "dependencies": {
-    "EmeraldsCrossline": "Oblivious-Oblivious/EmeraldsCrossline"
+    "EmeraldsBool": "Oblivious-Oblivious/EmeraldsBool",
+    "EmeraldsCrossline": "Oblivious-Oblivious/EmeraldsCrossline",
   },
 
   "dev-dependencies": {

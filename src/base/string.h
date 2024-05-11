@@ -1,8 +1,9 @@
 #ifndef __STRING_H_
 #define __STRING_H_
 
-#include <stdbool.h> /* bool */
-#include <stdlib.h>  /* size_t */
+#include "../../libs/EmeraldsBool/export/EmeraldsBool.h"
+
+#include <stdlib.h> /* size_t */
 
 /**
  * @brief A mutable string of characters used to dynamically build a string.
