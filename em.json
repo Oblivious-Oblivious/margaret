@@ -3,7 +3,9 @@
 
   "version": "0.0.1",
 
-  "dependencies": {},
+  "dependencies": {
+    "EmeraldsCrossline": "Oblivious-Oblivious/EmeraldsCrossline"
+  },
 
   "dev-dependencies": {
     "cSpec": "Oblivious-Oblivious/cSpec"
@@ -17,22 +19,19 @@
       "opt": "-Og -g",
       "version": "-std=c99",
       "flags": "-Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic",
-      "warnings": "-Wno-unused-function -Wno-strict-prototypes",
-      "libs": "libs/readline/libreadline.dylib"
+      "warnings": "-Wno-unused-function -Wno-strict-prototypes"
     },
     "release": {
       "opt": "-O3",
       "version": "-std=c2x",
       "flags": "",
-      "warnings": "",
-      "libs": "libs/readline/libreadline.dylib"
+      "warnings": ""
     },
     "test": {
       "opt": "-O2",
       "version": "-std=c2x",
       "flags": "",
-      "warnings": "",
-      "libs": "libs/readline/libreadline.dylib"
+      "warnings": ""
     }
   },
 
