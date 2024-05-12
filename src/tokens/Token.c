@@ -2,8 +2,9 @@
 
 #include "../base/memory.h"
 
-Token *
-token_new(string *value, Type type, size_t line_number, const char *filename) {
+Token *token_new(
+  EmeraldsString *value, Type type, size_t line_number, const char *filename
+) {
   Token *t = (Token *)collected_malloc(sizeof(Token));
 
   t->value       = value;
@@ -14,7 +15,7 @@ token_new(string *value, Type type, size_t line_number, const char *filename) {
   return t;
 }
 
-int token_equals_values(Token *tok, string *value) {
+int token_equals_values(Token *tok, EmeraldsString *value) {
   return string_equals(tok->value, value);
 }
 

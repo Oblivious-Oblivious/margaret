@@ -135,7 +135,7 @@ void marg_hash_delete(MargHash *self, MargValue key) {
 }
 
 char *marg_hash_to_string(MargHash *object) {
-  string *res    = string_new("");
+  EmeraldsString *res = string_new("");
   string_add_str(res, "{");
   size_t hash_size = marg_hash_size(object);
   if(hash_size > 0) {

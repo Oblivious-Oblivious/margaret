@@ -59,9 +59,9 @@ int file_loader_close(file_loader *self) {
   return 1;
 }
 
-string *file_loader_load(file_loader *self, const char *filepath) {
+EmeraldsString *file_loader_load(file_loader *self, const char *filepath) {
   file_loader_open(self, filepath);
-  string *result = string_new("");
+  EmeraldsString *result = string_new("");
 
   char ch;
   while((ch = fgetc(self->fd)) != EOF) {

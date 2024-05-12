@@ -136,9 +136,9 @@ EmeraldsVector *parser_unary_selector(Parser *self) {
     return ast_empty();
   }
   if(lookahead_1_type_equals(TOKEN_IDENTIFIER)) {
-    string *id =
+    EmeraldsString *id =
       ensure_type(TOKEN_IDENTIFIER, "expected identifier on unary selector.");
-    string *optional_symbol = string_new("");
+    EmeraldsString *optional_symbol = string_new("");
     if(lookahead_1_type_equals(TOKEN_ID_SYMBOL)) {
       optional_symbol =
         ensure_type(TOKEN_ID_SYMBOL, "expected id symbol on unary identifier.");
@@ -167,7 +167,7 @@ EmeraldsVector *parser_binary_object(Parser *self) {
 
 EmeraldsVector *parser_binary_selector(Parser *self) {
   if(lookahead_1_type_equals(TOKEN_MESSAGE_SYMBOL)) {
-    string *sel = ensure_type(
+    EmeraldsString *sel = ensure_type(
       TOKEN_MESSAGE_SYMBOL, "expected message symbol on binary selector."
     );
     EmeraldsVector *obj = parser_unary_message(self);
@@ -203,15 +203,16 @@ EmeraldsVector *parser_keyword_selector(Parser *self) {
      (lookahead_2_value_equals(":") ||
       (lookahead_2_type_equals(TOKEN_ID_SYMBOL) && lookahead_3_value_equals(":")
       ))) {
-    string *id =
+    EmeraldsString *id =
       ensure_type(TOKEN_IDENTIFIER, "expected identifier on keyword selector.");
-    string *optional_symbol = string_new("");
+    EmeraldsString *optional_symbol = string_new("");
     if(lookahead_1_type_equals(TOKEN_ID_SYMBOL)) {
       optional_symbol = ensure_type(
         TOKEN_ID_SYMBOL, "expected id symbol on keyword identifier."
       );
     }
-    string *delim = ensure_value(":", "expected ':' on keyword selector.");
+    EmeraldsString *delim =
+      ensure_value(":", "expected ':' on keyword selector.");
     EmeraldsVector *obj = parser_binary_message(self);
 
     if(vector_size(obj) == 1 && vector_get(obj, 0) == NULL) {
@@ -324,7 +325,7 @@ EmeraldsVector *parser_c_function_declaration(Parser *self) {
   ensure_value("#", "missing '###' on C function declaration.");
   ensure_value("#", "missing '###' on C function declaration.");
   ensure_value("#", "missing '###' on C function declaration.");
-  string *return_type = ensure_type(
+  EmeraldsString *return_type = ensure_type(
     TOKEN_IDENTIFIER, "expected identifier on C function return type."
   );
   while(lookahead_1_type_equals(TOKEN_MESSAGE_SYMBOL)) {
@@ -336,7 +337,7 @@ EmeraldsVector *parser_c_function_declaration(Parser *self) {
       )
     );
   }
-  string *name =
+  EmeraldsString *name =
     ensure_type(TOKEN_IDENTIFIER, "expected identifier on C function name.");
 
   EmeraldsVector *__params = vector_new_empty();
@@ -347,7 +348,7 @@ EmeraldsVector *parser_c_function_declaration(Parser *self) {
       break;
     }
 
-    string *param_type = ensure_type(
+    EmeraldsString *param_type = ensure_type(
       TOKEN_IDENTIFIER, "expected identifier on C function param type."
     );
     while(lookahead_1_type_equals(TOKEN_MESSAGE_SYMBOL)) {
@@ -358,7 +359,7 @@ EmeraldsVector *parser_c_function_declaration(Parser *self) {
         )
       );
     }
-    string *param_name = ensure_type(
+    EmeraldsString *param_name = ensure_type(
       TOKEN_IDENTIFIER, "expected identifier on C function param name."
     );
     EmeraldsVector *param = vector_new(param_type, param_name);
@@ -409,7 +410,7 @@ EmeraldsVector *parser_method_definition_literal(Parser *self) {
 EmeraldsVector *parser_unary_method_definition(
   Parser *self, EmeraldsVector *multimethod_object_default_value
 ) {
-  string *selector = ensure_type(
+  EmeraldsString *selector = ensure_type(
     TOKEN_IDENTIFIER, "expected identifier on unary method definition."
   );
   if(lookahead_1_type_equals(TOKEN_ID_SYMBOL)) {
@@ -428,7 +429,7 @@ EmeraldsVector *parser_unary_method_definition(
 EmeraldsVector *parser_binary_method_definition(
   Parser *self, EmeraldsVector *multimethod_object_default_value
 ) {
-  string *selector = ensure_type(
+  EmeraldsString *selector = ensure_type(
     TOKEN_MESSAGE_SYMBOL, "expected message symbol on binary method definition."
   );
 
@@ -452,10 +453,10 @@ EmeraldsVector *parser_binary_method_definition(
 EmeraldsVector *parser_keyword_method_definition(
   Parser *self, EmeraldsVector *multimethod_object_default_value
 ) {
-  string *selector       = string_new("");
-  EmeraldsVector *params = vector_new_empty();
+  EmeraldsString *selector = string_new("");
+  EmeraldsVector *params   = vector_new_empty();
   while(lookahead_1_type_equals(TOKEN_IDENTIFIER)) {
-    string *key = ensure_type(
+    EmeraldsString *key = ensure_type(
       TOKEN_IDENTIFIER, "expected identifier on keyword method selector."
     );
     if(lookahead_1_type_equals(TOKEN_ID_SYMBOL)) {
@@ -490,7 +491,7 @@ EmeraldsVector *parser_keyword_method_definition(
 EmeraldsVector *parser_any_object(void) { return ast_any_object(); }
 
 EmeraldsVector *parser_literal(Parser *self) {
-  string *sign = string_new("");
+  EmeraldsString *sign = string_new("");
   if(lookahead_1_value_equals("+")) {
     sign = ensure_value("+", "expected '+' on literal.");
   } else if(lookahead_1_value_equals("-")) {
@@ -554,13 +555,13 @@ EmeraldsVector *parser_true_literal(Parser *self) {
   return ast_true_literal();
 }
 
-EmeraldsVector *parser_integer_literal(Parser *self, string *sign) {
+EmeraldsVector *parser_integer_literal(Parser *self, EmeraldsString *sign) {
   return ast_integer_literal(
     sign, ensure_type(TOKEN_INTEGER, "expected integer literal.")
   );
 }
 
-EmeraldsVector *parser_float_literal(Parser *self, string *sign) {
+EmeraldsVector *parser_float_literal(Parser *self, EmeraldsString *sign) {
   return ast_float_literal(
     sign, ensure_type(TOKEN_FLOAT, "expected float literal.")
   );
@@ -620,7 +621,7 @@ EmeraldsVector *parser_hash_literal(Parser *self) {
 
 EmeraldsVector *parser_association_literal(Parser *self) {
   if(lookahead_1_type_equals(TOKEN_IDENTIFIER)) {
-    string *key = ensure_type(
+    EmeraldsString *key = ensure_type(
       TOKEN_IDENTIFIER, "expected identifier on association literal."
     );
     ensure_value(":", "hash keys should be denoted by colons.");

@@ -6,11 +6,11 @@
 #include "../loader/file_loader.h"
 #include "../optimizer/Optimizer.h"
 
-string *LOAD(char *filename) {
+EmeraldsString *LOAD(char *filename) {
   return file_loader_load(file_loader_new(), filename);
 }
 
-TokenTable *READ(string *chars) {
+TokenTable *READ(EmeraldsString *chars) {
   return lexer_make_tokens(lexer_new("repl", chars));
 }
 

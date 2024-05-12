@@ -2,7 +2,7 @@
 #define __SCANNER_H_
 
 #include "../../libs/EmeraldsCrossline/export/crossline/crossline.h"
-#include "../base/string.h"
+#include "../../libs/EmeraldsString/export/EmeraldsString.h"
 
 /**
  * @brief Scans a string using provided prompt from command line
@@ -10,6 +10,6 @@
  * @param prompt -> Displays it for each command
  * @return string* -> Value typed in `string` form
  */
-string *scanner_scan(char *prompt);
+EmeraldsString *scanner_scan(char *prompt);
 
 #endif

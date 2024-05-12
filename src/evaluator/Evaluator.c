@@ -531,7 +531,7 @@ static void evaluator_run(VM *vm) {
 
       MargValue filename = STACK_POP(vm);
       STACK_POP(vm);
-      string *chars                   = LOAD(AS_STRING(filename)->chars);
+      EmeraldsString *chars           = LOAD(AS_STRING(filename)->chars);
       TokenTable *tokens              = READ(chars);
       EmeraldsVector *formal_bytecode = FORMALIZE(tokens);
       vm->current->bytecode           = chunk_new();
@@ -636,7 +636,7 @@ static void evaluator_run(VM *vm) {
       MargValue object       = STACK_POP(vm);
       STACK_POP(vm);
       if(!IS_UNDEFINED(object) && IS_STRING_CLONE(message_name)) {
-        string *dnu_message = string_new("");
+        EmeraldsString *dnu_message = string_new("");
         string_addf(
           dnu_message,
           "Object `%s` or any other object in the delegation chain does not "

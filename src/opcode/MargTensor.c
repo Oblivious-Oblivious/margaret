@@ -22,7 +22,7 @@ MargTensor *marg_tensor_new(VM *vm, size_t initial_alloced) {
 }
 
 char *marg_tensor_to_string(MargTensor *object) {
-  string *res        = string_new("");
+  EmeraldsString *res = string_new("");
 
   string_add_str(res, "[");
   size_t tensor_size = marg_tensor_size(object);

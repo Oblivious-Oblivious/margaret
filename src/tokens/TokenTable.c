@@ -12,7 +12,7 @@
  * @param message -> The message to display
  * @return string* -> NULL pointer
  */
-static string *error(Token *token, const char *message) {
+static EmeraldsString *error(Token *token, const char *message) {
   fprintf(
     stderr,
     "%s:%zu: \033[1;31merror:\033[0m %s  Token: \033[1;31m`%s`\033[0m\n",
@@ -67,7 +67,7 @@ Token *token_table_consume(TokenTable *self) {
   return token_table_get(self, self->pos - 1);
 }
 
-string *token_table_ensure_value(
+EmeraldsString *token_table_ensure_value(
   TokenTable *self, const char *value, const char *error_message
 ) {
   Token *token = token_table_consume(self);
@@ -78,7 +78,7 @@ string *token_table_ensure_value(
   }
 }
 
-string *token_table_ensure_type(
+EmeraldsString *token_table_ensure_type(
   TokenTable *self, Type type, const char *error_message
 ) {
   Token *token = token_table_consume(self);

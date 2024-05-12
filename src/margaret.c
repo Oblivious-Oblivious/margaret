@@ -17,14 +17,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "base/string.h"
 #include "opcode/MargValue.h"
 #include "scanner/Scanner.h"
 #include "vm/on_demand_compilation_pipeline.h"
 
 #include <stdio.h> /* printf */
 
-static string *SCAN(char *prompt) { return scanner_scan(prompt); }
+static EmeraldsString *SCAN(char *prompt) { return scanner_scan(prompt); }
 
 static void PRINT(MargValue evaluated) {
   printf("%s\n", string_get(marg_value_format(evaluated)));
@@ -53,7 +52,7 @@ static void margaret_repl(VM *vm) {
 }
 
 static void margaret_run_file(VM *vm, char *filename) {
-  string *chars                   = LOAD(filename);
+  EmeraldsString *chars           = LOAD(filename);
   TokenTable *tokens              = READ(chars);
   EmeraldsVector *formal_bytecode = FORMALIZE(tokens);
   // PRINT_FORMAL(formal_bytecode);

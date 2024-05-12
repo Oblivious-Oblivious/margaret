@@ -6,7 +6,7 @@
 #include <stdio.h> /* printf */
 
 static void write_offset_and_line_number_on(
-  string *disassembled_instruction, chunk *chunk, size_t offset
+  EmeraldsString *disassembled_instruction, chunk *chunk, size_t offset
 ) {
   string_addf(disassembled_instruction, "%04zx    ", offset);
   if(offset > 0 && chunk->lines[offset] == chunk->lines[offset - 1]) {
@@ -29,7 +29,7 @@ static size_t instruction_single(
 ) {
   uint8_t opcode = chunk_get(chunk, offset);
 
-  string *disassembled_instruction = string_new("");
+  EmeraldsString *disassembled_instruction = string_new("");
   write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
   string_addf(disassembled_instruction, "%02x                  ", opcode);
   string_addf(disassembled_instruction, "%s", name);
@@ -43,7 +43,7 @@ instruction_send(EmeraldsVector *res, char *name, chunk *chunk, size_t offset) {
   uint8_t opcode             = chunk_get(chunk, offset);
   uint8_t message_name_index = chunk_get(chunk, offset + 1);
 
-  string *disassembled_instruction = string_new("");
+  EmeraldsString *disassembled_instruction = string_new("");
   write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
   string_addf(
     disassembled_instruction,
@@ -71,7 +71,7 @@ static size_t instruction_send_word(
   };
   uint16_t message_name_index = bytes_to_word(bytes);
 
-  string *disassembled_instruction = string_new("");
+  EmeraldsString *disassembled_instruction = string_new("");
   write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
   string_addf(
     disassembled_instruction,
@@ -102,7 +102,7 @@ static size_t instruction_send_dword(
   };
   uint32_t message_name_index = bytes_to_dword(bytes);
 
-  string *disassembled_instruction = string_new("");
+  EmeraldsString *disassembled_instruction = string_new("");
   write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
   string_addf(
     disassembled_instruction,
@@ -129,7 +129,7 @@ static size_t instruction_object(
   uint8_t opcode    = chunk_get(chunk, offset);
   uint8_t temporary = chunk_get(chunk, offset + 1);
 
-  string *disassembled_instruction = string_new("");
+  EmeraldsString *disassembled_instruction = string_new("");
   write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
   string_addf(
     disassembled_instruction, "%02x %02x               ", opcode, temporary
@@ -155,7 +155,7 @@ static size_t instruction_object_word(
   };
   uint16_t temporary = bytes_to_word(bytes);
 
-  string *disassembled_instruction = string_new("");
+  EmeraldsString *disassembled_instruction = string_new("");
   write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
   string_addf(
     disassembled_instruction,
@@ -187,7 +187,7 @@ static size_t instruction_object_dword(
   };
   uint32_t temporary = bytes_to_dword(bytes);
 
-  string *disassembled_instruction = string_new("");
+  EmeraldsString *disassembled_instruction = string_new("");
   write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
   string_addf(
     disassembled_instruction,
@@ -215,7 +215,7 @@ static size_t instruction_variable(
   uint8_t opcode   = chunk_get(chunk, offset);
   uint8_t variable = chunk_get(chunk, offset + 1);
 
-  string *disassembled_instruction = string_new("");
+  EmeraldsString *disassembled_instruction = string_new("");
   write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
   string_addf(
     disassembled_instruction, "%02x %02x               ", opcode, variable
@@ -241,7 +241,7 @@ static size_t instruction_variable_word(
   };
   uint16_t variable = bytes_to_word(bytes);
 
-  string *disassembled_instruction = string_new("");
+  EmeraldsString *disassembled_instruction = string_new("");
   write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
   string_addf(
     disassembled_instruction,
@@ -273,7 +273,7 @@ static size_t instruction_variable_dword(
   };
   uint32_t variable = bytes_to_dword(bytes);
 
-  string *disassembled_instruction = string_new("");
+  EmeraldsString *disassembled_instruction = string_new("");
   write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
   string_addf(
     disassembled_instruction,
@@ -301,7 +301,7 @@ static size_t instruction_array_type(
   uint8_t opcode             = chunk_get(chunk, offset);
   uint8_t number_of_elements = chunk_get(chunk, offset + 1);
 
-  string *disassembled_instruction = string_new("");
+  EmeraldsString *disassembled_instruction = string_new("");
   write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
   string_addf(
     disassembled_instruction,
@@ -329,7 +329,7 @@ static size_t instruction_array_type_word(
   };
   uint16_t number_of_elements = bytes_to_word(bytes);
 
-  string *disassembled_instruction = string_new("");
+  EmeraldsString *disassembled_instruction = string_new("");
   write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
   string_addf(
     disassembled_instruction,
@@ -360,7 +360,7 @@ static size_t instruction_array_type_dword(
   };
   uint32_t number_of_elements = bytes_to_dword(bytes);
 
-  string *disassembled_instruction = string_new("");
+  EmeraldsString *disassembled_instruction = string_new("");
   write_offset_and_line_number_on(disassembled_instruction, chunk, offset);
   string_addf(
     disassembled_instruction,
@@ -559,7 +559,7 @@ inspect_instruction(EmeraldsVector *res, chunk *chunk, size_t offset) {
     return instruction_single(res, "PRIM_DOUBLE", chunk, offset);
 
   default: {
-    string *unknown_opcode = string_new("");
+    EmeraldsString *unknown_opcode = string_new("");
     string_addf(unknown_opcode, "Unknown opcode %d", instruction);
     vector_add(res, unknown_opcode);
     return offset + 1;

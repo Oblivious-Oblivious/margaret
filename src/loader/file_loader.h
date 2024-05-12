@@ -1,7 +1,7 @@
 #ifndef __FILE_LOADER_H_
 #define __FILE_LOADER_H_
 
-#include "../base/string.h"
+#include "../../libs/EmeraldsString/export/EmeraldsString.h"
 
 #include <stdio.h> /* FILE */
 
@@ -44,7 +44,7 @@ int file_loader_close(file_loader *self);
  * @param filepath -> The name of the file to read from
  * @return string*
  */
-string *file_loader_load(file_loader *self, const char *filepath);
+EmeraldsString *file_loader_load(file_loader *self, const char *filepath);
 
 /**
  * @brief Finds the system specific pwd

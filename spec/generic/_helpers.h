@@ -2,8 +2,8 @@
 #define ___HELPERS_H_
 
 #include "../../libs/cSpec/export/cSpec.h"
+#include "../../libs/EmeraldsString/export/EmeraldsString.h"
 #include "../../libs/EmeraldsVector/export/EmeraldsVector.h"
-#include "../../src/base/string.h"
 #include "../../src/lexer/Lexer.h"
 #include "../../src/opcode/fmcodes.h"
 #include "../../src/parser/Parser.h"
@@ -19,8 +19,8 @@ void parse(const char *code, EmeraldsVector *expected_result) {
 
   if(size_of_res <= the_same_size_as_expected) {
     for(size_t i = 0; i < size_of_res; i++) {
-      assert_that_charptr(string_get((string *)vector_get(res, i)
-      ) equals to string_get((string *)vector_get(expected_result, i)));
+      assert_that_charptr(string_get((EmeraldsString *)vector_get(res, i)
+      ) equals to string_get((EmeraldsString *)vector_get(expected_result, i)));
     }
   }
 }
@@ -34,25 +34,27 @@ void debug(const char *code, EmeraldsVector *expected_result) {
   printf("[");
   for(size_t i = 0; i < size_of_res - 1; i++) {
     if(res == NULL || vector_get(res, i) == NULL or
-       string_get((string *)vector_get(res, i)) == NULL) {
+       string_get((EmeraldsString *)vector_get(res, i)) == NULL) {
       printf("(NULL), ");
     } else {
-      printf("%s, ", string_get((string *)vector_get(res, i)));
+      printf("%s, ", string_get((EmeraldsString *)vector_get(res, i)));
     }
   }
   if(res == NULL || vector_get(res, size_of_res - 1) == NULL or
-     string_get((string *)vector_get(res, size_of_res - 1)) == NULL) {
+     string_get((EmeraldsString *)vector_get(res, size_of_res - 1)) == NULL) {
     printf("(NULL), ");
   } else {
-    printf("%s]\n", string_get((string *)vector_get(res, size_of_res - 1)));
+    printf(
+      "%s]\n", string_get((EmeraldsString *)vector_get(res, size_of_res - 1))
+    );
   }
 
   assert_that_int(size_of_res equals to the_same_size_as_expected);
 
   if(size_of_res <= the_same_size_as_expected) {
     for(size_t i = 0; i < size_of_res; i++) {
-      assert_that_charptr(string_get((string *)vector_get(res, i)
-      ) equals to string_get((string *)vector_get(expected_result, i)));
+      assert_that_charptr(string_get((EmeraldsString *)vector_get(res, i)
+      ) equals to string_get((EmeraldsString *)vector_get(expected_result, i)));
     }
   }
 }

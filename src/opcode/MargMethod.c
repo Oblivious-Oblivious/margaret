@@ -23,7 +23,7 @@ marg_method_new(VM *vm, MargObject *bound_object, char *message_name) {
 }
 
 char *marg_method_to_string(MargMethod *object) {
-  string *res = string_new("");
+  EmeraldsString *res = string_new("");
   string_addf(
     res,
     "< %s#%s >",

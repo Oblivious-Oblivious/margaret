@@ -1,6 +1,6 @@
 #include "MargValue.h"
 
-string *marg_value_format(MargValue self) {
+EmeraldsString *marg_value_format(MargValue self) {
   if(IS_UNDEFINED(self)) {
     return string_new("<unbound>");
   } else if(IS_INTEGER_CLONE(self)) {
@@ -8,7 +8,7 @@ string *marg_value_format(MargValue self) {
   } else if(IS_FLOAT_CLONE(self)) {
     return string_new(marg_float_to_string(AS_FLOAT(self)));
   } else if(IS_STRING_CLONE(self)) {
-    string *res = string_new("");
+    EmeraldsString *res = string_new("");
     string_addf(res, "\"%s\"", AS_STRING(self)->chars);
     return res;
   } else if(IS_METHOD_CLONE(self)) {
@@ -24,8 +24,8 @@ string *marg_value_format(MargValue self) {
   }
 }
 
-string *marg_value_as_variable(MargValue self) {
-  string *res = string_new("");
+EmeraldsString *marg_value_as_variable(MargValue self) {
+  EmeraldsString *res = string_new("");
 
   if(IS_STRING_CLONE(self)) {
     string_addf(res, "%s", AS_STRING(self)->chars);

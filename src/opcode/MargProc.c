@@ -25,9 +25,7 @@ MargProc *marg_proc_new(VM *vm, MargMethod *bound_method) {
 }
 
 char *marg_proc_to_string(MargProc *object) {
-  string *res = string_new("");
-  string_addf(
-    res, "< %s:proc >", object->bound_method->bound_object->name
-  );
+  EmeraldsString *res = string_new("");
+  string_addf(res, "< %s:proc >", object->bound_method->bound_object->name);
   return string_get(res);
 }

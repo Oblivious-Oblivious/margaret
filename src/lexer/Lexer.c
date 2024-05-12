@@ -5,7 +5,7 @@
 #include <ctype.h> /* tolower */
 #include <stdio.h> /* fprintf */
 
-Lexer *lexer_new(const char *filename, string *text) {
+Lexer *lexer_new(const char *filename, EmeraldsString *text) {
   Lexer *self = (Lexer *)collected_malloc(sizeof(Lexer));
 
   self->filename = filename;
@@ -16,7 +16,7 @@ Lexer *lexer_new(const char *filename, string *text) {
   return self;
 }
 
-void *lexer_error(Lexer *self, const char *message, string *token) {
+void *lexer_error(Lexer *self, const char *message, EmeraldsString *token) {
   fprintf(
     stderr,
     "%s:%zu: \033[1;31merror:\033[0m %s on `%s`\n",
@@ -38,7 +38,7 @@ char lexer_peek_character(Lexer *self, size_t i) {
 }
 
 static Token *lexer_tokenize_integer(Lexer *self, char c) {
-  string *final_number = string_new("");
+  EmeraldsString *final_number = string_new("");
   while(1) {
     string_add_char(final_number, c);
     c = lexer_peek_character(self, 1);
@@ -58,7 +58,7 @@ static Token *lexer_tokenize_integer(Lexer *self, char c) {
 }
 
 static Token *lexer_tokenize_number_special(
-  Lexer *self, string *final_number, const char *matcher, Type type
+  Lexer *self, EmeraldsString *final_number, const char *matcher, Type type
 ) {
   // Fraction part
   char c = lexer_next_character(self);
@@ -98,7 +98,7 @@ static Token *lexer_tokenize_integer_or_float(Lexer *self, char c) {
 }
 
 static Token *lexer_tokenize_number(Lexer *self, char c) {
-  string *final_number = string_new("");
+  EmeraldsString *final_number = string_new("");
   string_add_char(final_number, c);
 
   // TODO Refactor to work with multiple zeros
@@ -140,7 +140,7 @@ static Token *lexer_tokenize_number(Lexer *self, char c) {
 }
 
 static Token *lexer_tokenize_identifier(Lexer *self, char c) {
-  string *final_identifier = string_new("");
+  EmeraldsString *final_identifier = string_new("");
 
   // TODO Add unicode support for identifier names (APL or Julia style)
   while(1) {
@@ -159,7 +159,7 @@ static Token *lexer_tokenize_identifier(Lexer *self, char c) {
 }
 
 static Token *lexer_tokenize_message_symbol(Lexer *self, char c) {
-  string *final_symbol = string_new("");
+  EmeraldsString *final_symbol = string_new("");
 
   while(1) {
     string_add_char(final_symbol, c);
@@ -183,7 +183,7 @@ static Token *lexer_tokenize_message_symbol(Lexer *self, char c) {
 }
 
 static Token *lexer_tokenize_string(Lexer *self, char c) {
-  string *final_string = string_new("");
+  EmeraldsString *final_string = string_new("");
   string_add_char(final_string, c);
   c = lexer_next_character(self);
   // TODO Separate pairs of single and double quotes -> avoid ("str'), or
@@ -221,7 +221,7 @@ TokenTable *lexer_make_tokens(Lexer *self) {
     } else if(regex_matches(c, REGEX_MESSAGE_SYMBOL)) {
       token_table_add(token_table, lexer_tokenize_message_symbol(self, c));
     } else if(regex_matches(c, REGEX_SYNTAX_SYMBOL)) {
-      string *symb = string_new("");
+      EmeraldsString *symb = string_new("");
       string_add_char(symb, c);
       token_table_add(
         token_table,
@@ -235,7 +235,7 @@ TokenTable *lexer_make_tokens(Lexer *self) {
       }
       token_table_add(token_table, tok);
     } else {
-      string *err = string_new("");
+      EmeraldsString *err = string_new("");
       string_add_char(err, c);
       lexer_error(self, "Unexpected character.", err);
       break;

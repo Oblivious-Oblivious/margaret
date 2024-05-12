@@ -21,7 +21,7 @@ MargFloat *marg_float_new(VM *vm, double value) {
 }
 
 char *marg_float_to_string(MargFloat *object) {
-  string *res = string_new("");
+  EmeraldsString *res = string_new("");
   string_addf(res, "%.*Lg", LDBL_DIG, object->value);
   return string_get(res);
 }

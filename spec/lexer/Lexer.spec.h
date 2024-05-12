@@ -1,8 +1,8 @@
 #ifndef __LEXER_SPEC_H_
 #define __LEXER_SPEC_H_
 
-#include "../../src/lexer/Lexer.h"
 #include "../../libs/cSpec/export/cSpec.h"
+#include "../../src/lexer/Lexer.h"
 
 module(LexerSpec, {
   describe("Lexer", {

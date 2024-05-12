@@ -71,8 +71,9 @@ ast_unary_message(EmeraldsVector *object, EmeraldsVector *selectors) {
 
 EmeraldsVector *ast_unary_object(EmeraldsVector *object) { return object; }
 
-EmeraldsVector *ast_unary_selector(string *id, string *optional_symbol) {
-  string *sel = id;
+EmeraldsVector *
+ast_unary_selector(EmeraldsString *id, EmeraldsString *optional_symbol) {
+  EmeraldsString *sel = id;
   string_add(sel, optional_symbol);
   return vector_new(sel);
 }
@@ -102,7 +103,7 @@ ast_binary_message(EmeraldsVector *object, EmeraldsVector *selectors) {
 
 EmeraldsVector *ast_binary_object(EmeraldsVector *object) { return object; }
 
-EmeraldsVector *ast_binary_selector(string *sel, EmeraldsVector *obj) {
+EmeraldsVector *ast_binary_selector(EmeraldsString *sel, EmeraldsVector *obj) {
   return vector_new(sel, obj);
 }
 
@@ -113,7 +114,7 @@ ast_keyword_message(EmeraldsVector *object, EmeraldsVector *selectors) {
 
     size_t selectors_size = vector_size(selectors);
     for(size_t i = 0; i < selectors_size; i++) {
-      string *sel0         = vector_get(vector_get(selectors, i), 0);
+      EmeraldsString *sel0 = vector_get(vector_get(selectors, i), 0);
       EmeraldsVector *sel1 = vector_get(vector_get(selectors, i), 1);
 
       size_t object_size = vector_size(object);
@@ -132,7 +133,7 @@ ast_keyword_message(EmeraldsVector *object, EmeraldsVector *selectors) {
     }
     return res;
   } else {
-    string *joined_selector = string_new("");
+    EmeraldsString *joined_selector = string_new("");
     for(size_t i = 0; i < vector_size(selectors); i++) {
       string_add(joined_selector, vector_get(vector_get(selectors, i), 0));
     }
@@ -157,7 +158,7 @@ ast_keyword_message(EmeraldsVector *object, EmeraldsVector *selectors) {
     vector_add(res, joined_selector);
     char size_ptr[32];
     snprintf(size_ptr, sizeof(size_ptr), "%zu", vector_size(selectors));
-    string *size = string_new(size_ptr);
+    EmeraldsString *size = string_new(size_ptr);
     vector_add(res, size);
     return res;
   }
@@ -166,9 +167,12 @@ ast_keyword_message(EmeraldsVector *object, EmeraldsVector *selectors) {
 EmeraldsVector *ast_keyword_object(EmeraldsVector *object) { return object; }
 
 EmeraldsVector *ast_keyword_selector(
-  string *id, string *optional_symbol, string *delim, EmeraldsVector *obj
+  EmeraldsString *id,
+  EmeraldsString *optional_symbol,
+  EmeraldsString *delim,
+  EmeraldsVector *obj
 ) {
-  string *sel = string_new("");
+  EmeraldsString *sel = string_new("");
   string_add(sel, id);
   string_add(sel, optional_symbol);
   string_add(sel, delim);
@@ -202,7 +206,8 @@ EmeraldsVector *ast_group(EmeraldsVector *unit_list) {
   }
 }
 
-EmeraldsVector *ast_variable(string *optional_instance_symbol, string *name) {
+EmeraldsVector *
+ast_variable(EmeraldsString *optional_instance_symbol, EmeraldsString *name) {
   if(string_equals(optional_instance_symbol, string_new("$")) &&
      string_equals(name, string_new("nil"))) {
     return vector_new(FM_NIL);
@@ -262,7 +267,7 @@ ast_proc_literal(EmeraldsVector *param_list, EmeraldsVector *function) {
 }
 
 EmeraldsVector *ast_c_function_declaration(
-  string *return_type, string *name, EmeraldsVector *params
+  EmeraldsString *return_type, EmeraldsString *name, EmeraldsVector *params
 ) {
   EmeraldsVector *res =
     vector_new(FM_START_C_FUNCTION, FM_LOCAL, return_type, FM_LOCAL, name);
@@ -283,7 +288,7 @@ EmeraldsVector *ast_c_function_declaration(
   vector_add(res, FM_TENSOR);
   char size_ptr[32];
   snprintf(size_ptr, sizeof(size_ptr), "%zu", vector_size(params));
-  string *size = string_new(size_ptr);
+  EmeraldsString *size = string_new(size_ptr);
   vector_add(res, size);
   vector_add(res, FM_END_C_FUNCTION);
   return res;
@@ -291,7 +296,7 @@ EmeraldsVector *ast_c_function_declaration(
 
 EmeraldsVector *ast_unary_method_definition(
   EmeraldsVector *multimethod_object_default_value,
-  string *selector,
+  EmeraldsString *selector,
   EmeraldsVector *function
 ) {
   EmeraldsVector *res = vector_new(FM_START_UNARY_METHOD, selector);
@@ -320,7 +325,7 @@ EmeraldsVector *ast_unary_method_definition(
 
 EmeraldsVector *ast_binary_method_definition(
   EmeraldsVector *multimethod_object_default_value,
-  string *selector,
+  EmeraldsString *selector,
   EmeraldsVector *param,
   EmeraldsVector *function
 ) {
@@ -355,7 +360,7 @@ EmeraldsVector *ast_binary_method_definition(
 
 EmeraldsVector *ast_keyword_method_definition(
   EmeraldsVector *multimethod_object_default_value,
-  string *selector,
+  EmeraldsString *selector,
   EmeraldsVector *params,
   EmeraldsVector *function
 ) {
@@ -402,7 +407,8 @@ EmeraldsVector *ast_false_literal(void) { return vector_new(FM_FALSE); }
 
 EmeraldsVector *ast_true_literal(void) { return vector_new(FM_TRUE); }
 
-EmeraldsVector *ast_integer_literal(string *sign, string *number) {
+EmeraldsVector *
+ast_integer_literal(EmeraldsString *sign, EmeraldsString *number) {
   number = string_remove_underscores(number);
 
   if(string_get_char_at_index(number, 0) == '0' &&
@@ -423,7 +429,7 @@ EmeraldsVector *ast_integer_literal(string *sign, string *number) {
   }
 
   if(string_equals(sign, string_new("-"))) {
-    string *inum = string_new("");
+    EmeraldsString *inum = string_new("");
     string_add(inum, sign);
     string_add(inum, number);
 
@@ -433,15 +439,16 @@ EmeraldsVector *ast_integer_literal(string *sign, string *number) {
   }
 }
 
-EmeraldsVector *ast_float_literal(string *sign, string *number) {
-  string *f = string_new("");
+EmeraldsVector *
+ast_float_literal(EmeraldsString *sign, EmeraldsString *number) {
+  EmeraldsString *f = string_new("");
   string_add(f, sign);
   string_add(f, string_remove_underscores(number));
 
   return vector_new(FM_FLOAT, f);
 }
 
-EmeraldsVector *ast_string_literal(string *string) {
+EmeraldsVector *ast_string_literal(EmeraldsString *string) {
   string_skip(string, 1);
   string_shorten(string, string_size(string) - 1);
   return vector_new(FM_STRING, string);
@@ -463,7 +470,7 @@ EmeraldsVector *ast_tensor_literal(EmeraldsVector *item_list) {
   vector_add(res, FM_TENSOR);
   char size_ptr[32];
   snprintf(size_ptr, sizeof(size_ptr), "%zu", vector_size(item_list));
-  string *size = string_new(size_ptr);
+  EmeraldsString *size = string_new(size_ptr);
   vector_add(res, size);
   return res;
 }
@@ -484,7 +491,7 @@ EmeraldsVector *ast_tuple_literal(EmeraldsVector *item_list) {
   vector_add(res, FM_TUPLE);
   char size_ptr[32];
   snprintf(size_ptr, sizeof(size_ptr), "%zu", vector_size(item_list));
-  string *size = string_new(size_ptr);
+  EmeraldsString *size = string_new(size_ptr);
   vector_add(res, size);
   return res;
 }
@@ -507,7 +514,7 @@ EmeraldsVector *ast_hash_literal(EmeraldsVector *association_list) {
   snprintf(
     size_ptr, sizeof(size_ptr), "%zu", vector_size(association_list) * 2
   );
-  string *size = string_new(size_ptr);
+  EmeraldsString *size = string_new(size_ptr);
   vector_add(res, size);
   return res;
 }
@@ -528,7 +535,8 @@ EmeraldsVector *ast_association(EmeraldsVector *key, EmeraldsVector *value) {
   return res;
 }
 
-EmeraldsVector *ast_json_association(string *key, EmeraldsVector *value) {
+EmeraldsVector *
+ast_json_association(EmeraldsString *key, EmeraldsVector *value) {
   EmeraldsVector *res = vector_new_empty();
   vector_add(res, FM_STRING);
   vector_add(res, key);
@@ -556,7 +564,7 @@ EmeraldsVector *ast_bitstring_literal(EmeraldsVector *item_list) {
   vector_add(res, FM_BITSTRING);
   char size_ptr[32];
   snprintf(size_ptr, sizeof(size_ptr), "%zu", vector_size(item_list) * 2);
-  string *size = string_new(size_ptr);
+  EmeraldsString *size = string_new(size_ptr);
   vector_add(res, size);
   return res;
 }

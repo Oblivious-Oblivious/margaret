@@ -73,7 +73,7 @@ Token *token_table_consume(TokenTable *self);
  * of wrong value
  * @return string* -> The found token
  */
-string *token_table_ensure_value(
+EmeraldsString *token_table_ensure_value(
   TokenTable *self, const char *value, const char *error_message
 );
 
@@ -85,7 +85,7 @@ string *token_table_ensure_value(
  * of wrong type
  * @return string*
  */
-string *
+EmeraldsString *
 token_table_ensure_type(TokenTable *self, Type type, const char *error_message);
 
 #endif

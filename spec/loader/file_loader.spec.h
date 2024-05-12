@@ -1,8 +1,8 @@
 #ifndef __FILE_LOADER_SPEC_H_
 #define __FILE_LOADER_SPEC_H_
 
-#include "../../src/loader/file_loader.h"
 #include "../../libs/cSpec/export/cSpec.h"
+#include "../../src/loader/file_loader.h"
 
 file_loader *loader;
 void setup_file_loader(void) { loader = file_loader_new(); }
@@ -48,7 +48,7 @@ module(file_loader_spec, {
       fprintf(fd, "%s", "text");
       fclose(fd);
 
-      string *text = file_loader_load(loader, "test.marg");
+      EmeraldsString *text = file_loader_load(loader, "test.marg");
       assert_that_int(string_get_char_at_index(text, 0) equals to 't');
       assert_that_int(string_get_char_at_index(text, 1) equals to 'e');
       assert_that_int(string_get_char_at_index(text, 2) equals to 'x');

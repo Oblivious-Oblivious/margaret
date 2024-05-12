@@ -20,8 +20,8 @@ MargObject *marg_object_new(VM *bound_vm, size_t size, char *name) {
 }
 
 char *marg_object_to_string_with_hash(MargValue object) {
-  string *res       = string_new("");
-  char *object_name = AS_OBJECT(object)->name;
+  EmeraldsString *res = string_new("");
+  char *object_name   = AS_OBJECT(object)->name;
   string_addf(
     res,
     "%s@%llx",
