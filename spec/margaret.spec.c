@@ -9,7 +9,6 @@
 #include "base/fnv_1a_64_hash.spec.h"
 #include "base/memory.spec.h"
 #include "base/table.spec.h"
-#include "base/temporaries.spec.h"
 
 // bytecode
 #include "bytecode/alternate_to_dec.spec.h"
@@ -100,7 +99,6 @@ spec_suite({
   fnv_1a_64_hash_spec();
   memory_spec();
   table_spec();
-  temporaries_spec();
 
   alternate_to_dec_spec();
   FormalASTSpec();

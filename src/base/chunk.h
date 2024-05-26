@@ -1,8 +1,9 @@
 #ifndef __CHUNK_H_
 #define __CHUNK_H_
 
+#include "../../libs/EmeraldsVector/export/EmeraldsVector.h"
+#include "../opcode/MargValueType.h"
 #include "memory.h"
-#include "temporaries.h"
 
 #define CHUNK_GROW_FACTOR 1.618
 
@@ -22,7 +23,7 @@ typedef struct chunk {
   size_t size;
 
   size_t *lines;
-  temporaries temp_vector;
+  MargValue *temp_vector;
 } chunk;
 
 /**
@@ -92,10 +93,10 @@ chunk *chunk_new(void);
  * @param value -> MargValue
  * @return size_t -> The index the temporary was appended to
  */
-#define chunk_temporaries_add(chunk, value, index)          \
-  do {                                                      \
-    temporaries_add(&(chunk)->temp_vector, (value));        \
-    *(index) = temporaries_size(&(chunk)->temp_vector) - 1; \
+#define chunk_temporaries_add(chunk, value, index)    \
+  do {                                                \
+    vector_add((chunk)->temp_vector, (value));        \
+    *(index) = vector_size((chunk)->temp_vector) - 1; \
   } while(0)
 
 /**
@@ -106,7 +107,7 @@ chunk *chunk_new(void);
  * @return MargValue -> The value of the temporary
  */
 #define chunk_temporaries_get(chunk, index) \
-  temporaries_get(&(chunk)->temp_vector, (index))
+  vector_get((chunk)->temp_vector, (index))
 
 /**
  * @brief Helper for retrieving the number of elements
@@ -114,6 +115,6 @@ chunk *chunk_new(void);
  * @param chunk -> Current chunk
  * @return size_t -> Number of elements
  */
-#define chunk_temporaries_size(chunk) temporaries_size(&(chunk)->temp_vector)
+#define chunk_temporaries_size(chunk) vector_size((chunk)->temp_vector)
 
 #endif
