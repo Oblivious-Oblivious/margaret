@@ -24,6 +24,10 @@
 #include <stdio.h> /* printf */
 
 static EmeraldsString *SCAN(char *prompt) { return scanner_scan(prompt); }
+#define VERSION "0.0.1"
+#define DATE    "2022-2024"
+#define LINK    "margaret.org"
+
 
 static void PRINT(MargValue evaluated) {
   printf("%s\n", string_get(marg_value_format(evaluated)));
@@ -44,6 +48,7 @@ static void PRINT_FORMAL(EmeraldsVector *formal_bytecode) {
 }
 
 static void margaret_repl(VM *vm) {
+  printf("margaret %s  Copyright (C) %s %s, Ioannina\n", VERSION, DATE, LINK);
   while(1) {
     EmeraldsVector *formal_bytecode = FORMALIZE(READ(SCAN("$> ")));
     // PRINT_FORMAL(formal_bytecode);
