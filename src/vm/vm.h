@@ -1,7 +1,6 @@
 #ifndef __VM_H_
 #define __VM_H_
 
-#include "../../libs/EmeraldsVector/export/EmeraldsVector.h"
 #include "../base/chunk.h"
 #include "../base/memory.h"
 #include "../base/table.h"
@@ -24,17 +23,6 @@ typedef struct VM {
   table interned_strings;
   MargProc *current;
 } VM;
-
-/** @brief Better assurances for inlining */
-#define inline __inline__
-
-inline void STACK_PUSH(VM *vm, MargValue item) { *vm->sp++ = item; }
-
-inline MargValue STACK_POP(VM *vm) { return *--vm->sp; }
-
-inline MargValue STACK_PEEK(VM *vm, int distance) {
-  return *(vm->sp - 1 - distance);
-}
 
 /** @brief Works for any IP pointer no matter what context current is in */
 #define READ_BYTE() (*vm->current->ip++)

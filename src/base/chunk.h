@@ -50,8 +50,9 @@ chunk *chunk_new(void);
       (self)->alloced = new_capacity;                          \
       (self)->items   = new_items;                             \
     }                                                          \
-    if(new_lines)                                              \
+    if(new_lines) {                                            \
       (self)->lines = new_lines;                               \
+    }                                                          \
   } while(0)
 
 /**
@@ -63,8 +64,9 @@ chunk *chunk_new(void);
  */
 #define chunk_add(self, item, line)       \
   do {                                    \
-    if((self)->alloced == (self)->size)   \
+    if((self)->alloced == (self)->size) { \
       chunk_ensure_space((self));         \
+    }                                     \
                                           \
     (self)->items[(self)->size] = (item); \
     (self)->lines[(self)->size] = (line); \
@@ -106,8 +108,7 @@ chunk *chunk_new(void);
  * @param index -> Index of the temporary
  * @return MargValue -> The value of the temporary
  */
-#define chunk_temporaries_get(chunk, index) \
-  vector_get((chunk)->temp_vector, (index))
+#define chunk_temporaries_get(chunk, index) (chunk)->temp_vector[(index)]
 
 /**
  * @brief Helper for retrieving the number of elements

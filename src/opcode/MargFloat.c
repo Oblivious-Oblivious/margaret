@@ -1,5 +1,6 @@
 #include "MargFloat.h"
 
+#include "../../libs/EmeraldsString/export/EmeraldsString.h" /* IWYU pragma: keep */
 #include "MargValue.h"
 
 #include <float.h> /* LDBL_DIG */
@@ -21,7 +22,7 @@ MargFloat *marg_float_new(VM *vm, double value) {
 }
 
 char *marg_float_to_string(MargFloat *object) {
-  EmeraldsString *res = string_new("");
+  char *res = string_new("");
   string_addf(res, "%.*Lg", LDBL_DIG, object->value);
-  return string_get(res);
+  return res;
 }

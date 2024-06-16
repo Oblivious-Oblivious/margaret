@@ -1,8 +1,10 @@
 #include "Scanner.h"
 
+#include "../../libs/EmeraldsString/export/EmeraldsString.h" /* IWYU pragma: keep */
+
 #include <string.h>
 
-EmeraldsString *scanner_scan(char *prompt) {
+char *scanner_scan(char *prompt) {
   char bounds_buf[4096];
   char *line = crossline_readline(prompt, bounds_buf, sizeof(bounds_buf));
   if(!strcmp(line, "")) {

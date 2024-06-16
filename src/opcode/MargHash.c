@@ -1,5 +1,6 @@
 #include "MargHash.h"
 
+#include "../../libs/EmeraldsString/export/EmeraldsString.h" /* IWYU pragma: keep */
 #include "MargValue.h"
 
 #define MARG_HASH_MAX_LOAD 0.75
@@ -135,8 +136,8 @@ void marg_hash_delete(MargHash *self, MargValue key) {
 }
 
 char *marg_hash_to_string(MargHash *object) {
-  EmeraldsString *res = string_new("");
-  string_add_str(res, "{");
+  char *res = string_new("");
+  string_add(res, "{");
   size_t hash_size = marg_hash_size(object);
   if(hash_size > 0) {
     for(size_t i = 0; i < object->alloced; i++) {
@@ -145,15 +146,15 @@ char *marg_hash_to_string(MargHash *object) {
         string_addf(
           res,
           "%s: %s, ",
-          string_get(marg_value_format(entry->key)),
-          string_get(marg_value_format(entry->value))
+          marg_value_format(entry->key),
+          marg_value_format(entry->value)
         );
       }
     }
-    string_shorten(res, string_size(res) - 2);
+    string_ignore_last(res, 2);
   }
 
-  string_addf(res, "}");
+  string_add(res, "}");
 
-  return string_get(res);
+  return res;
 }

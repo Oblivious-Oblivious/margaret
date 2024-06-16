@@ -1,10 +1,10 @@
 #include "Token.h"
 
+#include "../../libs/EmeraldsString/export/EmeraldsString.h" /* IWYU pragma: keep */
 #include "../base/memory.h"
 
-Token *token_new(
-  EmeraldsString *value, Type type, size_t line_number, const char *filename
-) {
+Token *
+token_new(char *value, Type type, size_t line_number, const char *filename) {
   Token *t = (Token *)collected_malloc(sizeof(Token));
 
   t->value       = value;
@@ -15,7 +15,7 @@ Token *token_new(
   return t;
 }
 
-int token_equals_values(Token *tok, EmeraldsString *value) {
+int token_equals_values(Token *tok, char *value) {
   return string_equals(tok->value, value);
 }
 

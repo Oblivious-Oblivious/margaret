@@ -1,7 +1,6 @@
 #ifndef __TOKEN_TABLE_H_
 #define __TOKEN_TABLE_H_
 
-#include "../../libs/EmeraldsVector/export/EmeraldsVector.h"
 #include "Token.h"
 
 /**
@@ -12,7 +11,7 @@
  * @param pos -> Current position of table pointer
  */
 typedef struct TokenTable {
-  EmeraldsVector *token_list;
+  Token **token_list;
   size_t pos;
 } TokenTable;
 
@@ -73,7 +72,7 @@ Token *token_table_consume(TokenTable *self);
  * of wrong value
  * @return string* -> The found token
  */
-EmeraldsString *token_table_ensure_value(
+char *token_table_ensure_value(
   TokenTable *self, const char *value, const char *error_message
 );
 
@@ -85,7 +84,7 @@ EmeraldsString *token_table_ensure_value(
  * of wrong type
  * @return string*
  */
-EmeraldsString *
+char *
 token_table_ensure_type(TokenTable *self, Type type, const char *error_message);
 
 #endif

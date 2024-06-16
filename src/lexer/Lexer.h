@@ -80,7 +80,7 @@ static int regex_matches(char c, const char *matcher) {
  */
 typedef struct Lexer {
   const char *filename;
-  EmeraldsString *text;
+  char *text;
   size_t pos;
   size_t lineno;
 } Lexer;
@@ -91,7 +91,7 @@ typedef struct Lexer {
  * @param text -> The text we read
  * @return Lexer*
  */
-Lexer *lexer_new(const char *filename, EmeraldsString *text);
+Lexer *lexer_new(const char *filename, char *text);
 
 /**
  * @brief Reports an error to stderrr
@@ -100,7 +100,7 @@ Lexer *lexer_new(const char *filename, EmeraldsString *text);
  * @param token -> The token where the error occurred at
  * @return void* -> NULL
  */
-void *lexer_error(Lexer *self, const char *message, EmeraldsString *token);
+void *lexer_error(Lexer *self, const char *message, char *token);
 
 /**
  * @brief Get the next character from the input stream

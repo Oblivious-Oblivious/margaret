@@ -1,5 +1,7 @@
 #include "Evaluator.h"
 
+#include "../../libs/EmeraldsFastStack/export//EmeraldsFastStack.h" /* IWYU pragma: keep */
+#include "../../libs/EmeraldsString/export/EmeraldsString.h" /* IWYU pragma: keep */
 #include "../opcode/MargValue.h"
 #include "../opcode/opcodes.h"
 #include "../vm/on_demand_compilation_pipeline.h"
@@ -13,10 +15,10 @@ static void op_put_tensor_helper(VM *vm, MargValue temporary) {
   MargTensor *tensor_object  = AS_TENSOR(tensor_value);
 
   for(int64_t i = number_of_elements - 1; i >= 0; i--) {
-    marg_tensor_add_at(tensor_object, STACK_POP(vm), i);
+    marg_tensor_add_at(tensor_object, fs_pop(vm->sp), i);
   }
 
-  STACK_PUSH(vm, tensor_value);
+  fs_push(vm->sp, tensor_value);
 }
 
 static void op_put_hash_helper(VM *vm, MargValue temporary) {
@@ -25,12 +27,12 @@ static void op_put_hash_helper(VM *vm, MargValue temporary) {
   MargHash *hash_object      = AS_HASH(hash_value);
 
   for(int64_t i = 0; i < number_of_elements; i++) {
-    MargValue value = STACK_POP(vm);
-    MargValue key   = STACK_POP(vm);
+    MargValue value = fs_pop(vm->sp);
+    MargValue key   = fs_pop(vm->sp);
     marg_hash_add(hash_object, key, value);
   }
 
-  STACK_PUSH(vm, hash_value);
+  fs_push(vm->sp, hash_value);
 }
 
 static MargValue dispatch_method_from_delegation_chain(
@@ -73,24 +75,24 @@ static MargValue retrieve_all_messages_in_delegation_chain(
 
 static void op_send_helper(VM *vm, MargValue message_name) {
   /* Read temporary values */
-  int64_t number_of_parameters = AS_INTEGER(STACK_POP(vm))->value;
+  int64_t number_of_parameters = AS_INTEGER(fs_pop(vm->sp))->value;
 
   /* Pop all parameters first */
   MargValue *actual_parameters =
     collected_malloc(sizeof(MargValue) * number_of_parameters);
   for(int64_t i = number_of_parameters - 1; i >= 0; i--) {
-    actual_parameters[i] = STACK_POP(vm);
+    actual_parameters[i] = fs_pop(vm->sp);
   }
 
   /* Pop object after parameters */
-  MargObject *object = AS_OBJECT(STACK_POP(vm));
+  MargObject *object = AS_OBJECT(fs_pop(vm->sp));
   MargValue method_value =
     dispatch_method_from_delegation_chain(object, message_name);
   MargMethod *method = NULL;
   if(IS_UNDEFINED(method_value)) {
-    STACK_PUSH(vm, QNAN_BOX(object));
-    STACK_PUSH(vm, message_name);
-    STACK_PUSH(vm, MARG_INTEGER(1));
+    fs_push(vm->sp, QNAN_BOX(object));
+    fs_push(vm->sp, message_name);
+    fs_push(vm->sp, MARG_INTEGER(1));
     op_send_helper(vm, MARG_STRING("dnu:"));
   } else {
     method                   = AS_METHOD(method_value);
@@ -114,101 +116,111 @@ static void op_send_helper(VM *vm, MargValue message_name) {
   }
 }
 
-#define integer_unary_operation_helper(operation)                        \
-  do {                                                                   \
-    MargValue number = STACK_POP(vm);                                    \
-    STACK_POP(vm);                                                       \
-    if(IS_INTEGER(number))                                               \
-      STACK_PUSH(vm, MARG_INTEGER(AS_INTEGER(number)->value operation)); \
-    else                                                                 \
-      STACK_PUSH(vm, MARG_NIL);                                          \
+#define integer_unary_operation_helper(operation)                         \
+  do {                                                                    \
+    MargValue number = fs_pop(vm->sp);                                    \
+    fs_pop(vm->sp);                                                       \
+    if(IS_INTEGER(number)) {                                              \
+      fs_push(vm->sp, MARG_INTEGER(AS_INTEGER(number)->value operation)); \
+    } else {                                                              \
+      fs_push(vm->sp, MARG_NIL);                                          \
+    }                                                                     \
   } while(0)
 
 #define numeric_binary_operation_helper(operation)                            \
   do {                                                                        \
-    MargValue op2 = STACK_POP(vm);                                            \
-    MargValue op1 = STACK_POP(vm);                                            \
-    STACK_POP(vm);                                                            \
-    if(IS_INTEGER(op1) && IS_INTEGER(op2))                                    \
-      STACK_PUSH(                                                             \
-        vm,                                                                   \
+    MargValue op2 = fs_pop(vm->sp);                                           \
+    MargValue op1 = fs_pop(vm->sp);                                           \
+    fs_pop(vm->sp);                                                           \
+    if(IS_INTEGER(op1) && IS_INTEGER(op2)) {                                  \
+      fs_push(                                                                \
+        vm->sp,                                                               \
         MARG_INTEGER(AS_INTEGER(op1)->value operation AS_INTEGER(op2)->value) \
       );                                                                      \
-    else if(IS_INTEGER(op1) && IS_FLOAT(op2))                                 \
-      STACK_PUSH(                                                             \
-        vm, MARG_FLOAT(AS_INTEGER(op1)->value operation AS_FLOAT(op2)->value) \
+    } else if(IS_INTEGER(op1) && IS_FLOAT(op2)) {                             \
+      fs_push(                                                                \
+        vm->sp,                                                               \
+        MARG_FLOAT(AS_INTEGER(op1)->value operation AS_FLOAT(op2)->value)     \
       );                                                                      \
-    else if(IS_FLOAT(op1) && IS_INTEGER(op2))                                 \
-      STACK_PUSH(                                                             \
-        vm, MARG_FLOAT(AS_FLOAT(op1)->value operation AS_INTEGER(op2)->value) \
+    } else if(IS_FLOAT(op1) && IS_INTEGER(op2)) {                             \
+      fs_push(                                                                \
+        vm->sp,                                                               \
+        MARG_FLOAT(AS_FLOAT(op1)->value operation AS_INTEGER(op2)->value)     \
       );                                                                      \
-    else if(IS_FLOAT(op1) && IS_FLOAT(op2))                                   \
-      STACK_PUSH(                                                             \
-        vm, MARG_FLOAT(AS_FLOAT(op1)->value operation AS_FLOAT(op2)->value)   \
+    } else if(IS_FLOAT(op1) && IS_FLOAT(op2)) {                               \
+      fs_push(                                                                \
+        vm->sp,                                                               \
+        MARG_FLOAT(AS_FLOAT(op1)->value operation AS_FLOAT(op2)->value)       \
       );                                                                      \
-    else                                                                      \
-      STACK_PUSH(vm, MARG_NIL);                                               \
+    } else {                                                                  \
+      fs_push(vm->sp, MARG_NIL);                                              \
+    }                                                                         \
   } while(0)
 
-#define numeric_binary_comparison_helper(operation)               \
-  do {                                                            \
-    MargValue op2 = STACK_POP(vm);                                \
-    MargValue op1 = STACK_POP(vm);                                \
-    STACK_POP(vm);                                                \
-    if(IS_INTEGER(op1) && IS_INTEGER(op2)) {                      \
-      if(AS_INTEGER(op1)->value operation AS_INTEGER(op2)->value) \
-        STACK_PUSH(vm, MARG_TRUE);                                \
-      else                                                        \
-        STACK_PUSH(vm, MARG_FALSE);                               \
-    } else if(IS_INTEGER(op1) && IS_FLOAT(op2)) {                 \
-      if(AS_INTEGER(op1)->value operation AS_FLOAT(op2)->value)   \
-        STACK_PUSH(vm, MARG_TRUE);                                \
-      else                                                        \
-        STACK_PUSH(vm, MARG_FALSE);                               \
-    } else if(IS_FLOAT(op1) && IS_INTEGER(op2)) {                 \
-      if(AS_FLOAT(op1)->value operation AS_INTEGER(op2)->value)   \
-        STACK_PUSH(vm, MARG_TRUE);                                \
-      else                                                        \
-        STACK_PUSH(vm, MARG_FALSE);                               \
-    } else if(IS_FLOAT(op1) && IS_FLOAT(op2)) {                   \
-      if(AS_FLOAT(op1)->value operation AS_FLOAT(op2)->value)     \
-        STACK_PUSH(vm, MARG_TRUE);                                \
-      else                                                        \
-        STACK_PUSH(vm, MARG_FALSE);                               \
-    } else                                                        \
-      STACK_PUSH(vm, MARG_NIL);                                   \
+#define numeric_binary_comparison_helper(operation)                 \
+  do {                                                              \
+    MargValue op2 = fs_pop(vm->sp);                                 \
+    MargValue op1 = fs_pop(vm->sp);                                 \
+    fs_pop(vm->sp);                                                 \
+    if(IS_INTEGER(op1) && IS_INTEGER(op2)) {                        \
+      if(AS_INTEGER(op1)->value operation AS_INTEGER(op2)->value) { \
+        fs_push(vm->sp, MARG_TRUE);                                 \
+      } else {                                                      \
+        fs_push(vm->sp, MARG_FALSE);                                \
+      }                                                             \
+    } else if(IS_INTEGER(op1) && IS_FLOAT(op2)) {                   \
+      if(AS_INTEGER(op1)->value operation AS_FLOAT(op2)->value) {   \
+        fs_push(vm->sp, MARG_TRUE);                                 \
+      } else {                                                      \
+        fs_push(vm->sp, MARG_FALSE);                                \
+      }                                                             \
+    } else if(IS_FLOAT(op1) && IS_INTEGER(op2)) {                   \
+      if(AS_FLOAT(op1)->value operation AS_INTEGER(op2)->value) {   \
+        fs_push(vm->sp, MARG_TRUE);                                 \
+      } else {                                                      \
+        fs_push(vm->sp, MARG_FALSE);                                \
+      }                                                             \
+    } else if(IS_FLOAT(op1) && IS_FLOAT(op2)) {                     \
+      if(AS_FLOAT(op1)->value operation AS_FLOAT(op2)->value) {     \
+        fs_push(vm->sp, MARG_TRUE);                                 \
+      } else {                                                      \
+        fs_push(vm->sp, MARG_FALSE);                                \
+      }                                                             \
+    } else {                                                        \
+      fs_push(vm->sp, MARG_NIL);                                    \
+    }                                                               \
   } while(0)
 
 static bool op_prim_to_string_helper(VM *vm, MargValue object) {
   if(IS_UNDEFINED(object)) {
-    STACK_PUSH(vm, MARG_STRING("<unbound>"));
+    fs_push(vm->sp, MARG_STRING("<unbound>"));
   } else if(IS_NIL_CLONE(object)) {
-    STACK_PUSH(vm, MARG_STRING(AS_OBJECT(object)->name));
+    fs_push(vm->sp, MARG_STRING(AS_OBJECT(object)->name));
   } else if(IS_FALSE_CLONE(object)) {
-    STACK_PUSH(vm, MARG_STRING(AS_OBJECT(object)->name));
+    fs_push(vm->sp, MARG_STRING(AS_OBJECT(object)->name));
   } else if(IS_TRUE_CLONE(object)) {
-    STACK_PUSH(vm, MARG_STRING(AS_OBJECT(object)->name));
+    fs_push(vm->sp, MARG_STRING(AS_OBJECT(object)->name));
   } else if(IS_INTEGER_CLONE(object)) {
-    STACK_PUSH(vm, MARG_STRING(marg_integer_to_string(AS_INTEGER(object))));
+    fs_push(vm->sp, MARG_STRING(marg_integer_to_string(AS_INTEGER(object))));
   } else if(IS_FLOAT_CLONE(object)) {
-    STACK_PUSH(vm, MARG_STRING(marg_float_to_string(AS_FLOAT(object))));
+    fs_push(vm->sp, MARG_STRING(marg_float_to_string(AS_FLOAT(object))));
   } else if(IS_STRING_CLONE(object)) {
-    STACK_PUSH(vm, object);
+    fs_push(vm->sp, object);
   } else if(IS_METHOD_CLONE(object)) {
-    STACK_PUSH(vm, MARG_STRING(marg_method_to_string(AS_METHOD(object))));
+    fs_push(vm->sp, MARG_STRING(marg_method_to_string(AS_METHOD(object))));
   } else if(IS_PROC_CLONE(object)) {
-    STACK_PUSH(vm, MARG_STRING(marg_proc_to_string(AS_PROC(object))));
+    fs_push(vm->sp, MARG_STRING(marg_proc_to_string(AS_PROC(object))));
   }
 
   // TODO Implement inside of $Tensor and $Hash
   else if(IS_TENSOR_CLONE(object)) {
-    STACK_PUSH(vm, MARG_STRING(marg_tensor_to_string(AS_TENSOR(object))));
+    fs_push(vm->sp, MARG_STRING(marg_tensor_to_string(AS_TENSOR(object))));
   } else if(IS_HASH_CLONE(object)) {
-    STACK_PUSH(vm, MARG_STRING(marg_hash_to_string(AS_HASH(object))));
+    fs_push(vm->sp, MARG_STRING(marg_hash_to_string(AS_HASH(object))));
   }
 
   else {
-    STACK_PUSH(vm, MARG_STRING(marg_object_to_string_with_hash(object)));
+    fs_push(vm->sp, MARG_STRING(marg_object_to_string_with_hash(object)));
     return true;
   }
 
@@ -225,52 +237,54 @@ static void evaluator_run(VM *vm) {
   vm->current->ip       = vm->current->bytecode->items;
 
   // TODO Branch table, computed goto
-  while(1) {
+  while(true) {
   enter_explicit_send:;
     switch(READ_BYTE()) {
     case OP_HALT:
       return;
     case OP_POP: {
-      STACK_POP(vm);
+      fs_pop(vm->sp);
       break;
     }
 
     case OP_PUT_NIL: {
-      STACK_PUSH(vm, MARG_NIL);
+      fs_push(vm->sp, MARG_NIL);
       break;
     }
     case OP_PUT_TRUE: {
-      STACK_PUSH(vm, MARG_TRUE);
+      fs_push(vm->sp, MARG_TRUE);
       break;
     }
     case OP_PUT_FALSE: {
-      STACK_PUSH(vm, MARG_FALSE);
+      fs_push(vm->sp, MARG_FALSE);
       break;
     }
 
     case OP_PUT_SELF: {
-      STACK_PUSH(vm, QNAN_BOX(vm->current->bound_method->bound_object));
+      fs_push(vm->sp, QNAN_BOX(vm->current->bound_method->bound_object));
       break;
     }
     case OP_PUT_SUPER: {
-      STACK_PUSH(vm, QNAN_BOX(vm->current->bound_method->bound_object->parent));
+      fs_push(
+        vm->sp, QNAN_BOX(vm->current->bound_method->bound_object->parent)
+      );
       break;
     }
 
     case OP_PUT_MINUS_1: {
-      STACK_PUSH(vm, MARG_INTEGER(-1));
+      fs_push(vm->sp, MARG_INTEGER(-1));
       break;
     }
     case OP_PUT_0: {
-      STACK_PUSH(vm, MARG_INTEGER(0));
+      fs_push(vm->sp, MARG_INTEGER(0));
       break;
     }
     case OP_PUT_1: {
-      STACK_PUSH(vm, MARG_INTEGER(1));
+      fs_push(vm->sp, MARG_INTEGER(1));
       break;
     }
     case OP_PUT_2: {
-      STACK_PUSH(vm, MARG_INTEGER(2));
+      fs_push(vm->sp, MARG_INTEGER(2));
       break;
     }
 
@@ -281,7 +295,7 @@ static void evaluator_run(VM *vm) {
           &vm->current->local_variables, &AS_PROC(object)->local_variables
         );
       }
-      STACK_PUSH(vm, object);
+      fs_push(vm->sp, object);
       break;
     }
     case OP_PUT_OBJECT_WORD: {
@@ -291,7 +305,7 @@ static void evaluator_run(VM *vm) {
           &vm->current->local_variables, &AS_PROC(object)->local_variables
         );
       }
-      STACK_PUSH(vm, object);
+      fs_push(vm->sp, object);
       break;
     }
     case OP_PUT_OBJECT_DWORD: {
@@ -301,7 +315,7 @@ static void evaluator_run(VM *vm) {
           &vm->current->local_variables, &AS_PROC(object)->local_variables
         );
       }
-      STACK_PUSH(vm, object);
+      fs_push(vm->sp, object);
       break;
     }
 
@@ -344,18 +358,18 @@ static void evaluator_run(VM *vm) {
       // case OP_PUT_LABEL_DWORD: {break;}
 
     case OP_SET_GLOBAL: {
-      table_set(&vm->global_variables, READ_TEMPORARY(), STACK_PEEK(vm, 0));
+      table_set(&vm->global_variables, READ_TEMPORARY(), fs_peek(vm->sp, 0));
       break;
     }
     case OP_SET_GLOBAL_WORD: {
       table_set(
-        &vm->global_variables, READ_TEMPORARY_WORD(), STACK_PEEK(vm, 0)
+        &vm->global_variables, READ_TEMPORARY_WORD(), fs_peek(vm->sp, 0)
       );
       break;
     }
     case OP_SET_GLOBAL_DWORD: {
       table_set(
-        &vm->global_variables, READ_TEMPORARY_DWORD(), STACK_PEEK(vm, 0)
+        &vm->global_variables, READ_TEMPORARY_DWORD(), fs_peek(vm->sp, 0)
       );
       break;
     }
@@ -363,7 +377,7 @@ static void evaluator_run(VM *vm) {
       table_set(
         &vm->current->bound_method->bound_object->instance_variables,
         READ_TEMPORARY(),
-        STACK_PEEK(vm, 0)
+        fs_peek(vm->sp, 0)
       );
       break;
     }
@@ -371,7 +385,7 @@ static void evaluator_run(VM *vm) {
       table_set(
         &vm->current->bound_method->bound_object->instance_variables,
         READ_TEMPORARY_WORD(),
-        STACK_PEEK(vm, 0)
+        fs_peek(vm->sp, 0)
       );
       break;
     }
@@ -379,44 +393,46 @@ static void evaluator_run(VM *vm) {
       table_set(
         &vm->current->bound_method->bound_object->instance_variables,
         READ_TEMPORARY_DWORD(),
-        STACK_PEEK(vm, 0)
+        fs_peek(vm->sp, 0)
       );
       break;
     }
     case OP_SET_LOCAL: {
       table_set(
-        &vm->current->local_variables, READ_TEMPORARY(), STACK_PEEK(vm, 0)
+        &vm->current->local_variables, READ_TEMPORARY(), fs_peek(vm->sp, 0)
       );
       break;
     }
     case OP_SET_LOCAL_WORD: {
       table_set(
-        &vm->current->local_variables, READ_TEMPORARY_WORD(), STACK_PEEK(vm, 0)
+        &vm->current->local_variables, READ_TEMPORARY_WORD(), fs_peek(vm->sp, 0)
       );
       break;
     }
     case OP_SET_LOCAL_DWORD: {
       table_set(
-        &vm->current->local_variables, READ_TEMPORARY_DWORD(), STACK_PEEK(vm, 0)
+        &vm->current->local_variables,
+        READ_TEMPORARY_DWORD(),
+        fs_peek(vm->sp, 0)
       );
       break;
     }
 
     case OP_GET_GLOBAL: {
-      STACK_PUSH(vm, table_get(&vm->global_variables, READ_TEMPORARY()));
+      fs_push(vm->sp, table_get(&vm->global_variables, READ_TEMPORARY()));
       break;
     }
     case OP_GET_GLOBAL_WORD: {
-      STACK_PUSH(vm, table_get(&vm->global_variables, READ_TEMPORARY_WORD()));
+      fs_push(vm->sp, table_get(&vm->global_variables, READ_TEMPORARY_WORD()));
       break;
     }
     case OP_GET_GLOBAL_DWORD: {
-      STACK_PUSH(vm, table_get(&vm->global_variables, READ_TEMPORARY_DWORD()));
+      fs_push(vm->sp, table_get(&vm->global_variables, READ_TEMPORARY_DWORD()));
       break;
     }
     case OP_GET_INSTANCE: {
-      STACK_PUSH(
-        vm,
+      fs_push(
+        vm->sp,
         table_get(
           &vm->current->bound_method->bound_object->instance_variables,
           READ_TEMPORARY()
@@ -425,8 +441,8 @@ static void evaluator_run(VM *vm) {
       break;
     }
     case OP_GET_INSTANCE_WORD: {
-      STACK_PUSH(
-        vm,
+      fs_push(
+        vm->sp,
         table_get(
           &vm->current->bound_method->bound_object->instance_variables,
           READ_TEMPORARY_WORD()
@@ -435,8 +451,8 @@ static void evaluator_run(VM *vm) {
       break;
     }
     case OP_GET_INSTANCE_DWORD: {
-      STACK_PUSH(
-        vm,
+      fs_push(
+        vm->sp,
         table_get(
           &vm->current->bound_method->bound_object->instance_variables,
           READ_TEMPORARY_DWORD()
@@ -445,20 +461,20 @@ static void evaluator_run(VM *vm) {
       break;
     }
     case OP_GET_LOCAL: {
-      STACK_PUSH(
-        vm, table_get(&vm->current->local_variables, READ_TEMPORARY())
+      fs_push(
+        vm->sp, table_get(&vm->current->local_variables, READ_TEMPORARY())
       );
       break;
     }
     case OP_GET_LOCAL_WORD: {
-      STACK_PUSH(
-        vm, table_get(&vm->current->local_variables, READ_TEMPORARY_WORD())
+      fs_push(
+        vm->sp, table_get(&vm->current->local_variables, READ_TEMPORARY_WORD())
       );
       break;
     }
     case OP_GET_LOCAL_DWORD: {
-      STACK_PUSH(
-        vm, table_get(&vm->current->local_variables, READ_TEMPORARY_DWORD())
+      fs_push(
+        vm->sp, table_get(&vm->current->local_variables, READ_TEMPORARY_DWORD())
       );
       break;
     }
@@ -489,14 +505,14 @@ static void evaluator_run(VM *vm) {
     }
 
     case OP_PUTS: {
-      MargValue object = STACK_POP(vm);
-      STACK_POP(vm);
+      MargValue object = fs_pop(vm->sp);
+      fs_pop(vm->sp);
       if(IS_STRING_CLONE(object)) {
         printf("%s\n", AS_STRING(object)->chars);
       } else {
         if(op_prim_to_string_helper(vm, object)) {
-          STACK_PUSH(vm, object);
-          STACK_PUSH(vm, MARG_INTEGER(0));
+          fs_push(vm->sp, object);
+          fs_push(vm->sp, MARG_INTEGER(0));
           op_send_helper(vm, MARG_STRING("to_string"));
 
           /**
@@ -519,9 +535,9 @@ static void evaluator_run(VM *vm) {
         exit_explicit_send:;
           on_explicit_send = false;
         }
-        printf("%s\n", AS_STRING(STACK_POP(vm))->chars);
+        printf("%s\n", AS_STRING(fs_pop(vm->sp))->chars);
       }
-      STACK_PUSH(vm, object);
+      fs_push(vm->sp, object);
       break;
     }
 
@@ -529,14 +545,14 @@ static void evaluator_run(VM *vm) {
       chunk *previous_bytecode   = vm->current->bytecode;
       uint8_t *previous_position = vm->current->ip;
 
-      MargValue filename = STACK_POP(vm);
-      STACK_POP(vm);
-      EmeraldsString *chars           = LOAD(AS_STRING(filename)->chars);
-      TokenTable *tokens              = READ(chars);
-      EmeraldsVector *formal_bytecode = FORMALIZE(tokens);
-      vm->current->bytecode           = chunk_new();
-      vm                              = EMIT(vm, formal_bytecode);
-      vm                              = OPTIMIZE(vm);
+      MargValue filename = fs_pop(vm->sp);
+      fs_pop(vm->sp);
+      char *chars            = LOAD(AS_STRING(filename)->chars);
+      TokenTable *tokens     = READ(chars);
+      char **formal_bytecode = FORMALIZE(tokens);
+      vm->current->bytecode  = chunk_new();
+      vm                     = EMIT(vm, formal_bytecode);
+      vm                     = OPTIMIZE(vm);
       EVAL(vm);
 
       vm->current->bytecode = previous_bytecode;
@@ -546,21 +562,21 @@ static void evaluator_run(VM *vm) {
     }
 
     case OP_PROC_CALL: {
-      MargValue proc = STACK_POP(vm);
-      // STACK_POP(vm);
+      MargValue proc = fs_pop(vm->sp);
+      // fs_pop(vm->sp);
       if(IS_PROC_CLONE(proc)) {
         AS_PROC(proc)->bound_proc = vm->current;
         vm->current               = AS_PROC(proc);
       } else {
-        STACK_PUSH(vm, MARG_NIL);
+        fs_push(vm->sp, MARG_NIL);
       }
       break;
     }
 
     case OP_PROC_CALL_PARAMS: {
-      MargHash *parameters = AS_HASH(STACK_POP(vm));
-      MargValue proc       = STACK_POP(vm);
-      // STACK_POP(vm);
+      MargHash *parameters = AS_HASH(fs_pop(vm->sp));
+      MargValue proc       = fs_pop(vm->sp);
+      // fs_pop(vm->sp);
 
       if(IS_PROC_CLONE(proc)) {
         AS_PROC(proc)->bound_proc = vm->current;
@@ -577,52 +593,52 @@ static void evaluator_run(VM *vm) {
 
         vm->current = AS_PROC(proc);
       } else {
-        STACK_PUSH(vm, MARG_NIL);
+        fs_push(vm->sp, MARG_NIL);
       }
       break;
     }
 
     case OP_PRIM_MESSAGES: {
-      MargValue object = STACK_POP(vm);
-      STACK_POP(vm);
+      MargValue object = fs_pop(vm->sp);
+      fs_pop(vm->sp);
       if(!IS_UNDEFINED(object)) {
-        STACK_PUSH(
-          vm,
+        fs_push(
+          vm->sp,
           retrieve_all_messages_in_delegation_chain(
             vm, MARG_TENSOR(32), AS_OBJECT(object)
           )
         );
       } else {
-        STACK_PUSH(vm, MARG_NIL);
+        fs_push(vm->sp, MARG_NIL);
       }
       break;
     }
 
     case OP_PRIM_OBJECT_ID: {
-      MargValue object = STACK_POP(vm);
-      STACK_POP(vm);
+      MargValue object = fs_pop(vm->sp);
+      fs_pop(vm->sp);
       if(!IS_UNDEFINED(object)) {
         char qnan_encoded_value[20];
         sprintf(qnan_encoded_value, "0x%016" PRIx64, (uint64_t)object);
-        STACK_PUSH(vm, MARG_STRING(qnan_encoded_value));
+        fs_push(vm->sp, MARG_STRING(qnan_encoded_value));
       } else {
-        STACK_PUSH(vm, MARG_NIL);
+        fs_push(vm->sp, MARG_NIL);
       }
       break;
     }
 
     case OP_PRIM_TO_STRING: {
-      MargValue object = STACK_POP(vm);
-      STACK_POP(vm);
+      MargValue object = fs_pop(vm->sp);
+      fs_pop(vm->sp);
       op_prim_to_string_helper(vm, object);
       break;
     }
 
     case OP_PRIM_EQUALS: {
-      MargValue obj1 = STACK_POP(vm);
-      MargValue obj2 = STACK_POP(vm);
-      STACK_POP(vm);
-      obj1 == obj2 ? STACK_PUSH(vm, MARG_TRUE) : STACK_PUSH(vm, MARG_FALSE);
+      MargValue obj1 = fs_pop(vm->sp);
+      MargValue obj2 = fs_pop(vm->sp);
+      fs_pop(vm->sp);
+      obj1 == obj2 ? fs_push(vm->sp, MARG_TRUE) : fs_push(vm->sp, MARG_FALSE);
       break;
     }
 
@@ -632,11 +648,11 @@ static void evaluator_run(VM *vm) {
     }
 
     case OP_PRIM_DNU: {
-      MargValue message_name = STACK_POP(vm);
-      MargValue object       = STACK_POP(vm);
-      STACK_POP(vm);
+      MargValue message_name = fs_pop(vm->sp);
+      MargValue object       = fs_pop(vm->sp);
+      fs_pop(vm->sp);
       if(!IS_UNDEFINED(object) && IS_STRING_CLONE(message_name)) {
-        EmeraldsString *dnu_message = string_new("");
+        char *dnu_message = string_new("");
         string_addf(
           dnu_message,
           "Object `%s` or any other object in the delegation chain does not "
@@ -644,18 +660,18 @@ static void evaluator_run(VM *vm) {
           AS_OBJECT(object)->name,
           AS_STRING(message_name)->chars
         );
-        STACK_PUSH(vm, MARG_STRING(string_get(dnu_message)));
+        fs_push(vm->sp, MARG_STRING(dnu_message));
       } else {
         // TODO Instead of pushing a nil, we should throw an error.
-        STACK_PUSH(vm, MARG_NIL);
+        fs_push(vm->sp, MARG_NIL);
       }
       break;
     }
 
     case OP_PRIM_CLONE_OBJECT: {
-      MargValue new_object_name = STACK_POP(vm);
-      MargValue parent_object   = STACK_POP(vm);
-      STACK_POP(vm);
+      MargValue new_object_name = fs_pop(vm->sp);
+      MargValue parent_object   = fs_pop(vm->sp);
+      fs_pop(vm->sp);
       if(!IS_UNDEFINED(parent_object) && IS_STRING_CLONE(new_object_name)) {
         MargValue child_object = MARG_OBJECT(AS_STRING(new_object_name)->chars);
         AS_OBJECT(child_object)->parent = AS_OBJECT(parent_object);
@@ -669,25 +685,27 @@ static void evaluator_run(VM *vm) {
           MARG_STRING("@super"),
           parent_object
         );
-        STACK_PUSH(vm, child_object);
+        fs_push(vm->sp, child_object);
       } else {
-        STACK_PUSH(vm, MARG_NIL);
+        fs_push(vm->sp, MARG_NIL);
       }
       break;
     }
 
     case OP_PRIM_BIND_METHOD: {
-      MargValue object = STACK_POP(vm);
-      MargValue method = STACK_POP(vm);
-      STACK_POP(vm);
+      MargValue object = fs_pop(vm->sp);
+      MargValue method = fs_pop(vm->sp);
+      fs_pop(vm->sp);
       if(!IS_UNDEFINED(object) && IS_METHOD_CLONE(method)) {
         table_set(
-          &AS_OBJECT(object)->messages, AS_METHOD(method)->message_name, method
+          &AS_OBJECT(object)->messages,
+          MARG_STRING(AS_METHOD(method)->message_name->chars),
+          method
         );
         AS_METHOD(method)->bound_object = AS_OBJECT(object);
-        STACK_PUSH(vm, method);
+        fs_push(vm->sp, method);
       } else {
-        STACK_PUSH(vm, MARG_NIL);
+        fs_push(vm->sp, MARG_NIL);
       }
       break;
     }
@@ -713,26 +731,26 @@ static void evaluator_run(VM *vm) {
     }
 
     case OP_PRIM_ABS: {
-      MargValue number = STACK_POP(vm);
-      STACK_POP(vm);
+      MargValue number = fs_pop(vm->sp);
+      fs_pop(vm->sp);
       if(IS_INTEGER(number)) {
-        STACK_PUSH(
-          vm,
+        fs_push(
+          vm->sp,
           MARG_INTEGER(
             (AS_INTEGER(number)->value < 0) ? -AS_INTEGER(number)->value
                                             : AS_INTEGER(number)->value
           )
         );
       } else if(IS_FLOAT(number)) {
-        STACK_PUSH(
-          vm,
+        fs_push(
+          vm->sp,
           MARG_FLOAT(
             (AS_FLOAT(number)->value < 0) ? -AS_FLOAT(number)->value
                                           : AS_FLOAT(number)->value
           )
         );
       } else {
-        STACK_PUSH(vm, MARG_NIL);
+        fs_push(vm->sp, MARG_NIL);
       }
       break;
     }
@@ -777,5 +795,5 @@ static void evaluator_run(VM *vm) {
 
 MargValue evaluator_evaluate(VM *vm) {
   evaluator_run(vm);
-  return STACK_PEEK(vm, -1);
+  return fs_peek(vm->sp, -1);
 }

@@ -1,7 +1,6 @@
 #ifndef __MARG_VALUE_H_
 #define __MARG_VALUE_H_
 
-#include "../../libs/EmeraldsString/export/EmeraldsString.h"
 #include "../base/fnv_1a_64_hash.h"
 #include "MargFloat.h"
 #include "MargHash.h"
@@ -126,13 +125,13 @@
  * @param self -> The MargValue represented as a double
  * @return string*
  */
-EmeraldsString *marg_value_format(MargValue self);
+char *marg_value_format(MargValue self);
 
 /**
  * @brief Formats a marg value as a margaret variable
  * @param self
  * @return string*
  */
-EmeraldsString *marg_value_as_variable(MargValue self);
+char *marg_value_as_variable(MargValue self);
 
 #endif

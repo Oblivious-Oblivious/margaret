@@ -1,5 +1,6 @@
 #include "MargInteger.h"
 
+#include "../../libs/EmeraldsString/export/EmeraldsString.h" /* IWYU pragma: keep */
 #include "MargValue.h"
 
 MargInteger *marg_integer_new(VM *vm, int64_t value) {
@@ -19,7 +20,7 @@ MargInteger *marg_integer_new(VM *vm, int64_t value) {
 }
 
 char *marg_integer_to_string(MargInteger *object) {
-  EmeraldsString *res = string_new("");
+  char *res = string_new("");
   string_addf(res, "%lld", object->value);
-  return string_get(res);
+  return res;
 }

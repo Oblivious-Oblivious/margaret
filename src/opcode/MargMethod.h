@@ -2,6 +2,7 @@
 #define __MARG_METHOD_H_
 
 #include "MargObject.h"
+#include "MargString.h"
 #include "MargTensor.h"
 
 /**
@@ -19,7 +20,7 @@ typedef struct MargMethod {
   MargObject _;
   MargObject *bound_object;
 
-  MargValue message_name;
+  MargString *message_name;
   MargTensor *parameter_names;
   MargProc *proc;
 } MargMethod;

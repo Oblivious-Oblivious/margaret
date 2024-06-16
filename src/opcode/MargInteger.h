@@ -9,6 +9,7 @@
  */
 typedef struct MargInteger {
   MargObject _;
+  // TODO - Replace int64_t with ptrdiff_t
   int64_t value;
 } MargInteger;
 

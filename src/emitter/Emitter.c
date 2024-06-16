@@ -1,5 +1,6 @@
 #include "Emitter.h"
 
+#include "../../libs/EmeraldsString/export/EmeraldsString.h" /* IWYU pragma: keep */
 #include "../inspector/Inspector.h"
 #include "../opcode/fmcodes.h"
 #include "../opcode/MargValue.h"
@@ -49,14 +50,15 @@
     emit_byte((byte4));                         \
   } while(0)
 
-#define emit_variable_length_op(opcode)                            \
-  do {                                                             \
-    if(chunk_temporaries_size(vm->current->bytecode) < 256)        \
-      chunk_add(vm->current->bytecode, (opcode), 123);             \
-    else if(chunk_temporaries_size(vm->current->bytecode) < 65536) \
-      chunk_add(vm->current->bytecode, (opcode##_WORD), 123);      \
-    else                                                           \
-      chunk_add(vm->current->bytecode, (opcode##_DWORD), 123);     \
+#define emit_variable_length_op(opcode)                                \
+  do {                                                                 \
+    if(chunk_temporaries_size(vm->current->bytecode) < 256) {          \
+      chunk_add(vm->current->bytecode, (opcode), 123);                 \
+    } else if(chunk_temporaries_size(vm->current->bytecode) < 65536) { \
+      chunk_add(vm->current->bytecode, (opcode##_WORD), 123);          \
+    } else {                                                           \
+      chunk_add(vm->current->bytecode, (opcode##_DWORD), 123);         \
+    }                                                                  \
   } while(0)
 
 #define emit_temporary(temporary)                      \
@@ -70,11 +72,11 @@
   chunk_temporaries_add((vm)->current->bytecode, (temporary), (index));
 
 #define add_temporary(vm, temporary_index) \
-  __add_temporary_function(vm, temporary_index, 256 + 1, 65536 + 1);
+  _add_temporary_function(vm, temporary_index, 256 + 1, 65536 + 1);
 #define add_premade_temporary(vm, temporary_index) \
-  __add_temporary_function(vm, temporary_index, 256, 65536);
+  _add_temporary_function(vm, temporary_index, 256, 65536);
 
-static void __add_temporary_function(
+static void _add_temporary_function(
   VM *vm, uint32_t temporary_index, uint16_t byte_bound, uint32_t word_bound
 ) {
   if(chunk_temporaries_size(vm->current->bytecode) < byte_bound) {
@@ -93,7 +95,7 @@ static void __add_temporary_function(
   }
 }
 
-VM *emitter_emit(VM *vm, EmeraldsVector *formal_bytecode) {
+VM *emitter_emit(VM *vm, char **formal_bytecode) {
   MargObject *marg_object =
     AS_OBJECT(table_get(&vm->global_variables, MARG_STRING("$Margaret")));
   MargMethod *main_method =
@@ -103,43 +105,43 @@ VM *emitter_emit(VM *vm, EmeraldsVector *formal_bytecode) {
 
   size_t bytecode_size = vector_size(formal_bytecode);
   for(size_t ip = 0; ip < bytecode_size; ip++) {
-    EmeraldsString *opcode = vector_get(formal_bytecode, ip);
+    char *opcode = formal_bytecode[ip];
 
     switch_opcode_case(FM_POP) { emit_byte(OP_POP); }
 
     opcode_case(FM_LOCAL) {
-      EmeraldsString *variable_name = vector_get(formal_bytecode, ++ip);
-      MargValue temporary           = MARG_STRING(variable_name->str);
+      char *variable_name = formal_bytecode[++ip];
+      MargValue temporary = MARG_STRING(variable_name);
       emit_variable_length_op(OP_GET_LOCAL);
       emit_temporary(temporary);
     }
     opcode_case(FM_INSTANCE) {
-      EmeraldsString *variable_name = vector_get(formal_bytecode, ++ip);
-      MargValue temporary           = MARG_STRING(variable_name->str);
+      char *variable_name = formal_bytecode[++ip];
+      MargValue temporary = MARG_STRING(variable_name);
       emit_variable_length_op(OP_GET_INSTANCE);
       emit_temporary(temporary);
     }
     opcode_case(FM_GLOBAL) {
-      EmeraldsString *variable_name = vector_get(formal_bytecode, ++ip);
-      MargValue temporary           = MARG_STRING(variable_name->str);
+      char *variable_name = formal_bytecode[++ip];
+      MargValue temporary = MARG_STRING(variable_name);
       emit_variable_length_op(OP_GET_GLOBAL);
       emit_temporary(temporary);
     }
 
     opcode_case(FM_STORE_LOCAL) {
-      EmeraldsString *variable_name = vector_get(formal_bytecode, ++ip);
+      char *variable_name = formal_bytecode[++ip];
       emit_variable_length_op(OP_SET_LOCAL);
-      emit_temporary(MARG_STRING(variable_name->str));
+      emit_temporary(MARG_STRING(variable_name));
     }
     opcode_case(FM_STORE_INSTANCE) {
-      EmeraldsString *variable_name = vector_get(formal_bytecode, ++ip);
+      char *variable_name = formal_bytecode[++ip];
       emit_variable_length_op(OP_SET_INSTANCE);
-      emit_temporary(MARG_STRING(variable_name->str));
+      emit_temporary(MARG_STRING(variable_name));
     }
     opcode_case(FM_STORE_GLOBAL) {
-      EmeraldsString *variable_name = vector_get(formal_bytecode, ++ip);
+      char *variable_name = formal_bytecode[++ip];
       emit_variable_length_op(OP_SET_GLOBAL);
-      emit_temporary(MARG_STRING(variable_name->str));
+      emit_temporary(MARG_STRING(variable_name));
     }
 
     opcode_case(FM_NIL) { emit_byte(OP_PUT_NIL); }
@@ -151,9 +153,9 @@ VM *emitter_emit(VM *vm, EmeraldsVector *formal_bytecode) {
 
     // TODO Distinguish normal number from big numbers
     opcode_case(FM_INTEGER) {
-      EmeraldsString *temporary_str = vector_get(formal_bytecode, ++ip);
+      char *temporary_str = formal_bytecode[++ip];
       char *end;
-      long long integer = strtoll(string_get(temporary_str), &end, 10);
+      long long integer = strtoll(temporary_str, &end, 10);
       if(integer == -1) {
         emit_byte(OP_PUT_MINUS_1);
       } else if(integer == 0) {
@@ -169,23 +171,21 @@ VM *emitter_emit(VM *vm, EmeraldsVector *formal_bytecode) {
     }
     opcode_case(FM_FLOAT) {
       char *end;
-      EmeraldsString *temporary_str = vector_get(formal_bytecode, ++ip);
-      MargValue temporary =
-        MARG_FLOAT(strtold(string_get(temporary_str), &end));
+      char *temporary_str = formal_bytecode[++ip];
+      MargValue temporary = MARG_FLOAT(strtold(temporary_str, &end));
       emit_variable_length_op(OP_PUT_OBJECT);
       emit_temporary(temporary);
     }
 
     opcode_case(FM_STRING) {
-      EmeraldsString *temporary_str = vector_get(formal_bytecode, ++ip);
-      char *chars                   = string_get(temporary_str);
-      size_t size                   = string_size(temporary_str);
+      char *temporary_str = formal_bytecode[++ip];
+      size_t size         = string_size(temporary_str);
 
-      MargValue interned = MARG_STRING_INTERNED(chars, size);
+      MargValue interned = MARG_STRING_INTERNED(temporary_str, size);
       emit_variable_length_op(OP_PUT_OBJECT);
 
       if(IS_NOT_INTERNED(interned)) {
-        interned = MARG_STRING(chars);
+        interned = MARG_STRING(temporary_str);
 
         uint32_t temporary_index;
         make_temporary(vm, interned, &temporary_index);
@@ -203,18 +203,16 @@ VM *emitter_emit(VM *vm, EmeraldsVector *formal_bytecode) {
 
     opcode_case(FM_TENSOR) {
       char *end;
-      EmeraldsString *number_of_elements = vector_get(formal_bytecode, ++ip);
-      MargValue temporary =
-        MARG_INTEGER(strtoll(string_get(number_of_elements), &end, 10));
+      char *number_of_elements = formal_bytecode[++ip];
+      MargValue temporary = MARG_INTEGER(strtoll(number_of_elements, &end, 10));
       emit_variable_length_op(OP_PUT_TENSOR);
       emit_temporary(temporary);
     }
     opcode_case(FM_TUPLE) {}
     opcode_case(FM_HASH) {
       char *end;
-      EmeraldsString *number_of_elements = vector_get(formal_bytecode, ++ip);
-      MargValue temporary =
-        MARG_INTEGER(strtoll(string_get(number_of_elements), &end, 10));
+      char *number_of_elements = formal_bytecode[++ip];
+      MargValue temporary = MARG_INTEGER(strtoll(number_of_elements, &end, 10));
       emit_variable_length_op(OP_PUT_HASH);
       emit_temporary(temporary);
     }
@@ -239,8 +237,7 @@ VM *emitter_emit(VM *vm, EmeraldsVector *formal_bytecode) {
 
     opcode_case(FM_START_UNARY_METHOD) {
       MargValue new_method = MARG_METHOD(
-        vm->current->bound_method->bound_object,
-        string_get(vector_get(formal_bytecode, ++ip))
+        vm->current->bound_method->bound_object, formal_bytecode[++ip]
       );
       AS_METHOD(new_method)->proc->bound_proc = vm->current;
       emit_variable_length_op(OP_PUT_OBJECT);
@@ -255,8 +252,7 @@ VM *emitter_emit(VM *vm, EmeraldsVector *formal_bytecode) {
     }
     opcode_case(FM_START_BINARY_METHOD) {
       MargValue new_method = MARG_METHOD(
-        vm->current->bound_method->bound_object,
-        string_get(vector_get(formal_bytecode, ++ip))
+        vm->current->bound_method->bound_object, formal_bytecode[++ip]
       );
       AS_METHOD(new_method)->proc->bound_proc = vm->current;
       emit_variable_length_op(OP_PUT_OBJECT);
@@ -271,8 +267,7 @@ VM *emitter_emit(VM *vm, EmeraldsVector *formal_bytecode) {
     }
     opcode_case(FM_START_KEYWORD_METHOD) {
       MargValue new_method = MARG_METHOD(
-        vm->current->bound_method->bound_object,
-        string_get(vector_get(formal_bytecode, ++ip))
+        vm->current->bound_method->bound_object, formal_bytecode[++ip]
       );
       AS_METHOD(new_method)->proc->bound_proc = vm->current;
       emit_variable_length_op(OP_PUT_OBJECT);
@@ -288,31 +283,31 @@ VM *emitter_emit(VM *vm, EmeraldsVector *formal_bytecode) {
 
     opcode_case(FM_ANY_OBJECT) {}
     opcode_case(FM_METHOD_PARAMETER) {
-      char *parameter_name = string_get(vector_get(formal_bytecode, ++ip));
+      char *parameter_name = formal_bytecode[++ip];
       marg_tensor_add(
         vm->current->bound_method->parameter_names, MARG_STRING(parameter_name)
       );
     }
 
     opcode_case(FM_UNARY) {
-      EmeraldsString *unary_name = vector_get(formal_bytecode, ++ip);
+      char *unary_name = formal_bytecode[++ip];
 
       switch_unary_case("call") emit_byte(OP_PROC_CALL);
       default_unary_case {
         emit_byte(OP_PUT_0);
         emit_variable_length_op(OP_SEND);
-        emit_temporary(MARG_STRING(string_get(unary_name)));
+        emit_temporary(MARG_STRING(unary_name));
       }
     }
     opcode_case(FM_BINARY) {
-      EmeraldsString *binary_name = vector_get(formal_bytecode, ++ip);
+      char *binary_name = formal_bytecode[++ip];
       emit_byte(OP_PUT_1);
       emit_variable_length_op(OP_SEND);
-      emit_temporary(MARG_STRING(string_get(binary_name)));
+      emit_temporary(MARG_STRING(binary_name));
     }
     opcode_case(FM_KEYWORD) {
-      EmeraldsString *keyword_name         = vector_get(formal_bytecode, ++ip);
-      EmeraldsString *number_of_parameters = vector_get(formal_bytecode, ++ip);
+      char *keyword_name         = formal_bytecode[++ip];
+      char *number_of_parameters = formal_bytecode[++ip];
 
       switch_keyword_case("puts:") emit_byte(OP_PUTS);
       keyword_case("include:") emit_byte(OP_INCLUDE);
@@ -346,14 +341,13 @@ VM *emitter_emit(VM *vm, EmeraldsVector *formal_bytecode) {
           emit_byte(OP_PUT_2);
         } else {
           char *end;
-          long long integer =
-            strtoll(string_get(number_of_parameters), &end, 10);
+          long long integer = strtoll(number_of_parameters, &end, 10);
           emit_variable_length_op(OP_PUT_OBJECT);
           emit_temporary(MARG_INTEGER(integer));
         }
 
         emit_variable_length_op(OP_SEND);
-        emit_temporary(MARG_STRING(string_get(keyword_name)));
+        emit_temporary(MARG_STRING(keyword_name));
       }
     }
   }

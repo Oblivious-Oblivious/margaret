@@ -23,46 +23,44 @@
 
 #include <stdio.h> /* printf */
 
-static EmeraldsString *SCAN(char *prompt) { return scanner_scan(prompt); }
 #define VERSION "0.0.1"
 #define DATE    "2022-2024"
 #define LINK    "margaret.org"
 
+static char *SCAN(char *prompt) { return scanner_scan(prompt); }
 
 static void PRINT(MargValue evaluated) {
-  printf("%s\n", string_get(marg_value_format(evaluated)));
+  printf("%s\n", marg_value_format(evaluated));
 }
 
-static void PRINT_FORMAL(EmeraldsVector *formal_bytecode) {
+static void PRINT_FORMAL(char **formal_bytecode) {
   printf("[");
   size_t formal_bytecode_size = vector_size(formal_bytecode);
   if(formal_bytecode_size > 0) {
     for(size_t i = 0; i < formal_bytecode_size - 1; i++) {
-      printf("%s, ", string_get(vector_get(formal_bytecode, i)));
+      printf("%s, ", formal_bytecode[i]);
     }
-    printf(
-      "%s", string_get(vector_get(formal_bytecode, formal_bytecode_size - 1))
-    );
+    printf("%s", formal_bytecode[formal_bytecode_size - 1]);
   }
   printf("]\n");
 }
 
 static void margaret_repl(VM *vm) {
-  printf("margaret %s  Copyright (C) %s %s, Ioannina\n", VERSION, DATE, LINK);
-  while(1) {
-    EmeraldsVector *formal_bytecode = FORMALIZE(READ(SCAN("$> ")));
+  printf("Margaret %s  Copyright (C) %s %s, Ioannina\n", VERSION, DATE, LINK);
+  while(true) {
+    char **formal_bytecode = FORMALIZE(READ(SCAN("> ")));
     // PRINT_FORMAL(formal_bytecode);
     PRINT(EVAL(OPTIMIZE(EMIT(vm, formal_bytecode))));
   }
 }
 
 static void margaret_run_file(VM *vm, char *filename) {
-  EmeraldsString *chars           = LOAD(filename);
-  TokenTable *tokens              = READ(chars);
-  EmeraldsVector *formal_bytecode = FORMALIZE(tokens);
+  char *chars            = LOAD(filename);
+  TokenTable *tokens     = READ(chars);
+  char **formal_bytecode = FORMALIZE(tokens);
   // PRINT_FORMAL(formal_bytecode);
-  vm                              = EMIT(vm, formal_bytecode);
-  vm                              = OPTIMIZE(vm);
+  vm                     = EMIT(vm, formal_bytecode);
+  vm                     = OPTIMIZE(vm);
   EVAL(vm);
 }
 

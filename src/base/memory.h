@@ -15,7 +15,7 @@
  * @param nbytes -> Size of allocation
  * @return void*
  */
-inline void *collected_malloc(size_t nbytes) { return malloc(nbytes); }
+#define collected_malloc(nbytes) (malloc((nbytes)))
 
 /**
  * @brief Interface to a garbage collected reallocation
@@ -23,8 +23,6 @@ inline void *collected_malloc(size_t nbytes) { return malloc(nbytes); }
  * @param new_size -> Size of reallocation
  * @return void*
  */
-inline void *collected_realloc(void *old, size_t new_size) {
-  return realloc(old, new_size);
-}
+#define collected_realloc(old, new_size) (realloc((old), (new_size)))
 
 #endif

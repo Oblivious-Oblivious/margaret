@@ -1,5 +1,6 @@
 #include "MargProc.h"
 
+#include "../../libs/EmeraldsString/export/EmeraldsString.h" /* IWYU pragma: keep */
 #include "MargValue.h"
 
 MargProc *marg_proc_new(VM *vm, MargMethod *bound_method) {
@@ -25,7 +26,7 @@ MargProc *marg_proc_new(VM *vm, MargMethod *bound_method) {
 }
 
 char *marg_proc_to_string(MargProc *object) {
-  EmeraldsString *res = string_new("");
+  char *res = string_new("");
   string_addf(res, "< %s:proc >", object->bound_method->bound_object->name);
-  return string_get(res);
+  return res;
 }

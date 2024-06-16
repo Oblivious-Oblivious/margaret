@@ -1,5 +1,6 @@
 #include "MargObject.h"
 
+#include "../../libs/EmeraldsString/export/EmeraldsString.h" /* IWYU pragma: keep */
 #include "MargValue.h"
 
 MargObject *marg_object_new(VM *bound_vm, size_t size, char *name) {
@@ -20,13 +21,13 @@ MargObject *marg_object_new(VM *bound_vm, size_t size, char *name) {
 }
 
 char *marg_object_to_string_with_hash(MargValue object) {
-  EmeraldsString *res = string_new("");
-  char *object_name   = AS_OBJECT(object)->name;
+  char *res         = string_new("");
+  char *object_name = AS_OBJECT(object)->name;
   string_addf(
     res,
     "%s@%llx",
     object_name,
     fnv_1a_64_hash(object_name, strlen(object_name))
   );
-  return string_get(res);
+  return res;
 }

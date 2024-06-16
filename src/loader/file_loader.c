@@ -1,6 +1,11 @@
 #include "file_loader.h"
 
+// TODO - Extract to a separate library
+
+#include "../../libs/EmeraldsString/export/EmeraldsString.h" /* IWYU pragma: keep */
+
 #include <stdio.h> /* FILE, fopen, fclose, FILENAME_MAX, printf */
+
 #ifdef ON_WINDOWS
   #include <direct.h> /* _getcwd */
   #define present_working_directory _getcwd
@@ -59,9 +64,9 @@ int file_loader_close(file_loader *self) {
   return 1;
 }
 
-EmeraldsString *file_loader_load(file_loader *self, const char *filepath) {
+char *file_loader_load(file_loader *self, const char *filepath) {
   file_loader_open(self, filepath);
-  EmeraldsString *result = string_new("");
+  char *result = string_new("");
 
   char ch;
   while((ch = fgetc(self->fd)) != EOF) {

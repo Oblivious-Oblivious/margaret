@@ -4,10 +4,10 @@
 #include "../parser/Parser.h"
 #include "../vm/vm.h"
 
-EmeraldsString *LOAD(char *filename);
-TokenTable *READ(EmeraldsString *chars);
-EmeraldsVector *FORMALIZE(TokenTable *tokens);
-VM *EMIT(VM *vm, EmeraldsVector *formal_bytecode);
+char *LOAD(char *filename);
+TokenTable *READ(char *chars);
+char **FORMALIZE(TokenTable *tokens);
+VM *EMIT(VM *vm, char **formal_bytecode);
 VM *OPTIMIZE(VM *vm);
 MargValue EVAL(VM *vm);
 

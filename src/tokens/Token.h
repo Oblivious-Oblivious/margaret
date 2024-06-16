@@ -1,8 +1,9 @@
 #ifndef __TOKEN_H_
 #define __TOKEN_H_
 
-#include "../../libs/EmeraldsString/export/EmeraldsString.h"
 #include "Type.h"
+
+#include <stdlib.h>
 
 /**
  * @brief Describes a Token data structure that
@@ -13,7 +14,7 @@
  * @param filename -> Filename this token was found on
  */
 typedef struct Token {
-  EmeraldsString *value;
+  char *value;
   Type type;
   size_t line_number;
   const char *filename;
@@ -27,9 +28,8 @@ typedef struct Token {
  * @param filename -> The current line which the token was consumed at
  * @return Token
  */
-Token *token_new(
-  EmeraldsString *value, Type type, size_t line_number, const char *filename
-);
+Token *
+token_new(char *value, Type type, size_t line_number, const char *filename);
 
 /**
  * @brief Checks for equality between a token and a string value
@@ -37,7 +37,7 @@ Token *token_new(
  * @param value -> Second value
  * @return A boolean
  */
-int token_equals_values(Token *tok, EmeraldsString *value);
+int token_equals_values(Token *tok, char *value);
 
 /**
  * @brief Checks for equality between two tokens

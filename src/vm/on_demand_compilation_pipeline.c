@@ -6,19 +6,19 @@
 #include "../loader/file_loader.h"
 #include "../optimizer/Optimizer.h"
 
-EmeraldsString *LOAD(char *filename) {
+char *LOAD(char *filename) {
   return file_loader_load(file_loader_new(), filename);
 }
 
-TokenTable *READ(EmeraldsString *chars) {
+TokenTable *READ(char *chars) {
   return lexer_make_tokens(lexer_new("repl", chars));
 }
 
-EmeraldsVector *FORMALIZE(TokenTable *tokens) {
+char **FORMALIZE(TokenTable *tokens) {
   return parser_analyze_syntax(parser_new(tokens));
 }
 
-VM *EMIT(VM *vm, EmeraldsVector *formal_bytecode) {
+VM *EMIT(VM *vm, char **formal_bytecode) {
   return emitter_emit(vm, formal_bytecode);
 }
 

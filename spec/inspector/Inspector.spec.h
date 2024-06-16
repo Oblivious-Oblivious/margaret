@@ -22,10 +22,11 @@ module(InspectorSpec, {
       chunk_add(bytecode, temporary_in_bytes[1], 123);
     }
 
-    EmeraldsVector *res = inspect_vm_bytecode(vm);
-    assert_that_charptr(string_get((EmeraldsString *)vector_get(res, 4000))
-                          equals to "2ee0         |      0c 0f a0            "
-                                    "PUT_OBJECT_WORD          42.42 @[4000]");
+    char **res = inspect_vm_bytecode(vm);
+    assert_that_int(vector_size(res) equals to 4001);
+    assert_that_charptr(res[4000] equals to
+                        "2ee0         |      0c 0f a0            "
+                        "PUT_OBJECT_WORD          42.42 @[4000]");
   });
 })
 

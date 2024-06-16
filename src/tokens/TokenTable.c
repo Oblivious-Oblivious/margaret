@@ -1,5 +1,7 @@
 #include "TokenTable.h"
 
+#include "../../libs/EmeraldsString/export/EmeraldsString.h" /* IWYU pragma: keep */
+#include "../../libs/EmeraldsVector/export/EmeraldsVector.h" /* IWYU pragma: keep */
 #include "../base/memory.h"
 
 #include <stdio.h> /* fprintf */
@@ -12,14 +14,14 @@
  * @param message -> The message to display
  * @return string* -> NULL pointer
  */
-static EmeraldsString *error(Token *token, const char *message) {
+static char *error(Token *token, const char *message) {
   fprintf(
     stderr,
     "%s:%zu: \033[1;31merror:\033[0m %s  Token: \033[1;31m`%s`\033[0m\n",
     token->filename,
     token->line_number,
     message,
-    string_get(token->value)
+    token->value
   );
   return NULL;
 }
@@ -27,7 +29,7 @@ static EmeraldsString *error(Token *token, const char *message) {
 void token_table_display(TokenTable *self) {
   for(size_t i = 0; i < token_table_size(self); i++) {
     Token *t = token_table_get(self, i);
-    printf("(%s,%d,%zu)\n", string_get(t->value), t->type, t->line_number);
+    printf("(%s,%d,%zu)\n", t->value, t->type, t->line_number);
   }
   printf("\n");
 }
@@ -35,7 +37,7 @@ void token_table_display(TokenTable *self) {
 TokenTable *token_table_new(void) {
   TokenTable *t = (TokenTable *)collected_malloc(sizeof(TokenTable));
 
-  t->token_list = vector_new_empty();
+  t->token_list = NULL;
   t->pos        = 0;
 
   return t;
@@ -52,9 +54,9 @@ size_t token_table_size(TokenTable *self) {
 Token *token_table_get(TokenTable *self, size_t i) {
   size_t size = token_table_size(self);
   if(i >= size) {
-    return vector_get(self->token_list, size - 1);
+    return self->token_list[size - 1];
   } else {
-    return vector_get(self->token_list, i);
+    return self->token_list[i];
   }
 }
 
@@ -67,7 +69,7 @@ Token *token_table_consume(TokenTable *self) {
   return token_table_get(self, self->pos - 1);
 }
 
-EmeraldsString *token_table_ensure_value(
+char *token_table_ensure_value(
   TokenTable *self, const char *value, const char *error_message
 ) {
   Token *token = token_table_consume(self);
@@ -78,7 +80,7 @@ EmeraldsString *token_table_ensure_value(
   }
 }
 
-EmeraldsString *token_table_ensure_type(
+char *token_table_ensure_type(
   TokenTable *self, Type type, const char *error_message
 ) {
   Token *token = token_table_consume(self);

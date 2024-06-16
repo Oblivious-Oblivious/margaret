@@ -2,6 +2,7 @@
 #define __LEXER_SPEC_H_
 
 #include "../../libs/cSpec/export/cSpec.h"
+#include "../../libs/EmeraldsString/export/EmeraldsString.h"
 #include "../../src/lexer/Lexer.h"
 
 module(LexerSpec, {
@@ -9,7 +10,7 @@ module(LexerSpec, {
     it("contains the input text, lexer position and current character", {
       Lexer *l = lexer_new("file.marg", string_new("(42 factorial)"));
       assert_that_charptr(l->filename equals to "file.marg");
-      assert_that_charptr(string_get(l->text) equals to "(42 factorial)");
+      assert_that_charptr(l->text equals to "(42 factorial)");
       assert_that_int(l->pos equals to 0);
       assert_that_int(l->lineno equals to 1);
     });
@@ -107,34 +108,31 @@ module(LexerSpec, {
         Lexer *l = lexer_new("file.marg", string_new("(@ $ % ^ & *)"));
         TokenTable *tokens = lexer_make_tokens(l);
         assert_that_int(token_table_size(tokens) equals to 9);
-        assert_that_charptr(string_get(token_table_get(tokens, 3)->value)
-                              equals to "%");
+        assert_that_charptr(token_table_get(tokens, 3)->value equals to "%");
       });
 
       it("tokenizes integers", {
         TokenTable *tokens =
           lexer_make_tokens(lexer_new("file.marg", string_new("(42 msg)")));
-        assert_that_charptr(string_get(token_table_get(tokens, 1)->value)
-                              equals to "42");
+        assert_that_charptr(token_table_get(tokens, 1)->value equals to "42");
         assert_that_int(token_table_get(tokens, 1)->type equals to TOKEN_INTEGER
         );
         assert_that_int(token_table_get(tokens, 1)->line_number equals to 1);
 
         tokens = lexer_make_tokens(lexer_new("file.marg", string_new("4_200")));
-        assert_that_charptr(string_get(token_table_get(tokens, 0)->value)
-                              equals to "4_200");
+        assert_that_charptr(token_table_get(tokens, 0)->value equals to "4_200"
+        );
         tokens =
           lexer_make_tokens(lexer_new("file.marg", string_new("4_2_0_0")));
-        assert_that_charptr(string_get(token_table_get(tokens, 0)->value)
-                              equals to "4_2_0_0");
+        assert_that_charptr(token_table_get(tokens, 0)->value equals to
+                            "4_2_0_0");
       });
 
       it("tokenizes zero", {
         Lexer *l           = lexer_new("file.marg", string_new("(0 is_zero?)"));
         TokenTable *tokens = lexer_make_tokens(l);
 
-        assert_that_charptr(string_get(token_table_get(tokens, 1)->value)
-                              equals to "0");
+        assert_that_charptr(token_table_get(tokens, 1)->value equals to "0");
         assert_that_int(token_table_get(tokens, 1)->type equals to TOKEN_INTEGER
         );
         assert_that_int(token_table_get(tokens, 1)->line_number equals to 1);
@@ -149,68 +147,53 @@ module(LexerSpec, {
       it("tokenizes floats", {
         Lexer *l           = lexer_new("file.marg", string_new("0.0"));
         TokenTable *tokens = lexer_make_tokens(l);
-        assert_that_charptr(string_get(token_table_get(tokens, 0)->value)
-                              equals to "0.0");
+        assert_that_charptr(token_table_get(tokens, 0)->value equals to "0.0");
         assert_that_int(token_table_get(tokens, 0)->type equals to TOKEN_FLOAT);
         assert_that_int(token_table_get(tokens, 1)->line_number equals to 1);
 
         l      = lexer_new("file.marg", string_new("(42.7 msg)"));
         tokens = lexer_make_tokens(l);
-        assert_that_charptr(string_get(token_table_get(tokens, 1)->value)
-                              equals to "42.7");
+        assert_that_charptr(token_table_get(tokens, 1)->value equals to "42.7");
         assert_that_int(token_table_get(tokens, 1)->type equals to TOKEN_FLOAT);
         assert_that_int(token_table_get(tokens, 1)->line_number equals to 1);
 
         l      = lexer_new("file.marg", string_new("(0.7 msg)"));
         tokens = lexer_make_tokens(l);
-        assert_that_charptr(string_get(token_table_get(tokens, 1)->value)
-                              equals to "0.7");
+        assert_that_charptr(token_table_get(tokens, 1)->value equals to "0.7");
         assert_that_int(token_table_get(tokens, 1)->type equals to TOKEN_FLOAT);
         assert_that_int(token_table_get(tokens, 1)->line_number equals to 1);
 
         l      = lexer_new("file.marg", string_new("(0.7+0.5+0.23)"));
         tokens = lexer_make_tokens(l);
-        assert_that_charptr(string_get(token_table_get(tokens, 1)->value)
-                              equals to "0.7");
-        assert_that_charptr(string_get(token_table_get(tokens, 2)->value)
-                              equals to "+");
-        assert_that_charptr(string_get(token_table_get(tokens, 3)->value)
-                              equals to "0.5");
+        assert_that_charptr(token_table_get(tokens, 1)->value equals to "0.7");
+        assert_that_charptr(token_table_get(tokens, 2)->value equals to "+");
+        assert_that_charptr(token_table_get(tokens, 3)->value equals to "0.5");
 
         l      = lexer_new("file.marg", string_new("(.7 msg)"));
         tokens = lexer_make_tokens(l);
-        assert_that_charptr(string_get(token_table_get(tokens, 0)->value)
-                              equals to "(");
-        assert_that_charptr(string_get(token_table_get(tokens, 1)->value)
-                              equals to ".");
-        assert_that_charptr(string_get(token_table_get(tokens, 2)->value)
-                              equals to "7");
-        assert_that_charptr(string_get(token_table_get(tokens, 3)->value)
-                              equals to "msg");
-        assert_that_charptr(string_get(token_table_get(tokens, 4)->value)
-                              equals to ")");
+        assert_that_charptr(token_table_get(tokens, 0)->value equals to "(");
+        assert_that_charptr(token_table_get(tokens, 1)->value equals to ".");
+        assert_that_charptr(token_table_get(tokens, 2)->value equals to "7");
+        assert_that_charptr(token_table_get(tokens, 3)->value equals to "msg");
+        assert_that_charptr(token_table_get(tokens, 4)->value equals to ")");
 
         l      = lexer_new("file.marg", string_new("(124.0 msg)"));
         tokens = lexer_make_tokens(l);
-        assert_that_charptr(string_get(token_table_get(tokens, 1)->value)
-                              equals to "124.0");
-        assert_that_charptr(string_get(token_table_get(tokens, 2)->value)
-                              equals to "msg");
+        assert_that_charptr(token_table_get(tokens, 1)->value equals to "124.0"
+        );
+        assert_that_charptr(token_table_get(tokens, 2)->value equals to "msg");
       });
 
       it("tokenizes binary literals", {
         Lexer *l = lexer_new("file.marg", string_new("(0b1010 + 0B0100)"));
         TokenTable *tokens = lexer_make_tokens(l);
-        assert_that_charptr(string_get(token_table_get(tokens, 0)->value)
-                              equals to "(");
-        assert_that_charptr(string_get(token_table_get(tokens, 1)->value)
-                              equals to "0b1010");
-        assert_that_charptr(string_get(token_table_get(tokens, 2)->value)
-                              equals to "+");
-        assert_that_charptr(string_get(token_table_get(tokens, 3)->value)
-                              equals to "0b0100");
-        assert_that_charptr(string_get(token_table_get(tokens, 4)->value)
-                              equals to ")");
+        assert_that_charptr(token_table_get(tokens, 0)->value equals to "(");
+        assert_that_charptr(token_table_get(tokens, 1)->value equals to "0b1010"
+        );
+        assert_that_charptr(token_table_get(tokens, 2)->value equals to "+");
+        assert_that_charptr(token_table_get(tokens, 3)->value equals to "0b0100"
+        );
+        assert_that_charptr(token_table_get(tokens, 4)->value equals to ")");
 
         assert_that_int(token_table_get(tokens, 1)->type equals to TOKEN_INTEGER
         );
@@ -221,16 +204,13 @@ module(LexerSpec, {
       it("tokenizes hexadecimal literals", {
         Lexer *l = lexer_new("file.marg", string_new("(0xfeed42 + 0Xbeef41)"));
         TokenTable *tokens = lexer_make_tokens(l);
-        assert_that_charptr(string_get(token_table_get(tokens, 0)->value)
-                              equals to "(");
-        assert_that_charptr(string_get(token_table_get(tokens, 1)->value)
-                              equals to "0xfeed42");
-        assert_that_charptr(string_get(token_table_get(tokens, 2)->value)
-                              equals to "+");
-        assert_that_charptr(string_get(token_table_get(tokens, 3)->value)
-                              equals to "0xbeef41");
-        assert_that_charptr(string_get(token_table_get(tokens, 4)->value)
-                              equals to ")");
+        assert_that_charptr(token_table_get(tokens, 0)->value equals to "(");
+        assert_that_charptr(token_table_get(tokens, 1)->value equals to
+                            "0xfeed42");
+        assert_that_charptr(token_table_get(tokens, 2)->value equals to "+");
+        assert_that_charptr(token_table_get(tokens, 3)->value equals to
+                            "0xbeef41");
+        assert_that_charptr(token_table_get(tokens, 4)->value equals to ")");
 
         assert_that_int(token_table_get(tokens, 1)->type equals to TOKEN_INTEGER
         );
@@ -241,16 +221,12 @@ module(LexerSpec, {
       it("tokenizes octal literals", {
         Lexer *l = lexer_new("file.marg", string_new("(0o752 + 0O52)"));
         TokenTable *tokens = lexer_make_tokens(l);
-        assert_that_charptr(string_get(token_table_get(tokens, 0)->value)
-                              equals to "(");
-        assert_that_charptr(string_get(token_table_get(tokens, 1)->value)
-                              equals to "0o752");
-        assert_that_charptr(string_get(token_table_get(tokens, 2)->value)
-                              equals to "+");
-        assert_that_charptr(string_get(token_table_get(tokens, 3)->value)
-                              equals to "0o52");
-        assert_that_charptr(string_get(token_table_get(tokens, 4)->value)
-                              equals to ")");
+        assert_that_charptr(token_table_get(tokens, 0)->value equals to "(");
+        assert_that_charptr(token_table_get(tokens, 1)->value equals to "0o752"
+        );
+        assert_that_charptr(token_table_get(tokens, 2)->value equals to "+");
+        assert_that_charptr(token_table_get(tokens, 3)->value equals to "0o52");
+        assert_that_charptr(token_table_get(tokens, 4)->value equals to ")");
 
         assert_that_int(token_table_get(tokens, 1)->type equals to TOKEN_INTEGER
         );
@@ -261,8 +237,7 @@ module(LexerSpec, {
       it("tokenizes character literals", {
         Lexer *l           = lexer_new("file.marg", string_new("('a' puts)"));
         TokenTable *tokens = lexer_make_tokens(l);
-        assert_that_charptr(string_get(token_table_get(tokens, 1)->value)
-                              equals to "'a'");
+        assert_that_charptr(token_table_get(tokens, 1)->value equals to "'a'");
         assert_that_int(token_table_get(tokens, 1)->type equals to TOKEN_STRING
         );
       });
@@ -270,14 +245,14 @@ module(LexerSpec, {
       it("tokenizes string literals", {
         Lexer *l = lexer_new("file.marg", string_new("(\"hello\" puts)"));
         TokenTable *tokens = lexer_make_tokens(l);
-        assert_that_charptr(string_get(token_table_get(tokens, 1)->value)
-                              equals to "\"hello\"");
+        assert_that_charptr(token_table_get(tokens, 1)->value equals to
+                            "\"hello\"");
 
         l =
           lexer_new("file.marg", string_new("(\"multi\nline\nstring\" puts)"));
         tokens = lexer_make_tokens(l);
-        assert_that_charptr(string_get(token_table_get(tokens, 1)->value)
-                              equals to "\"multi\nline\nstring\"");
+        assert_that_charptr(token_table_get(tokens, 1)->value equals to
+                            "\"multi\nline\nstring\"");
       });
 
       it("tokenizes identifiers", {
@@ -286,21 +261,20 @@ module(LexerSpec, {
         );
         TokenTable *tokens = lexer_make_tokens(l);
         assert_that_int(token_table_size(tokens) equals to 17);
-        assert_that_charptr(string_get(token_table_get(tokens, 2)->value)
-                              equals to "factorial");
-        assert_that_charptr(string_get(token_table_get(tokens, 3)->value)
-                              equals to "x");
-        assert_that_charptr(string_get(token_table_get(tokens, 7)->value)
-                              equals to "times");
-        assert_that_charptr(string_get(token_table_get(tokens, 12)->value)
-                              equals to "plus");
+        assert_that_charptr(token_table_get(tokens, 2)->value equals to
+                            "factorial");
+        assert_that_charptr(token_table_get(tokens, 3)->value equals to "x");
+        assert_that_charptr(token_table_get(tokens, 7)->value equals to "times"
+        );
+        assert_that_charptr(token_table_get(tokens, 12)->value equals to "plus"
+        );
       });
 
       it("tokenizes identifiers starting with an underscore", {
         Lexer *l = lexer_new("file.marg", string_new("((1 2 3) __msg)"));
         TokenTable *tokens = lexer_make_tokens(l);
-        assert_that_charptr(string_get(token_table_get(tokens, 6)->value)
-                              equals to "__msg");
+        assert_that_charptr(token_table_get(tokens, 6)->value equals to "__msg"
+        );
       });
     });
   });

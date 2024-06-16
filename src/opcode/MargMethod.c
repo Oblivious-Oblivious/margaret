@@ -1,5 +1,6 @@
 #include "MargMethod.h"
 
+#include "../../libs/EmeraldsString/export/EmeraldsString.h" /* IWYU pragma: keep */
 #include "MargValue.h"
 
 MargMethod *
@@ -15,7 +16,7 @@ marg_method_new(VM *vm, MargObject *bound_object, char *message_name) {
 
   self->bound_object = bound_object;
 
-  self->message_name    = MARG_STRING(message_name);
+  self->message_name    = AS_STRING(MARG_STRING(message_name));
   self->parameter_names = AS_TENSOR(MARG_TENSOR(2));
   self->proc            = marg_proc_new(vm, self);
 
@@ -23,12 +24,9 @@ marg_method_new(VM *vm, MargObject *bound_object, char *message_name) {
 }
 
 char *marg_method_to_string(MargMethod *object) {
-  EmeraldsString *res = string_new("");
+  char *res = string_new("");
   string_addf(
-    res,
-    "< %s#%s >",
-    object->bound_object->name,
-    AS_STRING(object->message_name)->chars
+    res, "< %s#%s >", object->bound_object->name, object->message_name->chars
   );
-  return string_get(res);
+  return res;
 }
