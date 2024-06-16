@@ -29,7 +29,7 @@ static size_t
 instruction_single(char ***res, char *name, chunk *chunk, size_t offset) {
   uint8_t opcode = chunk_get(chunk, offset);
 
-  char *disassembled_instruction = string_new("s");
+  char *disassembled_instruction = string_new("");
   write_offset_and_line_number_on(&disassembled_instruction, chunk, offset);
   string_addf(disassembled_instruction, "%02x                  ", opcode);
   string_addf(disassembled_instruction, "%s", name);
