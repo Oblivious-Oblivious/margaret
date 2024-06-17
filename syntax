@@ -1,0 +1,231 @@
+first_unit:
+    translation_unit EOF
+
+translation_unit:
+    assignment_chain message
+
+assignment_chain:
+    assignment
+  | assignment assignment_chain
+
+assignment:
+    variable '='
+
+message:
+    keyword_message
+
+keyword_message:
+    keyword_object keyword_selector_chain
+
+keyword_object:
+    binary_message
+
+keyword_selector_chain:
+    keyword_selector
+  | keyword_selector keyword_selector_chain
+
+keyword_selector:
+    IDENTIFIER ID_SYMBOL_OR_EMPTY ':' binary_message
+
+binary_message:
+    binary_object binary_selector_chain
+
+binary_object:
+    unary_message
+
+binary_selector_chain:
+    binary_selector
+  | binary_selector binary_selector_chain
+
+binary_selector:
+    MESSAGE_SYMBOL unary_message
+
+unary_message:
+    unary_object unary_selector_chain
+
+unary_object:
+    expression
+
+unary_selector_chain:
+    unary_selector
+  | unary_selector unary_selector_chain
+
+unary_selector:
+    IDENTIFIER ID_SYMBOL_OR_EMPTY
+
+expression:
+    group
+  | variable
+  | proc_literal
+  | c_function_declaration
+  | method_definition_literal
+  | literal
+
+group:
+    '(' group_items_or_empty ')'
+
+group_items_or_empty:
+    translation_unit
+  | translation_unit ',' group_items_or_empty
+  | ε
+
+variable:
+    '@' IDENTIFIER
+  | '$' IDENTIFIER
+  | IDENTIFIER
+
+proc_literal:
+    '{' param_list_or_empty param_separator_or_empty translation_unit '}'
+
+param_list_or_empty:
+    IDENTIFIER
+  | IDENTIFIER ',' param_list_or_empty
+  | ε
+
+param_separator_or_empty:
+    '|' | ε
+
+c_function_declaration:
+    '#' '#' '#' IDENTIFIER c_function_star_or_empty IDENTIFIER '(' c_param_list ')'
+
+c_param_list:
+    IDENTIFIER c_function_star_or_empty
+  | IDENTIFIER c_function_star_or_empty ',' c_param_list
+
+c_function_star_or_empty:
+    '*' | ε
+
+method_definition_literal:
+    '#' method_literal_or_any_or_empty method_definition
+
+method_literal_or_any_or_empty:
+    literal
+  | '_'
+  | ε
+
+method_definition:
+    keyword_method_definition
+  | binary_method_definition
+  | unary_method_definition
+
+keyword_method_definition:
+    keyword_list '=>' translation_unit
+
+keyword_list:
+    keyword
+  | keyword keyword_list
+
+keyword:
+    IDENTIFIER ID_SYMBOL_OR_EMPTY ':' literal_or_variable_or_empty
+
+binary_method_definition:
+    MESSAGE_SYMBOL literal_or_variable_or_empty '=>' translation_unit
+
+unary_method_definition:
+    IDENTIFIER ID_SYMBOL_OR_EMPTY '=>' translation_unit
+
+literal_or_variable_or_empty:
+    literal
+  | variable
+  | ε
+
+literal:
+    sign_or_empty numeric
+  | nil_literal
+  | false_literal
+  | true_literal
+  | string_literal
+  | tuple_literal
+  | tensor_literal
+  | bitstring_literal
+  | hash_literal
+
+sign_or_empty:
+    '+' | '-' | ε
+
+numeric:
+    integer_literal
+  | float_literal
+
+integer_literal:
+    INTEGER
+
+float_literal:
+    FLOAT
+
+nil_literal:
+    '$' 'nil'
+
+false_literal:
+    '$' 'false'
+
+true_literal:
+    '$' 'true'
+
+string_literal:
+    STRING
+
+tuple_literal:
+    '[' '<' enumerable_list_or_empty ']'
+
+tensor_literal:
+    '[' enumerable_list_or_empty ']'
+
+enumerable_list_or_empty:
+    translation_unit
+  | translation_unit ',' enumerable_list_or_empty
+  | ε
+
+bitstring_literal:
+    '{' '<' bit_literal_list '}'
+
+bit_literal_list:
+    bit_literal
+  | bit_literal ',' bit_literal_list
+
+bit_literal:
+    variable_or_integer
+  | variable_or_integer ':' ':' integer_literal
+
+variable_or_integer:
+    variable
+  | integer_literal
+
+hash_literal:
+    '{' association_list '}'
+
+association_list:
+    association
+  | association ',' association_list
+
+association:
+    IDENTIFIER ':' translation_unit
+  | STRING ':' translation_unit
+
+
+EOF:                  forced eof value
+IDENTIFIER:           [a-zA-Z_][a-zA-Z0-9_]*
+ID_SYMBOL_OR_EMPTY:
+    '!'
+  | '?'
+  | ε
+SYNTAX_SYMBOL:
+    '_'
+  | '(' | ')'
+  | '[' | ']'
+  | '{' | '}'
+  | ','
+  | ':'
+  | '@' | '$'
+  | '#'
+MESSAGE_SYMBOL:
+    '!' | '?'
+  | '+' | '-' | '*' | '/' | '%' | '^' | '~'
+  | '<' | '>' | '='
+  | '|' | '&'
+  | '\\' | '`'
+  | ';' | '.'
+
+INTEGER: decimal, hexadecimal, binary, octal with underscore separators
+FLOAT:   in decimal formal with underscore separators
+STRING:  in double and single quotes
