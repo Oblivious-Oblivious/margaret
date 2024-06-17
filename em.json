@@ -6,6 +6,7 @@
   "dependencies": {
     "EmeraldsBool": "Oblivious-Oblivious/EmeraldsBool",
     "EmeraldsCrossline": "Oblivious-Oblivious/EmeraldsCrossline",
+    "EmeraldsFastStack": "Oblivious-Oblivious/EmeraldsFastStack",
     "EmeraldsString": "Oblivious-Oblivious/EmeraldsString",
     "EmeraldsVector": "Oblivious-Oblivious/EmeraldsVector"
   },
@@ -20,9 +21,9 @@
     "cc": "clang",
     "debug": {
       "opt": "-Og -g",
-      "version": "-std=c99",
+      "version": "-std=c11",
       "flags": "-Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic",
-      "warnings": "-Wno-unused-function -Wno-strict-prototypes"
+      "warnings": "-Wno-extra-semi -Wno-unused-function -Wno-strict-prototypes"
     },
     "release": {
       "opt": "-O3",
@@ -32,7 +33,7 @@
     },
     "test": {
       "opt": "-Og -g",
-      "version": "-std=c99",
+      "version": "-std=c11",
       "flags": "",
       "warnings": ""
     }
