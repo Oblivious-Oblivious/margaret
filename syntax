@@ -95,9 +95,9 @@ group_items_or_empty:
   | ε
 
 EOF:                  forced eof value
-IDENTIFIER:           /^[@$]?[a-zA-Z_][a-zA-Z0-9_]*[!?]?$/
-SYNTAX_SYMBOL:        /^[\(\)\[\]\{\},:\#]$/
-MESSAGE_SYMBOL:       /^[+\-*/\\~<>=%|&^;.`]*$/
+IDENTIFIER:           /^[@$]?[a-zA-Z_][a-zA-Z0-9_]*/
+SYNTAX_SYMBOL:        /^[\\(\\)\\[\\]\\{\\},:\\#]/
+MESSAGE_SYMBOL:       /^[+\\-*/\\\\~<>=%|&^;.`]*/
 
 INTEGER:              /^[+-]?((0b[01_]+)|(0o[0-7_]+)|(0x[0-9A-Fa-f_]+)|(\d+(_\d+)*))/
 FLOAT:                /^[+-]?\d+(_\d+)*\.\d+(_\d+)*/
