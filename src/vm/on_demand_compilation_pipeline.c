@@ -1,5 +1,6 @@
 #include "on_demand_compilation_pipeline.h"
 
+#include "../../libs/EmeraldsString/export/EmeraldsString.h" /* IWYU pragma: keep */
 #include "../emitter/Emitter.h"
 #include "../evaluator/Evaluator.h"
 #include "../lexer/Lexer.h"
@@ -10,8 +11,15 @@ char *LOAD(char *filename) {
   return file_loader_load(file_loader_new(), filename);
 }
 
-TokenTable *READ(char *chars) {
-  return lexer_make_tokens(lexer_new("repl", chars));
+TokenTable *READ(char *chars, char *filename) {
+  char *str_filename = string_new(filename);
+  char **vec         = string_split(str_filename, "/");
+
+  if(vector_size(vec) > 1) {
+    return lexer_make_tokens(lexer_new(vec[vector_size(vec) - 1], chars));
+  } else {
+    return lexer_make_tokens(lexer_new(filename, chars));
+  }
 }
 
 char **FORMALIZE(TokenTable *tokens) {

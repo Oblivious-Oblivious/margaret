@@ -48,7 +48,7 @@ static void PRINT_FORMAL(char **formal_bytecode) {
 static void margaret_repl(VM *vm) {
   printf("Margaret %s  Copyright (C) %s %s, Ioannina\n", VERSION, DATE, LINK);
   while(true) {
-    char **formal_bytecode = FORMALIZE(READ(SCAN("> ")));
+    char **formal_bytecode = FORMALIZE(READ(SCAN("> "), "repl"));
     // PRINT_FORMAL(formal_bytecode);
     PRINT(EVAL(OPTIMIZE(EMIT(vm, formal_bytecode))));
   }
@@ -56,7 +56,7 @@ static void margaret_repl(VM *vm) {
 
 static void margaret_run_file(VM *vm, char *filename) {
   char *chars            = LOAD(filename);
-  TokenTable *tokens     = READ(chars);
+  TokenTable *tokens     = READ(chars, filename);
   char **formal_bytecode = FORMALIZE(tokens);
   // PRINT_FORMAL(formal_bytecode);
   vm                     = EMIT(vm, formal_bytecode);
