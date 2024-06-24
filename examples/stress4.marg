@@ -1,24 +1,22 @@
-(
-    include: "examples/Margaret.marg",
+include: "examples/Margaret.marg",
 
-    $Margaret bind: # test => 42,
-    puts: $Margaret test,puts: $Margaret test,puts: $Margaret test,puts: $Margaret test,
-    puts: $Margaret test,puts: $Margaret test,puts: $Margaret test,puts: $Margaret test,
+$Margaret bind: # test => 42,
+puts: $Margaret test,puts: $Margaret test,puts: $Margaret test,puts: $Margaret test,
+puts: $Margaret test,puts: $Margaret test,puts: $Margaret test,puts: $Margaret test,
 
-    $Margaret bind: # first: p1 second: p2 => (
-        puts: p1,
-        puts: "---",
-        puts: p2,
-    ),
+$Margaret bind: # first: p1 second: p2 => (
+  puts: p1,
+  puts: "---",
+  puts: p2,
+),
 
-    first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,
-    first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,
-    first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,
-    first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,
-    first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,
-    first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,
-    first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,
-    first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,
-    first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,
-    first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,
-)
+first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,
+first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,
+first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,
+first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,
+first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,
+first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,
+first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,
+first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,
+first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,
+first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,

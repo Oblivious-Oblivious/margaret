@@ -1,25 +1,23 @@
-(
-    include: "examples/Margaret.marg",
+include: "examples/Margaret.marg",
 
-    $Parent = $Margaret clone: "$Parent",
-    $Child = $Parent clone: "$Child",
+$Parent = $Margaret clone,
+$Child = $Parent clone,
 
-    puts: $Margaret self self self,
-    puts: $Parent self self self,
-    puts: $Child self self self,
+puts: $Margaret self self self,
+puts: $Parent self self self,
+puts: $Child self self self,
 
-    puts: "",
+puts: "",
 
-    puts: $Margaret super,
+puts: $Margaret super,
 
-    puts: "",
+puts: "",
 
-    puts: $Parent super,
-    puts: $Parent super super,
+puts: $Parent super,
+puts: $Parent super super,
 
-    puts: "",
+puts: "",
 
-    puts: $Child super,
-    puts: $Child super super,
-    puts: $Child super super super,
-)
+puts: $Child super,
+puts: $Child super super,
+puts: $Child super super super,

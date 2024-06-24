@@ -1,12 +1,10 @@
-(
-    include: "examples/Margaret.marg",
+include: "examples/Margaret.marg",
 
-    $String bind: #== other => (
-        puts: @self,
-        puts: other,
-        primitive_4_equals?: @self with: other,
-    ),
+$String ::: #== other => {
+  puts: @self,
+  puts: other,
+  primitive_4_equals?: @self with: other,
+},
 
-    puts: "" messages,
-    puts: $Margaret messages,
-)
+puts: "" messages,
+puts: $Margaret messages,

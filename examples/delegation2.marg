@@ -1,18 +1,16 @@
-(
-    include: "examples/Margaret.marg",
+include: "examples/Margaret.marg",
 
-    $Margaret bind: #delegated => @self,
+$Margaret <- #delegated => @self,
 
-    $Parent = $Margaret clone: "$Parent",
-    $Child = $Parent clone: "$Child",
+$Parent = $Margaret clone,
+$Child = $Parent clone,
 
-    puts: $Margaret delegated,
-    puts: $Parent delegated,
-    puts: $Child delegated,
+puts: $Margaret delegated,
+puts: $Parent delegated,
+puts: $Child delegated,
 
-    $Child notboundmessage,
-    $Margaret bind: #dnu: message_name => puts: "custom dnu message",
+$Child notboundmessage,
+$Margaret bind: #dnu: message_name => puts: "custom dnu message",
 
-    $Child notboundmessage,
-    ($Margaret dnu: "nonexistent"),
-)
+$Child notboundmessage,
+($Margaret dnu: "nonexistent"),

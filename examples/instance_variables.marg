@@ -1,62 +1,60 @@
-(
-    include: "examples/Margaret.marg",
+include: "examples/Margaret.marg",
 
-    $Margaret bind: #a => @a,
-    $Numeric bind: #a => @a,
+$Margaret <- #a => @a,
+$Numeric <- #a => @a,
 
-    $Integer bind: #something => (
-        @a = 42,
-        p0 = {(
-            puts: "inside p0 inside of $Integer",
-            puts: "self:",
-            puts: @self,
-            puts: @a,
-        )},
-    ),
-
-    $Integer bind: #calculation: other => @self + @a + other,
-
-    123 something call,
-
-    puts: (-20 calculation: 20),
-
-    puts: "-> should be unbound",
+$Integer <- #something => {
+  @a = 42,
+  p0 = {
+    puts: "inside p0 inside of $Integer",
+    puts: "self:",
+    puts: @self,
     puts: @a,
-    puts: $Margaret a,
-    puts: $Numeric a,
-    puts: "-> should be 42",
-    puts: $Integer a,
-    puts: "-> should be unbound",
-    puts: $Float a,
+  },
+},
 
-    $Float bind: #setup_instances => (@x = 41, @y = 42),
-    $Float setup_instances,
-    $Margaret bind: #x => @x,
-    $Margaret bind: #y => @y,
-    $Numeric bind: #x => @x,
-    $Numeric bind: #y => @y,
+$Integer <- #calculation: other => @self + @a + other,
 
-    puts: "-> should be unbound, unbound",
-    puts: 123 x,
-    puts: 123 y,
-    puts: "-> should be 41, 42",
-    puts: 0.85 x,
-    puts: 0.85 y,
-    puts: $Float x,
-    puts: $Float y,
-    puts: "-> should be unbound, unbound",
-    puts: @x,
-    puts: @y,
-    puts: $Margaret x,
-    puts: $Margaret y,
+123 something call,
 
-    $Integer bind: #something_else => (
-        @a = 44,
-        @b = 41,
-        puts: "OK -> ",
-        puts: @self,
-        puts: @super,
-    ),
+puts: (-20 calculation: 20),
 
-    55 something_else,
-)
+puts: "-> should be unbound",
+puts: @a,
+puts: $Margaret a,
+puts: $Numeric a,
+puts: "-> should be 42",
+puts: $Integer a,
+puts: "-> should be unbound",
+puts: $Float a,
+
+$Float <- #setup_instances => {@x = 41, @y = 42},
+$Float setup_instances,
+$Margaret <- #x => @x,
+$Margaret <- #y => @y,
+$Numeric <- #x => @x,
+$Numeric <- #y => @y,
+
+puts: "-> should be unbound, unbound",
+puts: 123 x,
+puts: 123 y,
+puts: "-> should be 41, 42",
+puts: 0.85 x,
+puts: 0.85 y,
+puts: $Float x,
+puts: $Float y,
+puts: "-> should be unbound, unbound",
+puts: @x,
+puts: @y,
+puts: $Margaret x,
+puts: $Margaret y,
+
+$Integer <- #something_else => {
+  @a = 44,
+  @b = 41,
+  puts: "OK -> ",
+  puts: @self,
+  puts: @super,
+},
+
+55 something_else,

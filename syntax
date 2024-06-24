@@ -2,16 +2,12 @@ first_unit:
     translation_unit EOF
 
 translation_unit:
-    group
-  | ':' ':' IDENTIFIER
-  | assignment_chain keyword_message
-
-group:
-    '(' group_items_or_empty ')'
+    assignment_chain keyword_message
 
 assignment_chain:
     IDENTIFIER '='
   | IDENTIFIER '=' assignment_chain
+  | ε
 
 keyword_message:
     binary_message keyword_selector_chain
@@ -19,6 +15,7 @@ keyword_message:
 keyword_selector_chain:
     IDENTIFIER ':' binary_message
   | IDENTIFIER ':' binary_message keyword_selector_chain
+  | ε
 
 binary_message:
     unary_message binary_selector_chain
@@ -26,33 +23,47 @@ binary_message:
 binary_selector_chain:
     MESSAGE_SYMBOL unary_message
   | MESSAGE_SYMBOL unary_message binary_selector_chain
+  | ε
 
 unary_message:
-    literal unary_selector_chain
+    lhs_message unary_selector_chain
 
 unary_selector_chain:
     IDENTIFIER
   | IDENTIFIER unary_selector_chain
+  | ε
+
+lhs_message:
+    lhs_selector literal
+
+lhs_selector:
+    LHS_OPERATOR
+  | ε
 
 literal:
-    sign_or_empty numeric
-  | '$' 'nil'
+    '$' 'nil'
   | '$' 'false'
   | '$' 'true'
-  | STRING
-  | '[' group_items_or_empty ']'
-  | '[' association_list ']'
-  | '[' bit_literal_list ']'
-  | IDENTIFIER
-  | '{' param_list_or_empty group_items_or_empty '}'
-  | '#' method_literal_or_any_or_empty method_definition
-
-sign_or_empty:
-    '+' | '-' | ε
-
-numeric:
-    INTEGER
+  | ':' ':' IDENTIFIER
+  | INTEGER
   | FLOAT
+  | STRING
+  | IDENTIFIER
+  | '(' group_items_or_empty ')'
+  | '[' bit_literal_list ']'
+  | '[' association_list ']'
+  | '[' group_items_or_empty ']'
+  | '{' param_list_or_empty group_items_or_empty '}'
+  | '#' literal method_definition
+  | '#' method_definition
+
+bit_literal_list:
+    bit_literal
+  | bit_literal ',' bit_literal_list
+
+bit_literal:
+    IDENTIFIER ':' ':' INTEGER
+  | INTEGER ':' ':' INTEGER
 
 association_list:
     association
@@ -62,22 +73,14 @@ association:
     IDENTIFIER ':' translation_unit
   | STRING ':' translation_unit
 
-bit_literal_list:
-    identifier_or_integer ':' ':' INTEGER
-  | identifier_or_integer ':' ':' INTEGER ',' bit_literal_list
-
-identifier_or_integer:
-    IDENTIFIER
-  | INTEGER
-
 param_list_or_empty:
     IDENTIFIER '|'
   | IDENTIFIER ',' param_list_or_empty
   | ε
 
-method_literal_or_any_or_empty:
-    literal
-  | '_'
+group_items_or_empty:
+    translation_unit
+  | translation_unit ',' group_items_or_empty
   | ε
 
 method_definition:
@@ -89,16 +92,14 @@ keyword_list:
     IDENTIFIER ':' literal
   | IDENTIFIER ':' literal keyword_list
 
-group_items_or_empty:
-    translation_unit
-  | translation_unit ',' group_items_or_empty
-  | ε
+FLOAT:                ^\d+(_\d+)*\.\d+(_\d+)*
+INTEGER:              ^(?:0[bBoOxX][\da-fA-F_]+|0|[1-9][\d_]*)
+STRING:               ^(['"]).*?\1
 
-EOF:                  forced eof value
-IDENTIFIER:           /^[@$]?[a-zA-Z_][a-zA-Z0-9_]*/
-SYNTAX_SYMBOL:        /^[\\(\\)\\[\\]\\{\\},:\\#]/
-MESSAGE_SYMBOL:       /^[+\\-*/\\\\~<>=%|&^;.`]*/
+IDENTIFIER:           ^[@$]?[a-zA-Z_][a-zA-Z0-9_]*
+MESSAGE_SYMBOL:       ^[!?+\-*/\\~<>=%|&^;.`]+
+SYNTAX_SYMBOL:        ^[()\[\]{},:#]
 
-INTEGER:              /^[+-]?((0b[01_]+)|(0o[0-7_]+)|(0x[0-9A-Fa-f_]+)|(\d+(_\d+)*))/
-FLOAT:                /^[+-]?\d+(_\d+)*\.\d+(_\d+)*/
-STRING:               /^(['"]).*?\1/
+LHS_OPERATOR:         ^[+-!~]
+
+EOF:                  ends parsing
