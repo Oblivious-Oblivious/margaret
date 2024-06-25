@@ -4,11 +4,11 @@
   "version": "0.0.1",
 
   "dependencies": {
-    "EmeraldsBool": "Oblivious-Oblivious/EmeraldsBool",
-    "EmeraldsCrossline": "Oblivious-Oblivious/EmeraldsCrossline",
-    "EmeraldsFastStack": "Oblivious-Oblivious/EmeraldsFastStack",
-    "EmeraldsString": "Oblivious-Oblivious/EmeraldsString",
-    "EmeraldsVector": "Oblivious-Oblivious/EmeraldsVector"
+    "EmeraldsBool": "The-Fourth-Wall/EmeraldsBool",
+    "EmeraldsCrossline": "The-Fourth-Wall/EmeraldsCrossline",
+    "EmeraldsFastStack": "The-Fourth-Wall/EmeraldsFastStack",
+    "EmeraldsString": "The-Fourth-Wall/EmeraldsString",
+    "EmeraldsVector": "The-Fourth-Wall/EmeraldsVector"
   },
 
   "dev-dependencies": {
