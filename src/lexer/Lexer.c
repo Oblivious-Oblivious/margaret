@@ -88,10 +88,7 @@ Token **lexer_make_tokens(Lexer *self) {
           string_skip_first(self->text, 1);
           goto new_token;
         } else if(REGEX_LIST[i].type == TOKEN_STRING) {
-          size_t line_count = vector_size(string_split(token, "\n"));
-          printf("line count: %zu\n", line_count);
-          self->lineno += line_count;
-          printf("lineno: %zu\n", self->lineno);
+          self->lineno += vector_size(string_split(token, "\n"));
           goto new_token;
         } else {
         new_token:
