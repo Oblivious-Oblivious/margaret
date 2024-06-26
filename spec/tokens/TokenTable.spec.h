@@ -5,19 +5,17 @@
 #include "../../libs/EmeraldsString/export/EmeraldsString.h"
 #include "../../src/tokens/TokenTable.h"
 
-static TokenTable *t;
+static Token **t;
 static void token_table_spec_setup(void) {
-  t = token_table_new();
-  token_table_add(
-    t, token_new(string_new("a"), TOKEN_IDENTIFIER, 1, "file1.marg")
+  t = NULL;
+  vector_add(
+    t, token_new(string_new("a"), TOKEN_IDENTIFIER, 1, 1, "file1.marg")
   );
-  token_table_add(
-    t, token_new(string_new("+"), TOKEN_MESSAGE_SYMBOL, 1, "file1.marg")
+  vector_add(
+    t, token_new(string_new("+"), TOKEN_MESSAGE_SYMBOL, 1, 1, "file1.marg")
   );
-  token_table_add(
-    t, token_new(string_new("2"), TOKEN_INTEGER, 1, "file1.marg")
-  );
-  token_table_add(t, token_new(string_new("eof"), TOKEN_EOF, 1, "file1.marg"));
+  vector_add(t, token_new(string_new("2"), TOKEN_INTEGER, 1, 1, "file1.marg"));
+  vector_add(t, token_new(string_new("eof"), TOKEN_EOF, 1, 1, "file1.marg"));
 }
 
 module(TokenTableSpec, {
@@ -26,15 +24,14 @@ module(TokenTableSpec, {
   it("is not nil", { assert_that(t isnot NULL); });
 
   it("counts 4 elements in the list", {
-    assert_that_int(token_table_size(t) equals to 4);
+    assert_that_int(vector_size(t) equals to 4);
   });
 
   it("peeks a token at the current position on the array", {
-    assert_that_charptr(token_table_lookahead(t, 1)->value equals to "a");
-    assert_that_charptr(token_table_lookahead(t, 2)->value equals to "+");
-    assert_that_charptr(token_table_lookahead(t, 3)->value equals to "2");
-    assert_that_charptr(token_table_lookahead(t, 4)->value equals to "eof");
-    assert_that_charptr(token_table_lookahead(t, 5)->value equals to "eof");
+    assert_that_charptr(t[0]->value equals to "a");
+    assert_that_charptr(t[1]->value equals to "+");
+    assert_that_charptr(t[2]->value equals to "2");
+    assert_that_charptr(t[3]->value equals to "eof");
   });
 
   it("consumes a token and returns the value", {
@@ -48,13 +45,10 @@ module(TokenTableSpec, {
   });
 
   it("gets a list element by index", {
-    assert_that_charptr(token_table_get(t, 1)->value equals to "+");
-    assert_that_charptr(token_table_get(t, 0)->value equals to "a");
-    assert_that_charptr(token_table_get(t, 3)->value equals to "eof");
-    assert_that_charptr(token_table_get(t, 2)->value equals to "2");
-
-    assert_that_charptr(token_table_get(t, 99)->value equals to "eof");
-    assert_that_charptr(token_table_get(t, 42)->value equals to "eof");
+    assert_that_charptr(t[1]->value equals to "+");
+    assert_that_charptr(t[0]->value equals to "a");
+    assert_that_charptr(t[3]->value equals to "eof");
+    assert_that_charptr(t[2]->value equals to "2");
   });
 
   it("ensures it consumes a specific value", {

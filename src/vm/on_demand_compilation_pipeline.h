@@ -5,8 +5,8 @@
 #include "../vm/vm.h"
 
 char *LOAD(char *filename);
-TokenTable *READ(char *chars, char *filename);
-char **FORMALIZE(TokenTable *tokens);
+Token **READ(char *chars, char *filename);
+char **FORMALIZE(Token **tokens);
 VM *EMIT(VM *vm, char **formal_bytecode);
 VM *OPTIMIZE(VM *vm);
 MargValue EVAL(VM *vm);

@@ -2,7 +2,6 @@
 
 #include "../../libs/EmeraldsString/export/EmeraldsString.h" /* IWYU pragma: keep */
 #include "../../libs/EmeraldsVector/export/EmeraldsVector.h" /* IWYU pragma: keep */
-#include "../base/memory.h"
 
 #include <stdio.h> /* fprintf */
 
@@ -17,60 +16,28 @@
 static char *error(Token *token, const char *message) {
   fprintf(
     stderr,
-    "%s:%zu: \033[1;31merror:\033[0m %s  Token: \033[1;31m`%s`\033[0m\n",
+    "%s:%zu:%zu \033[1;31merror:\033[0m %s  Token: \033[1;31m`%s`\033[0m\n",
     token->filename,
     token->line_number,
+    token->char_number,
     message,
     token->value
   );
   return NULL;
 }
 
-void token_table_display(TokenTable *self) {
-  for(size_t i = 0; i < token_table_size(self); i++) {
-    Token *t = token_table_get(self, i);
-    printf("(%s,%d,%zu)\n", t->value, t->type, t->line_number);
-  }
-  printf("\n");
-}
-
-TokenTable *token_table_new(void) {
-  TokenTable *t = (TokenTable *)collected_malloc(sizeof(TokenTable));
-
-  t->token_list = NULL;
-  t->pos        = 0;
-
-  return t;
-}
-
-void token_table_add(TokenTable *self, Token *tok) {
-  vector_add(self->token_list, tok);
-}
-
-size_t token_table_size(TokenTable *self) {
-  return vector_size(self->token_list);
-}
-
-Token *token_table_get(TokenTable *self, size_t i) {
-  size_t size = token_table_size(self);
-  if(i >= size) {
-    return self->token_list[size - 1];
+Token *token_table_consume(Token **self) {
+  if(vector_size(self) == 0) {
+    return token_new(string_new("eof"), TOKEN_EOF, 0, 0, "");
   } else {
-    return self->token_list[i];
+    Token *token = self[0];
+    vector_remove(self, 0);
+    return token;
   }
-}
-
-Token *token_table_lookahead(TokenTable *self, size_t i) {
-  return token_table_get(self, self->pos + i - 1);
-}
-
-Token *token_table_consume(TokenTable *self) {
-  self->pos += 1;
-  return token_table_get(self, self->pos - 1);
 }
 
 char *token_table_ensure_value(
-  TokenTable *self, const char *value, const char *error_message
+  Token **self, const char *value, const char *error_message
 ) {
   Token *token = token_table_consume(self);
   if(token_equals_values(token, string_new(value))) {
@@ -80,9 +47,8 @@ char *token_table_ensure_value(
   }
 }
 
-char *token_table_ensure_type(
-  TokenTable *self, Type type, const char *error_message
-) {
+char *
+token_table_ensure_type(Token **self, Type type, const char *error_message) {
   Token *token = token_table_consume(self);
   if(token->type == type) {
     return token->value;

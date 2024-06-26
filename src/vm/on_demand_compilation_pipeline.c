@@ -11,7 +11,7 @@ char *LOAD(char *filename) {
   return file_loader_load(file_loader_new(), filename);
 }
 
-TokenTable *READ(char *chars, char *filename) {
+Token **READ(char *chars, char *filename) {
   char *str_filename = string_new(filename);
   char **vec         = string_split(str_filename, "/");
 
@@ -22,7 +22,7 @@ TokenTable *READ(char *chars, char *filename) {
   }
 }
 
-char **FORMALIZE(TokenTable *tokens) {
+char **FORMALIZE(Token **tokens) {
   return parser_analyze_syntax(parser_new(tokens));
 }
 

@@ -56,7 +56,7 @@ static void margaret_repl(VM *vm) {
 
 static void margaret_run_file(VM *vm, char *filename) {
   char *chars            = LOAD(filename);
-  TokenTable *tokens     = READ(chars, filename);
+  Token **tokens         = READ(chars, filename);
   char **formal_bytecode = FORMALIZE(tokens);
   // PRINT_FORMAL(formal_bytecode);
   vm                     = EMIT(vm, formal_bytecode);

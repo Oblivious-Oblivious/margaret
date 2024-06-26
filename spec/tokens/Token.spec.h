@@ -7,7 +7,8 @@
 
 module(TokenSpec, {
   it("has a type and a value", {
-    Token *tok = token_new(string_new("42"), TOKEN_INTEGER, 125, "file1.marg");
+    Token *tok =
+      token_new(string_new("42"), TOKEN_INTEGER, 125, 0, "file1.marg");
     assert_that_charptr(tok->value equals to "42");
     assert_that_int(tok->type equals to TOKEN_INTEGER);
     assert_that_int(tok->line_number equals to 125);
@@ -15,16 +16,9 @@ module(TokenSpec, {
   });
 
   it("has an equals message for values", {
-    Token *tok = token_new(string_new("hello"), TOKEN_STRING, 10, "file2.marg");
+    Token *tok =
+      token_new(string_new("hello"), TOKEN_STRING, 10, 0, "file2.marg");
     assert_that(token_equals_values(tok, string_new("hello")));
-  });
-
-  it("has an equals message for values", {
-    Token *tok1 =
-      token_new(string_new("hello"), TOKEN_STRING, 10, "file3.marg");
-    Token *tok2 =
-      token_new(string_new("hello"), TOKEN_STRING, 12, "file3.marg");
-    nassert_that(token_equals_objects(tok1, tok2));
   });
 })
 

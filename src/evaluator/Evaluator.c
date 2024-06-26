@@ -548,7 +548,7 @@ static void evaluator_run(VM *vm) {
       MargValue filename = fs_pop(vm->sp);
       fs_pop(vm->sp);
       char *chars            = LOAD(AS_STRING(filename)->chars);
-      TokenTable *tokens     = READ(chars);
+      Token **tokens         = READ(chars, AS_STRING(filename)->chars);
       char **formal_bytecode = FORMALIZE(tokens);
       vm->current->bytecode  = chunk_new();
       vm                     = EMIT(vm, formal_bytecode);
