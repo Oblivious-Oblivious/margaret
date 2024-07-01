@@ -27,6 +27,8 @@
 #define DATE    "2022-2024"
 #define LINK    "margaret.org"
 
+// TODO - Replace int, long, size_t etc. values with bit equivalents (uint64_t)
+
 static char *SCAN(char *prompt) { return scanner_scan(prompt); }
 
 static void PRINT(MargValue evaluated) {

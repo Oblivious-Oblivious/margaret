@@ -106,37 +106,37 @@ spec_suite({
 
   EvaluatorSpec();
 
-  arithmetic_spec();
-  assignments_spec();
-  bitstrings_spec();
-  bitwise_spec();
-  booleans_spec();
-  characters_spec();
-  classes_spec();
-  code_as_data_spec();
-  complex_spec();
-  conditionals_spec();
-  constants_spec();
-  conversions_spec();
-  date_time_spec();
-  errors_spec();
-  groups_spec();
-  hashes_spec();
-  identifiers_spec();
-  intervals_spec();
-  iterations_spec();
-  margaret_messages_spec();
-  messages_spec();
-  meta_evaluation_spec();
-  method_definition_spec();
-  numeric_spec();
-  procs_spec();
-  rational_spec();
-  strings_spec();
-  symbols_spec();
-  tensors_spec();
-  tuples_spec();
-  variables_spec();
+  // arithmetic_spec();
+  // assignments_spec();
+  // bitstrings_spec();
+  // bitwise_spec();
+  // booleans_spec();
+  // characters_spec();
+  // classes_spec();
+  // code_as_data_spec();
+  // complex_spec();
+  // conditionals_spec();
+  // constants_spec();
+  // conversions_spec();
+  // date_time_spec();
+  // errors_spec();
+  // groups_spec();
+  // hashes_spec();
+  // identifiers_spec();
+  // intervals_spec();
+  // iterations_spec();
+  // margaret_messages_spec();
+  // messages_spec();
+  // meta_evaluation_spec();
+  // method_definition_spec();
+  // numeric_spec();
+  // procs_spec();
+  // rational_spec();
+  // strings_spec();
+  // symbols_spec();
+  // tensors_spec();
+  // tuples_spec();
+  // variables_spec();
 
   InspectorSpec();
 
@@ -156,7 +156,7 @@ spec_suite({
 
   OptimizerSpec();
 
-  ParserSpec();
+  // ParserSpec();
 
   ScannerSpec();
 

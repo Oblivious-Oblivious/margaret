@@ -31,11 +31,11 @@ static Regex REGEX_LIST[8] = {
     .type    = TOKEN_IDENTIFIER,
   },
   {
-    .pattern = (UChar *)"^[!?+\\-*\\\\/\\~<>=%|&^;.`]+",
+    .pattern = (UChar *)"^[!?+\\-*\\\\/\\~<>=|&^;.`]+",
     .type    = TOKEN_MESSAGE_SYMBOL,
   },
   {
-    .pattern = (UChar *)"^[()\\[\\]{},:#]",
+    .pattern = (UChar *)"^[()\\[\\]{},:#%]",
     .type    = TOKEN_SYNTAX_SYMBOL,
   },
   {

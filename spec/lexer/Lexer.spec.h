@@ -4,6 +4,7 @@
 #include "../../libs/cSpec/export/cSpec.h"
 #include "../../libs/EmeraldsString/export/EmeraldsString.h"
 #include "../../src/lexer/Lexer.h"
+#include "../../src/loader/file_loader.h"
 
 #define tokenize_and_assert(str)                              \
   do {                                                        \
@@ -301,25 +302,25 @@ module(LexerSpec, {
     });
 
     it("tokenizes different types of messages", {
-      tokenize_and_assert("!?+*-~<>%=|&^;");
+      tokenize_and_assert("!?+*-~<>=|&^;");
       tokenize_and_assert("*~&^;");
       tokenize_and_assert("<>|=;~");
       tokenize_and_assert(";.~!?`");
-      tokenize_and_assert("%|&<>!");
+      tokenize_and_assert("|&<>!");
       tokenize_and_assert("+=~;*");
-      tokenize_and_assert("<>=%^|");
+      tokenize_and_assert("<>=^|");
       tokenize_and_assert("+*-\\/");
       tokenize_and_assert("~;.|");
       tokenize_and_assert("!?<>");
-      tokenize_and_assert("!?+*~<>%=|&^;.");
+      tokenize_and_assert("!?+*~<>=|&^;.");
       tokenize_and_assert(";<>+=*~/");
-      tokenize_and_assert("?^~&|;=%");
+      tokenize_and_assert("?^~&|;=");
       tokenize_and_assert("!*<>|/~");
       tokenize_and_assert("+.-=;!?");
-      tokenize_and_assert("<>%^;!");
+      tokenize_and_assert("<>^;!");
       tokenize_and_assert("|&+*.~");
       tokenize_and_assert(";!?^=<>");
-      tokenize_and_assert("-~&%=|");
+      tokenize_and_assert("-~&=|");
       tokenize_and_assert("\\;.^!?");
     });
 
@@ -333,6 +334,7 @@ module(LexerSpec, {
       tokenize_and_assert(",");
       tokenize_and_assert(":");
       tokenize_and_assert("#");
+      tokenize_and_assert("%");
     });
 
     it("tokenizes different types of strings", {
@@ -358,6 +360,18 @@ module(LexerSpec, {
       tokenize_and_assert_multiline("'string\nwith\nmultiple\nlines'", 5);
       tokenize_and_assert_multiline("\"testing\nnew\nline\nhandling\"", 5);
     });
+  });
+
+  it("prints postcard", {
+    char *postcard =
+      file_loader_load(file_loader_new(), "./examples/postcard.marg");
+    Lexer *l       = lexer_new("postcard.marg", string_new(postcard));
+    Token **tokens = lexer_make_tokens(l);
+    printf("[");
+    for(size_t i = 0; i < vector_size(tokens) - 1; i++) {
+      printf("\"%s\", ", tokens[i]->value);
+    }
+    printf("\"%s\"]\n", tokens[vector_size(tokens) - 1]->value);
   });
 })
 
