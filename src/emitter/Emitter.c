@@ -232,9 +232,6 @@ VM *emitter_emit(VM *vm, char **formal_bytecode) {
       vm->current = vm->current->bound_proc;
     }
 
-    opcode_case(FM_START_C_FUNCTION) {}
-    opcode_case(FM_END_C_FUNCTION) {}
-
     opcode_case(FM_START_UNARY_METHOD) {
       MargValue new_method = MARG_METHOD(
         vm->current->bound_method->bound_object, formal_bytecode[++ip]
