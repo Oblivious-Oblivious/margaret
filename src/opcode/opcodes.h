@@ -27,10 +27,10 @@
 // #define OP_PUT_BITSTRING          0x17
 // #define OP_PUT_BITSTRING_WORD     0x18
 // #define OP_PUT_BITSTRING_DWORD    0x19
-// TODO OP_JUMP_LOCAL -> Jumps into a label in the same context (fast jump)
-// TODO OP_JUMP -> Jumps into a label on different context (searches
+// TODO - OP_JUMP_LOCAL -> Jumps into a label in the same context (fast jump)
+// TODO - OP_JUMP -> Jumps into a label on different context (searches
 // object->message->method->proc->activation_record)
-// TODO Label, LabelLocal primitives that store position in bytecode
+// TODO - Label, LabelLocal primitives that store position in bytecode
 // #define OP_PUT_LABEL              0x1a
 // #define OP_GOTO                   0x1b
 // #define OP_GOTO_LOCAL             0x1c

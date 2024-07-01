@@ -6,7 +6,7 @@
 module(
   MargValueSpec,
   {
-    // TODO Test for QNAN values
+    // TODO - Test for QNAN values
   }
 )
 

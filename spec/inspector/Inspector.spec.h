@@ -7,7 +7,7 @@
 #include "../../src/opcode/opcodes.h"
 
 module(InspectorSpec, {
-  // TODO Test for a `postcard` type mini program that includes every single
+  // TODO - Test for a `postcard` type mini program that includes every single
   // feature
   it("tests multiple long temporaries", {
     VM *vm          = vm_new();

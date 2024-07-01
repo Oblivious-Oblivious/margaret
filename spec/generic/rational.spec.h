@@ -43,7 +43,7 @@ module(rational_spec, {
         FM_POP
       )
     );
-    // TODO Separate `-` message on its own token (avoids `-/` or `/-`)
+    // TODO - Separate `-` message on its own token (avoids `-/` or `/-`)
     parse(
       "2/(-3r)",
       vector_new(
@@ -123,7 +123,7 @@ module(rational_spec, {
   it(
     "parses rational literal messages",
     {
-      // TODO
+      // TODO -
     }
   );
 })

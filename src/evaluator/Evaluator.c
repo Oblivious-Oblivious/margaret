@@ -212,7 +212,7 @@ static bool op_prim_to_string_helper(VM *vm, MargValue object) {
     fs_push(vm->sp, MARG_STRING(marg_proc_to_string(AS_PROC(object))));
   }
 
-  // TODO Implement inside of $Tensor and $Hash
+  // TODO - Implement to_string inside of $Tensor and $Hash
   else if(IS_TENSOR_CLONE(object)) {
     fs_push(vm->sp, MARG_STRING(marg_tensor_to_string(AS_TENSOR(object))));
   } else if(IS_HASH_CLONE(object)) {
@@ -236,7 +236,7 @@ static void evaluator_run(VM *vm) {
   bool on_explicit_send = false;
   vm->current->ip       = vm->current->bytecode->items;
 
-  // TODO Branch table, computed goto
+  // TODO - Branch table, computed goto, otherwise use number based binary search
   while(true) {
   enter_explicit_send:;
     switch(READ_BYTE()) {
@@ -662,7 +662,7 @@ static void evaluator_run(VM *vm) {
         );
         fs_push(vm->sp, MARG_STRING(dnu_message));
       } else {
-        // TODO Instead of pushing a nil, we should throw an error.
+        // TODO - Instead of pushing a nil, we should throw an error.
         fs_push(vm->sp, MARG_NIL);
       }
       break;

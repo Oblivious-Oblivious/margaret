@@ -6,7 +6,7 @@
 module(
   MargTensorSpec,
   {
-    // TODO Test for MargTensor internal primitive messages
+    // TODO - Test for MargTensor internal primitive messages
   }
 )
 

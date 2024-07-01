@@ -42,7 +42,7 @@ module(complex_spec, {
   it(
     "parses complex literal messages",
     {
-      // TODO
+      // TODO -
     }
   );
 })

@@ -6,7 +6,7 @@
 module(
   MargHashSpec,
   {
-    // TODO Test for MargHash internal primitive messages
+    // TODO - Test for MargHash internal primitive messages
   }
 )
 

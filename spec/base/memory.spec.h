@@ -7,7 +7,7 @@
 module(
   memory_spec,
   {
-    // TODO garbage collector stress tests
+    // TODO - garbage collector stress tests
   }
 )
 

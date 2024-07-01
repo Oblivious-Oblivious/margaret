@@ -14,7 +14,7 @@ static void initialize_vm(void) { vm = vm_new(); }
 module(EmitterSpec, {
   before_each(&initialize_vm);
 
-  // TODO Test for a `postcard` type mini program that includes every single
+  // TODO - Test for a `postcard` type mini program that includes every single
   // feature
 
   it("parses a simple program", {

@@ -151,7 +151,7 @@ VM *emitter_emit(VM *vm, char **formal_bytecode) {
     opcode_case(FM_SELF) { emit_byte(OP_PUT_SELF); }
     opcode_case(FM_SUPER) { emit_byte(OP_PUT_SUPER); }
 
-    // TODO Distinguish normal number from big numbers
+    // TODO - Discern between normal number from big numbers
     opcode_case(FM_INTEGER) {
       char *temporary_str = formal_bytecode[++ip];
       char *end;

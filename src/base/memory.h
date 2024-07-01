@@ -3,9 +3,9 @@
 
 #include <stdlib.h> /* size_t */
 
-// TODO Implement a rudimentary GC
+// TODO - Implement a rudimentary GC
 
-// TODO Eventually remove
+// TODO - Eventually remove
 #define MEMORY_GROW_FACTOR 2
 #define MEMORY_GROW_CAPACITY(capacity) \
   ((capacity) < 8 ? 8 : (capacity) * MEMORY_GROW_FACTOR)

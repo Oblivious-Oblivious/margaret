@@ -7,7 +7,7 @@
 module(
   VmSpec,
   {
-    // TODO Stack tests and vm data tests
+    // TODO - Stack tests and vm data tests
   }
 )
 

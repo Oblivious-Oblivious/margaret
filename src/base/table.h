@@ -4,7 +4,7 @@
 #include "../../libs/EmeraldsBool/export/EmeraldsBool.h"
 #include "../opcode/MargValueType.h"
 
-// TODO Implement data-oriented approach by separating keys with values
+// TODO - Implement data-oriented approach by separating keys with values
 //      for better memory compaction, and less cache misses
 // TableKeys -> table -> {key1: index1, key2: index2, ...}
 // TableValues -> vector -> [index1, index2, ...]

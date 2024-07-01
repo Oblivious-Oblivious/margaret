@@ -7,9 +7,9 @@
 module(
   EvaluatorSpec,
   {
-    // TODO Test for a `postcard` type mini program that includes every single
+    // TODO - Test for a `postcard` type mini program that includes every single
     // feature
-    // TODO Test for more examples as this will finally interpret the bytecode
+    // TODO - Test for more examples as this will finally interpret the bytecode
   }
 )
 

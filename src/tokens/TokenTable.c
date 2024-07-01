@@ -7,8 +7,8 @@
 
 /**
  * @brief
-    TODO Abstract error somewhere closer to boundary
-    TODO Name error messages or abstract to macros
+    TODO - Abstract error somewhere closer to boundary
+    TODO - Name error messages or abstract to macros
  * @param token -> The token where the error occured at
  * @param message -> The message to display
  * @return string* -> NULL pointer

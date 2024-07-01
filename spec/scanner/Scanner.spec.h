@@ -7,7 +7,7 @@
 module(
   ScannerSpec,
   {
-    // TODO
+    // TODO -
   }
 )
 

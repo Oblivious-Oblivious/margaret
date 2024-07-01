@@ -18,7 +18,7 @@ module(errors_spec, {
   it(
     "other syntax errors",
     {
-      // TODO
+      // TODO -
     }
   );
 })

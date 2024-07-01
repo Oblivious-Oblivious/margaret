@@ -7,7 +7,7 @@
 module(
   OptimizerSpec,
   {
-    // TODO Test for a `postcard` type mini program that includes every single
+    // TODO - Test for a `postcard` type mini program that includes every single
     // feature
   }
 )

@@ -6,7 +6,7 @@
 module(
   MargStringSpec,
   {
-    // TODO Test for MargString internal primitive messages
+    // TODO - Test for MargString internal primitive messages
   }
 )
 

@@ -6,7 +6,6 @@
 VM *optimizer_optimize(VM *vm) {
   vm->current->ip = vm->current->bytecode->items;
 
-  // TODO Branch table, computed goto
   while(true) {
     uint8_t instruction;
     switch(instruction = READ_BYTE()) {
