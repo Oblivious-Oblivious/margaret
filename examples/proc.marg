@@ -19,7 +19,7 @@ puts: v,
 puts: p0,
 
 p1 = { v | v * 2 },
-res = p1 call: [v: 11],
+res = p1 call: %{v: 11},
 puts: res,
 
 external_proc = {
@@ -32,7 +32,7 @@ external_proc = {
     { param |
       puts: "internal with param(42):",
       puts: param,
-    } call: [param: value],
+    } call: %{param: value},
     puts: value,
   },
 },

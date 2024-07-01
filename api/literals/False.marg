@@ -1,16 +1,18 @@
-{(
-    $false = Object subclass,
-    $false extend: (
-        #& a_boolean => $false,
-        #and: alternate_block => self,
-        #as_bit => 0,
-        #if_false: alternate_block => alternate_block value,
-        #if_false: false_alternate_block if_true: true_alternate_block => false_alternate_block value,
-        #if_true: alternate_block => $nil,
-        #if_true: true_alternate_block if_false: false_alternate_block => false_alternate_block value,
-        #not => $true,
-        #or: alternate_block => alternate_block value,
-        #xor: a_block => a_block value if_true: $true if_false: $false,
-        #| a_boolean => $false,
-    ),
-)}
+$FalseProto = $Margaret clone,
+$false = $FalseProto clone,
+
+$FalseProto -- [
+  #& a_boolean => $false,
+  #and: alternate_block => @self,
+  #as_bit => 0,
+  #if_false: alternate_block => alternate_block value,
+  #if_false: false_alternate_block if_true: true_alternate_block => false_alternate_block value,
+  #if_true: alternate_block => $nil,
+  #if_true: true_alternate_block if_false: false_alternate_block => false_alternate_block value,
+  #not => $true,
+  #or: alternate_block => alternate_block value,
+  #xor: a_block => a_block value if_true: $true if_false: $false,
+  #| a_boolean => $false,
+],
+
+$false freeze!,

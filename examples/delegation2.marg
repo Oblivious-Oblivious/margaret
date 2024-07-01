@@ -1,6 +1,6 @@
 include: "examples/Margaret.marg",
 
-$Margaret <- #delegated => @self,
+$Margaret -- #delegated => @self,
 
 $Parent = $Margaret clone,
 $Child = $Parent clone,
@@ -10,7 +10,7 @@ puts: $Parent delegated,
 puts: $Child delegated,
 
 $Child notboundmessage,
-$Margaret bind: #dnu: message_name => puts: "custom dnu message",
+$Margaret -- #dnu: message_name => puts: "custom dnu message",
 
 $Child notboundmessage,
 ($Margaret dnu: "nonexistent"),

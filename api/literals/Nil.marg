@@ -1,18 +1,20 @@
-{(
-    $nil = Object subclass,
-    $nil extend: (
-        #& an_object => $false,
-        #| an_object => an_object,
-        #^ an_object => self xor: an_object,
+$NilProto = $Margaret clone,
+$nil = $NilProto clone,
 
-        #inspect => "nil",
-        #is_nil? => $true,
+$nil extend: (
+  #& an_object => $false,
+  #| an_object => an_object,
+  #^ an_object => @self xor: an_object,
 
-        #to_c => '',
-        #to_f => 0.0,
-        #to_h => {},
-        #to_i => 0,
-        #to_t => [],
-        #to_s => "",
-    ),
-)}
+  #inspect => "nil",
+  #is_nil? => $true,
+
+  #to_c => '',
+  #to_f => 0.0,
+  #to_h => %{},
+  #to_i => 0,
+  #to_t => [],
+  #to_s => "",
+],
+
+$nil freeze!,

@@ -28,11 +28,11 @@ puts: #test => (),
 puts: {},
 
 puts: [1,2,3],
-puts: [a: []h, b: ~[]],
+puts: %{a: %{}, b: %{}},
 
 test = $Margaret clone: "test",
-test bind: #to_string => to_string: @self,
-test bind: #to_string => "my test object",
+test -- #to_string => to_string: @self,
+test -- #to_string => "my test object",
 
 puts: test,
 

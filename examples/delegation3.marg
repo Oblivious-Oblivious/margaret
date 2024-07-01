@@ -1,10 +1,10 @@
 include: "examples/Margaret.marg",
 
-$String ::: #== other => {
+$String -- #== other => (
   puts: @self,
   puts: other,
   primitive_equals?: @self with: other,
-},
+),
 
 puts: "str" == "str",
 puts: "",

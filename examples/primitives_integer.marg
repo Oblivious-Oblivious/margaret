@@ -14,7 +14,7 @@ puts: 41 incr,
 puts: 43 decr,
 puts: 21 double,
 
-$Integer bind: #test => 123,
+$Integer -- #test => 123,
 puts: 0 test,
 puts: 1 test,
 puts: 2 test,

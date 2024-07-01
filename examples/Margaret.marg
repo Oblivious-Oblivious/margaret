@@ -1,51 +1,52 @@
-$Margaret primitive_bind_method: (#bind: method => primitive_bind_method: method to: @self) to: @self,
-$Margaret bind: #<- message => #bind: method => primitive_bind_method: method to: @self,
+$Margaret _PRIM_BIND_METHOD: (#-- method => _PRIM_BIND_METHOD: method to: @self) to: @self,
+$Margaret -- #-- message => -- method to: @self,
 
-$Margaret <- #self => @self,
-$Margaret <- #super => @super,
+$Margaret -- #self => @self,
+$Margaret -- #super => @super,
 
-$Margaret <- #messages => primitive_messages: @self,
-$Margaret <- #object_id: object => primitive_object_id: object,
-$Margaret <- #to_string => primitive_to_string: @self,
-$Margaret <- #== other => primitive_equals?: @self with: other,
-$Margaret <- #dnu: message_name => puts: (primitive_dnu: @self msg: message_name),
-$Margaret <- #clone: name => primitive_clone_object: @self with_name: name,
+$Margaret -- #messages => _PRIM_MESSAGES: @self,
+$Margaret -- #object_id: object => _PRIM_OBJECT_ID: object,
+$Margaret -- #to_string => _PRIM_TO_STRING: @self,
+$Margaret -- #== other => _PRIM_EQUALS?: @self with: other,
+$Margaret -- #dnu: message_name => puts: (_PRIM_DNU: @self msg: message_name),
+$Margaret -- #clone: name => _PRIM_CLONE_OBJECT: @self with_name: name,
 
-$Numeric <- #== other => primitive_equals_numeric?: @self with: other,
-$Numeric <- #+ other => primitive_add: @self with: other,
-$Numeric <- #- other => primitive_sub: @self with: other,
-$Numeric <- #* other => primitive_mul: @self with: other,
-$Numeric <- #/ other => primitive_div: @self with: other,
-$Numeric <- #abs => primitive_abs: @self,
-$Numeric <- #< other => primitive_less: @self than: other,
-$Numeric <- #> other => primitive_greater: @self than: other,
-$Numeric <- #<= other => primitive_less_or_equals: @self than: other,
-$Numeric <- #>= other => primitive_greater_or_equals: @self than: other,
+$Numeric -- #== other => _PRIM_EQUALS_NUMERIC?: @self with: other,
+$Numeric -- #+ other => _PRIM_ADD: @self with: other,
+$Numeric -- #- other => _PRIM_SUB: @self with: other,
+$Numeric -- #* other => _PRIM_MUL: @self with: other,
+$Numeric -- #/ other => _PRIM_DIV: @self with: other,
+$Numeric -- #abs => _PRIM_ABS: @self,
+$Numeric -- #< other => _PRIM_LESS: @self than: other,
+$Numeric -- #> other => _PRIM_GREATER: @self than: other,
+$Numeric -- #<= other => _PRIM_LESS_OR_EQUALS: @self than: other,
+$Numeric -- #>= other => _PRIM_GREATER_OR_EQUALS: @self than: other,
 
-$Integer <- #incr => primitive_incr: @self,
-$Integer <- #decr => primitive_decr: @self,
-$Integer <- #double => primitive_double: @self,
+$Integer -- #incr => _PRIM_INCR: @self,
+$Integer -- #decr => _PRIM_DECR: @self,
+$Integer -- #double => _PRIM_DOUBLE: @self,
 
-$true <- #not => $false,
-$false <- #not => $true,
+$true -- #not => $false,
+$false -- #not => $true,
 
-$Numeric <- #!= other => (@self == other) not,
-$true bind: #if_false: proc => $nil,
-$true bind: #if_false: false_proc if_true: true_proc => true_proc call,
-$true bind: #if_true: proc => proc call,
-$true bind: #if_true: true_proc if_false: false_proc => true_proc call,
+$Numeric -- #!= other => (@self == other) not,
 
-$false bind: #if_false: proc => proc call,
-$false bind: #if_false: false_proc if_true: true_proc => false_proc call,
-$false bind: #if_true: proc => $nil,
-$false bind: #if_true: true_proc if_false: false_proc => false_proc call,
+$true -- #if_false: proc => $nil,
+$true -- #if_false: false_proc if_true: true_proc => true_proc call,
+$true -- #if_true: proc => proc call,
+$true -- #if_true: true_proc if_false: false_proc => true_proc call,
 
-$Margaret bind: #if: condition then: proc => (
+$false -- #if_false: proc => proc call,
+$false -- #if_false: false_proc if_true: true_proc => false_proc call,
+$false -- #if_true: proc => $nil,
+$false -- #if_true: true_proc if_false: false_proc => false_proc call,
+
+$Margaret -- #if: condition then: proc => (
   condition
     if_true: proc
     if_false: {},
 ),
-$Margaret bind: #if: condition then: true_proc else: false_proc => (
+$Margaret -- #if: condition then: true_proc else: false_proc => (
   condition
     if_true: true_proc
     if_false: false_proc,

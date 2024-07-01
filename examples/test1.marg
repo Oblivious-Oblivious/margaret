@@ -1,25 +1,23 @@
-(
-    include: "examples/Margaret.marg",
+include: "examples/Margaret.marg",
 
-    $Numeric bind: #0 fact => 1,
-    $Numeric bind: #fact => @self * (@self-1) fact,
+$Numeric -- #0 fact => 1,
+$Numeric -- #fact => @self * (@self-1) fact,
 
-    $Numeric bind:
-        #abs => (
-            @self < 0
-                if_true: { -@self }
-                if_false: { @self }
-        ),
-    Comment new: "Method selector: abs block: {...}",
+$Numeric --
+  #abs => (
+    @self < 0
+      if_true: { -@self }
+      if_false: { @self }
+  ),
+Comment new: "Method selector: abs block: {...}",
 
-    $Numeric bind: #** a_number => @self raised_to: a_number,
+$Numeric -- #** a_number => @self raised_to: a_number,
 
-    $Numeric bind:
-        #times: a_block => (
-            remaining = @self,
-            {(remaining = remaining - 1) >= 0} while_true: {a_block call}
-        ),
-    $Numeric bind:
-        #add: element at: position => 42,
-    Comment new: "Method selector: add:at: block: {element, position | 42}",
-)
+$Numeric --
+  #times: a_block => (
+    remaining = @self,
+    {(remaining = remaining - 1) >= 0} while_true: {a_block call}
+  ),
+$Numeric --
+  #add: element at: position => 42,
+Comment new: "Method selector: add:at: block: {element, position | 42}",

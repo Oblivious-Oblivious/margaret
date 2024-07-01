@@ -1,8 +1,6 @@
-{(
-    $Value = Object clone,
-    $Value extend: (
-        #== other => $false,
-        #dup => self,
-        #clone => self
-    )
-)}
+$Value = $Margaret clone,
+$Value -- [
+  #== other => $false,
+  #dup => @self,
+  #clone => @self,
+],

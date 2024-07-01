@@ -1,30 +1,27 @@
-{(
-    $Margaret = $Margaret subclass,
-    $Margaret extend: (
-        #new => Primitive no: 1,
-        #not => Primitive no: 2,
-        #!= other => Primitive no: 3,
-        #== other => Primitive no: 4,
-        #object_id => Primitive no: 5,
-        #hash => Primitive no: 6,
-        #class => Primitive no: 7,
-        #inspect => Primitive no: 8,
-        #is_nil? => Primitive no: 9,
-        #pp => Primitive no: 10,
-        #puts => Primitive no: 11,
-        #print => Primitive no: 12,
+$Margaret = $Margaret clone,
+$Margaret -- [
+  #clone => _PRIM_1_CLONE,
+  #not => _PRIM_2_NOT,
+  #!= other => _PRIM_3_NOT_EQUALS: other,
+  #== other => _PRIM_4_EQUALS: other,
+  #object_id => _PRIM_5_OBJECT_ID,
+  #hash => _PRIM_6_HASH,
+  #inspect => _PRIM_7_INSPECT,
+  #is_nil? => _PRIM_8_IS_NIL?,
+  #pp => _PRIM_9_PP,
+  #puts => _PRIM_10_PUTS,
+  #print => _PRIM_11_PRINT,
 
-        #send => (),
-        #equal? => (),
-        #method_missing => (),
-        #responds_to?: msg => (),
-        #to_s => (),
+  #send => (),
+  #equal? => (),
+  #method_missing => (),
+  #responds_to?: msg => (),
+  #to_s => (),
 
-        #<=> other => (),
-        #=== other => (),
+  #<=> other => (),
+  #=== other => (),
 
-        #methods => (),
-        #dup => (),
-        #freeze => ()
-    )
-)}
+  #methods => (),
+  #dup => (),
+  #freeze => ()
+],

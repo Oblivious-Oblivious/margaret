@@ -1,7 +1,7 @@
 include: "examples/Margaret.marg",
 
 value = 42,
-$Margaret bind: #add: v2 => value + v2 + v3,
+$Margaret -- #add: v2 => value + v2 + v3,
 v3 = 35,
 
 puts: (add: 123),

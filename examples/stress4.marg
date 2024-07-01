@@ -1,10 +1,10 @@
 include: "examples/Margaret.marg",
 
-$Margaret bind: # test => 42,
+$Margaret -- # test => 42,
 puts: $Margaret test,puts: $Margaret test,puts: $Margaret test,puts: $Margaret test,
 puts: $Margaret test,puts: $Margaret test,puts: $Margaret test,puts: $Margaret test,
 
-$Margaret bind: # first: p1 second: p2 => (
+$Margaret -- # first: p1 second: p2 => (
   puts: p1,
   puts: "---",
   puts: p2,
