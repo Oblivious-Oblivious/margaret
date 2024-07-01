@@ -30,3 +30,23 @@ $true <- #not => $false,
 $false <- #not => $true,
 
 $Numeric <- #!= other => (@self == other) not,
+$true bind: #if_false: proc => $nil,
+$true bind: #if_false: false_proc if_true: true_proc => true_proc call,
+$true bind: #if_true: proc => proc call,
+$true bind: #if_true: true_proc if_false: false_proc => true_proc call,
+
+$false bind: #if_false: proc => proc call,
+$false bind: #if_false: false_proc if_true: true_proc => false_proc call,
+$false bind: #if_true: proc => $nil,
+$false bind: #if_true: true_proc if_false: false_proc => false_proc call,
+
+$Margaret bind: #if: condition then: proc => (
+  condition
+    if_true: proc
+    if_false: {},
+),
+$Margaret bind: #if: condition then: true_proc else: false_proc => (
+  condition
+    if_true: true_proc
+    if_false: false_proc,
+),

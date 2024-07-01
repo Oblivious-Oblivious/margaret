@@ -1,0 +1,44 @@
+include: "examples/Margaret.marg",
+
+x = 15,
+x > 10
+  if_true: { puts: "OK" }
+  if_false: { puts: "NOT OK" },
+
+if: x > 10 then: {
+  puts: ">10"
+},
+
+if: x > 10 then: {
+  puts: "OK -> >10",
+}
+else: {
+  puts: "NOT OK -> <10",
+},
+
+res = 22,
+puts: (res == 22 if_true: { "ok1" }),
+puts: (res == 22 if_true: { "ok2" }),
+puts: (res == 22 if_true: { "ok3" }),
+puts: (res == 22 if_true: { "ok4" }),
+puts: (res == 22 if_true: { "ok5" }),
+puts: (res == 22 if_true: { "ok6" }),
+puts: (res == 22 if_true: { "ok7" }),
+puts: (res == 22 if_true: { "ok8" }),
+
+proc = {
+  puts: "BEFORE",
+  {
+    puts: "BEFOREinner",
+    if: res == 22 then: { puts: "ok" },
+    if: res != 22 then: { puts: "ok" } else: { puts: "not ok" },
+    puts: "AFTERinner",
+  } call,
+  puts: "AFTER",
+},
+
+proc call,
+puts: "",
+proc call,
+puts: "",
+proc call,
