@@ -1,16 +1,17 @@
 first_unit:
-    translation_unit EOF
+    unit EOF
 
-translation_unit:
+unit:
     assignment_chain keyword_message
 
 assignment_chain:
-    IDENTIFIER '='
-  | IDENTIFIER '=' assignment_chain
+    keyword_message '='
+  | keyword_message '=' assignment_chain
   | ε
 
 keyword_message:
-    binary_message keyword_selector_chain
+    keyword_selector_chain
+  | binary_message keyword_selector_chain
 
 keyword_selector_chain:
     IDENTIFIER ':' binary_message
@@ -37,10 +38,53 @@ lhs_message:
     lhs_selector literal
 
 lhs_selector:
-    LHS_OPERATOR
+    MESSAGE_SYMBOL
   | ε
 
 literal:
+    scalar
+  | '(' unit_list ')'
+  | '[' unit_list ']'
+  | '{' param_list unit_list '}'
+  | '%' '(' bit_list ')'
+  | '%' '[' unit_list ']'
+  | '%' '{' association_list '}'
+  | '#' literal method_definition
+  | ε
+
+unit_list:
+    unit
+  | unit ',' unit_list
+
+param_list:
+    IDENTIFIER '|'
+  | IDENTIFIER ',' param_list
+  | ε
+
+bit_list:
+    bit
+  | bit ',' bit_list
+  | ε
+
+bit:
+    scalar
+  | scalar ':' ':' INTEGER
+
+association_list:
+    scalar : unit
+  | scalar : unit ',' association_list
+
+method_definition:
+    IDENTIFIER '=>' unit
+  | MESSAGE_SYMBOL '=>' unit
+  | keyword_list '=>' unit
+  | MESSAGE_SYMBOL literal '=>' unit
+
+keyword_list:
+    IDENTIFIER ':' literal
+  | IDENTIFIER ':' literal keyword_list
+
+scalar:
     '$' 'nil'
   | '$' 'false'
   | '$' 'true'
@@ -49,57 +93,13 @@ literal:
   | FLOAT
   | STRING
   | IDENTIFIER
-  | '(' group_items_or_empty ')'
-  | '[' bit_literal_list ']'
-  | '[' association_list ']'
-  | '[' group_items_or_empty ']'
-  | '{' param_list_or_empty group_items_or_empty '}'
-  | '#' literal method_definition
-  | '#' method_definition
-
-bit_literal_list:
-    bit_literal
-  | bit_literal ',' bit_literal_list
-
-bit_literal:
-    IDENTIFIER ':' ':' INTEGER
-  | INTEGER ':' ':' INTEGER
-
-association_list:
-    association
-  | association ',' association_list
-
-association:
-    IDENTIFIER ':' translation_unit
-  | STRING ':' translation_unit
-
-param_list_or_empty:
-    IDENTIFIER '|'
-  | IDENTIFIER ',' param_list_or_empty
-  | ε
-
-group_items_or_empty:
-    translation_unit
-  | translation_unit ',' group_items_or_empty
-  | ε
-
-method_definition:
-    keyword_list '=>' translation_unit
-  | MESSAGE_SYMBOL literal '=>' translation_unit
-  | IDENTIFIER '=>' translation_unit
-
-keyword_list:
-    IDENTIFIER ':' literal
-  | IDENTIFIER ':' literal keyword_list
 
 FLOAT:                ^\d+(_\d+)*\.\d+(_\d+)*
 INTEGER:              ^(?:0[bBoOxX][\da-fA-F_]+|0|[1-9][\d_]*)
 STRING:               ^(['"]).*?\1
 
 IDENTIFIER:           ^[@$]?[a-zA-Z_][a-zA-Z0-9_]*
-MESSAGE_SYMBOL:       ^[!?+\-*/\\~<>=%|&^;.`]+
-SYNTAX_SYMBOL:        ^[()\[\]{},:#]
-
-LHS_OPERATOR:         ^[+-!~]
+MESSAGE_SYMBOL:       ^[!?+\-*/\\~<>=|&^;.`]+
+SYNTAX_SYMBOL:        ^[()\[\]{},:#%]
 
 EOF:                  ends parsing
