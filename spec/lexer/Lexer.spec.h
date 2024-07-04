@@ -14,6 +14,14 @@
     assert_that_charptr(tokens[0]->value equals to str);      \
   } while(0)
 
+#define tokenize_and_assert_res(str, res)                     \
+  do {                                                        \
+    Lexer *l       = lexer_new("file.marg", string_new(str)); \
+    Token **tokens = lexer_make_tokens(l);                    \
+    assert_that_int(vector_size(tokens) equals to 2);         \
+    assert_that_charptr(tokens[0]->value equals to res);      \
+  } while(0)
+
 #define tokenize_and_assert_multiline(str, no_lines)          \
   do {                                                        \
     Lexer *l       = lexer_new("file.marg", string_new(str)); \
@@ -63,10 +71,10 @@ module(LexerSpec, {
         assert_that_int(tokens[1]->line_number equals to 1);
 
         tokens = lexer_make_tokens(lexer_new("file.marg", string_new("4_200")));
-        assert_that_charptr(tokens[0]->value equals to "4_200");
+        assert_that_charptr(tokens[0]->value equals to "4200");
         tokens =
           lexer_make_tokens(lexer_new("file.marg", string_new("4_2_0_0")));
-        assert_that_charptr(tokens[0]->value equals to "4_2_0_0");
+        assert_that_charptr(tokens[0]->value equals to "4200");
       });
 
       it("tokenizes zero", {
@@ -127,9 +135,9 @@ module(LexerSpec, {
         Lexer *l = lexer_new("file.marg", string_new("(0b1010 + 0B0100)"));
         Token **tokens = lexer_make_tokens(l);
         assert_that_charptr(tokens[0]->value equals to "(");
-        assert_that_charptr(tokens[1]->value equals to "0b1010");
+        assert_that_charptr(tokens[1]->value equals to "10");
         assert_that_charptr(tokens[2]->value equals to "+");
-        assert_that_charptr(tokens[3]->value equals to "0B0100");
+        assert_that_charptr(tokens[3]->value equals to "4");
         assert_that_charptr(tokens[4]->value equals to ")");
 
         assert_that_int(tokens[1]->type equals to TOKEN_INTEGER);
@@ -140,9 +148,9 @@ module(LexerSpec, {
         Lexer *l = lexer_new("file.marg", string_new("(0xfeed42 + 0Xbeef41)"));
         Token **tokens = lexer_make_tokens(l);
         assert_that_charptr(tokens[0]->value equals to "(");
-        assert_that_charptr(tokens[1]->value equals to "0xfeed42");
+        assert_that_charptr(tokens[1]->value equals to "16706882");
         assert_that_charptr(tokens[2]->value equals to "+");
-        assert_that_charptr(tokens[3]->value equals to "0Xbeef41");
+        assert_that_charptr(tokens[3]->value equals to "12513089");
         assert_that_charptr(tokens[4]->value equals to ")");
 
         assert_that_int(tokens[1]->type equals to TOKEN_INTEGER);
@@ -153,9 +161,9 @@ module(LexerSpec, {
         Lexer *l       = lexer_new("file.marg", string_new("(0o752 + 0O52)"));
         Token **tokens = lexer_make_tokens(l);
         assert_that_charptr(tokens[0]->value equals to "(");
-        assert_that_charptr(tokens[1]->value equals to "0o752");
+        assert_that_charptr(tokens[1]->value equals to "490");
         assert_that_charptr(tokens[2]->value equals to "+");
-        assert_that_charptr(tokens[3]->value equals to "0O52");
+        assert_that_charptr(tokens[3]->value equals to "42");
         assert_that_charptr(tokens[4]->value equals to ")");
 
         assert_that_int(tokens[1]->type equals to TOKEN_INTEGER);
@@ -228,49 +236,49 @@ module(LexerSpec, {
 
     it("tokenizes different types of floats", {
       tokenize_and_assert("123.456");
-      tokenize_and_assert("789_10.11");
-      tokenize_and_assert("56_78.90_12");
+      tokenize_and_assert("78910.11");
+      tokenize_and_assert("5678.9012");
       tokenize_and_assert("123456.789");
-      tokenize_and_assert("1_2_3.4_5_6");
-      tokenize_and_assert("7890.1234_5678");
+      tokenize_and_assert("123.456");
+      tokenize_and_assert("7890.12345678");
       tokenize_and_assert("12345.6789");
       tokenize_and_assert("0.1");
-      tokenize_and_assert("987_654.321_0");
-      tokenize_and_assert("456_789.012");
+      tokenize_and_assert("987654.3210");
+      tokenize_and_assert("456789.012");
     });
 
     it("tokenizes different types of integers", {
       tokenize_and_assert("0");
-      tokenize_and_assert("0b0");
-      tokenize_and_assert("0b00");
-      tokenize_and_assert("0o0");
-      tokenize_and_assert("0o000");
-      tokenize_and_assert("0x0");
-      tokenize_and_assert("0x00");
+      tokenize_and_assert_res("0b0", "0");
+      tokenize_and_assert_res("0b00", "0");
+      tokenize_and_assert_res("0o0", "0");
+      tokenize_and_assert_res("0o000", "0");
+      tokenize_and_assert_res("0x0", "0");
+      tokenize_and_assert_res("0x00", "0");
       tokenize_and_assert("1");
-      tokenize_and_assert("0b1");
-      tokenize_and_assert("0b01");
-      tokenize_and_assert("0o1");
-      tokenize_and_assert("0o001");
-      tokenize_and_assert("0x1");
-      tokenize_and_assert("0x01");
+      tokenize_and_assert_res("0b1", "1");
+      tokenize_and_assert_res("0b01", "1");
+      tokenize_and_assert_res("0o1", "1");
+      tokenize_and_assert_res("0o001", "1");
+      tokenize_and_assert_res("0x1", "1");
+      tokenize_and_assert_res("0x01", "1");
       tokenize_and_assert("2");
-      tokenize_and_assert("0b10");
-      tokenize_and_assert("0b010");
-      tokenize_and_assert("0o2");
-      tokenize_and_assert("0o002");
-      tokenize_and_assert("0x2");
-      tokenize_and_assert("0x02");
-      tokenize_and_assert("0b1010_0110");
-      tokenize_and_assert("0B1101");
-      tokenize_and_assert("0o755");
-      tokenize_and_assert("0O123_456");
-      tokenize_and_assert("0xDEAD_BEEF");
-      tokenize_and_assert("0XFA12");
+      tokenize_and_assert_res("0b10", "2");
+      tokenize_and_assert_res("0b010", "2");
+      tokenize_and_assert_res("0o2", "2");
+      tokenize_and_assert_res("0o002", "2");
+      tokenize_and_assert_res("0x2", "2");
+      tokenize_and_assert_res("0x02", "2");
+      tokenize_and_assert_res("0b1010_0110", "166");
+      tokenize_and_assert_res("0B1101", "13");
+      tokenize_and_assert_res("0o755", "493");
+      tokenize_and_assert_res("0O123_456", "42798");
+      tokenize_and_assert_res("0xDEAD_BEEF", "3735928559");
+      tokenize_and_assert_res("0XFA12", "64018");
       tokenize_and_assert("0");
-      tokenize_and_assert("123_456");
+      tokenize_and_assert("123456");
       tokenize_and_assert("42");
-      tokenize_and_assert("9_876_543");
+      tokenize_and_assert("9876543");
     });
 
     it("tokenizes different types of identifiers", {

@@ -2,21 +2,22 @@
 #define __ALTERNATE_TO_DEC_SPEC_H_
 
 #include "../../libs/cSpec/export/cSpec.h"
-#include "../../src/bytecode/alternate_to_dec.h"
+#include "../../libs/EmeraldsString/export/EmeraldsString.h"
+#include "../../src/lexer/alternate_to_dec.h"
 
 module(alternate_to_dec_spec, {
   it("converts from binary to decimal", {
-    char *bin = bin_to_dec("101010");
+    char *bin = bin_to_dec(string_new("101010"));
     assert_that_charptr(bin equals to "42");
   });
 
   it("converts from octal to decimal", {
-    char *oct = oct_to_dec("12345");
+    char *oct = oct_to_dec(string_new("12345"));
     assert_that_charptr(oct equals to "5349");
   });
 
   it("converts from hexadecimal to decimal", {
-    char *hex = hex_to_dec("bEeF");
+    char *hex = hex_to_dec(string_new("bEeF"));
     assert_that_charptr(hex equals to "48879");
   });
 })

@@ -11,7 +11,6 @@
 #include "base/table.spec.h"
 
 // bytecode
-#include "bytecode/alternate_to_dec.spec.h"
 #include "bytecode/FormalAST.spec.h"
 
 // emitter
@@ -57,6 +56,7 @@
 #include "inspector/Inspector.spec.h"
 
 // lexer
+#include "lexer/alternate_to_dec.spec.h"
 #include "lexer/Lexer.spec.h"
 
 // loader

@@ -3,6 +3,7 @@
 #include "../../libs/EmeraldsBool/export/EmeraldsBool.h" /* IWYU pragma: keep */
 #include "../../libs/EmeraldsString/export/EmeraldsString.h" /* IWYU pragma: keep */
 #include "../base/memory.h"
+#include "alternate_to_dec.h"
 #include "Regex.h"
 
 #include <stdio.h> /* fprintf */
@@ -86,6 +87,23 @@ Token **lexer_make_tokens(Lexer *self) {
                   (self->text[0] == '!' || self->text[0] == '?')) {
           string_add_char(token, self->text[0]);
           string_skip_first(self->text, 1);
+          goto new_token;
+        } else if(REGEX_LIST[i].type == TOKEN_FLOAT) {
+          token = string_remove_underscores(token);
+          goto new_token;
+        } else if(REGEX_LIST[i].type == TOKEN_INTEGER) {
+          token = string_remove_underscores(token);
+
+          if(token[0] == '0' && (token[1] == 'b' || token[1] == 'B')) {
+            string_skip_first(token, 2);
+            token = string_new(bin_to_dec(token));
+          } else if(token[0] == '0' && (token[1] == 'o' || token[1] == 'O')) {
+            string_skip_first(token, 2);
+            token = string_new(oct_to_dec(token));
+          } else if(token[0] == '0' && (token[1] == 'x' || token[1] == 'X')) {
+            string_skip_first(token, 2);
+            token = string_new(hex_to_dec(token));
+          }
           goto new_token;
         } else if(REGEX_LIST[i].type == TOKEN_STRING) {
           self->lineno += vector_size(string_split(token, "\n"));
