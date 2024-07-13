@@ -18,6 +18,8 @@ typedef enum Type {
   TOKEN_INTEGER        = 12,
   TOKEN_STRING         = 111,
   TOKEN_IDENTIFIER     = 201,
+  TOKEN_INSTANCE       = 202,
+  TOKEN_GLOBAL         = 203,
   TOKEN_MESSAGE_SYMBOL = 1001,
   TOKEN_SYNTAX_SYMBOL  = 1002,
 } Type;

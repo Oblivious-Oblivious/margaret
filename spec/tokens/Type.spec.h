@@ -22,6 +22,8 @@ module(TypeSpec, {
 
   it("contains non terminal literal types", {
     assert_that_int(TOKEN_IDENTIFIER equals to 201);
+    assert_that_int(TOKEN_INSTANCE equals to 202);
+    assert_that_int(TOKEN_GLOBAL equals to 203);
   });
 
   it("contains message normal and syntax symbols", {

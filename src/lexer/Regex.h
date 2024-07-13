@@ -9,7 +9,7 @@ typedef struct Regex {
   Type type;
 } Regex;
 
-static Regex REGEX_LIST[8] = {
+static Regex REGEX_LIST[10] = {
   {
     .pattern = (UChar *)"^\\n",
     .type    = TOKEN_NEWLINE,
@@ -27,7 +27,15 @@ static Regex REGEX_LIST[8] = {
     .type    = TOKEN_INTEGER,
   },
   {
-    .pattern = (UChar *)"^[@$]?[a-zA-Z_][a-zA-Z0-9_]*",
+    .pattern = (UChar *)"^@[a-zA-Z_][a-zA-Z0-9_]*",
+    .type    = TOKEN_INSTANCE,
+  },
+  {
+    .pattern = (UChar *)"^\\$[a-zA-Z_][a-zA-Z0-9_]*",
+    .type    = TOKEN_GLOBAL,
+  },
+  {
+    .pattern = (UChar *)"^[a-zA-Z_][a-zA-Z0-9_]*",
     .type    = TOKEN_IDENTIFIER,
   },
   {

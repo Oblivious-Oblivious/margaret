@@ -86,7 +86,9 @@ Token **lexer_make_tokens(Lexer *self) {
           self->charno = 0;
         } else if(REGEX_LIST[i].type == TOKEN_WHITESPACE) {
           ; // skip
-        } else if(REGEX_LIST[i].type == TOKEN_IDENTIFIER &&
+        } else if((REGEX_LIST[i].type == TOKEN_IDENTIFIER ||
+                   REGEX_LIST[i].type == TOKEN_INSTANCE ||
+                   REGEX_LIST[i].type == TOKEN_GLOBAL) &&
                   (self->text[0] == '!' || self->text[0] == '?')) {
           string_add_char(token, self->text[0]);
           string_skip_first(self->text, 1);
