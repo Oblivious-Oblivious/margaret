@@ -81,9 +81,6 @@ keyword_list:
   | IDENTIFIER ':' literal keyword_list
 
 scalar:
-    '$' 'nil'
-  | '$' 'false'
-  | '$' 'true'
   | ':' ':' IDENTIFIER
   | INTEGER
   | FLOAT
@@ -91,10 +88,13 @@ scalar:
   | variable
 
 variable:
-    '@self'
+    '$nil'
+  | '$false'
+  | '$true'
+  | '@self'
   | '@super'
-  | INSTANCE
   | GLOBAL
+  | INSTANCE
   | IDENTIFIER
 
 FLOAT:                ^\d+(_\d+)*\.\d+(_\d+)*

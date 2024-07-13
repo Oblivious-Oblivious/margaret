@@ -203,12 +203,11 @@ void parser_keyword_list(Token **table, char ***fmcodes) {
 }
 
 void parser_scalar(Token **table, char ***fmcodes) {
-  if(la1value("$") && la2value("nil")) {
-    generate(FM_NIL);
-  } else if(la1value("$") && la2value("false")) {
-    generate(FM_FALSE);
-  } else if(la1value("$") && la2value("true")) {
-    generate(FM_TRUE);
+  if(la1value(":") && la2value(":")) {
+    ensure_value(":", "expected ':' on label.");
+    ensure_value(":", "expected ':' on label.");
+    generate(FM_LABEL);
+    generate(ensure_type(TOKEN_IDENTIFIER, "expected identifier on label."));
   } else if(la1type(TOKEN_INTEGER)) {
     generate(FM_INTEGER);
     generate(ensure_type(TOKEN_INTEGER, "expected integer literal."));
@@ -224,7 +223,16 @@ void parser_scalar(Token **table, char ***fmcodes) {
 }
 
 void parser_variable(Token **table, char ***fmcodes) {
-  if(la1value("@self")) {
+  if(la1value("$nil")) {
+    ensure_value("$nil", "expected '$nil' on nil literal.");
+    generate(FM_NIL);
+  } else if(la1value("$false")) {
+    ensure_value("$false", "expected '$false' on false literal.");
+    generate(FM_FALSE);
+  } else if(la1value("$true")) {
+    ensure_value("$true", "expected '$true' on true literal.");
+    generate(FM_TRUE);
+  } else if(la1value("@self")) {
     ensure_value("@self", "expected '@self' on instance variable declaration.");
     generate(FM_SELF);
   } else if(la1value("@super")) {
@@ -232,15 +240,15 @@ void parser_variable(Token **table, char ***fmcodes) {
       "@super", "expected '@super' on instance variable declaration."
     );
     generate(FM_SUPER);
-  } else if(la1type(TOKEN_INSTANCE)) {
-    generate(FM_INSTANCE);
-    generate(ensure_type(
-      TOKEN_INSTANCE, "expected identifier on instance variable declaration."
-    ));
   } else if(la1type(TOKEN_GLOBAL)) {
     generate(FM_GLOBAL);
     generate(ensure_type(
       TOKEN_GLOBAL, "expected identifier on global variable declaration."
+    ));
+  } else if(la1type(TOKEN_INSTANCE)) {
+    generate(FM_INSTANCE);
+    generate(ensure_type(
+      TOKEN_INSTANCE, "expected identifier on instance variable declaration."
     ));
   } else if(la1type(TOKEN_IDENTIFIER)) {
     generate(FM_LOCAL);
