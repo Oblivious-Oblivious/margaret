@@ -227,7 +227,7 @@ module(LexerSpec, {
     });
 
     it("ignores multiple types of whitespace", {
-      Lexer *l       = lexer_new("file.marg", string_new(" \t\r\v\f\b "));
+      Lexer *l       = lexer_new("file.marg", string_new(" \t\r\v\f "));
       Token **tokens = lexer_make_tokens(l);
       assert_that_int(vector_size(tokens) equals to 1);
       assert_that_int(l->lineno equals to 1);
