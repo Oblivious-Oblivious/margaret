@@ -30,6 +30,7 @@
 #define bit_list()               parser_bit_list(table, fmcodes)
 #define bit()                    parser_bit(table, fmcodes)
 #define association_list()       parser_association_list(table, fmcodes)
+#define key()                    parser_key(table, fmcodes)
 #define method_definition()      parser_method_definition(table, fmcodes)
 #define keyword_list()           parser_keyword_list(table, fmcodes)
 #define scalar()                 parser_scalar(table, fmcodes)
@@ -179,6 +180,14 @@ void parser_association_list(Token **table, char ***fmcodes) {
   // TODO
   (void)table;
   (void)fmcodes;
+void parser_key(Token **table, char ***fmcodes) {
+  if(la1type(TOKEN_IDENTIFIER)) {
+    generate(FM_STRING);
+    generate(ensure_type(TOKEN_IDENTIFIER, "expected identifier on key."));
+  } else if(la1type(TOKEN_STRING)) {
+    generate(FM_STRING);
+    generate(ensure_type(TOKEN_STRING, "expected string on key."));
+  }
 }
 
 void parser_method_definition(Token **table, char ***fmcodes) {
@@ -267,6 +276,7 @@ void parser_variable(Token **table, char ***fmcodes) {
 #undef bit_list
 #undef bit
 #undef association_list
+#undef key
 #undef method_definition
 #undef keyword_list
 #undef scalar

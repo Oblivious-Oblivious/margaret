@@ -6,8 +6,21 @@
 
 module(unit_list, {
   it("parses a list of empty groups", {
+    char **empty = NULL;
+    parse("", empty);
+    parse(",", empty);
+    parse(",,,,,", empty);
     parse("()", vector_new(FM_NIL));
+    parse("(,)", vector_new(FM_NIL));
+    parse("(,),", vector_new(FM_NIL));
+    parse("(,,(),),", vector_new(FM_NIL));
+    parse("(,(),(),),", vector_new(FM_NIL, FM_NIL));
+    parse("(),(),", vector_new(FM_NIL, FM_NIL));
     parse("(), (), (), ()", vector_new(FM_NIL, FM_NIL, FM_NIL, FM_NIL));
+    parse(
+      "((), (42), (), ())",
+      vector_new(FM_NIL, FM_INTEGER, string_new("42"), FM_NIL, FM_NIL)
+    );
   });
 
   unit();

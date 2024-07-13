@@ -63,8 +63,12 @@ bit:
   | scalar ':' ':' INTEGER
 
 association_list:
-    scalar : unit
-  | scalar : unit ',' association_list
+    key ':' unit
+  | key ':' unit ',' association_list
+
+key:
+    IDENTIFIER
+  | STRING
 
 method_definition:
     IDENTIFIER '=>' unit

@@ -2,6 +2,7 @@
 #define __ASSOCIATION_LIST_MODULE_SPEC_H_
 
 #include "../../generic/_helpers.h"
+#include "key.module.spec.h"
 
 module(association_list, {
   it("parses association lists", {
@@ -25,6 +26,8 @@ module(association_list, {
       )
     );
   });
+
+  key();
 })
 
 #endif

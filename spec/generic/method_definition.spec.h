@@ -4,6 +4,35 @@
 #include "_helpers.h"
 
 module(method_definition_spec, {
+  it("parses lhs methods", {
+    parse(
+      "# - => 42",
+      vector_new(
+        FM_START_LHS_METHOD,
+        FM_METHOD_RECEIVER,
+        FM_METHOD_ANY_OBJECT,
+        FM_METHOD_NAME,
+        string_new("-"),
+        FM_INTEGER,
+        string_new("42"),
+        FM_END_LHS_METHOD
+      )
+    );
+
+    parse(
+      "# $false ! => $true",
+      vector_new(
+        FM_START_LHS_METHOD,
+        FM_METHOD_RECEIVER,
+        FM_FALSE,
+        FM_METHOD_NAME,
+        string_new("!"),
+        FM_TRUE,
+        FM_END_LHS_METHOD
+      )
+    );
+  });
+
   it("parses unary methods", {
     parse(
       "# $true not => $false",
