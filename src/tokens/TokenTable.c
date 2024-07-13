@@ -3,7 +3,7 @@
 #include "../../libs/EmeraldsString/export/EmeraldsString.h" /* IWYU pragma: keep */
 #include "../../libs/EmeraldsVector/export/EmeraldsVector.h" /* IWYU pragma: keep */
 
-#include <stdio.h> /* fprintf */
+#include <stdio.h> /* printf */
 
 /**
  * @brief
@@ -14,8 +14,7 @@
  * @return string* -> NULL pointer
  */
 static char *error(Token *token, const char *message) {
-  fprintf(
-    stderr,
+  printf(
     "%s:%zu:%zu \033[1;31merror:\033[0m %s  Token: \033[1;31m`%s`\033[0m\n",
     token->filename,
     token->line_number,

@@ -6,7 +6,7 @@
 #include "alternate_to_dec.h"
 #include "Regex.h"
 
-#include <stdio.h> /* fprintf */
+#include <stdio.h> /* printf */
 
 Lexer *lexer_new(const char *filename, char *text) {
   Lexer *self = (Lexer *)collected_malloc(sizeof(Lexer));
@@ -20,8 +20,11 @@ Lexer *lexer_new(const char *filename, char *text) {
 }
 
 void *lexer_error(Lexer *self, const char *message, char *token) {
-  fprintf(
-    stderr,
+  if(self->charno == 0) {
+    self->charno = 1;
+  }
+
+  printf(
     "%s:%zu:%zu: \033[1;31merror:\033[0m %s on `%s`\n",
     self->filename,
     self->lineno,
