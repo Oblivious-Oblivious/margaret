@@ -111,6 +111,8 @@ Token **lexer_make_tokens(Lexer *self) {
           }
           goto new_token;
         } else if(REGEX_LIST[i].type == TOKEN_STRING) {
+          string_skip_first(token, 1);
+          string_ignore_last(token, 1);
           self->lineno += vector_size(string_split(token, "\n"));
           goto new_token;
         } else {
