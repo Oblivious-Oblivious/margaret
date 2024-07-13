@@ -43,6 +43,8 @@ module(ParserSpec, {
     assert_that_charptr(token_table_lookahead(p->table, 4)->value equals to ")"
     );
   });
+
+  first_unit();
 })
 
 #endif
