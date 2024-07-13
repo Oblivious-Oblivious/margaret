@@ -11,8 +11,8 @@
 #define parse(code, expected_result)                                             \
   do {                                                                           \
     Lexer *l                         = lexer_new("file.marg", string_new(code)); \
-    Parser *p                        = parser_new(lexer_make_tokens(l));         \
-    char **res                       = parser_analyze_syntax(p);                 \
+    Token **table                    = lexer_make_tokens(l);                     \
+    char **res                       = parser_analyze_syntax(table);             \
     size_t size_of_res               = vector_size(res);                         \
     size_t the_same_size_as_expected = vector_size(expected_result);             \
                                                                                  \
@@ -28,8 +28,8 @@
 #define debug(code, expected_result)                                             \
   do {                                                                           \
     Lexer *l                         = lexer_new("file.marg", string_new(code)); \
-    Parser *p                        = parser_new(lexer_make_tokens(l));         \
-    char **res                       = parser_analyze_syntax(p);                 \
+    Token **table                    = lexer_make_tokens(l);                     \
+    char **res                       = parser_analyze_syntax(table);             \
     size_t size_of_res               = vector_size(res);                         \
     size_t the_same_size_as_expected = vector_size(expected_result);             \
     printf("[");                                                                 \
@@ -56,12 +56,12 @@
     }                                                                            \
   } while(0)
 
-#define error(code, error_message)                         \
-  do {                                                     \
-    Lexer *l   = lexer_new("file.marg", string_new(code)); \
-    Parser *p  = parser_new(lexer_make_tokens(l));         \
-    char **res = parser_analyze_syntax(p);                 \
-    (void)res;                                             \
+#define error(code, error_message)                            \
+  do {                                                        \
+    Lexer *l      = lexer_new("file.marg", string_new(code)); \
+    Token **table = lexer_make_tokens(l);                     \
+    char **res    = parser_analyze_syntax(table);             \
+    (void)res;                                                \
   } while(0)
 
 #endif

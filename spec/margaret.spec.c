@@ -156,7 +156,7 @@ spec_suite({
 
   OptimizerSpec();
 
-  // ParserSpec();
+  ParserSpec();
 
   ScannerSpec();
 

@@ -22,9 +22,7 @@ Token **READ(char *chars, char *filename) {
   }
 }
 
-char **FORMALIZE(Token **tokens) {
-  return parser_analyze_syntax(parser_new(tokens));
-}
+char **FORMALIZE(Token **tokens) { return parser_analyze_syntax(tokens); }
 
 VM *EMIT(VM *vm, char **formal_bytecode) {
   return emitter_emit(vm, formal_bytecode);
