@@ -14,9 +14,10 @@ module(booleans_spec, {
         string_new("3"),
         FM_BINARY,
         string_new("=="),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("b"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -26,9 +27,10 @@ module(booleans_spec, {
         string_new("2"),
         FM_UNARY,
         string_new("dosth!"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("b"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -40,9 +42,10 @@ module(booleans_spec, {
         string_new("y"),
         FM_BINARY,
         string_new("!="),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("b"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -54,9 +57,10 @@ module(booleans_spec, {
         string_new("y"),
         FM_BINARY,
         string_new("==="),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("b"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -68,9 +72,10 @@ module(booleans_spec, {
         string_new("y"),
         FM_BINARY,
         string_new("!=="),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("b"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -82,9 +87,10 @@ module(booleans_spec, {
         string_new("y"),
         FM_BINARY,
         string_new(">"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("b"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -96,9 +102,10 @@ module(booleans_spec, {
         string_new("y"),
         FM_BINARY,
         string_new("<"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("b"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -110,9 +117,10 @@ module(booleans_spec, {
         string_new("y"),
         FM_BINARY,
         string_new(">="),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("b"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -124,9 +132,10 @@ module(booleans_spec, {
         string_new("y"),
         FM_BINARY,
         string_new("<="),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("b"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -136,9 +145,10 @@ module(booleans_spec, {
         string_new("b"),
         FM_UNARY,
         string_new("not"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("b"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -158,9 +168,10 @@ module(booleans_spec, {
         string_new(">"),
         FM_BINARY,
         string_new("&&"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("b"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -180,9 +191,10 @@ module(booleans_spec, {
         string_new(">"),
         FM_BINARY,
         string_new("||"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("b"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -203,9 +215,10 @@ module(booleans_spec, {
         FM_KEYWORD,
         string_new("and:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("b"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -226,9 +239,10 @@ module(booleans_spec, {
         FM_KEYWORD,
         string_new("or:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("b"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -249,9 +263,10 @@ module(booleans_spec, {
         FM_KEYWORD,
         string_new("eqv:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("b"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -272,9 +287,10 @@ module(booleans_spec, {
         FM_KEYWORD,
         string_new("xor:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("b"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -289,9 +305,10 @@ module(booleans_spec, {
         FM_KEYWORD,
         string_new("between:and:"),
         string_new("2"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("b"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -304,9 +321,10 @@ module(booleans_spec, {
         FM_KEYWORD,
         string_new("is_kind_of:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("b"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -319,9 +337,10 @@ module(booleans_spec, {
         FM_KEYWORD,
         string_new("is_member_of:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("b"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -334,9 +353,10 @@ module(booleans_spec, {
         FM_KEYWORD,
         string_new("responds_to:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("b"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -346,9 +366,10 @@ module(booleans_spec, {
         string_new("x"),
         FM_UNARY,
         string_new("is_nil?"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("b"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -358,9 +379,10 @@ module(booleans_spec, {
         string_new("x"),
         FM_UNARY,
         string_new("is_zero?"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("b"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -370,9 +392,10 @@ module(booleans_spec, {
         string_new("x"),
         FM_UNARY,
         string_new("is_positive?"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("b"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -382,9 +405,10 @@ module(booleans_spec, {
         string_new("x"),
         FM_UNARY,
         string_new("is_negative?"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("b"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -394,9 +418,10 @@ module(booleans_spec, {
         string_new("x"),
         FM_UNARY,
         string_new("is_even?"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("b"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -406,9 +431,10 @@ module(booleans_spec, {
         string_new("x"),
         FM_UNARY,
         string_new("is_odd?"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("b"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -418,9 +444,10 @@ module(booleans_spec, {
         string_new("x"),
         FM_UNARY,
         string_new("is_integer?"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("b"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -430,9 +457,10 @@ module(booleans_spec, {
         string_new("x"),
         FM_UNARY,
         string_new("is_float?"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("b"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -442,9 +470,10 @@ module(booleans_spec, {
         string_new("x"),
         FM_UNARY,
         string_new("is_number?"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("b"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -454,9 +483,10 @@ module(booleans_spec, {
         string_new("a"),
         FM_UNARY,
         string_new("is_uppercase?"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("b"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -466,9 +496,10 @@ module(booleans_spec, {
         string_new("a"),
         FM_UNARY,
         string_new("is_lowercase?"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("b"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
   });

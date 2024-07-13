@@ -17,8 +17,7 @@ module(conditionals_spec, {
         FM_INTEGER,
         string_new("42"),
         FM_BINARY,
-        string_new("+"),
-        FM_POP
+        string_new("+")
       )
     );
     parse(
@@ -34,8 +33,7 @@ module(conditionals_spec, {
         string_new("42"),
         FM_KEYWORD,
         string_new("if_true:"),
-        string_new("1"),
-        FM_POP
+        string_new("1")
       )
     );
     parse(
@@ -51,14 +49,13 @@ module(conditionals_spec, {
         string_new("41"),
         FM_KEYWORD,
         string_new("if_false:"),
-        string_new("1"),
-        FM_POP
+        string_new("1")
       )
     );
     parse(
-      "(x > 10 \
-                if_true: 42 \
-                if_false: 41)",
+      "x > 10 \
+        if_true: 42 \
+        if_false: 41",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -72,19 +69,17 @@ module(conditionals_spec, {
         string_new("41"),
         FM_KEYWORD,
         string_new("if_true:if_false:"),
-        string_new("2"),
-        FM_POP
+        string_new("2")
       )
     );
     parse(
-      "(x > 10 \
-                if_true: ( \
-                    x > 5 \
-                        if_true: 1 \
-                        if_false: 2 \
-                ) \
-                if_false: 3 \
-        )",
+      "x > 10 \
+        if_true: { \
+          x > 5 \
+            if_true: 1 \
+            if_false: 2 \
+        } \
+        if_false: 3",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -92,6 +87,7 @@ module(conditionals_spec, {
         string_new("10"),
         FM_BINARY,
         string_new(">"),
+        FM_START_PROC,
         FM_LOCAL,
         string_new("x"),
         FM_INTEGER,
@@ -105,21 +101,20 @@ module(conditionals_spec, {
         FM_KEYWORD,
         string_new("if_true:if_false:"),
         string_new("2"),
+        FM_END_PROC,
         FM_INTEGER,
         string_new("3"),
         FM_KEYWORD,
         string_new("if_true:if_false:"),
-        string_new("2"),
-        FM_POP
+        string_new("2")
       )
     );
     parse(
-      "(obj match: [ \
-                    [1, 100], \
-                    [2, 200], \
-                    [3, 300], \
-                ] \
-        )",
+      "(obj match: %[ \
+        %[1, 100], \
+        %[2, 200], \
+        %[3, 300], \
+      ])",
       vector_new(
         FM_LOCAL,
         string_new("obj"),
@@ -127,30 +122,29 @@ module(conditionals_spec, {
         string_new("1"),
         FM_INTEGER,
         string_new("100"),
-        FM_TENSOR,
+        FM_TUPLE,
         string_new("2"),
         FM_INTEGER,
         string_new("2"),
         FM_INTEGER,
         string_new("200"),
-        FM_TENSOR,
+        FM_TUPLE,
         string_new("2"),
         FM_INTEGER,
         string_new("3"),
         FM_INTEGER,
         string_new("300"),
-        FM_TENSOR,
+        FM_TUPLE,
         string_new("2"),
-        FM_TENSOR,
+        FM_TUPLE,
         string_new("3"),
         FM_KEYWORD,
         string_new("match:"),
-        string_new("1"),
-        FM_POP
+        string_new("1")
       )
     );
     parse(
-      "obj match: {\"1\": 100, \"2\": 200, \"3\": 300}",
+      "obj match: %{\"1\": 100, \"2\": 200, \"3\": 300}",
       vector_new(
         FM_LOCAL,
         string_new("obj"),
@@ -170,8 +164,7 @@ module(conditionals_spec, {
         string_new("6"),
         FM_KEYWORD,
         string_new("match:"),
-        string_new("1"),
-        FM_POP
+        string_new("1")
       )
     );
   });

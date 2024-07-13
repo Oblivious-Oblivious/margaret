@@ -12,9 +12,10 @@ module(date_time_spec, {
         string_new("Date"),
         FM_UNARY,
         string_new("today"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -24,9 +25,10 @@ module(date_time_spec, {
         string_new("Date"),
         FM_UNARY,
         string_new("day_and_time_now"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -39,9 +41,10 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("from_string:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -58,9 +61,10 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("day:month:year:"),
         string_new("3"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -73,9 +77,10 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("from_days:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -88,9 +93,10 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("day_of_week:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     ); // 1
     parse(
@@ -103,9 +109,10 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("index_of_month:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     ); // 3
     parse(
@@ -120,9 +127,10 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("days_in_month:for_year:"),
         string_new("2"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     ); // 28 or 29
     parse(
@@ -135,9 +143,10 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("days_in_year:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     ); // 365 or 66
     parse(
@@ -150,9 +159,10 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("name_of_day:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     ); // Monday
     parse(
@@ -165,9 +175,10 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("is_leap_year?:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     ); // true or false
 
@@ -180,9 +191,10 @@ module(date_time_spec, {
         string_new("today"),
         FM_UNARY,
         string_new("weekday"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     ); // What day is today
     parse(
@@ -194,9 +206,10 @@ module(date_time_spec, {
         string_new("today"),
         FM_UNARY,
         string_new("previous"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     ); // Prev day from today
     parse(
@@ -208,9 +221,10 @@ module(date_time_spec, {
         string_new("today"),
         FM_UNARY,
         string_new("day_of_month"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     ); // 1-31
     parse(
@@ -222,9 +236,10 @@ module(date_time_spec, {
         string_new("today"),
         FM_UNARY,
         string_new("day"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     ); // 1-366
     parse(
@@ -236,9 +251,10 @@ module(date_time_spec, {
         string_new("today"),
         FM_UNARY,
         string_new("first_day_of_month"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -250,9 +266,10 @@ module(date_time_spec, {
         string_new("today"),
         FM_UNARY,
         string_new("month_name"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -264,9 +281,10 @@ module(date_time_spec, {
         string_new("today"),
         FM_UNARY,
         string_new("month_index"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -278,9 +296,10 @@ module(date_time_spec, {
         string_new("today"),
         FM_UNARY,
         string_new("days_in_month"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     ); // 1-31
     parse(
@@ -292,9 +311,10 @@ module(date_time_spec, {
         string_new("today"),
         FM_UNARY,
         string_new("year"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     ); // 2022
     parse(
@@ -306,9 +326,10 @@ module(date_time_spec, {
         string_new("today"),
         FM_UNARY,
         string_new("days_in_year"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -320,9 +341,10 @@ module(date_time_spec, {
         string_new("today"),
         FM_UNARY,
         string_new("days_left_in_year"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -334,9 +356,10 @@ module(date_time_spec, {
         string_new("today"),
         FM_UNARY,
         string_new("to_seconds"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -351,9 +374,10 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("add_days:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -368,9 +392,10 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("subtract_days:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -387,9 +412,10 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("subtract_date:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
   });
@@ -402,9 +428,10 @@ module(date_time_spec, {
         string_new("Time"),
         FM_UNARY,
         string_new("now"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -414,9 +441,10 @@ module(date_time_spec, {
         string_new("Time"),
         FM_UNARY,
         string_new("date_and_time_now"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -429,9 +457,10 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("from_string:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -444,9 +473,10 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("from_string:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -467,9 +497,10 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("from_seconds:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -479,9 +510,10 @@ module(date_time_spec, {
         string_new("Time"),
         FM_UNARY,
         string_new("millisecond_clock_value"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     ); // Since midnight?
     parse(
@@ -491,9 +523,10 @@ module(date_time_spec, {
         string_new("Time"),
         FM_UNARY,
         string_new("total_seconds"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     ); // Since beginning
 
@@ -506,9 +539,10 @@ module(date_time_spec, {
         string_new("now"),
         FM_UNARY,
         string_new("seconds"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     ); // Seconds past current minute
     parse(
@@ -520,9 +554,10 @@ module(date_time_spec, {
         string_new("now"),
         FM_UNARY,
         string_new("minutes"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     ); // Minutes past current hour
     parse(
@@ -534,9 +569,10 @@ module(date_time_spec, {
         string_new("now"),
         FM_UNARY,
         string_new("hours"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     ); // Hours past midnight
     parse(
@@ -553,9 +589,10 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("add_time:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -572,9 +609,10 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("subtract_time:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -586,9 +624,10 @@ module(date_time_spec, {
         string_new("now"),
         FM_UNARY,
         string_new("as_seconds"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
   });

@@ -5,8 +5,8 @@
 
 module(tensors_spec, {
   it("parses tensor literals", {
-    parse("[]", vector_new(FM_TENSOR, string_new("0"), FM_POP));
-    parse("([])", vector_new(FM_TENSOR, string_new("0"), FM_POP));
+    parse("[]", vector_new(FM_TENSOR, string_new("0")));
+    parse("([])", vector_new(FM_TENSOR, string_new("0")));
     parse(
       "[[], []]",
       vector_new(
@@ -15,8 +15,7 @@ module(tensors_spec, {
         FM_TENSOR,
         string_new("0"),
         FM_TENSOR,
-        string_new("2"),
-        FM_POP
+        string_new("2")
       )
     );
     parse(
@@ -27,8 +26,7 @@ module(tensors_spec, {
         FM_INTEGER,
         string_new("42"),
         FM_TENSOR,
-        string_new("2"),
-        FM_POP
+        string_new("2")
       )
     );
     parse(
@@ -39,8 +37,7 @@ module(tensors_spec, {
         FM_INTEGER,
         string_new("42"),
         FM_TENSOR,
-        string_new("2"),
-        FM_POP
+        string_new("2")
       )
     );
     parse(
@@ -53,8 +50,7 @@ module(tensors_spec, {
         FM_LOCAL,
         string_new("var"),
         FM_TENSOR,
-        string_new("3"),
-        FM_POP
+        string_new("3")
       )
     );
     parse(
@@ -69,12 +65,11 @@ module(tensors_spec, {
         FM_LOCAL,
         string_new("v2"),
         FM_TENSOR,
-        string_new("4"),
-        FM_POP
+        string_new("4")
       )
     );
     parse(
-      "[42, \"Hello\", v1, v2, (), [], {}, x = 1]",
+      "[42, \"Hello\", v1, v2, (), [], %{}, x = 1]",
       vector_new(
         FM_INTEGER,
         string_new("42"),
@@ -91,11 +86,12 @@ module(tensors_spec, {
         string_new("0"),
         FM_INTEGER,
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
+        FM_BINARY,
+        string_new("="),
         FM_TENSOR,
-        string_new("8"),
-        FM_POP
+        string_new("8")
       )
     );
   });

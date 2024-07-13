@@ -5,9 +5,9 @@
 
 module(characters_spec, {
   it("parses character literals", {
-    parse("'a'", vector_new(FM_STRING, string_new("a"), FM_POP));
-    parse("'\n'", vector_new(FM_STRING, string_new("\n"), FM_POP));
-    parse("'œ'", vector_new(FM_STRING, string_new("œ"), FM_POP));
+    parse("'a'", vector_new(FM_STRING, string_new("a")));
+    parse("'\n'", vector_new(FM_STRING, string_new("\n")));
+    parse("'œ'", vector_new(FM_STRING, string_new("œ")));
   });
 
   it("parses character messages", {
@@ -18,9 +18,10 @@ module(characters_spec, {
         string_new("a"),
         FM_UNARY,
         string_new("is_lowercase?"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -30,9 +31,10 @@ module(characters_spec, {
         string_new("a"),
         FM_UNARY,
         string_new("is_uppercase?"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -42,9 +44,10 @@ module(characters_spec, {
         string_new("a"),
         FM_UNARY,
         string_new("is_letter?"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -54,9 +57,10 @@ module(characters_spec, {
         string_new("a"),
         FM_UNARY,
         string_new("is_digit?"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -66,9 +70,10 @@ module(characters_spec, {
         string_new("a"),
         FM_UNARY,
         string_new("is_alphanumeric?"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -78,9 +83,10 @@ module(characters_spec, {
         string_new("a"),
         FM_UNARY,
         string_new("is_separator?"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -90,9 +96,10 @@ module(characters_spec, {
         string_new("a"),
         FM_UNARY,
         string_new("is_vowel?"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -102,9 +109,10 @@ module(characters_spec, {
         string_new("a"),
         FM_UNARY,
         string_new("to_digit"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -114,9 +122,10 @@ module(characters_spec, {
         string_new("a"),
         FM_UNARY,
         string_new("to_lowercase"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -126,9 +135,10 @@ module(characters_spec, {
         string_new("a"),
         FM_UNARY,
         string_new("to_uppercase"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -138,9 +148,10 @@ module(characters_spec, {
         string_new("a"),
         FM_UNARY,
         string_new("to_ascii"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -152,9 +163,10 @@ module(characters_spec, {
         string_new("b"),
         FM_BINARY,
         string_new("<="),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
   });

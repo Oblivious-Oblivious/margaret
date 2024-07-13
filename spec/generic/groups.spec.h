@@ -5,33 +5,27 @@
 
 module(groups_spec, {
   it("parses an empty group as a first unit", {
-    parse("()", vector_new(FM_NIL, FM_POP));
+    parse("()", vector_new(FM_NIL));
   });
 
   it("parses multiple groups as translation units", {
-    parse("(())", vector_new(FM_NIL, FM_POP));
-    parse("((()))", vector_new(FM_NIL, FM_POP));
-    parse(
-      "((), (), (), ())",
-      vector_new(FM_NIL, FM_POP, FM_NIL, FM_POP, FM_NIL, FM_POP, FM_NIL, FM_POP)
-    );
-    parse("((()), ())", vector_new(FM_NIL, FM_POP, FM_NIL, FM_POP));
+    parse("(())", vector_new(FM_NIL));
+    parse("((()))", vector_new(FM_NIL));
+    parse("((), (), (), ())", vector_new(FM_NIL, FM_NIL, FM_NIL, FM_NIL));
+    parse("((()), ())", vector_new(FM_NIL, FM_NIL));
   });
 
   it("parses infinite groups of groups", {
-    parse("(42)", vector_new(FM_INTEGER, string_new("42"), FM_POP));
+    parse("(42)", vector_new(FM_INTEGER, string_new("42")));
     parse(
       "(42, 43, 44)",
       vector_new(
         FM_INTEGER,
         string_new("42"),
-        FM_POP,
         FM_INTEGER,
         string_new("43"),
-        FM_POP,
         FM_INTEGER,
-        string_new("44"),
-        FM_POP
+        string_new("44")
       )
     );
     parse(
@@ -39,14 +33,10 @@ module(groups_spec, {
       vector_new(
         FM_INTEGER,
         string_new("42"),
-        FM_POP,
         FM_NIL,
-        FM_POP,
         FM_INTEGER,
         string_new("43"),
-        FM_POP,
-        FM_NIL,
-        FM_POP
+        FM_NIL
       )
     );
     parse(
@@ -54,39 +44,29 @@ module(groups_spec, {
       vector_new(
         FM_INTEGER,
         string_new("42"),
-        FM_POP,
         FM_INTEGER,
         string_new("43"),
-        FM_POP,
         FM_INTEGER,
         string_new("44"),
-        FM_POP,
-        FM_NIL,
-        FM_POP
+        FM_NIL
       )
     );
-    parse("((((()))))", vector_new(FM_NIL, FM_POP));
+    parse("((((()))))", vector_new(FM_NIL));
     parse(
       "(1, 2, (10, 20, 30), 3)",
       vector_new(
         FM_INTEGER,
         string_new("1"),
-        FM_POP,
         FM_INTEGER,
         string_new("2"),
-        FM_POP,
         FM_INTEGER,
         string_new("10"),
-        FM_POP,
         FM_INTEGER,
         string_new("20"),
-        FM_POP,
         FM_INTEGER,
         string_new("30"),
-        FM_POP,
         FM_INTEGER,
-        string_new("3"),
-        FM_POP
+        string_new("3")
       )
     );
   });
@@ -105,9 +85,10 @@ module(groups_spec, {
         string_new("4"),
         FM_TENSOR,
         string_new("4"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("arr"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -126,8 +107,7 @@ module(groups_spec, {
         FM_INTEGER,
         string_new("3"),
         FM_BINARY,
-        string_new("<<"),
-        FM_POP
+        string_new("<<")
       )
     );
     parse(
@@ -153,8 +133,7 @@ module(groups_spec, {
         string_new("3"),
         FM_KEYWORD,
         string_new("add:"),
-        string_new("1"),
-        FM_POP
+        string_new("1")
       )
     );
     parse(
@@ -169,7 +148,6 @@ module(groups_spec, {
         FM_KEYWORD,
         string_new("at:put:"),
         string_new("2"),
-        FM_POP,
         FM_LOCAL,
         string_new("arr"),
         FM_INTEGER,
@@ -178,8 +156,7 @@ module(groups_spec, {
         string_new("6"),
         FM_KEYWORD,
         string_new("at:put:"),
-        string_new("2"),
-        FM_POP
+        string_new("2")
       )
     );
     parse(
@@ -189,9 +166,10 @@ module(groups_spec, {
         string_new("arr"),
         FM_UNARY,
         string_new("is_empty?"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("b"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -201,9 +179,10 @@ module(groups_spec, {
         string_new("arr"),
         FM_UNARY,
         string_new("size"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -216,9 +195,10 @@ module(groups_spec, {
         FM_KEYWORD,
         string_new("at:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -231,9 +211,10 @@ module(groups_spec, {
         FM_KEYWORD,
         string_new("includes?:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -246,9 +227,10 @@ module(groups_spec, {
         FM_KEYWORD,
         string_new("includes:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -263,9 +245,10 @@ module(groups_spec, {
         FM_KEYWORD,
         string_new("copy_from:to:"),
         string_new("2"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -280,9 +263,10 @@ module(groups_spec, {
         FM_KEYWORD,
         string_new("index_of:if_absent:"),
         string_new("2"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -295,9 +279,10 @@ module(groups_spec, {
         FM_KEYWORD,
         string_new("occurrences_of:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -306,6 +291,8 @@ module(groups_spec, {
         FM_LOCAL,
         string_new("arr"),
         FM_START_PROC,
+        FM_PROC_PARAMETER,
+        string_new("a"),
         FM_LOCAL,
         string_new("a"),
         FM_UNARY,
@@ -313,8 +300,7 @@ module(groups_spec, {
         FM_END_PROC,
         FM_KEYWORD,
         string_new("each:"),
-        string_new("1"),
-        FM_POP
+        string_new("1")
       )
     );
     parse(
@@ -323,6 +309,8 @@ module(groups_spec, {
         FM_LOCAL,
         string_new("arr"),
         FM_START_PROC,
+        FM_PROC_PARAMETER,
+        string_new("a"),
         FM_LOCAL,
         string_new("a"),
         FM_INTEGER,
@@ -341,9 +329,10 @@ module(groups_spec, {
         FM_KEYWORD,
         string_new("conform:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("b"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -352,6 +341,8 @@ module(groups_spec, {
         FM_LOCAL,
         string_new("arr"),
         FM_START_PROC,
+        FM_PROC_PARAMETER,
+        string_new("a"),
         FM_LOCAL,
         string_new("a"),
         FM_INTEGER,
@@ -362,9 +353,10 @@ module(groups_spec, {
         FM_KEYWORD,
         string_new("select:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -373,6 +365,8 @@ module(groups_spec, {
         FM_LOCAL,
         string_new("arr"),
         FM_START_PROC,
+        FM_PROC_PARAMETER,
+        string_new("a"),
         FM_LOCAL,
         string_new("a"),
         FM_INTEGER,
@@ -383,9 +377,10 @@ module(groups_spec, {
         FM_KEYWORD,
         string_new("reject:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -394,6 +389,8 @@ module(groups_spec, {
         FM_LOCAL,
         string_new("arr"),
         FM_START_PROC,
+        FM_PROC_PARAMETER,
+        string_new("a"),
         FM_LOCAL,
         string_new("a"),
         FM_LOCAL,
@@ -404,9 +401,10 @@ module(groups_spec, {
         FM_KEYWORD,
         string_new("collect:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -415,6 +413,8 @@ module(groups_spec, {
         FM_LOCAL,
         string_new("arr"),
         FM_START_PROC,
+        FM_PROC_PARAMETER,
+        string_new("a"),
         FM_LOCAL,
         string_new("a"),
         FM_INTEGER,
@@ -426,18 +426,18 @@ module(groups_spec, {
         FM_KEYWORD,
         string_new("detect:if_none:"),
         string_new("2"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
-      "( \
-            arr = [1, 2, 3, 4], \
-            sum = 0, \
-            arr each: { a | sum += a }, \
-            sum \
-        )",
+      "arr = [1, 2, 3, 4], \
+       sum = 0, \
+       arr each: { a | sum += a }, \
+       sum \
+      )",
       vector_new(
         FM_INTEGER,
         string_new("1"),
@@ -449,17 +449,21 @@ module(groups_spec, {
         string_new("4"),
         FM_TENSOR,
         string_new("4"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("arr"),
-        FM_POP,
+        FM_BINARY,
+        string_new("="),
         FM_INTEGER,
         string_new("0"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("sum"),
-        FM_POP,
+        FM_BINARY,
+        string_new("="),
         FM_LOCAL,
         string_new("arr"),
         FM_START_PROC,
+        FM_PROC_PARAMETER,
+        string_new("a"),
         FM_LOCAL,
         string_new("sum"),
         FM_LOCAL,
@@ -470,10 +474,8 @@ module(groups_spec, {
         FM_KEYWORD,
         string_new("each:"),
         string_new("1"),
-        FM_POP,
         FM_LOCAL,
-        string_new("sum"),
-        FM_POP
+        string_new("sum")
       )
     );
     parse(
@@ -484,6 +486,10 @@ module(groups_spec, {
         FM_INTEGER,
         string_new("0"),
         FM_START_PROC,
+        FM_PROC_PARAMETER,
+        string_new("a"),
+        FM_PROC_PARAMETER,
+        string_new("c"),
         FM_LOCAL,
         string_new("a"),
         FM_LOCAL,
@@ -494,9 +500,10 @@ module(groups_spec, {
         FM_KEYWORD,
         string_new("inject:into:"),
         string_new("2"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("sum"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -507,6 +514,10 @@ module(groups_spec, {
         FM_INTEGER,
         string_new("0"),
         FM_START_PROC,
+        FM_PROC_PARAMETER,
+        string_new("a"),
+        FM_PROC_PARAMETER,
+        string_new("c"),
         FM_LOCAL,
         string_new("a"),
         FM_LOCAL,
@@ -517,25 +528,30 @@ module(groups_spec, {
         FM_KEYWORD,
         string_new("fold:into:"),
         string_new("2"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("sum"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
       "(max = arr \
-                inject: 0 \
-                into: { a, c | \
-                    (a > c) if_true: a \
-                             if_false: b \
-                } \
-        )",
+        inject: 0 \
+        into: { a, c | \
+          (a > c) if_true: a \
+                  if_false: b \
+        } \
+      )",
       vector_new(
         FM_LOCAL,
         string_new("arr"),
         FM_INTEGER,
         string_new("0"),
         FM_START_PROC,
+        FM_PROC_PARAMETER,
+        string_new("a"),
+        FM_PROC_PARAMETER,
+        string_new("c"),
         FM_LOCAL,
         string_new("a"),
         FM_LOCAL,
@@ -553,9 +569,10 @@ module(groups_spec, {
         FM_KEYWORD,
         string_new("inject:into:"),
         string_new("2"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("max"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -565,9 +582,10 @@ module(groups_spec, {
         string_new("arr"),
         FM_UNARY,
         string_new("shuffled"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
   });

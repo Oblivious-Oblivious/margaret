@@ -6,8 +6,7 @@
 module(rational_spec, {
   it("parses rational literals", {
     parse(
-      "1r",
-      vector_new(FM_INTEGER, string_new("1"), FM_UNARY, string_new("r"), FM_POP)
+      "1r", vector_new(FM_INTEGER, string_new("1"), FM_UNARY, string_new("r"))
     );
     parse(
       "2/3r",
@@ -19,57 +18,65 @@ module(rational_spec, {
         FM_UNARY,
         string_new("r"),
         FM_BINARY,
-        string_new("/"),
-        FM_POP
+        string_new("/")
       )
     );
     parse(
       "-1r",
       vector_new(
-        FM_INTEGER, string_new("-1"), FM_UNARY, string_new("r"), FM_POP
+        FM_INTEGER,
+        string_new("1"),
+        FM_LHS,
+        string_new("-"),
+        FM_UNARY,
+        string_new("r")
       )
     );
     parse(
       "-2/3r",
       vector_new(
         FM_INTEGER,
-        string_new("-2"),
+        string_new("2"),
+        FM_LHS,
+        string_new("-"),
         FM_INTEGER,
         string_new("3"),
         FM_UNARY,
         string_new("r"),
         FM_BINARY,
-        string_new("/"),
-        FM_POP
+        string_new("/")
       )
     );
-    // TODO - Separate `-` message on its own token (avoids `-/` or `/-`)
     parse(
       "2/(-3r)",
       vector_new(
         FM_INTEGER,
         string_new("2"),
         FM_INTEGER,
-        string_new("-3"),
+        string_new("3"),
+        FM_LHS,
+        string_new("-"),
         FM_UNARY,
         string_new("r"),
         FM_BINARY,
-        string_new("/"),
-        FM_POP
+        string_new("/")
       )
     );
     parse(
       "-2/(-3r)",
       vector_new(
         FM_INTEGER,
-        string_new("-2"),
+        string_new("2"),
+        FM_LHS,
+        string_new("-"),
         FM_INTEGER,
-        string_new("-3"),
+        string_new("3"),
+        FM_LHS,
+        string_new("-"),
         FM_UNARY,
         string_new("r"),
         FM_BINARY,
-        string_new("/"),
-        FM_POP
+        string_new("/")
       )
     );
     parse(
@@ -77,18 +84,20 @@ module(rational_spec, {
       vector_new(
         FM_INTEGER,
         string_new("1"),
+        FM_LHS,
+        string_new("+"),
         FM_INTEGER,
         string_new("3"),
+        FM_LHS,
+        string_new("+"),
         FM_UNARY,
         string_new("r"),
         FM_BINARY,
-        string_new("/"),
-        FM_POP
+        string_new("/")
       )
     );
     parse(
-      "1.2r",
-      vector_new(FM_FLOAT, string_new("1.2"), FM_UNARY, string_new("r"), FM_POP)
+      "1.2r", vector_new(FM_FLOAT, string_new("1.2"), FM_UNARY, string_new("r"))
     );
     parse(
       "1_1/2_2r",
@@ -100,8 +109,7 @@ module(rational_spec, {
         FM_UNARY,
         string_new("r"),
         FM_BINARY,
-        string_new("/"),
-        FM_POP
+        string_new("/")
       )
     );
     parse(
@@ -114,8 +122,7 @@ module(rational_spec, {
         FM_UNARY,
         string_new("r"),
         FM_BINARY,
-        string_new("/"),
-        FM_POP
+        string_new("/")
       )
     );
   });

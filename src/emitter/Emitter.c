@@ -107,9 +107,7 @@ VM *emitter_emit(VM *vm, char **formal_bytecode) {
   for(size_t ip = 0; ip < bytecode_size; ip++) {
     char *opcode = formal_bytecode[ip];
 
-    switch_opcode_case(FM_POP) { emit_byte(OP_POP); }
-
-    opcode_case(FM_LOCAL) {
+    switch_opcode_case(FM_LOCAL) {
       char *variable_name = formal_bytecode[++ip];
       MargValue temporary = MARG_STRING(variable_name);
       emit_variable_length_op(OP_GET_LOCAL);
@@ -126,22 +124,6 @@ VM *emitter_emit(VM *vm, char **formal_bytecode) {
       MargValue temporary = MARG_STRING(variable_name);
       emit_variable_length_op(OP_GET_GLOBAL);
       emit_temporary(temporary);
-    }
-
-    opcode_case(FM_STORE_LOCAL) {
-      char *variable_name = formal_bytecode[++ip];
-      emit_variable_length_op(OP_SET_LOCAL);
-      emit_temporary(MARG_STRING(variable_name));
-    }
-    opcode_case(FM_STORE_INSTANCE) {
-      char *variable_name = formal_bytecode[++ip];
-      emit_variable_length_op(OP_SET_INSTANCE);
-      emit_temporary(MARG_STRING(variable_name));
-    }
-    opcode_case(FM_STORE_GLOBAL) {
-      char *variable_name = formal_bytecode[++ip];
-      emit_variable_length_op(OP_SET_GLOBAL);
-      emit_temporary(MARG_STRING(variable_name));
     }
 
     opcode_case(FM_NIL) { emit_byte(OP_PUT_NIL); }
@@ -278,7 +260,7 @@ VM *emitter_emit(VM *vm, char **formal_bytecode) {
       vm->current = vm->current->bound_proc;
     }
 
-    opcode_case(FM_ANY_OBJECT) {}
+    opcode_case(FM_METHOD_ANY_OBJECT) {}
     opcode_case(FM_METHOD_PARAMETER) {
       char *parameter_name = formal_bytecode[++ip];
       marg_tensor_add(

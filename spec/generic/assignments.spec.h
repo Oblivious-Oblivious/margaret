@@ -8,7 +8,12 @@ module(assignments_spec, {
     parse(
       "(x = 4)",
       vector_new(
-        FM_INTEGER, string_new("4"), FM_STORE_LOCAL, string_new("x"), FM_POP
+        FM_INTEGER,
+        string_new("4"),
+        FM_LOCAL,
+        string_new("x"),
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -16,13 +21,18 @@ module(assignments_spec, {
       vector_new(
         FM_INTEGER,
         string_new("6"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("z"),
-        FM_STORE_LOCAL,
+        FM_BINARY,
+        string_new("="),
+        FM_LOCAL,
         string_new("y"),
-        FM_STORE_LOCAL,
+        FM_BINARY,
+        string_new("="),
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -30,15 +40,18 @@ module(assignments_spec, {
       vector_new(
         FM_INTEGER,
         string_new("6"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("y"),
+        FM_BINARY,
+        string_new("="),
         FM_INTEGER,
         string_new("1"),
         FM_BINARY,
         string_new("+"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -48,21 +61,32 @@ module(assignments_spec, {
         string_new("Object"),
         FM_UNARY,
         string_new("new"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
       "var = 12",
       vector_new(
-        FM_INTEGER, string_new("12"), FM_STORE_LOCAL, string_new("var"), FM_POP
+        FM_INTEGER,
+        string_new("12"),
+        FM_LOCAL,
+        string_new("var"),
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
       "arr = []",
       vector_new(
-        FM_TENSOR, string_new("0"), FM_STORE_LOCAL, string_new("arr"), FM_POP
+        FM_TENSOR,
+        string_new("0"),
+        FM_LOCAL,
+        string_new("arr"),
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -74,15 +98,21 @@ module(assignments_spec, {
         string_new("2"),
         FM_BINARY,
         string_new("+"),
-        FM_STORE_INSTANCE,
+        FM_LOCAL,
         string_new("@x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
       "a = b",
       vector_new(
-        FM_LOCAL, string_new("b"), FM_STORE_LOCAL, string_new("a"), FM_POP
+        FM_LOCAL,
+        string_new("b"),
+        FM_LOCAL,
+        string_new("a"),
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -90,11 +120,14 @@ module(assignments_spec, {
       vector_new(
         FM_LOCAL,
         string_new("c"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("b"),
-        FM_STORE_LOCAL,
+        FM_BINARY,
+        string_new("="),
+        FM_LOCAL,
         string_new("a"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -102,11 +135,14 @@ module(assignments_spec, {
       vector_new(
         FM_INSTANCE,
         string_new("@c"),
-        FM_STORE_INSTANCE,
+        FM_INSTANCE,
         string_new("@b"),
-        FM_STORE_INSTANCE,
+        FM_BINARY,
+        string_new("="),
+        FM_INSTANCE,
         string_new("@a"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -114,11 +150,14 @@ module(assignments_spec, {
       vector_new(
         FM_GLOBAL,
         string_new("$c"),
-        FM_STORE_GLOBAL,
+        FM_GLOBAL,
         string_new("$b"),
-        FM_STORE_GLOBAL,
+        FM_BINARY,
+        string_new("="),
+        FM_GLOBAL,
         string_new("$a"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -126,15 +165,23 @@ module(assignments_spec, {
       vector_new(
         FM_INTEGER,
         string_new("42"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("d"),
-        FM_STORE_LOCAL,
+        FM_BINARY,
+        string_new("="),
+        FM_LOCAL,
         string_new("c"),
-        FM_STORE_LOCAL,
+        FM_BINARY,
+        string_new("="),
+        FM_LOCAL,
         string_new("b"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
+        FM_BINARY,
+        string_new("="),
+        FM_LOCAL,
         string_new("a"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -142,21 +189,26 @@ module(assignments_spec, {
       vector_new(
         FM_INTEGER,
         string_new("2"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("a"),
-        FM_POP,
+        FM_BINARY,
+        string_new("="),
         FM_INTEGER,
         string_new("3"),
-        FM_STORE_LOCAL,
-        string_new("b"),
-        FM_POP,
         FM_LOCAL,
         string_new("b"),
-        FM_STORE_LOCAL,
+        FM_BINARY,
+        string_new("="),
+        FM_LOCAL,
+        string_new("b"),
+        FM_LOCAL,
         string_new("a"),
-        FM_STORE_LOCAL,
+        FM_BINARY,
+        string_new("="),
+        FM_LOCAL,
         string_new("c"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -164,21 +216,26 @@ module(assignments_spec, {
       vector_new(
         FM_INTEGER,
         string_new("2"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("a"),
-        FM_POP,
+        FM_BINARY,
+        string_new("="),
         FM_INTEGER,
         string_new("3"),
-        FM_STORE_LOCAL,
-        string_new("b"),
-        FM_POP,
         FM_LOCAL,
         string_new("b"),
-        FM_STORE_LOCAL,
+        FM_BINARY,
+        string_new("="),
+        FM_LOCAL,
+        string_new("b"),
+        FM_LOCAL,
         string_new("a"),
-        FM_STORE_LOCAL,
+        FM_BINARY,
+        string_new("="),
+        FM_LOCAL,
         string_new("c"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -186,17 +243,22 @@ module(assignments_spec, {
       vector_new(
         FM_INTEGER,
         string_new("42"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("c"),
+        FM_BINARY,
+        string_new("="),
         FM_INTEGER,
         string_new("12"),
         FM_BINARY,
         string_new("+"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("b"),
-        FM_STORE_LOCAL,
+        FM_BINARY,
+        string_new("="),
+        FM_LOCAL,
         string_new("a"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -212,9 +274,10 @@ module(assignments_spec, {
         string_new("4"),
         FM_BINARY,
         string_new("*"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("a"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
   });
@@ -223,14 +286,6 @@ module(assignments_spec, {
     parse(
       "[a, b, c] = [1, 2, 3]",
       vector_new(
-        FM_LOCAL,
-        string_new("a"),
-        FM_LOCAL,
-        string_new("b"),
-        FM_LOCAL,
-        string_new("c"),
-        FM_TENSOR,
-        string_new("3"),
         FM_INTEGER,
         string_new("1"),
         FM_INTEGER,
@@ -239,9 +294,16 @@ module(assignments_spec, {
         string_new("3"),
         FM_TENSOR,
         string_new("3"),
+        FM_LOCAL,
+        string_new("a"),
+        FM_LOCAL,
+        string_new("b"),
+        FM_LOCAL,
+        string_new("c"),
+        FM_TENSOR,
+        string_new("3"),
         FM_BINARY,
-        string_new("="),
-        FM_POP
+        string_new("=")
       )
     );
     parse(
@@ -253,25 +315,25 @@ module(assignments_spec, {
         string_new("4"),
         FM_BINARY,
         string_new("+"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("a"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
       "2 = 3 + 4",
       vector_new(
         FM_INTEGER,
-        string_new("2"),
-        FM_INTEGER,
         string_new("3"),
-        FM_BINARY,
-        string_new("="),
         FM_INTEGER,
         string_new("4"),
         FM_BINARY,
         string_new("+"),
-        FM_POP
+        FM_INTEGER,
+        string_new("2"),
+        FM_BINARY,
+        string_new("=")
       )
     );
   });

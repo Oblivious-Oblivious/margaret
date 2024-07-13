@@ -6,8 +6,7 @@
 module(complex_spec, {
   it("parses complex literals", {
     parse(
-      "1i",
-      vector_new(FM_INTEGER, string_new("1"), FM_UNARY, string_new("i"), FM_POP)
+      "1i", vector_new(FM_INTEGER, string_new("1"), FM_UNARY, string_new("i"))
     );
     parse(
       "1i * 1i",
@@ -21,8 +20,7 @@ module(complex_spec, {
         FM_UNARY,
         string_new("i"),
         FM_BINARY,
-        string_new("*"),
-        FM_POP
+        string_new("*")
       )
     );
     parse(
@@ -33,8 +31,7 @@ module(complex_spec, {
         FM_UNARY,
         string_new("r"),
         FM_UNARY,
-        string_new("i"),
-        FM_POP
+        string_new("i")
       )
     );
   });

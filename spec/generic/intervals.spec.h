@@ -17,9 +17,10 @@ module(intervals_spec, {
         FM_KEYWORD,
         string_new("from:to:"),
         string_new("2"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -36,9 +37,10 @@ module(intervals_spec, {
         FM_KEYWORD,
         string_new("from:to:by:"),
         string_new("3"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -51,9 +53,10 @@ module(intervals_spec, {
         FM_KEYWORD,
         string_new("to:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -68,9 +71,10 @@ module(intervals_spec, {
         FM_KEYWORD,
         string_new("to:by:"),
         string_new("2"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
   });

@@ -15,9 +15,10 @@ module(bitwise_spec, {
         FM_KEYWORD,
         string_new("bitand:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -30,9 +31,10 @@ module(bitwise_spec, {
         FM_KEYWORD,
         string_new("bitor:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -45,9 +47,10 @@ module(bitwise_spec, {
         FM_KEYWORD,
         string_new("bitxor:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -57,9 +60,10 @@ module(bitwise_spec, {
         string_new("255"),
         FM_UNARY,
         string_new("bitinvert"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -72,9 +76,10 @@ module(bitwise_spec, {
         FM_KEYWORD,
         string_new("bitshift:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     ); // Left shift
     parse(
@@ -87,9 +92,10 @@ module(bitwise_spec, {
         FM_KEYWORD,
         string_new("bitshift:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     ); // Right shift
     parse(
@@ -99,9 +105,10 @@ module(bitwise_spec, {
         string_new("128"),
         FM_UNARY,
         string_new("highbit"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -114,9 +121,10 @@ module(bitwise_spec, {
         FM_KEYWORD,
         string_new("all_mask:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -129,9 +137,10 @@ module(bitwise_spec, {
         FM_KEYWORD,
         string_new("any_mask:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -144,9 +153,10 @@ module(bitwise_spec, {
         FM_KEYWORD,
         string_new("no_mask:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
   });

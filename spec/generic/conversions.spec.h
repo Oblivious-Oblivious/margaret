@@ -12,9 +12,10 @@ module(conversions_spec, {
         string_new("3.99"),
         FM_UNARY,
         string_new("to_int"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -24,9 +25,10 @@ module(conversions_spec, {
         string_new("3.99"),
         FM_UNARY,
         string_new("to_fraction"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -36,9 +38,10 @@ module(conversions_spec, {
         string_new("3"),
         FM_UNARY,
         string_new("to_float"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -48,9 +51,10 @@ module(conversions_spec, {
         string_new("65"),
         FM_UNARY,
         string_new("to_char"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -60,9 +64,10 @@ module(conversions_spec, {
         string_new("A"),
         FM_UNARY,
         string_new("to_ascii"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -72,9 +77,10 @@ module(conversions_spec, {
         string_new("b"),
         FM_UNARY,
         string_new("to_ascii"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
   });

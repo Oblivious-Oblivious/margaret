@@ -5,9 +5,9 @@
 
 module(hashes_spec, {
   it("parses hash literals", {
-    parse("({})", vector_new(FM_HASH, string_new("0"), FM_POP));
+    parse("(%{})", vector_new(FM_HASH, string_new("0")));
     parse(
-      "({a: {}, b: {}})",
+      "(%{a: %{}, b: %{}})",
       vector_new(
         FM_STRING,
         string_new("a"),
@@ -18,12 +18,11 @@ module(hashes_spec, {
         FM_HASH,
         string_new("0"),
         FM_HASH,
-        string_new("4"),
-        FM_POP
+        string_new("4")
       )
     );
     parse(
-      "({a: 1, b: 2, c: 3})",
+      "(%{a: 1, b: 2, c: 3})",
       vector_new(
         FM_STRING,
         string_new("a"),
@@ -38,12 +37,11 @@ module(hashes_spec, {
         FM_INTEGER,
         string_new("3"),
         FM_HASH,
-        string_new("6"),
-        FM_POP
+        string_new("6")
       )
     );
     parse(
-      "{\"a\": 1, \"b\": 2, \"c\": 3}",
+      "%{\"a\": 1, \"b\": 2, \"c\": 3}",
       vector_new(
         FM_STRING,
         string_new("a"),
@@ -58,12 +56,11 @@ module(hashes_spec, {
         FM_INTEGER,
         string_new("3"),
         FM_HASH,
-        string_new("6"),
-        FM_POP
+        string_new("6")
       )
     );
     parse(
-      "({\"k1\": \"v1\", \"k2\": \"v2\", \"k3\": \"v3\"})",
+      "(%{\"k1\": \"v1\", \"k2\": \"v2\", \"k3\": \"v3\"})",
       vector_new(
         FM_STRING,
         string_new("k1"),
@@ -78,12 +75,11 @@ module(hashes_spec, {
         FM_STRING,
         string_new("v3"),
         FM_HASH,
-        string_new("6"),
-        FM_POP
+        string_new("6")
       )
     );
     parse(
-      "{x: {a: 1, b: 2}, y: {c: 3, d: 4}}",
+      "%{x: %{a: 1, b: 2}, y: %{c: 3, d: 4}}",
       vector_new(
         FM_STRING,
         string_new("x"),
@@ -110,12 +106,11 @@ module(hashes_spec, {
         FM_HASH,
         string_new("4"),
         FM_HASH,
-        string_new("4"),
-        FM_POP
+        string_new("4")
       )
     );
     parse(
-      "{a: 42 factorial, b: 2 + 3, c: 41 plus: 1, d: (42 incr decr, 41 incr)}",
+      "%{a: 42 factorial, b: 2 + 3, c: 41 plus: 1, d: (42 incr decr, 41 incr)}",
       vector_new(
         FM_STRING,
         string_new("a"),
@@ -148,14 +143,12 @@ module(hashes_spec, {
         string_new("incr"),
         FM_UNARY,
         string_new("decr"),
-        FM_POP,
         FM_INTEGER,
         string_new("41"),
         FM_UNARY,
         string_new("incr"),
         FM_HASH,
-        string_new("8"),
-        FM_POP
+        string_new("8")
       )
     );
   });
@@ -172,21 +165,16 @@ module(hashes_spec, {
         string_new("3"),
         FM_KEYWORD,
         string_new("at:put:"),
-        string_new("2"),
-        FM_POP
+        string_new("2")
       )
     );
     parse(
       "(x is_empty?)",
-      vector_new(
-        FM_LOCAL, string_new("x"), FM_UNARY, string_new("is_empty?"), FM_POP
-      )
+      vector_new(FM_LOCAL, string_new("x"), FM_UNARY, string_new("is_empty?"))
     );
     parse(
       "(x size)",
-      vector_new(
-        FM_LOCAL, string_new("x"), FM_UNARY, string_new("size"), FM_POP
-      )
+      vector_new(FM_LOCAL, string_new("x"), FM_UNARY, string_new("size"))
     );
     parse(
       "(x at: \"a\" if_absent: \"\")",
@@ -199,8 +187,7 @@ module(hashes_spec, {
         string_new(""),
         FM_KEYWORD,
         string_new("at:if_absent:"),
-        string_new("2"),
-        FM_POP
+        string_new("2")
       )
     );
     parse(
@@ -214,8 +201,7 @@ module(hashes_spec, {
         string_new(""),
         FM_KEYWORD,
         string_new("key_at_value:if_absent:"),
-        string_new("2"),
-        FM_POP
+        string_new("2")
       )
     );
     parse(
@@ -229,8 +215,7 @@ module(hashes_spec, {
         string_new(""),
         FM_KEYWORD,
         string_new("remove_key:if_absent:"),
-        string_new("2"),
-        FM_POP
+        string_new("2")
       )
     );
     parse(
@@ -243,9 +228,10 @@ module(hashes_spec, {
         FM_KEYWORD,
         string_new("includes_key:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("b"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -256,8 +242,7 @@ module(hashes_spec, {
         FM_UNARY,
         string_new("keys"),
         FM_UNARY,
-        string_new("puts"),
-        FM_POP
+        string_new("puts")
       )
     );
     parse(
@@ -268,8 +253,7 @@ module(hashes_spec, {
         FM_UNARY,
         string_new("values"),
         FM_UNARY,
-        string_new("puts"),
-        FM_POP
+        string_new("puts")
       )
     );
     parse(
@@ -278,6 +262,8 @@ module(hashes_spec, {
         FM_LOCAL,
         string_new("x"),
         FM_START_PROC,
+        FM_PROC_PARAMETER,
+        string_new("a"),
         FM_LOCAL,
         string_new("a"),
         FM_UNARY,
@@ -285,8 +271,7 @@ module(hashes_spec, {
         FM_END_PROC,
         FM_KEYWORD,
         string_new("each_key:"),
-        string_new("1"),
-        FM_POP
+        string_new("1")
       )
     );
     parse(
@@ -295,6 +280,8 @@ module(hashes_spec, {
         FM_LOCAL,
         string_new("x"),
         FM_START_PROC,
+        FM_PROC_PARAMETER,
+        string_new("a"),
         FM_LOCAL,
         string_new("a"),
         FM_UNARY,
@@ -302,8 +289,7 @@ module(hashes_spec, {
         FM_END_PROC,
         FM_KEYWORD,
         string_new("each_value:"),
-        string_new("1"),
-        FM_POP
+        string_new("1")
       )
     );
     parse(
@@ -312,6 +298,8 @@ module(hashes_spec, {
         FM_LOCAL,
         string_new("x"),
         FM_START_PROC,
+        FM_PROC_PARAMETER,
+        string_new("a"),
         FM_LOCAL,
         string_new("a"),
         FM_UNARY,
@@ -319,8 +307,7 @@ module(hashes_spec, {
         FM_END_PROC,
         FM_KEYWORD,
         string_new("each:"),
-        string_new("1"),
-        FM_POP
+        string_new("1")
       )
     );
   });

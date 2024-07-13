@@ -18,7 +18,7 @@ module(EmitterSpec, {
   // feature
 
   it("parses a simple program", {
-    char **formal_bytecode = vector_new(FM_INTEGER, string_new("42"), FM_POP);
+    char **formal_bytecode = vector_new(FM_INTEGER, string_new("42"));
     vm                     = emitter_emit(vm, formal_bytecode);
     assert_that_int(vm->current->bytecode->size equals to 4);
     assert_that_int(vm->current->bytecode->items[0] equals to OP_PUT_OBJECT);

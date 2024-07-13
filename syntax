@@ -1,5 +1,9 @@
 first_unit:
-    unit EOF
+    unit_list EOF
+
+unit_list:
+    unit
+  | unit ',' unit_list
 
 unit:
     assignment_chain keyword_message
@@ -7,7 +11,6 @@ unit:
 assignment_chain:
     keyword_message '='
   | keyword_message '=' assignment_chain
-  | ε
 
 keyword_message:
     keyword_selector_chain
@@ -16,7 +19,6 @@ keyword_message:
 keyword_selector_chain:
     IDENTIFIER ':' binary_message
   | IDENTIFIER ':' binary_message keyword_selector_chain
-  | ε
 
 binary_message:
     unary_message binary_selector_chain
@@ -24,7 +26,6 @@ binary_message:
 binary_selector_chain:
     MESSAGE_SYMBOL unary_message
   | MESSAGE_SYMBOL unary_message binary_selector_chain
-  | ε
 
 unary_message:
     lhs_message unary_selector_chain
@@ -32,14 +33,12 @@ unary_message:
 unary_selector_chain:
     IDENTIFIER
   | IDENTIFIER unary_selector_chain
-  | ε
 
 lhs_message:
     lhs_selector literal
 
 lhs_selector:
     MESSAGE_SYMBOL
-  | ε
 
 literal:
     scalar
@@ -50,21 +49,14 @@ literal:
   | '%' '[' unit_list ']'
   | '%' '{' association_list '}'
   | '#' literal method_definition
-  | ε
-
-unit_list:
-    unit
-  | unit ',' unit_list
 
 param_list:
     IDENTIFIER '|'
   | IDENTIFIER ',' param_list
-  | ε
 
 bit_list:
     bit
   | bit ',' bit_list
-  | ε
 
 bit:
     scalar
@@ -92,14 +84,26 @@ scalar:
   | INTEGER
   | FLOAT
   | STRING
+  | variable
+
+variable:
+    '@self'
+  | '@super'
+  | INSTANCE
+  | GLOBAL
   | IDENTIFIER
 
 FLOAT:                ^\d+(_\d+)*\.\d+(_\d+)*
 INTEGER:              ^(?:0[bBoOxX][\da-fA-F_]+|0|[1-9][\d_]*)
 STRING:               ^(['"]).*?\1
 
-IDENTIFIER:           ^[@$]?[a-zA-Z_][a-zA-Z0-9_]*
+IDENTIFIER:           ^[a-zA-Z_][a-zA-Z0-9_]*
+INSTANCE:             ^@[a-zA-Z_][a-zA-Z0-9_]*
+GLOBAL:               ^$[a-zA-Z_][a-zA-Z0-9_]*
+
 MESSAGE_SYMBOL:       ^[!?+\-*/\\~<>=|&^;.`]+
 SYNTAX_SYMBOL:        ^[()\[\]{},:#%]
 
 EOF:                  ends parsing
+NEWLINE:              for counting lines
+WHITESPACE:           to ignore

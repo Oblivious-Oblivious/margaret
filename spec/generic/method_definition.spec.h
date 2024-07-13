@@ -9,10 +9,11 @@ module(method_definition_spec, {
       "# $true not => $false",
       vector_new(
         FM_START_UNARY_METHOD,
+        FM_METHOD_RECEIVER,
+        FM_TRUE,
         string_new("not"),
         FM_FALSE,
-        FM_END_UNARY_METHOD,
-        FM_POP
+        FM_END_UNARY_METHOD
       )
     );
 
@@ -20,10 +21,11 @@ module(method_definition_spec, {
       "# $false neg => $nil",
       vector_new(
         FM_START_UNARY_METHOD,
+        FM_METHOD_RECEIVER,
+        FM_FALSE,
         string_new("neg"),
         FM_NIL,
-        FM_END_UNARY_METHOD,
-        FM_POP
+        FM_END_UNARY_METHOD
       )
     );
 
@@ -31,38 +33,41 @@ module(method_definition_spec, {
       "#incr => @self + 1",
       vector_new(
         FM_START_UNARY_METHOD,
+        FM_METHOD_RECEIVER,
+        FM_METHOD_ANY_OBJECT,
         string_new("incr"),
         FM_SELF,
         FM_INTEGER,
         string_new("1"),
         FM_BINARY,
         string_new("+"),
-        FM_END_UNARY_METHOD,
-        FM_POP
+        FM_END_UNARY_METHOD
       )
     );
     parse(
       "#  incr => @self + 1",
       vector_new(
         FM_START_UNARY_METHOD,
+        FM_METHOD_RECEIVER,
+        FM_METHOD_ANY_OBJECT,
         string_new("incr"),
         FM_SELF,
         FM_INTEGER,
         string_new("1"),
         FM_BINARY,
         string_new("+"),
-        FM_END_UNARY_METHOD,
-        FM_POP
+        FM_END_UNARY_METHOD
       )
     );
     parse(
       "#is_empty? => $true",
       vector_new(
         FM_START_UNARY_METHOD,
+        FM_METHOD_RECEIVER,
+        FM_METHOD_ANY_OBJECT,
         string_new("is_empty?"),
         FM_TRUE,
-        FM_END_UNARY_METHOD,
-        FM_POP
+        FM_END_UNARY_METHOD
       )
     );
 
@@ -70,11 +75,13 @@ module(method_definition_spec, {
       "# 0 fact => 1",
       vector_new(
         FM_START_UNARY_METHOD,
+        FM_METHOD_RECEIVER,
+        FM_INTEGER,
+        string_new("0"),
         string_new("fact"),
         FM_INTEGER,
         string_new("1"),
-        FM_END_UNARY_METHOD,
-        FM_POP
+        FM_END_UNARY_METHOD
       )
     );
 
@@ -83,19 +90,23 @@ module(method_definition_spec, {
     // }
     parse(
       "( \
-            # 0 fact => 1, \
-            # _ fact => @self * (@self-1) fact \
-        )",
+        # 0 fact => 1, \
+        # _ fact => @self * (@self-1) fact \
+      )",
       vector_new(
         FM_START_UNARY_METHOD,
+        FM_METHOD_RECEIVER,
+        FM_INTEGER,
+        string_new("0"),
         string_new("fact"),
         FM_INTEGER,
         string_new("1"),
         FM_END_UNARY_METHOD,
-        FM_POP,
-
         FM_START_UNARY_METHOD,
         string_new("fact"),
+        FM_METHOD_RECEIVER,
+        FM_LOCAL,
+        string_new("_"),
         FM_SELF,
         FM_SELF,
         FM_INTEGER,
@@ -106,8 +117,7 @@ module(method_definition_spec, {
         string_new("fact"),
         FM_BINARY,
         string_new("*"),
-        FM_END_UNARY_METHOD,
-        FM_POP
+        FM_END_UNARY_METHOD
       )
     );
   });
@@ -118,12 +128,14 @@ module(method_definition_spec, {
       "# 0 ** 0 => $nil",
       vector_new(
         FM_START_BINARY_METHOD,
+        FM_METHOD_RECEIVER,
+        FM_INTEGER,
+        string_new("0"),
         string_new("**"),
         FM_METHOD_PARAMETER,
         string_new("0"),
         FM_NIL,
-        FM_END_BINARY_METHOD,
-        FM_POP
+        FM_END_BINARY_METHOD
       )
     );
 
@@ -132,13 +144,16 @@ module(method_definition_spec, {
       "# 0 ** _ => 0",
       vector_new(
         FM_START_BINARY_METHOD,
-        string_new("**"),
-        FM_METHOD_PARAMETER,
-        FM_ANY_OBJECT,
+        FM_METHOD_RECEIVER,
         FM_INTEGER,
         string_new("0"),
-        FM_END_BINARY_METHOD,
-        FM_POP
+        string_new("**"),
+        FM_METHOD_PARAMETER,
+        FM_LOCAL,
+        string_new("_"),
+        FM_INTEGER,
+        string_new("0"),
+        FM_END_BINARY_METHOD
       )
     );
 
@@ -147,13 +162,15 @@ module(method_definition_spec, {
       "# _ ** 0 => 1",
       vector_new(
         FM_START_BINARY_METHOD,
+        FM_METHOD_RECEIVER,
+        FM_LOCAL,
+        string_new("_"),
         string_new("**"),
         FM_METHOD_PARAMETER,
         string_new("0"),
         FM_INTEGER,
         string_new("1"),
-        FM_END_BINARY_METHOD,
-        FM_POP
+        FM_END_BINARY_METHOD
       )
     );
 
@@ -163,13 +180,16 @@ module(method_definition_spec, {
       "# 0 ** a_number => 0",
       vector_new(
         FM_START_BINARY_METHOD,
+        FM_METHOD_RECEIVER,
+        FM_INTEGER,
+        string_new("0"),
         string_new("**"),
         FM_METHOD_PARAMETER,
+        FM_LOCAL,
         string_new("a_number"),
         FM_INTEGER,
         string_new("0"),
-        FM_END_BINARY_METHOD,
-        FM_POP
+        FM_END_BINARY_METHOD
       )
     );
 
@@ -179,6 +199,8 @@ module(method_definition_spec, {
       "# ** a_number => @self raised_to: a_number",
       vector_new(
         FM_START_BINARY_METHOD,
+        FM_METHOD_RECEIVER,
+        FM_METHOD_ANY_OBJECT,
         string_new("**"),
         FM_METHOD_PARAMETER,
         string_new("a_number"),
@@ -188,8 +210,7 @@ module(method_definition_spec, {
         FM_KEYWORD,
         string_new("raised_to:"),
         string_new("1"),
-        FM_END_BINARY_METHOD,
-        FM_POP
+        FM_END_BINARY_METHOD
       )
     );
   });
@@ -201,6 +222,8 @@ module(method_definition_spec, {
       "#add: element at: position => 42",
       vector_new(
         FM_START_KEYWORD_METHOD,
+        FM_METHOD_RECEIVER,
+        FM_METHOD_ANY_OBJECT,
         string_new("add:at:"),
         FM_METHOD_PARAMETER,
         string_new("element"),
@@ -208,8 +231,7 @@ module(method_definition_spec, {
         string_new("position"),
         FM_INTEGER,
         string_new("42"),
-        FM_END_KEYWORD_METHOD,
-        FM_POP
+        FM_END_KEYWORD_METHOD
       )
     );
 
@@ -218,13 +240,15 @@ module(method_definition_spec, {
       "# _ new: 2 => 1",
       vector_new(
         FM_START_KEYWORD_METHOD,
+        FM_METHOD_RECEIVER,
+        FM_LOCAL,
+        string_new("_"),
         string_new("new:"),
         FM_METHOD_PARAMETER,
         string_new("2"),
         FM_INTEGER,
         string_new("1"),
-        FM_END_KEYWORD_METHOD,
-        FM_POP
+        FM_END_KEYWORD_METHOD
       )
     );
 
@@ -233,12 +257,14 @@ module(method_definition_spec, {
       "# 1 add: $nil => $nil",
       vector_new(
         FM_START_KEYWORD_METHOD,
+        FM_METHOD_RECEIVER,
+        FM_INTEGER,
+        string_new("1"),
         string_new("add:"),
         FM_METHOD_PARAMETER,
         FM_NIL,
         FM_NIL,
-        FM_END_KEYWORD_METHOD,
-        FM_POP
+        FM_END_KEYWORD_METHOD
       )
     );
 
@@ -247,13 +273,16 @@ module(method_definition_spec, {
       "# 1 add: 2 => 3",
       vector_new(
         FM_START_KEYWORD_METHOD,
+        FM_METHOD_RECEIVER,
+        FM_INTEGER,
+        string_new("1"),
         string_new("add:"),
         FM_METHOD_PARAMETER,
+        FM_INTEGER,
         string_new("2"),
         FM_INTEGER,
         string_new("3"),
-        FM_END_KEYWORD_METHOD,
-        FM_POP
+        FM_END_KEYWORD_METHOD
       )
     );
 
@@ -262,15 +291,19 @@ module(method_definition_spec, {
       "# 1 one: _ two: _ => 42",
       vector_new(
         FM_START_KEYWORD_METHOD,
+        FM_METHOD_RECEIVER,
+        FM_INTEGER,
+        string_new("1"),
         string_new("one:two:"),
         FM_METHOD_PARAMETER,
-        FM_ANY_OBJECT,
+        FM_LOCAL,
+        string_new("_"),
         FM_METHOD_PARAMETER,
-        FM_ANY_OBJECT,
+        FM_LOCAL,
+        string_new("_"),
         FM_INTEGER,
         string_new("42"),
-        FM_END_KEYWORD_METHOD,
-        FM_POP
+        FM_END_KEYWORD_METHOD
       )
     );
 
@@ -280,15 +313,18 @@ module(method_definition_spec, {
       "#ok?: value1 otherwise!: value2 => 17",
       vector_new(
         FM_START_KEYWORD_METHOD,
+        FM_METHOD_RECEIVER,
+        FM_METHOD_ANY_OBJECT,
         string_new("ok?:otherwise!:"),
         FM_METHOD_PARAMETER,
+        FM_LOCAL,
         string_new("value1"),
         FM_METHOD_PARAMETER,
+        FM_LOCAL,
         string_new("value2"),
         FM_INTEGER,
         string_new("17"),
-        FM_END_KEYWORD_METHOD,
-        FM_POP
+        FM_END_KEYWORD_METHOD
       )
     );
 
@@ -298,15 +334,19 @@ module(method_definition_spec, {
       "# [] add: element at: position => 17",
       vector_new(
         FM_START_KEYWORD_METHOD,
+        FM_METHOD_RECEIVER,
+        FM_TENSOR,
+        string_new("0"),
         string_new("add:at:"),
         FM_METHOD_PARAMETER,
+        FM_LOCAL,
         string_new("element"),
         FM_METHOD_PARAMETER,
+        FM_LOCAL,
         string_new("position"),
         FM_INTEGER,
         string_new("17"),
-        FM_END_KEYWORD_METHOD,
-        FM_POP
+        FM_END_KEYWORD_METHOD
       )
     );
 
@@ -316,17 +356,21 @@ module(method_definition_spec, {
       "# [] add: 'a' at: 0 => ['a']",
       vector_new(
         FM_START_KEYWORD_METHOD,
+        FM_METHOD_RECEIVER,
+        FM_TENSOR,
+        string_new("0"),
         string_new("add:at:"),
         FM_METHOD_PARAMETER,
+        FM_STRING,
         string_new("a"),
         FM_METHOD_PARAMETER,
+        FM_INTEGER,
         string_new("0"),
         FM_STRING,
         string_new("a"),
         FM_TENSOR,
         string_new("1"),
-        FM_END_KEYWORD_METHOD,
-        FM_POP
+        FM_END_KEYWORD_METHOD
       )
     );
 
@@ -336,10 +380,14 @@ module(method_definition_spec, {
       "#add: 'a' at: 0 => ['a'] ++ @self",
       vector_new(
         FM_START_KEYWORD_METHOD,
+        FM_METHOD_RECEIVER,
+        FM_METHOD_ANY_OBJECT,
         string_new("add:at:"),
         FM_METHOD_PARAMETER,
+        FM_STRING,
         string_new("a"),
         FM_METHOD_PARAMETER,
+        FM_INTEGER,
         string_new("0"),
         FM_STRING,
         string_new("a"),
@@ -348,8 +396,7 @@ module(method_definition_spec, {
         FM_SELF,
         FM_BINARY,
         string_new("++"),
-        FM_END_KEYWORD_METHOD,
-        FM_POP
+        FM_END_KEYWORD_METHOD
       )
     );
 
@@ -360,18 +407,22 @@ module(method_definition_spec, {
     // ) }
     parse(
       "#times: a_block => ( \
-            remaining = @self, \
-            { (remaining = remaining - 1) >= 0 } while_true: { a_block value } \
-        )",
+        remaining = @self, \
+        { (remaining = remaining - 1) >= 0 } while_true: { a_block value } \
+      )",
       vector_new(
         FM_START_KEYWORD_METHOD,
+        FM_METHOD_RECEIVER,
+        FM_METHOD_ANY_OBJECT,
         string_new("times:"),
         FM_METHOD_PARAMETER,
+        FM_LOCAL,
         string_new("a_block"),
         FM_SELF,
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("remaining"),
-        FM_POP,
+        FM_BINARY,
+        string_new("="),
         FM_START_PROC,
         FM_LOCAL,
         string_new("remaining"),
@@ -379,8 +430,10 @@ module(method_definition_spec, {
         string_new("1"),
         FM_BINARY,
         string_new("-"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("remaining"),
+        FM_BINARY,
+        string_new("="),
         FM_INTEGER,
         string_new("0"),
         FM_BINARY,
@@ -395,8 +448,7 @@ module(method_definition_spec, {
         FM_KEYWORD,
         string_new("while_true:"),
         string_new("1"),
-        FM_END_KEYWORD_METHOD,
-        FM_POP
+        FM_END_KEYWORD_METHOD
       )
     );
   });

@@ -7,40 +7,31 @@ module(strings_spec, {
   it("parses string literals", {
     parse(
       "(\"hello\" puts)",
-      vector_new(
-        FM_STRING, string_new("hello"), FM_UNARY, string_new("puts"), FM_POP
-      )
+      vector_new(FM_STRING, string_new("hello"), FM_UNARY, string_new("puts"))
     );
     parse(
       "\"multi\n\
-            line\n\
-            string\"",
-      vector_new(
-        FM_STRING,
-        string_new("multi\n            line\n            string"),
-        FM_POP
-      )
+        line\n\
+        string\"",
+      vector_new(FM_STRING, string_new("multi\n        line\n        string"))
     );
   });
 
   it("parses escape strings", {
+    parse("\"foo\tbar\"", vector_new(FM_STRING, string_new("foo\tbar")));
     parse(
-      "\"foo\tbar\"", vector_new(FM_STRING, string_new("foo\tbar"), FM_POP)
+      "\"a string lit\"", vector_new(FM_STRING, string_new("a string lit"))
     );
-    parse(
-      "\"a string lit\"",
-      vector_new(FM_STRING, string_new("a string lit"), FM_POP)
-    );
-    parse("\"str\"", vector_new(FM_STRING, string_new("str"), FM_POP));
+    parse("\"str\"", vector_new(FM_STRING, string_new("str")));
 
-    parse("\"\a\"", vector_new(FM_STRING, string_new("\a"), FM_POP));
-    parse("\"\b\"", vector_new(FM_STRING, string_new("\b"), FM_POP));
-    parse("\"\t\"", vector_new(FM_STRING, string_new("\t"), FM_POP));
-    parse("\"\n\"", vector_new(FM_STRING, string_new("\n"), FM_POP));
-    parse("\"\v\"", vector_new(FM_STRING, string_new("\v"), FM_POP));
-    parse("\"\f\"", vector_new(FM_STRING, string_new("\f"), FM_POP));
-    parse("\"\r\"", vector_new(FM_STRING, string_new("\r"), FM_POP));
-    parse("\"\\\"", vector_new(FM_STRING, string_new("\\"), FM_POP));
+    parse("\"\a\"", vector_new(FM_STRING, string_new("\a")));
+    parse("\"\b\"", vector_new(FM_STRING, string_new("\b")));
+    parse("\"\t\"", vector_new(FM_STRING, string_new("\t")));
+    parse("\"\n\"", vector_new(FM_STRING, string_new("\n")));
+    parse("\"\v\"", vector_new(FM_STRING, string_new("\v")));
+    parse("\"\f\"", vector_new(FM_STRING, string_new("\f")));
+    parse("\"\r\"", vector_new(FM_STRING, string_new("\r")));
+    parse("\"\\\"", vector_new(FM_STRING, string_new("\\")));
   });
 
   it("parses string messages", {
@@ -51,9 +42,10 @@ module(strings_spec, {
         string_new("s"),
         FM_UNARY,
         string_new("is_empty?"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("b"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -63,9 +55,10 @@ module(strings_spec, {
         string_new("s"),
         FM_UNARY,
         string_new("size"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -78,9 +71,10 @@ module(strings_spec, {
         FM_KEYWORD,
         string_new("at:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -95,9 +89,10 @@ module(strings_spec, {
         FM_KEYWORD,
         string_new("copy_from:to:"),
         string_new("2"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -112,9 +107,10 @@ module(strings_spec, {
         FM_KEYWORD,
         string_new("index_of:if_absent:"),
         string_new("2"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -129,7 +125,6 @@ module(strings_spec, {
         FM_KEYWORD,
         string_new("at:put:"),
         string_new("2"),
-        FM_POP,
         FM_LOCAL,
         string_new("s"),
         FM_INTEGER,
@@ -139,7 +134,6 @@ module(strings_spec, {
         FM_KEYWORD,
         string_new("at:put:"),
         string_new("2"),
-        FM_POP,
         FM_LOCAL,
         string_new("s"),
         FM_INTEGER,
@@ -148,8 +142,7 @@ module(strings_spec, {
         string_new("c"),
         FM_KEYWORD,
         string_new("at:put:"),
-        string_new("2"),
-        FM_POP
+        string_new("2")
       )
     );
     parse(
@@ -172,8 +165,7 @@ module(strings_spec, {
         FM_STRING,
         string_new("d"),
         FM_BINARY,
-        string_new("<<"),
-        FM_POP
+        string_new("<<")
       )
     );
     parse(
@@ -206,8 +198,7 @@ module(strings_spec, {
         string_new("d"),
         FM_KEYWORD,
         string_new("add:"),
-        string_new("1"),
-        FM_POP
+        string_new("1")
       )
     );
     parse(
@@ -216,6 +207,8 @@ module(strings_spec, {
         FM_LOCAL,
         string_new("s"),
         FM_START_PROC,
+        FM_PROC_PARAMETER,
+        string_new("a"),
         FM_LOCAL,
         string_new("a"),
         FM_UNARY,
@@ -223,8 +216,7 @@ module(strings_spec, {
         FM_END_PROC,
         FM_KEYWORD,
         string_new("each_char:"),
-        string_new("1"),
-        FM_POP
+        string_new("1")
       )
     );
     parse(
@@ -233,6 +225,8 @@ module(strings_spec, {
         FM_LOCAL,
         string_new("s"),
         FM_START_PROC,
+        FM_PROC_PARAMETER,
+        string_new("a"),
         FM_LOCAL,
         string_new("a"),
         FM_STRING,
@@ -251,9 +245,10 @@ module(strings_spec, {
         FM_KEYWORD,
         string_new("conform:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("b"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -262,6 +257,8 @@ module(strings_spec, {
         FM_LOCAL,
         string_new("s"),
         FM_START_PROC,
+        FM_PROC_PARAMETER,
+        string_new("a"),
         FM_LOCAL,
         string_new("a"),
         FM_STRING,
@@ -272,9 +269,10 @@ module(strings_spec, {
         FM_KEYWORD,
         string_new("select:"),
         string_new("1"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -284,9 +282,10 @@ module(strings_spec, {
         string_new("s"),
         FM_UNARY,
         string_new("to_list"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -296,9 +295,10 @@ module(strings_spec, {
         string_new("s"),
         FM_UNARY,
         string_new("to_symbol"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -308,9 +308,10 @@ module(strings_spec, {
         string_new("abcd"),
         FM_UNARY,
         string_new("to_byte_array"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
     parse(
@@ -320,9 +321,10 @@ module(strings_spec, {
         string_new("s"),
         FM_UNARY,
         string_new("shuffled"),
-        FM_STORE_LOCAL,
+        FM_LOCAL,
         string_new("x"),
-        FM_POP
+        FM_BINARY,
+        string_new("=")
       )
     );
   });
