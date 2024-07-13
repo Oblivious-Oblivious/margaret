@@ -12,8 +12,21 @@ module(literal, {
   it("parses groups", {
     parse("()", vector_new(FM_NIL));
     parse("(42)", vector_new(FM_INTEGER, string_new("42")));
-    parse("(42, 43)", vector_new(FM_INTEGER, string_new("42")));
-    parse("(42, 43, 44)", vector_new(FM_INTEGER, string_new("42")));
+    parse(
+      "(42, 43)",
+      vector_new(FM_INTEGER, string_new("42"), FM_INTEGER, string_new("43"))
+    );
+    parse(
+      "(42, 43, 44)",
+      vector_new(
+        FM_INTEGER,
+        string_new("42"),
+        FM_INTEGER,
+        string_new("43"),
+        FM_INTEGER,
+        string_new("44")
+      )
+    );
   });
 
   it("parses tensors", {
@@ -24,11 +37,27 @@ module(literal, {
     );
     parse(
       "[42, 43]",
-      vector_new(FM_INTEGER, string_new("42"), FM_TENSOR, string_new("1"))
+      vector_new(
+        FM_INTEGER,
+        string_new("42"),
+        FM_INTEGER,
+        string_new("43"),
+        FM_TENSOR,
+        string_new("2")
+      )
     );
     parse(
       "[42, 43, 44]",
-      vector_new(FM_INTEGER, string_new("42"), FM_TENSOR, string_new("1"))
+      vector_new(
+        FM_INTEGER,
+        string_new("42"),
+        FM_INTEGER,
+        string_new("43"),
+        FM_INTEGER,
+        string_new("44"),
+        FM_TENSOR,
+        string_new("3")
+      )
     );
   });
 
@@ -40,15 +69,13 @@ module(literal, {
       vector_new(FM_START_PROC, FM_INTEGER, string_new("42"), FM_END_PROC)
     );
     parse(
-      "{ a | a factorial }",
+      "{ a | a }",
       vector_new(
         FM_START_PROC,
         FM_PROC_PARAMETER,
         string_new("a"),
         FM_LOCAL,
         string_new("a"),
-        FM_UNARY,
-        string_new("factorial"),
         FM_END_PROC
       )
     );

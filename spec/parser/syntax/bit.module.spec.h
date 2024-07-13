@@ -22,6 +22,8 @@ module(bit, {
         string_new("1"),
         FM_INTEGER,
         string_new("1"),
+        FM_INTEGER,
+        string_new("1"),
         FM_BITSTRING,
         string_new("8")
       )
