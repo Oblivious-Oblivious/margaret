@@ -119,16 +119,21 @@ void parser_lhs_selector(Token **table, char ***fmcodes) {
 void parser_literal(Token **table, char ***fmcodes) {
   if(la1value("(")) {
     ensure_value("(", "missing opening parenthesis on group.");
-    size_t prev_size = vector_size(fmcodes);
-    unit_list();
-    if(vector_size(fmcodes) == prev_size) {
+    while(la1value(",")) {
+      ensure_value(",", "");
+    }
+    if(la1value(")")) {
       generate(FM_NIL);
+    } else {
+      unit_list();
     }
     ensure_value(")", "missing closing parenthesis on group.");
   } else if(la1value("[")) {
     ensure_value("[", "missing opening bracket on tensor.");
-    unit_list();
+    char *number_of_elements = unit_list();
     ensure_value("]", "missing closing bracket on tensor.");
+    generate(FM_TENSOR);
+    generate(number_of_elements);
   } else if(la1value("{")) {
     ensure_value("{", "missing opening curly on proc.");
     param_list();
@@ -137,18 +142,24 @@ void parser_literal(Token **table, char ***fmcodes) {
   } else if(la1value("%") && la2value("(")) {
     ensure_value("%", "missing `%` on bitstring.");
     ensure_value("(", "missing opening parenthesis on bitstring.");
-    bit_list();
+    char *number_of_elements = bit_list();
     ensure_value(")", "missing closing parenthesis on bitstring.");
+    generate(FM_BITSTRING);
+    generate(number_of_elements);
   } else if(la1value("%") && la2value("[")) {
-    ensure_value("%", "missing `%` on bitstring.");
+    ensure_value("%", "missing `%` on tuple.");
     ensure_value("[", "missing opening bracket on tuple.");
-    unit_list();
+    char *number_of_elements = unit_list();
     ensure_value("]", "missing closing bracket on tuple.");
+    generate(FM_TUPLE);
+    generate(number_of_elements);
   } else if(la1value("%") && la2value("{")) {
     ensure_value("%", "missing `%` on hash.");
     ensure_value("{", "missing opening curly on hash.");
-    association_list();
+    char *number_of_elements = association_list();
     ensure_value("}", "missing closing curly on hash.");
+    generate(FM_HASH);
+    generate(number_of_elements);
   } else if(la1value("#")) {
     ensure_value("#", "missing `#` on method definition.");
     literal();
@@ -164,22 +175,56 @@ void parser_param_list(Token **table, char ***fmcodes) {
   (void)fmcodes;
 }
 
-void parser_bit_list(Token **table, char ***fmcodes) {
-  // TODO
-  (void)table;
-  (void)fmcodes;
+char *parser_bit_list(Token **table, char ***fmcodes) {
+  size_t no_elements       = 0;
+  char *number_of_elements = NULL;
+
+  while(!la1value(")") && !la1value("eof")) {
+    bit();
+    no_elements++;
+
+    if(!la1value(")")) {
+      ensure_value(",", "missing ',' on bit list.");
+    }
+  }
+
+  string_addf(number_of_elements, "%zu", no_elements * 2);
+  return number_of_elements;
 }
 
 void parser_bit(Token **table, char ***fmcodes) {
-  // TODO
-  (void)table;
-  (void)fmcodes;
+  scalar();
+
+  if(la1value(":") && la2value(":")) {
+    ensure_value(":", "expected '::' on bit.");
+    ensure_value(":", "expected '::' on bit.");
+    generate(FM_INTEGER);
+    generate(ensure_type(TOKEN_INTEGER, "expected integer on bit."));
+  } else {
+    generate(FM_INTEGER);
+    generate(string_new("8"));
+  }
 }
 
-void parser_association_list(Token **table, char ***fmcodes) {
-  // TODO
-  (void)table;
-  (void)fmcodes;
+char *parser_association_list(Token **table, char ***fmcodes) {
+  size_t no_elements       = 0;
+  char *number_of_elements = NULL;
+
+  while(!la1value("}") && !la1value("eof")) {
+    key();
+    ensure_value(":", "missing ':' on association list.");
+    unit();
+    no_elements++;
+
+    if(!la1value("}")) {
+      ensure_value(",", "missing ',' on association list.");
+    }
+  }
+
+  string_addf(number_of_elements, "%zu", no_elements * 2);
+  return number_of_elements;
+}
+
 void parser_key(Token **table, char ***fmcodes) {
   if(la1type(TOKEN_IDENTIFIER)) {
     generate(FM_STRING);

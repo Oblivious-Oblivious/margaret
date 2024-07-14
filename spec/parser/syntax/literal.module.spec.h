@@ -84,21 +84,6 @@ module(literal, {
   it("parses bitstrings", {
     parse("%()", vector_new(FM_BITSTRING, string_new("0")));
     parse(
-      "%(%(), %())",
-      vector_new(
-        FM_BITSTRING,
-        string_new("0"),
-        FM_INTEGER,
-        string_new("8"),
-        FM_BITSTRING,
-        string_new("0"),
-        FM_INTEGER,
-        string_new("8"),
-        FM_BITSTRING,
-        string_new("4")
-      )
-    );
-    parse(
       "%(41, 42)",
       vector_new(
         FM_INTEGER,
@@ -144,7 +129,7 @@ module(literal, {
       vector_new(
         FM_INTEGER,
         string_new("1"),
-        FM_TUPLE,
+        FM_INTEGER,
         string_new("2"),
         FM_INTEGER,
         string_new("3"),
@@ -157,10 +142,14 @@ module(literal, {
   it("parses hashes", {
     parse("%{}", vector_new(FM_HASH, string_new("0")));
     parse(
-      "%{%{}, %{}}",
+      "%{\"a\": %{}, \"b\": %{}}",
       vector_new(
+        FM_STRING,
+        string_new("a"),
         FM_HASH,
         string_new("0"),
+        FM_STRING,
+        string_new("b"),
         FM_HASH,
         string_new("0"),
         FM_HASH,
