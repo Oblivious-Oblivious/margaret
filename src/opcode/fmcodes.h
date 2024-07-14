@@ -19,8 +19,6 @@
 #define FM_GLOBAL               string_new("GLOBAL")
 #define FM_INSTANCE             string_new("INSTANCE")
 #define FM_LOCAL                string_new("LOCAL")
-#define FM_START_PROC           string_new("START_PROC")
-#define FM_END_PROC             string_new("END_PROC")
 #define FM_PROC_PARAMETER       string_new("PROC_PARAMETER")
 #define FM_START_KEYWORD_METHOD string_new("START_KEYWORD_METHOD")
 #define FM_END_KEYWORD_METHOD   string_new("END_KEYWORD_METHOD")
@@ -37,5 +35,7 @@
 #define FM_BINARY               string_new("BINARY")
 #define FM_UNARY                string_new("UNARY")
 #define FM_LHS                  string_new("LHS")
+#define FM_PROC_START        string_new("PROC_START")
+#define FM_PROC_END          string_new("PROC_END")
 
 #endif

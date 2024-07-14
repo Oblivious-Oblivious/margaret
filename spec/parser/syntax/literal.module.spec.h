@@ -62,21 +62,21 @@ module(literal, {
   });
 
   it("parses procs", {
-    parse("{}", vector_new(FM_START_PROC, FM_NIL, FM_END_PROC));
-    parse("{|}", vector_new(FM_START_PROC, FM_NIL, FM_END_PROC));
+    parse("{}", vector_new(FM_PROC_START, FM_NIL, FM_PROC_END));
+    parse("{|}", vector_new(FM_PROC_START, FM_NIL, FM_PROC_END));
     parse(
       "{ 42 }",
-      vector_new(FM_START_PROC, FM_INTEGER, string_new("42"), FM_END_PROC)
+      vector_new(FM_PROC_START, FM_INTEGER, string_new("42"), FM_PROC_END)
     );
     parse(
       "{ a | a }",
       vector_new(
-        FM_START_PROC,
+        FM_PROC_START,
         FM_PROC_PARAMETER,
         string_new("a"),
         FM_LOCAL,
         string_new("a"),
-        FM_END_PROC
+        FM_PROC_END
       )
     );
   });

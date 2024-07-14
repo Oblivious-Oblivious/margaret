@@ -136,9 +136,20 @@ void parser_literal(Token **table, char ***fmcodes) {
     generate(number_of_elements);
   } else if(la1value("{")) {
     ensure_value("{", "missing opening curly on proc.");
-    param_list();
-    unit_list();
+    generate(FM_PROC_START);
+
+    if(la1value("}")) {
+      generate(FM_NIL);
+    } else if(la1value("|") && la2value("}")) {
+      ensure_value("|", "missing '|' on proc.");
+      generate(FM_NIL);
+    } else {
+      param_list();
+      unit_list();
+    }
+
     ensure_value("}", "missing closing curly on proc.");
+    generate(FM_PROC_END);
   } else if(la1value("%") && la2value("(")) {
     ensure_value("%", "missing `%` on bitstring.");
     ensure_value("(", "missing opening parenthesis on bitstring.");
@@ -170,9 +181,20 @@ void parser_literal(Token **table, char ***fmcodes) {
 }
 
 void parser_param_list(Token **table, char ***fmcodes) {
-  // TODO
-  (void)table;
-  (void)fmcodes;
+  if(la2value(",")) {
+    generate(FM_PROC_PARAMETER);
+    generate(
+      ensure_type(TOKEN_IDENTIFIER, "expected identifier on proc parameters.")
+    );
+    ensure_value(",", "missing ',' on proc parameter list.");
+    param_list();
+  } else if(la2value("|")) {
+    generate(FM_PROC_PARAMETER);
+    generate(
+      ensure_type(TOKEN_IDENTIFIER, "expected identifier on proc parameters.")
+    );
+    ensure_value("|", "missing '|' on proc parameter list.");
+  }
 }
 
 char *parser_bit_list(Token **table, char ***fmcodes) {

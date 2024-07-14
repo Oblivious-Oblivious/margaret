@@ -8,7 +8,7 @@ module(param_list, {
     parse(
       "{ a, b, c | a + b + c }",
       vector_new(
-        FM_START_PROC,
+        FM_PROC_START,
         FM_PROC_PARAMETER,
         string_new("a"),
         FM_PROC_PARAMETER,
@@ -25,7 +25,7 @@ module(param_list, {
         string_new("c"),
         FM_BINARY,
         string_new("+"),
-        FM_END_PROC
+        FM_PROC_END
       )
     );
   });
