@@ -175,22 +175,23 @@ module(literal, {
         string_new("6")
       )
     );
+  });
 
-    it("parses method definitions", {
-      parse(
-        "# 0 fact => 1",
-        vector_new(
-          FM_START_UNARY_METHOD,
-          FM_METHOD_RECEIVER,
-          FM_INTEGER,
-          string_new("0"),
-          string_new("fact"),
-          FM_INTEGER,
-          string_new("1"),
-          FM_END_UNARY_METHOD
-        )
-      );
-    });
+  it("parses method definitions", {
+    parse(
+      "# 0 fact => 1",
+      vector_new(
+        FM_METHOD_START,
+        FM_METHOD_RECEIVER,
+        FM_INTEGER,
+        string_new("0"),
+        FM_METHOD_NAME,
+        string_new("fact"),
+        FM_INTEGER,
+        string_new("1"),
+        FM_METHOD_END
+      )
+    );
   });
 
   param_list();

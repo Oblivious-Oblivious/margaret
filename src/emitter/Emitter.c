@@ -200,7 +200,7 @@ VM *emitter_emit(VM *vm, char **formal_bytecode) {
     }
     opcode_case(FM_BITSTRING) {}
 
-    opcode_case(FM_START_PROC) {
+    opcode_case(FM_PROC_START) {
       MargValue new_proc            = MARG_PROC(vm->current->bound_method);
       AS_PROC(new_proc)->bound_proc = vm->current;
       emit_variable_length_op(OP_PUT_OBJECT);
@@ -208,13 +208,13 @@ VM *emitter_emit(VM *vm, char **formal_bytecode) {
 
       vm->current = AS_PROC(new_proc);
     }
-    opcode_case(FM_END_PROC) {
+    opcode_case(FM_PROC_END) {
       emit_byte(OP_EXIT_ACTIVATION_RECORD);
       inspect_and_print_proc(vm);
       vm->current = vm->current->bound_proc;
     }
 
-    opcode_case(FM_START_UNARY_METHOD) {
+    opcode_case(FM_METHOD_START) {
       MargValue new_method = MARG_METHOD(
         vm->current->bound_method->bound_object, formal_bytecode[++ip]
       );
@@ -224,37 +224,7 @@ VM *emitter_emit(VM *vm, char **formal_bytecode) {
 
       vm->current = AS_METHOD(new_method)->proc;
     }
-    opcode_case(FM_END_UNARY_METHOD) {
-      emit_byte(OP_EXIT_ACTIVATION_RECORD);
-      inspect_and_print_method(vm);
-      vm->current = vm->current->bound_proc;
-    }
-    opcode_case(FM_START_BINARY_METHOD) {
-      MargValue new_method = MARG_METHOD(
-        vm->current->bound_method->bound_object, formal_bytecode[++ip]
-      );
-      AS_METHOD(new_method)->proc->bound_proc = vm->current;
-      emit_variable_length_op(OP_PUT_OBJECT);
-      emit_temporary(new_method);
-
-      vm->current = AS_METHOD(new_method)->proc;
-    }
-    opcode_case(FM_END_BINARY_METHOD) {
-      emit_byte(OP_EXIT_ACTIVATION_RECORD);
-      inspect_and_print_method(vm);
-      vm->current = vm->current->bound_proc;
-    }
-    opcode_case(FM_START_KEYWORD_METHOD) {
-      MargValue new_method = MARG_METHOD(
-        vm->current->bound_method->bound_object, formal_bytecode[++ip]
-      );
-      AS_METHOD(new_method)->proc->bound_proc = vm->current;
-      emit_variable_length_op(OP_PUT_OBJECT);
-      emit_temporary(new_method);
-
-      vm->current = AS_METHOD(new_method)->proc;
-    }
-    opcode_case(FM_END_KEYWORD_METHOD) {
+    opcode_case(FM_METHOD_END) {
       emit_byte(OP_EXIT_ACTIVATION_RECORD);
       inspect_and_print_method(vm);
       vm->current = vm->current->bound_proc;

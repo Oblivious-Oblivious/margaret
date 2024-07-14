@@ -8,17 +8,20 @@ module(keyword_list, {
     parse(
       "#add: element at: position => 42",
       vector_new(
-        FM_START_KEYWORD_METHOD,
+        FM_METHOD_START,
         FM_METHOD_RECEIVER,
         FM_METHOD_ANY_OBJECT,
-        string_new("add:at:"),
         FM_METHOD_PARAMETER,
+        FM_LOCAL,
         string_new("element"),
         FM_METHOD_PARAMETER,
+        FM_LOCAL,
         string_new("position"),
+        FM_METHOD_NAME,
+        string_new("add:at:"),
         FM_INTEGER,
         string_new("42"),
-        FM_END_KEYWORD_METHOD
+        FM_METHOD_END
       )
     );
   });

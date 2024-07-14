@@ -30,7 +30,7 @@ void parser_bit(Token **table, char ***fmcodes);
 char *parser_association_list(Token **table, char ***fmcodes);
 void parser_key(Token **table, char ***fmcodes);
 void parser_method_definition(Token **table, char ***fmcodes);
-void parser_keyword_list(Token **table, char ***fmcodes);
+char *parser_keyword_list(Token **table, char ***fmcodes);
 void parser_scalar(Token **table, char ***fmcodes);
 void parser_variable(Token **table, char ***fmcodes);
 

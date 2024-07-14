@@ -173,8 +173,23 @@ void parser_literal(Token **table, char ***fmcodes) {
     generate(number_of_elements);
   } else if(la1value("#")) {
     ensure_value("#", "missing `#` on method definition.");
-    literal();
+    generate(FM_METHOD_START);
+
+    generate(FM_METHOD_RECEIVER);
+    size_t prev_size = vector_size(*fmcodes);
+
+    if(!((la1type(TOKEN_MESSAGE_SYMBOL) && la2value("=>")) ||
+         (la1type(TOKEN_IDENTIFIER) && la2value("=>")) ||
+         (la1type(TOKEN_MESSAGE_SYMBOL) && la3value("=>")) ||
+         (la1type(TOKEN_IDENTIFIER) && la2value(":")))) {
+      literal();
+    }
+    if(vector_size(*fmcodes) == prev_size) {
+      generate(FM_METHOD_ANY_OBJECT);
+    }
+
     method_definition();
+    generate(FM_METHOD_END);
   } else {
     scalar();
   }
@@ -258,15 +273,51 @@ void parser_key(Token **table, char ***fmcodes) {
 }
 
 void parser_method_definition(Token **table, char ***fmcodes) {
-  // TODO
-  (void)table;
-  (void)fmcodes;
+  char *name = NULL;
+
+  if(la1type(TOKEN_IDENTIFIER) && la2value(":")) {
+    name = keyword_list();
+    ensure_value("=>", "missing '=>' on keyword keyword method definition.");
+  } else if(la1type(TOKEN_IDENTIFIER) && la2value("=>")) {
+    name = ensure_type(
+      TOKEN_IDENTIFIER, "expected identifier on unary method definition."
+    );
+    ensure_value("=>", "missing '=>' on unary method definition.");
+  } else if(la1type(TOKEN_MESSAGE_SYMBOL) && la2value("=>")) {
+    name = ensure_type(
+      TOKEN_MESSAGE_SYMBOL, "expected message symbol on lhs method definition."
+    );
+    ensure_value("=>", "missing '=>' on lhs method definition.");
+  } else if(la1type(TOKEN_MESSAGE_SYMBOL)) {
+    name = ensure_type(
+      TOKEN_MESSAGE_SYMBOL,
+      "expected message symbol on binary method definition."
+    );
+    generate(FM_METHOD_PARAMETER);
+    literal();
+    ensure_value("=>", "missing '=>' on binary method definition.");
+  }
+
+  generate(FM_METHOD_NAME);
+  generate(name);
+  unit();
 }
 
-void parser_keyword_list(Token **table, char ***fmcodes) {
-  // TODO
-  (void)table;
-  (void)fmcodes;
+char *parser_keyword_list(Token **table, char ***fmcodes) {
+  char *keyword_method_name = NULL;
+
+  while(la1type(TOKEN_IDENTIFIER) && la2value(":")) {
+    string_addf(
+      keyword_method_name,
+      "%s%s",
+      ensure_type(TOKEN_IDENTIFIER, "expected identifier on keyword list."),
+      ensure_value(":", "missing ':' on keyword list.")
+    );
+    generate(FM_METHOD_PARAMETER);
+    literal();
+  }
+
+  return keyword_method_name;
 }
 
 void parser_scalar(Token **table, char ***fmcodes) {

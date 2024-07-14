@@ -71,9 +71,9 @@ key:
   | STRING
 
 method_definition:
-    IDENTIFIER '=>' unit
+    keyword_list '=>' unit
+  | IDENTIFIER '=>' unit
   | MESSAGE_SYMBOL '=>' unit
-  | keyword_list '=>' unit
   | MESSAGE_SYMBOL literal '=>' unit
 
 keyword_list:

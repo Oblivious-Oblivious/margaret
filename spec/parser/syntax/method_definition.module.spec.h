@@ -6,53 +6,134 @@
 
 module(method_definition, {
   it("parses method definitions", {
-    it("parses method definitions", {
-      parse(
-        "# 0 fact => 1",
-        vector_new(
-          FM_START_UNARY_METHOD,
-          FM_METHOD_RECEIVER,
-          FM_INTEGER,
-          string_new("0"),
-          string_new("fact"),
-          FM_INTEGER,
-          string_new("1"),
-          FM_END_UNARY_METHOD
-        )
-      );
+    parse(
+      "# ! => @self",
+      vector_new(
+        FM_METHOD_START,
+        FM_METHOD_RECEIVER,
+        FM_METHOD_ANY_OBJECT,
+        FM_METHOD_NAME,
+        string_new("!"),
+        FM_SELF,
+        FM_METHOD_END
+      )
+    );
 
-      parse(
-        "# 0 ** 0 => $nil",
-        vector_new(
-          FM_START_BINARY_METHOD,
-          FM_METHOD_RECEIVER,
-          FM_INTEGER,
-          string_new("0"),
-          string_new("**"),
-          FM_METHOD_PARAMETER,
-          string_new("0"),
-          FM_NIL,
-          FM_END_BINARY_METHOD
-        )
-      );
+    parse(
+      "# $false ! => $true",
+      vector_new(
+        FM_METHOD_START,
+        FM_METHOD_RECEIVER,
+        FM_FALSE,
+        FM_METHOD_NAME,
+        string_new("!"),
+        FM_TRUE,
+        FM_METHOD_END
+      )
+    );
 
-      parse(
-        "#add: element at: position => 42",
-        vector_new(
-          FM_START_KEYWORD_METHOD,
-          FM_METHOD_RECEIVER,
-          FM_METHOD_ANY_OBJECT,
-          string_new("add:at:"),
-          FM_METHOD_PARAMETER,
-          string_new("element"),
-          FM_METHOD_PARAMETER,
-          string_new("position"),
-          FM_INTEGER,
-          string_new("42"),
-          FM_END_KEYWORD_METHOD
-        )
-      );
-    });
+    parse(
+      "# fact => 0",
+      vector_new(
+        FM_METHOD_START,
+        FM_METHOD_RECEIVER,
+        FM_METHOD_ANY_OBJECT,
+        FM_METHOD_NAME,
+        string_new("fact"),
+        FM_INTEGER,
+        string_new("0"),
+        FM_METHOD_END
+      )
+    );
+
+    parse(
+      "# 0 fact => 1",
+      vector_new(
+        FM_METHOD_START,
+        FM_METHOD_RECEIVER,
+        FM_INTEGER,
+        string_new("0"),
+        FM_METHOD_NAME,
+        string_new("fact"),
+        FM_INTEGER,
+        string_new("1"),
+        FM_METHOD_END
+      )
+    );
+
+    parse(
+      "# ** 0 => 1",
+      vector_new(
+        FM_METHOD_START,
+        FM_METHOD_RECEIVER,
+        FM_METHOD_ANY_OBJECT,
+        FM_METHOD_PARAMETER,
+        FM_INTEGER,
+        string_new("0"),
+        FM_METHOD_NAME,
+        string_new("**"),
+        FM_INTEGER,
+        string_new("1"),
+        FM_METHOD_END
+      )
+    );
+
+    parse(
+      "# 0 ** 0 => $nil",
+      vector_new(
+        FM_METHOD_START,
+        FM_METHOD_RECEIVER,
+        FM_INTEGER,
+        string_new("0"),
+        FM_METHOD_PARAMETER,
+        FM_INTEGER,
+        string_new("0"),
+        FM_METHOD_NAME,
+        string_new("**"),
+        FM_NIL,
+        FM_METHOD_END
+      )
+    );
+
+    parse(
+      "#add: element at: position => 42",
+      vector_new(
+        FM_METHOD_START,
+        FM_METHOD_RECEIVER,
+        FM_METHOD_ANY_OBJECT,
+        FM_METHOD_PARAMETER,
+        FM_LOCAL,
+        string_new("element"),
+        FM_METHOD_PARAMETER,
+        FM_LOCAL,
+        string_new("position"),
+        FM_METHOD_NAME,
+        string_new("add:at:"),
+        FM_INTEGER,
+        string_new("42"),
+        FM_METHOD_END
+      )
+    );
+
+    parse(
+      "#%{} add: 42 at: 'a' => $true",
+      vector_new(
+        FM_METHOD_START,
+        FM_METHOD_RECEIVER,
+        FM_HASH,
+        string_new("0"),
+        FM_METHOD_PARAMETER,
+        FM_INTEGER,
+        string_new("42"),
+        FM_METHOD_PARAMETER,
+        FM_STRING,
+        string_new("a"),
+        FM_METHOD_NAME,
+        string_new("add:at:"),
+        FM_TRUE,
+        FM_METHOD_END
+      )
+    );
   });
 
   keyword_list();

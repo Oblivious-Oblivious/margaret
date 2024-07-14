@@ -54,7 +54,7 @@ module(margaret_messages_spec, {
       vector_new(
         FM_GLOBAL,
         string_new("$Margaret"),
-        FM_START_KEYWORD_METHOD,
+        FM_METHOD_START,
         FM_METHOD_RECEIVER,
         FM_METHOD_ANY_OBJECT,
         string_new("while:do:"),
@@ -88,7 +88,7 @@ module(margaret_messages_spec, {
         FM_KEYWORD,
         string_new("if:then:"),
         string_new("2"),
-        FM_END_KEYWORD_METHOD,
+        FM_METHOD_END,
         FM_KEYWORD,
         string_new("bind:"),
         string_new("1")
