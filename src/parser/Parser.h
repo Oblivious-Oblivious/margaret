@@ -12,7 +12,7 @@ char **parser_analyze_syntax(Token **table);
 
 /** Parser rules */
 void parser_first_unit(Token **table, char ***fmcodes);
-void parser_unit_list(Token **table, char ***fmcodes);
+char *parser_unit_list(Token **table, char ***fmcodes);
 void parser_unit(Token **table, char ***fmcodes);
 void parser_assignment_chain(Token **table, char ***fmcodes);
 void parser_keyword_message(Token **table, char ***fmcodes);
@@ -22,7 +22,6 @@ void parser_binary_selector_chain(Token **table, char ***fmcodes);
 void parser_unary_message(Token **table, char ***fmcodes);
 void parser_unary_selector_chain(Token **table, char ***fmcodes);
 void parser_lhs_message(Token **table, char ***fmcodes);
-void parser_lhs_selector(Token **table, char ***fmcodes);
 void parser_literal(Token **table, char ***fmcodes);
 void parser_param_list(Token **table, char ***fmcodes);
 char *parser_bit_list(Token **table, char ***fmcodes);

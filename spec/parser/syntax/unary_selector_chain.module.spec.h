@@ -16,7 +16,7 @@ module(unary_selector_chain, {
       "40 incr incr",
       vector_new(
         FM_INTEGER,
-        string_new("17"),
+        string_new("40"),
         FM_UNARY,
         string_new("incr"),
         FM_UNARY,

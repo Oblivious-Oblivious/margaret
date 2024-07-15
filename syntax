@@ -35,10 +35,7 @@ unary_selector_chain:
   | IDENTIFIER unary_selector_chain
 
 lhs_message:
-    lhs_selector literal
-
-lhs_selector:
-    MESSAGE_SYMBOL
+    MESSAGE_SYMBOL literal
 
 literal:
     scalar

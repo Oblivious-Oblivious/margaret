@@ -47,19 +47,28 @@ void parser_first_unit(Token **table, char ***fmcodes) {
   ensure_value("eof", "reached end of program.");
 }
 
-void parser_unit_list(Token **table, char ***fmcodes) {
-  while(!la1value(")") && !la1value("eof")) {
-    unit();
+char *parser_unit_list(Token **table, char ***fmcodes) {
+  size_t no_elements       = 0;
+  char *number_of_elements = NULL;
 
-    if(!la1value(")") && !la1value("eof")) {
+  while(!la1value(")") && !la1value("]") && !la1value("}") && !la1value("eof")
+  ) {
+    unit();
+    no_elements++;
+
+    if(!la1value(")") && !la1value("]") && !la1value("}") && !la1value("eof")) {
       ensure_value(",", "grouped items should be separated by commas.");
     }
   }
+
+  string_addf(number_of_elements, "%zu", no_elements);
+  return number_of_elements;
 }
 
-void parser_unit(Token **table, char ***fmcodes) {
-  // TODO
-  literal();
+void parser_unit(Token **table, char ***fmcodes) { assignment_message(); }
+
+void parser_assignment_message(Token **table, char ***fmcodes) {
+  keyword_message();
 }
 
 void parser_assignment_chain(Token **table, char ***fmcodes) {
@@ -69,51 +78,95 @@ void parser_assignment_chain(Token **table, char ***fmcodes) {
 }
 
 void parser_keyword_message(Token **table, char ***fmcodes) {
-  // TODO
-  (void)table;
-  (void)fmcodes;
+  if(la1type(TOKEN_IDENTIFIER) && la2value(":")) {
+    generate(FM_GLOBAL);
+    generate(string_new("$Margaret"));
+    keyword_selector_chain();
+  } else {
+    binary_message();
+
+    if(la1type(TOKEN_IDENTIFIER) && la2value(":")) {
+      keyword_selector_chain();
+    }
+  }
 }
 
 void parser_keyword_selector_chain(Token **table, char ***fmcodes) {
-  // TODO
-  (void)table;
-  (void)fmcodes;
+  char *message_name = NULL;
+  size_t no_keywords = 0;
+
+  while(la1type(TOKEN_IDENTIFIER) && la2value(":")) {
+    no_keywords++;
+    string_addf(
+      message_name,
+      "%s",
+      ensure_type(
+        TOKEN_IDENTIFIER, "expected identifier on keyword selector chain."
+      )
+    );
+    string_addf(
+      message_name,
+      "%s",
+      ensure_value(":", "expected ':' on keyword selector chain.")
+    );
+    binary_message();
+  }
+
+  generate(FM_KEYWORD);
+  generate(message_name);
+  char *number_of_keywords = NULL;
+  string_addf(number_of_keywords, "%zu", no_keywords);
+  generate(number_of_keywords);
 }
 
 void parser_binary_message(Token **table, char ***fmcodes) {
-  // TODO
-  (void)table;
-  (void)fmcodes;
+  unary_message();
+  if(la1type(TOKEN_MESSAGE_SYMBOL)) {
+    binary_selector_chain();
+  }
 }
 
 void parser_binary_selector_chain(Token **table, char ***fmcodes) {
-  // TODO
-  (void)table;
-  (void)fmcodes;
+  while(la1type(TOKEN_MESSAGE_SYMBOL) && !la1value("=")) {
+    char *message_name = ensure_type(
+      TOKEN_MESSAGE_SYMBOL, "expected message symbol on binary selector."
+    );
+    unary_message();
+    generate(FM_BINARY);
+    generate(message_name);
+  }
 }
 
 void parser_unary_message(Token **table, char ***fmcodes) {
-  // TODO
-  (void)table;
-  (void)fmcodes;
+  lhs_message();
+  if(la1type(TOKEN_IDENTIFIER) && !la2value(":")) {
+    unary_selector_chain();
+  }
 }
 
 void parser_unary_selector_chain(Token **table, char ***fmcodes) {
-  // TODO
-  (void)table;
-  (void)fmcodes;
+  while(la1type(TOKEN_IDENTIFIER)) {
+    generate(FM_UNARY);
+    generate(
+      ensure_type(TOKEN_IDENTIFIER, "expected identifier on unary selector.")
+    );
+  }
 }
 
 void parser_lhs_message(Token **table, char ***fmcodes) {
-  // TODO
-  (void)table;
-  (void)fmcodes;
-}
+  char *message_name = NULL;
+  if(la1type(TOKEN_MESSAGE_SYMBOL) && !la1value("=")) {
+    message_name = ensure_type(
+      TOKEN_MESSAGE_SYMBOL, "expected message symbol on lhs selector."
+    );
+  }
 
-void parser_lhs_selector(Token **table, char ***fmcodes) {
-  // TODO
-  (void)table;
-  (void)fmcodes;
+  literal();
+
+  if(message_name != NULL) {
+    generate(FM_LHS);
+    generate(message_name);
+  }
 }
 
 void parser_literal(Token **table, char ***fmcodes) {

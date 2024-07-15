@@ -13,7 +13,8 @@ module(keyword_selector_chain, {
         FM_INTEGER,
         string_new("42"),
         FM_KEYWORD,
-        string_new("puts:")
+        string_new("puts:"),
+        string_new("1")
       )
     );
   });
@@ -29,7 +30,8 @@ module(keyword_selector_chain, {
         FM_INTEGER,
         string_new("0"),
         FM_KEYWORD,
-        string_new("add:at:")
+        string_new("add:at:"),
+        string_new("2")
       )
     );
   });
