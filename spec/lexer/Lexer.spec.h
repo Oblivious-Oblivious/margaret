@@ -31,6 +31,15 @@
     assert_that_charptr(tokens[0]->value equals to str);      \
   } while(0)
 
+#define tokenize_and_assert_multiline_res(str, res, no_lines) \
+  do {                                                        \
+    Lexer *l       = lexer_new("file.marg", string_new(str)); \
+    Token **tokens = lexer_make_tokens(l);                    \
+    assert_that_int(vector_size(tokens) equals to 2);         \
+    assert_that_int(l->lineno equals to no_lines);            \
+    assert_that_charptr(tokens[0]->value equals to res);      \
+  } while(0)
+
 module(LexerSpec, {
   describe("Lexer", {
     it("contains the input text, lexer position and current character", {
@@ -173,20 +182,19 @@ module(LexerSpec, {
       it("tokenizes character literals", {
         Lexer *l       = lexer_new("file.marg", string_new("('a' puts)"));
         Token **tokens = lexer_make_tokens(l);
-        assert_that_charptr(tokens[1]->value equals to "'a'");
+        assert_that_charptr(tokens[1]->value equals to "a");
         assert_that_int(tokens[1]->type equals to TOKEN_STRING);
       });
 
       it("tokenizes string literals", {
         Lexer *l       = lexer_new("file.marg", string_new("(\"hello\" puts)"));
         Token **tokens = lexer_make_tokens(l);
-        assert_that_charptr(tokens[1]->value equals to "\"hello\"");
+        assert_that_charptr(tokens[1]->value equals to "hello");
 
         l =
           lexer_new("file.marg", string_new("(\"multi\nline\nstring\" puts)"));
         tokens = lexer_make_tokens(l);
-        assert_that_charptr(tokens[1]->value equals to "\"multi\nline\nstring\""
-        );
+        assert_that_charptr(tokens[1]->value equals to "multi\nline\nstring");
       });
 
       it("tokenizes identifiers", {
@@ -346,27 +354,45 @@ module(LexerSpec, {
     });
 
     it("tokenizes different types of strings", {
-      tokenize_and_assert("'hello'");
-      tokenize_and_assert("\"world\"");
-      tokenize_and_assert("'test string'");
-      tokenize_and_assert("\"another example\"");
-      tokenize_and_assert("'a'");
-      tokenize_and_assert("\"simple\"");
-      tokenize_and_assert("'pattern matching'");
-      tokenize_and_assert("\"regex\"");
-      tokenize_and_assert("'quoted text'");
-      tokenize_and_assert("\"with quotes\"");
+      tokenize_and_assert_res("'hello'", "hello");
+      tokenize_and_assert_res("\"world\"", "world");
+      tokenize_and_assert_res("'test string'", "test string");
+      tokenize_and_assert_res("\"another example\"", "another example");
+      tokenize_and_assert_res("'a'", "a");
+      tokenize_and_assert_res("\"simple\"", "simple");
+      tokenize_and_assert_res("'pattern matching'", "pattern matching");
+      tokenize_and_assert_res("\"regex\"", "regex");
+      tokenize_and_assert_res("'quoted text'", "quoted text");
+      tokenize_and_assert_res("\"with quotes\"", "with quotes");
 
-      tokenize_and_assert_multiline("'hello\nworld'", 3);
-      tokenize_and_assert_multiline("\"multi\nline\nstring\"", 4);
-      tokenize_and_assert_multiline("'example\nwith\nnewlines'", 4);
-      tokenize_and_assert_multiline("\"another\nexample\"", 3);
-      tokenize_and_assert_multiline("'this\nis a\ntest'", 4);
-      tokenize_and_assert_multiline("\"multi\nline\nregex\npattern\"", 5);
-      tokenize_and_assert_multiline("'quotes\nwith\nnewlines'", 4);
-      tokenize_and_assert_multiline("\"new\nline\ntest\"", 4);
-      tokenize_and_assert_multiline("'string\nwith\nmultiple\nlines'", 5);
-      tokenize_and_assert_multiline("\"testing\nnew\nline\nhandling\"", 5);
+      tokenize_and_assert_multiline_res("'hello\nworld'", "hello\nworld", 3);
+      tokenize_and_assert_multiline_res(
+        "\"multi\nline\nstring\"", "multi\nline\nstring", 4
+      );
+      tokenize_and_assert_multiline_res(
+        "'example\nwith\nnewlines'", "example\nwith\nnewlines", 4
+      );
+      tokenize_and_assert_multiline_res(
+        "\"another\nexample\"", "another\nexample", 3
+      );
+      tokenize_and_assert_multiline_res(
+        "'this\nis a\ntest'", "this\nis a\ntest", 4
+      );
+      tokenize_and_assert_multiline_res(
+        "\"multi\nline\nregex\npattern\"", "multi\nline\nregex\npattern", 5
+      );
+      tokenize_and_assert_multiline_res(
+        "'quotes\nwith\nnewlines'", "quotes\nwith\nnewlines", 4
+      );
+      tokenize_and_assert_multiline_res(
+        "\"new\nline\ntest\"", "new\nline\ntest", 4
+      );
+      tokenize_and_assert_multiline_res(
+        "'string\nwith\nmultiple\nlines'", "string\nwith\nmultiple\nlines", 5
+      );
+      tokenize_and_assert_multiline_res(
+        "\"testing\nnew\nline\nhandling\"", "testing\nnew\nline\nhandling", 5
+      );
     });
   });
 
