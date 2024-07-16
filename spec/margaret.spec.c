@@ -10,9 +10,6 @@
 #include "base/memory.spec.h"
 #include "base/table.spec.h"
 
-// bytecode
-#include "bytecode/FormalAST.spec.h"
-
 // emitter
 #include "emitter/Emitter.spec.h"
 
@@ -99,9 +96,6 @@ spec_suite({
   memory_spec();
   table_spec();
 
-  alternate_to_dec_spec();
-  FormalASTSpec();
-
   EmitterSpec();
 
   EvaluatorSpec();
@@ -140,6 +134,7 @@ spec_suite({
 
   InspectorSpec();
 
+  alternate_to_dec_spec();
   LexerSpec();
 
   file_loader_spec();
