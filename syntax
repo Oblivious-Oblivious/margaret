@@ -6,11 +6,11 @@ unit_list:
   | unit ',' unit_list
 
 unit:
-    assignment_chain keyword_message
+    assignment_message
 
-assignment_chain:
-    keyword_message '='
-  | keyword_message '=' assignment_chain
+assignment_message:
+    keyword_message
+  | keyword_message '=' assignment_message
 
 keyword_message:
     keyword_selector_chain

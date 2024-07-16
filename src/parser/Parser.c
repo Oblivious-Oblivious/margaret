@@ -16,7 +16,7 @@
 #define first_unit()             parser_first_unit(table, fmcodes)
 #define unit_list()              parser_unit_list(table, fmcodes)
 #define unit()                   parser_unit(table, fmcodes)
-#define assignment_chain()       parser_assignment_chain(table, fmcodes)
+#define assignment_message()     parser_assignment_message(table, fmcodes)
 #define keyword_message()        parser_keyword_message(table, fmcodes)
 #define keyword_selector_chain() parser_keyword_selector_chain(table, fmcodes)
 #define binary_message()         parser_binary_message(table, fmcodes)
@@ -69,12 +69,12 @@ void parser_unit(Token **table, char ***fmcodes) { assignment_message(); }
 
 void parser_assignment_message(Token **table, char ***fmcodes) {
   keyword_message();
-}
-
-void parser_assignment_chain(Token **table, char ***fmcodes) {
-  // TODO
-  (void)table;
-  (void)fmcodes;
+  if(la1value("=")) {
+    char *eq = ensure_value("=", "expected '=' on assignment message.");
+    assignment_message();
+    generate(FM_BINARY);
+    generate(eq);
+  }
 }
 
 void parser_keyword_message(Token **table, char ***fmcodes) {
@@ -441,7 +441,7 @@ void parser_variable(Token **table, char ***fmcodes) {
 #undef first_unit
 #undef unit_list
 #undef unit
-#undef assignment_chain
+#undef assignment_message
 #undef keyword_message
 #undef keyword_selector_chain
 #undef binary_message
