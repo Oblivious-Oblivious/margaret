@@ -9,6 +9,8 @@ module(intervals_spec, {
       "(x = Interval from: 5 to: 10)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("Interval"),
         FM_INTEGER,
         string_new("5"),
@@ -17,8 +19,6 @@ module(intervals_spec, {
         FM_KEYWORD,
         string_new("from:to:"),
         string_new("2"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -26,6 +26,8 @@ module(intervals_spec, {
     parse(
       "(x = Interval from: 5 to: 10 by: 2)",
       vector_new(
+        FM_LOCAL,
+        string_new("x"),
         FM_LOCAL,
         string_new("Interval"),
         FM_INTEGER,
@@ -37,8 +39,6 @@ module(intervals_spec, {
         FM_KEYWORD,
         string_new("from:to:by:"),
         string_new("3"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -46,6 +46,8 @@ module(intervals_spec, {
     parse(
       "(x = 5 to: 10)",
       vector_new(
+        FM_LOCAL,
+        string_new("x"),
         FM_INTEGER,
         string_new("5"),
         FM_INTEGER,
@@ -53,8 +55,6 @@ module(intervals_spec, {
         FM_KEYWORD,
         string_new("to:"),
         string_new("1"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -62,6 +62,8 @@ module(intervals_spec, {
     parse(
       "(x = 5 to: 10 by: 2)",
       vector_new(
+        FM_LOCAL,
+        string_new("x"),
         FM_INTEGER,
         string_new("5"),
         FM_INTEGER,
@@ -71,8 +73,6 @@ module(intervals_spec, {
         FM_KEYWORD,
         string_new("to:by:"),
         string_new("2"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )

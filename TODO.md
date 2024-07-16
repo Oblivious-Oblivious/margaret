@@ -1,19 +1,21 @@
 ## (✗) ver. 1.0.0
 -----------------
   🟥 Implement all literals and stdlib
-    🟥 $nil                                                  -> ($NilProto clone)   -> singleton
-    🟥 $true                                                 -> ($TrueProto clone)  -> singleton
-    🟥 $false                                                -> ($FalseProto clone) -> singleton
-    🟥 ::label                                               -> ($LabelProto clone)
-    🟥 42, 4_200, 0b0110, 0B10, 0xbeef, 0X0427, 0o741, 0O210 -> ($IntegerProto clone)
-    🟥 42.0, 42_42.42_42                                     -> ($FloatProto clone)
-    🟥 "foo\tbar"                                            -> ($StringProto clone)
-    🟥 [42, "Hello", false]                                  -> ($TensorProto clone)
-    🟥 %{"a": 1, b: 2}                                       -> ($HashProto clone)
-    🟥 %[1, 2]                                               -> ($TupleProto clone)
-    🟥 %(1::1, 0::1)                                         -> ($BitstringProto clone)
-    🟥 {a | a + 1}                                           -> ($ProcProto clone)
-    🟥 #put: element at: position => ()                      -> ($MethodProto clone)
+    🟩 $nil                                                  -> ($NilProto clone)   -> singleton
+    🟩 $true                                                 -> ($TrueProto clone)  -> singleton
+    🟩 $false                                                -> ($FalseProto clone) -> singleton
+    🟩 ::label                                               -> ($LabelProto clone)
+    🟩 42, 4_200, 0b0110, 0B10, 0xbeef, 0X0427, 0o741, 0O210 -> ($IntegerProto clone)
+    🟩 42.0, 42_42.42_42                                     -> ($FloatProto clone)
+    🟩 "foo\tbar"                                            -> ($StringProto clone)
+    🟩 [42, "Hello", false]                                  -> ($TensorProto clone)
+    🟩 %{"a": 1, b: 2}                                       -> ($HashProto clone)
+    🟩 %[1, 2]                                               -> ($TupleProto clone)
+    🟩 %(1::1, 0::1)                                         -> ($BitstringProto clone)
+    🟩 {a | a + 1}                                           -> ($ProcProto clone)
+    🟩 #put: element at: position => ()                      -> ($MethodProto clone)
+  🟥 Add visual literals of trees, graphs and matrices (2-dimentional data representation).
+     Most likely part of an IDE that casts the data into tensors.
 
 ## (✗) ver. 0.4.0
 -----------------
@@ -46,8 +48,6 @@
   🟥 Optimize hash function for better string interning.
   🟥 Add big integers and big floats.
   🟥 Refactor `include:`, `call` and `call:` into primitive messages.
-  🟥 Add visual literals of trees, graphs and matrices (2-dimentional data representation).
-     Most likely part of an IDE that casts the data into tensors.
   🟥 Use comments for docs or TODO graphs.
   🟥 Add cascaded messages.
   🟥 Add a custom mark and sweep garbage collector.
@@ -73,7 +73,7 @@
   🟥 Make bang (!) messages denote persistant changes in object state.
   🟥 Add complex numbers `(0+2i)`, and rational numbers `(1/2r)` -> unary messages.
   🟥 Use GOTO for break and continue. -> `list iterate: { elem | if: { elem == 42 } then: { goto: exit_label } elem puts } ::exit_label`.
-  🟥 Create an `import/require` Margaret message.
+  🟩 Create an `import/require` Margaret message.
      Probably simple concatenation of files (C-like include), not actual module system.
   ---------------------------
   🟥 Add functional features:
@@ -95,13 +95,10 @@
      Array bind: # [] add: element at: position => 17
      Array bind: # [] add: 'a' at 0 => ['a']
      Array bind: # _ add: 'a' at 0 => ['a'] ++ self
-  🟥 Numeric bind: [
-      # 0 ** 0 => nil,
-      # 0 ** _ => 0,
-      # _ ** 0 => 1,
-      # ** other => self raised_to: other,
-  ]
   🟩 Setup message binding and sending:
+     $Lhs msg -> Method {name: "msg", parameters: {}}
+     msg $Lhs (no change)
+
      $Unary msg -> Method {name: "msg", parameters: {}}
      $Unary msg -> (no change)
 

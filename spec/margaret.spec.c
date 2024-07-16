@@ -26,7 +26,6 @@
 #include "generic/bitwise.spec.h"
 #include "generic/booleans.spec.h"
 #include "generic/characters.spec.h"
-#include "generic/classes.spec.h"
 #include "generic/code_as_data.spec.h"
 #include "generic/complex.spec.h"
 #include "generic/conditionals.spec.h"
@@ -44,6 +43,7 @@
 #include "generic/meta_evaluation.spec.h"
 #include "generic/method_definition.spec.h"
 #include "generic/numeric.spec.h"
+#include "generic/postcard.spec.h"
 #include "generic/procs.spec.h"
 #include "generic/rational.spec.h"
 #include "generic/strings.spec.h"
@@ -106,37 +106,37 @@ spec_suite({
 
   EvaluatorSpec();
 
-  // arithmetic_spec();
-  // assignments_spec();
-  // bitstrings_spec();
-  // bitwise_spec();
-  // booleans_spec();
-  // characters_spec();
-  // classes_spec();
-  // code_as_data_spec();
-  // complex_spec();
-  // conditionals_spec();
-  // constants_spec();
-  // conversions_spec();
-  // date_time_spec();
-  // errors_spec();
-  // groups_spec();
-  // hashes_spec();
-  // identifiers_spec();
-  // intervals_spec();
-  // iterations_spec();
-  // margaret_messages_spec();
-  // messages_spec();
-  // meta_evaluation_spec();
-  // method_definition_spec();
-  // numeric_spec();
-  // procs_spec();
-  // rational_spec();
-  // strings_spec();
-  // symbols_spec();
-  // tensors_spec();
-  // tuples_spec();
-  // variables_spec();
+  arithmetic_spec();
+  assignments_spec();
+  bitstrings_spec();
+  bitwise_spec();
+  booleans_spec();
+  characters_spec();
+  code_as_data_spec();
+  complex_spec();
+  conditionals_spec();
+  constants_spec();
+  conversions_spec();
+  date_time_spec();
+  errors_spec();
+  groups_spec();
+  hashes_spec();
+  identifiers_spec();
+  intervals_spec();
+  iterations_spec();
+  margaret_messages_spec();
+  messages_spec();
+  meta_evaluation_spec();
+  method_definition_spec();
+  numeric_spec();
+  postcard_spec();
+  procs_spec();
+  rational_spec();
+  strings_spec();
+  symbols_spec();
+  tensors_spec();
+  tuples_spec();
+  variables_spec();
 
   InspectorSpec();
 

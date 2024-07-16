@@ -145,7 +145,7 @@ void parser_unary_message(Token **table, char ***fmcodes) {
 }
 
 void parser_unary_selector_chain(Token **table, char ***fmcodes) {
-  while(la1type(TOKEN_IDENTIFIER)) {
+  while(la1type(TOKEN_IDENTIFIER) && !la2value(":")) {
     generate(FM_UNARY);
     generate(
       ensure_type(TOKEN_IDENTIFIER, "expected identifier on unary selector.")

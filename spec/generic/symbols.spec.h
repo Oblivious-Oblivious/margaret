@@ -7,7 +7,7 @@ module(symbols_spec, {
   it(
     "parses frozen strings",
     {
-      // NOTE Look at ruby
+      // NOTE - Look at ruby
     }
   );
 })

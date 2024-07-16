@@ -60,11 +60,11 @@ module(messages_spec, {
       "x = (obj puts)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("obj"),
         FM_UNARY,
         string_new("puts"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -113,6 +113,8 @@ module(messages_spec, {
     parse(
       "x = 42 incr incr decr decr",
       vector_new(
+        FM_LOCAL,
+        string_new("x"),
         FM_INTEGER,
         string_new("42"),
         FM_UNARY,
@@ -123,8 +125,6 @@ module(messages_spec, {
         string_new("decr"),
         FM_UNARY,
         string_new("decr"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -329,6 +329,8 @@ module(messages_spec, {
       "x = a + b * 2 - 5",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("a"),
         FM_LOCAL,
         string_new("b"),
@@ -342,8 +344,6 @@ module(messages_spec, {
         string_new("5"),
         FM_BINARY,
         string_new("-"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -452,11 +452,11 @@ module(messages_spec, {
       )",
       vector_new(
         FM_LOCAL,
+        string_new("list"),
+        FM_LOCAL,
         string_new("List"),
         FM_UNARY,
         string_new("new"),
-        FM_LOCAL,
-        string_new("list"),
         FM_BINARY,
         string_new("="),
         FM_LOCAL,
@@ -469,14 +469,14 @@ module(messages_spec, {
         string_new("put:at:"),
         string_new("2"),
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("list"),
         FM_INTEGER,
         string_new("2"),
         FM_KEYWORD,
         string_new("get:"),
         string_new("1"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("="),
         FM_LOCAL,
@@ -612,23 +612,13 @@ module(messages_spec, {
         string_new("arr"),
         FM_INTEGER,
         string_new("1"),
-        FM_KEYWORD,
-        string_new("add:"),
-        string_new("1"),
-        FM_LOCAL,
-        string_new("arr"),
         FM_INTEGER,
         string_new("2"),
-        FM_KEYWORD,
-        string_new("add:"),
-        string_new("1"),
-        FM_LOCAL,
-        string_new("arr"),
         FM_INTEGER,
         string_new("3"),
         FM_KEYWORD,
-        string_new("add:"),
-        string_new("1")
+        string_new("add:add:add:"),
+        string_new("3")
       )
     );
     parse(

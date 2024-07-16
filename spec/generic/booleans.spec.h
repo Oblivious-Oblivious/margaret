@@ -8,14 +8,14 @@ module(booleans_spec, {
     parse(
       "(b = 2 == 3)",
       vector_new(
+        FM_LOCAL,
+        string_new("b"),
         FM_INTEGER,
         string_new("2"),
         FM_INTEGER,
         string_new("3"),
         FM_BINARY,
         string_new("=="),
-        FM_LOCAL,
-        string_new("b"),
         FM_BINARY,
         string_new("=")
       )
@@ -23,12 +23,12 @@ module(booleans_spec, {
     parse(
       "(b = 2 dosth!)",
       vector_new(
+        FM_LOCAL,
+        string_new("b"),
         FM_INTEGER,
         string_new("2"),
         FM_UNARY,
         string_new("dosth!"),
-        FM_LOCAL,
-        string_new("b"),
         FM_BINARY,
         string_new("=")
       )
@@ -37,13 +37,13 @@ module(booleans_spec, {
       "(b = x != y)",
       vector_new(
         FM_LOCAL,
+        string_new("b"),
+        FM_LOCAL,
         string_new("x"),
         FM_LOCAL,
         string_new("y"),
         FM_BINARY,
         string_new("!="),
-        FM_LOCAL,
-        string_new("b"),
         FM_BINARY,
         string_new("=")
       )
@@ -52,13 +52,13 @@ module(booleans_spec, {
       "(b = x === y)",
       vector_new(
         FM_LOCAL,
+        string_new("b"),
+        FM_LOCAL,
         string_new("x"),
         FM_LOCAL,
         string_new("y"),
         FM_BINARY,
         string_new("==="),
-        FM_LOCAL,
-        string_new("b"),
         FM_BINARY,
         string_new("=")
       )
@@ -67,13 +67,13 @@ module(booleans_spec, {
       "(b = x !== y)",
       vector_new(
         FM_LOCAL,
+        string_new("b"),
+        FM_LOCAL,
         string_new("x"),
         FM_LOCAL,
         string_new("y"),
         FM_BINARY,
         string_new("!=="),
-        FM_LOCAL,
-        string_new("b"),
         FM_BINARY,
         string_new("=")
       )
@@ -82,13 +82,13 @@ module(booleans_spec, {
       "(b = x > y)",
       vector_new(
         FM_LOCAL,
+        string_new("b"),
+        FM_LOCAL,
         string_new("x"),
         FM_LOCAL,
         string_new("y"),
         FM_BINARY,
         string_new(">"),
-        FM_LOCAL,
-        string_new("b"),
         FM_BINARY,
         string_new("=")
       )
@@ -97,13 +97,13 @@ module(booleans_spec, {
       "(b = x < y)",
       vector_new(
         FM_LOCAL,
+        string_new("b"),
+        FM_LOCAL,
         string_new("x"),
         FM_LOCAL,
         string_new("y"),
         FM_BINARY,
         string_new("<"),
-        FM_LOCAL,
-        string_new("b"),
         FM_BINARY,
         string_new("=")
       )
@@ -112,13 +112,13 @@ module(booleans_spec, {
       "(b = x >= y)",
       vector_new(
         FM_LOCAL,
+        string_new("b"),
+        FM_LOCAL,
         string_new("x"),
         FM_LOCAL,
         string_new("y"),
         FM_BINARY,
         string_new(">="),
-        FM_LOCAL,
-        string_new("b"),
         FM_BINARY,
         string_new("=")
       )
@@ -127,13 +127,13 @@ module(booleans_spec, {
       "(b = x <= y)",
       vector_new(
         FM_LOCAL,
+        string_new("b"),
+        FM_LOCAL,
         string_new("x"),
         FM_LOCAL,
         string_new("y"),
         FM_BINARY,
         string_new("<="),
-        FM_LOCAL,
-        string_new("b"),
         FM_BINARY,
         string_new("=")
       )
@@ -143,10 +143,10 @@ module(booleans_spec, {
       vector_new(
         FM_LOCAL,
         string_new("b"),
-        FM_UNARY,
-        string_new("not"),
         FM_LOCAL,
         string_new("b"),
+        FM_UNARY,
+        string_new("not"),
         FM_BINARY,
         string_new("=")
       )
@@ -154,6 +154,8 @@ module(booleans_spec, {
     parse(
       "(b = (x < 5) && (y > 1))",
       vector_new(
+        FM_LOCAL,
+        string_new("b"),
         FM_LOCAL,
         string_new("x"),
         FM_INTEGER,
@@ -168,8 +170,6 @@ module(booleans_spec, {
         string_new(">"),
         FM_BINARY,
         string_new("&&"),
-        FM_LOCAL,
-        string_new("b"),
         FM_BINARY,
         string_new("=")
       )
@@ -177,6 +177,8 @@ module(booleans_spec, {
     parse(
       "(b = (x < 5) || (y > 1))",
       vector_new(
+        FM_LOCAL,
+        string_new("b"),
         FM_LOCAL,
         string_new("x"),
         FM_INTEGER,
@@ -191,8 +193,6 @@ module(booleans_spec, {
         string_new(">"),
         FM_BINARY,
         string_new("||"),
-        FM_LOCAL,
-        string_new("b"),
         FM_BINARY,
         string_new("=")
       )
@@ -200,6 +200,8 @@ module(booleans_spec, {
     parse(
       "(b = (x < 5) and: (y > 1))",
       vector_new(
+        FM_LOCAL,
+        string_new("b"),
         FM_LOCAL,
         string_new("x"),
         FM_INTEGER,
@@ -215,8 +217,6 @@ module(booleans_spec, {
         FM_KEYWORD,
         string_new("and:"),
         string_new("1"),
-        FM_LOCAL,
-        string_new("b"),
         FM_BINARY,
         string_new("=")
       )
@@ -224,6 +224,8 @@ module(booleans_spec, {
     parse(
       "(b = (x < 5) or: (y > 1))",
       vector_new(
+        FM_LOCAL,
+        string_new("b"),
         FM_LOCAL,
         string_new("x"),
         FM_INTEGER,
@@ -239,8 +241,6 @@ module(booleans_spec, {
         FM_KEYWORD,
         string_new("or:"),
         string_new("1"),
-        FM_LOCAL,
-        string_new("b"),
         FM_BINARY,
         string_new("=")
       )
@@ -248,6 +248,8 @@ module(booleans_spec, {
     parse(
       "(b = (x < 5) eqv: (y > 1))",
       vector_new(
+        FM_LOCAL,
+        string_new("b"),
         FM_LOCAL,
         string_new("x"),
         FM_INTEGER,
@@ -263,8 +265,6 @@ module(booleans_spec, {
         FM_KEYWORD,
         string_new("eqv:"),
         string_new("1"),
-        FM_LOCAL,
-        string_new("b"),
         FM_BINARY,
         string_new("=")
       )
@@ -272,6 +272,8 @@ module(booleans_spec, {
     parse(
       "(b = (x < 5) xor: (y > 1))",
       vector_new(
+        FM_LOCAL,
+        string_new("b"),
         FM_LOCAL,
         string_new("x"),
         FM_INTEGER,
@@ -287,8 +289,6 @@ module(booleans_spec, {
         FM_KEYWORD,
         string_new("xor:"),
         string_new("1"),
-        FM_LOCAL,
-        string_new("b"),
         FM_BINARY,
         string_new("=")
       )
@@ -296,6 +296,8 @@ module(booleans_spec, {
     parse(
       "(b = 5 between: 3 and: 12)",
       vector_new(
+        FM_LOCAL,
+        string_new("b"),
         FM_INTEGER,
         string_new("5"),
         FM_INTEGER,
@@ -305,8 +307,6 @@ module(booleans_spec, {
         FM_KEYWORD,
         string_new("between:and:"),
         string_new("2"),
-        FM_LOCAL,
-        string_new("b"),
         FM_BINARY,
         string_new("=")
       )
@@ -314,6 +314,8 @@ module(booleans_spec, {
     parse(
       "(b = 123 is_kind_of: Number)",
       vector_new(
+        FM_LOCAL,
+        string_new("b"),
         FM_INTEGER,
         string_new("123"),
         FM_LOCAL,
@@ -321,8 +323,6 @@ module(booleans_spec, {
         FM_KEYWORD,
         string_new("is_kind_of:"),
         string_new("1"),
-        FM_LOCAL,
-        string_new("b"),
         FM_BINARY,
         string_new("=")
       )
@@ -330,6 +330,8 @@ module(booleans_spec, {
     parse(
       "(b = 123 is_member_of: SmallInteger)",
       vector_new(
+        FM_LOCAL,
+        string_new("b"),
         FM_INTEGER,
         string_new("123"),
         FM_LOCAL,
@@ -337,8 +339,6 @@ module(booleans_spec, {
         FM_KEYWORD,
         string_new("is_member_of:"),
         string_new("1"),
-        FM_LOCAL,
-        string_new("b"),
         FM_BINARY,
         string_new("=")
       )
@@ -346,6 +346,8 @@ module(booleans_spec, {
     parse(
       "(b = 123 responds_to: \"sqrt\")",
       vector_new(
+        FM_LOCAL,
+        string_new("b"),
         FM_INTEGER,
         string_new("123"),
         FM_STRING,
@@ -353,8 +355,6 @@ module(booleans_spec, {
         FM_KEYWORD,
         string_new("responds_to:"),
         string_new("1"),
-        FM_LOCAL,
-        string_new("b"),
         FM_BINARY,
         string_new("=")
       )
@@ -363,11 +363,11 @@ module(booleans_spec, {
       "(b = x is_nil?)",
       vector_new(
         FM_LOCAL,
+        string_new("b"),
+        FM_LOCAL,
         string_new("x"),
         FM_UNARY,
         string_new("is_nil?"),
-        FM_LOCAL,
-        string_new("b"),
         FM_BINARY,
         string_new("=")
       )
@@ -376,11 +376,11 @@ module(booleans_spec, {
       "(b = x is_zero?)",
       vector_new(
         FM_LOCAL,
+        string_new("b"),
+        FM_LOCAL,
         string_new("x"),
         FM_UNARY,
         string_new("is_zero?"),
-        FM_LOCAL,
-        string_new("b"),
         FM_BINARY,
         string_new("=")
       )
@@ -389,11 +389,11 @@ module(booleans_spec, {
       "(b = x is_positive?)",
       vector_new(
         FM_LOCAL,
+        string_new("b"),
+        FM_LOCAL,
         string_new("x"),
         FM_UNARY,
         string_new("is_positive?"),
-        FM_LOCAL,
-        string_new("b"),
         FM_BINARY,
         string_new("=")
       )
@@ -402,11 +402,11 @@ module(booleans_spec, {
       "(b = x is_negative?)",
       vector_new(
         FM_LOCAL,
+        string_new("b"),
+        FM_LOCAL,
         string_new("x"),
         FM_UNARY,
         string_new("is_negative?"),
-        FM_LOCAL,
-        string_new("b"),
         FM_BINARY,
         string_new("=")
       )
@@ -415,11 +415,11 @@ module(booleans_spec, {
       "(b = x is_even?)",
       vector_new(
         FM_LOCAL,
+        string_new("b"),
+        FM_LOCAL,
         string_new("x"),
         FM_UNARY,
         string_new("is_even?"),
-        FM_LOCAL,
-        string_new("b"),
         FM_BINARY,
         string_new("=")
       )
@@ -428,11 +428,11 @@ module(booleans_spec, {
       "(b = x is_odd?)",
       vector_new(
         FM_LOCAL,
+        string_new("b"),
+        FM_LOCAL,
         string_new("x"),
         FM_UNARY,
         string_new("is_odd?"),
-        FM_LOCAL,
-        string_new("b"),
         FM_BINARY,
         string_new("=")
       )
@@ -441,11 +441,11 @@ module(booleans_spec, {
       "(b = x is_integer?)",
       vector_new(
         FM_LOCAL,
+        string_new("b"),
+        FM_LOCAL,
         string_new("x"),
         FM_UNARY,
         string_new("is_integer?"),
-        FM_LOCAL,
-        string_new("b"),
         FM_BINARY,
         string_new("=")
       )
@@ -454,11 +454,11 @@ module(booleans_spec, {
       "(b = x is_float?)",
       vector_new(
         FM_LOCAL,
+        string_new("b"),
+        FM_LOCAL,
         string_new("x"),
         FM_UNARY,
         string_new("is_float?"),
-        FM_LOCAL,
-        string_new("b"),
         FM_BINARY,
         string_new("=")
       )
@@ -467,11 +467,11 @@ module(booleans_spec, {
       "(b = x is_number?)",
       vector_new(
         FM_LOCAL,
+        string_new("b"),
+        FM_LOCAL,
         string_new("x"),
         FM_UNARY,
         string_new("is_number?"),
-        FM_LOCAL,
-        string_new("b"),
         FM_BINARY,
         string_new("=")
       )
@@ -479,12 +479,12 @@ module(booleans_spec, {
     parse(
       "(b = 'a' is_uppercase?)",
       vector_new(
+        FM_LOCAL,
+        string_new("b"),
         FM_STRING,
         string_new("a"),
         FM_UNARY,
         string_new("is_uppercase?"),
-        FM_LOCAL,
-        string_new("b"),
         FM_BINARY,
         string_new("=")
       )
@@ -492,12 +492,12 @@ module(booleans_spec, {
     parse(
       "(b = 'a' is_lowercase?)",
       vector_new(
+        FM_LOCAL,
+        string_new("b"),
         FM_STRING,
         string_new("a"),
         FM_UNARY,
         string_new("is_lowercase?"),
-        FM_LOCAL,
-        string_new("b"),
         FM_BINARY,
         string_new("=")
       )

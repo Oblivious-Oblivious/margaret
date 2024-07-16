@@ -34,6 +34,11 @@ module(complex_spec, {
         string_new("i")
       )
     );
+
+    parse(
+      "12.3ri",
+      vector_new(FM_FLOAT, string_new("12.3"), FM_UNARY, string_new("ri"))
+    );
   });
 
   it(

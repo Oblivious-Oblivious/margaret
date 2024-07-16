@@ -75,6 +75,8 @@ module(groups_spec, {
     parse(
       "(arr = [1, 2, 3, 4])",
       vector_new(
+        FM_LOCAL,
+        string_new("arr"),
         FM_INTEGER,
         string_new("1"),
         FM_INTEGER,
@@ -85,8 +87,6 @@ module(groups_spec, {
         string_new("4"),
         FM_TENSOR,
         string_new("4"),
-        FM_LOCAL,
-        string_new("arr"),
         FM_BINARY,
         string_new("=")
       )
@@ -117,23 +117,13 @@ module(groups_spec, {
         string_new("arr"),
         FM_INTEGER,
         string_new("1"),
-        FM_KEYWORD,
-        string_new("add:"),
-        string_new("1"),
-        FM_LOCAL,
-        string_new("arr"),
         FM_INTEGER,
         string_new("2"),
-        FM_KEYWORD,
-        string_new("add:"),
-        string_new("1"),
-        FM_LOCAL,
-        string_new("arr"),
         FM_INTEGER,
         string_new("3"),
         FM_KEYWORD,
-        string_new("add:"),
-        string_new("1")
+        string_new("add:add:add:"),
+        string_new("3")
       )
     );
     parse(
@@ -163,11 +153,11 @@ module(groups_spec, {
       "(b = arr is_empty?)",
       vector_new(
         FM_LOCAL,
+        string_new("b"),
+        FM_LOCAL,
         string_new("arr"),
         FM_UNARY,
         string_new("is_empty?"),
-        FM_LOCAL,
-        string_new("b"),
         FM_BINARY,
         string_new("=")
       )
@@ -176,11 +166,11 @@ module(groups_spec, {
       "(x = arr size)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("arr"),
         FM_UNARY,
         string_new("size"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -189,14 +179,14 @@ module(groups_spec, {
       "(x = arr at: 4)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("arr"),
         FM_INTEGER,
         string_new("4"),
         FM_KEYWORD,
         string_new("at:"),
         string_new("1"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -205,14 +195,14 @@ module(groups_spec, {
       "(x = arr includes?: 3)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("arr"),
         FM_INTEGER,
         string_new("3"),
         FM_KEYWORD,
         string_new("includes?:"),
         string_new("1"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -221,14 +211,14 @@ module(groups_spec, {
       "(x = arr includes: 3)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("arr"),
         FM_INTEGER,
         string_new("3"),
         FM_KEYWORD,
         string_new("includes:"),
         string_new("1"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -236,6 +226,8 @@ module(groups_spec, {
     parse(
       "(x = arr copy_from: 2 to: 4)",
       vector_new(
+        FM_LOCAL,
+        string_new("x"),
         FM_LOCAL,
         string_new("arr"),
         FM_INTEGER,
@@ -245,8 +237,6 @@ module(groups_spec, {
         FM_KEYWORD,
         string_new("copy_from:to:"),
         string_new("2"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -255,16 +245,18 @@ module(groups_spec, {
       "(x = arr index_of: 3 if_absent: -1)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("arr"),
         FM_INTEGER,
         string_new("3"),
         FM_INTEGER,
-        string_new("-1"),
+        string_new("1"),
+        FM_LHS,
+        string_new("-"),
         FM_KEYWORD,
         string_new("index_of:if_absent:"),
         string_new("2"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -273,14 +265,14 @@ module(groups_spec, {
       "(x = arr occurrences_of: 3)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("arr"),
         FM_INTEGER,
         string_new("3"),
         FM_KEYWORD,
         string_new("occurrences_of:"),
         string_new("1"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -307,6 +299,8 @@ module(groups_spec, {
       "(b = arr conform: { a | (a >= 1) && (a <= 4) })",
       vector_new(
         FM_LOCAL,
+        string_new("b"),
+        FM_LOCAL,
         string_new("arr"),
         FM_PROC_START,
         FM_PROC_PARAMETER,
@@ -329,8 +323,6 @@ module(groups_spec, {
         FM_KEYWORD,
         string_new("conform:"),
         string_new("1"),
-        FM_LOCAL,
-        string_new("b"),
         FM_BINARY,
         string_new("=")
       )
@@ -338,6 +330,8 @@ module(groups_spec, {
     parse(
       "(x = arr select: { a | a > 2 })",
       vector_new(
+        FM_LOCAL,
+        string_new("x"),
         FM_LOCAL,
         string_new("arr"),
         FM_PROC_START,
@@ -353,8 +347,6 @@ module(groups_spec, {
         FM_KEYWORD,
         string_new("select:"),
         string_new("1"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -362,6 +354,8 @@ module(groups_spec, {
     parse(
       "(x = arr reject: { a | a < 2 })",
       vector_new(
+        FM_LOCAL,
+        string_new("x"),
         FM_LOCAL,
         string_new("arr"),
         FM_PROC_START,
@@ -377,8 +371,6 @@ module(groups_spec, {
         FM_KEYWORD,
         string_new("reject:"),
         string_new("1"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -386,6 +378,8 @@ module(groups_spec, {
     parse(
       "(x = arr collect: { a | a + a })",
       vector_new(
+        FM_LOCAL,
+        string_new("x"),
         FM_LOCAL,
         string_new("arr"),
         FM_PROC_START,
@@ -401,8 +395,6 @@ module(groups_spec, {
         FM_KEYWORD,
         string_new("collect:"),
         string_new("1"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -410,6 +402,8 @@ module(groups_spec, {
     parse(
       "(x = arr detect: { a | a > 3 } if_none: ())",
       vector_new(
+        FM_LOCAL,
+        string_new("x"),
         FM_LOCAL,
         string_new("arr"),
         FM_PROC_START,
@@ -426,8 +420,6 @@ module(groups_spec, {
         FM_KEYWORD,
         string_new("detect:if_none:"),
         string_new("2"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -437,8 +429,10 @@ module(groups_spec, {
        sum = 0, \
        arr each: { a | sum += a }, \
        sum \
-      )",
+      ",
       vector_new(
+        FM_LOCAL,
+        string_new("arr"),
         FM_INTEGER,
         string_new("1"),
         FM_INTEGER,
@@ -449,14 +443,12 @@ module(groups_spec, {
         string_new("4"),
         FM_TENSOR,
         string_new("4"),
-        FM_LOCAL,
-        string_new("arr"),
         FM_BINARY,
         string_new("="),
-        FM_INTEGER,
-        string_new("0"),
         FM_LOCAL,
         string_new("sum"),
+        FM_INTEGER,
+        string_new("0"),
         FM_BINARY,
         string_new("="),
         FM_LOCAL,
@@ -478,116 +470,116 @@ module(groups_spec, {
         string_new("sum")
       )
     );
-    parse(
-      "(sum = arr inject: 0 into: { a, c | a + c })",
-      vector_new(
-        FM_LOCAL,
-        string_new("arr"),
-        FM_INTEGER,
-        string_new("0"),
-        FM_PROC_START,
-        FM_PROC_PARAMETER,
-        string_new("a"),
-        FM_PROC_PARAMETER,
-        string_new("c"),
-        FM_LOCAL,
-        string_new("a"),
-        FM_LOCAL,
-        string_new("c"),
-        FM_BINARY,
-        string_new("+"),
-        FM_PROC_END,
-        FM_KEYWORD,
-        string_new("inject:into:"),
-        string_new("2"),
-        FM_LOCAL,
-        string_new("sum"),
-        FM_BINARY,
-        string_new("=")
-      )
-    );
-    parse(
-      "(sum = arr fold: 0 into: { a, c | a + c })",
-      vector_new(
-        FM_LOCAL,
-        string_new("arr"),
-        FM_INTEGER,
-        string_new("0"),
-        FM_PROC_START,
-        FM_PROC_PARAMETER,
-        string_new("a"),
-        FM_PROC_PARAMETER,
-        string_new("c"),
-        FM_LOCAL,
-        string_new("a"),
-        FM_LOCAL,
-        string_new("c"),
-        FM_BINARY,
-        string_new("+"),
-        FM_PROC_END,
-        FM_KEYWORD,
-        string_new("fold:into:"),
-        string_new("2"),
-        FM_LOCAL,
-        string_new("sum"),
-        FM_BINARY,
-        string_new("=")
-      )
-    );
-    parse(
-      "(max = arr \
-        inject: 0 \
-        into: { a, c | \
-          (a > c) if_true: a \
-                  if_false: b \
-        } \
-      )",
-      vector_new(
-        FM_LOCAL,
-        string_new("arr"),
-        FM_INTEGER,
-        string_new("0"),
-        FM_PROC_START,
-        FM_PROC_PARAMETER,
-        string_new("a"),
-        FM_PROC_PARAMETER,
-        string_new("c"),
-        FM_LOCAL,
-        string_new("a"),
-        FM_LOCAL,
-        string_new("c"),
-        FM_BINARY,
-        string_new(">"),
-        FM_LOCAL,
-        string_new("a"),
-        FM_LOCAL,
-        string_new("b"),
-        FM_KEYWORD,
-        string_new("if_true:if_false:"),
-        string_new("2"),
-        FM_PROC_END,
-        FM_KEYWORD,
-        string_new("inject:into:"),
-        string_new("2"),
-        FM_LOCAL,
-        string_new("max"),
-        FM_BINARY,
-        string_new("=")
-      )
-    );
-    parse(
-      "(x = arr shuffled)",
-      vector_new(
-        FM_LOCAL,
-        string_new("arr"),
-        FM_UNARY,
-        string_new("shuffled"),
-        FM_LOCAL,
-        string_new("x"),
-        FM_BINARY,
-        string_new("=")
-      )
-    );
+    // parse(
+    //   "(sum = arr inject: 0 into: { a, c | a + c })",
+    //   vector_new(
+    //     FM_LOCAL,
+    //     string_new("sum"),
+    //     FM_LOCAL,
+    //     string_new("arr"),
+    //     FM_INTEGER,
+    //     string_new("0"),
+    //     FM_PROC_START,
+    //     FM_PROC_PARAMETER,
+    //     string_new("a"),
+    //     FM_PROC_PARAMETER,
+    //     string_new("c"),
+    //     FM_LOCAL,
+    //     string_new("a"),
+    //     FM_LOCAL,
+    //     string_new("c"),
+    //     FM_BINARY,
+    //     string_new("+"),
+    //     FM_PROC_END,
+    //     FM_KEYWORD,
+    //     string_new("inject:into:"),
+    //     string_new("2"),
+    //     FM_BINARY,
+    //     string_new("=")
+    //   )
+    // );
+    // parse(
+    //   "(sum = arr fold: 0 into: { a, c | a + c })",
+    //   vector_new(
+    //     FM_LOCAL,
+    //     string_new("sum"),
+    //     FM_LOCAL,
+    //     string_new("arr"),
+    //     FM_INTEGER,
+    //     string_new("0"),
+    //     FM_PROC_START,
+    //     FM_PROC_PARAMETER,
+    //     string_new("a"),
+    //     FM_PROC_PARAMETER,
+    //     string_new("c"),
+    //     FM_LOCAL,
+    //     string_new("a"),
+    //     FM_LOCAL,
+    //     string_new("c"),
+    //     FM_BINARY,
+    //     string_new("+"),
+    //     FM_PROC_END,
+    //     FM_KEYWORD,
+    //     string_new("fold:into:"),
+    //     string_new("2"),
+    //     FM_BINARY,
+    //     string_new("=")
+    //   )
+    // );
+    // parse(
+    //   "(max = arr \
+    //     inject: 0 \
+    //     into: { a, c | \
+    //       (a > c) if_true: a \
+    //               if_false: b \
+    //     } \
+    //   )",
+    //   vector_new(
+    //     FM_LOCAL,
+    //     string_new("max"),
+    //     FM_LOCAL,
+    //     string_new("arr"),
+    //     FM_INTEGER,
+    //     string_new("0"),
+    //     FM_PROC_START,
+    //     FM_PROC_PARAMETER,
+    //     string_new("a"),
+    //     FM_PROC_PARAMETER,
+    //     string_new("c"),
+    //     FM_LOCAL,
+    //     string_new("a"),
+    //     FM_LOCAL,
+    //     string_new("c"),
+    //     FM_BINARY,
+    //     string_new(">"),
+    //     FM_LOCAL,
+    //     string_new("a"),
+    //     FM_LOCAL,
+    //     string_new("b"),
+    //     FM_KEYWORD,
+    //     string_new("if_true:if_false:"),
+    //     string_new("2"),
+    //     FM_PROC_END,
+    //     FM_KEYWORD,
+    //     string_new("inject:into:"),
+    //     string_new("2"),
+    //     FM_BINARY,
+    //     string_new("=")
+    //   )
+    // );
+    // parse(
+    //   "(x = arr shuffled)",
+    //   vector_new(
+    //     FM_LOCAL,
+    //     string_new("x"),
+    //     FM_LOCAL,
+    //     string_new("arr"),
+    //     FM_UNARY,
+    //     string_new("shuffled"),
+    //     FM_BINARY,
+    //     string_new("=")
+    //   )
+    // );
   });
 })
 

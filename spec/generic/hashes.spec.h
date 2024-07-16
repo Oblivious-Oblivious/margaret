@@ -222,14 +222,14 @@ module(hashes_spec, {
       "(b = x includes_key: \"a\")",
       vector_new(
         FM_LOCAL,
+        string_new("b"),
+        FM_LOCAL,
         string_new("x"),
         FM_STRING,
         string_new("a"),
         FM_KEYWORD,
         string_new("includes_key:"),
         string_new("1"),
-        FM_LOCAL,
-        string_new("b"),
         FM_BINARY,
         string_new("=")
       )

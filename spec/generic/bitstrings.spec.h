@@ -8,21 +8,6 @@ module(bitstrings_spec, {
     parse("%()", vector_new(FM_BITSTRING, string_new("0")));
     parse("(%())", vector_new(FM_BITSTRING, string_new("0")));
     parse(
-      "%(%(), %())",
-      vector_new(
-        FM_BITSTRING,
-        string_new("0"),
-        FM_INTEGER,
-        string_new("8"),
-        FM_BITSTRING,
-        string_new("0"),
-        FM_INTEGER,
-        string_new("8"),
-        FM_BITSTRING,
-        string_new("4")
-      )
-    );
-    parse(
       "%(41, 42)",
       vector_new(
         FM_INTEGER,

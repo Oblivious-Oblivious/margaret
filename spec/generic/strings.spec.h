@@ -39,11 +39,11 @@ module(strings_spec, {
       "(b = s is_empty?)",
       vector_new(
         FM_LOCAL,
+        string_new("b"),
+        FM_LOCAL,
         string_new("s"),
         FM_UNARY,
         string_new("is_empty?"),
-        FM_LOCAL,
-        string_new("b"),
         FM_BINARY,
         string_new("=")
       )
@@ -52,11 +52,11 @@ module(strings_spec, {
       "(x = s size)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("s"),
         FM_UNARY,
         string_new("size"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -65,14 +65,14 @@ module(strings_spec, {
       "(x = s at: 2)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("s"),
         FM_INTEGER,
         string_new("2"),
         FM_KEYWORD,
         string_new("at:"),
         string_new("1"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -80,6 +80,8 @@ module(strings_spec, {
     parse(
       "(x = s copy_from: 2 to: 4)",
       vector_new(
+        FM_LOCAL,
+        string_new("x"),
         FM_LOCAL,
         string_new("s"),
         FM_INTEGER,
@@ -89,8 +91,6 @@ module(strings_spec, {
         FM_KEYWORD,
         string_new("copy_from:to:"),
         string_new("2"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -98,6 +98,8 @@ module(strings_spec, {
     parse(
       "(x = s index_of: 'a' if_absent: 0)",
       vector_new(
+        FM_LOCAL,
+        string_new("x"),
         FM_LOCAL,
         string_new("s"),
         FM_STRING,
@@ -107,8 +109,6 @@ module(strings_spec, {
         FM_KEYWORD,
         string_new("index_of:if_absent:"),
         string_new("2"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -175,30 +175,15 @@ module(strings_spec, {
         string_new("s"),
         FM_STRING,
         string_new("a"),
-        FM_KEYWORD,
-        string_new("add:"),
-        string_new("1"),
-        FM_LOCAL,
-        string_new("s"),
         FM_STRING,
         string_new("b"),
-        FM_KEYWORD,
-        string_new("add:"),
-        string_new("1"),
-        FM_LOCAL,
-        string_new("s"),
         FM_STRING,
         string_new("c"),
-        FM_KEYWORD,
-        string_new("add:"),
-        string_new("1"),
-        FM_LOCAL,
-        string_new("s"),
         FM_STRING,
         string_new("d"),
         FM_KEYWORD,
-        string_new("add:"),
-        string_new("1")
+        string_new("add:add:add:add:"),
+        string_new("4")
       )
     );
     parse(
@@ -223,6 +208,8 @@ module(strings_spec, {
       "(b = s conform: {a | (a >= 'a') && (a <= 'z')})",
       vector_new(
         FM_LOCAL,
+        string_new("b"),
+        FM_LOCAL,
         string_new("s"),
         FM_PROC_START,
         FM_PROC_PARAMETER,
@@ -245,8 +232,6 @@ module(strings_spec, {
         FM_KEYWORD,
         string_new("conform:"),
         string_new("1"),
-        FM_LOCAL,
-        string_new("b"),
         FM_BINARY,
         string_new("=")
       )
@@ -254,6 +239,8 @@ module(strings_spec, {
     parse(
       "(x = s select: { a | a > 'a'})",
       vector_new(
+        FM_LOCAL,
+        string_new("x"),
         FM_LOCAL,
         string_new("s"),
         FM_PROC_START,
@@ -269,8 +256,6 @@ module(strings_spec, {
         FM_KEYWORD,
         string_new("select:"),
         string_new("1"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -279,11 +264,11 @@ module(strings_spec, {
       "(x = s to_list)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("s"),
         FM_UNARY,
         string_new("to_list"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -292,11 +277,11 @@ module(strings_spec, {
       "(x = s to_symbol)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("s"),
         FM_UNARY,
         string_new("to_symbol"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -304,12 +289,12 @@ module(strings_spec, {
     parse(
       "(x = \"abcd\" to_byte_array)",
       vector_new(
+        FM_LOCAL,
+        string_new("x"),
         FM_STRING,
         string_new("abcd"),
         FM_UNARY,
         string_new("to_byte_array"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -318,11 +303,11 @@ module(strings_spec, {
       "(x = s shuffled)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("s"),
         FM_UNARY,
         string_new("shuffled"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )

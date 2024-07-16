@@ -181,14 +181,14 @@ module(numeric_spec, {
         x to_int puts, \
       )",
       vector_new(
+        FM_LOCAL,
+        string_new("x"),
         FM_INTEGER,
         string_new("5"),
         FM_INTEGER,
         string_new("11"),
         FM_BINARY,
         string_new("+"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("="),
         FM_LOCAL,
@@ -215,6 +215,8 @@ module(numeric_spec, {
     parse(
       "(x = 0xbeef to_bin to_int puts)",
       vector_new(
+        FM_LOCAL,
+        string_new("x"),
         FM_INTEGER,
         string_new("48879"),
         FM_UNARY,
@@ -223,8 +225,6 @@ module(numeric_spec, {
         string_new("to_int"),
         FM_UNARY,
         string_new("puts"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -256,6 +256,8 @@ module(numeric_spec, {
     parse(
       "(x = 0o751 to_hex to_bin to_int puts)",
       vector_new(
+        FM_LOCAL,
+        string_new("x"),
         FM_INTEGER,
         string_new("489"),
         FM_UNARY,
@@ -266,8 +268,6 @@ module(numeric_spec, {
         string_new("to_int"),
         FM_UNARY,
         string_new("puts"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )

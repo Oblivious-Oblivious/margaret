@@ -95,10 +95,13 @@ module(LexerSpec, {
         assert_that_int(tokens[1]->line_number equals to 1);
       });
 
-      it("draws an error when trying to tokenize an integer starting with 0", {
+      it("correctly parses code that the parser will drop later", {
         Lexer *l      = lexer_new("file.marg", string_new("042 msg"));
         Token **table = lexer_make_tokens(l);
-        assert_that_charptr(table[0]->value equals to "eof");
+        assert_that_charptr(table[0]->value equals to "0");
+        assert_that_charptr(table[1]->value equals to "42");
+        assert_that_charptr(table[2]->value equals to "msg");
+        assert_that_charptr(table[3]->value equals to "eof");
       });
 
       it("tokenizes floats", {

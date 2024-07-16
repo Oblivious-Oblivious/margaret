@@ -14,7 +14,7 @@ It offers powerful literals, easy to use objects and smalltalk-like message stru
 
 ## Installation
 
-TODO Write installation instructions
+TODO - Write installation instructions
 
 ## "Postcard"
 

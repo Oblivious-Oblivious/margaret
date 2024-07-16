@@ -9,11 +9,11 @@ module(date_time_spec, {
       "(x = Date today)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("Date"),
         FM_UNARY,
         string_new("today"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -22,11 +22,11 @@ module(date_time_spec, {
       "(x = Date day_and_time_now)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("Date"),
         FM_UNARY,
         string_new("day_and_time_now"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -35,14 +35,14 @@ module(date_time_spec, {
       "(x = Date from_string: \"01/02/1999\")",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("Date"),
         FM_STRING,
         string_new("01/02/1999"),
         FM_KEYWORD,
         string_new("from_string:"),
         string_new("1"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -50,6 +50,8 @@ module(date_time_spec, {
     parse(
       "(x = Date day: 6 month: \"july\" year: 2022)",
       vector_new(
+        FM_LOCAL,
+        string_new("x"),
         FM_LOCAL,
         string_new("Date"),
         FM_INTEGER,
@@ -61,8 +63,6 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("day:month:year:"),
         string_new("3"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -71,14 +71,14 @@ module(date_time_spec, {
       "(x = Date from_days: 36000)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("Date"),
         FM_INTEGER,
         string_new("36000"),
         FM_KEYWORD,
         string_new("from_days:"),
         string_new("1"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -87,14 +87,14 @@ module(date_time_spec, {
       "(x = Date day_of_week: \"Monday\")",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("Date"),
         FM_STRING,
         string_new("Monday"),
         FM_KEYWORD,
         string_new("day_of_week:"),
         string_new("1"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -103,14 +103,14 @@ module(date_time_spec, {
       "(x = Date index_of_month: \"March\")",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("Date"),
         FM_STRING,
         string_new("March"),
         FM_KEYWORD,
         string_new("index_of_month:"),
         string_new("1"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -118,6 +118,8 @@ module(date_time_spec, {
     parse(
       "(x = Date days_in_month: 2 for_year: 1978)",
       vector_new(
+        FM_LOCAL,
+        string_new("x"),
         FM_LOCAL,
         string_new("Date"),
         FM_INTEGER,
@@ -127,8 +129,6 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("days_in_month:for_year:"),
         string_new("2"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -137,14 +137,14 @@ module(date_time_spec, {
       "(x = Date days_in_year: 1984)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("Date"),
         FM_INTEGER,
         string_new("1984"),
         FM_KEYWORD,
         string_new("days_in_year:"),
         string_new("1"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -153,14 +153,14 @@ module(date_time_spec, {
       "(x = Date name_of_day: 1)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("Date"),
         FM_INTEGER,
         string_new("1"),
         FM_KEYWORD,
         string_new("name_of_day:"),
         string_new("1"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -169,14 +169,14 @@ module(date_time_spec, {
       "(x = Date is_leap_year?: 1996)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("Date"),
         FM_INTEGER,
         string_new("1996"),
         FM_KEYWORD,
         string_new("is_leap_year?:"),
         string_new("1"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -186,13 +186,13 @@ module(date_time_spec, {
       "(x = Date today weekday)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("Date"),
         FM_UNARY,
         string_new("today"),
         FM_UNARY,
         string_new("weekday"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -201,13 +201,13 @@ module(date_time_spec, {
       "(x = Date today previous)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("Date"),
         FM_UNARY,
         string_new("today"),
         FM_UNARY,
         string_new("previous"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -216,13 +216,13 @@ module(date_time_spec, {
       "(x = Date today day_of_month)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("Date"),
         FM_UNARY,
         string_new("today"),
         FM_UNARY,
         string_new("day_of_month"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -231,13 +231,13 @@ module(date_time_spec, {
       "(x = Date today day)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("Date"),
         FM_UNARY,
         string_new("today"),
         FM_UNARY,
         string_new("day"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -246,13 +246,13 @@ module(date_time_spec, {
       "(x = Date today first_day_of_month)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("Date"),
         FM_UNARY,
         string_new("today"),
         FM_UNARY,
         string_new("first_day_of_month"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -261,13 +261,13 @@ module(date_time_spec, {
       "(x = Date today month_name)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("Date"),
         FM_UNARY,
         string_new("today"),
         FM_UNARY,
         string_new("month_name"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -276,13 +276,13 @@ module(date_time_spec, {
       "(x = Date today month_index)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("Date"),
         FM_UNARY,
         string_new("today"),
         FM_UNARY,
         string_new("month_index"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -291,13 +291,13 @@ module(date_time_spec, {
       "(x = Date today days_in_month)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("Date"),
         FM_UNARY,
         string_new("today"),
         FM_UNARY,
         string_new("days_in_month"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -306,13 +306,13 @@ module(date_time_spec, {
       "(x = Date today year)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("Date"),
         FM_UNARY,
         string_new("today"),
         FM_UNARY,
         string_new("year"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -321,13 +321,13 @@ module(date_time_spec, {
       "(x = Date today days_in_year)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("Date"),
         FM_UNARY,
         string_new("today"),
         FM_UNARY,
         string_new("days_in_year"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -336,13 +336,13 @@ module(date_time_spec, {
       "(x = Date today days_left_in_year)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("Date"),
         FM_UNARY,
         string_new("today"),
         FM_UNARY,
         string_new("days_left_in_year"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -351,13 +351,13 @@ module(date_time_spec, {
       "(x = Date today to_seconds)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("Date"),
         FM_UNARY,
         string_new("today"),
         FM_UNARY,
         string_new("to_seconds"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -365,6 +365,8 @@ module(date_time_spec, {
     parse(
       "(x = Date today add_days: 10)",
       vector_new(
+        FM_LOCAL,
+        string_new("x"),
         FM_LOCAL,
         string_new("Date"),
         FM_UNARY,
@@ -374,8 +376,6 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("add_days:"),
         string_new("1"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -383,6 +383,8 @@ module(date_time_spec, {
     parse(
       "(x = Date today subtract_days: 10)",
       vector_new(
+        FM_LOCAL,
+        string_new("x"),
         FM_LOCAL,
         string_new("Date"),
         FM_UNARY,
@@ -392,8 +394,6 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("subtract_days:"),
         string_new("1"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -401,6 +401,8 @@ module(date_time_spec, {
     parse(
       "(x = Date today subtract_date: Date today)",
       vector_new(
+        FM_LOCAL,
+        string_new("x"),
         FM_LOCAL,
         string_new("Date"),
         FM_UNARY,
@@ -412,8 +414,6 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("subtract_date:"),
         string_new("1"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -425,11 +425,11 @@ module(date_time_spec, {
       "(x = Time now)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("Time"),
         FM_UNARY,
         string_new("now"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -438,11 +438,11 @@ module(date_time_spec, {
       "(x = Time date_and_time_now)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("Time"),
         FM_UNARY,
         string_new("date_and_time_now"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -451,14 +451,14 @@ module(date_time_spec, {
       "(x = Time from_string: \"3:47:26 pm\")",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("Time"),
         FM_STRING,
         string_new("3:47:26 pm"),
         FM_KEYWORD,
         string_new("from_string:"),
         string_new("1"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -467,14 +467,14 @@ module(date_time_spec, {
       "(x = Time from_string: \"22:47:26\")",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("Time"),
         FM_STRING,
         string_new("22:47:26"),
         FM_KEYWORD,
         string_new("from_string:"),
         string_new("1"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -482,6 +482,8 @@ module(date_time_spec, {
     parse(
       "(x = Time from_seconds: (60 * 60 * 4))",
       vector_new(
+        FM_LOCAL,
+        string_new("x"),
         FM_LOCAL,
         string_new("Time"),
         FM_INTEGER,
@@ -497,8 +499,6 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("from_seconds:"),
         string_new("1"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -507,11 +507,11 @@ module(date_time_spec, {
       "(x = Time millisecond_clock_value)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("Time"),
         FM_UNARY,
         string_new("millisecond_clock_value"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -520,11 +520,11 @@ module(date_time_spec, {
       "(x = Time total_seconds)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("Time"),
         FM_UNARY,
         string_new("total_seconds"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -534,13 +534,13 @@ module(date_time_spec, {
       "(x = Time now seconds)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("Time"),
         FM_UNARY,
         string_new("now"),
         FM_UNARY,
         string_new("seconds"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -549,13 +549,13 @@ module(date_time_spec, {
       "(x = Time now minutes)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("Time"),
         FM_UNARY,
         string_new("now"),
         FM_UNARY,
         string_new("minutes"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -564,13 +564,13 @@ module(date_time_spec, {
       "(x = Time now hours)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("Time"),
         FM_UNARY,
         string_new("now"),
         FM_UNARY,
         string_new("hours"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -578,6 +578,8 @@ module(date_time_spec, {
     parse(
       "(x = Time now add_time: Time now)",
       vector_new(
+        FM_LOCAL,
+        string_new("x"),
         FM_LOCAL,
         string_new("Time"),
         FM_UNARY,
@@ -589,8 +591,6 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("add_time:"),
         string_new("1"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -598,6 +598,8 @@ module(date_time_spec, {
     parse(
       "(x = Time now subtract_time: Time now)",
       vector_new(
+        FM_LOCAL,
+        string_new("x"),
         FM_LOCAL,
         string_new("Time"),
         FM_UNARY,
@@ -609,8 +611,6 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("subtract_time:"),
         string_new("1"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -619,13 +619,13 @@ module(date_time_spec, {
       "(x = Time now as_seconds)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("Time"),
         FM_UNARY,
         string_new("now"),
         FM_UNARY,
         string_new("as_seconds"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )

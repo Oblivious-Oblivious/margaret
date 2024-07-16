@@ -23,7 +23,7 @@ static Regex REGEX_LIST[10] = {
     .type    = TOKEN_FLOAT,
   },
   {
-    .pattern = (UChar *)"^\\b(?:0[bBoOxX][\\da-fA-F_]+|0|[1-9][\\d_]*)\\b",
+    .pattern = (UChar *)"^(?:0[bBoOxX][\\da-fA-F_]+|0|[1-9][\\d_]*)",
     .type    = TOKEN_INTEGER,
   },
   {

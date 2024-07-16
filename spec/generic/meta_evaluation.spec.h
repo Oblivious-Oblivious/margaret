@@ -7,7 +7,7 @@ module(meta_evaluation_spec, {
   it(
     "compiles and calls messages dynamically",
     {
-      // NOTE Figure out dynamic send
+      // NOTE - Figure out dynamic send
     }
   );
 
@@ -16,11 +16,11 @@ module(meta_evaluation_spec, {
       "(x = String name)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("String"),
         FM_UNARY,
         string_new("name"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -29,11 +29,11 @@ module(meta_evaluation_spec, {
       "(x = String category)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("String"),
         FM_UNARY,
         string_new("category"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -42,11 +42,11 @@ module(meta_evaluation_spec, {
       "(x = String description)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("String"),
         FM_UNARY,
         string_new("description"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -55,11 +55,11 @@ module(meta_evaluation_spec, {
       "(x = String kind_of_subclass)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("String"),
         FM_UNARY,
         string_new("kind_of_subclass"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -68,11 +68,11 @@ module(meta_evaluation_spec, {
       "(x = String definition)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("String"),
         FM_UNARY,
         string_new("definition"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -81,11 +81,11 @@ module(meta_evaluation_spec, {
       "(x = String field_names)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("String"),
         FM_UNARY,
         string_new("field_names"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -94,11 +94,11 @@ module(meta_evaluation_spec, {
       "(x = String all_field_names)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("String"),
         FM_UNARY,
         string_new("all_field_names"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -107,11 +107,11 @@ module(meta_evaluation_spec, {
       "(x = String selectors)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("String"),
         FM_UNARY,
         string_new("selectors"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -120,14 +120,14 @@ module(meta_evaluation_spec, {
       "(x = String source_code_at: \"message\")",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("String"),
         FM_STRING,
         string_new("message"),
         FM_KEYWORD,
         string_new("source_code_at:"),
         string_new("1"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -136,11 +136,11 @@ module(meta_evaluation_spec, {
       "(x = String all_instances)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("String"),
         FM_UNARY,
         string_new("all_instances"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -149,11 +149,11 @@ module(meta_evaluation_spec, {
       "(x = String superclass)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("String"),
         FM_UNARY,
         string_new("superclass"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -162,11 +162,11 @@ module(meta_evaluation_spec, {
       "(x = String all_superclasses)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("String"),
         FM_UNARY,
         string_new("all_superclasses"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -175,11 +175,11 @@ module(meta_evaluation_spec, {
       "(x = String subclasses)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("String"),
         FM_UNARY,
         string_new("subclasses"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -188,11 +188,11 @@ module(meta_evaluation_spec, {
       "(x = String all_subclasses)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("String"),
         FM_UNARY,
         string_new("all_subclasses"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
@@ -201,11 +201,11 @@ module(meta_evaluation_spec, {
       "(x = String number_of_instances)",
       vector_new(
         FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
         string_new("String"),
         FM_UNARY,
         string_new("number_of_instances"),
-        FM_LOCAL,
-        string_new("x"),
         FM_BINARY,
         string_new("=")
       )
