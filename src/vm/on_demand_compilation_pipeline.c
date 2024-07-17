@@ -1,14 +1,14 @@
 #include "on_demand_compilation_pipeline.h"
 
+#include "../../libs/EmeraldsReadHandler/export/EmeraldsReadHandler.h" /* IWYU pragma: keep */
 #include "../../libs/EmeraldsString/export/EmeraldsString.h" /* IWYU pragma: keep */
 #include "../emitter/Emitter.h"
 #include "../evaluator/Evaluator.h"
 #include "../lexer/Lexer.h"
-#include "../loader/file_loader.h"
 #include "../optimizer/Optimizer.h"
 
 char *LOAD(char *filename) {
-  return file_loader_load(file_loader_new(), filename);
+  return read_handler_load(read_handler_new(), filename);
 }
 
 Token **READ(char *chars, char *filename) {

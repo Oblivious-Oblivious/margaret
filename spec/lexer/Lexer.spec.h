@@ -2,9 +2,9 @@
 #define __LEXER_SPEC_H_
 
 #include "../../libs/cSpec/export/cSpec.h"
+#include "../../libs/EmeraldsReadHandler/export/EmeraldsReadHandler.h"
 #include "../../libs/EmeraldsString/export/EmeraldsString.h"
 #include "../../src/lexer/Lexer.h"
-#include "../../src/loader/file_loader.h"
 
 #define tokenize_and_assert(str)                              \
   do {                                                        \
@@ -401,7 +401,7 @@ module(LexerSpec, {
 
   it("prints postcard", {
     char *postcard =
-      file_loader_load(file_loader_new(), "./examples/postcard.marg");
+      read_handler_load(read_handler_new(), "./examples/postcard.marg");
     Lexer *l       = lexer_new("postcard.marg", string_new(postcard));
     Token **tokens = lexer_make_tokens(l);
     printf("[");
