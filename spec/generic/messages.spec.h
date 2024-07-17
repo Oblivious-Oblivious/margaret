@@ -246,6 +246,21 @@ module(messages_spec, {
       )
     );
     parse(
+      "-5 - -3",
+      vector_new(
+        FM_INTEGER,
+        string_new("5"),
+        FM_LHS,
+        string_new("-"),
+        FM_INTEGER,
+        string_new("3"),
+        FM_LHS,
+        string_new("-"),
+        FM_BINARY,
+        string_new("-")
+      )
+    );
+    parse(
       "42 factorial + 17",
       vector_new(
         FM_INTEGER,

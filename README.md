@@ -23,7 +23,7 @@ $Margaret -- #ultimate_answer: x => (
   $true && !$false not not && ($nil is_nil?) if_false: { exit: 0 },
   y = @self methods size + @super to_string length * 42,
   [::label, 42, 42.2, "str", 0b0110, 0xbeef, 0o741, %[y, 42, "val"],
-    %{"k1": -42, k2: 43}, %(1::1, 0::1)] each: { elem |
+    %{"k1": -42, k2: 43}, %(42, 1::1, 0::1)] each: { elem |
       puts: elem object_id,
     },
   if: x < y then: { x } else: { y },
