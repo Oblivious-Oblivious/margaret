@@ -4,7 +4,7 @@
 #include "../vm/vm.h"
 
 /**
- * @brief Disassembles a bytecode chunk and inspects the content
+ * @brief Disassembles a bytecode vector and inspects the content
  * @param vm -> The vm to be disassembled
  * @return vector* -> The list of disassembled
     instructions as marg_strings (for testing)

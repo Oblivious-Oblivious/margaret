@@ -20,10 +20,10 @@ module(EmitterSpec, {
   it("parses a simple program", {
     char **formal_bytecode = vector_new(FM_INTEGER, string_new("42"));
     vm                     = emitter_emit(vm, formal_bytecode);
-    assert_that_int(vm->current->bytecode->size equals to 3);
-    assert_that_int(vm->current->bytecode->items[0] equals to OP_PUT_OBJECT);
-    assert_that_int(vm->current->bytecode->items[1] equals to 0);
-    assert_that_int(vm->current->bytecode->items[2] equals to OP_HALT);
+    assert_that_int(vector_size(vm->current->bytecode) equals to 3);
+    assert_that_int(vm->current->bytecode[0] equals to OP_PUT_OBJECT);
+    assert_that_int(vm->current->bytecode[1] equals to 0);
+    assert_that_int(vm->current->bytecode[2] equals to OP_HALT);
   });
 })
 

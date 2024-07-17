@@ -234,9 +234,10 @@ static bool op_prim_to_string_helper(VM *vm, MargValue object) {
  */
 static void evaluator_run(VM *vm) {
   bool on_explicit_send = false;
-  vm->current->ip       = vm->current->bytecode->items;
+  vm->current->ip       = vm->current->bytecode;
 
-  // TODO - Branch table, computed goto, otherwise use number based binary search
+  // TODO - Branch table, computed goto, otherwise use number based binary
+  // search
   while(true) {
   enter_explicit_send:;
     switch(READ_BYTE()) {
@@ -493,7 +494,7 @@ static void evaluator_run(VM *vm) {
     }
     case OP_EXIT_ACTIVATION_RECORD: {
       /* Reset proc's IP */
-      vm->current->ip = vm->current->bytecode->items;
+      vm->current->ip = vm->current->bytecode;
       /* Reset parameter table */
       table_init(&vm->current->parameters);
       /* Reset back to enclosing bound proc */
@@ -542,7 +543,7 @@ static void evaluator_run(VM *vm) {
     }
 
     case OP_INCLUDE: {
-      chunk *previous_bytecode   = vm->current->bytecode;
+      uint8_t *previous_bytecode = vm->current->bytecode;
       uint8_t *previous_position = vm->current->ip;
 
       MargValue filename = fs_pop(vm->sp);
@@ -550,7 +551,7 @@ static void evaluator_run(VM *vm) {
       char *chars            = LOAD(AS_STRING(filename)->chars);
       Token **tokens         = READ(chars, AS_STRING(filename)->chars);
       char **formal_bytecode = FORMALIZE(tokens);
-      vm->current->bytecode  = chunk_new();
+      vm->current->bytecode  = NULL;
       vm                     = EMIT(vm, formal_bytecode);
       vm                     = OPTIMIZE(vm);
       EVAL(vm);

@@ -27,7 +27,7 @@
   else if(string_equals(keyword_name, string_new((keywordstr))))
 #define default_keyword_case else
 
-#define emit_byte(byte) chunk_add(vm->current->bytecode, (byte), 123)
+#define emit_byte(byte) vector_add(vm->current->bytecode, (byte))
 
 #define emit_bytes2(byte1, byte2) \
   do {                            \
@@ -50,15 +50,15 @@
     emit_byte((byte4));                         \
   } while(0)
 
-#define emit_variable_length_op(opcode)                                \
-  do {                                                                 \
-    if(chunk_temporaries_size(vm->current->bytecode) < 256) {          \
-      chunk_add(vm->current->bytecode, (opcode), 123);                 \
-    } else if(chunk_temporaries_size(vm->current->bytecode) < 65536) { \
-      chunk_add(vm->current->bytecode, (opcode##_WORD), 123);          \
-    } else {                                                           \
-      chunk_add(vm->current->bytecode, (opcode##_DWORD), 123);         \
-    }                                                                  \
+#define emit_variable_length_op(opcode)                     \
+  do {                                                      \
+    if(vector_size(vm->current->bytecode) < 256) {          \
+      vector_add(vm->current->bytecode, (opcode));          \
+    } else if(vector_size(vm->current->bytecode) < 65536) { \
+      vector_add(vm->current->bytecode, (opcode##_WORD));   \
+    } else {                                                \
+      vector_add(vm->current->bytecode, (opcode##_DWORD));  \
+    }                                                       \
   } while(0)
 
 #define emit_temporary(temporary)                      \
@@ -68,8 +68,9 @@
     add_temporary(vm, temporary_index);                \
   } while(0)
 
-#define make_temporary(vm, temporary, index) \
-  chunk_temporaries_add((vm)->current->bytecode, (temporary), (index));
+#define make_temporary(vm, temporary, index)           \
+  vector_add((vm)->current->temporaries, (temporary)); \
+  *(index) = vector_size((vm)->current->temporaries) - 1;
 
 #define add_temporary(vm, temporary_index) \
   _add_temporary_function(vm, temporary_index, 256 + 1, 65536 + 1);
@@ -79,9 +80,9 @@
 static void _add_temporary_function(
   VM *vm, uint32_t temporary_index, uint16_t byte_bound, uint32_t word_bound
 ) {
-  if(chunk_temporaries_size(vm->current->bytecode) < byte_bound) {
+  if(vector_size(vm->current->bytecode) < byte_bound) {
     emit_byte((uint8_t)temporary_index);
-  } else if(chunk_temporaries_size(vm->current->bytecode) < word_bound) {
+  } else if(vector_size(vm->current->bytecode) < word_bound) {
     uint8_t *temporary_index_in_bytes = word_to_bytes(temporary_index);
     emit_bytes2(temporary_index_in_bytes[0], temporary_index_in_bytes[1]);
   } else {
@@ -100,7 +101,7 @@ VM *emitter_emit(VM *vm, char **formal_bytecode) {
     AS_OBJECT(table_get(&vm->global_variables, MARG_STRING("$Margaret")));
   MargMethod *main_method =
     AS_METHOD(table_get(&marg_object->messages, MARG_STRING("")));
-  vm->current->bytecode = chunk_new();
+  vm->current->bytecode = NULL;
   vm->current           = main_method->proc;
 
   size_t bytecode_size = vector_size(formal_bytecode);

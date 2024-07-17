@@ -4,7 +4,7 @@
 #include "../opcode/opcodes.h"
 
 VM *optimizer_optimize(VM *vm) {
-  vm->current->ip = vm->current->bytecode->items;
+  vm->current->ip = vm->current->bytecode;
 
   while(true) {
     uint8_t instruction;

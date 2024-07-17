@@ -1,7 +1,6 @@
 #ifndef __MARG_PROC_H_
 #define __MARG_PROC_H_
 
-#include "../base/chunk.h"
 #include "MargMethod.h"
 #include "MargObject.h"
 
@@ -23,7 +22,8 @@ struct MargProc {
   table parameters;
   table local_variables;
 
-  chunk *bytecode;
+  uint8_t *bytecode;
+  MargValue *temporaries;
   uint8_t *ip;
 };
 

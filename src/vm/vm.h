@@ -1,7 +1,6 @@
 #ifndef __VM_H_
 #define __VM_H_
 
-#include "../base/chunk.h"
 #include "../base/memory.h"
 #include "../base/table.h"
 #include "../opcode/MargValueType.h"
@@ -31,12 +30,9 @@ typedef struct VM {
   (bytes_to_dword((uint8_t[4] \
   ){READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE()}))
 
-#define READ_TEMPORARY() \
-  (chunk_temporaries_get(vm->current->bytecode, READ_BYTE()))
-#define READ_TEMPORARY_WORD() \
-  (chunk_temporaries_get(vm->current->bytecode, READ_WORD()))
-#define READ_TEMPORARY_DWORD() \
-  (chunk_temporaries_get(vm->current->bytecode, READ_DWORD()))
+#define READ_TEMPORARY()       (vm->current->bytecode[READ_BYTE()])
+#define READ_TEMPORARY_WORD()  (vm->current->bytecode[READ_WORD()])
+#define READ_TEMPORARY_DWORD() (vm->current->bytecode[READ_DWORD()])
 
 /**
  * @brief Creates a new VM instance

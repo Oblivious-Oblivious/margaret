@@ -19,8 +19,8 @@ MargProc *marg_proc_new(VM *vm, MargMethod *bound_method) {
   table_init(&self->parameters);
   table_init(&self->local_variables);
 
-  self->bytecode = chunk_new();
-  self->ip       = self->bytecode->items;
+  self->bytecode = NULL;
+  self->ip       = self->bytecode;
 
   return self;
 }
