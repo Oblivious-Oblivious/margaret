@@ -60,6 +60,23 @@ static ptrdiff_t matcher(UChar *pattern, UChar *input_string) {
   return output;
 }
 
+static char *normalize_integer(char *token) {
+  token = string_remove_underscores(token);
+
+  if(token[0] == '0' && (token[1] == 'b' || token[1] == 'B')) {
+    string_skip_first(token, 2);
+    token = string_new(bin_to_dec(token));
+  } else if(token[0] == '0' && (token[1] == 'o' || token[1] == 'O')) {
+    string_skip_first(token, 2);
+    token = string_new(oct_to_dec(token));
+  } else if(token[0] == '0' && (token[1] == 'x' || token[1] == 'X')) {
+    string_skip_first(token, 2);
+    token = string_new(hex_to_dec(token));
+  }
+
+  return token;
+}
+
 Token **lexer_make_tokens(Lexer *self, char *text) {
   Token **token_table = NULL;
 
@@ -80,53 +97,36 @@ Token **lexer_make_tokens(Lexer *self, char *text) {
         token          = string_substring(text, 0, end_index);
         self->charno += end_index;
         string_skip_first(text, end_index);
-        if(REGEX_LIST[i].type == TOKEN_NEWLINE) {
+
+        Type token_type = REGEX_LIST[i].type;
+        if(token_type == TOKEN_NEWLINE) {
           self->lineno++;
           self->charno = 0;
-        } else if(REGEX_LIST[i].type == TOKEN_WHITESPACE) {
-          ; // skip
-        } else if((REGEX_LIST[i].type == TOKEN_IDENTIFIER ||
-                   REGEX_LIST[i].type == TOKEN_INSTANCE ||
-                   REGEX_LIST[i].type == TOKEN_GLOBAL) &&
+          continue;
+        } else if(token_type == TOKEN_WHITESPACE) {
+          continue;
+        } else if((token_type == TOKEN_IDENTIFIER ||
+                   token_type == TOKEN_INSTANCE ||
+                   token_type == TOKEN_GLOBAL) &&
                   (text[0] == '!' || text[0] == '?')) {
           string_add_char(token, text[0]);
           string_skip_first(text, 1);
-          goto new_token;
-        } else if(REGEX_LIST[i].type == TOKEN_FLOAT) {
+        } else if(token_type == TOKEN_FLOAT) {
           token = string_remove_underscores(token);
-          goto new_token;
-        } else if(REGEX_LIST[i].type == TOKEN_INTEGER) {
-          token = string_remove_underscores(token);
-
-          if(token[0] == '0' && (token[1] == 'b' || token[1] == 'B')) {
-            string_skip_first(token, 2);
-            token = string_new(bin_to_dec(token));
-          } else if(token[0] == '0' && (token[1] == 'o' || token[1] == 'O')) {
-            string_skip_first(token, 2);
-            token = string_new(oct_to_dec(token));
-          } else if(token[0] == '0' && (token[1] == 'x' || token[1] == 'X')) {
-            string_skip_first(token, 2);
-            token = string_new(hex_to_dec(token));
-          }
-          goto new_token;
-        } else if(REGEX_LIST[i].type == TOKEN_STRING) {
+        } else if(token_type == TOKEN_INTEGER) {
+          token = normalize_integer(token);
+        } else if(token_type == TOKEN_STRING) {
           string_skip_first(token, 1);
           string_ignore_last(token, 1);
           self->lineno += vector_size(string_split(token, "\n"));
-          goto new_token;
-        } else {
-        new_token:
-          vector_add(
-            token_table,
-            token_new(
-              token,
-              REGEX_LIST[i].type,
-              self->lineno,
-              self->charno,
-              self->filename
-            )
-          );
         }
+
+        vector_add(
+          token_table,
+          token_new(
+            token, token_type, self->lineno, self->charno, self->filename
+          )
+        );
         break;
       }
     }

@@ -10,9 +10,11 @@
 #define la1type(expected_type)   table[0]->type == (expected_type)
 #define la2type(expected_type)   table[1]->type == (expected_type)
 #define la3type(expected_type)   table[2]->type == (expected_type)
+
 #define ensure_value(value, msg) token_table_ensure_value(table, (value), (msg))
 #define ensure_type(type, msg)   token_table_ensure_type(table, (type), (msg))
 #define generate(value)          vector_add(*fmcodes, value)
+
 #define first_unit()             parser_first_unit(table, fmcodes)
 #define unit_list()              parser_unit_list(table, fmcodes)
 #define unit()                   parser_unit(table, fmcodes)
@@ -435,9 +437,11 @@ void parser_variable(Token **table, char ***fmcodes) {
 #undef la1type
 #undef la2type
 #undef la3type
+
 #undef ensure_value
 #undef ensure_type
 #undef generate
+
 #undef first_unit
 #undef unit_list
 #undef unit
