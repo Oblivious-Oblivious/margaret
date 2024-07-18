@@ -138,7 +138,7 @@ VM *emitter_emit(VM *vm, char **formal_bytecode) {
     opcode_case(FM_INTEGER) {
       char *temporary_str = formal_bytecode[++ip];
       char *end;
-      long long integer = strtoll(temporary_str, &end, 10);
+      ptrdiff_t integer = strtoll(temporary_str, &end, 10);
       if(integer == -1) {
         emit_byte(OP_PUT_MINUS_1);
       } else if(integer == 0) {
@@ -291,7 +291,7 @@ VM *emitter_emit(VM *vm, char **formal_bytecode) {
           emit_byte(OP_PUT_2);
         } else {
           char *end;
-          long long integer = strtoll(number_of_parameters, &end, 10);
+          ptrdiff_t integer = strtoll(number_of_parameters, &end, 10);
           emit_variable_length_op(OP_PUT_OBJECT);
           emit_temporary(MARG_INTEGER(integer));
         }

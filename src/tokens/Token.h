@@ -1,6 +1,7 @@
 #ifndef __TOKEN_H_
 #define __TOKEN_H_
 
+#include "../../libs/EmeraldsBool/export/EmeraldsBool.h"
 #include "Type.h"
 
 #include <stdlib.h>
@@ -45,6 +46,6 @@ Token *token_new(
  * @param value -> Second value
  * @return A boolean
  */
-int token_equals_values(Token *tok, char *value);
+bool token_equals_values(Token *tok, char *value);
 
 #endif

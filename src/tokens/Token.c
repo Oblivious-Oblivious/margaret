@@ -21,6 +21,6 @@ Token *token_new(
   return t;
 }
 
-int token_equals_values(Token *tok, char *value) {
+bool token_equals_values(Token *tok, char *value) {
   return string_equals(tok->value, value);
 }

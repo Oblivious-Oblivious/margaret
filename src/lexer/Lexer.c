@@ -35,7 +35,7 @@ void *lexer_error(Lexer *self, const char *message, char *token) {
   return NULL;
 }
 
-static int matcher(UChar *pattern, UChar *input_string) {
+static ptrdiff_t matcher(UChar *pattern, UChar *input_string) {
   regex_t *regex = NULL;
   OnigErrorInfo error_info;
   onig_new(
@@ -50,11 +50,11 @@ static int matcher(UChar *pattern, UChar *input_string) {
 
   OnigRegion *region = onig_region_new();
   OnigUChar *end     = input_string + string_size(input_string);
-  int res            = onig_search(
+  ptrdiff_t res      = onig_search(
     regex, input_string, end, input_string, end, region, ONIG_OPTION_NONE
   );
 
-  int output = res >= 0 && region->beg[0] == 0 ? region->end[0] : -1;
+  ptrdiff_t output = res >= 0 && region->beg[0] == 0 ? region->end[0] : -1;
   onig_region_free(region, 1);
   onig_free(regex);
 
@@ -74,8 +74,8 @@ Token **lexer_make_tokens(Lexer *self) {
     bool is_not_matched = true;
 
     for(size_t i = 0; i < sizeof(REGEX_LIST) / sizeof(Regex); i++) {
-      Regex *r      = &REGEX_LIST[i];
-      int end_index = matcher(r->pattern, (UChar *)self->text);
+      Regex *r            = &REGEX_LIST[i];
+      ptrdiff_t end_index = matcher(r->pattern, (UChar *)self->text);
       if(end_index != -1) {
         is_not_matched = false;
         token          = string_substring(self->text, 0, end_index);
