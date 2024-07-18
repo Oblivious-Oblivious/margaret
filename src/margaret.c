@@ -17,18 +17,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "version.h"
 #include "vm/on_demand_compilation_pipeline.h"
 
 #include <stdio.h> /* printf */
 
-#define VERSION "0.0.1"
-#define DATE    "2022-2024"
-#define LINK    "margaret.org"
-
 // TODO - Replace int, long, size_t etc. values with bit equivalents (uint64_t)
 
 static void margaret_repl(VM *vm) {
-  printf("Margaret %s  Copyright (C) %s %s, Ioannina\n", VERSION, DATE, LINK);
+  printf(
+    "Margaret %s  Copyright (C) %s %s, Ioannina\n",
+    MARGARET_VERSION,
+    MARGARET_DATE,
+    MARGARET_LINK
+  );
   while(true) {
     PRINT(EVAL(OPTIMIZE(EMIT(vm, FORMALIZE(READ(SCAN("> "), "repl"))))));
   }
