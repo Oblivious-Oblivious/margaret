@@ -8,11 +8,10 @@
 
 #include <stdio.h> /* printf */
 
-Lexer *lexer_new(const char *filename, char *text) {
+Lexer *lexer_new(const char *filename) {
   Lexer *self = (Lexer *)collected_malloc(sizeof(Lexer));
 
   self->filename = filename;
-  self->text     = text;
   self->lineno   = 1;
   self->charno   = 0;
 
@@ -61,7 +60,7 @@ static ptrdiff_t matcher(UChar *pattern, UChar *input_string) {
   return output;
 }
 
-Token **lexer_make_tokens(Lexer *self) {
+Token **lexer_make_tokens(Lexer *self, char *text) {
   Token **token_table = NULL;
 
   OnigEncoding encodings[1] = {ONIG_ENCODING_ASCII};
@@ -70,17 +69,17 @@ Token **lexer_make_tokens(Lexer *self) {
   char *token          = NULL;
   bool has_lexer_error = false;
 
-  while(string_size(self->text) > 0) {
+  while(string_size(text) > 0) {
     bool is_not_matched = true;
 
     for(size_t i = 0; i < sizeof(REGEX_LIST) / sizeof(Regex); i++) {
       Regex *r            = &REGEX_LIST[i];
-      ptrdiff_t end_index = matcher(r->pattern, (UChar *)self->text);
+      ptrdiff_t end_index = matcher(r->pattern, (UChar *)text);
       if(end_index != -1) {
         is_not_matched = false;
-        token          = string_substring(self->text, 0, end_index);
+        token          = string_substring(text, 0, end_index);
         self->charno += end_index;
-        string_skip_first(self->text, end_index);
+        string_skip_first(text, end_index);
         if(REGEX_LIST[i].type == TOKEN_NEWLINE) {
           self->lineno++;
           self->charno = 0;
@@ -89,9 +88,9 @@ Token **lexer_make_tokens(Lexer *self) {
         } else if((REGEX_LIST[i].type == TOKEN_IDENTIFIER ||
                    REGEX_LIST[i].type == TOKEN_INSTANCE ||
                    REGEX_LIST[i].type == TOKEN_GLOBAL) &&
-                  (self->text[0] == '!' || self->text[0] == '?')) {
-          string_add_char(token, self->text[0]);
-          string_skip_first(self->text, 1);
+                  (text[0] == '!' || text[0] == '?')) {
+          string_add_char(token, text[0]);
+          string_skip_first(text, 1);
           goto new_token;
         } else if(REGEX_LIST[i].type == TOKEN_FLOAT) {
           token = string_remove_underscores(token);
@@ -134,10 +133,8 @@ Token **lexer_make_tokens(Lexer *self) {
 
     if(is_not_matched) {
       has_lexer_error = true;
-      lexer_error(
-        self, "Unexpected character.", string_split(self->text, "\n")[0]
-      );
-      string_skip_first(self->text, 1);
+      lexer_error(self, "Unexpected character.", string_split(text, "\n")[0]);
+      string_skip_first(text, 1);
     }
   }
 

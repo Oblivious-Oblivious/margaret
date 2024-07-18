@@ -19,9 +19,9 @@ Token **READ(char *chars, char *filename) {
   char **vec         = string_split(str_filename, "/");
 
   if(vector_size(vec) > 1) {
-    return lexer_make_tokens(lexer_new(vec[vector_size(vec) - 1], chars));
+    return lexer_make_tokens(lexer_new(vec[vector_size(vec) - 1]), chars);
   } else {
-    return lexer_make_tokens(lexer_new(filename, chars));
+    return lexer_make_tokens(lexer_new(filename), chars);
   }
 }
 
