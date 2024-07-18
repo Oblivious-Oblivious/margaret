@@ -35,8 +35,8 @@ typedef struct VM {
 #define READ_TEMPORARY_DWORD() (vm->current->bytecode[READ_DWORD()])
 
 /**
- * @brief Creates a new VM instance
-        By being an explicit pointer can create multiple of them
+ * @brief Creates a new VM instance By being an explicit pointer can create
+ * multiple of them
  * @return VM*
  */
 VM *vm_new(void);

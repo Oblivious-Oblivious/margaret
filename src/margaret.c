@@ -17,8 +17,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "opcode/MargValue.h"
-#include "scanner/Scanner.h"
 #include "vm/on_demand_compilation_pipeline.h"
 
 #include <stdio.h> /* printf */
@@ -29,30 +27,10 @@
 
 // TODO - Replace int, long, size_t etc. values with bit equivalents (uint64_t)
 
-static char *SCAN(char *prompt) { return scanner_scan(prompt); }
-
-static void PRINT(MargValue evaluated) {
-  printf("%s\n", marg_value_format(evaluated));
-}
-
-static void PRINT_FORMAL(char **formal_bytecode) {
-  printf("[");
-  size_t formal_bytecode_size = vector_size(formal_bytecode);
-  if(formal_bytecode_size > 0) {
-    for(size_t i = 0; i < formal_bytecode_size - 1; i++) {
-      printf("%s, ", formal_bytecode[i]);
-    }
-    printf("%s", formal_bytecode[formal_bytecode_size - 1]);
-  }
-  printf("]\n");
-}
-
 static void margaret_repl(VM *vm) {
   printf("Margaret %s  Copyright (C) %s %s, Ioannina\n", VERSION, DATE, LINK);
   while(true) {
-    char **formal_bytecode = FORMALIZE(READ(SCAN("> "), "repl"));
-    // PRINT_FORMAL(formal_bytecode);
-    PRINT(EVAL(OPTIMIZE(EMIT(vm, formal_bytecode))));
+    PRINT(EVAL(OPTIMIZE(EMIT(vm, FORMALIZE(READ(SCAN("> "), "repl"))))));
   }
 }
 
@@ -65,8 +43,6 @@ static void margaret_run_file(VM *vm, char *filename) {
   vm                     = OPTIMIZE(vm);
   EVAL(vm);
 }
-
-static void banner(void) { printf("Usage: margaret <filename>\n"); }
 
 int main(int argc, char **argv) {
   VM *vm = vm_new();
