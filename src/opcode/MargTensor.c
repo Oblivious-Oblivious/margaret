@@ -4,8 +4,9 @@
 #include "MargValue.h"
 
 MargTensor *marg_tensor_new(VM *vm, size_t initial_alloced) {
-  MargObject *obj =
-    (MargObject *)marg_object_new(vm, sizeof(MargTensor), "$TensorClone");
+  MargObject *obj = (MargObject *)marg_object_new(
+    vm, sizeof(MargTensor), string_new("$TensorClone")
+  );
   MargTensor *self = (MargTensor *)obj;
 
   MargValue proto_object =

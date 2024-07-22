@@ -40,7 +40,7 @@ static MargValue dispatch_method_from_delegation_chain(
 ) {
   MargValue method_value = table_get(&object->messages, message_name);
   if(IS_UNDEFINED(method_value)) {
-    if(!strncmp(object->name, "$Margaret", 10)) {
+    if(string_equals(object->name, "$Margaret")) {
       return method_value;
     } else {
       return dispatch_method_from_delegation_chain(
@@ -64,7 +64,7 @@ static MargValue retrieve_all_messages_in_delegation_chain(
     }
   }
 
-  if(!strncmp(object->name, "$Margaret", 10)) {
+  if(string_equals(object->name, "$Margaret")) {
     return messages_tensor;
   } else {
     return retrieve_all_messages_in_delegation_chain(

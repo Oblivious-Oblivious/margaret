@@ -4,8 +4,9 @@
 #include "MargValue.h"
 
 MargProc *marg_proc_new(VM *vm, MargMethod *bound_method) {
-  MargObject *obj = marg_object_new(vm, sizeof(MargProc), "$ProcClone");
-  MargProc *self  = (MargProc *)obj;
+  MargObject *obj =
+    marg_object_new(vm, sizeof(MargProc), string_new("$ProcClone"));
+  MargProc *self = (MargProc *)obj;
 
   MargValue proto_object =
     table_get(&vm->global_variables, MARG_STRING("$Proc"));

@@ -5,7 +5,8 @@
 
 MargMethod *
 marg_method_new(VM *vm, MargObject *bound_object, char *message_name) {
-  MargObject *obj  = marg_object_new(vm, sizeof(MargMethod), "$MethodClone");
+  MargObject *obj =
+    marg_object_new(vm, sizeof(MargMethod), string_new("$MethodClone"));
   MargMethod *self = (MargMethod *)obj;
 
   MargValue proto_object =

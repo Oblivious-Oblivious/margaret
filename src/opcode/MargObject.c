@@ -11,7 +11,7 @@ MargObject *marg_object_new(VM *bound_vm, size_t size, char *name) {
 
   self->bound_vm = bound_vm;
 
-  self->name   = (char *)collected_malloc(sizeof(char) * strlen(name));
+  self->name   = (char *)collected_malloc(sizeof(char) * string_size(name));
   self->name   = name;
   self->parent = self;
   table_init(&self->instance_variables);
@@ -27,7 +27,7 @@ char *marg_object_to_string_with_hash(MargValue object) {
     res,
     "%s@%llx",
     object_name,
-    fnv_1a_64_hash(object_name, strlen(object_name))
+    fnv_1a_64_hash(object_name, string_size(object_name))
   );
   return res;
 }

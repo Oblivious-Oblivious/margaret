@@ -1,6 +1,7 @@
 #ifndef __MARG_VALUE_H_
 #define __MARG_VALUE_H_
 
+#include "../../libs/EmeraldsString/export/EmeraldsString.h"
 #include "../base/fnv_1a_64_hash.h"
 #include "MargFloat.h"
 #include "MargHash.h"
@@ -11,8 +12,6 @@
 #include "MargString.h"
 #include "MargTensor.h"
 #include "MargValueType.h"
-
-#include <string.h> /* strncmp */
 
 /* QNAN = 0b    0     11111111111       1            1       ('0' * 50)
              (sign) (exponent bits) (qnan bit) (qnan fp ind)   (rest)        */
@@ -46,7 +45,7 @@
 #define MARG_TRUE            (table_get(&vm->global_variables, MARG_STRING("$true")))
 #define MARG_INTEGER(number) (QNAN_BOX(marg_integer_new(vm, (number))))
 #define MARG_FLOAT(number)   (QNAN_BOX(marg_float_new(vm, (number))))
-#define MARG_STRING(chars)   (QNAN_BOX(marg_string_new(vm, (chars))))
+#define MARG_STRING(chars)   (QNAN_BOX(marg_string_new(vm, string_new(chars))))
 #define MARG_STRING_INTERNED(chars, size)                                   \
   (QNAN_BOX(table_find_string(                                              \
     &vm->interned_strings, (chars), (size), fnv_1a_64_hash((chars), (size)) \
@@ -55,7 +54,7 @@
   (QNAN_BOX(marg_tensor_new(vm, (initial_alloced))))
 #define MARG_HASH (QNAN_BOX(marg_hash_new(vm)))
 #define MARG_OBJECT(name) \
-  (QNAN_BOX(marg_object_new(vm, sizeof(MargObject), (name))))
+  (QNAN_BOX(marg_object_new(vm, sizeof(MargObject), string_new(name))))
 #define MARG_METHOD(bound_object, message_name) \
   (QNAN_BOX(marg_method_new(vm, (bound_object), (message_name))))
 #define MARG_PROC(bound_method) (QNAN_BOX(marg_proc_new(vm, (bound_method))))
@@ -70,55 +69,60 @@
 #define AS_PROC(value)    ((MargProc *)QNAN_UNBOX(value))
 
 #define IS_NIL(value) \
-  (!IS_UNDEFINED((value)) && (!strncmp(QNAN_UNBOX(value)->name, "$nil", 4)))
+  (!IS_UNDEFINED((value)) && (string_equals(QNAN_UNBOX(value)->name, "$nil")))
 #define IS_FALSE(value) \
-  (!IS_UNDEFINED((value)) && (!strncmp(QNAN_UNBOX(value)->name, "$false", 6)))
+  (!IS_UNDEFINED((value)) && (string_equals(QNAN_UNBOX(value)->name, "$false")))
 #define IS_TRUE(value) \
-  (!IS_UNDEFINED((value)) && (!strncmp(QNAN_UNBOX(value)->name, "$true", 5)))
-#define IS_INTEGER(value) \
-  (!IS_UNDEFINED((value)) && (!strncmp(QNAN_UNBOX(value)->name, "$Integer", 8)))
+  (!IS_UNDEFINED((value)) && (string_equals(QNAN_UNBOX(value)->name, "$true")))
+#define IS_INTEGER(value)    \
+  (!IS_UNDEFINED((value)) && \
+   (string_equals(QNAN_UNBOX(value)->name, "$Integer")))
 #define IS_FLOAT(value) \
-  (!IS_UNDEFINED((value)) && (!strncmp(QNAN_UNBOX(value)->name, "$Float", 6)))
-#define IS_STRING(value) \
-  (!IS_UNDEFINED((value)) && (!strncmp(QNAN_UNBOX(value)->name, "$String", 7)))
-#define IS_TENSOR(value) \
-  (!IS_UNDEFINED((value)) && (!strncmp(QNAN_UNBOX(value)->name, "$Tensor", 7)))
+  (!IS_UNDEFINED((value)) && (string_equals(QNAN_UNBOX(value)->name, "$Float")))
+#define IS_STRING(value)     \
+  (!IS_UNDEFINED((value)) && \
+   (string_equals(QNAN_UNBOX(value)->name, "$String")))
+#define IS_TENSOR(value)     \
+  (!IS_UNDEFINED((value)) && \
+   (string_equals(QNAN_UNBOX(value)->name, "$Tensor")))
 #define IS_HASH(value) \
-  (!IS_UNDEFINED((value)) && (!strncmp(QNAN_UNBOX(value)->name, "$Hash", 5)))
-#define IS_OBJECT(value) \
-  (!IS_UNDEFINED((value)) && (!strncmp(QNAN_UNBOX(value)->name, "$Object", 7)))
-#define IS_METHOD(value) \
-  (!IS_UNDEFINED((value)) && (!strncmp(QNAN_UNBOX(value)->name, "$Method", 7)))
+  (!IS_UNDEFINED((value)) && (string_equals(QNAN_UNBOX(value)->name, "$Hash")))
+#define IS_OBJECT(value)     \
+  (!IS_UNDEFINED((value)) && \
+   (string_equals(QNAN_UNBOX(value)->name, "$Object")))
+#define IS_METHOD(value)     \
+  (!IS_UNDEFINED((value)) && \
+   (string_equals(QNAN_UNBOX(value)->name, "$Method")))
 #define IS_PROC(value) \
-  (!IS_UNDEFINED((value)) && (!strncmp(QNAN_UNBOX(value)->name, "$Proc", 5)))
+  (!IS_UNDEFINED((value)) && (string_equals(QNAN_UNBOX(value)->name, "$Proc")))
 
 #define IS_NIL_CLONE(value)   (!IS_UNDEFINED((value)) && IS_NIL((value)))
 #define IS_FALSE_CLONE(value) (!IS_UNDEFINED((value)) && IS_FALSE((value)))
 #define IS_TRUE_CLONE(value)  (!IS_UNDEFINED((value)) && IS_TRUE((value)))
 #define IS_INTEGER_CLONE(value) \
   (!IS_UNDEFINED((value)) &&    \
-   (!strncmp(QNAN_UNBOX(value)->name, "$IntegerClone", 13)))
+   (string_equals(QNAN_UNBOX(value)->name, "$IntegerClone")))
 #define IS_FLOAT_CLONE(value) \
   (!IS_UNDEFINED((value)) &&  \
-   (!strncmp(QNAN_UNBOX(value)->name, "$FloatClone", 11)))
+   (string_equals(QNAN_UNBOX(value)->name, "$FloatClone")))
 #define IS_STRING_CLONE(value) \
   (!IS_UNDEFINED((value)) &&   \
-   (!strncmp(QNAN_UNBOX(value)->name, "$StringClone", 12)))
+   (string_equals(QNAN_UNBOX(value)->name, "$StringClone")))
 #define IS_TENSOR_CLONE(value) \
   (!IS_UNDEFINED((value)) &&   \
-   (!strncmp(QNAN_UNBOX(value)->name, "$TensorClone", 12)))
+   (string_equals(QNAN_UNBOX(value)->name, "$TensorClone")))
 #define IS_HASH_CLONE(value) \
   (!IS_UNDEFINED((value)) && \
-   (!strncmp(QNAN_UNBOX(value)->name, "$HashClone", 10)))
+   (string_equals(QNAN_UNBOX(value)->name, "$HashClone")))
 #define IS_OBJECT_CLONE(value) \
   (!IS_UNDEFINED((value)) &&   \
-   (!strncmp(QNAN_UNBOX(value)->name, "$ObjectClone", 12)))
+   (string_equals(QNAN_UNBOX(value)->name, "$ObjectClone")))
 #define IS_METHOD_CLONE(value) \
   (!IS_UNDEFINED((value)) &&   \
-   (!strncmp(QNAN_UNBOX(value)->name, "$MethodClone", 12)))
+   (string_equals(QNAN_UNBOX(value)->name, "$MethodClone")))
 #define IS_PROC_CLONE(value) \
   (!IS_UNDEFINED((value)) && \
-   (!strncmp(QNAN_UNBOX(value)->name, "$ProcClone", 10)))
+   (string_equals(QNAN_UNBOX(value)->name, "$ProcClone")))
 
 /**
  * @brief Formats a marg value using QNAN boxing

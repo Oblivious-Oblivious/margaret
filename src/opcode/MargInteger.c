@@ -4,8 +4,9 @@
 #include "MargValue.h"
 
 MargInteger *marg_integer_new(VM *vm, int64_t value) {
-  MargObject *obj =
-    (MargObject *)marg_object_new(vm, sizeof(MargInteger), "$IntegerClone");
+  MargObject *obj = (MargObject *)marg_object_new(
+    vm, sizeof(MargInteger), string_new("$IntegerClone")
+  );
   MargInteger *self = (MargInteger *)obj;
 
   MargValue proto_object =

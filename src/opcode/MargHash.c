@@ -70,8 +70,9 @@ static void marg_hash_adjust_capacity(MargHash *self, size_t alloced) {
 }
 
 MargHash *marg_hash_new(VM *vm) {
-  MargObject *obj =
-    (MargObject *)marg_object_new(vm, sizeof(MargHash), "$HashClone");
+  MargObject *obj = (MargObject *)marg_object_new(
+    vm, sizeof(MargHash), string_new("$HashClone")
+  );
   MargHash *self = (MargHash *)obj;
 
   MargValue proto_object =

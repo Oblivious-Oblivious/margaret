@@ -3,7 +3,6 @@
 #include "../../libs/EmeraldsString/export/EmeraldsString.h" /* IWYU pragma: keep */
 
 #include <stdint.h>
-#include <string.h> /* strlen */
 
 char *bin_to_dec(const char *bin) {
   char *res  = NULL;

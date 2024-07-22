@@ -118,7 +118,7 @@ Token **lexer_make_tokens(Lexer *self, char *text) {
         } else if(token_type == TOKEN_STRING) {
           string_skip_first(token, 1);
           string_ignore_last(token, 1);
-          self->lineno += vector_size(string_split(token, "\n"));
+          self->lineno += vector_size(string_split(token, '\n'));
         }
 
         vector_add(
@@ -133,7 +133,7 @@ Token **lexer_make_tokens(Lexer *self, char *text) {
 
     if(is_not_matched) {
       has_lexer_error = true;
-      lexer_error(self, "Unexpected character.", string_split(text, "\n")[0]);
+      lexer_error(self, "Unexpected character.", string_split(text, '\n')[0]);
       string_skip_first(text, 1);
     }
   }

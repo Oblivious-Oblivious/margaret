@@ -16,7 +16,7 @@ char *LOAD(char *filename) {
 
 Token **READ(char *chars, char *filename) {
   char *str_filename = string_new(filename);
-  char **vec         = string_split(str_filename, "/");
+  char **vec         = string_split(str_filename, '/');
 
   if(vector_size(vec) > 1) {
     return lexer_make_tokens(lexer_new(vec[vector_size(vec) - 1]), chars);

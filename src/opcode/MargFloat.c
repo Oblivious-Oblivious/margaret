@@ -6,8 +6,9 @@
 #include <float.h> /* LDBL_DIG */
 
 MargFloat *marg_float_new(VM *vm, double value) {
-  MargObject *obj =
-    (MargObject *)marg_object_new(vm, sizeof(MargFloat), "$FloatClone");
+  MargObject *obj = (MargObject *)marg_object_new(
+    vm, sizeof(MargFloat), string_new("$FloatClone")
+  );
   MargFloat *self = (MargFloat *)obj;
 
   MargValue proto_object =
