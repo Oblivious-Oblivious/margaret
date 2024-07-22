@@ -4,12 +4,12 @@
 #include "../opcode/fmcodes.h"
 #include "../tokens/TokenTable.h"
 
-#define la1value(token)          token_equals_values(table[0], string_new((token)))
-#define la2value(token)          token_equals_values(table[1], string_new((token)))
-#define la3value(token)          token_equals_values(table[2], string_new((token)))
-#define la1type(expected_type)   table[0]->type == (expected_type)
-#define la2type(expected_type)   table[1]->type == (expected_type)
-#define la3type(expected_type)   table[2]->type == (expected_type)
+#define la1value(token)        token_equals_values(table[0], string_new((token)))
+#define la2value(token)        token_equals_values(table[1], string_new((token)))
+#define la3value(token)        token_equals_values(table[2], string_new((token)))
+#define la1type(expected_type) table[0]->type == (expected_type)
+#define la2type(expected_type) table[1]->type == (expected_type)
+#define la3type(expected_type) table[2]->type == (expected_type)
 
 #define ensure_value(value, msg) token_table_ensure_value(table, (value), (msg))
 #define ensure_type(type, msg)   token_table_ensure_type(table, (type), (msg))
