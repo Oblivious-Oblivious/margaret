@@ -1,7 +1,7 @@
 #include "Token.h"
 
 #include "../../libs/EmeraldsString/export/EmeraldsString.h" /* IWYU pragma: keep */
-#include "../base/memory.h"
+#include "../base/memory.h" /* IWYU pragma: keep */
 
 Token *token_new(
   char *value,

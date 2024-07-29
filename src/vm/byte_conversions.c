@@ -1,6 +1,6 @@
 #include "byte_conversions.h"
 
-#include "../base/memory.h"
+#include "../base/memory.h" /* IWYU pragma: keep */
 
 uint8_t *word_to_bytes(uint16_t word) {
   uint8_t *bytes = (uint8_t *)malloc(sizeof(uint8_t) * 2);
