@@ -79,7 +79,7 @@ static void op_send_helper(VM *vm, MargValue message_name) {
 
   /* Pop all parameters first */
   MargValue *actual_parameters =
-    collected_malloc(sizeof(MargValue) * number_of_parameters);
+    malloc(sizeof(MargValue) * number_of_parameters);
   for(int64_t i = number_of_parameters - 1; i >= 0; i--) {
     actual_parameters[i] = fs_pop(vm->sp);
   }

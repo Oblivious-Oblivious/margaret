@@ -35,7 +35,7 @@ MargTensor *marg_tensor_new(VM *vm, size_t initial_size);
 #define marg_tensor_ensure_space(self)                               \
   do {                                                               \
     size_t new_capacity = (self)->alloced * MARG_TENSOR_GROW_FACTOR; \
-    MargValue *items    = (MargValue *)collected_realloc(            \
+    MargValue *items    = (MargValue *)realloc(            \
       (self)->items, sizeof(MargValue) * new_capacity             \
     );                                                            \
                                                                      \

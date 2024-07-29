@@ -79,7 +79,7 @@ static void point_ip_to_main_method(VM *vm) {
 }
 
 VM *vm_new(void) {
-  VM *vm = (VM *)collected_malloc(sizeof(VM));
+  VM *vm = (VM *)malloc(sizeof(VM));
 
   vm->sp = vm->stack;
   table_init(&vm->global_variables);

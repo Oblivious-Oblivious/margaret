@@ -10,7 +10,7 @@ Token *token_new(
   size_t char_number,
   const char *filename
 ) {
-  Token *t = (Token *)collected_malloc(sizeof(Token));
+  Token *t = (Token *)malloc(sizeof(Token));
 
   t->value       = value;
   t->type        = type;

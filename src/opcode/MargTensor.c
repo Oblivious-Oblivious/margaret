@@ -18,7 +18,7 @@ MargTensor *marg_tensor_new(VM *vm, size_t initial_alloced) {
   self->alloced = initial_alloced;
   self->size    = 0;
   self->items =
-    (MargValue *)collected_malloc(sizeof(MargValue) * self->alloced);
+    (MargValue *)malloc(sizeof(MargValue) * self->alloced);
 
   return self;
 }

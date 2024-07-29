@@ -9,7 +9,7 @@
 #include <stdio.h> /* printf */
 
 Lexer *lexer_new(const char *filename) {
-  Lexer *self = (Lexer *)collected_malloc(sizeof(Lexer));
+  Lexer *self = (Lexer *)malloc(sizeof(Lexer));
 
   self->filename = filename;
   self->lineno   = 1;

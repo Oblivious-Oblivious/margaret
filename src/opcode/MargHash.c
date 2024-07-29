@@ -44,7 +44,7 @@ marg_hash_find_entry(MargHashEntry *entries, size_t alloced, MargValue key) {
  */
 static void marg_hash_adjust_capacity(MargHash *self, size_t alloced) {
   MargHashEntry *entries =
-    (MargHashEntry *)collected_malloc(sizeof(MargHashEntry) * alloced);
+    (MargHashEntry *)malloc(sizeof(MargHashEntry) * alloced);
 
   for(size_t i = 0; i < alloced; i++) {
     entries[i].key   = MARG_NOT_INTERNED;
