@@ -3,7 +3,21 @@
 #include "../../libs/EmeraldsString/export/EmeraldsString.h" /* IWYU pragma: keep */
 #include "MargValue.h"
 
-#define MARG_HASH_MAX_LOAD 0.75
+#include <stdint.h>
+
+#define MARG_HASH_MAX_LOAD    0.75
+#define MARG_HASH_GROW_FACTOR 2
+
+static uint64_t fnv_1a_64_hash(char *key, size_t size) {
+  uint64_t hash = 14695981039346656037u;
+
+  for(size_t i = 0; i < size; i++) {
+    hash ^= (uint8_t)key[i];
+    hash *= 1099511628211;
+  }
+
+  return hash;
+}
 
 /**
  * @brief Finds a specific entry using a key
@@ -14,26 +28,27 @@
  */
 static MargHashEntry *
 marg_hash_find_entry(MargHashEntry *entries, size_t alloced, MargValue key) {
-  uint64_t index = MEMORY_GROW_FACTOR == 2
-                     ? AS_STRING(key)->hash & (alloced - 1)
-                     : AS_STRING(key)->hash % alloced;
+  uint64_t hash  = fnv_1a_64_hash(AS_STRING(key)->chars, AS_STRING(key)->size);
+  uint64_t index = hash & (alloced - 1);
 
   // Linear probing
   MargHashEntry *tombstone = NULL;
   while(true) {
     MargHashEntry *entry = &entries[index];
+    uint64_t entry_hash =
+      fnv_1a_64_hash(AS_STRING(entry->key)->chars, AS_STRING(entry->key)->size);
     if(IS_NOT_INTERNED(entry->key)) {
       if(IS_UNDEFINED(entry->value)) {
         return tombstone != NULL ? tombstone : entry;
       } else if(tombstone == NULL) {
         tombstone = entry;
       }
-    } else if(AS_STRING(entry->key)->hash == AS_STRING(key)->hash) {
+    } else if(entry_hash == hash) {
       return entry;
     }
 
-    index = MEMORY_GROW_FACTOR == 2 ? (index + 1) & (alloced - 1)
-                                    : (index + 1) % alloced;
+    index = MARG_HASH_GROW_FACTOR == 2 ? (index + 1) & (alloced - 1)
+                                       : (index + 1) % alloced;
   }
 }
 
@@ -75,14 +90,11 @@ MargHash *marg_hash_new(VM *vm) {
   );
   MargHash *self = (MargHash *)obj;
 
-  MargValue proto_object =
-    table_get(&vm->global_variables, MARG_STRING("$Hash"));
-  obj->parent = AS_OBJECT(proto_object);
+  MargValue proto_object = table_get(&vm->global_variables, "$Hash");
+  obj->parent            = AS_OBJECT(proto_object);
 
-  table_set(&obj->instance_variables, MARG_STRING("@self"), QNAN_BOX(obj));
-  table_set(
-    &obj->instance_variables, MARG_STRING("@super"), QNAN_BOX(obj->parent)
-  );
+  table_add(&obj->instance_variables, "@self", QNAN_BOX(obj));
+  table_add(&obj->instance_variables, "@super", QNAN_BOX(obj->parent));
 
   self->alloced = 0;
   self->size    = 0;
@@ -93,7 +105,7 @@ MargHash *marg_hash_new(VM *vm) {
 
 void marg_hash_add(MargHash *self, MargValue key, MargValue value) {
   if(self->size + 1 > self->alloced * MARG_HASH_MAX_LOAD) {
-    marg_hash_adjust_capacity(self, MEMORY_GROW_CAPACITY(self->alloced));
+    marg_hash_adjust_capacity(self, self->alloced * MARG_HASH_GROW_FACTOR);
   }
 
   MargHashEntry *entry =
@@ -159,3 +171,6 @@ char *marg_hash_to_string(MargHash *object) {
 
   return res;
 }
+
+#undef MARG_HASH_MAX_LOAD
+#undef MARG_HASH_GROW_FACTOR

@@ -98,11 +98,10 @@ static void _add_temporary_function(
 
 VM *emitter_emit(VM *vm, char **formal_bytecode) {
   MargObject *marg_object =
-    AS_OBJECT(table_get(&vm->global_variables, MARG_STRING("$Margaret")));
-  MargMethod *main_method =
-    AS_METHOD(table_get(&marg_object->messages, MARG_STRING("")));
-  vm->current->bytecode = NULL;
-  vm->current           = main_method->proc;
+    AS_OBJECT(table_get(&vm->global_variables, "$Margaret"));
+  MargMethod *main_method = AS_METHOD(table_get(&marg_object->messages, ""));
+  vm->current->bytecode   = NULL;
+  vm->current             = main_method->proc;
 
   size_t bytecode_size = vector_size(formal_bytecode);
   for(size_t ip = 0; ip < bytecode_size; ip++) {
@@ -162,9 +161,8 @@ VM *emitter_emit(VM *vm, char **formal_bytecode) {
 
     opcode_case(FM_STRING) {
       char *temporary_str = formal_bytecode[++ip];
-      size_t size         = string_size(temporary_str);
 
-      MargValue interned = MARG_STRING_INTERNED(temporary_str, size);
+      MargValue interned = MARG_STRING_INTERNED(temporary_str);
       emit_variable_length_op(OP_PUT_OBJECT);
 
       if(IS_NOT_INTERNED(interned)) {
@@ -174,8 +172,8 @@ VM *emitter_emit(VM *vm, char **formal_bytecode) {
         make_temporary(vm, interned, &temporary_index);
         add_temporary(vm, temporary_index);
 
-        table_set(
-          &vm->interned_strings, interned, MARG_INTEGER(temporary_index)
+        table_add(
+          &vm->interned_strings, temporary_str, MARG_INTEGER(temporary_index)
         );
       } else {
         uint32_t temporary_index;

@@ -8,9 +8,8 @@ MargProc *marg_proc_new(VM *vm, MargMethod *bound_method) {
     marg_object_new(vm, sizeof(MargProc), string_new("$ProcClone"));
   MargProc *self = (MargProc *)obj;
 
-  MargValue proto_object =
-    table_get(&vm->global_variables, MARG_STRING("$Proc"));
-  obj->parent = AS_OBJECT(proto_object);
+  MargValue proto_object = table_get(&vm->global_variables, "$Proc");
+  obj->parent            = AS_OBJECT(proto_object);
 
   obj->instance_variables = obj->parent->instance_variables;
 

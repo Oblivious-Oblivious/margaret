@@ -12,7 +12,6 @@
 typedef struct MargString {
   MargObject _;
   size_t size;
-  uint64_t hash;
   char chars[];
 } MargString;
 

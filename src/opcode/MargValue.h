@@ -2,7 +2,6 @@
 #define __MARG_VALUE_H_
 
 #include "../../libs/EmeraldsString/export/EmeraldsString.h"
-#include "../base/fnv_1a_64_hash.h"
 #include "MargFloat.h"
 #include "MargHash.h"
 #include "MargInteger.h"
@@ -40,16 +39,14 @@
 #define IS_NOT_INTERNED(value) ((value) == MARG_NOT_INTERNED)
 
 // Objects
-#define MARG_NIL             (table_get(&vm->global_variables, MARG_STRING("$nil")))
-#define MARG_FALSE           (table_get(&vm->global_variables, MARG_STRING("$false")))
-#define MARG_TRUE            (table_get(&vm->global_variables, MARG_STRING("$true")))
+#define MARG_NIL             (table_get(&vm->global_variables, "$nil"))
+#define MARG_FALSE           (table_get(&vm->global_variables, "$false"))
+#define MARG_TRUE            (table_get(&vm->global_variables, "$true"))
 #define MARG_INTEGER(number) (QNAN_BOX(marg_integer_new(vm, (number))))
 #define MARG_FLOAT(number)   (QNAN_BOX(marg_float_new(vm, (number))))
 #define MARG_STRING(chars)   (QNAN_BOX(marg_string_new(vm, string_new(chars))))
-#define MARG_STRING_INTERNED(chars, size)                                   \
-  (QNAN_BOX(table_find_string(                                              \
-    &vm->interned_strings, (chars), (size), fnv_1a_64_hash((chars), (size)) \
-  )))
+#define MARG_STRING_INTERNED(chars) \
+  (QNAN_BOX(table_get(&vm->interned_strings, (chars))))
 #define MARG_TENSOR(initial_alloced) \
   (QNAN_BOX(marg_tensor_new(vm, (initial_alloced))))
 #define MARG_HASH (QNAN_BOX(marg_hash_new(vm)))

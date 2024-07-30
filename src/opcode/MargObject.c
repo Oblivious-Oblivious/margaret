@@ -25,9 +25,10 @@ char *marg_object_to_string_with_hash(MargValue object) {
   char *object_name = AS_OBJECT(object)->name;
   string_addf(
     res,
-    "%s@%llx",
+    "%s@%s",
     object_name,
-    fnv_1a_64_hash(object_name, string_size(object_name))
+    // TODO - add hash
+    "somehash"
   );
   return res;
 }

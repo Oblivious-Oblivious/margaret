@@ -103,13 +103,13 @@
      $Unary msg -> (no change)
 
      $Binary + other -> Method {name: "+", parameters: ["other"]}
-     $Binary + 3 -> parameters: "+": 3 -> table_set(locals, parameters.get[0], 3)
+     $Binary + 3 -> parameters: "+": 3 -> table_add(locals, parameters.get[0], 3)
 
      $Keyword at: position put: element -> Method {name: "at:put:", parameters: ["position", "element"]}
      $Keyword at: 0 put: 42 -> parameters: "at": 0, "put": 42
         -> actual_params = [0, 42]
         -> foreach param:
-            table_set(locals, parameters.get[i], actual_params[i])
+            table_add(locals, parameters.get[i], actual_params[i])
   ---------------------------
   🟩 Compile time bytecodes
      Stored along with runtime ones.

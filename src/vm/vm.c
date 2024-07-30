@@ -13,18 +13,13 @@
  */
 MargValue create_new_proto_object(VM *vm, char *parent_name, char *name) {
   MargValue proto_object = MARG_OBJECT(name);
-  table_set(&vm->global_variables, MARG_STRING(name), proto_object);
-  table_set(
-    &AS_OBJECT(proto_object)->instance_variables,
-    MARG_STRING("@self"),
-    proto_object
+  table_add(&vm->global_variables, name, proto_object);
+  table_add(
+    &AS_OBJECT(proto_object)->instance_variables, "@self", proto_object
   );
-  MargValue parent_object =
-    table_get(&vm->global_variables, MARG_STRING(parent_name));
-  table_set(
-    &AS_OBJECT(proto_object)->instance_variables,
-    MARG_STRING("@super"),
-    parent_object
+  MargValue parent_object = table_get(&vm->global_variables, parent_name);
+  table_add(
+    &AS_OBJECT(proto_object)->instance_variables, "@super", parent_object
   );
   AS_OBJECT(proto_object)->parent = AS_OBJECT(parent_object);
 
@@ -65,17 +60,16 @@ static void setup_proto_object_chain(VM *vm) {
  */
 static void define_main_method(VM *vm) {
   MargObject *margaret =
-    AS_OBJECT(table_get(&vm->global_variables, MARG_STRING("$Margaret")));
+    AS_OBJECT(table_get(&vm->global_variables, "$Margaret"));
   MargMethod *method = AS_METHOD(MARG_METHOD(margaret, ""));
-  table_set(&margaret->messages, MARG_STRING(""), QNAN_BOX(method));
+  table_add(&margaret->messages, "", QNAN_BOX(method));
 }
 
 static void point_ip_to_main_method(VM *vm) {
   MargObject *margaret =
-    AS_OBJECT(table_get(&vm->global_variables, MARG_STRING("$Margaret")));
-  MargMethod *method =
-    AS_METHOD(table_get(&margaret->messages, MARG_STRING("")));
-  vm->current = method->proc;
+    AS_OBJECT(table_get(&vm->global_variables, "$Margaret"));
+  MargMethod *method = AS_METHOD(table_get(&margaret->messages, ""));
+  vm->current        = method->proc;
 }
 
 VM *vm_new(void) {

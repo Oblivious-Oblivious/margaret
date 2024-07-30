@@ -4,10 +4,6 @@
 // margaret
 #include "version.spec.h"
 
-// base
-#include "base/fnv_1a_64_hash.spec.h"
-#include "base/table.spec.h"
-
 // emitter
 #include "emitter/Emitter.spec.h"
 
@@ -85,9 +81,6 @@
 
 spec_suite({
   VersionSpec();
-
-  fnv_1a_64_hash_spec();
-  table_spec();
 
   EmitterSpec();
 

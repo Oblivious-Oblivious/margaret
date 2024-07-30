@@ -19,8 +19,8 @@ struct MargProc {
   MargMethod *bound_method;
   MargProc *bound_proc;
 
-  table parameters;
-  table local_variables;
+  EmeraldsHashtable parameters;
+  EmeraldsHashtable local_variables;
 
   uint8_t *bytecode;
   MargValue *temporaries;

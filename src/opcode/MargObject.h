@@ -3,6 +3,7 @@
 
 typedef struct MargObject MargObject;
 
+#include "../../libs/EmeraldsBool/export/EmeraldsBool.h"
 #include "../vm/vm.h"
 
 /**
@@ -24,8 +25,8 @@ struct MargObject {
 
   char *name;
   MargObject *parent;
-  table instance_variables;
-  table messages;
+  EmeraldsHashtable instance_variables;
+  EmeraldsHashtable messages;
 };
 
 /**

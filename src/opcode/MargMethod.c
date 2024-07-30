@@ -9,9 +9,8 @@ marg_method_new(VM *vm, MargObject *bound_object, char *message_name) {
     marg_object_new(vm, sizeof(MargMethod), string_new("$MethodClone"));
   MargMethod *self = (MargMethod *)obj;
 
-  MargValue proto_object =
-    table_get(&vm->global_variables, MARG_STRING("$Method"));
-  obj->parent = AS_OBJECT(proto_object);
+  MargValue proto_object = table_get(&vm->global_variables, "$Method");
+  obj->parent            = AS_OBJECT(proto_object);
 
   obj->instance_variables = obj->parent->instance_variables;
 
