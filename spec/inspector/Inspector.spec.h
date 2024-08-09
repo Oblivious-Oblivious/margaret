@@ -18,7 +18,8 @@ module(InspectorSpec, {
       uint32_t word_temporary_index = vector_size(vm->current->temporaries) - 1;
 
       vector_add(vm->current->bytecode, OP_PUT_OBJECT_WORD);
-      uint8_t *temporary_in_bytes = word_to_bytes(word_temporary_index);
+      uint8_t temporary_in_bytes[2];
+      word_to_bytes(word_temporary_index, temporary_in_bytes);
       vector_add(vm->current->bytecode, temporary_in_bytes[0]);
       vector_add(vm->current->bytecode, temporary_in_bytes[1]);
     }

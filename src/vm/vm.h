@@ -24,10 +24,10 @@ typedef struct VM {
 
 /** @brief Works for any IP pointer no matter what context current is in */
 #define READ_BYTE() (*vm->current->ip++)
-#define READ_WORD() (bytes_to_word((uint8_t[2]){READ_BYTE(), READ_BYTE()}))
-#define READ_DWORD()          \
-  (bytes_to_dword((uint8_t[4] \
-  ){READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE()}))
+#define READ_WORD() (bytes_to_word(((uint8_t[2]){READ_BYTE(), READ_BYTE()})))
+#define READ_DWORD()           \
+  (bytes_to_dword(((uint8_t[4] \
+  ){READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE()})))
 
 #define READ_TEMPORARY()       (vm->current->bytecode[READ_BYTE()])
 #define READ_TEMPORARY_WORD()  (vm->current->bytecode[READ_WORD()])

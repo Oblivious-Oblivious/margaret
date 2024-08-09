@@ -83,10 +83,12 @@ static void _add_temporary_function(
   if(vector_size(vm->current->bytecode) < byte_bound) {
     emit_byte((uint8_t)temporary_index);
   } else if(vector_size(vm->current->bytecode) < word_bound) {
-    uint8_t *temporary_index_in_bytes = word_to_bytes(temporary_index);
+    uint8_t temporary_index_in_bytes[2];
+    word_to_bytes(temporary_index, temporary_index_in_bytes);
     emit_bytes2(temporary_index_in_bytes[0], temporary_index_in_bytes[1]);
   } else {
-    uint8_t *temporary_index_in_bytes = dword_to_bytes(temporary_index);
+    uint8_t temporary_index_in_bytes[4];
+    dword_to_bytes(temporary_index, temporary_index_in_bytes);
     emit_bytes4(
       temporary_index_in_bytes[0],
       temporary_index_in_bytes[1],
