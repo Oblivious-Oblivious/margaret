@@ -64,13 +64,13 @@ static char *normalize_integer(char *token) {
 
   if(token[0] == '0' && (token[1] == 'b' || token[1] == 'B')) {
     string_skip_first(token, 2);
-    token = string_new(bin_to_dec(token));
+    bin_to_dec(token);
   } else if(token[0] == '0' && (token[1] == 'o' || token[1] == 'O')) {
     string_skip_first(token, 2);
-    token = string_new(oct_to_dec(token));
+    oct_to_dec(token);
   } else if(token[0] == '0' && (token[1] == 'x' || token[1] == 'X')) {
     string_skip_first(token, 2);
-    token = string_new(hex_to_dec(token));
+    hex_to_dec(token);
   }
 
   return token;
@@ -89,7 +89,7 @@ Token **lexer_make_tokens(Lexer *self, char *text) {
     bool is_not_matched = true;
 
     for(size_t i = 0; i < sizeof(REGEX_LIST) / sizeof(Regex); i++) {
-      Regex *r            = &REGEX_LIST[i];
+      const Regex *r      = &REGEX_LIST[i];
       ptrdiff_t end_index = matcher(r->pattern, (UChar *)text);
       if(end_index != -1) {
         is_not_matched = false;

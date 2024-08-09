@@ -7,17 +7,20 @@
 
 module(alternate_to_dec_spec, {
   it("converts from binary to decimal", {
-    char *bin = bin_to_dec(string_new("101010"));
+    char *bin = string_new("101010");
+    bin_to_dec(bin);
     assert_that_charptr(bin equals to "42");
   });
 
   it("converts from octal to decimal", {
-    char *oct = oct_to_dec(string_new("12345"));
+    char *oct = string_new("12345");
+    oct_to_dec(oct);
     assert_that_charptr(oct equals to "5349");
   });
 
   it("converts from hexadecimal to decimal", {
-    char *hex = hex_to_dec(string_new("bEeF"));
+    char *hex = string_new("bEeF");
+    hex_to_dec(hex);
     assert_that_charptr(hex equals to "48879");
   });
 })
