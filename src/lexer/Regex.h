@@ -9,7 +9,7 @@ typedef struct Regex {
   Type type;
 } Regex;
 
-static Regex REGEX_LIST[10] = {
+static const Regex REGEX_LIST[] = {
   {
     .pattern = (UChar *)"^\\n",
     .type    = TOKEN_NEWLINE,
