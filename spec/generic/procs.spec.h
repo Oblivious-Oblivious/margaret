@@ -27,7 +27,7 @@ module(procs_spec, {
         string_new("="),
         FM_PROC_END
       )
-    ); // x = Proc
+    );
     parse(
       "x = { \
         v1, v2 | ( \

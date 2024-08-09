@@ -10,7 +10,6 @@
  */
 char **parser_analyze_syntax(Token **table);
 
-/** Parser rules */
 void parser_first_unit(Token **table, char ***fmcodes);
 char *parser_unit_list(Token **table, char ***fmcodes);
 void parser_unit(Token **table, char ***fmcodes);

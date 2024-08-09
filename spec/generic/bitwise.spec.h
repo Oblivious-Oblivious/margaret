@@ -81,7 +81,7 @@ module(bitwise_spec, {
         FM_BINARY,
         string_new("=")
       )
-    ); // Left shift
+    );
     parse(
       "(x = 0xf0 bitshift: -4)",
       vector_new(
@@ -99,7 +99,7 @@ module(bitwise_spec, {
         FM_BINARY,
         string_new("=")
       )
-    ); // Right shift
+    );
     parse(
       "(x = 0x80 highbit)",
       vector_new(

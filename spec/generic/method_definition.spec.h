@@ -120,9 +120,6 @@ module(method_definition_spec, {
       )
     );
 
-    // Method unary object: 0 message: "fact" method: { 1 }
-    // Method unary object: _ message: "fact" method: { @self * (@self - 1) fact
-    // }
     parse(
       "( \
         # 0 fact => 1, \
@@ -160,7 +157,6 @@ module(method_definition_spec, {
   });
 
   it("parses binary methods", {
-    // Method binary object: 0 message: "**" param: 0 method: { $nil }
     parse(
       "# 0 ** 0 => $nil",
       vector_new(
@@ -178,7 +174,6 @@ module(method_definition_spec, {
       )
     );
 
-    // Method binary object: 0 message: "**" param: _ method: { 0 }
     parse(
       "# 0 ** _ => 0",
       vector_new(
@@ -197,7 +192,6 @@ module(method_definition_spec, {
       )
     );
 
-    // Method binary object: _ message: "**" param: 0 method: { 1 }
     parse(
       "# _ ** 0 => 1",
       vector_new(
@@ -216,8 +210,6 @@ module(method_definition_spec, {
       )
     );
 
-    // Method binary object: 0 message: "**" param: a_number method: { a_number
-    // | 0 }
     parse(
       "# 0 ** a_number => 0",
       vector_new(
@@ -236,8 +228,6 @@ module(method_definition_spec, {
       )
     );
 
-    // Method binary object: _ message: "**" param: a_number method: { a_number
-    // | @self raised_to: a_number }
     parse(
       "# ** a_number => @self raised_to: a_number",
       vector_new(
@@ -261,8 +251,6 @@ module(method_definition_spec, {
   });
 
   it("parses keyword methods", {
-    // Method keyword object: _ message: "add:at:" params: [element, position]
-    // method: { element, position | 42 }
     parse(
       "#add: element at: position => 42",
       vector_new(
@@ -283,7 +271,6 @@ module(method_definition_spec, {
       )
     );
 
-    // Method keyword object: _ message: "new:" params: [2] method: { 1 }
     parse(
       "# _ new: 2 => 1",
       vector_new(
@@ -302,7 +289,6 @@ module(method_definition_spec, {
       )
     );
 
-    // Method keyword object: 1 message: "add:" params: [$nil] method: { $nil }
     parse(
       "# 1 add: $nil => $nil",
       vector_new(
@@ -319,7 +305,6 @@ module(method_definition_spec, {
       )
     );
 
-    // Method keyword object: 1 message: "add:" params: [2] method: { 3 }
     parse(
       "# 1 add: 2 => 3",
       vector_new(
@@ -338,7 +323,6 @@ module(method_definition_spec, {
       )
     );
 
-    // Method keyword object: 1 message: "one:" params: [_, _] method: { 42 }
     parse(
       "# 1 one: _ two: _ => 42",
       vector_new(
@@ -360,8 +344,6 @@ module(method_definition_spec, {
       )
     );
 
-    // Method keyword object: _ message: "ok?:otherwise!:" params: [value1,
-    // value2] method: { value1, value2 | 17 }
     parse(
       "#ok?: value1 otherwise!: value2 => 17",
       vector_new(
@@ -382,8 +364,6 @@ module(method_definition_spec, {
       )
     );
 
-    // Method keyword object: [] message: "add:at:" params: ["element",
-    // "position"] method: { element, position | 17 }
     parse(
       "# [] add: element at: position => 17",
       vector_new(
@@ -405,8 +385,6 @@ module(method_definition_spec, {
       )
     );
 
-    // Method keyword object: [] message: "add:at:" params: ['a', 0] method: {
-    // ['a'] }
     parse(
       "# [] add: 'a' at: 0 => ['a']",
       vector_new(
@@ -430,8 +408,6 @@ module(method_definition_spec, {
       )
     );
 
-    // Method keyword object: _ message: "add:at:" params: ['a', 0] method {
-    // ['a'] ++ @self }
     parse(
       "#add: 'a' at: 0 => ['a'] ++ @self",
       vector_new(
@@ -457,11 +433,6 @@ module(method_definition_spec, {
       )
     );
 
-    // Method keyword object: _ message: "times:" params: ["a_block"] method: {
-    // a_block | (
-    //     remaining = @self,
-    //     { (remaining = remaining - 1) >= 0 } while_true: { a_block value }
-    // ) }
     parse(
       "#times: a_block => ( \
         remaining = @self, \

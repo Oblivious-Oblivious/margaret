@@ -470,116 +470,116 @@ module(groups_spec, {
         string_new("sum")
       )
     );
-    // parse(
-    //   "(sum = arr inject: 0 into: { a, c | a + c })",
-    //   vector_new(
-    //     FM_LOCAL,
-    //     string_new("sum"),
-    //     FM_LOCAL,
-    //     string_new("arr"),
-    //     FM_INTEGER,
-    //     string_new("0"),
-    //     FM_PROC_START,
-    //     FM_PROC_PARAMETER,
-    //     string_new("a"),
-    //     FM_PROC_PARAMETER,
-    //     string_new("c"),
-    //     FM_LOCAL,
-    //     string_new("a"),
-    //     FM_LOCAL,
-    //     string_new("c"),
-    //     FM_BINARY,
-    //     string_new("+"),
-    //     FM_PROC_END,
-    //     FM_KEYWORD,
-    //     string_new("inject:into:"),
-    //     string_new("2"),
-    //     FM_BINARY,
-    //     string_new("=")
-    //   )
-    // );
-    // parse(
-    //   "(sum = arr fold: 0 into: { a, c | a + c })",
-    //   vector_new(
-    //     FM_LOCAL,
-    //     string_new("sum"),
-    //     FM_LOCAL,
-    //     string_new("arr"),
-    //     FM_INTEGER,
-    //     string_new("0"),
-    //     FM_PROC_START,
-    //     FM_PROC_PARAMETER,
-    //     string_new("a"),
-    //     FM_PROC_PARAMETER,
-    //     string_new("c"),
-    //     FM_LOCAL,
-    //     string_new("a"),
-    //     FM_LOCAL,
-    //     string_new("c"),
-    //     FM_BINARY,
-    //     string_new("+"),
-    //     FM_PROC_END,
-    //     FM_KEYWORD,
-    //     string_new("fold:into:"),
-    //     string_new("2"),
-    //     FM_BINARY,
-    //     string_new("=")
-    //   )
-    // );
-    // parse(
-    //   "(max = arr \
-    //     inject: 0 \
-    //     into: { a, c | \
-    //       (a > c) if_true: a \
-    //               if_false: b \
-    //     } \
-    //   )",
-    //   vector_new(
-    //     FM_LOCAL,
-    //     string_new("max"),
-    //     FM_LOCAL,
-    //     string_new("arr"),
-    //     FM_INTEGER,
-    //     string_new("0"),
-    //     FM_PROC_START,
-    //     FM_PROC_PARAMETER,
-    //     string_new("a"),
-    //     FM_PROC_PARAMETER,
-    //     string_new("c"),
-    //     FM_LOCAL,
-    //     string_new("a"),
-    //     FM_LOCAL,
-    //     string_new("c"),
-    //     FM_BINARY,
-    //     string_new(">"),
-    //     FM_LOCAL,
-    //     string_new("a"),
-    //     FM_LOCAL,
-    //     string_new("b"),
-    //     FM_KEYWORD,
-    //     string_new("if_true:if_false:"),
-    //     string_new("2"),
-    //     FM_PROC_END,
-    //     FM_KEYWORD,
-    //     string_new("inject:into:"),
-    //     string_new("2"),
-    //     FM_BINARY,
-    //     string_new("=")
-    //   )
-    // );
-    // parse(
-    //   "(x = arr shuffled)",
-    //   vector_new(
-    //     FM_LOCAL,
-    //     string_new("x"),
-    //     FM_LOCAL,
-    //     string_new("arr"),
-    //     FM_UNARY,
-    //     string_new("shuffled"),
-    //     FM_BINARY,
-    //     string_new("=")
-    //   )
-    // );
+    parse(
+      "(sum = arr inject: 0 into: { a, c | a + c })",
+      vector_new(
+        FM_LOCAL,
+        string_new("sum"),
+        FM_LOCAL,
+        string_new("arr"),
+        FM_INTEGER,
+        string_new("0"),
+        FM_PROC_START,
+        FM_PROC_PARAMETER,
+        string_new("a"),
+        FM_PROC_PARAMETER,
+        string_new("c"),
+        FM_LOCAL,
+        string_new("a"),
+        FM_LOCAL,
+        string_new("c"),
+        FM_BINARY,
+        string_new("+"),
+        FM_PROC_END,
+        FM_KEYWORD,
+        string_new("inject:into:"),
+        string_new("2"),
+        FM_BINARY,
+        string_new("=")
+      )
+    );
+    parse(
+      "(sum = arr fold: 0 into: { a, c | a + c })",
+      vector_new(
+        FM_LOCAL,
+        string_new("sum"),
+        FM_LOCAL,
+        string_new("arr"),
+        FM_INTEGER,
+        string_new("0"),
+        FM_PROC_START,
+        FM_PROC_PARAMETER,
+        string_new("a"),
+        FM_PROC_PARAMETER,
+        string_new("c"),
+        FM_LOCAL,
+        string_new("a"),
+        FM_LOCAL,
+        string_new("c"),
+        FM_BINARY,
+        string_new("+"),
+        FM_PROC_END,
+        FM_KEYWORD,
+        string_new("fold:into:"),
+        string_new("2"),
+        FM_BINARY,
+        string_new("=")
+      )
+    );
+    parse(
+      "(max = arr \
+        inject: 0 \
+        into: { a, c | \
+          (a > c) if_true: a \
+                  if_false: b \
+        } \
+      )",
+      vector_new(
+        FM_LOCAL,
+        string_new("max"),
+        FM_LOCAL,
+        string_new("arr"),
+        FM_INTEGER,
+        string_new("0"),
+        FM_PROC_START,
+        FM_PROC_PARAMETER,
+        string_new("a"),
+        FM_PROC_PARAMETER,
+        string_new("c"),
+        FM_LOCAL,
+        string_new("a"),
+        FM_LOCAL,
+        string_new("c"),
+        FM_BINARY,
+        string_new(">"),
+        FM_LOCAL,
+        string_new("a"),
+        FM_LOCAL,
+        string_new("b"),
+        FM_KEYWORD,
+        string_new("if_true:if_false:"),
+        string_new("2"),
+        FM_PROC_END,
+        FM_KEYWORD,
+        string_new("inject:into:"),
+        string_new("2"),
+        FM_BINARY,
+        string_new("=")
+      )
+    );
+    parse(
+      "(x = arr shuffled)",
+      vector_new(
+        FM_LOCAL,
+        string_new("x"),
+        FM_LOCAL,
+        string_new("arr"),
+        FM_UNARY,
+        string_new("shuffled"),
+        FM_BINARY,
+        string_new("=")
+      )
+    );
   });
 })
 

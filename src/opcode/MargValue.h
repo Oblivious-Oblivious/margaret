@@ -38,7 +38,6 @@
   ((MargValue)(uint64_t)(SIGN_BIT | ENCODING | NOT_INTERNED_TAG))
 #define IS_NOT_INTERNED(value) ((value) == MARG_NOT_INTERNED)
 
-// Objects
 #define MARG_NIL             (table_get(&vm->global_variables, "$nil"))
 #define MARG_FALSE           (table_get(&vm->global_variables, "$false"))
 #define MARG_TRUE            (table_get(&vm->global_variables, "$true"))
