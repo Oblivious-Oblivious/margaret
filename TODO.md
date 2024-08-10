@@ -17,7 +17,7 @@
   🟥 Add visual literals of trees, graphs and matrices (2-dimentional data representation).
      Most likely part of an IDE that casts the data into tensors.
 
-## (✗) ver. 0.4.0
+## (✗) ver. 0.0.4
 -----------------
   🟥 Add green threads.
   🟥 Upgrade to a concurrent tricolor generational mark & sweep gc.
@@ -27,7 +27,7 @@
   🟥 Upgrade to a compacting concurrent tricolor generational mark & sweep gc.
      Stress test for fragmentation issues.
 
-## (✗) ver. 0.3.0
+## (✗) ver. 0.0.3
 -----------------
   🟥 Upgrade to a mark & sweep generational gc, gen0, gen1, gen2.
   🟥 Upgrade to a tricolor generational mark & sweep gc.
@@ -40,7 +40,7 @@
      `Margaret` uses delegation pattern: maintains a priority queue of objects with priority based on inheritance, first sends message to all children and to itself at last.
      e.g. for `MyObject2 < MyObject1 < Margaret`, we send `one:two:` to MyObject2, it fowards it to parents and finally to Margaret, which responds or sends `method_missing`.
 
-## (✗) ver. 0.2.0
+## (✗) ver. 0.0.2
 -----------------
   🟥 Pattern-match multimethods by hashing receiver and parameters.
      Every multi-method is hashed into a unique value and searched for in the method table of the receiver.
@@ -52,18 +52,26 @@
   🟥 Add cascaded messages.
   🟥 Add a custom mark and sweep garbage collector.
   🟥 Optimize repeating bytecodes that offer no state change outside the loop.
+  🟥 Think of most syntax, semantic or runtime errors and spec them.
 
-## (✗) ver. 0.1.0
+## (✗) ver. 0.0.1
 -----------------
   🟥 Add lexically removed comments.
+  🟥 Make comments part of the language (Comment new: "...").
   🟥 Add a macro system where you can pass formal bytecode as a message implementation.
      primitive `bytecode:` message that simply places the formal bytecodes in between the rest of the code.
-  🟥 Make comments part of the language (Comment new: "...").
+  🟥 Add code-as-data functionality, storing bytecode as byte arrays and messages to interpret them.
+  🟥 Figure out dynamic send for dynamically called messages.
+  🟥 Add symbol objects and frozen strings.
   🟥 Make comments dynamic and persistent on code files.
-  🟥 Since comments are dynamic, we can use interpolation to change them according to data (for documentation comments).
   🟥 Add string interpolation and formatting with `#{..}` or similar.
+  🟥 Since comments are dynamic, we can use interpolation to change them according to data (for documentation comments).
   🟥 Separate value types from object types.
      Add atomic types that become atemporal (cannot be extended through prototypes).
+  🟥 Add spec for missing code from C side.
+     Scanner module.
+     byte_conversions module.
+     Stack tests and vm data tests.
   🟩 Procs and methods return tensors of bytecodes.
   🟩 Implement if:then:else: using lambda calculus.
   🟥 Implement `while:` using the `goto:` primitive to avoid endless recursion.
@@ -72,6 +80,7 @@
   🟥 Add a switch matcher -> `obj match: %[%[1, 100], %[2, 200], %[3, 300],]`.
   🟥 Make bang (!) messages denote persistant changes in object state.
   🟥 Add complex numbers `(0+2i)`, and rational numbers `(1/2r)` -> unary messages.
+  🟥 Add complex and rational specific messages.
   🟥 Use GOTO for break and continue. -> `list iterate: { elem | if: { elem == 42 } then: { goto: exit_label } elem puts } ::exit_label`.
   🟩 Create an `import/require` Margaret message.
      Probably simple concatenation of files (C-like include), not actual module system.

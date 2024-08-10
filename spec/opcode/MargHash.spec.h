@@ -3,11 +3,6 @@
 
 #include "../../libs/cSpec/export/cSpec.h"
 
-module(
-  MargHashSpec,
-  {
-    // TODO - Test for MargHash internal primitive messages
-  }
-)
+module(MargHashSpec, {})
 
 #endif

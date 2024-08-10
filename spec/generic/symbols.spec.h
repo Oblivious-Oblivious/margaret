@@ -4,12 +4,8 @@
 #include "_helpers.h"
 
 module(symbols_spec, {
-  it(
-    "parses frozen strings",
-    {
-      // NOTE - Look at ruby
-    }
-  );
+  xit("parses symbol objects", {});
+  xit("parses frozen strings", {});
 })
 
 #endif

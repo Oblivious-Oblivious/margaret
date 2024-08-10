@@ -41,12 +41,7 @@ module(complex_spec, {
     );
   });
 
-  it(
-    "parses complex literal messages",
-    {
-      // TODO -
-    }
-  );
+  xit("parses complex literal messages", {});
 })
 
 #endif

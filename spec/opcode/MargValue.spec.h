@@ -3,11 +3,6 @@
 
 #include "../../libs/cSpec/export/cSpec.h"
 
-module(
-  MargValueSpec,
-  {
-    // TODO - Test for QNAN values
-  }
-)
+module(MargValueSpec, {})
 
 #endif

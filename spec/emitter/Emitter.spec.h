@@ -14,8 +14,7 @@ static void initialize_vm(void) { vm = vm_new(); }
 module(EmitterSpec, {
   before_each(&initialize_vm);
 
-  // TODO - Test for a `postcard` type mini program that includes every single
-  // feature
+  // TODO - Test a `postcard` mini program including every single feature.
 
   it("parses a simple program", {
     char **formal_bytecode = vector_new(FM_INTEGER, string_new("42"));

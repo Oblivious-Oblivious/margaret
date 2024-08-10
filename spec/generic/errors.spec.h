@@ -15,12 +15,7 @@ module(errors_spec, {
     error("}", "missing opening curly brace on hash.");
   });
 
-  it(
-    "other syntax errors",
-    {
-      // TODO -
-    }
-  );
+  xit("other syntax errors", {});
 })
 
 #endif

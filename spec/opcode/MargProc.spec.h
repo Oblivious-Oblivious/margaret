@@ -3,11 +3,6 @@
 
 #include "../../libs/cSpec/export/cSpec.h"
 
-module(
-  MargProcSpec,
-  {
-    // TODO -
-  }
-)
+module(MargProcSpec, {})
 
 #endif

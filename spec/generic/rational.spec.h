@@ -127,12 +127,7 @@ module(rational_spec, {
     );
   });
 
-  it(
-    "parses rational literal messages",
-    {
-      // TODO -
-    }
-  );
+  xit("parses rational literal messages", {});
 })
 
 #endif

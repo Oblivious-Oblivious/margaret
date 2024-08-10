@@ -242,8 +242,7 @@ static void evaluator_run(VM *vm) {
   bool on_explicit_send = false;
   vm->current->ip       = vm->current->bytecode;
 
-  // TODO - Branch table, computed goto, otherwise use number based binary
-  // search
+  // TODO - Branch table, computed goto, otherwise use binary search
   while(true) {
   enter_explicit_send:;
     switch(READ_BYTE()) {

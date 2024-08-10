@@ -4,11 +4,6 @@
 #include "../../libs/cSpec/export/cSpec.h"
 #include "../../src/scanner/Scanner.h"
 
-module(
-  ScannerSpec,
-  {
-    // TODO -
-  }
-)
+module(ScannerSpec, {})
 
 #endif

@@ -4,12 +4,7 @@
 #include "_helpers.h"
 
 module(meta_evaluation_spec, {
-  it(
-    "compiles and calls messages dynamically",
-    {
-      // NOTE - Figure out dynamic send
-    }
-  );
+  xit("compiles and calls messages dynamically", {});
 
   it("parses metaclass messages", {
     parse(

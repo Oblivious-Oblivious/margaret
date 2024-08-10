@@ -22,7 +22,7 @@
 
 #include <stdio.h> /* printf */
 
-// TODO - Replace int, long, size_t etc. values with bit equivalents (uint64_t)
+// TODO - Ensure all std functions are bounds checked with *n* versions.
 
 static void margaret_repl(VM *vm) {
   printf(

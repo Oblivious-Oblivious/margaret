@@ -4,12 +4,8 @@
 #include "_helpers.h"
 
 module(code_as_data_spec, {
-  it(
-    "saves code literals",
-    {
-      // TODO -
-    }
-  );
+  xit("saves code literals", {});
+  xit("interprets code literals", {});
 })
 
 #endif

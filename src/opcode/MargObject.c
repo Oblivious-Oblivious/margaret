@@ -27,7 +27,7 @@ char *marg_object_to_string_with_hash(MargValue object) {
     res,
     "%s@%s",
     object_name,
-    // TODO - add hash
+    // TODO - Add hash
     "somehash"
   );
   return res;
