@@ -303,7 +303,7 @@ VM *emitter_emit(VM *vm, char **formal_bytecode) {
   }
 
   emit_byte(OP_HALT);
-  inspect_and_print_main(vm);
+  // inspect_and_print_main(vm);
 
   return vm;
 }

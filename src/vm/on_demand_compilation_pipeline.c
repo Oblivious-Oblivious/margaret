@@ -49,5 +49,7 @@ VM *OPTIMIZE(VM *vm) { return optimizer_optimize(vm); }
 MargValue EVAL(VM *vm) { return evaluator_evaluate(vm); }
 
 void PRINT(MargValue evaluated) {
-  printf("%s\n", marg_value_format(evaluated));
+  if(!IS_UNDEFINED(evaluated)) {
+    printf("%s\n", marg_value_format(evaluated));
+  }
 }
