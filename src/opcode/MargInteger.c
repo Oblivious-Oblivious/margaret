@@ -3,7 +3,7 @@
 #include "../../libs/EmeraldsString/export/EmeraldsString.h" /* IWYU pragma: keep */
 #include "MargValue.h"
 
-MargInteger *marg_integer_new(VM *vm, int64_t value) {
+MargInteger *marg_integer_new(VM *vm, ptrdiff_t value) {
   MargObject *obj = (MargObject *)marg_object_new(
     vm, sizeof(MargInteger), string_new("$IntegerClone")
   );

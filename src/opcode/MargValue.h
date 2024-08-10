@@ -14,14 +14,13 @@
 
 /* QNAN = 0b    0     11111111111       1            1       ('0' * 50)
              (sign) (exponent bits) (qnan bit) (qnan fp ind)   (rest)        */
-#define SIGN_BIT  ((uint64_t)0x8000000000000000)
-#define EXPONENTS ((uint64_t)0x7ff0000000000000)
-#define QNAN      ((uint64_t)0x0008000000000000)
-#define FP_IND    ((uint64_t)0x0004000000000000)
+#define SIGN_BIT  ((size_t)0x8000000000000000)
+#define EXPONENTS ((size_t)0x7ff0000000000000)
+#define QNAN      ((size_t)0x0008000000000000)
+#define FP_IND    ((size_t)0x0004000000000000)
 #define ENCODING  (EXPONENTS | QNAN | FP_IND)
 
-#define QNAN_BOX(pointer) \
-  ((MargValue)(ENCODING | (uint64_t)(uintptr_t)(pointer)))
+#define QNAN_BOX(pointer) ((MargValue)(ENCODING | (size_t)(uintptr_t)(pointer)))
 #define QNAN_UNBOX(value) ((MargObject *)(uintptr_t)((value) & ~(ENCODING)))
 
 // sign = 1
@@ -30,12 +29,12 @@
 // Allows for 4 distinct values (00, 01, 10, 11) that are not objects
 #define UNDEFINED_TAG 0x00
 #define MARG_UNDEFINED \
-  ((MargValue)(uint64_t)(SIGN_BIT | ENCODING | UNDEFINED_TAG))
+  ((MargValue)(size_t)(SIGN_BIT | ENCODING | UNDEFINED_TAG))
 #define IS_UNDEFINED(value) ((value) == MARG_UNDEFINED)
 
 #define NOT_INTERNED_TAG 0x01
 #define MARG_NOT_INTERNED \
-  ((MargValue)(uint64_t)(SIGN_BIT | ENCODING | NOT_INTERNED_TAG))
+  ((MargValue)(size_t)(SIGN_BIT | ENCODING | NOT_INTERNED_TAG))
 #define IS_NOT_INTERNED(value) ((value) == MARG_NOT_INTERNED)
 
 #define MARG_NIL             (table_get(&vm->global_variables, "$nil"))

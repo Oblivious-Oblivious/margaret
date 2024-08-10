@@ -9,8 +9,8 @@
  */
 typedef struct MargInteger {
   MargObject _;
-  // TODO - Replace int64_t with ptrdiff_t
-  int64_t value;
+
+  ptrdiff_t value;
 } MargInteger;
 
 /**
@@ -19,7 +19,7 @@ typedef struct MargInteger {
  * @param value -> Actual C int value
  * @return MargInteger*
  */
-MargInteger *marg_integer_new(VM *vm, int64_t value);
+MargInteger *marg_integer_new(VM *vm, ptrdiff_t value);
 
 /**
  * @brief Constructs a primitive string representation for integer literals

@@ -8,8 +8,8 @@
 #define MARG_HASH_MAX_LOAD    0.75
 #define MARG_HASH_GROW_FACTOR 2
 
-static uint64_t fnv_1a_64_hash(char *key, size_t size) {
-  uint64_t hash = 14695981039346656037u;
+static size_t fnv_1a_64_hash(char *key, size_t size) {
+  size_t hash = 14695981039346656037u;
 
   for(size_t i = 0; i < size; i++) {
     hash ^= (uint8_t)key[i];
@@ -28,14 +28,14 @@ static uint64_t fnv_1a_64_hash(char *key, size_t size) {
  */
 static MargHashEntry *
 marg_hash_find_entry(MargHashEntry *entries, size_t alloced, MargValue key) {
-  uint64_t hash  = fnv_1a_64_hash(AS_STRING(key)->chars, AS_STRING(key)->size);
-  uint64_t index = hash & (alloced - 1);
+  size_t hash  = fnv_1a_64_hash(AS_STRING(key)->chars, AS_STRING(key)->size);
+  size_t index = hash & (alloced - 1);
 
   // Linear probing
   MargHashEntry *tombstone = NULL;
   while(true) {
     MargHashEntry *entry = &entries[index];
-    uint64_t entry_hash =
+    size_t entry_hash =
       fnv_1a_64_hash(AS_STRING(entry->key)->chars, AS_STRING(entry->key)->size);
     if(IS_NOT_INTERNED(entry->key)) {
       if(IS_UNDEFINED(entry->value)) {

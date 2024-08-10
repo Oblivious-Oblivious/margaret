@@ -7,14 +7,15 @@
 #include "../vm/on_demand_compilation_pipeline.h"
 
 #include <inttypes.h> /* PRIx64 */
-#include <stdio.h>    /* pritnf, sprintf */
+#include <stdint.h>
+#include <stdio.h> /* pritnf, sprintf */
 
 static void op_put_tensor_helper(VM *vm, MargValue temporary) {
-  int64_t number_of_elements = AS_INTEGER(temporary)->value;
-  MargValue tensor_value     = MARG_TENSOR(number_of_elements);
-  MargTensor *tensor_object  = AS_TENSOR(tensor_value);
+  ptrdiff_t number_of_elements = AS_INTEGER(temporary)->value;
+  MargValue tensor_value       = MARG_TENSOR(number_of_elements);
+  MargTensor *tensor_object    = AS_TENSOR(tensor_value);
 
-  for(int64_t i = number_of_elements - 1; i >= 0; i--) {
+  for(ptrdiff_t i = number_of_elements - 1; i >= 0; i--) {
     marg_tensor_add_at(tensor_object, fs_pop(vm->sp), i);
   }
 
@@ -22,11 +23,11 @@ static void op_put_tensor_helper(VM *vm, MargValue temporary) {
 }
 
 static void op_put_hash_helper(VM *vm, MargValue temporary) {
-  int64_t number_of_elements = AS_INTEGER(temporary)->value / 2;
-  MargValue hash_value       = MARG_HASH;
-  MargHash *hash_object      = AS_HASH(hash_value);
+  ptrdiff_t number_of_elements = AS_INTEGER(temporary)->value / 2;
+  MargValue hash_value         = MARG_HASH;
+  MargHash *hash_object        = AS_HASH(hash_value);
 
-  for(int64_t i = 0; i < number_of_elements; i++) {
+  for(ptrdiff_t i = 0; i < number_of_elements; i++) {
     MargValue value = fs_pop(vm->sp);
     MargValue key   = fs_pop(vm->sp);
     marg_hash_add(hash_object, key, value);
@@ -78,12 +79,12 @@ static MargValue retrieve_all_messages_in_delegation_chain(
 
 static void op_send_helper(VM *vm, MargValue message_name) {
   /* Read temporary values */
-  int64_t number_of_parameters = AS_INTEGER(fs_pop(vm->sp))->value;
+  ptrdiff_t number_of_parameters = AS_INTEGER(fs_pop(vm->sp))->value;
 
   /* Pop all parameters first */
   MargValue *actual_parameters =
     malloc(sizeof(MargValue) * number_of_parameters);
-  for(int64_t i = number_of_parameters - 1; i >= 0; i--) {
+  for(ptrdiff_t i = number_of_parameters - 1; i >= 0; i--) {
     actual_parameters[i] = fs_pop(vm->sp);
   }
 
@@ -108,7 +109,7 @@ static void op_send_helper(VM *vm, MargValue message_name) {
     );
 
     /* Inject method parameters */
-    for(int64_t i = 0; i < number_of_parameters; i++) {
+    for(ptrdiff_t i = 0; i < number_of_parameters; i++) {
       MargValue parameter_name = marg_tensor_get(method->parameter_names, i);
       table_add(
         &method->proc->local_variables,
@@ -651,6 +652,7 @@ static void evaluator_run(VM *vm) {
       fs_pop(vm->sp);
       if(!IS_UNDEFINED(object)) {
         char qnan_encoded_value[20];
+        // TODO - Replace with size_t
         sprintf(qnan_encoded_value, "0x%016" PRIx64, (uint64_t)object);
         fs_push(vm->sp, MARG_STRING(qnan_encoded_value));
       } else {

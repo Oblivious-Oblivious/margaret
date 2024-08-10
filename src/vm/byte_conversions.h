@@ -1,7 +1,7 @@
 #ifndef __BYTES_H_
 #define __BYTES_H_
 
-#include <stdint.h> /* uint8_t, uint16_t, uint32_t, uint64_t */
+#include <stdint.h> /* uint8_t, uint16_t, uint32_t */
 
 /**
  * @brief Splits a 16 bit word into 2, 8-bit parts
