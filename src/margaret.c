@@ -26,10 +26,11 @@
 
 static void margaret_repl(VM *vm) {
   printf(
-    "Margaret %s  Copyright (C) %s %s, Ioannina\n",
+    "Margaret %s  Copyright (C) %s %s, %s\n",
     MARGARET_VERSION,
     MARGARET_DATE,
-    MARGARET_LINK
+    MARGARET_LINK,
+    MARGARET_CITY
   );
   while(true) {
     PRINT(EVAL(OPTIMIZE(EMIT(vm, FORMALIZE(READ(vm, SCAN("> ")))))));
