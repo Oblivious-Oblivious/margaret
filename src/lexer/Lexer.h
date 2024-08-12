@@ -8,17 +8,22 @@
  * @brief Reports an error to stderrr
  * @param self -> The VM object
  * @param message -> The error message to report
- * @param token -> The token where the error occurred at
  * @return void* -> NULL
  */
-void *lexer_error(VM *vm, const char *message, char *token);
+void *lexer_error(VM *vm, const char *message);
+
+/**
+ * @brief Tokenizes the next token from the source code
+ * @param vm -> The VM object
+ * @return Token* -> A token object
+ */
+Token *tokenize(VM *vm);
 
 /**
  * @brief Tokenizes the input and stores into a token table
- * @param self -> The VM object
- * @param text -> The text we read
- * @return Token** -> A table of Token objects;
+ * @param vm -> The VM object
+ * @return VM* -> The VM object
  */
-Token **lexer_make_tokens(VM *vm, char *text);
+VM *lexer_make_tokens(VM *vm);
 
 #endif

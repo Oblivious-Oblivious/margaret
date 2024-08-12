@@ -577,14 +577,9 @@ static void evaluator_run(VM *vm) {
 
       MargValue filename = fs_pop(vm->sp);
       fs_pop(vm->sp);
-      vm->filename           = AS_STRING(filename)->chars;
-      char *chars            = LOAD(vm);
-      Token **tokens         = READ(vm, chars);
-      char **formal_bytecode = FORMALIZE(tokens);
-      vm->current->bytecode  = NULL;
-      vm                     = EMIT(vm, formal_bytecode);
-      vm                     = OPTIMIZE(vm);
-      EVAL(vm);
+      vm->filename = AS_STRING(filename)->chars;
+
+      EVAL(OPTIMIZE(EMIT(FORMALIZE(READ(LOAD(vm))))));
 
       vm->current->bytecode = previous_bytecode;
       vm->current->ip       = previous_position;

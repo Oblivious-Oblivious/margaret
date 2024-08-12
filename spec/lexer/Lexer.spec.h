@@ -5,39 +5,44 @@
 #include "../../libs/EmeraldsReadHandler/export/EmeraldsReadHandler.h"
 #include "../../libs/EmeraldsString/export/EmeraldsString.h"
 #include "../../src/lexer/Lexer.h"
+#include "../../src/loader/Loader.h"
 
 #define tokenize_and_assert(str)                             \
   do {                                                       \
-    VM *vm         = vm_new("file.marg");                    \
-    Token **tokens = lexer_make_tokens(vm, string_new(str)); \
-    assert_that_int(vector_size(tokens) equals to 2);        \
-    assert_that_charptr(tokens[0]->value equals to str);     \
+    VM *vm     = vm_new("file.marg");                        \
+    vm->source = string_new(str);                            \
+    lexer_make_tokens(vm);                                   \
+    assert_that_int(vector_size(vm->tokens) equals to 2);    \
+    assert_that_charptr(vm->tokens[0]->value equals to str); \
   } while(0)
 
 #define tokenize_and_assert_res(str, res)                    \
   do {                                                       \
-    VM *vm         = vm_new("file.marg");                    \
-    Token **tokens = lexer_make_tokens(vm, string_new(str)); \
-    assert_that_int(vector_size(tokens) equals to 2);        \
-    assert_that_charptr(tokens[0]->value equals to res);     \
+    VM *vm     = vm_new("file.marg");                        \
+    vm->source = string_new(str);                            \
+    lexer_make_tokens(vm);                                   \
+    assert_that_int(vector_size(vm->tokens) equals to 2);    \
+    assert_that_charptr(vm->tokens[0]->value equals to res); \
   } while(0)
 
 #define tokenize_and_assert_multiline(str, no_lines)         \
   do {                                                       \
-    VM *vm         = vm_new("file.marg");                    \
-    Token **tokens = lexer_make_tokens(vm, string_new(str)); \
-    assert_that_int(vector_size(tokens) equals to 2);        \
+    VM *vm     = vm_new("file.marg");                        \
+    vm->source = string_new(str);                            \
+    lexer_make_tokens(vm);                                   \
+    assert_that_int(vector_size(vm->tokens) equals to 2);    \
     assert_that_int(vm->lineno equals to no_lines);          \
-    assert_that_charptr(tokens[0]->value equals to str);     \
+    assert_that_charptr(vm->tokens[0]->value equals to str); \
   } while(0)
 
 #define tokenize_and_assert_multiline_res(str, res, no_lines) \
   do {                                                        \
-    VM *vm         = vm_new("file.marg");                     \
-    Token **tokens = lexer_make_tokens(vm, string_new(str));  \
-    assert_that_int(vector_size(tokens) equals to 2);         \
+    VM *vm     = vm_new("file.marg");                         \
+    vm->source = string_new(str);                             \
+    lexer_make_tokens(vm);                                    \
+    assert_that_int(vector_size(vm->tokens) equals to 2);     \
     assert_that_int(vm->lineno equals to no_lines);           \
-    assert_that_charptr(tokens[0]->value equals to res);      \
+    assert_that_charptr(vm->tokens[0]->value equals to res);  \
   } while(0)
 
 module(LexerSpec, {
@@ -50,40 +55,54 @@ module(LexerSpec, {
 
     it("prints error messages", {
       VM *vm         = vm_new("file.marg");
-      void *response = lexer_error(vm, "random exception", string_new(""));
+      vm->source     = string_new("");
+      void *response = lexer_error(vm, "random exception");
       assert_that(response is NULL);
     });
 
     context("on #make_tokens", {
       it("correctly counts the number of lines", {
-        VM *vm = vm_new("file.marg");
-        lexer_make_tokens(vm, string_new("(42 factorial\nx = 2 + 3\ny = 5)"));
+        VM *vm     = vm_new("file.marg");
+        vm->source = string_new("(42 factorial\nx = 2 + 3\ny = 5)");
+        lexer_make_tokens(vm);
         assert_that_int(vm->lineno equals to 3);
       });
 
       it("tokenizes symbols", {
-        VM *vm         = vm_new("file.marg");
-        Token **tokens = lexer_make_tokens(vm, string_new("(% ^ & *)"));
+        VM *vm     = vm_new("file.marg");
+        vm->source = string_new("(% ^ & *)");
+        lexer_make_tokens(vm);
+        Token **tokens = vm->tokens;
         assert_that_int(vector_size(tokens) equals to 7);
         assert_that_charptr(tokens[1]->value equals to "%");
       });
 
       it("tokenizes integers", {
-        Token **tokens =
-          lexer_make_tokens(vm_new("file.marg"), string_new("(42 msg)"));
+        VM *vm     = vm_new("file.marg");
+        vm->source = string_new("(42 msg)");
+        lexer_make_tokens(vm);
+        Token **tokens = vm->tokens;
         assert_that_charptr(tokens[1]->value equals to "42");
         assert_that_int(tokens[1]->type equals to TOKEN_INTEGER);
         assert_that_int(tokens[1]->line_number equals to 1);
 
-        tokens = lexer_make_tokens(vm_new("file.marg"), string_new("4_200"));
+        vm         = vm_new("file.marg");
+        vm->source = string_new("4_200");
+        lexer_make_tokens(vm);
+        tokens = vm->tokens;
         assert_that_charptr(tokens[0]->value equals to "4200");
-        tokens = lexer_make_tokens(vm_new("file.marg"), string_new("4_2_0_0"));
+        vm         = vm_new("file.marg");
+        vm->source = string_new("4_2_0_0");
+        lexer_make_tokens(vm);
+        tokens = vm->tokens;
         assert_that_charptr(tokens[0]->value equals to "4200");
       });
 
       it("tokenizes zero", {
-        VM *vm         = vm_new("file.marg");
-        Token **tokens = lexer_make_tokens(vm, string_new("(0 is_zero?)"));
+        VM *vm     = vm_new("file.marg");
+        vm->source = string_new("(0 is_zero?)");
+        lexer_make_tokens(vm);
+        Token **tokens = vm->tokens;
 
         assert_that_charptr(tokens[1]->value equals to "0");
         assert_that_int(tokens[1]->type equals to TOKEN_INTEGER);
@@ -91,8 +110,10 @@ module(LexerSpec, {
       });
 
       it("correctly parses code that the parser will drop later", {
-        VM *vm        = vm_new("file.marg");
-        Token **table = lexer_make_tokens(vm, string_new("042 msg"));
+        VM *vm     = vm_new("file.marg");
+        vm->source = string_new("042 msg");
+        lexer_make_tokens(vm);
+        Token **table = vm->tokens;
         assert_that_charptr(table[0]->value equals to "0");
         assert_that_charptr(table[1]->value equals to "42");
         assert_that_charptr(table[2]->value equals to "msg");
@@ -100,47 +121,63 @@ module(LexerSpec, {
       });
 
       it("tokenizes floats", {
-        VM *vm         = vm_new("file.marg");
-        Token **tokens = lexer_make_tokens(vm, string_new("0.0"));
+        VM *vm     = vm_new("file.marg");
+        vm->source = string_new("0.0");
+        lexer_make_tokens(vm);
+        Token **tokens = vm->tokens;
         assert_that_charptr(tokens[0]->value equals to "0.0");
         assert_that_int(tokens[0]->type equals to TOKEN_FLOAT);
         assert_that_int(tokens[1]->line_number equals to 1);
 
-        vm     = vm_new("file.marg");
-        tokens = lexer_make_tokens(vm, string_new("(42.7 msg)"));
+        vm         = vm_new("file.marg");
+        vm->source = string_new("(42.7 msg)");
+        lexer_make_tokens(vm);
+        tokens = vm->tokens;
         assert_that_charptr(tokens[1]->value equals to "42.7");
         assert_that_int(tokens[1]->type equals to TOKEN_FLOAT);
         assert_that_int(tokens[1]->line_number equals to 1);
 
-        vm     = vm_new("file.marg");
-        tokens = lexer_make_tokens(vm, string_new("(0.7 msg)"));
+        vm         = vm_new("file.marg");
+        vm->source = string_new("(0.7 msg)");
+        lexer_make_tokens(vm);
+        tokens = vm->tokens;
         assert_that_charptr(tokens[1]->value equals to "0.7");
         assert_that_int(tokens[1]->type equals to TOKEN_FLOAT);
         assert_that_int(tokens[1]->line_number equals to 1);
 
-        vm     = vm_new("file.marg");
-        tokens = lexer_make_tokens(vm, string_new("(0.7+0.5+0.23)"));
+        vm         = vm_new("file.marg");
+        vm->source = string_new("(0.7+0.5+0.23)");
+        lexer_make_tokens(vm);
+        tokens = vm->tokens;
         assert_that_charptr(tokens[1]->value equals to "0.7");
         assert_that_charptr(tokens[2]->value equals to "+");
         assert_that_charptr(tokens[3]->value equals to "0.5");
+        assert_that_charptr(tokens[4]->value equals to "+");
+        assert_that_charptr(tokens[5]->value equals to "0.23");
 
-        vm     = vm_new("file.marg");
-        tokens = lexer_make_tokens(vm, string_new("(.7 msg)"));
+        vm         = vm_new("file.marg");
+        vm->source = string_new("(.7 msg)");
+        lexer_make_tokens(vm);
+        tokens = vm->tokens;
         assert_that_charptr(tokens[0]->value equals to "(");
         assert_that_charptr(tokens[1]->value equals to ".");
         assert_that_charptr(tokens[2]->value equals to "7");
         assert_that_charptr(tokens[3]->value equals to "msg");
         assert_that_charptr(tokens[4]->value equals to ")");
 
-        vm     = vm_new("file.marg");
-        tokens = lexer_make_tokens(vm, string_new("(124.0 msg)"));
+        vm         = vm_new("file.marg");
+        vm->source = string_new("(124.0 msg)");
+        lexer_make_tokens(vm);
+        tokens = vm->tokens;
         assert_that_charptr(tokens[1]->value equals to "124.0");
         assert_that_charptr(tokens[2]->value equals to "msg");
       });
 
       it("tokenizes binary literals", {
-        VM *vm         = vm_new("file.marg");
-        Token **tokens = lexer_make_tokens(vm, string_new("(0b1010 + 0B0100)"));
+        VM *vm     = vm_new("file.marg");
+        vm->source = string_new("(0b1010 + 0B0100)");
+        lexer_make_tokens(vm);
+        Token **tokens = vm->tokens;
         assert_that_charptr(tokens[0]->value equals to "(");
         assert_that_charptr(tokens[1]->value equals to "10");
         assert_that_charptr(tokens[2]->value equals to "+");
@@ -152,9 +189,10 @@ module(LexerSpec, {
       });
 
       it("tokenizes hexadecimal literals", {
-        VM *vm = vm_new("file.marg");
-        Token **tokens =
-          lexer_make_tokens(vm, string_new("(0xfeed42 + 0Xbeef41)"));
+        VM *vm     = vm_new("file.marg");
+        vm->source = string_new("(0xfeed42 + 0Xbeef41)");
+        lexer_make_tokens(vm);
+        Token **tokens = vm->tokens;
         assert_that_charptr(tokens[0]->value equals to "(");
         assert_that_charptr(tokens[1]->value equals to "16706882");
         assert_that_charptr(tokens[2]->value equals to "+");
@@ -166,8 +204,10 @@ module(LexerSpec, {
       });
 
       it("tokenizes octal literals", {
-        VM *vm         = vm_new("file.marg");
-        Token **tokens = lexer_make_tokens(vm, string_new("(0o752 + 0O52)"));
+        VM *vm     = vm_new("file.marg");
+        vm->source = string_new("(0o752 + 0O52)");
+        lexer_make_tokens(vm);
+        Token **tokens = vm->tokens;
         assert_that_charptr(tokens[0]->value equals to "(");
         assert_that_charptr(tokens[1]->value equals to "490");
         assert_that_charptr(tokens[2]->value equals to "+");
@@ -179,28 +219,33 @@ module(LexerSpec, {
       });
 
       it("tokenizes character literals", {
-        VM *vm         = vm_new("file.marg");
-        Token **tokens = lexer_make_tokens(vm, string_new("('a' puts)"));
+        VM *vm     = vm_new("file.marg");
+        vm->source = string_new("('a' puts)");
+        lexer_make_tokens(vm);
+        Token **tokens = vm->tokens;
         assert_that_charptr(tokens[1]->value equals to "a");
         assert_that_int(tokens[1]->type equals to TOKEN_STRING);
       });
 
       it("tokenizes string literals", {
-        VM *vm         = vm_new("file.marg");
-        Token **tokens = lexer_make_tokens(vm, string_new("(\"hello\" puts)"));
+        VM *vm     = vm_new("file.marg");
+        vm->source = string_new("(\"hello\" puts)");
+        lexer_make_tokens(vm);
+        Token **tokens = vm->tokens;
         assert_that_charptr(tokens[1]->value equals to "hello");
 
-        vm = vm_new("file.marg");
-        tokens =
-          lexer_make_tokens(vm, string_new("(\"multi\nline\nstring\" puts)"));
+        vm         = vm_new("file.marg");
+        vm->source = string_new("(\"multi\nline\nstring\" puts)");
+        lexer_make_tokens(vm);
+        tokens = vm->tokens;
         assert_that_charptr(tokens[1]->value equals to "multi\nline\nstring");
       });
 
       it("tokenizes identifiers", {
-        VM *vm         = vm_new("file.marg");
-        Token **tokens = lexer_make_tokens(
-          vm, string_new("(42 factorial\nx = (2 times: 3)\n3 plus: 4)")
-        );
+        VM *vm     = vm_new("file.marg");
+        vm->source = string_new("(42 factorial\nx = (2 times: 3)\n3 plus: 4)");
+        lexer_make_tokens(vm);
+        Token **tokens = vm->tokens;
         assert_that_int(vector_size(tokens) equals to 17);
         assert_that_charptr(tokens[2]->value equals to "factorial");
         assert_that_charptr(tokens[3]->value equals to "x");
@@ -209,8 +254,10 @@ module(LexerSpec, {
       });
 
       it("tokenizes identifiers starting with an underscore", {
-        VM *vm         = vm_new("file.marg");
-        Token **tokens = lexer_make_tokens(vm, string_new("((1 2 3) __msg)"));
+        VM *vm     = vm_new("file.marg");
+        vm->source = string_new("((1 2 3) __msg)");
+        lexer_make_tokens(vm);
+        Token **tokens = vm->tokens;
         assert_that_charptr(tokens[6]->value equals to "__msg");
       });
     });
@@ -218,24 +265,30 @@ module(LexerSpec, {
 
   describe("Different Types", {
     it("tokenizes around newlines", {
-      VM *vm         = vm_new("file.marg");
-      Token **tokens = lexer_make_tokens(vm, string_new("\n12\n"));
+      VM *vm     = vm_new("file.marg");
+      vm->source = string_new("\n12\n");
+      lexer_make_tokens(vm);
+      Token **tokens = vm->tokens;
       assert_that_int(vector_size(tokens) equals to 2);
       assert_that_int(vm->lineno equals to 3);
       assert_that_charptr(tokens[0]->value equals to "12");
     });
 
     it("tokenizes around whitespace", {
-      VM *vm         = vm_new("file.marg");
-      Token **tokens = lexer_make_tokens(vm, string_new(" 12 "));
+      VM *vm     = vm_new("file.marg");
+      vm->source = string_new(" 12 ");
+      lexer_make_tokens(vm);
+      Token **tokens = vm->tokens;
       assert_that_int(vector_size(tokens) equals to 2);
       assert_that_int(vm->lineno equals to 1);
       assert_that_charptr(tokens[0]->value equals to "12");
     });
 
     it("ignores multiple types of whitespace", {
-      VM *vm         = vm_new("file.marg");
-      Token **tokens = lexer_make_tokens(vm, string_new(" \t\r\v\f "));
+      VM *vm     = vm_new("file.marg");
+      vm->source = string_new(" \t\r\v\f ");
+      lexer_make_tokens(vm);
+      Token **tokens = vm->tokens;
       assert_that_int(vector_size(tokens) equals to 1);
       assert_that_int(vm->lineno equals to 1);
       assert_that_charptr(tokens[0]->value equals to "eof");
@@ -396,10 +449,10 @@ module(LexerSpec, {
   });
 
   it("prints postcard", {
-    char *postcard =
-      read_handler_load(read_handler_new(), "./examples/postcard.marg");
-    VM *vm         = vm_new("postcard.marg");
-    Token **tokens = lexer_make_tokens(vm, string_new(postcard));
+    VM *vm = vm_new("./examples/postcard.marg");
+    loader_load(vm);
+    lexer_make_tokens(vm);
+    Token **tokens = vm->tokens;
     printf("[");
     for(size_t i = 0; i < vector_size(tokens) - 1; i++) {
       printf("\"%s\", ", tokens[i]->value);

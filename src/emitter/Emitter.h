@@ -11,6 +11,6 @@
  * @param formal_bytecode
  * @return VM* -> The modified VM object
  */
-VM *emitter_emit(VM *vm, char **formal_bytecode);
+VM *emitter_emit(VM *vm);
 
 #endif

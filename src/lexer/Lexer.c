@@ -7,7 +7,8 @@
 
 #include <stdio.h> /* printf */
 
-void *lexer_error(VM *vm, const char *message, char *token) {
+void *lexer_error(VM *vm, const char *message) {
+  char *token = string_split(vm->source, '\n')[0];
   if(vm->charno == 0) {
     vm->charno = 1;
   }
@@ -66,7 +67,7 @@ static char *normalize_integer(char *token) {
   return token;
 }
 
-Token *tokenize(VM *vm, char *text) {
+Token *tokenize(VM *vm) {
   OnigEncoding encodings[1] = {ONIG_ENCODING_ASCII};
   onig_initialize(encodings, 1);
 
@@ -76,12 +77,14 @@ Token *tokenize(VM *vm, char *text) {
 
   for(size_t i = 0; i < sizeof(REGEX_LIST) / sizeof(Regex); i++) {
     const Regex *r      = &REGEX_LIST[i];
+    char *text          = vm->source + vm->index;
     ptrdiff_t end_index = matcher(r->pattern, (UChar *)text);
     if(end_index != -1) {
       is_not_matched = false;
       token          = string_substring(text, 0, end_index);
       vm->charno += end_index;
-      string_skip_first(text, end_index);
+      vm->index += end_index;
+      text = vm->source + vm->index;
 
       token_type = REGEX_LIST[i].type;
       if(token_type == TOKEN_NEWLINE) {
@@ -94,7 +97,7 @@ Token *tokenize(VM *vm, char *text) {
                  token_type == TOKEN_INSTANCE || token_type == TOKEN_GLOBAL) &&
                 (text[0] == '!' || text[0] == '?')) {
         string_add_char(token, text[0]);
-        string_skip_first(text, 1);
+        vm->index++;
       } else if(token_type == TOKEN_FLOAT) {
         token = string_remove_underscores(token);
       } else if(token_type == TOKEN_INTEGER) {
@@ -112,29 +115,25 @@ Token *tokenize(VM *vm, char *text) {
   onig_end();
 
   if(is_not_matched) {
-    lexer_error(vm, "Unexpected character.", string_split(text, '\n')[0]);
-    string_skip_first(text, 1);
-    return NULL;
+    return lexer_error(vm, "Unexpected character.");
   } else {
     return token_new(token, token_type, vm->lineno, vm->charno, vm->filename);
   }
 }
 
-Token **lexer_make_tokens(VM *vm, char *text) {
-  Token **token_table = NULL;
-
-  while(string_size(text) > 0) {
-    Token *token = tokenize(vm, text);
+VM *lexer_make_tokens(VM *vm) {
+  while(vm->index < string_size(vm->source)) {
+    Token *token = tokenize(vm);
     if(token == NULL) {
-      vector_free(token_table);
+      vector_free(vm->tokens);
       break;
     } else if(token->type > 10) {
-      vector_add(token_table, token);
+      vector_add(vm->tokens, token);
     }
   }
 
   vector_add(
-    token_table,
+    vm->tokens,
     token_new(
       string_new("eof"), TOKEN_EOF, vm->lineno, vm->charno, vm->filename
     )
@@ -142,5 +141,5 @@ Token **lexer_make_tokens(VM *vm, char *text) {
 
   onig_end();
 
-  return token_table;
+  return vm;
 }

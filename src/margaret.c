@@ -34,18 +34,12 @@ static void margaret_repl(VM *vm) {
     MARGARET_CITY
   );
   while(true) {
-    PRINT(EVAL(OPTIMIZE(EMIT(vm, FORMALIZE(READ(vm, SCAN("> ")))))));
+    PRINT(EVAL(OPTIMIZE(EMIT(FORMALIZE(READ(SCAN(vm, "> ")))))));
   }
 }
 
 static void margaret_run_file(VM *vm) {
-  char *chars            = LOAD(vm);
-  Token **tokens         = READ(vm, chars);
-  char **formal_bytecode = FORMALIZE(tokens);
-  // PRINT_FORMAL(formal_bytecode);
-  vm                     = EMIT(vm, formal_bytecode);
-  vm                     = OPTIMIZE(vm);
-  EVAL(vm);
+  EVAL(OPTIMIZE(EMIT(FORMALIZE(READ(LOAD(vm))))));
 }
 
 int main(int argc, char **argv) {

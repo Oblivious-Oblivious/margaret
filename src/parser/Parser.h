@@ -2,13 +2,14 @@
 #define __PARSER_H_
 
 #include "../tokens/TokenTable.h"
+#include "../vm/vm.h"
 
 /**
- * @brief Starts the parsing process
- * @param table -> The parser token table
- * @return -> A vector of opcodes
+ * @brief Starts the parsing process and constructs the token table
+ * @param vm -> The VM object
+ * @return VM* -> The VM object
  */
-char **parser_analyze_syntax(Token **table);
+VM *parser_analyze_syntax(VM *vm);
 
 void parser_first_unit(Token **table, char ***fmcodes);
 char *parser_unit_list(Token **table, char ***fmcodes);

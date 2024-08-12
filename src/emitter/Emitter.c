@@ -98,10 +98,11 @@ static void _add_temporary_function(
   }
 }
 
-VM *emitter_emit(VM *vm, char **formal_bytecode) {
+VM *emitter_emit(VM *vm) {
   MargObject *marg_object =
     AS_OBJECT(table_get(&vm->global_variables, "$Margaret"));
   MargMethod *main_method = AS_METHOD(table_get(&marg_object->messages, ""));
+  char **formal_bytecode  = vm->formal_bytecode;
   vm->current->bytecode   = NULL;
   vm->current             = main_method->proc;
 

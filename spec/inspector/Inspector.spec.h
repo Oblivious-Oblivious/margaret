@@ -10,7 +10,7 @@
 module(InspectorSpec, {
   // TODO - Test a `postcard` mini program including every single feature.
   it("tests multiple long temporaries", {
-    VM *vm = vm_new();
+    VM *vm = vm_new("test.marg");
 
     for(int i = 0; i <= 4000; i++) {
       vector_add(vm->current->temporaries, MARG_FLOAT(42.42));

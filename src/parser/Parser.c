@@ -38,10 +38,9 @@
 #define scalar()                 parser_scalar(table, fmcodes)
 #define variable()               parser_variable(table, fmcodes)
 
-char **parser_analyze_syntax(Token **table) {
-  char **fmcodes = NULL;
-  parser_first_unit(table, &fmcodes);
-  return fmcodes;
+VM *parser_analyze_syntax(VM *vm) {
+  parser_first_unit(vm->tokens, &vm->formal_bytecode);
+  return vm;
 }
 
 void parser_first_unit(Token **table, char ***fmcodes) {
