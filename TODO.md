@@ -32,7 +32,7 @@
   🟥 Upgrade to a mark & sweep generational gc, gen0, gen1, gen2.
   🟥 Upgrade to a tricolor generational mark & sweep gc.
      Precursor to concurrent implementation.
-  🟥 Specialize tokens by assigning different values for each token.
+  🟥 Modify the pipeline for cocurrent execution (tokenization -> parsing -> evaluation) token by token.
   🟥 Add syntax for using user defined inferred objects -> Inferred start_using: MyObject, one: 1 two: 2   -> (MyObject one: 1 two: 2) Inferred stop_using: MyObject
      Possibly MyObject can inherit from Margaret to not lose predefined marg messages
      FormalMessages step can always infer `Margaret` because at runtime it can replace the correct object using the inheritance structures.
@@ -82,8 +82,12 @@
   🟥 Add complex numbers `(0+2i)`, and rational numbers `(1/2r)` -> unary messages.
   🟥 Add complex and rational specific messages.
   🟥 Use GOTO for break and continue. -> `list iterate: { elem | if: { elem == 42 } then: { goto: exit_label } elem puts } ::exit_label`.
+  🟥 Create an object `detatch` functionality that removes the inheritance link and object model metadata.
+     Add object `freezing` that removes state modification capabilities.
   🟩 Create an `import/require` Margaret message.
      Probably simple concatenation of files (C-like include), not actual module system.
+  🟥 Add an internal include guard for the require primitive.
+  🟥 Add functionality for reading multiple files and changing the VM pointer to the currect file we are scanning.
   ---------------------------
   🟥 Add functional features:
   🟥 %[a, b, c] = %["hello", "world", 42]

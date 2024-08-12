@@ -23,6 +23,7 @@
 #include <stdio.h> /* printf */
 
 // TODO - Ensure all std functions are bounds checked with *n* versions.
+// TODO - Convert all streamlined ifs to switches
 
 static void margaret_repl(VM *vm) {
   printf(
