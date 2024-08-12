@@ -37,7 +37,7 @@ static ptrdiff_t matcher(UChar *pattern, UChar *input_string) {
   );
 
   OnigRegion *region = onig_region_new();
-  OnigUChar *end     = input_string + string_size(input_string);
+  OnigUChar *end     = input_string + strlen((char *)input_string);
   ptrdiff_t res      = onig_search(
     regex, input_string, end, input_string, end, region, ONIG_OPTION_NONE
   );
