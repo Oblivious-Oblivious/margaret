@@ -1,14 +1,15 @@
 #ifndef __POSTCARD_SPEC_H_
 #define __POSTCARD_SPEC_H_
 
-#include "../../libs/EmeraldsReadHandler/export/EmeraldsReadHandler.h"
+#include "../../src/loader/Loader.h"
 #include "_helpers.h"
 
 module(postcard_spec, {
   it("parses postcard snippet", {
-    char *postcard = string_new(
-      read_handler_load(read_handler_new(), "./examples/postcard.marg")
-    );
+    VM *vm = vm_new("./examples/postcard.marg");
+    loader_load(vm);
+    char *postcard = vm->source;
+
     parse(
       postcard,
       vector_new(

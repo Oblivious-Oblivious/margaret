@@ -50,6 +50,9 @@
 #include "lexer/alternate_to_dec.spec.h"
 #include "lexer/Lexer.spec.h"
 
+// loader
+#include "loader/Loader.spec.h"
+
 // opcode
 #include "opcode/MargFloat.spec.h"
 #include "opcode/MargHash.spec.h"
@@ -122,6 +125,8 @@ spec_suite({
 
   alternate_to_dec_spec();
   LexerSpec();
+
+  LoaderSpec();
 
   MargFloatSpec();
   MargHashSpec();
