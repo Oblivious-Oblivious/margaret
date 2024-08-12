@@ -6,8 +6,8 @@
 
 module(ParserSpec, {
   it("traverses through the token table", {
-    Lexer *l     = lexer_new("file.obl");
-    Token **toks = lexer_make_tokens(l, string_new("(42 factorial)"));
+    VM *vm       = vm_new("file.obl");
+    Token **toks = lexer_make_tokens(vm, string_new("(42 factorial)"));
     assert_that_charptr(token_table_consume(toks)->value equals to "(");
     assert_that_charptr(token_table_consume(toks)->value equals to "42");
     assert_that_charptr(token_table_consume(toks)->value equals to "factorial");
@@ -16,8 +16,8 @@ module(ParserSpec, {
   });
 
   it("peeks on top of the token table", {
-    Lexer *l       = lexer_new("file.obl");
-    Token **tokens = lexer_make_tokens(l, string_new("(42 factorial)"));
+    VM *vm         = vm_new("file.obl");
+    Token **tokens = lexer_make_tokens(vm, string_new("(42 factorial)"));
     assert_that_charptr(tokens[1]->value equals to "42");
     assert_that_charptr(tokens[2]->value equals to "factorial");
     assert_that_charptr(tokens[0]->value equals to "(");

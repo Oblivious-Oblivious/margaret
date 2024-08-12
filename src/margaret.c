@@ -32,13 +32,13 @@ static void margaret_repl(VM *vm) {
     MARGARET_LINK
   );
   while(true) {
-    PRINT(EVAL(OPTIMIZE(EMIT(vm, FORMALIZE(READ(SCAN("> "), "repl"))))));
+    PRINT(EVAL(OPTIMIZE(EMIT(vm, FORMALIZE(READ(vm, SCAN("> ")))))));
   }
 }
 
-static void margaret_run_file(VM *vm, char *filename) {
-  char *chars            = LOAD(filename);
-  Token **tokens         = READ(chars, filename);
+static void margaret_run_file(VM *vm) {
+  char *chars            = LOAD(vm);
+  Token **tokens         = READ(vm, chars);
   char **formal_bytecode = FORMALIZE(tokens);
   // PRINT_FORMAL(formal_bytecode);
   vm                     = EMIT(vm, formal_bytecode);
@@ -47,12 +47,11 @@ static void margaret_run_file(VM *vm, char *filename) {
 }
 
 int main(int argc, char **argv) {
-  VM *vm = vm_new();
   if(argc < 2) {
     (void)argc;
     (void)argv;
-    margaret_repl(vm);
+    margaret_repl(vm_new("repl"));
   } else {
-    margaret_run_file(vm, argv[1]);
+    margaret_run_file(vm_new(argv[0]));
   }
 }

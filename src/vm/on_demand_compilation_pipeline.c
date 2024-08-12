@@ -10,20 +10,14 @@
 
 char *SCAN(char *prompt) { return scanner_scan(prompt); }
 
-char *LOAD(char *filename) {
-  return read_handler_load(read_handler_new(), filename);
+char *LOAD(VM *vm) {
+  EmeraldsReadHandler *fd = read_handler_new();
+  char *res               = read_handler_load(fd, vm->filename);
+  read_handler_close(fd);
+  return res;
 }
 
-Token **READ(char *chars, char *filename) {
-  char *str_filename = string_new(filename);
-  char **vec         = string_split(str_filename, '/');
-
-  if(vector_size(vec) > 1) {
-    return lexer_make_tokens(lexer_new(vec[vector_size(vec) - 1]), chars);
-  } else {
-    return lexer_make_tokens(lexer_new(filename), chars);
-  }
-}
+Token **READ(VM *vm, char *chars) { return lexer_make_tokens(vm, chars); }
 
 char **FORMALIZE(Token **tokens) { return parser_analyze_syntax(tokens); }
 

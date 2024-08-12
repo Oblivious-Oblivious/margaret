@@ -11,12 +11,25 @@ typedef struct MargProc MargProc;
 
 /**
  * @brief Virtual Machine Engine
- * @param bytecode -> The list of emitted bytecode instructions
- * @param ip -> Instruction pointer that directly points into bytecode array
+ * @param filename -> Current filename to lex tokens from
+ * @param lineno -> Current line number
+ * @param charno -> Current character number
+ *
+ * @param stack -> Stack data structure for storing bytecode results
+ * @param sp -> Stack pointer
+ *
+ * @param global_variables -> Globall without namespacing or scoping
+ * @param interned_strings -> Stores all strings (variables, messages, etc.)
+ * @param current -> Pointer to the currect method-derived proc
  */
 typedef struct VM {
+  const char *filename;
+  size_t lineno;
+  size_t charno;
+
   MargValue stack[65536];
   MargValue *sp;
+
   EmeraldsHashtable global_variables;
   EmeraldsHashtable interned_strings;
   MargProc *current;
@@ -36,8 +49,9 @@ typedef struct VM {
 /**
  * @brief Creates a new VM instance By being an explicit pointer can create
  * multiple of them
+ * @param filename -> Current filename to lex tokens from
  * @return VM*
  */
-VM *vm_new(void);
+VM *vm_new(const char *filename);
 
 #endif

@@ -82,8 +82,8 @@ static void op_send_helper(VM *vm, MargValue message_name) {
   ptrdiff_t number_of_parameters = AS_INTEGER(fs_pop(vm->sp))->value;
 
   /* Pop all parameters first */
-  MargValue *actual_parameters =
-    malloc(sizeof(MargValue) * number_of_parameters);
+  MargValue *actual_parameters = NULL;
+  vector_initialize_n(actual_parameters, number_of_parameters);
   for(ptrdiff_t i = number_of_parameters - 1; i >= 0; i--) {
     actual_parameters[i] = fs_pop(vm->sp);
   }
@@ -577,8 +577,9 @@ static void evaluator_run(VM *vm) {
 
       MargValue filename = fs_pop(vm->sp);
       fs_pop(vm->sp);
-      char *chars            = LOAD(AS_STRING(filename)->chars);
-      Token **tokens         = READ(chars, AS_STRING(filename)->chars);
+      vm->filename           = AS_STRING(filename)->chars;
+      char *chars            = LOAD(vm);
+      Token **tokens         = READ(vm, chars);
       char **formal_bytecode = FORMALIZE(tokens);
       vm->current->bytecode  = NULL;
       vm                     = EMIT(vm, formal_bytecode);

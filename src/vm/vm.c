@@ -72,10 +72,15 @@ static void point_ip_to_main_method(VM *vm) {
   vm->current        = method->proc;
 }
 
-VM *vm_new(void) {
+VM *vm_new(const char *filename) {
   VM *vm = (VM *)malloc(sizeof(VM));
 
+  vm->filename = filename;
+  vm->lineno   = 1;
+  vm->charno   = 0;
+
   vm->sp = vm->stack;
+
   table_init(&vm->global_variables);
   table_init(&vm->interned_strings);
 

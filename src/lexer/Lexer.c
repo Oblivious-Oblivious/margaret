@@ -7,26 +7,16 @@
 
 #include <stdio.h> /* printf */
 
-Lexer *lexer_new(const char *filename) {
-  Lexer *self = (Lexer *)malloc(sizeof(Lexer));
-
-  self->filename = filename;
-  self->lineno   = 1;
-  self->charno   = 0;
-
-  return self;
-}
-
-void *lexer_error(Lexer *self, const char *message, char *token) {
-  if(self->charno == 0) {
-    self->charno = 1;
+void *lexer_error(VM *vm, const char *message, char *token) {
+  if(vm->charno == 0) {
+    vm->charno = 1;
   }
 
   printf(
     "%s:%zu:%zu: \033[1;31merror:\033[0m %s on `%s`\n",
-    self->filename,
-    self->lineno,
-    self->charno,
+    vm->filename,
+    vm->lineno,
+    vm->charno,
     message,
     token
   );
@@ -76,75 +66,77 @@ static char *normalize_integer(char *token) {
   return token;
 }
 
-Token **lexer_make_tokens(Lexer *self, char *text) {
-  Token **token_table = NULL;
-
+Token *tokenize(VM *vm, char *text) {
   OnigEncoding encodings[1] = {ONIG_ENCODING_ASCII};
   onig_initialize(encodings, 1);
 
-  char *token          = NULL;
-  bool has_lexer_error = false;
+  Type token_type;
+  char *token         = NULL;
+  bool is_not_matched = true;
 
-  while(string_size(text) > 0) {
-    bool is_not_matched = true;
+  for(size_t i = 0; i < sizeof(REGEX_LIST) / sizeof(Regex); i++) {
+    const Regex *r      = &REGEX_LIST[i];
+    ptrdiff_t end_index = matcher(r->pattern, (UChar *)text);
+    if(end_index != -1) {
+      is_not_matched = false;
+      token          = string_substring(text, 0, end_index);
+      vm->charno += end_index;
+      string_skip_first(text, end_index);
 
-    for(size_t i = 0; i < sizeof(REGEX_LIST) / sizeof(Regex); i++) {
-      const Regex *r      = &REGEX_LIST[i];
-      ptrdiff_t end_index = matcher(r->pattern, (UChar *)text);
-      if(end_index != -1) {
-        is_not_matched = false;
-        token          = string_substring(text, 0, end_index);
-        self->charno += end_index;
-        string_skip_first(text, end_index);
-
-        Type token_type = REGEX_LIST[i].type;
-        if(token_type == TOKEN_NEWLINE) {
-          self->lineno++;
-          self->charno = 0;
-          continue;
-        } else if(token_type == TOKEN_WHITESPACE) {
-          continue;
-        } else if((token_type == TOKEN_IDENTIFIER ||
-                   token_type == TOKEN_INSTANCE ||
-                   token_type == TOKEN_GLOBAL) &&
-                  (text[0] == '!' || text[0] == '?')) {
-          string_add_char(token, text[0]);
-          string_skip_first(text, 1);
-        } else if(token_type == TOKEN_FLOAT) {
-          token = string_remove_underscores(token);
-        } else if(token_type == TOKEN_INTEGER) {
-          token = normalize_integer(token);
-        } else if(token_type == TOKEN_STRING) {
-          string_skip_first(token, 1);
-          string_ignore_last(token, 1);
-          self->lineno += vector_size(string_split(token, '\n'));
-        }
-
-        vector_add(
-          token_table,
-          token_new(
-            token, token_type, self->lineno, self->charno, self->filename
-          )
-        );
-        break;
+      token_type = REGEX_LIST[i].type;
+      if(token_type == TOKEN_NEWLINE) {
+        vm->lineno++;
+        vm->charno = 0;
+        continue;
+      } else if(token_type == TOKEN_WHITESPACE) {
+        continue;
+      } else if((token_type == TOKEN_IDENTIFIER ||
+                 token_type == TOKEN_INSTANCE || token_type == TOKEN_GLOBAL) &&
+                (text[0] == '!' || text[0] == '?')) {
+        string_add_char(token, text[0]);
+        string_skip_first(text, 1);
+      } else if(token_type == TOKEN_FLOAT) {
+        token = string_remove_underscores(token);
+      } else if(token_type == TOKEN_INTEGER) {
+        token = normalize_integer(token);
+      } else if(token_type == TOKEN_STRING) {
+        string_skip_first(token, 1);
+        string_ignore_last(token, 1);
+        vm->lineno += vector_size(string_split(token, '\n'));
       }
-    }
 
-    if(is_not_matched) {
-      has_lexer_error = true;
-      lexer_error(self, "Unexpected character.", string_split(text, '\n')[0]);
-      string_skip_first(text, 1);
+      break;
     }
   }
 
-  if(has_lexer_error) {
-    vector_free(token_table);
+  onig_end();
+
+  if(is_not_matched) {
+    lexer_error(vm, "Unexpected character.", string_split(text, '\n')[0]);
+    string_skip_first(text, 1);
+    return NULL;
+  } else {
+    return token_new(token, token_type, vm->lineno, vm->charno, vm->filename);
+  }
+}
+
+Token **lexer_make_tokens(VM *vm, char *text) {
+  Token **token_table = NULL;
+
+  while(string_size(text) > 0) {
+    Token *token = tokenize(vm, text);
+    if(token == NULL) {
+      vector_free(token_table);
+      break;
+    } else if(token->type > 10) {
+      vector_add(token_table, token);
+    }
   }
 
   vector_add(
     token_table,
     token_new(
-      string_new("eof"), TOKEN_EOF, self->lineno, self->charno, self->filename
+      string_new("eof"), TOKEN_EOF, vm->lineno, vm->charno, vm->filename
     )
   );
 

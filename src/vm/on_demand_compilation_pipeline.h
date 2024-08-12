@@ -6,8 +6,8 @@
 #include "../vm/vm.h"
 
 char *SCAN(char *prompt);
-char *LOAD(char *filename);
-Token **READ(char *chars, char *filename);
+char *LOAD(VM *vm);
+Token **READ(VM *vm, char *chars);
 char **FORMALIZE(Token **tokens);
 char **PRINT_FORMAL(char **formal_bytecode);
 VM *EMIT(VM *vm, char **formal_bytecode);

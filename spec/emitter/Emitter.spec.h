@@ -9,7 +9,7 @@
 #include "../../src/opcode/opcodes.h"
 
 static VM *vm;
-static void initialize_vm(void) { vm = vm_new(); }
+static void initialize_vm(void) { vm = vm_new("test.marg"); }
 
 module(EmitterSpec, {
   before_each(&initialize_vm);
