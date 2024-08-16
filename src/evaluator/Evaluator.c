@@ -8,7 +8,7 @@
 
 #include <inttypes.h> /* PRIx64 */
 #include <stdint.h>
-#include <stdio.h> /* pritnf, sprintf */
+#include <stdio.h> /* pritnf, snprintf */
 
 static void op_put_tensor_helper(VM *vm, MargValue temporary) {
   ptrdiff_t number_of_elements = AS_INTEGER(temporary)->value;
@@ -648,7 +648,7 @@ static void evaluator_run(VM *vm) {
       if(!IS_UNDEFINED(object)) {
         char qnan_encoded_value[20];
         // TODO - Replace with size_t
-        sprintf(qnan_encoded_value, "0x%016" PRIx64, (uint64_t)object);
+        snprintf(qnan_encoded_value, 20, "0x%016" PRIx64, (uint64_t)object);
         fs_push(vm->sp, MARG_STRING(qnan_encoded_value));
       } else {
         fs_push(vm->sp, MARG_NIL);
