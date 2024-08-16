@@ -82,74 +82,74 @@
 #include "vm/byte_conversions.spec.h"
 #include "vm/vm.spec.h"
 
-spec_suite({
-  VersionSpec();
+int main(void) {
+  cspec_run_suite("all", {
+    VersionSpec();
 
-  EmitterSpec();
+    EmitterSpec();
 
-  EvaluatorSpec();
+    EvaluatorSpec();
 
-  arithmetic_spec();
-  assignments_spec();
-  bitstrings_spec();
-  bitwise_spec();
-  booleans_spec();
-  characters_spec();
-  code_as_data_spec();
-  complex_spec();
-  conditionals_spec();
-  constants_spec();
-  conversions_spec();
-  date_time_spec();
-  errors_spec();
-  groups_spec();
-  hashes_spec();
-  identifiers_spec();
-  intervals_spec();
-  iterations_spec();
-  margaret_messages_spec();
-  messages_spec();
-  meta_evaluation_spec();
-  method_definition_spec();
-  numeric_spec();
-  postcard_spec();
-  procs_spec();
-  rational_spec();
-  strings_spec();
-  symbols_spec();
-  tensors_spec();
-  tuples_spec();
-  variables_spec();
+    arithmetic_spec();
+    assignments_spec();
+    bitstrings_spec();
+    bitwise_spec();
+    booleans_spec();
+    characters_spec();
+    code_as_data_spec();
+    complex_spec();
+    conditionals_spec();
+    constants_spec();
+    conversions_spec();
+    date_time_spec();
+    errors_spec();
+    groups_spec();
+    hashes_spec();
+    identifiers_spec();
+    intervals_spec();
+    iterations_spec();
+    margaret_messages_spec();
+    messages_spec();
+    meta_evaluation_spec();
+    method_definition_spec();
+    numeric_spec();
+    postcard_spec();
+    procs_spec();
+    rational_spec();
+    strings_spec();
+    symbols_spec();
+    tensors_spec();
+    tuples_spec();
+    variables_spec();
 
-  InspectorSpec();
+    InspectorSpec();
 
-  alternate_to_dec_spec();
-  LexerSpec();
+    alternate_to_dec_spec();
+    LexerSpec();
 
-  LoaderSpec();
+    LoaderSpec();
 
-  MargFloatSpec();
-  MargHashSpec();
-  MargIntegerSpec();
-  MargMethodSpec();
-  MargObjectSpec();
-  MargProcSpec();
-  MargStringSpec();
-  MargTensorSpec();
-  MargValueSpec();
+    MargFloatSpec();
+    MargHashSpec();
+    MargIntegerSpec();
+    MargMethodSpec();
+    MargObjectSpec();
+    MargProcSpec();
+    MargStringSpec();
+    MargTensorSpec();
+    MargValueSpec();
 
-  OptimizerSpec();
+    OptimizerSpec();
 
-  ParserSpec();
+    ParserSpec();
 
-  ScannerSpec();
+    ScannerSpec();
 
-  TokenSpec();
-  TokenTableSpec();
-  TypeSpec();
+    TokenSpec();
+    TokenTableSpec();
+    TypeSpec();
 
-  byte_conversions_spec();
-  VmSpec();
-});
-
-int main(void) { run_spec_suite("failing"); }
+    byte_conversions_spec();
+    VmSpec();
+  });
+}
