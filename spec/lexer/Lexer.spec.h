@@ -84,7 +84,7 @@ module(LexerSpec, {
         Token **tokens = vm->tokens;
         assert_that_charptr(tokens[1]->value equals to "42");
         assert_that_int(tokens[1]->type equals to TOKEN_INTEGER);
-        assert_that_int(tokens[1]->line_number equals to 1);
+        assert_that_int(vm->lineno equals to 1);
 
         vm         = vm_new("file.marg");
         vm->source = string_new("4_200");
@@ -106,7 +106,7 @@ module(LexerSpec, {
 
         assert_that_charptr(tokens[1]->value equals to "0");
         assert_that_int(tokens[1]->type equals to TOKEN_INTEGER);
-        assert_that_int(tokens[1]->line_number equals to 1);
+        assert_that_int(vm->lineno equals to 1);
       });
 
       it("correctly parses code that the parser will drop later", {
@@ -127,7 +127,7 @@ module(LexerSpec, {
         Token **tokens = vm->tokens;
         assert_that_charptr(tokens[0]->value equals to "0.0");
         assert_that_int(tokens[0]->type equals to TOKEN_FLOAT);
-        assert_that_int(tokens[1]->line_number equals to 1);
+        assert_that_int(vm->lineno equals to 1);
 
         vm         = vm_new("file.marg");
         vm->source = string_new("(42.7 msg)");
@@ -135,7 +135,7 @@ module(LexerSpec, {
         tokens = vm->tokens;
         assert_that_charptr(tokens[1]->value equals to "42.7");
         assert_that_int(tokens[1]->type equals to TOKEN_FLOAT);
-        assert_that_int(tokens[1]->line_number equals to 1);
+        assert_that_int(vm->lineno equals to 1);
 
         vm         = vm_new("file.marg");
         vm->source = string_new("(0.7 msg)");
@@ -143,7 +143,7 @@ module(LexerSpec, {
         tokens = vm->tokens;
         assert_that_charptr(tokens[1]->value equals to "0.7");
         assert_that_int(tokens[1]->type equals to TOKEN_FLOAT);
-        assert_that_int(tokens[1]->line_number equals to 1);
+        assert_that_int(vm->lineno equals to 1);
 
         vm         = vm_new("file.marg");
         vm->source = string_new("(0.7+0.5+0.23)");

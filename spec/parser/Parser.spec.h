@@ -9,12 +9,11 @@ module(ParserSpec, {
     VM *vm     = vm_new("file.obl");
     vm->source = string_new("(42 factorial)");
     lexer_make_tokens(vm);
-    Token **toks = vm->tokens;
-    assert_that_charptr(token_table_consume(toks)->value equals to "(");
-    assert_that_charptr(token_table_consume(toks)->value equals to "42");
-    assert_that_charptr(token_table_consume(toks)->value equals to "factorial");
-    assert_that_charptr(token_table_consume(toks)->value equals to ")");
-    assert_that_charptr(token_table_consume(toks)->value equals to "eof");
+    assert_that_charptr(token_table_consume(vm)->value equals to "(");
+    assert_that_charptr(token_table_consume(vm)->value equals to "42");
+    assert_that_charptr(token_table_consume(vm)->value equals to "factorial");
+    assert_that_charptr(token_table_consume(vm)->value equals to ")");
+    assert_that_charptr(token_table_consume(vm)->value equals to "eof");
   });
 
   it("peeks on top of the token table", {

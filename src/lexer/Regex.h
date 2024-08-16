@@ -1,53 +1,52 @@
 #ifndef __REGEX_H_
 #define __REGEX_H_
 
-#include "../../libs/EmeraldsOniguruma/export/EmeraldsOniguruma.h"
 #include "../tokens/Type.h"
 
 typedef struct Regex {
-  UChar *pattern;
+  const char *pattern;
   Type type;
 } Regex;
 
 static const Regex REGEX_LIST[] = {
   {
-    .pattern = (UChar *)"^\\n",
+    .pattern = "^\\n",
     .type    = TOKEN_NEWLINE,
   },
   {
-    .pattern = (UChar *)"^\\s+",
+    .pattern = "^\\s+",
     .type    = TOKEN_WHITESPACE,
   },
   {
-    .pattern = (UChar *)"^\\d+(_\\d+)*\\.\\d+(_\\d+)*",
+    .pattern = "^\\d+(_\\d+)*\\.\\d+(_\\d+)*",
     .type    = TOKEN_FLOAT,
   },
   {
-    .pattern = (UChar *)"^(?:0[bBoOxX][\\da-fA-F_]+|0|[1-9][\\d_]*)",
+    .pattern = "^(?:0[bBoOxX][\\da-fA-F_]+|0|[1-9][\\d_]*)",
     .type    = TOKEN_INTEGER,
   },
   {
-    .pattern = (UChar *)"^@[a-zA-Z_][a-zA-Z0-9_]*",
+    .pattern = "^@[a-zA-Z_][a-zA-Z0-9_]*",
     .type    = TOKEN_INSTANCE,
   },
   {
-    .pattern = (UChar *)"^\\$[a-zA-Z_][a-zA-Z0-9_]*",
+    .pattern = "^\\$[a-zA-Z_][a-zA-Z0-9_]*",
     .type    = TOKEN_GLOBAL,
   },
   {
-    .pattern = (UChar *)"^[a-zA-Z_][a-zA-Z0-9_]*",
+    .pattern = "^[a-zA-Z_][a-zA-Z0-9_]*",
     .type    = TOKEN_IDENTIFIER,
   },
   {
-    .pattern = (UChar *)"^[!?+\\-*\\\\/\\~<>=|&^;.`]+",
+    .pattern = "^[!?+\\-*\\\\/\\~<>=|&^;.`]+",
     .type    = TOKEN_MESSAGE_SYMBOL,
   },
   {
-    .pattern = (UChar *)"^[()\\[\\]{},:#%]",
+    .pattern = "^[()\\[\\]{},:#%]",
     .type    = TOKEN_SYNTAX_SYMBOL,
   },
   {
-    .pattern = (UChar *)"^(['\"]).*?\\1",
+    .pattern = "^(['\"]).*?\\1",
     .type    = TOKEN_STRING,
   },
 };

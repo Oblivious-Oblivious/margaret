@@ -2,20 +2,11 @@
 
 #include "../../libs/EmeraldsString/export/EmeraldsString.h" /* IWYU pragma: keep */
 
-Token *token_new(
-  char *value,
-  Type type,
-  size_t line_number,
-  size_t char_number,
-  const char *filename
-) {
+Token *token_new(char *value, Type type) {
   Token *t = (Token *)malloc(sizeof(Token));
 
-  t->value       = value;
-  t->type        = type;
-  t->line_number = line_number;
-  t->char_number = char_number;
-  t->filename    = filename;
+  t->value = value;
+  t->type  = type;
 
   return t;
 }

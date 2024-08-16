@@ -9,49 +9,48 @@
  * @brief
     TODO - Abstract error somewhere closer to boundary
     TODO - Name error messages or abstract to macros
+ * @param vm -> The vm containing the token table
  * @param token -> The token where the error occured at
  * @param message -> The message to display
  * @return string* -> NULL pointer
  */
-static char *error(Token *token, const char *message) {
+static char *error(VM *vm, Token *token, const char *message) {
   printf(
     "%s:%zu:%zu \033[1;31merror:\033[0m %s  Token: \033[1;31m`%s`\033[0m\n",
-    token->filename,
-    token->line_number,
-    token->char_number,
+    vm->filename,
+    vm->lineno,
+    vm->charno,
     message,
     token->value
   );
   return NULL;
 }
 
-Token *token_table_consume(Token **self) {
-  if(vector_size(self) == 0) {
-    return token_new(string_new("eof"), TOKEN_EOF, 0, 0, "");
+Token *token_table_consume(VM *vm) {
+  if(vector_size(vm->tokens) == 0) {
+    return token_new(string_new("eof"), TOKEN_EOF);
   } else {
-    Token *token = self[0];
-    vector_remove(self, 0);
+    Token *token = vm->tokens[0];
+    vector_remove(vm->tokens, 0);
     return token;
   }
 }
 
-char *token_table_ensure_value(
-  Token **self, const char *value, const char *error_message
-) {
-  Token *token = token_table_consume(self);
+char *
+token_table_ensure_value(VM *vm, const char *value, const char *error_message) {
+  Token *token = token_table_consume(vm);
   if(token_equals_values(token, string_new(value))) {
     return token->value;
   } else {
-    return error(token, error_message);
+    return error(vm, token, error_message);
   }
 }
 
-char *
-token_table_ensure_type(Token **self, Type type, const char *error_message) {
-  Token *token = token_table_consume(self);
+char *token_table_ensure_type(VM *vm, Type type, const char *error_message) {
+  Token *token = token_table_consume(vm);
   if(token->type == type) {
     return token->value;
   } else {
-    return error(token, error_message);
+    return error(vm, token, error_message);
   }
 }

@@ -1,6 +1,7 @@
 #include "Lexer.h"
 
 #include "../../libs/EmeraldsBool/export/EmeraldsBool.h" /* IWYU pragma: keep */
+#include "../../libs/EmeraldsOniguruma/export/EmeraldsOniguruma.h" /* IWYU pragma: keep */
 #include "../../libs/EmeraldsString/export/EmeraldsString.h" /* IWYU pragma: keep */
 #include "alternate_to_dec.h"
 #include "Regex.h"
@@ -24,13 +25,13 @@ void *lexer_error(VM *vm, const char *message) {
   return NULL;
 }
 
-static ptrdiff_t matcher(UChar *pattern, UChar *input_string) {
+static ptrdiff_t matcher(const char *pattern, const char *input_string) {
   regex_t *regex = NULL;
   OnigErrorInfo error_info;
   onig_new(
     &regex,
-    pattern,
-    pattern + strlen((char *)pattern),
+    (UChar *)pattern,
+    (UChar *)(pattern + strlen(pattern)),
     ONIG_OPTION_MULTILINE,
     ONIG_ENCODING_ASCII,
     ONIG_SYNTAX_DEFAULT,
@@ -38,9 +39,15 @@ static ptrdiff_t matcher(UChar *pattern, UChar *input_string) {
   );
 
   OnigRegion *region = onig_region_new();
-  OnigUChar *end     = input_string + strlen((char *)input_string);
+  OnigUChar *end     = (UChar *)(input_string + strlen(input_string));
   ptrdiff_t res      = onig_search(
-    regex, input_string, end, input_string, end, region, ONIG_OPTION_NONE
+    regex,
+    (UChar *)input_string,
+    end,
+    (UChar *)input_string,
+    end,
+    region,
+    ONIG_OPTION_NONE
   );
 
   ptrdiff_t output = res >= 0 && region->beg[0] == 0 ? region->end[0] : -1;
@@ -51,7 +58,7 @@ static ptrdiff_t matcher(UChar *pattern, UChar *input_string) {
 }
 
 static char *normalize_integer(char *token) {
-  token = string_remove_underscores(token);
+  string_remove_underscores(token);
 
   if(token[0] == '0' && (token[1] == 'b' || token[1] == 'B')) {
     string_skip_first(token, 2);
@@ -78,14 +85,13 @@ Token *tokenize(VM *vm) {
   for(size_t i = 0; i < sizeof(REGEX_LIST) / sizeof(Regex); i++) {
     const Regex *r      = &REGEX_LIST[i];
     char *text          = vm->source + vm->index;
-    ptrdiff_t end_index = matcher(r->pattern, (UChar *)text);
+    ptrdiff_t end_index = matcher(r->pattern, text);
     if(end_index != -1) {
       is_not_matched = false;
       token          = string_substring(text, 0, end_index);
       vm->charno += end_index;
       vm->index += end_index;
-      text = vm->source + vm->index;
-
+      text       = vm->source + vm->index;
       token_type = REGEX_LIST[i].type;
       if(token_type == TOKEN_NEWLINE) {
         vm->lineno++;
@@ -96,10 +102,10 @@ Token *tokenize(VM *vm) {
       } else if((token_type == TOKEN_IDENTIFIER ||
                  token_type == TOKEN_INSTANCE || token_type == TOKEN_GLOBAL) &&
                 (text[0] == '!' || text[0] == '?')) {
-        string_add_char(token, text[0]);
+        string_addf(token, "%c", text[0]);
         vm->index++;
       } else if(token_type == TOKEN_FLOAT) {
-        token = string_remove_underscores(token);
+        string_remove_underscores(token);
       } else if(token_type == TOKEN_INTEGER) {
         token = normalize_integer(token);
       } else if(token_type == TOKEN_STRING) {
@@ -117,7 +123,7 @@ Token *tokenize(VM *vm) {
   if(is_not_matched) {
     return lexer_error(vm, "Unexpected character.");
   } else {
-    return token_new(token, token_type, vm->lineno, vm->charno, vm->filename);
+    return token_new(token, token_type);
   }
 }
 
@@ -132,12 +138,7 @@ VM *lexer_make_tokens(VM *vm) {
     }
   }
 
-  vector_add(
-    vm->tokens,
-    token_new(
-      string_new("eof"), TOKEN_EOF, vm->lineno, vm->charno, vm->filename
-    )
-  );
+  vector_add(vm->tokens, token_new(string_new("eof"), TOKEN_EOF));
 
   onig_end();
 

@@ -76,13 +76,19 @@ VM *vm_new(const char *filename) {
   VM *vm = (VM *)malloc(sizeof(VM));
 
   vm->filename = filename;
+  vm->source   = NULL;
   vm->lineno   = 1;
   vm->charno   = 0;
+  vm->index    = 0;
+
+  vm->tokens          = NULL;
+  vm->formal_bytecode = NULL;
 
   vm->sp = vm->stack;
 
   table_init(&vm->global_variables);
   table_init(&vm->interned_strings);
+  vm->current = NULL;
 
   setup_proto_object_chain(vm);
   define_main_method(vm);

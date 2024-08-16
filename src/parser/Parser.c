@@ -4,51 +4,51 @@
 #include "../opcode/fmcodes.h"
 #include "../tokens/TokenTable.h"
 
-#define la1value(token)        token_equals_values(table[0], string_new((token)))
-#define la2value(token)        token_equals_values(table[1], string_new((token)))
-#define la3value(token)        token_equals_values(table[2], string_new((token)))
-#define la1type(expected_type) table[0]->type == (expected_type)
-#define la2type(expected_type) table[1]->type == (expected_type)
-#define la3type(expected_type) table[2]->type == (expected_type)
+#define la1value(token)        token_equals_values(vm->tokens[0], string_new((token)))
+#define la2value(token)        token_equals_values(vm->tokens[1], string_new((token)))
+#define la3value(token)        token_equals_values(vm->tokens[2], string_new((token)))
+#define la1type(expected_type) vm->tokens[0]->type == (expected_type)
+#define la2type(expected_type) vm->tokens[1]->type == (expected_type)
+#define la3type(expected_type) vm->tokens[2]->type == (expected_type)
 
-#define ensure_value(value, msg) token_table_ensure_value(table, (value), (msg))
-#define ensure_type(type, msg)   token_table_ensure_type(table, (type), (msg))
-#define generate(value)          vector_add(*fmcodes, value)
+#define ensure_value(value, msg) token_table_ensure_value(vm, (value), (msg))
+#define ensure_type(type, msg)   token_table_ensure_type(vm, (type), (msg))
+#define generate(value)          vector_add(vm->formal_bytecode, value)
 
-#define first_unit()             parser_first_unit(table, fmcodes)
-#define unit_list()              parser_unit_list(table, fmcodes)
-#define unit()                   parser_unit(table, fmcodes)
-#define assignment_message()     parser_assignment_message(table, fmcodes)
-#define keyword_message()        parser_keyword_message(table, fmcodes)
-#define keyword_selector_chain() parser_keyword_selector_chain(table, fmcodes)
-#define binary_message()         parser_binary_message(table, fmcodes)
-#define binary_selector_chain()  parser_binary_selector_chain(table, fmcodes)
-#define unary_message()          parser_unary_message(table, fmcodes)
-#define unary_selector_chain()   parser_unary_selector_chain(table, fmcodes)
-#define lhs_message()            parser_lhs_message(table, fmcodes)
-#define lhs_selector()           parser_lhs_selector(table, fmcodes)
-#define literal()                parser_literal(table, fmcodes)
-#define param_list()             parser_param_list(table, fmcodes)
-#define bit_list()               parser_bit_list(table, fmcodes)
-#define bit()                    parser_bit(table, fmcodes)
-#define association_list()       parser_association_list(table, fmcodes)
-#define key()                    parser_key(table, fmcodes)
-#define method_definition()      parser_method_definition(table, fmcodes)
-#define keyword_list()           parser_keyword_list(table, fmcodes)
-#define scalar()                 parser_scalar(table, fmcodes)
-#define variable()               parser_variable(table, fmcodes)
+#define first_unit()             parser_first_unit(vm)
+#define unit_list()              parser_unit_list(vm)
+#define unit()                   parser_unit(vm)
+#define assignment_message()     parser_assignment_message(vm)
+#define keyword_message()        parser_keyword_message(vm)
+#define keyword_selector_chain() parser_keyword_selector_chain(vm)
+#define binary_message()         parser_binary_message(vm)
+#define binary_selector_chain()  parser_binary_selector_chain(vm)
+#define unary_message()          parser_unary_message(vm)
+#define unary_selector_chain()   parser_unary_selector_chain(vm)
+#define lhs_message()            parser_lhs_message(vm)
+#define lhs_selector()           parser_lhs_selector(vm)
+#define literal()                parser_literal(vm)
+#define param_list()             parser_param_list(vm)
+#define bit_list()               parser_bit_list(vm)
+#define bit()                    parser_bit(vm)
+#define association_list()       parser_association_list(vm)
+#define key()                    parser_key(vm)
+#define method_definition()      parser_method_definition(vm)
+#define keyword_list()           parser_keyword_list(vm)
+#define scalar()                 parser_scalar(vm)
+#define variable()               parser_variable(vm)
 
 VM *parser_analyze_syntax(VM *vm) {
-  parser_first_unit(vm->tokens, &vm->formal_bytecode);
+  parser_first_unit(vm);
   return vm;
 }
 
-void parser_first_unit(Token **table, char ***fmcodes) {
+void parser_first_unit(VM *vm) {
   unit_list();
   ensure_value("eof", "reached end of program.");
 }
 
-char *parser_unit_list(Token **table, char ***fmcodes) {
+char *parser_unit_list(VM *vm) {
   size_t no_elements       = 0;
   char *number_of_elements = NULL;
 
@@ -66,9 +66,9 @@ char *parser_unit_list(Token **table, char ***fmcodes) {
   return number_of_elements;
 }
 
-void parser_unit(Token **table, char ***fmcodes) { assignment_message(); }
+void parser_unit(VM *vm) { assignment_message(); }
 
-void parser_assignment_message(Token **table, char ***fmcodes) {
+void parser_assignment_message(VM *vm) {
   keyword_message();
   if(la1value("=")) {
     char *eq = ensure_value("=", "expected '=' on assignment message.");
@@ -78,7 +78,7 @@ void parser_assignment_message(Token **table, char ***fmcodes) {
   }
 }
 
-void parser_keyword_message(Token **table, char ***fmcodes) {
+void parser_keyword_message(VM *vm) {
   if(la1type(TOKEN_IDENTIFIER) && la2value(":")) {
     generate(FM_GLOBAL);
     generate(string_new("$Margaret"));
@@ -92,7 +92,7 @@ void parser_keyword_message(Token **table, char ***fmcodes) {
   }
 }
 
-void parser_keyword_selector_chain(Token **table, char ***fmcodes) {
+void parser_keyword_selector_chain(VM *vm) {
   char *message_name = NULL;
   size_t no_keywords = 0;
 
@@ -120,14 +120,14 @@ void parser_keyword_selector_chain(Token **table, char ***fmcodes) {
   generate(number_of_keywords);
 }
 
-void parser_binary_message(Token **table, char ***fmcodes) {
+void parser_binary_message(VM *vm) {
   unary_message();
   if(la1type(TOKEN_MESSAGE_SYMBOL)) {
     binary_selector_chain();
   }
 }
 
-void parser_binary_selector_chain(Token **table, char ***fmcodes) {
+void parser_binary_selector_chain(VM *vm) {
   while(la1type(TOKEN_MESSAGE_SYMBOL) && !la1value("=")) {
     char *message_name = ensure_type(
       TOKEN_MESSAGE_SYMBOL, "expected message symbol on binary selector."
@@ -138,14 +138,14 @@ void parser_binary_selector_chain(Token **table, char ***fmcodes) {
   }
 }
 
-void parser_unary_message(Token **table, char ***fmcodes) {
+void parser_unary_message(VM *vm) {
   lhs_message();
   if(la1type(TOKEN_IDENTIFIER) && !la2value(":")) {
     unary_selector_chain();
   }
 }
 
-void parser_unary_selector_chain(Token **table, char ***fmcodes) {
+void parser_unary_selector_chain(VM *vm) {
   while(la1type(TOKEN_IDENTIFIER) && !la2value(":")) {
     generate(FM_UNARY);
     generate(
@@ -154,7 +154,7 @@ void parser_unary_selector_chain(Token **table, char ***fmcodes) {
   }
 }
 
-void parser_lhs_message(Token **table, char ***fmcodes) {
+void parser_lhs_message(VM *vm) {
   char *message_name = NULL;
   if(la1type(TOKEN_MESSAGE_SYMBOL) && !la1value("=")) {
     message_name = ensure_type(
@@ -170,7 +170,7 @@ void parser_lhs_message(Token **table, char ***fmcodes) {
   }
 }
 
-void parser_literal(Token **table, char ***fmcodes) {
+void parser_literal(VM *vm) {
   if(la1value("(")) {
     ensure_value("(", "missing opening parenthesis on group.");
     while(la1value(",")) {
@@ -230,7 +230,7 @@ void parser_literal(Token **table, char ***fmcodes) {
     generate(FM_METHOD_START);
 
     generate(FM_METHOD_RECEIVER);
-    size_t prev_size = vector_size(*fmcodes);
+    size_t prev_size = vector_size(vm->formal_bytecode);
 
     if(!((la1type(TOKEN_MESSAGE_SYMBOL) && la2value("=>")) ||
          (la1type(TOKEN_IDENTIFIER) && la2value("=>")) ||
@@ -238,7 +238,7 @@ void parser_literal(Token **table, char ***fmcodes) {
          (la1type(TOKEN_IDENTIFIER) && la2value(":")))) {
       literal();
     }
-    if(vector_size(*fmcodes) == prev_size) {
+    if(vector_size(vm->formal_bytecode) == prev_size) {
       generate(FM_METHOD_ANY_OBJECT);
     }
 
@@ -249,7 +249,7 @@ void parser_literal(Token **table, char ***fmcodes) {
   }
 }
 
-void parser_param_list(Token **table, char ***fmcodes) {
+void parser_param_list(VM *vm) {
   if(la2value(",")) {
     generate(FM_PROC_PARAMETER);
     generate(
@@ -266,7 +266,7 @@ void parser_param_list(Token **table, char ***fmcodes) {
   }
 }
 
-char *parser_bit_list(Token **table, char ***fmcodes) {
+char *parser_bit_list(VM *vm) {
   size_t no_elements       = 0;
   char *number_of_elements = NULL;
 
@@ -283,7 +283,7 @@ char *parser_bit_list(Token **table, char ***fmcodes) {
   return number_of_elements;
 }
 
-void parser_bit(Token **table, char ***fmcodes) {
+void parser_bit(VM *vm) {
   scalar();
 
   if(la1value(":") && la2value(":")) {
@@ -297,7 +297,7 @@ void parser_bit(Token **table, char ***fmcodes) {
   }
 }
 
-char *parser_association_list(Token **table, char ***fmcodes) {
+char *parser_association_list(VM *vm) {
   size_t no_elements       = 0;
   char *number_of_elements = NULL;
 
@@ -316,7 +316,7 @@ char *parser_association_list(Token **table, char ***fmcodes) {
   return number_of_elements;
 }
 
-void parser_key(Token **table, char ***fmcodes) {
+void parser_key(VM *vm) {
   if(la1type(TOKEN_IDENTIFIER)) {
     generate(FM_STRING);
     generate(ensure_type(TOKEN_IDENTIFIER, "expected identifier on key."));
@@ -326,7 +326,7 @@ void parser_key(Token **table, char ***fmcodes) {
   }
 }
 
-void parser_method_definition(Token **table, char ***fmcodes) {
+void parser_method_definition(VM *vm) {
   char *name = NULL;
 
   if(la1type(TOKEN_IDENTIFIER) && la2value(":")) {
@@ -357,7 +357,7 @@ void parser_method_definition(Token **table, char ***fmcodes) {
   unit();
 }
 
-char *parser_keyword_list(Token **table, char ***fmcodes) {
+char *parser_keyword_list(VM *vm) {
   char *keyword_method_name = NULL;
 
   while(la1type(TOKEN_IDENTIFIER) && la2value(":")) {
@@ -374,7 +374,7 @@ char *parser_keyword_list(Token **table, char ***fmcodes) {
   return keyword_method_name;
 }
 
-void parser_scalar(Token **table, char ***fmcodes) {
+void parser_scalar(VM *vm) {
   if(la1value(":") && la2value(":")) {
     ensure_value(":", "expected ':' on label.");
     ensure_value(":", "expected ':' on label.");
@@ -383,6 +383,9 @@ void parser_scalar(Token **table, char ***fmcodes) {
   } else if(la1type(TOKEN_INTEGER)) {
     generate(FM_INTEGER);
     generate(ensure_type(TOKEN_INTEGER, "expected integer literal."));
+    // char *newstr = string_new("INTEGERRR");
+    // generate(newstr);
+    // vector_add(*fmcodes, newstr);
   } else if(la1type(TOKEN_FLOAT)) {
     generate(FM_FLOAT);
     generate(ensure_type(TOKEN_FLOAT, "expected float literal."));
@@ -394,7 +397,7 @@ void parser_scalar(Token **table, char ***fmcodes) {
   }
 }
 
-void parser_variable(Token **table, char ***fmcodes) {
+void parser_variable(VM *vm) {
   if(la1value("$nil")) {
     ensure_value("$nil", "expected '$nil' on nil literal.");
     generate(FM_NIL);
@@ -429,37 +432,3 @@ void parser_variable(Token **table, char ***fmcodes) {
     ));
   }
 }
-
-#undef la1value
-#undef la2value
-#undef la3value
-#undef la1type
-#undef la2type
-#undef la3type
-
-#undef ensure_value
-#undef ensure_type
-#undef generate
-
-#undef first_unit
-#undef unit_list
-#undef unit
-#undef assignment_message
-#undef keyword_message
-#undef keyword_selector_chain
-#undef binary_message
-#undef binary_selector_chain
-#undef unary_message
-#undef unary_selector_chain
-#undef lhs_message
-#undef lhs_selector
-#undef literal
-#undef param_list
-#undef bit_list
-#undef bit
-#undef association_list
-#undef key
-#undef method_definition
-#undef keyword_list
-#undef scalar
-#undef variable
