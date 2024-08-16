@@ -23,22 +23,22 @@
   "compile-flags": {
     "cc": "clang",
     "debug": {
-      "opt": "-Og -g",
+      "opt": "-Og",
       "version": "-std=c11",
-      "flags": "-Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic",
-      "warnings": "-Wno-extra-semi -Wno-unused-function -Wno-strict-prototypes"
+      "flags": "-g -fsanitize=address",
+      "warnings": "-Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic -Wno-extra-semi -Wno-unused-function"
     },
     "release": {
-      "opt": "-O3",
+      "opt": "-O2",
       "version": "-std=c2x",
       "flags": "",
       "warnings": ""
     },
     "test": {
-      "opt": "-Og -g",
+      "opt": "-Og",
       "version": "-std=c11",
-      "flags": "",
-      "warnings": ""
+      "flags": "-g -fsanitize=address",
+      "warnings": "-Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic -Wno-extra-semi -Wno-unused-function"
     }
   },
 
