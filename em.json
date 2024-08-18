@@ -26,19 +26,13 @@
       "opt": "-Og",
       "version": "-std=c11",
       "flags": "-g -fsanitize=address",
-      "warnings": "-Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic -Wno-extra-semi -Wno-unused-function"
+      "warnings": "-Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic"
     },
     "release": {
       "opt": "-O2",
       "version": "-std=c2x",
       "flags": "",
       "warnings": ""
-    },
-    "test": {
-      "opt": "-Og",
-      "version": "-std=c11",
-      "flags": "-g -fsanitize=address",
-      "warnings": "-Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic -Wno-extra-semi -Wno-unused-function"
     }
   },
 

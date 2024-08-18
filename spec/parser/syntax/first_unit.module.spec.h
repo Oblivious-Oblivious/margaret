@@ -4,6 +4,6 @@
 #include "../../generic/_helpers.h"
 #include "unit_list.module.spec.h"
 
-module(first_unit, { unit_list(); });
+module(first_unit, { unit_list(); })
 
 #endif
