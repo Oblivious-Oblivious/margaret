@@ -646,9 +646,8 @@ static void evaluator_run(VM *vm) {
       MargValue object = fs_pop(vm->sp);
       fs_pop(vm->sp);
       if(!IS_UNDEFINED(object)) {
-        char qnan_encoded_value[20];
-        // TODO - Replace with size_t
-        snprintf(qnan_encoded_value, 20, "0x%016" PRIx64, (uint64_t)object);
+        char qnan_encoded_value[32];
+        snprintf(qnan_encoded_value, 32, "0x%016zx" PRIx64, object);
         fs_push(vm->sp, MARG_STRING(qnan_encoded_value));
       } else {
         fs_push(vm->sp, MARG_NIL);
