@@ -6,9 +6,7 @@
 #include <stdio.h> /* printf */
 
 /**
- * @brief
-    TODO - Abstract error somewhere closer to boundary
-    TODO - Name error messages or abstract to macros
+ * @brief Displays an error message (grabs latest line and column)
  * @param vm -> The vm containing the token table
  * @param token -> The token where the error occured at
  * @param message -> The message to display
