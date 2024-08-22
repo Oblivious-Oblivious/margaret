@@ -682,7 +682,7 @@ static void evaluator_run(VM *vm) {
       if(!IS_UNDEFINED(object) && IS_STRING_CLONE(message_name)) {
         char *dnu_message = string_new("");
         string_addf(
-          dnu_message,
+          &dnu_message,
           "Object `%s` or any other object in the delegation chain does not "
           "understand: `%s`",
           AS_OBJECT(object)->name,

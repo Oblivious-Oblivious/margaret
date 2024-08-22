@@ -12,7 +12,7 @@
       dec = dec * 2 + (bin[i] - '0'); \
     }                                 \
     string_free(bin);                 \
-    string_addf(bin, "%zu", dec);     \
+    string_addf(&bin, "%zu", dec);    \
   } while(0)
 
 #define oct_to_dec(oct)               \
@@ -23,7 +23,7 @@
       dec = dec * 8 + (oct[i] - '0'); \
     }                                 \
     string_free(oct);                 \
-    string_addf(oct, "%zu", dec);     \
+    string_addf(&oct, "%zu", dec);    \
   } while(0)
 
 #define hex_to_dec(hex)                           \
@@ -40,5 +40,5 @@
       }                                           \
     }                                             \
     string_free(hex);                             \
-    string_addf(hex, "%zu", dec);                 \
+    string_addf(&hex, "%zu", dec);                \
   } while(0)

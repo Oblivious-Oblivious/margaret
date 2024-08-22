@@ -11,7 +11,7 @@ char *marg_value_format(MargValue self) {
     return string_new(marg_float_to_string(AS_FLOAT(self)));
   } else if(IS_STRING_CLONE(self)) {
     char *res = string_new("");
-    string_addf(res, "\"%s\"", AS_STRING(self)->chars);
+    string_addf(&res, "\"%s\"", AS_STRING(self)->chars);
     return res;
   } else if(IS_METHOD_CLONE(self)) {
     return string_new(marg_method_to_string(AS_METHOD(self)));
@@ -30,7 +30,7 @@ char *marg_value_as_variable(MargValue self) {
   char *res = string_new("");
 
   if(IS_STRING_CLONE(self)) {
-    string_addf(res, "%s", AS_STRING(self)->chars);
+    string_addf(&res, "%s", AS_STRING(self)->chars);
   }
 
   return res;

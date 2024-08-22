@@ -21,6 +21,6 @@ MargInteger *marg_integer_new(VM *vm, ptrdiff_t value) {
 
 char *marg_integer_to_string(MargInteger *object) {
   char *res = string_new("");
-  string_addf(res, "%lld", object->value);
+  string_addf(&res, "%lld", object->value);
   return res;
 }

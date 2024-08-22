@@ -62,7 +62,7 @@ char *parser_unit_list(VM *vm) {
     }
   }
 
-  string_addf(number_of_elements, "%zu", no_elements);
+  string_addf(&number_of_elements, "%zu", no_elements);
   return number_of_elements;
 }
 
@@ -99,14 +99,14 @@ void parser_keyword_selector_chain(VM *vm) {
   while(la1type(TOKEN_IDENTIFIER) && la2value(":")) {
     no_keywords++;
     string_addf(
-      message_name,
+      &message_name,
       "%s",
       ensure_type(
         TOKEN_IDENTIFIER, "expected identifier on keyword selector chain."
       )
     );
     string_addf(
-      message_name,
+      &message_name,
       "%s",
       ensure_value(":", "expected ':' on keyword selector chain.")
     );
@@ -115,8 +115,7 @@ void parser_keyword_selector_chain(VM *vm) {
 
   generate(FM_KEYWORD);
   generate(message_name);
-  char *number_of_keywords = NULL;
-  string_addf(number_of_keywords, "%zu", no_keywords);
+  string_addf(&number_of_keywords, "%zu", no_keywords);
   generate(number_of_keywords);
 }
 
@@ -279,7 +278,7 @@ char *parser_bit_list(VM *vm) {
     }
   }
 
-  string_addf(number_of_elements, "%zu", no_elements * 2);
+  string_addf(&number_of_elements, "%zu", no_elements * 2);
   return number_of_elements;
 }
 
@@ -312,7 +311,7 @@ char *parser_association_list(VM *vm) {
     }
   }
 
-  string_addf(number_of_elements, "%zu", no_elements * 2);
+  string_addf(&number_of_elements, "%zu", no_elements * 2);
   return number_of_elements;
 }
 
@@ -362,7 +361,7 @@ char *parser_keyword_list(VM *vm) {
 
   while(la1type(TOKEN_IDENTIFIER) && la2value(":")) {
     string_addf(
-      keyword_method_name,
+      &keyword_method_name,
       "%s%s",
       ensure_type(TOKEN_IDENTIFIER, "expected identifier on keyword list."),
       ensure_value(":", "missing ':' on keyword list.")

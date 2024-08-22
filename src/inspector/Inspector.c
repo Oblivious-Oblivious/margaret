@@ -9,7 +9,7 @@
 static void write_offset_and_line_number_on(
   char **disassembled_instruction, size_t offset
 ) {
-  string_addf(*disassembled_instruction, "%04zx    ", offset);
+  string_addf(disassembled_instruction, "%04zx    ", offset);
   string_add(*disassembled_instruction, "     |      ");
 }
 
@@ -27,8 +27,8 @@ instruction_single(char ***res, char *name, MargProc *proc, size_t offset) {
 
   char *disassembled_instruction = string_new("");
   write_offset_and_line_number_on(&disassembled_instruction, offset);
-  string_addf(disassembled_instruction, "%02x                  ", opcode);
-  string_addf(disassembled_instruction, "%s", name);
+  string_addf(&disassembled_instruction, "%02x                  ", opcode);
+  string_addf(&disassembled_instruction, "%s", name);
   vector_add(*res, disassembled_instruction);
 
   return offset + 1;
@@ -42,12 +42,12 @@ instruction_send(char ***res, char *name, MargProc *proc, size_t offset) {
   char *disassembled_instruction = string_new("");
   write_offset_and_line_number_on(&disassembled_instruction, offset);
   string_addf(
-    disassembled_instruction,
+    &disassembled_instruction,
     "%02x %02x               ",
     opcode,
     message_name_index
   );
-  string_addf(disassembled_instruction, "%-24s #", name);
+  string_addf(&disassembled_instruction, "%-24s #", name);
   string_add(
     disassembled_instruction,
     marg_value_as_variable(proc->temporaries[message_name_index])
@@ -69,13 +69,13 @@ instruction_send_word(char ***res, char *name, MargProc *proc, size_t offset) {
   char *disassembled_instruction = string_new("");
   write_offset_and_line_number_on(&disassembled_instruction, offset);
   string_addf(
-    disassembled_instruction,
+    &disassembled_instruction,
     "%02x %02x %02x            ",
     opcode,
     bytes[0],
     bytes[1]
   );
-  string_addf(disassembled_instruction, "%-24s #", name);
+  string_addf(&disassembled_instruction, "%-24s #", name);
   string_add(
     disassembled_instruction,
     marg_value_as_variable(proc->temporaries[message_name_index])
@@ -107,7 +107,7 @@ instruction_send_dword(char ***res, char *name, MargProc *proc, size_t offset) {
     bytes[2],
     bytes[3]
   );
-  string_addf(disassembled_instruction, "%-24s #", name);
+  string_addf(&disassembled_instruction, "%-24s #", name);
   string_add(
     disassembled_instruction,
     marg_value_as_variable(proc->temporaries[message_name_index])
@@ -125,13 +125,13 @@ instruction_object(char ***res, char *name, MargProc *proc, size_t offset) {
   char *disassembled_instruction = string_new("");
   write_offset_and_line_number_on(&disassembled_instruction, offset);
   string_addf(
-    disassembled_instruction, "%02x %02x               ", opcode, temporary
+    &disassembled_instruction, "%02x %02x               ", opcode, temporary
   );
-  string_addf(disassembled_instruction, "%-24s ", name);
+  string_addf(&disassembled_instruction, "%-24s ", name);
   string_add(
     disassembled_instruction, marg_value_format(proc->temporaries[temporary])
   );
-  string_addf(disassembled_instruction, " @[%d]", temporary);
+  string_addf(&disassembled_instruction, " @[%d]", temporary);
   vector_add(*res, disassembled_instruction);
 
   return offset + 2;
@@ -150,17 +150,17 @@ static size_t instruction_object_word(
   char *disassembled_instruction = string_new("");
   write_offset_and_line_number_on(&disassembled_instruction, offset);
   string_addf(
-    disassembled_instruction,
+    &disassembled_instruction,
     "%02x %02x %02x            ",
     opcode,
     bytes[0],
     bytes[1]
   );
-  string_addf(disassembled_instruction, "%-24s ", name);
+  string_addf(&disassembled_instruction, "%-24s ", name);
   string_add(
     disassembled_instruction, marg_value_format(proc->temporaries[temporary])
   );
-  string_addf(disassembled_instruction, " @[%d]", temporary);
+  string_addf(&disassembled_instruction, " @[%d]", temporary);
   vector_add(*res, disassembled_instruction);
 
   return offset + 3;
@@ -181,7 +181,7 @@ static size_t instruction_object_dword(
   char *disassembled_instruction = string_new("");
   write_offset_and_line_number_on(&disassembled_instruction, offset);
   string_addf(
-    disassembled_instruction,
+    &disassembled_instruction,
     "%02x %02x %02x %02x %02x      ",
     opcode,
     bytes[0],
@@ -189,11 +189,11 @@ static size_t instruction_object_dword(
     bytes[2],
     bytes[3]
   );
-  string_addf(disassembled_instruction, "%-24s ", name);
+  string_addf(&disassembled_instruction, "%-24s ", name);
   string_add(
     disassembled_instruction, marg_value_format(proc->temporaries[temporary])
   );
-  string_addf(disassembled_instruction, " @[%d]", temporary);
+  string_addf(&disassembled_instruction, " @[%d]", temporary);
   vector_add(*res, disassembled_instruction);
 
   return offset + 5;
@@ -207,14 +207,14 @@ instruction_variable(char ***res, char *name, MargProc *proc, size_t offset) {
   char *disassembled_instruction = string_new("");
   write_offset_and_line_number_on(&disassembled_instruction, offset);
   string_addf(
-    disassembled_instruction, "%02x %02x               ", opcode, variable
+    &disassembled_instruction, "%02x %02x               ", opcode, variable
   );
-  string_addf(disassembled_instruction, "%-24s ", name);
+  string_addf(&disassembled_instruction, "%-24s ", name);
   string_add(
     disassembled_instruction,
     marg_value_as_variable(proc->temporaries[variable])
   );
-  string_addf(disassembled_instruction, " @[%d]", variable);
+  string_addf(&disassembled_instruction, " @[%d]", variable);
   vector_add(*res, disassembled_instruction);
 
   return offset + 2;
@@ -233,18 +233,18 @@ static size_t instruction_variable_word(
   char *disassembled_instruction = string_new("");
   write_offset_and_line_number_on(&disassembled_instruction, offset);
   string_addf(
-    disassembled_instruction,
+    &disassembled_instruction,
     "%02x %02x %02x            ",
     opcode,
     proc->bytecode[offset + 1],
     bytes[1]
   );
-  string_addf(disassembled_instruction, "%-24s ", name);
+  string_addf(&disassembled_instruction, "%-24s ", name);
   string_add(
     disassembled_instruction,
     marg_value_as_variable(proc->temporaries[variable])
   );
-  string_addf(disassembled_instruction, " @[%d]", variable);
+  string_addf(&disassembled_instruction, " @[%d]", variable);
   vector_add(*res, disassembled_instruction);
 
   return offset + 3;
@@ -265,7 +265,7 @@ static size_t instruction_variable_dword(
   char *disassembled_instruction = string_new("");
   write_offset_and_line_number_on(&disassembled_instruction, offset);
   string_addf(
-    disassembled_instruction,
+    &disassembled_instruction,
     "%02x %02x %02x %02x %02x      ",
     opcode,
     proc->bytecode[offset + 1],
@@ -273,12 +273,12 @@ static size_t instruction_variable_dword(
     bytes[2],
     bytes[3]
   );
-  string_addf(disassembled_instruction, "%-24s ", name);
+  string_addf(&disassembled_instruction, "%-24s ", name);
   string_add(
     disassembled_instruction,
     marg_value_as_variable(proc->temporaries[variable])
   );
-  string_addf(disassembled_instruction, " @[%d]", variable);
+  string_addf(&disassembled_instruction, " @[%d]", variable);
   vector_add(*res, disassembled_instruction);
 
   return offset + 5;
@@ -292,12 +292,12 @@ instruction_array_type(char ***res, char *name, MargProc *proc, size_t offset) {
   char *disassembled_instruction = string_new("");
   write_offset_and_line_number_on(&disassembled_instruction, offset);
   string_addf(
-    disassembled_instruction,
+    &disassembled_instruction,
     "%02x %02x               ",
     opcode,
     number_of_elements
   );
-  string_addf(disassembled_instruction, "%-24s ", name);
+  string_addf(&disassembled_instruction, "%-24s ", name);
   string_add(
     disassembled_instruction,
     marg_value_format(proc->temporaries[number_of_elements])
@@ -320,13 +320,13 @@ static size_t instruction_array_type_word(
   char *disassembled_instruction = string_new("");
   write_offset_and_line_number_on(&disassembled_instruction, offset);
   string_addf(
-    disassembled_instruction,
+    &disassembled_instruction,
     "%02x %02x %02x            ",
     opcode,
     proc->bytecode[offset + 1],
     bytes[1]
   );
-  string_addf(disassembled_instruction, "%-24s ", name);
+  string_addf(&disassembled_instruction, "%-24s ", name);
   string_add(
     disassembled_instruction,
     marg_value_format(proc->temporaries[number_of_elements])
@@ -351,7 +351,7 @@ static size_t instruction_array_type_dword(
   char *disassembled_instruction = string_new("");
   write_offset_and_line_number_on(&disassembled_instruction, offset);
   string_addf(
-    disassembled_instruction,
+    &disassembled_instruction,
     "%02x %02x %02x %02x %02x      ",
     opcode,
     proc->bytecode[offset + 1],
@@ -359,7 +359,7 @@ static size_t instruction_array_type_dword(
     bytes[2],
     bytes[3]
   );
-  string_addf(disassembled_instruction, "%-24s ", name);
+  string_addf(&disassembled_instruction, "%-24s ", name);
   string_add(
     disassembled_instruction,
     marg_value_format(proc->temporaries[number_of_elements])
@@ -547,7 +547,7 @@ static size_t inspect_instruction(char ***res, MargProc *proc, size_t offset) {
 
   default: {
     char *unknown_opcode = string_new("");
-    string_addf(unknown_opcode, "Unknown opcode %d", instruction);
+    string_addf(&unknown_opcode, "Unknown opcode %d", instruction);
     vector_add(*res, unknown_opcode);
     return offset + 1;
   }

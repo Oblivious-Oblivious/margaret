@@ -29,10 +29,10 @@ char *marg_tensor_to_string(MargTensor *object) {
   size_t tensor_size = marg_tensor_size(object);
   if(tensor_size > 0) {
     for(size_t i = 0; i < tensor_size - 1; i++) {
-      string_addf(res, "%s, ", marg_value_format(marg_tensor_get(object, i)));
+      string_addf(&res, "%s, ", marg_value_format(marg_tensor_get(object, i)));
     }
     string_addf(
-      res, "%s]", marg_value_format(marg_tensor_get(object, tensor_size - 1))
+      &res, "%s]", marg_value_format(marg_tensor_get(object, tensor_size - 1))
     );
   } else {
     string_add(res, "]");

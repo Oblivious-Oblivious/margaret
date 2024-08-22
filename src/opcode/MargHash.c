@@ -157,7 +157,7 @@ char *marg_hash_to_string(MargHash *object) {
       MargHashEntry *entry = &object->entries[i];
       if(!IS_NOT_INTERNED(entry->key)) {
         string_addf(
-          res,
+          &res,
           "%s: %s, ",
           marg_value_format(entry->key),
           marg_value_format(entry->value)

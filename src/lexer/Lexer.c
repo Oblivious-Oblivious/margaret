@@ -102,7 +102,7 @@ Token *tokenize(VM *vm) {
       } else if((token_type == TOKEN_IDENTIFIER ||
                  token_type == TOKEN_INSTANCE || token_type == TOKEN_GLOBAL) &&
                 (text[0] == '!' || text[0] == '?')) {
-        string_addf(token, "%c", text[0]);
+        string_addf(&token, "%c", text[0]);
         vm->index++;
       } else if(token_type == TOKEN_FLOAT) {
         string_remove_underscores(token);

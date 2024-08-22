@@ -24,7 +24,7 @@ char *marg_object_to_string_with_hash(MargValue object) {
   char *res         = string_new("");
   char *object_name = AS_OBJECT(object)->name;
   string_addf(
-    res,
+    &res,
     "%s@%s",
     object_name,
     // TODO - Add hash
