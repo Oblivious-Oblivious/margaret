@@ -1,0 +1,7 @@
+CompileFlags:
+  Add:
+    - "-xc"
+    - "-std=c2x"
+
+Diagnostics:
+  Suppress: unused-includes
