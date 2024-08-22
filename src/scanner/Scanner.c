@@ -8,7 +8,7 @@ VM *scanner_scan(VM *vm, char *prompt) {
 
   if(line == NULL) {
     exit(0);
-  } else if(string_equals(line, "")) {
+  } else if(!strncmp(line, "", 0)) {
     vm->source = string_new("");
   } else {
     vm->source = string_new(line);
