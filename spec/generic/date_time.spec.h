@@ -98,7 +98,7 @@ module(date_time_spec, {
         FM_BINARY,
         string_new("=")
       )
-    ); // 1
+    );
     parse(
       "(x = Date index_of_month: \"March\")",
       vector_new(
@@ -114,7 +114,7 @@ module(date_time_spec, {
         FM_BINARY,
         string_new("=")
       )
-    ); // 3
+    );
     parse(
       "(x = Date days_in_month: 2 for_year: 1978)",
       vector_new(
@@ -132,7 +132,7 @@ module(date_time_spec, {
         FM_BINARY,
         string_new("=")
       )
-    ); // 28 or 29
+    );
     parse(
       "(x = Date days_in_year: 1984)",
       vector_new(
@@ -148,7 +148,7 @@ module(date_time_spec, {
         FM_BINARY,
         string_new("=")
       )
-    ); // 365 or 66
+    );
     parse(
       "(x = Date name_of_day: 1)",
       vector_new(
@@ -164,7 +164,7 @@ module(date_time_spec, {
         FM_BINARY,
         string_new("=")
       )
-    ); // Monday
+    );
     parse(
       "(x = Date is_leap_year?: 1996)",
       vector_new(
@@ -180,7 +180,7 @@ module(date_time_spec, {
         FM_BINARY,
         string_new("=")
       )
-    ); // true or false
+    );
 
     parse(
       "(x = Date today weekday)",
@@ -196,7 +196,7 @@ module(date_time_spec, {
         FM_BINARY,
         string_new("=")
       )
-    ); // What day is today
+    );
     parse(
       "(x = Date today previous)",
       vector_new(
@@ -211,7 +211,7 @@ module(date_time_spec, {
         FM_BINARY,
         string_new("=")
       )
-    ); // Prev day from today
+    );
     parse(
       "(x = Date today day_of_month)",
       vector_new(
@@ -226,7 +226,7 @@ module(date_time_spec, {
         FM_BINARY,
         string_new("=")
       )
-    ); // 1-31
+    );
     parse(
       "(x = Date today day)",
       vector_new(
@@ -241,7 +241,7 @@ module(date_time_spec, {
         FM_BINARY,
         string_new("=")
       )
-    ); // 1-366
+    );
     parse(
       "(x = Date today first_day_of_month)",
       vector_new(
@@ -301,7 +301,7 @@ module(date_time_spec, {
         FM_BINARY,
         string_new("=")
       )
-    ); // 1-31
+    );
     parse(
       "(x = Date today year)",
       vector_new(
@@ -316,7 +316,7 @@ module(date_time_spec, {
         FM_BINARY,
         string_new("=")
       )
-    ); // 2022
+    );
     parse(
       "(x = Date today days_in_year)",
       vector_new(
@@ -515,7 +515,7 @@ module(date_time_spec, {
         FM_BINARY,
         string_new("=")
       )
-    ); // Since midnight?
+    );
     parse(
       "(x = Time total_seconds)",
       vector_new(
@@ -528,7 +528,7 @@ module(date_time_spec, {
         FM_BINARY,
         string_new("=")
       )
-    ); // Since beginning
+    );
 
     parse(
       "(x = Time now seconds)",
@@ -544,7 +544,7 @@ module(date_time_spec, {
         FM_BINARY,
         string_new("=")
       )
-    ); // Seconds past current minute
+    );
     parse(
       "(x = Time now minutes)",
       vector_new(
@@ -559,7 +559,7 @@ module(date_time_spec, {
         FM_BINARY,
         string_new("=")
       )
-    ); // Minutes past current hour
+    );
     parse(
       "(x = Time now hours)",
       vector_new(
@@ -574,7 +574,7 @@ module(date_time_spec, {
         FM_BINARY,
         string_new("=")
       )
-    ); // Hours past midnight
+    );
     parse(
       "(x = Time now add_time: Time now)",
       vector_new(

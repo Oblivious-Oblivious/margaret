@@ -10,44 +10,44 @@ typedef struct Regex {
 
 static const Regex REGEX_LIST[] = {
   {
-    .pattern = "^\\n",
-    .type    = TOKEN_NEWLINE,
+    "^\\n",
+    TOKEN_NEWLINE,
   },
   {
-    .pattern = "^\\s+",
-    .type    = TOKEN_WHITESPACE,
+    "^\\s+",
+    TOKEN_WHITESPACE,
   },
   {
-    .pattern = "^\\d+(_\\d+)*\\.\\d+(_\\d+)*",
-    .type    = TOKEN_FLOAT,
+    "^\\d+(_\\d+)*\\.\\d+(_\\d+)*",
+    TOKEN_FLOAT,
   },
   {
-    .pattern = "^(?:0[bBoOxX][\\da-fA-F_]+|0|[1-9][\\d_]*)",
-    .type    = TOKEN_INTEGER,
+    "^(?:0[bBoOxX][\\da-fA-F_]+|0|[1-9][\\d_]*)",
+    TOKEN_INTEGER,
   },
   {
-    .pattern = "^@[a-zA-Z_][a-zA-Z0-9_]*",
-    .type    = TOKEN_INSTANCE,
+    "^@[a-zA-Z_][a-zA-Z0-9_]*",
+    TOKEN_INSTANCE,
   },
   {
-    .pattern = "^\\$[a-zA-Z_][a-zA-Z0-9_]*",
-    .type    = TOKEN_GLOBAL,
+    "^\\$[a-zA-Z_][a-zA-Z0-9_]*",
+    TOKEN_GLOBAL,
   },
   {
-    .pattern = "^[a-zA-Z_][a-zA-Z0-9_]*",
-    .type    = TOKEN_IDENTIFIER,
+    "^[a-zA-Z_][a-zA-Z0-9_]*",
+    TOKEN_IDENTIFIER,
   },
   {
-    .pattern = "^[!?+\\-*\\\\/\\~<>=|&^;.`]+",
-    .type    = TOKEN_MESSAGE_SYMBOL,
+    "^[!?+\\-*\\\\/\\~<>=|&^;.`]+",
+    TOKEN_MESSAGE_SYMBOL,
   },
   {
-    .pattern = "^[()\\[\\]{},:#%]",
-    .type    = TOKEN_SYNTAX_SYMBOL,
+    "^[()\\[\\]{},:#%]",
+    TOKEN_SYNTAX_SYMBOL,
   },
   {
-    .pattern = "^(['\"]).*?\\1",
-    .type    = TOKEN_STRING,
+    "^(['\"]).*?\\1",
+    TOKEN_STRING,
   },
 };
 

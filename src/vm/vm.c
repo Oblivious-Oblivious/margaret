@@ -12,12 +12,13 @@
  * @return MargValue -> New object value
  */
 MargValue create_new_proto_object(VM *vm, char *parent_name, char *name) {
-  MargValue proto_object = MARG_OBJECT(name);
+  MargValue proto_object  = MARG_OBJECT(name);
+  MargValue parent_object = table_get(&vm->global_variables, parent_name);
+
   table_add(&vm->global_variables, name, proto_object);
   table_add(
     &AS_OBJECT(proto_object)->instance_variables, "@self", proto_object
   );
-  MargValue parent_object = table_get(&vm->global_variables, parent_name);
   table_add(
     &AS_OBJECT(proto_object)->instance_variables, "@super", parent_object
   );
@@ -46,9 +47,9 @@ static void setup_proto_object_chain(VM *vm) {
 
   create_new_proto_object(vm, "$Margaret", "$Enumerable");
   create_new_proto_object(vm, "$Enumerable", "$Tensor");
-  // create_new_proto_object(vm, "$Tensor", "$Tuple");
+  /* create_new_proto_object(vm, "$Tensor", "$Tuple"); */
   create_new_proto_object(vm, "$Enumerable", "$Hash");
-  // create_new_proto_object(vm, "$Enumerable", "$Bitstring");
+  /* create_new_proto_object(vm, "$Enumerable", "$Bitstring"); */
 
   create_new_proto_object(vm, "$Margaret", "$Method");
   create_new_proto_object(vm, "$Margaret", "$Proc");

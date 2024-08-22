@@ -1,16 +1,16 @@
-// cspec
+/* cspec */
 #include "../libs/cSpec/export/cSpec.h"
 
-// margaret
+/* margaret */
 #include "version.spec.h"
 
-// emitter
+/* emitter */
 #include "emitter/Emitter.spec.h"
 
-// evaluator
+/* evaluator */
 #include "evaluator/Evaluator.spec.h"
 
-// generic
+/* generic */
 #include "generic/arithmetic.spec.h"
 #include "generic/assignments.spec.h"
 #include "generic/bitstrings.spec.h"
@@ -43,17 +43,17 @@
 #include "generic/tuples.spec.h"
 #include "generic/variables.spec.h"
 
-// inspector
+/* inspector */
 #include "inspector/Inspector.spec.h"
 
-// lexer
+/* lexer */
 #include "lexer/alternate_to_dec.spec.h"
 #include "lexer/Lexer.spec.h"
 
-// loader
+/* loader */
 #include "loader/Loader.spec.h"
 
-// opcode
+/* opcode */
 #include "opcode/MargFloat.spec.h"
 #include "opcode/MargHash.spec.h"
 #include "opcode/MargInteger.spec.h"
@@ -64,21 +64,21 @@
 #include "opcode/MargTensor.spec.h"
 #include "opcode/MargValue.spec.h"
 
-// optimizer
+/* optimizer */
 #include "optimizer/Optimizer.spec.h"
 
-// parser
+/* parser */
 #include "parser/Parser.spec.h"
 
-// scanner
+/* scanner */
 #include "scanner/Scanner.spec.h"
 
-// tokens
+/* tokens */
 #include "tokens/Token.spec.h"
 #include "tokens/TokenTable.spec.h"
 #include "tokens/Type.spec.h"
 
-// vm
+/* vm */
 #include "vm/byte_conversions.spec.h"
 #include "vm/vm.spec.h"
 

@@ -28,6 +28,11 @@ void *lexer_error(VM *vm, const char *message) {
 static ptrdiff_t matcher(const char *pattern, const char *input_string) {
   regex_t *regex = NULL;
   OnigErrorInfo error_info;
+  OnigRegion *region = NULL;
+  OnigUChar *end     = NULL;
+  ptrdiff_t res;
+  ptrdiff_t output;
+
   onig_new(
     &regex,
     (UChar *)pattern,
@@ -38,9 +43,9 @@ static ptrdiff_t matcher(const char *pattern, const char *input_string) {
     &error_info
   );
 
-  OnigRegion *region = onig_region_new();
-  OnigUChar *end     = (UChar *)(input_string + strlen(input_string));
-  ptrdiff_t res      = onig_search(
+  region = onig_region_new();
+  end    = (UChar *)(input_string + strlen(input_string));
+  res    = onig_search(
     regex,
     (UChar *)input_string,
     end,
@@ -50,7 +55,7 @@ static ptrdiff_t matcher(const char *pattern, const char *input_string) {
     ONIG_OPTION_NONE
   );
 
-  ptrdiff_t output = res >= 0 && region->beg[0] == 0 ? region->end[0] : -1;
+  output = res >= 0 && region->beg[0] == 0 ? region->end[0] : -1;
   onig_region_free(region, 1);
   onig_free(regex);
 
@@ -75,14 +80,15 @@ static char *normalize_integer(char *token) {
 }
 
 Token *tokenize(VM *vm) {
-  OnigEncoding encodings[1] = {ONIG_ENCODING_ASCII};
-  onig_initialize(encodings, 1);
-
   Type token_type;
   char *token         = NULL;
   bool is_not_matched = true;
+  size_t i;
 
-  for(size_t i = 0; i < sizeof(REGEX_LIST) / sizeof(Regex); i++) {
+  OnigEncoding encodings[1] = {ONIG_ENCODING_ASCII};
+  onig_initialize(encodings, 1);
+
+  for(i = 0; i < sizeof(REGEX_LIST) / sizeof(Regex); i++) {
     const Regex *r      = &REGEX_LIST[i];
     char *text          = vm->source + vm->index;
     ptrdiff_t end_index = matcher(r->pattern, text);

@@ -99,15 +99,17 @@ static void _add_temporary_function(
 }
 
 VM *emitter_emit(VM *vm) {
+  char **formal_bytecode = vm->formal_bytecode;
+  size_t bytecode_size   = vector_size(formal_bytecode);
+  size_t ip;
+
   MargObject *marg_object =
     AS_OBJECT(table_get(&vm->global_variables, "$Margaret"));
   MargMethod *main_method = AS_METHOD(table_get(&marg_object->messages, ""));
-  char **formal_bytecode  = vm->formal_bytecode;
   vm->current->bytecode   = NULL;
   vm->current             = main_method->proc;
 
-  size_t bytecode_size = vector_size(formal_bytecode);
-  for(size_t ip = 0; ip < bytecode_size; ip++) {
+  for(ip = 0; ip < bytecode_size; ip++) {
     char *opcode = formal_bytecode[ip];
 
     switch_opcode_case(FM_LOCAL) {
@@ -136,11 +138,11 @@ VM *emitter_emit(VM *vm) {
     opcode_case(FM_SELF) { emit_byte(OP_PUT_SELF); }
     opcode_case(FM_SUPER) { emit_byte(OP_PUT_SUPER); }
 
-    // TODO - Discern between normal number from big numbers
+    /* TODO - Discern between normal number from big numbers */
     opcode_case(FM_INTEGER) {
       char *temporary_str = formal_bytecode[++ip];
       char *end;
-      ptrdiff_t integer = strtoll(temporary_str, &end, 10);
+      ptrdiff_t integer = strtol(temporary_str, &end, 10);
       if(integer == -1) {
         emit_byte(OP_PUT_MINUS_1);
       } else if(integer == 0) {
@@ -169,9 +171,9 @@ VM *emitter_emit(VM *vm) {
       emit_variable_length_op(OP_PUT_OBJECT);
 
       if(IS_NOT_INTERNED(interned)) {
-        interned = MARG_STRING(temporary_str);
-
         uint32_t temporary_index;
+
+        interned = MARG_STRING(temporary_str);
         make_temporary(vm, interned, &temporary_index);
         add_temporary(vm, temporary_index);
 
@@ -188,7 +190,7 @@ VM *emitter_emit(VM *vm) {
     opcode_case(FM_TENSOR) {
       char *end;
       char *number_of_elements = formal_bytecode[++ip];
-      MargValue temporary = MARG_INTEGER(strtoll(number_of_elements, &end, 10));
+      MargValue temporary = MARG_INTEGER(strtol(number_of_elements, &end, 10));
       emit_variable_length_op(OP_PUT_TENSOR);
       emit_temporary(temporary);
     }
@@ -196,7 +198,7 @@ VM *emitter_emit(VM *vm) {
     opcode_case(FM_HASH) {
       char *end;
       char *number_of_elements = formal_bytecode[++ip];
-      MargValue temporary = MARG_INTEGER(strtoll(number_of_elements, &end, 10));
+      MargValue temporary = MARG_INTEGER(strtol(number_of_elements, &end, 10));
       emit_variable_length_op(OP_PUT_HASH);
       emit_temporary(temporary);
     }
@@ -292,7 +294,7 @@ VM *emitter_emit(VM *vm) {
           emit_byte(OP_PUT_2);
         } else {
           char *end;
-          ptrdiff_t integer = strtoll(number_of_parameters, &end, 10);
+          ptrdiff_t integer = strtol(number_of_parameters, &end, 10);
           emit_variable_length_op(OP_PUT_OBJECT);
           emit_temporary(MARG_INTEGER(integer));
         }
@@ -304,7 +306,7 @@ VM *emitter_emit(VM *vm) {
   }
 
   emit_byte(OP_HALT);
-  // inspect_and_print_main(vm);
+  /* inspect_and_print_main(vm); */
 
   return vm;
 }

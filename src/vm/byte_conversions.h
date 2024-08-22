@@ -30,15 +30,14 @@
  * @param bytes -> The list of bytes
  * @return uint16_t -> The 16 bit result
  */
-#define bytes_to_word(bytes) (uint16_t)(bytes)[0] << 8 | (bytes)[1]
+#define bytes_to_word(b1, b2) (uint16_t)(b1) << 8 | (b2)
 
 /**
  * @brief Joins 4, 8-bit parts into a single 32 bit integer
  * @param bytes -> The list of bytes
  * @return uint32_t -> The 32 bit result
  */
-#define bytes_to_dword(bytes)                               \
-  (uint32_t)(bytes)[0] << 24 | (uint32_t)(bytes)[1] << 16 | \
-    (uint16_t)(bytes)[2] << 8 | (bytes)[3]
+#define bytes_to_dword(b1, b2, b3, b4) \
+  (uint32_t)(b1) << 24 | (uint32_t)(b2) << 16 | (uint16_t)(b3) << 8 | (b4)
 
 #endif

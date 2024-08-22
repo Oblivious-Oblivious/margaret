@@ -59,12 +59,9 @@ instruction_send(char ***res, char *name, MargProc *proc, size_t offset) {
 
 static size_t
 instruction_send_word(char ***res, char *name, MargProc *proc, size_t offset) {
-  uint8_t opcode   = proc->bytecode[offset];
-  uint8_t bytes[2] = {
-    proc->bytecode[offset + 1],
-    proc->bytecode[offset + 2],
-  };
-  uint16_t message_name_index = bytes_to_word(bytes);
+  uint8_t opcode = proc->bytecode[offset];
+  uint16_t message_name_index =
+    bytes_to_word(proc->bytecode[offset + 1], proc->bytecode[offset + 2]);
 
   char *disassembled_instruction = string_new("");
   write_offset_and_line_number_on(&disassembled_instruction, offset);
@@ -72,8 +69,8 @@ instruction_send_word(char ***res, char *name, MargProc *proc, size_t offset) {
     &disassembled_instruction,
     "%02x %02x %02x            ",
     opcode,
-    bytes[0],
-    bytes[1]
+    proc->bytecode[offset + 1],
+    proc->bytecode[offset + 2]
   );
   string_addf(&disassembled_instruction, "%-24s #", name);
   string_add(
@@ -87,25 +84,24 @@ instruction_send_word(char ***res, char *name, MargProc *proc, size_t offset) {
 
 static size_t
 instruction_send_dword(char ***res, char *name, MargProc *proc, size_t offset) {
-  uint8_t opcode   = proc->bytecode[offset];
-  uint8_t bytes[4] = {
+  uint8_t opcode              = proc->bytecode[offset];
+  uint32_t message_name_index = bytes_to_dword(
     proc->bytecode[offset + 1],
     proc->bytecode[offset + 2],
     proc->bytecode[offset + 3],
-    proc->bytecode[offset + 4],
-  };
-  uint32_t message_name_index = bytes_to_dword(bytes);
+    proc->bytecode[offset + 4]
+  );
 
   char *disassembled_instruction = string_new("");
   write_offset_and_line_number_on(&disassembled_instruction, offset);
   string_addf(
-    disassembled_instruction,
+    &disassembled_instruction,
     "%02x %02x %02x %02x %02x      ",
     opcode,
-    bytes[0],
-    bytes[1],
-    bytes[2],
-    bytes[3]
+    proc->bytecode[offset + 1],
+    proc->bytecode[offset + 2],
+    proc->bytecode[offset + 3],
+    proc->bytecode[offset + 4]
   );
   string_addf(&disassembled_instruction, "%-24s #", name);
   string_add(
@@ -140,12 +136,9 @@ instruction_object(char ***res, char *name, MargProc *proc, size_t offset) {
 static size_t instruction_object_word(
   char ***res, char *name, MargProc *proc, size_t offset
 ) {
-  uint8_t opcode   = proc->bytecode[offset];
-  uint8_t bytes[2] = {
-    proc->bytecode[offset + 1],
-    proc->bytecode[offset + 2],
-  };
-  uint16_t temporary = bytes_to_word(bytes);
+  uint8_t opcode = proc->bytecode[offset];
+  uint16_t temporary =
+    bytes_to_word(proc->bytecode[offset + 1], proc->bytecode[offset + 2]);
 
   char *disassembled_instruction = string_new("");
   write_offset_and_line_number_on(&disassembled_instruction, offset);
@@ -153,8 +146,8 @@ static size_t instruction_object_word(
     &disassembled_instruction,
     "%02x %02x %02x            ",
     opcode,
-    bytes[0],
-    bytes[1]
+    proc->bytecode[offset + 1],
+    proc->bytecode[offset + 2]
   );
   string_addf(&disassembled_instruction, "%-24s ", name);
   string_add(
@@ -169,14 +162,13 @@ static size_t instruction_object_word(
 static size_t instruction_object_dword(
   char ***res, char *name, MargProc *proc, size_t offset
 ) {
-  uint8_t opcode   = proc->bytecode[offset];
-  uint8_t bytes[4] = {
+  uint8_t opcode     = proc->bytecode[offset];
+  uint32_t temporary = bytes_to_dword(
     proc->bytecode[offset + 1],
     proc->bytecode[offset + 2],
     proc->bytecode[offset + 3],
-    proc->bytecode[offset + 4],
-  };
-  uint32_t temporary = bytes_to_dword(bytes);
+    proc->bytecode[offset + 4]
+  );
 
   char *disassembled_instruction = string_new("");
   write_offset_and_line_number_on(&disassembled_instruction, offset);
@@ -184,10 +176,10 @@ static size_t instruction_object_dword(
     &disassembled_instruction,
     "%02x %02x %02x %02x %02x      ",
     opcode,
-    bytes[0],
-    bytes[1],
-    bytes[2],
-    bytes[3]
+    proc->bytecode[offset + 1],
+    proc->bytecode[offset + 2],
+    proc->bytecode[offset + 3],
+    proc->bytecode[offset + 4]
   );
   string_addf(&disassembled_instruction, "%-24s ", name);
   string_add(
@@ -223,12 +215,9 @@ instruction_variable(char ***res, char *name, MargProc *proc, size_t offset) {
 static size_t instruction_variable_word(
   char ***res, char *name, MargProc *proc, size_t offset
 ) {
-  uint8_t opcode   = proc->bytecode[offset];
-  uint8_t bytes[2] = {
-    proc->bytecode[offset + 1],
-    proc->bytecode[offset + 2],
-  };
-  uint16_t variable = bytes_to_word(bytes);
+  uint8_t opcode = proc->bytecode[offset];
+  uint16_t variable =
+    bytes_to_word(proc->bytecode[offset + 1], proc->bytecode[offset + 2]);
 
   char *disassembled_instruction = string_new("");
   write_offset_and_line_number_on(&disassembled_instruction, offset);
@@ -237,7 +226,7 @@ static size_t instruction_variable_word(
     "%02x %02x %02x            ",
     opcode,
     proc->bytecode[offset + 1],
-    bytes[1]
+    proc->bytecode[offset + 2]
   );
   string_addf(&disassembled_instruction, "%-24s ", name);
   string_add(
@@ -253,14 +242,13 @@ static size_t instruction_variable_word(
 static size_t instruction_variable_dword(
   char ***res, char *name, MargProc *proc, size_t offset
 ) {
-  uint8_t opcode   = proc->bytecode[offset];
-  uint8_t bytes[4] = {
+  uint8_t opcode    = proc->bytecode[offset];
+  uint32_t variable = bytes_to_dword(
     proc->bytecode[offset + 1],
     proc->bytecode[offset + 2],
     proc->bytecode[offset + 3],
-    proc->bytecode[offset + 4],
-  };
-  uint32_t variable = bytes_to_dword(bytes);
+    proc->bytecode[offset + 4]
+  );
 
   char *disassembled_instruction = string_new("");
   write_offset_and_line_number_on(&disassembled_instruction, offset);
@@ -269,9 +257,9 @@ static size_t instruction_variable_dword(
     "%02x %02x %02x %02x %02x      ",
     opcode,
     proc->bytecode[offset + 1],
-    bytes[1],
-    bytes[2],
-    bytes[3]
+    proc->bytecode[offset + 2],
+    proc->bytecode[offset + 3],
+    proc->bytecode[offset + 4]
   );
   string_addf(&disassembled_instruction, "%-24s ", name);
   string_add(
@@ -310,12 +298,9 @@ instruction_array_type(char ***res, char *name, MargProc *proc, size_t offset) {
 static size_t instruction_array_type_word(
   char ***res, char *name, MargProc *proc, size_t offset
 ) {
-  uint8_t opcode   = proc->bytecode[offset];
-  uint8_t bytes[2] = {
-    proc->bytecode[offset + 1],
-    proc->bytecode[offset + 2],
-  };
-  uint16_t number_of_elements = bytes_to_word(bytes);
+  uint8_t opcode = proc->bytecode[offset];
+  uint16_t number_of_elements =
+    bytes_to_word(proc->bytecode[offset + 1], proc->bytecode[offset + 2]);
 
   char *disassembled_instruction = string_new("");
   write_offset_and_line_number_on(&disassembled_instruction, offset);
@@ -324,7 +309,7 @@ static size_t instruction_array_type_word(
     "%02x %02x %02x            ",
     opcode,
     proc->bytecode[offset + 1],
-    bytes[1]
+    proc->bytecode[offset + 2]
   );
   string_addf(&disassembled_instruction, "%-24s ", name);
   string_add(
@@ -339,14 +324,13 @@ static size_t instruction_array_type_word(
 static size_t instruction_array_type_dword(
   char ***res, char *name, MargProc *proc, size_t offset
 ) {
-  uint8_t opcode   = proc->bytecode[offset];
-  uint8_t bytes[4] = {
+  uint8_t opcode              = proc->bytecode[offset];
+  uint32_t number_of_elements = bytes_to_dword(
     proc->bytecode[offset + 1],
     proc->bytecode[offset + 2],
     proc->bytecode[offset + 3],
-    proc->bytecode[offset + 4],
-  };
-  uint32_t number_of_elements = bytes_to_dword(bytes);
+    proc->bytecode[offset + 4]
+  );
 
   char *disassembled_instruction = string_new("");
   write_offset_and_line_number_on(&disassembled_instruction, offset);
@@ -355,9 +339,9 @@ static size_t instruction_array_type_dword(
     "%02x %02x %02x %02x %02x      ",
     opcode,
     proc->bytecode[offset + 1],
-    bytes[1],
-    bytes[2],
-    bytes[3]
+    proc->bytecode[offset + 2],
+    proc->bytecode[offset + 3],
+    proc->bytecode[offset + 4]
   );
   string_addf(&disassembled_instruction, "%-24s ", name);
   string_add(
@@ -418,35 +402,35 @@ static size_t inspect_instruction(char ***res, MargProc *proc, size_t offset) {
     return instruction_array_type_word(res, "PUT_TENSOR_WORD", proc, offset);
   case OP_PUT_TENSOR_DWORD:
     return instruction_array_type_dword(res, "PUT_TENSOR_DWORD", proc, offset);
-  // case OP_PUT_TUPLE:
-  //     return instruction_array_type(res, "PUT_TUPLE", proc, offset);
-  // case OP_PUT_TUPLE_WORD:
-  //     return instruction_array_type_word(res, "PUT_TUPLE_WORD", proc,
-  //     offset);
-  // case OP_PUT_TUPLE_DWORD:
-  //     return instruction_array_type_dword(res, "PUT_TUPLE_DWORD", proc,
-  //     offset);
+  /* case OP_PUT_TUPLE:
+      return instruction_array_type(res, "PUT_TUPLE", proc, offset);
+  case OP_PUT_TUPLE_WORD:
+      return instruction_array_type_word(res, "PUT_TUPLE_WORD", proc,
+      offset);
+  case OP_PUT_TUPLE_DWORD:
+      return instruction_array_type_dword(res, "PUT_TUPLE_DWORD", proc,
+      offset); */
   case OP_PUT_HASH:
     return instruction_array_type(res, "PUT_HASH", proc, offset);
   case OP_PUT_HASH_WORD:
     return instruction_array_type_word(res, "PUT_HASH_WORD", proc, offset);
   case OP_PUT_HASH_DWORD:
     return instruction_array_type_dword(res, "PUT_HASH_DWORD", proc, offset);
-    // case OP_PUT_BITSTRING:
-    //     return instruction_array_type(res, "PUT_BITSTRING", proc, offset);
-    // case OP_PUT_BITSTRING_WORD:
-    //     return instruction_array_type_word(res, "PUT_BITSTRING_WORD", proc,
-    //     offset);
-    // case OP_PUT_BITSTRING_DWORD:
-    //     return instruction_array_type_dword(res, "PUT_BITSTRING_DWORD",
-    //     proc, offset);
+    /* case OP_PUT_BITSTRING:
+        return instruction_array_type(res, "PUT_BITSTRING", proc, offset);
+    case OP_PUT_BITSTRING_WORD:
+        return instruction_array_type_word(res, "PUT_BITSTRING_WORD", proc,
+        offset);
+    case OP_PUT_BITSTRING_DWORD:
+        return instruction_array_type_dword(res, "PUT_BITSTRING_DWORD",
+        proc, offset);
 
-    // case OP_PUT_LABEL:
-    //     return offset + ??;
-    // case OP_GOTO:
-    //     return offset + ??;
-    // case OP_GOTO_LOCAL:
-    //     return offset + ??;
+    case OP_PUT_LABEL:
+        return offset + ??;
+    case OP_GOTO:
+        return offset + ??;
+    case OP_GOTO_LOCAL:
+        return offset + ??; */
 
   case OP_SET_GLOBAL:
     return instruction_variable(res, "SET_GLOBAL", proc, offset);
@@ -556,9 +540,10 @@ static size_t inspect_instruction(char ***res, MargProc *proc, size_t offset) {
 
 char **inspect_vm_bytecode(VM *vm) {
   char **res = NULL;
+  size_t offset;
 
   size_t number_of_bytecodes = vector_size(vm->current->bytecode);
-  for(size_t offset = 0; offset < number_of_bytecodes;) {
+  for(offset = 0; offset < number_of_bytecodes;) {
     offset = inspect_instruction(&res, vm->current, offset);
   }
 
@@ -566,10 +551,11 @@ char **inspect_vm_bytecode(VM *vm) {
 }
 
 void inspect_and_print_vm_bytecode(VM *vm) {
+  size_t i;
   char **disassembled = inspect_vm_bytecode(vm);
 
   size_t disassembled_size = vector_size(disassembled);
-  for(size_t i = 0; i < disassembled_size; i++) {
+  for(i = 0; i < disassembled_size; i++) {
     printf("%s\n", disassembled[i]);
   }
 }

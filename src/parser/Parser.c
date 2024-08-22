@@ -93,8 +93,9 @@ void parser_keyword_message(VM *vm) {
 }
 
 void parser_keyword_selector_chain(VM *vm) {
-  char *message_name = NULL;
-  size_t no_keywords = 0;
+  char *message_name       = NULL;
+  size_t no_keywords       = 0;
+  char *number_of_keywords = NULL;
 
   while(la1type(TOKEN_IDENTIFIER) && la2value(":")) {
     no_keywords++;
@@ -182,8 +183,9 @@ void parser_literal(VM *vm) {
     }
     ensure_value(")", "missing closing parenthesis on group.");
   } else if(la1value("[")) {
+    char *number_of_elements = NULL;
     ensure_value("[", "missing opening bracket on tensor.");
-    char *number_of_elements = unit_list();
+    number_of_elements = unit_list();
     ensure_value("]", "missing closing bracket on tensor.");
     generate(FM_TENSOR);
     generate(number_of_elements);
@@ -204,32 +206,36 @@ void parser_literal(VM *vm) {
     ensure_value("}", "missing closing curly on proc.");
     generate(FM_PROC_END);
   } else if(la1value("%") && la2value("(")) {
+    char *number_of_elements = NULL;
     ensure_value("%", "missing `%` on bitstring.");
     ensure_value("(", "missing opening parenthesis on bitstring.");
-    char *number_of_elements = bit_list();
+    number_of_elements = bit_list();
     ensure_value(")", "missing closing parenthesis on bitstring.");
     generate(FM_BITSTRING);
     generate(number_of_elements);
   } else if(la1value("%") && la2value("[")) {
+    char *number_of_elements = NULL;
     ensure_value("%", "missing `%` on tuple.");
     ensure_value("[", "missing opening bracket on tuple.");
-    char *number_of_elements = unit_list();
+    number_of_elements = unit_list();
     ensure_value("]", "missing closing bracket on tuple.");
     generate(FM_TUPLE);
     generate(number_of_elements);
   } else if(la1value("%") && la2value("{")) {
+    char *number_of_elements = NULL;
     ensure_value("%", "missing `%` on hash.");
     ensure_value("{", "missing opening curly on hash.");
-    char *number_of_elements = association_list();
+    number_of_elements = association_list();
     ensure_value("}", "missing closing curly on hash.");
     generate(FM_HASH);
     generate(number_of_elements);
   } else if(la1value("#")) {
+    size_t prev_size;
     ensure_value("#", "missing `#` on method definition.");
     generate(FM_METHOD_START);
 
     generate(FM_METHOD_RECEIVER);
-    size_t prev_size = vector_size(vm->formal_bytecode);
+    prev_size = vector_size(vm->formal_bytecode);
 
     if(!((la1type(TOKEN_MESSAGE_SYMBOL) && la2value("=>")) ||
          (la1type(TOKEN_IDENTIFIER) && la2value("=>")) ||
@@ -382,9 +388,6 @@ void parser_scalar(VM *vm) {
   } else if(la1type(TOKEN_INTEGER)) {
     generate(FM_INTEGER);
     generate(ensure_type(TOKEN_INTEGER, "expected integer literal."));
-    // char *newstr = string_new("INTEGERRR");
-    // generate(newstr);
-    // vector_add(*fmcodes, newstr);
   } else if(la1type(TOKEN_FLOAT)) {
     generate(FM_FLOAT);
     generate(ensure_type(TOKEN_FLOAT, "expected float literal."));

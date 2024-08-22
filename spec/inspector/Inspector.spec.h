@@ -7,8 +7,8 @@
 #include "../../src/opcode/MargValue.h"
 #include "../../src/opcode/opcodes.h"
 
-module(InspectorSpec, {
-  // TODO - Test a `postcard` mini program including every single feature.
+xmodule(InspectorSpec, {
+  /* TODO - Test a `postcard` mini program including every single feature. */
   it("tests multiple long temporaries", {
     VM *vm = vm_new("test.marg");
 

@@ -7,7 +7,7 @@
 module(
   EvaluatorSpec,
   {
-    // TODO - Test a `postcard` mini program including every single feature.
+    /* TODO - Test a `postcard` mini program including every single feature. */
   }
 )
 

@@ -12,7 +12,7 @@
 typedef struct MargString {
   MargObject _;
   size_t size;
-  char chars[];
+  char *chars;
 } MargString;
 
 /**

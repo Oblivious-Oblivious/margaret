@@ -23,10 +23,12 @@
 #define QNAN_BOX(pointer) ((MargValue)(ENCODING | (size_t)(uintptr_t)(pointer)))
 #define QNAN_UNBOX(value) ((MargObject *)(uintptr_t)((value) & ~(ENCODING)))
 
-// sign = 1
-// rest =  ('0' * 48)    0       0
-//          (Pointer) (tag1)  (tag0)
-// Allows for 4 distinct values (00, 01, 10, 11) that are not objects
+/**
+ * sign = 1
+ * rest =  ('0' * 48)    0       0
+ *          (Pointer) (tag1)  (tag0)
+ * Allows for 4 distinct values (00, 01, 10, 11) that are not objects
+ */
 #define UNDEFINED_TAG 0x00
 #define MARG_UNDEFINED \
   ((MargValue)(size_t)(SIGN_BIT | ENCODING | UNDEFINED_TAG))

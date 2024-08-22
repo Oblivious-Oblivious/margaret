@@ -15,7 +15,8 @@ static void op_put_tensor_helper(VM *vm, MargValue temporary) {
   MargValue tensor_value       = MARG_TENSOR(number_of_elements);
   MargTensor *tensor_object    = AS_TENSOR(tensor_value);
 
-  for(ptrdiff_t i = number_of_elements - 1; i >= 0; i--) {
+  ptrdiff_t i;
+  for(i = number_of_elements - 1; i >= 0; i--) {
     marg_tensor_add_at(tensor_object, fs_pop(vm->sp), i);
   }
 
@@ -27,7 +28,8 @@ static void op_put_hash_helper(VM *vm, MargValue temporary) {
   MargValue hash_value         = MARG_HASH;
   MargHash *hash_object        = AS_HASH(hash_value);
 
-  for(ptrdiff_t i = 0; i < number_of_elements; i++) {
+  ptrdiff_t i;
+  for(i = 0; i < number_of_elements; i++) {
     MargValue value = fs_pop(vm->sp);
     MargValue key   = fs_pop(vm->sp);
     marg_hash_add(hash_object, key, value);
@@ -58,8 +60,10 @@ static MargValue retrieve_all_messages_in_delegation_chain(
   VM *vm, MargValue messages_tensor, MargObject *object
 ) {
   EmeraldsHashtable *messages = &object->messages;
-  for(size_t i = 0; i < messages->size; i++) {
-    // table_entry *entry = &messages->entries[i];
+
+  size_t i;
+  for(i = 0; i < messages->size; i++) {
+    /* table_entry *entry = &messages->entries[i]; */
     if(!IS_NOT_INTERNED(MARG_STRING(messages->keys[i])) &&
        strncmp(messages->keys[i], "", 1)) {
       marg_tensor_add(
@@ -79,20 +83,23 @@ static MargValue retrieve_all_messages_in_delegation_chain(
 
 static void op_send_helper(VM *vm, MargValue message_name) {
   /* Read temporary values */
+  ptrdiff_t i;
+  MargObject *object;
+  MargValue method_value;
+  MargMethod *method             = NULL;
   ptrdiff_t number_of_parameters = AS_INTEGER(fs_pop(vm->sp))->value;
 
   /* Pop all parameters first */
   MargValue *actual_parameters = NULL;
   vector_initialize_n(actual_parameters, number_of_parameters);
-  for(ptrdiff_t i = number_of_parameters - 1; i >= 0; i--) {
+
+  for(i = number_of_parameters - 1; i >= 0; i--) {
     actual_parameters[i] = fs_pop(vm->sp);
   }
 
   /* Pop object after parameters */
-  MargObject *object = AS_OBJECT(fs_pop(vm->sp));
-  MargValue method_value =
-    dispatch_method_from_delegation_chain(object, message_name);
-  MargMethod *method = NULL;
+  object       = AS_OBJECT(fs_pop(vm->sp));
+  method_value = dispatch_method_from_delegation_chain(object, message_name);
   if(IS_UNDEFINED(method_value)) {
     fs_push(vm->sp, QNAN_BOX(object));
     fs_push(vm->sp, message_name);
@@ -109,7 +116,7 @@ static void op_send_helper(VM *vm, MargValue message_name) {
     );
 
     /* Inject method parameters */
-    for(ptrdiff_t i = 0; i < number_of_parameters; i++) {
+    for(i = 0; i < number_of_parameters; i++) {
       MargValue parameter_name = marg_tensor_get(method->parameter_names, i);
       table_add(
         &method->proc->local_variables,
@@ -218,7 +225,7 @@ static bool op_prim_to_string_helper(VM *vm, MargValue object) {
     fs_push(vm->sp, MARG_STRING(marg_proc_to_string(AS_PROC(object))));
   }
 
-  // TODO - Implement to_string inside of $Tensor and $Hash
+  /* TODO - Implement to_string inside of $Tensor and $Hash */
   else if(IS_TENSOR_CLONE(object)) {
     fs_push(vm->sp, MARG_STRING(marg_tensor_to_string(AS_TENSOR(object))));
   } else if(IS_HASH_CLONE(object)) {
@@ -242,7 +249,7 @@ static void evaluator_run(VM *vm) {
   bool on_explicit_send = false;
   vm->current->ip       = vm->current->bytecode;
 
-  // TODO - Branch table, computed goto, otherwise use binary search
+  /* TODO - Branch table, computed goto, otherwise use binary search */
   while(true) {
   enter_explicit_send:;
     switch(READ_BYTE()) {
@@ -337,9 +344,9 @@ static void evaluator_run(VM *vm) {
       op_put_tensor_helper(vm, READ_TEMPORARY_DWORD());
       break;
     }
-      // case OP_PUT_TUPLE: {break;}
-      // case OP_PUT_TUPLE_WORD: {break;}
-      // case OP_PUT_TUPLE_DWORD: {break;}
+      /* case OP_PUT_TUPLE: {break;}
+      case OP_PUT_TUPLE_WORD: {break;}
+      case OP_PUT_TUPLE_DWORD: {break;} */
 
     case OP_PUT_HASH: {
       op_put_hash_helper(vm, READ_TEMPORARY());
@@ -353,15 +360,15 @@ static void evaluator_run(VM *vm) {
       op_put_hash_helper(vm, READ_TEMPORARY_DWORD());
       break;
     }
-      // case OP_PUT_BITSTRING: {break;}
-      // case OP_PUT_BITSTRING_WORD: {break;}
-      // case OP_PUT_BITSTRING_DWORD: {break;}
+      /* case OP_PUT_BITSTRING: {break;}
+      case OP_PUT_BITSTRING_WORD: {break;}
+      case OP_PUT_BITSTRING_DWORD: {break;}
 
-      // case OP_JUMP: {break;}
-      // case OP_JUMP_LOCAL: {break;}
-      // case OP_PUT_LABEL: {break;}
-      // case OP_PUT_LABEL_WORD: {break;}
-      // case OP_PUT_LABEL_DWORD: {break;}
+      case OP_JUMP: {break;}
+      case OP_JUMP_LOCAL: {break;}
+      case OP_PUT_LABEL: {break;}
+      case OP_PUT_LABEL_WORD: {break;}
+      case OP_PUT_LABEL_DWORD: {break;} */
 
     case OP_SET_GLOBAL: {
       MargValue temp = vm->current->temporaries[READ_TEMPORARY()];
@@ -589,7 +596,7 @@ static void evaluator_run(VM *vm) {
 
     case OP_PROC_CALL: {
       MargValue proc = fs_pop(vm->sp);
-      // fs_pop(vm->sp);
+      /* fs_pop(vm->sp); */
       if(IS_PROC_CLONE(proc)) {
         AS_PROC(proc)->bound_proc = vm->current;
         vm->current               = AS_PROC(proc);
@@ -602,13 +609,14 @@ static void evaluator_run(VM *vm) {
     case OP_PROC_CALL_PARAMS: {
       MargHash *parameters = AS_HASH(fs_pop(vm->sp));
       MargValue proc       = fs_pop(vm->sp);
-      // fs_pop(vm->sp);
+      /* fs_pop(vm->sp); */
 
       if(IS_PROC_CLONE(proc)) {
+        size_t i;
         AS_PROC(proc)->bound_proc = vm->current;
 
         /* Inject proc parameters */
-        for(size_t i = 0; i < parameters->alloced; i++) {
+        for(i = 0; i < parameters->alloced; i++) {
           MargHashEntry *entry = &parameters->entries[i];
           if(!IS_NOT_INTERNED(entry->key)) {
             table_add(
@@ -690,7 +698,7 @@ static void evaluator_run(VM *vm) {
         );
         fs_push(vm->sp, MARG_STRING(dnu_message));
       } else {
-        // TODO - Instead of pushing a nil, we should throw an error.
+        /* TODO - Instead of pushing a nil, we should throw an error. */
         fs_push(vm->sp, MARG_NIL);
       }
       break;

@@ -19,7 +19,7 @@ MargString *marg_string_new(VM *vm, char *chars) {
 
   self->size = size;
   memcpy(self->chars, chars, size);
-  self->chars[size] = '\0';
+  /* self->chars[size] = '\0'; */
 
   return self;
 }

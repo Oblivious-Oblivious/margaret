@@ -16,19 +16,19 @@ MargTensor *marg_tensor_new(VM *vm, size_t initial_alloced) {
 
   self->alloced = initial_alloced;
   self->size    = 0;
-  self->items =
-    (MargValue *)malloc(sizeof(MargValue) * self->alloced);
+  self->items   = (MargValue *)malloc(sizeof(MargValue) * self->alloced);
 
   return self;
 }
 
 char *marg_tensor_to_string(MargTensor *object) {
-  char *res = string_new("");
+  char *res          = string_new("");
+  size_t tensor_size = marg_tensor_size(object);
 
   string_add(res, "[");
-  size_t tensor_size = marg_tensor_size(object);
   if(tensor_size > 0) {
-    for(size_t i = 0; i < tensor_size - 1; i++) {
+    size_t i;
+    for(i = 0; i < tensor_size - 1; i++) {
       string_addf(&res, "%s, ", marg_value_format(marg_tensor_get(object, i)));
     }
     string_addf(
