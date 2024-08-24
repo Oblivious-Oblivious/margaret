@@ -75,7 +75,6 @@
 
 /* tokens */
 #include "tokens/Token.spec.h"
-#include "tokens/TokenTable.spec.h"
 #include "tokens/Type.spec.h"
 
 /* vm */
@@ -146,7 +145,6 @@ int main(void) {
     ScannerSpec();
 
     TokenSpec();
-    TokenTableSpec();
     TypeSpec();
 
     byte_conversions_spec();

@@ -2,7 +2,6 @@
 
 #include "../../libs/EmeraldsVector/export/EmeraldsVector.h"
 #include "../opcode/fmcodes.h"
-#include "../tokens/TokenTable.h"
 
 #define la1value(token)        token_equals_values(vm->tokens[0], string_new((token)))
 #define la2value(token)        token_equals_values(vm->tokens[1], string_new((token)))
@@ -11,8 +10,8 @@
 #define la2type(expected_type) vm->tokens[1]->type == (expected_type)
 #define la3type(expected_type) vm->tokens[2]->type == (expected_type)
 
-#define ensure_value(value, msg) token_table_ensure_value(vm, (value), (msg))
-#define ensure_type(type, msg)   token_table_ensure_type(vm, (type), (msg))
+#define ensure_value(value, msg) parser_ensure_value(vm, (value), (msg))
+#define ensure_type(type, msg)   parser_ensure_type(vm, (type), (msg))
 #define generate(value)          vector_add(vm->formal_bytecode, value)
 
 #define first_unit()             parser_first_unit(vm)
@@ -37,6 +36,58 @@
 #define keyword_list()           parser_keyword_list(vm)
 #define scalar()                 parser_scalar(vm)
 #define variable()               parser_variable(vm)
+
+/**
+ * @brief Displays a parser-level error message (grabs latest line and column)
+ * @param vm -> The vm containing the token table
+ * @param token -> The token where the error occured at
+ * @param message -> The message to display
+ * @return string* -> NULL pointer
+ */
+static char *parser_error(VM *vm, Token *token, const char *message) {
+  printf(
+    "%s:%zu:%zu \033[1;31merror:\033[0m %s  Token: \033[1;31m`%s`\033[0m\n",
+    vm->filename,
+    vm->lineno,
+    vm->charno,
+    message,
+    token->value
+  );
+  return NULL;
+}
+
+/**
+ * @brief Consumes and removes the next token from the table
+ * @param vm -> The vm containing the token table
+ * @return Token* -> The token consumed
+ */
+static Token *parser_consume(VM *vm) {
+  if(vector_size(vm->tokens) == 0) {
+    return token_new(string_new("eof"), TOKEN_EOF);
+  } else {
+    Token *token = vm->tokens[0];
+    vector_remove(vm->tokens, 0);
+    return token;
+  }
+}
+
+char *parser_ensure_value(VM *vm, const char *value, const char *error_msg) {
+  Token *token = parser_consume(vm);
+  if(token_equals_values(token, string_new(value))) {
+    return token->value;
+  } else {
+    return parser_error(vm, token, error_msg);
+  }
+}
+
+char *parser_ensure_type(VM *vm, Type type, const char *error_msg) {
+  Token *token = parser_consume(vm);
+  if(token->type == type) {
+    return token->value;
+  } else {
+    return parser_error(vm, token, error_msg);
+  }
+}
 
 VM *parser_analyze_syntax(VM *vm) {
   parser_first_unit(vm);

@@ -1,8 +1,25 @@
 #ifndef __PARSER_H_
 #define __PARSER_H_
 
-#include "../tokens/TokenTable.h"
 #include "../vm/vm.h"
+
+/**
+ * @brief Consumes token by value
+ * @param vm -> The vm containing the token table
+ * @param value -> The value expecting to consume
+ * @param error_msg -> Prints in case of consumption of wrong value
+ * @return string* -> The found token
+ */
+char *parser_ensure_value(VM *vm, const char *value, const char *error_msg);
+
+/**
+ * @brief Consumes token by type
+ * @param vm -> The vm containing the token table
+ * @param type -> The type expecting to consume
+ * @param error_msg -> Prints in case of consumption of wrong type
+ * @return string*
+ */
+char *parser_ensure_type(VM *vm, Type type, const char *error_msg);
 
 /**
  * @brief Starts the parsing process and constructs the token table
