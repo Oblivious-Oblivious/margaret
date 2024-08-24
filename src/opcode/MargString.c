@@ -1,6 +1,6 @@
 #include "MargString.h"
 
-#include "../../libs/EmeraldsString/export/EmeraldsString.h" /* IWYU pragma: keep */
+#include "../../libs/EmeraldsString/export/EmeraldsString.h"
 #include "MargValue.h"
 
 MargString *marg_string_new(VM *vm, char *chars) {

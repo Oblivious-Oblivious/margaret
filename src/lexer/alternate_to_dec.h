@@ -1,4 +1,4 @@
-#include "../../libs/EmeraldsString/export/EmeraldsString.h" /* IWYU pragma: keep */
+#include "../../libs/EmeraldsString/export/EmeraldsString.h"
 
 /**
  * @brief Converts character representations

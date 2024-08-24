@@ -1,6 +1,6 @@
 #include "Loader.h"
 
-#include "../../libs/EmeraldsReadHandler/export/EmeraldsReadHandler.h" /* IWYU pragma: keep */
+#include "../../libs/EmeraldsReadHandler/export/EmeraldsReadHandler.h"
 
 VM *loader_load(VM *vm) {
   EmeraldsReadHandler *fd = read_handler_new();

@@ -1,6 +1,6 @@
 #include "Parser.h"
 
-#include "../../libs/EmeraldsVector/export/EmeraldsVector.h" /* IWYU pragma: keep */
+#include "../../libs/EmeraldsVector/export/EmeraldsVector.h"
 #include "../opcode/fmcodes.h"
 #include "../tokens/TokenTable.h"
 

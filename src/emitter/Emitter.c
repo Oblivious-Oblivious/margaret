@@ -1,6 +1,6 @@
 #include "Emitter.h"
 
-#include "../../libs/EmeraldsString/export/EmeraldsString.h" /* IWYU pragma: keep */
+#include "../../libs/EmeraldsString/export/EmeraldsString.h"
 #include "../inspector/Inspector.h"
 #include "../opcode/fmcodes.h"
 #include "../opcode/MargValue.h"

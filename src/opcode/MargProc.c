@@ -1,6 +1,6 @@
 #include "MargProc.h"
 
-#include "../../libs/EmeraldsString/export/EmeraldsString.h" /* IWYU pragma: keep */
+#include "../../libs/EmeraldsString/export/EmeraldsString.h"
 #include "MargValue.h"
 
 MargProc *marg_proc_new(VM *vm, MargMethod *bound_method) {

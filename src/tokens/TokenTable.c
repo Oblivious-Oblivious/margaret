@@ -1,7 +1,7 @@
 #include "TokenTable.h"
 
-#include "../../libs/EmeraldsString/export/EmeraldsString.h" /* IWYU pragma: keep */
-#include "../../libs/EmeraldsVector/export/EmeraldsVector.h" /* IWYU pragma: keep */
+#include "../../libs/EmeraldsString/export/EmeraldsString.h"
+#include "../../libs/EmeraldsVector/export/EmeraldsVector.h"
 
 #include <stdio.h> /* printf */
 

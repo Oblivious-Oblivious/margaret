@@ -1,6 +1,6 @@
 #include "MargObject.h"
 
-#include "../../libs/EmeraldsString/export/EmeraldsString.h" /* IWYU pragma: keep */
+#include "../../libs/EmeraldsString/export/EmeraldsString.h"
 #include "MargValue.h"
 
 MargObject *marg_object_new(VM *bound_vm, size_t size, char *name) {

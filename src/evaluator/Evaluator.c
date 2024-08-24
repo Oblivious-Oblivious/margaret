@@ -1,7 +1,7 @@
 #include "Evaluator.h"
 
-#include "../../libs/EmeraldsFastStack/export//EmeraldsFastStack.h" /* IWYU pragma: keep */
-#include "../../libs/EmeraldsString/export/EmeraldsString.h" /* IWYU pragma: keep */
+#include "../../libs/EmeraldsFastStack/export/EmeraldsFastStack.h"
+#include "../../libs/EmeraldsString/export/EmeraldsString.h"
 #include "../opcode/MargValue.h"
 #include "../opcode/opcodes.h"
 #include "../vm/on_demand_compilation_pipeline.h"

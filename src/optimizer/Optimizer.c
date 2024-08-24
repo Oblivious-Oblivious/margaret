@@ -1,6 +1,6 @@
 #include "Optimizer.h"
 
-#include "../opcode/MargProc.h" /* IWYU pragma: keep */
+#include "../opcode/MargProc.h"
 #include "../opcode/opcodes.h"
 
 VM *optimizer_optimize(VM *vm) {

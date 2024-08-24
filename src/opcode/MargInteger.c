@@ -1,6 +1,6 @@
 #include "MargInteger.h"
 
-#include "../../libs/EmeraldsString/export/EmeraldsString.h" /* IWYU pragma: keep */
+#include "../../libs/EmeraldsString/export/EmeraldsString.h"
 #include "MargValue.h"
 
 MargInteger *marg_integer_new(VM *vm, ptrdiff_t value) {

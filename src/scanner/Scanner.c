@@ -1,6 +1,6 @@
 #include "Scanner.h"
 
-#include "../../libs/EmeraldsString/export/EmeraldsString.h" /* IWYU pragma: keep */
+#include "../../libs/EmeraldsString/export/EmeraldsString.h"
 
 VM *scanner_scan(VM *vm, char *prompt) {
   char bounds_buf[65535];

@@ -1,6 +1,6 @@
 #include "MargTensor.h"
 
-#include "../../libs/EmeraldsString/export/EmeraldsString.h" /* IWYU pragma: keep */
+#include "../../libs/EmeraldsString/export/EmeraldsString.h"
 #include "MargValue.h"
 
 MargTensor *marg_tensor_new(VM *vm, size_t initial_alloced) {

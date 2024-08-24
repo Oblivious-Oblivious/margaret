@@ -1,6 +1,6 @@
 #include "Inspector.h"
 
-#include "../../libs/EmeraldsString/export/EmeraldsString.h" /* IWYU pragma: keep */
+#include "../../libs/EmeraldsString/export/EmeraldsString.h"
 #include "../opcode/MargValue.h"
 #include "../opcode/opcodes.h"
 

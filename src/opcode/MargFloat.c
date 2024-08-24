@@ -1,6 +1,6 @@
 #include "MargFloat.h"
 
-#include "../../libs/EmeraldsString/export/EmeraldsString.h" /* IWYU pragma: keep */
+#include "../../libs/EmeraldsString/export/EmeraldsString.h"
 #include "MargValue.h"
 
 #include <float.h> /* LDBL_DIG */
