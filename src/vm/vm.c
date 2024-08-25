@@ -76,13 +76,14 @@ static void point_ip_to_main_method(VM *vm) {
 VM *vm_new(const char *filename) {
   VM *vm = (VM *)malloc(sizeof(VM));
 
-  vm->filename = filename;
-  vm->source   = NULL;
-  vm->lineno   = 1;
-  vm->charno   = 0;
-  vm->index    = 0;
+  vm->filename  = filename;
+  vm->source    = NULL;
+  vm->lineno    = 1;
+  vm->charno    = 0;
+  vm->index     = 0;
+  vm->has_error = false;
 
-  vm->eof_token       = token_new(string_new("eof"), TOKEN_EOF);
+  vm->eof_token       = token_new(string_new("eof"), TOKEN_EOF, 1, 1);
   vm->tokens          = NULL;
   vm->formal_bytecode = NULL;
 

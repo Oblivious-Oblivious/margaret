@@ -826,6 +826,10 @@ static void evaluator_run(VM *vm) {
 }
 
 MargValue evaluator_evaluate(VM *vm) {
+  if(vm->has_error) {
+    return MARG_UNDEFINED;
+  }
+
   evaluator_run(vm);
   if(vector_size(vm->current->bytecode) == 1 &&
      vm->current->bytecode[0] == OP_HALT) {

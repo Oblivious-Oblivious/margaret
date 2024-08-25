@@ -34,6 +34,7 @@ typedef struct VM {
   size_t lineno;
   size_t charno;
   size_t index;
+  bool has_error;
 
   Token *eof_token;
   Token **tokens;

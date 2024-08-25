@@ -4,6 +4,10 @@
 #include "../opcode/opcodes.h"
 
 VM *optimizer_optimize(VM *vm) {
+  if(vm->has_error) {
+    return vm;
+  }
+
   vm->current->ip = vm->current->bytecode;
 
   while(true) {

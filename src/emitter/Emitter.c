@@ -102,12 +102,18 @@ VM *emitter_emit(VM *vm) {
   char **formal_bytecode = vm->formal_bytecode;
   size_t bytecode_size   = vector_size(formal_bytecode);
   size_t ip;
+  MargObject *marg_object = NULL;
+  MargMethod *main_method = NULL;
 
-  MargObject *marg_object =
-    AS_OBJECT(table_get(&vm->global_variables, "$Margaret"));
-  MargMethod *main_method = AS_METHOD(table_get(&marg_object->messages, ""));
-  vm->current->bytecode   = NULL;
-  vm->current             = main_method->proc;
+  if(vm->has_error) {
+    return vm;
+  }
+
+  marg_object = AS_OBJECT(table_get(&vm->global_variables, "$Margaret"));
+  main_method = AS_METHOD(table_get(&marg_object->messages, ""));
+
+  vm->current->bytecode = NULL;
+  vm->current           = main_method->proc;
 
   for(ip = 0; ip < bytecode_size; ip++) {
     char *opcode = formal_bytecode[ip];
