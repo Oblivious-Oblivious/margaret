@@ -53,13 +53,6 @@ module(LexerSpec, {
       assert_that_int(vm->lineno equals to 1);
     });
 
-    it("prints error messages", {
-      VM *vm         = vm_new("file.marg");
-      vm->source     = string_new("");
-      void *response = lexer_error(vm, "random exception", 1, 0);
-      assert_that_charptr(response equals to "eof");
-    });
-
     context("on #make_tokens", {
       it("correctly counts the number of lines", {
         VM *vm     = vm_new("file.marg");

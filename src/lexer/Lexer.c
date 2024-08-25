@@ -8,23 +8,6 @@
 
 #include <stdio.h> /* printf */
 
-void *lexer_error(VM *vm, const char *message, size_t lineno, size_t charno) {
-  char *token = string_split(vm->source, '\n')[0];
-  if(vm->charno == 0) {
-    vm->charno = 1;
-  }
-
-  printf(
-    "%s:%zu:%zu: \033[1;31merror:\033[0m %s on `%s`\n",
-    vm->filename,
-    lineno,
-    charno,
-    message,
-    token
-  );
-  return vm->eof_token->value;
-}
-
 static ptrdiff_t matcher(const char *pattern, const char *input_string) {
   regex_t *regex = NULL;
   OnigErrorInfo error_info;
@@ -80,9 +63,8 @@ static char *normalize_integer(char *token) {
 }
 
 Token *tokenize(VM *vm) {
-  Type token_type;
-  char *token         = NULL;
-  bool is_not_matched = true;
+  Type token_type = TOKEN_UNKNOWN;
+  char *token     = NULL;
   size_t i;
 
   OnigEncoding encodings[1] = {ONIG_ENCODING_ASCII};
@@ -93,8 +75,7 @@ Token *tokenize(VM *vm) {
     char *text          = vm->source + vm->index;
     ptrdiff_t end_index = matcher(r->pattern, text);
     if(end_index != -1) {
-      is_not_matched = false;
-      token          = string_substring(text, 0, end_index);
+      token = string_substring(text, 0, end_index);
       vm->charno += end_index;
       vm->index += end_index;
       text       = vm->source + vm->index;
@@ -120,17 +101,17 @@ Token *tokenize(VM *vm) {
         vm->lineno += vector_size(string_split(token, '\n'));
       }
 
-      break;
+      goto __end;
     }
   }
+  /* Skips an unknown character */
+  vm->charno++;
+  vm->index++;
+__end:
 
   onig_end();
 
-  if(is_not_matched) {
-    return lexer_error(vm, "Unexpected character.", vm->lineno, vm->charno);
-  } else {
-    return token_new(token, token_type, vm->lineno, vm->charno);
-  }
+  return token_new(token, token_type, vm->lineno, vm->charno);
 }
 
 VM *lexer_make_tokens(VM *vm) {

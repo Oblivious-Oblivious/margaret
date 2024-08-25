@@ -12,6 +12,7 @@ typedef enum Type {
   TOKEN_EOF            = 0,
   TOKEN_NEWLINE        = 1,
   TOKEN_WHITESPACE     = 2,
+  TOKEN_UNKNOWN        = 3,
   TOKEN_FLOAT          = 11,
   TOKEN_INTEGER        = 12,
   TOKEN_STRING         = 111,
