@@ -24,7 +24,7 @@ typedef struct MargProc MargProc;
  * @param stack -> Stack data structure for storing bytecode results
  * @param sp -> Stack pointer
  *
- * @param global_variables -> Globall without namespacing or scoping
+ * @param global_variables -> Global without namespacing or scoping
  * @param interned_strings -> Stores all strings (variables, messages, etc.)
  * @param current -> Pointer to the currect method-derived proc
  */

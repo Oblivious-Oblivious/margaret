@@ -75,6 +75,7 @@ static Token *parser_consume(VM *vm) {
     return vm->eof_token;
   } else {
     Token *token = vm->tokens[0];
+    /* TODO - Handle memory leaking right here */
     vector_remove(vm->tokens, 0);
     return token;
   }
@@ -99,14 +100,14 @@ char *parser_ensure_type(VM *vm, Type type, const char *error_msg) {
 }
 
 static void parser_free_parsing_specific_values(VM *vm) {
+  size_t i;
+
   string_free(vm->source);
-  for(size_t i = 0; i < vector_size(vm->tokens); i++) {
+  for(i = 0; i < vector_size(vm->tokens); i++) {
     string_free(vm->tokens[i]->value);
     free(vm->tokens[i]);
   }
   vector_free(vm->tokens);
-  // string_free(vm->eof_token->value);
-  // free(vm->eof_token);
 }
 
 VM *parser_analyze_syntax(VM *vm) {
