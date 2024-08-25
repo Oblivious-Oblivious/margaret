@@ -7,10 +7,12 @@
 static VM *vm;
 static void token_table_spec_setup(void) {
   vm = vm_new("file1.marg");
-  vector_add(vm->tokens, token_new(string_new("a"), TOKEN_IDENTIFIER));
-  vector_add(vm->tokens, token_new(string_new("+"), TOKEN_MESSAGE_SYMBOL));
-  vector_add(vm->tokens, token_new(string_new("2"), TOKEN_INTEGER));
-  vector_add(vm->tokens, token_new(string_new("eof"), TOKEN_EOF));
+  vector_add(vm->tokens, token_new(string_new("a"), TOKEN_IDENTIFIER, 1, 0));
+  vector_add(
+    vm->tokens, token_new(string_new("+"), TOKEN_MESSAGE_SYMBOL, 1, 0)
+  );
+  vector_add(vm->tokens, token_new(string_new("2"), TOKEN_INTEGER, 1, 0));
+  vector_add(vm->tokens, token_new(string_new("eof"), TOKEN_EOF, 1, 0));
 }
 
 module(ParserSpec, {

@@ -57,8 +57,8 @@ static char *parser_error(VM *vm, Token *token, const char *message) {
   printf(
     "%s:%zu:%zu \033[1;31merror:\033[0m %s  Token: \033[1;31m`%s`\033[0m\n",
     vm->filename,
-    vm->lineno,
-    vm->charno,
+    token->lineno,
+    token->charno,
     message,
     token->value
   );

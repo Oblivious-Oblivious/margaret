@@ -11,20 +11,24 @@
     organizes lexing information from file inputs
  * @param value -> Stringified value of the token
  * @param type -> A token type annotation
- * @param filename -> Filename this token was found on
+ * @param lineno -> Line number this token was found on
+ * @param charno -> Character number this token was found on
  */
 typedef struct Token {
   char *value;
   Type type;
+  size_t lineno;
+  size_t charno;
 } Token;
 
 /**
  * @brief Constructs a new token
  * @param value -> A string value of the token consumed
  * @param type -> A type identifier for the token
- * @param filename -> The current line which the token was consumed at
+ * @param lineno -> Line number this token was found on
+ * @param charno -> Character number this token was found on
  * @return Token
  */
-Token *token_new(char *value, Type type);
+Token *token_new(char *value, Type type, size_t lineno, size_t charno);
 
 #endif

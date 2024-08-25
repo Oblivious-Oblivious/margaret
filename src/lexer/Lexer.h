@@ -8,9 +8,11 @@
  * @brief Reports an error to stderrr
  * @param self -> The VM object
  * @param message -> The error message to report
+ * @param lineno -> The line number of the token being lexed
+ * @param charno -> The character number of the token being lexed
  * @return void* -> NULL
  */
-void *lexer_error(VM *vm, const char *message);
+void *lexer_error(VM *vm, const char *message, size_t lineno, size_t charno);
 
 /**
  * @brief Tokenizes the next token from the source code

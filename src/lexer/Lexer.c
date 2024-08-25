@@ -8,7 +8,7 @@
 
 #include <stdio.h> /* printf */
 
-void *lexer_error(VM *vm, const char *message) {
+void *lexer_error(VM *vm, const char *message, size_t lineno, size_t charno) {
   char *token = string_split(vm->source, '\n')[0];
   if(vm->charno == 0) {
     vm->charno = 1;
@@ -17,8 +17,8 @@ void *lexer_error(VM *vm, const char *message) {
   printf(
     "%s:%zu:%zu: \033[1;31merror:\033[0m %s on `%s`\n",
     vm->filename,
-    vm->lineno,
-    vm->charno,
+    lineno,
+    charno,
     message,
     token
   );
@@ -127,9 +127,9 @@ Token *tokenize(VM *vm) {
   onig_end();
 
   if(is_not_matched) {
-    return lexer_error(vm, "Unexpected character.");
+    return lexer_error(vm, "Unexpected character.", vm->lineno, vm->charno);
   } else {
-    return token_new(token, token_type);
+    return token_new(token, token_type, vm->lineno, vm->charno);
   }
 }
 

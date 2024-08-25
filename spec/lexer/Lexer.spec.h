@@ -56,7 +56,7 @@ module(LexerSpec, {
     it("prints error messages", {
       VM *vm         = vm_new("file.marg");
       vm->source     = string_new("");
-      void *response = lexer_error(vm, "random exception");
+      void *response = lexer_error(vm, "random exception", 1, 0);
       assert_that(response is NULL);
     });
 
