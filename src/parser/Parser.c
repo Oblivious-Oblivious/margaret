@@ -62,7 +62,7 @@ static char *parser_error(VM *vm, Token *token, const char *message) {
     message,
     token->value
   );
-  return NULL;
+  return vm->eof_token->value;
 }
 
 /**

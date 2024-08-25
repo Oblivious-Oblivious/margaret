@@ -22,7 +22,7 @@ void *lexer_error(VM *vm, const char *message, size_t lineno, size_t charno) {
     message,
     token
   );
-  return NULL;
+  return vm->eof_token->value;
 }
 
 static ptrdiff_t matcher(const char *pattern, const char *input_string) {
@@ -144,6 +144,9 @@ VM *lexer_make_tokens(VM *vm) {
     }
   }
 
+  vm->eof_token->lineno = vm->lineno;
+  /* NOTE - Figure out why the charno is off by 3 */
+  vm->eof_token->charno = vm->charno + 3;
   vector_add(vm->tokens, vm->eof_token);
 
   onig_end();
