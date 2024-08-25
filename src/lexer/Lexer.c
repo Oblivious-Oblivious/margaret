@@ -144,7 +144,7 @@ VM *lexer_make_tokens(VM *vm) {
     }
   }
 
-  vector_add(vm->tokens, token_new(string_new("eof"), TOKEN_EOF));
+  vector_add(vm->tokens, vm->eof_token);
 
   onig_end();
 

@@ -35,6 +35,7 @@ typedef struct VM {
   size_t charno;
   size_t index;
 
+  Token *eof_token;
   Token **tokens;
   char **formal_bytecode;
 

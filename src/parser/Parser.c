@@ -63,7 +63,7 @@ static char *parser_error(VM *vm, Token *token, const char *message) {
  */
 static Token *parser_consume(VM *vm) {
   if(vector_size(vm->tokens) == 0) {
-    return token_new(string_new("eof"), TOKEN_EOF);
+    return vm->eof_token;
   } else {
     Token *token = vm->tokens[0];
     vector_remove(vm->tokens, 0);

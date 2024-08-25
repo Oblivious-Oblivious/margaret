@@ -82,6 +82,7 @@ VM *vm_new(const char *filename) {
   vm->charno   = 0;
   vm->index    = 0;
 
+  vm->eof_token       = token_new(string_new("eof"), TOKEN_EOF);
   vm->tokens          = NULL;
   vm->formal_bytecode = NULL;
 
