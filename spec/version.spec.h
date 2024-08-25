@@ -2,12 +2,7 @@
 #define __VERSION_SPEC_H_
 
 #include "../libs/cSpec/export/cSpec.h"
-#include "../libs/EmeraldsOniguruma/export/EmeraldsOniguruma.h"
-#include "../libs/EmeraldsString/export/EmeraldsString.h"
-#include "../src/lexer/Lexer.h"
-#include "../src/parser/Parser.h"
 #include "../src/version.h"
-#include "../src/vm/vm.h"
 
 module(VersionSpec, {
   it("validates version number", {
