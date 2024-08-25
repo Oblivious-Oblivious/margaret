@@ -27,12 +27,4 @@ typedef struct Token {
  */
 Token *token_new(char *value, Type type);
 
-/**
- * @brief Checks for equality between a token and a string value
- * @param tok -> First token
- * @param value -> Second value
- * @return A boolean
- */
-bool token_equals_values(Token *tok, char *value);
-
 #endif

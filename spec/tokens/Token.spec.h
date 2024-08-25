@@ -14,7 +14,7 @@ module(TokenSpec, {
 
   it("has an equals message for values", {
     Token *tok = token_new(string_new("hello"), TOKEN_STRING);
-    assert_that(token_equals_values(tok, string_new("hello")));
+    assert_that(string_equals(tok->value, "hello"));
   });
 })
 

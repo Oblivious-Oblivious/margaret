@@ -3,12 +3,21 @@
 #include "../../libs/EmeraldsVector/export/EmeraldsVector.h"
 #include "../opcode/fmcodes.h"
 
-#define la1value(token)        token_equals_values(vm->tokens[0], string_new((token)))
-#define la2value(token)        token_equals_values(vm->tokens[1], string_new((token)))
-#define la3value(token)        token_equals_values(vm->tokens[2], string_new((token)))
-#define la1type(expected_type) vm->tokens[0]->type == (expected_type)
-#define la2type(expected_type) vm->tokens[1]->type == (expected_type)
-#define la3type(expected_type) vm->tokens[2]->type == (expected_type)
+#define token_get_value_safe(index)                                   \
+  ((index) < vector_size((vm)->tokens) ? (vm)->tokens[(index)]->value \
+                                       : vm->eof_token->value)
+
+#define token_get_type_safe(index)                                   \
+  ((index) < vector_size((vm)->tokens) ? (vm)->tokens[(index)]->type \
+                                       : vm->eof_token->type)
+
+/** Lookaheads */
+#define la1value(token)        (string_equals(token_get_value_safe(0), token))
+#define la2value(token)        (string_equals(token_get_value_safe(1), token))
+#define la3value(token)        (string_equals(token_get_value_safe(2), token))
+#define la1type(expected_type) (token_get_type_safe(0) == (expected_type))
+#define la2type(expected_type) (token_get_type_safe(1) == (expected_type))
+#define la3type(expected_type) (token_get_type_safe(2) == (expected_type))
 
 #define ensure_value(value, msg) parser_ensure_value(vm, (value), (msg))
 #define ensure_type(type, msg)   parser_ensure_type(vm, (type), (msg))
@@ -73,7 +82,7 @@ static Token *parser_consume(VM *vm) {
 
 char *parser_ensure_value(VM *vm, const char *value, const char *error_msg) {
   Token *token = parser_consume(vm);
-  if(token_equals_values(token, string_new(value))) {
+  if(string_equals(token->value, value)) {
     return token->value;
   } else {
     return parser_error(vm, token, error_msg);
