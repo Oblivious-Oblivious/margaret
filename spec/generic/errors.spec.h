@@ -1,6 +1,7 @@
 #ifndef __ERRORS_SPEC_H_
 #define __ERRORS_SPEC_H_
 
+#include "../../src/loader/Loader.h"
 #include "_helpers.h"
 
 module(errors_spec, {
@@ -15,7 +16,12 @@ module(errors_spec, {
     error("}", "missing opening curly brace on hash.");
   });
 
-  xit("other syntax errors", {});
+  it("other syntax errors", {
+    VM *vm = vm_new("./examples/errors/e1.marg");
+    loader_load(vm);
+    lexer_make_tokens(vm);
+    parser_analyze_syntax(vm);
+  });
 })
 
 #endif
