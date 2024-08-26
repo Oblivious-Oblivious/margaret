@@ -4,7 +4,22 @@
 #include "_helpers.h"
 
 module(meta_evaluation_spec, {
-  xit("compiles and calls messages dynamically", {});
+  it("compiles and calls messages dynamically", {
+    parse(
+      "send: \"msg\" to: $IntegerClone",
+      vector_new(
+        FM_GLOBAL,
+        string_new("$Margaret"),
+        FM_STRING,
+        string_new("msg"),
+        FM_GLOBAL,
+        string_new("$IntegerClone"),
+        FM_KEYWORD,
+        string_new("send:to:"),
+        string_new("2")
+      )
+    );
+  });
 
   it("parses metaclass messages", {
     parse(

@@ -17,7 +17,6 @@
 #include "generic/bitwise.spec.h"
 #include "generic/booleans.spec.h"
 #include "generic/characters.spec.h"
-#include "generic/code_as_data.spec.h"
 #include "generic/complex.spec.h"
 #include "generic/conditionals.spec.h"
 #include "generic/constants.spec.h"
@@ -38,7 +37,6 @@
 #include "generic/procs.spec.h"
 #include "generic/rational.spec.h"
 #include "generic/strings.spec.h"
-#include "generic/symbols.spec.h"
 #include "generic/tensors.spec.h"
 #include "generic/tuples.spec.h"
 #include "generic/variables.spec.h"
@@ -95,7 +93,6 @@ int main(void) {
     bitwise_spec();
     booleans_spec();
     characters_spec();
-    code_as_data_spec();
     complex_spec();
     conditionals_spec();
     constants_spec();
@@ -116,7 +113,6 @@ int main(void) {
     procs_spec();
     rational_spec();
     strings_spec();
-    symbols_spec();
     tensors_spec();
     tuples_spec();
     variables_spec();

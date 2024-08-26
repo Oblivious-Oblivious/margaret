@@ -127,7 +127,274 @@ module(rational_spec, {
     );
   });
 
-  xit("parses rational literal messages", {});
+  it("parses rational literal messages", {
+    parse(
+      "(2/3r) * (2/3r)",
+      vector_new(
+        FM_INTEGER,
+        string_new("2"),
+        FM_INTEGER,
+        string_new("3"),
+        FM_UNARY,
+        string_new("r"),
+        FM_BINARY,
+        string_new("/"),
+        FM_INTEGER,
+        string_new("2"),
+        FM_INTEGER,
+        string_new("3"),
+        FM_UNARY,
+        string_new("r"),
+        FM_BINARY,
+        string_new("/"),
+        FM_BINARY,
+        string_new("*")
+      )
+    );
+
+    parse(
+      "(2/3r) ** (2/3r)",
+      vector_new(
+        FM_INTEGER,
+        string_new("2"),
+        FM_INTEGER,
+        string_new("3"),
+        FM_UNARY,
+        string_new("r"),
+        FM_BINARY,
+        string_new("/"),
+        FM_INTEGER,
+        string_new("2"),
+        FM_INTEGER,
+        string_new("3"),
+        FM_UNARY,
+        string_new("r"),
+        FM_BINARY,
+        string_new("/"),
+        FM_BINARY,
+        string_new("**")
+      )
+    );
+
+    parse(
+      "(2/3r) + (2/3r)",
+      vector_new(
+        FM_INTEGER,
+        string_new("2"),
+        FM_INTEGER,
+        string_new("3"),
+        FM_UNARY,
+        string_new("r"),
+        FM_BINARY,
+        string_new("/"),
+        FM_INTEGER,
+        string_new("2"),
+        FM_INTEGER,
+        string_new("3"),
+        FM_UNARY,
+        string_new("r"),
+        FM_BINARY,
+        string_new("/"),
+        FM_BINARY,
+        string_new("+")
+      )
+    );
+
+    parse(
+      "(2/3r) - (2/3r)",
+      vector_new(
+        FM_INTEGER,
+        string_new("2"),
+        FM_INTEGER,
+        string_new("3"),
+        FM_UNARY,
+        string_new("r"),
+        FM_BINARY,
+        string_new("/"),
+        FM_INTEGER,
+        string_new("2"),
+        FM_INTEGER,
+        string_new("3"),
+        FM_UNARY,
+        string_new("r"),
+        FM_BINARY,
+        string_new("/"),
+        FM_BINARY,
+        string_new("-")
+      )
+    );
+
+    parse(
+      "-(2/3r)",
+      vector_new(
+        FM_INTEGER,
+        string_new("2"),
+        FM_INTEGER,
+        string_new("3"),
+        FM_UNARY,
+        string_new("r"),
+        FM_BINARY,
+        string_new("/"),
+        FM_LHS,
+        string_new("-")
+      )
+    );
+
+    parse(
+      "(2/3r) / (2/3r)",
+      vector_new(
+        FM_INTEGER,
+        string_new("2"),
+        FM_INTEGER,
+        string_new("3"),
+        FM_UNARY,
+        string_new("r"),
+        FM_BINARY,
+        string_new("/"),
+        FM_INTEGER,
+        string_new("2"),
+        FM_INTEGER,
+        string_new("3"),
+        FM_UNARY,
+        string_new("r"),
+        FM_BINARY,
+        string_new("/"),
+        FM_BINARY,
+        string_new("/")
+      )
+    );
+
+    parse(
+      "(2/3r) <=> (2/3r)",
+      vector_new(
+        FM_INTEGER,
+        string_new("2"),
+        FM_INTEGER,
+        string_new("3"),
+        FM_UNARY,
+        string_new("r"),
+        FM_BINARY,
+        string_new("/"),
+        FM_INTEGER,
+        string_new("2"),
+        FM_INTEGER,
+        string_new("3"),
+        FM_UNARY,
+        string_new("r"),
+        FM_BINARY,
+        string_new("/"),
+        FM_BINARY,
+        string_new("<=>")
+      )
+    );
+
+    parse(
+      "(2/3r) == (2/3r)",
+      vector_new(
+        FM_INTEGER,
+        string_new("2"),
+        FM_INTEGER,
+        string_new("3"),
+        FM_UNARY,
+        string_new("r"),
+        FM_BINARY,
+        string_new("/"),
+        FM_INTEGER,
+        string_new("2"),
+        FM_INTEGER,
+        string_new("3"),
+        FM_UNARY,
+        string_new("r"),
+        FM_BINARY,
+        string_new("/"),
+        FM_BINARY,
+        string_new("==")
+      )
+    );
+
+    parse(
+      "(2/3r) abs",
+      vector_new(
+        FM_INTEGER,
+        string_new("2"),
+        FM_INTEGER,
+        string_new("3"),
+        FM_UNARY,
+        string_new("r"),
+        FM_BINARY,
+        string_new("/"),
+        FM_UNARY,
+        string_new("abs")
+      )
+    );
+
+    parse(
+      "(2/3r) ceil",
+      vector_new(
+        FM_INTEGER,
+        string_new("2"),
+        FM_INTEGER,
+        string_new("3"),
+        FM_UNARY,
+        string_new("r"),
+        FM_BINARY,
+        string_new("/"),
+        FM_UNARY,
+        string_new("ceil")
+      )
+    );
+
+    parse(
+      "(2/3r) floor",
+      vector_new(
+        FM_INTEGER,
+        string_new("2"),
+        FM_INTEGER,
+        string_new("3"),
+        FM_UNARY,
+        string_new("r"),
+        FM_BINARY,
+        string_new("/"),
+        FM_UNARY,
+        string_new("floor")
+      )
+    );
+
+    parse(
+      "(2/3r) denominator",
+      vector_new(
+        FM_INTEGER,
+        string_new("2"),
+        FM_INTEGER,
+        string_new("3"),
+        FM_UNARY,
+        string_new("r"),
+        FM_BINARY,
+        string_new("/"),
+        FM_UNARY,
+        string_new("denominator")
+      )
+    );
+
+    parse(
+      "(2/3r) fdiv: 1",
+      vector_new(
+        FM_INTEGER,
+        string_new("2"),
+        FM_INTEGER,
+        string_new("3"),
+        FM_UNARY,
+        string_new("r"),
+        FM_BINARY,
+        string_new("/"),
+        FM_INTEGER,
+        string_new("1"),
+        FM_KEYWORD,
+        string_new("fdiv:"),
+        string_new("1")
+      )
+    );
+  });
 })
 
 #endif
