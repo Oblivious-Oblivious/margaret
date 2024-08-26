@@ -21,7 +21,7 @@
                                                                               \
     if(size_of_formal_bytecode <= same_size_as_expected) {                    \
       for(size_t i = 0; i < size_of_formal_bytecode; i++) {                   \
-        assert_that_charptr(res[i] equals to expected_result[i]);             \
+        assert_that_charptr(res[i] equals to(expected_result)[i]);            \
       }                                                                       \
     }                                                                         \
   } while(0)
@@ -54,7 +54,7 @@
                                                                               \
     if(size_of_formal_bytecode <= same_size_as_expected) {                    \
       for(size_t i = 0; i < size_of_formal_bytecode; i++) {                   \
-        assert_that_charptr(res[i] equals to expected_result[i]);             \
+        assert_that_charptr(res[i] equals to(expected_result)[i]);            \
       }                                                                       \
     }                                                                         \
   } while(0)

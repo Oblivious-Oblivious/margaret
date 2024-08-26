@@ -6,49 +6,33 @@
 #include "../opcode/MargValue.h"
 #include "../opcode/opcodes.h"
 
-#define switch_opcode_case(opstr) if(string_equals(opcode, (opstr)))
-#define opcode_case(opstr)        else if(string_equals(opcode, (opstr)))
+#define switch_opcode_case(opstr) if(string_equals(opcode, opstr))
+#define opcode_case(opstr)        else if(string_equals(opcode, opstr))
 
 #define switch_unary_case(unarystr) \
-  if(string_equals(unary_name, string_new((unarystr))))
+  if(string_equals(unary_name, string_new(unarystr)))
 #define unary_case(unarystr) \
-  else if(string_equals(unary_name, string_new((unarystr))))
+  else if(string_equals(unary_name, string_new(unarystr)))
 #define default_unary_case else
 
 #define switch_binary_case(binarystr) \
-  if(string_equals(binary_name, string_new((binarystr))))
+  if(string_equals(binary_name, string_new(binarystr)))
 #define binary_case(binarystr) \
-  else if(string_equals(binary_name, string_new((binarystr))))
+  else if(string_equals(binary_name, string_new(binarystr)))
 #define default_binary_case else
 
 #define switch_keyword_case(keywordstr) \
-  if(string_equals(keyword_name, string_new((keywordstr))))
+  if(string_equals(keyword_name, string_new(keywordstr)))
 #define keyword_case(keywordstr) \
-  else if(string_equals(keyword_name, string_new((keywordstr))))
+  else if(string_equals(keyword_name, string_new(keywordstr)))
 #define default_keyword_case else
 
-#define emit_byte(byte) vector_add(vm->current->bytecode, (byte))
-
-#define emit_bytes2(byte1, byte2) \
-  do {                            \
-    emit_byte((byte1));           \
-    emit_byte((byte2));           \
-  } while(0)
-
+#define emit_byte(byte)           vector_add(vm->current->bytecode, byte)
+#define emit_bytes2(byte1, byte2) (emit_byte(byte1), emit_byte(byte2))
 #define emit_bytes3(byte1, byte2, byte3) \
-  do {                                   \
-    emit_byte((byte1));                  \
-    emit_byte((byte2));                  \
-    emit_byte((byte3));                  \
-  } while(0)
-
+  (emit_byte(byte1), emit_byte(byte2), emit_byte(byte3))
 #define emit_bytes4(byte1, byte2, byte3, byte4) \
-  do {                                          \
-    emit_byte((byte1));                         \
-    emit_byte((byte2));                         \
-    emit_byte((byte3));                         \
-    emit_byte((byte4));                         \
-  } while(0)
+  (emit_byte(byte1), emit_byte(byte2), emit_byte(byte3), emit_byte(byte4))
 
 #define emit_variable_length_op(opcode)                     \
   do {                                                      \
@@ -61,21 +45,21 @@
     }                                                       \
   } while(0)
 
-#define emit_temporary(temporary)                      \
-  do {                                                 \
-    uint32_t temporary_index;                          \
-    make_temporary(vm, (temporary), &temporary_index); \
-    add_temporary(vm, temporary_index);                \
+#define emit_temporary(temporary)                    \
+  do {                                               \
+    uint32_t temporary_index;                        \
+    make_temporary(vm, temporary, &temporary_index); \
+    add_temporary(vm, temporary_index);              \
   } while(0)
 
-#define make_temporary(vm, temporary, index)           \
-  vector_add((vm)->current->temporaries, (temporary)); \
+#define make_temporary(vm, temporary, index)         \
+  vector_add((vm)->current->temporaries, temporary); \
   *(index) = vector_size((vm)->current->temporaries) - 1;
 
 #define add_temporary(vm, temporary_index) \
-  _add_temporary_function(vm, temporary_index, 256 + 1, 65536 + 1);
+  _add_temporary_function((vm), (temporary_index), 256 + 1, 65536 + 1);
 #define add_premade_temporary(vm, temporary_index) \
-  _add_temporary_function(vm, temporary_index, 256, 65536);
+  _add_temporary_function((vm), (temporary_index), 256, 65536);
 
 static void _add_temporary_function(
   VM *vm, uint32_t temporary_index, uint16_t byte_bound, uint32_t word_bound
