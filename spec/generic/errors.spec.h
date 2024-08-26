@@ -141,7 +141,8 @@ module(errors_spec, {
       )
     );
     parse(
-      "@_leading_underscore", vector_new(FM_INSTANCE, string_new("@_leading"))
+      "@_leading_underscore",
+      vector_new(FM_INSTANCE, string_new("@_leading_underscore"))
     );
     parse(
       "5e", vector_new(FM_INTEGER, string_new("5"), FM_UNARY, string_new("e"))
