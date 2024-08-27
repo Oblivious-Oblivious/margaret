@@ -18,6 +18,9 @@ module(errors_spec, {
       "#-invalid-syntax-symbol", "missing '=>' on binary method definition."
     );
     error("global$var", "grouped items should be separated by commas.");
+    error(
+      "# => l2 => [@self, l2]", "grouped items should be separated by commas."
+    );
   });
 
   it("other syntax errors", {
