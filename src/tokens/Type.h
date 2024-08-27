@@ -10,9 +10,9 @@
  */
 typedef enum Type {
   TOKEN_EOF            = 0,
-  TOKEN_NEWLINE        = 1,
-  TOKEN_WHITESPACE     = 2,
-  TOKEN_UNKNOWN        = 3,
+  TOKEN_UNKNOWN        = 1,
+  TOKEN_NEWLINE        = 2,
+  TOKEN_WHITESPACE     = 3,
   TOKEN_FLOAT          = 11,
   TOKEN_INTEGER        = 12,
   TOKEN_STRING         = 111,
@@ -20,7 +20,18 @@ typedef enum Type {
   TOKEN_INSTANCE       = 202,
   TOKEN_GLOBAL         = 203,
   TOKEN_MESSAGE_SYMBOL = 1001,
-  TOKEN_SYNTAX_SYMBOL  = 1002
+  TOKEN_SYNTAX_SYMBOL  = 1002,
+  TOKEN_LPAREN         = 1003,
+  TOKEN_RPAREN         = 1004,
+  TOKEN_LBRACKET       = 1005,
+  TOKEN_RBRACKET       = 1006,
+  TOKEN_LCURLY         = 1007,
+  TOKEN_RCURLY         = 1008,
+  TOKEN_COMMA          = 1009,
+  TOKEN_COLON          = 1010,
+  TOKEN_HASH           = 1011,
+  TOKEN_PERCENT        = 1012,
+  TOKEN_ROCKET         = 2001,
 } Type;
 
 #endif

@@ -99,6 +99,32 @@ Token *tokenize(VM *vm) {
         string_skip_first(token, 1);
         string_ignore_last(token, 1);
         vm->lineno += vector_size(string_split(token, '\n'));
+      } else if(token_type == TOKEN_MESSAGE_SYMBOL) {
+        if(string_size(token) == 2 && token[0] == '=' && token[1] == '>') {
+          token_type = TOKEN_ROCKET;
+        }
+      } else if(token_type == TOKEN_SYNTAX_SYMBOL) {
+        if(token[0] == '(') {
+          token_type = TOKEN_LPAREN;
+        } else if(token[0] == ')') {
+          token_type = TOKEN_RPAREN;
+        } else if(token[0] == '[') {
+          token_type = TOKEN_LBRACKET;
+        } else if(token[0] == ']') {
+          token_type = TOKEN_RBRACKET;
+        } else if(token[0] == '{') {
+          token_type = TOKEN_LCURLY;
+        } else if(token[0] == '}') {
+          token_type = TOKEN_RCURLY;
+        } else if(token[0] == ',') {
+          token_type = TOKEN_COMMA;
+        } else if(token[0] == ':') {
+          token_type = TOKEN_COLON;
+        } else if(token[0] == '#') {
+          token_type = TOKEN_HASH;
+        } else if(token[0] == '%') {
+          token_type = TOKEN_PERCENT;
+        }
       }
 
       goto __end;

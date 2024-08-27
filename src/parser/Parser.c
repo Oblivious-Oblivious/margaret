@@ -19,9 +19,8 @@
 #define la2type(expected_type) (token_get_type_safe(1) == (expected_type))
 #define la3type(expected_type) (token_get_type_safe(2) == (expected_type))
 
-#define ensure_value(value, msg) parser_ensure_value(vm, (value), (msg))
-#define ensure_type(type, msg)   parser_ensure_type(vm, (type), (msg))
-#define generate(value)          vector_add(vm->formal_bytecode, value)
+#define ensure(type, msg) parser_ensure(vm, (type), (msg))
+#define generate(value)   vector_add(vm->formal_bytecode, value)
 
 #define first_unit()             parser_first_unit(vm)
 #define unit_list()              parser_unit_list(vm)
@@ -83,16 +82,7 @@ static Token *parser_consume(VM *vm) {
   }
 }
 
-char *parser_ensure_value(VM *vm, const char *value, const char *error_msg) {
-  Token *token = parser_consume(vm);
-  if(string_equals(token->value, value)) {
-    return token->value;
-  } else {
-    return parser_error(vm, token, error_msg);
-  }
-}
-
-char *parser_ensure_type(VM *vm, Type type, const char *error_msg) {
+char *parser_ensure(VM *vm, Type type, const char *error_msg) {
   Token *token = parser_consume(vm);
   if(token->type == type) {
     return token->value;
@@ -120,7 +110,7 @@ VM *parser_analyze_syntax(VM *vm) {
 
 void parser_first_unit(VM *vm) {
   unit_list();
-  ensure_value("eof", "reached end of program.");
+  ensure(TOKEN_EOF, "reached end of program.");
 }
 
 char *parser_unit_list(VM *vm) {
@@ -133,7 +123,7 @@ char *parser_unit_list(VM *vm) {
     no_elements++;
 
     if(!la1value(")") && !la1value("]") && !la1value("}") && !la1value("eof")) {
-      ensure_value(",", "grouped items should be separated by commas.");
+      ensure(TOKEN_COMMA, "grouped items should be separated by commas.");
     }
   }
 
@@ -146,7 +136,8 @@ void parser_unit(VM *vm) { assignment_message(); }
 void parser_assignment_message(VM *vm) {
   keyword_message();
   if(la1value("=")) {
-    char *eq = ensure_value("=", "expected '=' on assignment message.");
+    char *eq =
+      ensure(TOKEN_MESSAGE_SYMBOL, "missing '=' on assignment message.");
     assignment_message();
     generate(FM_BINARY);
     generate(eq);
@@ -177,14 +168,12 @@ void parser_keyword_selector_chain(VM *vm) {
     string_addf(
       &message_name,
       "%s",
-      ensure_type(
-        TOKEN_IDENTIFIER, "expected identifier on keyword selector chain."
-      )
+      ensure(TOKEN_IDENTIFIER, "missing identifier on keyword selector chain.")
     );
     string_addf(
       &message_name,
       "%s",
-      ensure_value(":", "expected ':' on keyword selector chain.")
+      ensure(TOKEN_COLON, "missing ':' on keyword selector chain.")
     );
     binary_message();
   }
@@ -204,8 +193,8 @@ void parser_binary_message(VM *vm) {
 
 void parser_binary_selector_chain(VM *vm) {
   while(la1type(TOKEN_MESSAGE_SYMBOL) && !la1value("=")) {
-    char *message_name = ensure_type(
-      TOKEN_MESSAGE_SYMBOL, "expected message symbol on binary selector."
+    char *message_name = ensure(
+      TOKEN_MESSAGE_SYMBOL, "missing message symbol on binary selector."
     );
     unary_message();
     generate(FM_BINARY);
@@ -223,18 +212,15 @@ void parser_unary_message(VM *vm) {
 void parser_unary_selector_chain(VM *vm) {
   while(la1type(TOKEN_IDENTIFIER) && !la2value(":")) {
     generate(FM_UNARY);
-    generate(
-      ensure_type(TOKEN_IDENTIFIER, "expected identifier on unary selector.")
-    );
+    generate(ensure(TOKEN_IDENTIFIER, "missing identifier on unary selector."));
   }
 }
 
 void parser_lhs_message(VM *vm) {
   char *message_name = NULL;
   if(la1type(TOKEN_MESSAGE_SYMBOL) && !la1value("=")) {
-    message_name = ensure_type(
-      TOKEN_MESSAGE_SYMBOL, "expected message symbol on lhs selector."
-    );
+    message_name =
+      ensure(TOKEN_MESSAGE_SYMBOL, "missing message symbol on lhs selector.");
   }
 
   literal();
@@ -247,66 +233,66 @@ void parser_lhs_message(VM *vm) {
 
 void parser_literal(VM *vm) {
   if(la1value("(")) {
-    ensure_value("(", "missing opening parenthesis on group.");
+    ensure(TOKEN_LPAREN, "missing opening parenthesis on group.");
     while(la1value(",")) {
-      ensure_value(",", "");
+      ensure(TOKEN_COMMA, "");
     }
     if(la1value(")")) {
       generate(FM_NIL);
     } else {
       unit_list();
     }
-    ensure_value(")", "missing closing parenthesis on group.");
+    ensure(TOKEN_RPAREN, "missing closing parenthesis on group.");
   } else if(la1value("[")) {
     char *number_of_elements = NULL;
-    ensure_value("[", "missing opening bracket on tensor.");
+    ensure(TOKEN_LBRACKET, "missing opening bracket on tensor.");
     number_of_elements = unit_list();
-    ensure_value("]", "missing closing bracket on tensor.");
+    ensure(TOKEN_RBRACKET, "missing closing bracket on tensor.");
     generate(FM_TENSOR);
     generate(number_of_elements);
   } else if(la1value("{")) {
-    ensure_value("{", "missing opening curly on proc.");
+    ensure(TOKEN_LCURLY, "missing opening curly on proc.");
     generate(FM_PROC_START);
 
     if(la1value("}")) {
       generate(FM_NIL);
     } else if(la1value("|") && la2value("}")) {
-      ensure_value("|", "missing '|' on proc.");
+      ensure(TOKEN_MESSAGE_SYMBOL, "missing '|' on proc.");
       generate(FM_NIL);
     } else {
       param_list();
       unit_list();
     }
 
-    ensure_value("}", "missing closing curly on proc.");
+    ensure(TOKEN_RCURLY, "missing closing curly on proc.");
     generate(FM_PROC_END);
   } else if(la1value("%") && la2value("(")) {
     char *number_of_elements = NULL;
-    ensure_value("%", "missing `%` on bitstring.");
-    ensure_value("(", "missing opening parenthesis on bitstring.");
+    ensure(TOKEN_PERCENT, "missing `%` on bitstring.");
+    ensure(TOKEN_LPAREN, "missing opening parenthesis on bitstring.");
     number_of_elements = bit_list();
-    ensure_value(")", "missing closing parenthesis on bitstring.");
+    ensure(TOKEN_RPAREN, "missing closing parenthesis on bitstring.");
     generate(FM_BITSTRING);
     generate(number_of_elements);
   } else if(la1value("%") && la2value("[")) {
     char *number_of_elements = NULL;
-    ensure_value("%", "missing `%` on tuple.");
-    ensure_value("[", "missing opening bracket on tuple.");
+    ensure(TOKEN_PERCENT, "missing `%` on tuple.");
+    ensure(TOKEN_LBRACKET, "missing opening bracket on tuple.");
     number_of_elements = unit_list();
-    ensure_value("]", "missing closing bracket on tuple.");
+    ensure(TOKEN_RBRACKET, "missing closing bracket on tuple.");
     generate(FM_TUPLE);
     generate(number_of_elements);
   } else if(la1value("%") && la2value("{")) {
     char *number_of_elements = NULL;
-    ensure_value("%", "missing `%` on hash.");
-    ensure_value("{", "missing opening curly on hash.");
+    ensure(TOKEN_PERCENT, "missing `%` on hash.");
+    ensure(TOKEN_LCURLY, "missing opening curly on hash.");
     number_of_elements = association_list();
-    ensure_value("}", "missing closing curly on hash.");
+    ensure(TOKEN_RCURLY, "missing closing curly on hash.");
     generate(FM_HASH);
     generate(number_of_elements);
   } else if(la1value("#")) {
     size_t prev_size;
-    ensure_value("#", "missing `#` on method definition.");
+    ensure(TOKEN_HASH, "missing `#` on method definition.");
     generate(FM_METHOD_START);
 
     generate(FM_METHOD_RECEIVER);
@@ -332,17 +318,13 @@ void parser_literal(VM *vm) {
 void parser_param_list(VM *vm) {
   if(la2value(",")) {
     generate(FM_PROC_PARAMETER);
-    generate(
-      ensure_type(TOKEN_IDENTIFIER, "expected identifier on proc parameters.")
-    );
-    ensure_value(",", "missing ',' on proc parameter list.");
+    generate(ensure(TOKEN_IDENTIFIER, "missing identifier on proc parameter."));
+    ensure(TOKEN_COMMA, "missing ',' on proc parameter list.");
     param_list();
   } else if(la2value("|")) {
     generate(FM_PROC_PARAMETER);
-    generate(
-      ensure_type(TOKEN_IDENTIFIER, "expected identifier on proc parameters.")
-    );
-    ensure_value("|", "missing '|' on proc parameter list.");
+    generate(ensure(TOKEN_IDENTIFIER, "missing identifier on proc parameter."));
+    ensure(TOKEN_MESSAGE_SYMBOL, "missing '|' on proc parameter list.");
   }
 }
 
@@ -355,7 +337,7 @@ char *parser_bit_list(VM *vm) {
     no_elements++;
 
     if(!la1value(")")) {
-      ensure_value(",", "missing ',' on bit list.");
+      ensure(TOKEN_COMMA, "missing ',' on bit list.");
     }
   }
 
@@ -367,10 +349,10 @@ void parser_bit(VM *vm) {
   scalar();
 
   if(la1value(":") && la2value(":")) {
-    ensure_value(":", "expected '::' on bit.");
-    ensure_value(":", "expected '::' on bit.");
+    ensure(TOKEN_COLON, "missing '::' on bit.");
+    ensure(TOKEN_COLON, "missing '::' on bit.");
     generate(FM_INTEGER);
-    generate(ensure_type(TOKEN_INTEGER, "expected integer on bit."));
+    generate(ensure(TOKEN_INTEGER, "missing integer on bit."));
   } else {
     generate(FM_INTEGER);
     generate(string_new("8"));
@@ -383,12 +365,12 @@ char *parser_association_list(VM *vm) {
 
   while(!la1value("}") && !la1value("eof")) {
     key();
-    ensure_value(":", "missing ':' on association list.");
+    ensure(TOKEN_COLON, "missing ':' on association list.");
     unit();
     no_elements++;
 
     if(!la1value("}")) {
-      ensure_value(",", "missing ',' on association list.");
+      ensure(TOKEN_COMMA, "missing ',' on association list.");
     }
   }
 
@@ -399,10 +381,10 @@ char *parser_association_list(VM *vm) {
 void parser_key(VM *vm) {
   if(la1type(TOKEN_IDENTIFIER)) {
     generate(FM_STRING);
-    generate(ensure_type(TOKEN_IDENTIFIER, "expected identifier on key."));
+    generate(ensure(TOKEN_IDENTIFIER, "missing identifier on key."));
   } else if(la1type(TOKEN_STRING)) {
     generate(FM_STRING);
-    generate(ensure_type(TOKEN_STRING, "expected string on key."));
+    generate(ensure(TOKEN_STRING, "missing string on key."));
   }
 }
 
@@ -411,25 +393,25 @@ void parser_method_definition(VM *vm) {
 
   if(la1type(TOKEN_IDENTIFIER) && la2value(":")) {
     name = keyword_list();
-    ensure_value("=>", "missing '=>' on keyword keyword method definition.");
+    ensure(TOKEN_ROCKET, "missing '=>' on keyword keyword method definition.");
   } else if(la1type(TOKEN_IDENTIFIER) && la2value("=>")) {
-    name = ensure_type(
-      TOKEN_IDENTIFIER, "expected identifier on unary method definition."
+    name = ensure(
+      TOKEN_IDENTIFIER, "missing identifier on unary method definition."
     );
-    ensure_value("=>", "missing '=>' on unary method definition.");
+    ensure(TOKEN_ROCKET, "missing '=>' on unary method definition.");
   } else if(la1type(TOKEN_MESSAGE_SYMBOL) && la2value("=>")) {
-    name = ensure_type(
-      TOKEN_MESSAGE_SYMBOL, "expected message symbol on lhs method definition."
+    name = ensure(
+      TOKEN_MESSAGE_SYMBOL, "missing message symbol on lhs method definition."
     );
-    ensure_value("=>", "missing '=>' on lhs method definition.");
+    ensure(TOKEN_ROCKET, "missing '=>' on lhs method definition.");
   } else if(la1type(TOKEN_MESSAGE_SYMBOL)) {
-    name = ensure_type(
+    name = ensure(
       TOKEN_MESSAGE_SYMBOL,
-      "expected message symbol on binary method definition."
+      "missing message symbol on binary method definition."
     );
     generate(FM_METHOD_PARAMETER);
     literal();
-    ensure_value("=>", "missing '=>' on binary method definition.");
+    ensure(TOKEN_ROCKET, "missing '=>' on binary method definition.");
   }
 
   generate(FM_METHOD_NAME);
@@ -444,8 +426,8 @@ char *parser_keyword_list(VM *vm) {
     string_addf(
       &keyword_method_name,
       "%s%s",
-      ensure_type(TOKEN_IDENTIFIER, "expected identifier on keyword list."),
-      ensure_value(":", "missing ':' on keyword list.")
+      ensure(TOKEN_IDENTIFIER, "missing identifier on keyword list."),
+      ensure(TOKEN_COLON, "missing ':' on keyword list.")
     );
     generate(FM_METHOD_PARAMETER);
     literal();
@@ -456,19 +438,19 @@ char *parser_keyword_list(VM *vm) {
 
 void parser_scalar(VM *vm) {
   if(la1value(":") && la2value(":")) {
-    ensure_value(":", "expected ':' on label.");
-    ensure_value(":", "expected ':' on label.");
+    ensure(TOKEN_COLON, "expected ':' on label.");
+    ensure(TOKEN_COLON, "expected ':' on label.");
     generate(FM_LABEL);
-    generate(ensure_type(TOKEN_IDENTIFIER, "expected identifier on label."));
+    generate(ensure(TOKEN_IDENTIFIER, "expected identifier on label."));
   } else if(la1type(TOKEN_INTEGER)) {
     generate(FM_INTEGER);
-    generate(ensure_type(TOKEN_INTEGER, "expected integer literal."));
+    generate(ensure(TOKEN_INTEGER, "expected integer literal."));
   } else if(la1type(TOKEN_FLOAT)) {
     generate(FM_FLOAT);
-    generate(ensure_type(TOKEN_FLOAT, "expected float literal."));
+    generate(ensure(TOKEN_FLOAT, "expected float literal."));
   } else if(la1type(TOKEN_STRING)) {
     generate(FM_STRING);
-    generate(ensure_type(TOKEN_STRING, "expected string literal."));
+    generate(ensure(TOKEN_STRING, "expected string literal."));
   } else {
     variable();
   }
@@ -476,36 +458,38 @@ void parser_scalar(VM *vm) {
 
 void parser_variable(VM *vm) {
   if(la1value("$nil")) {
-    ensure_value("$nil", "expected '$nil' on nil literal.");
+    ensure(TOKEN_GLOBAL, "expected '$nil' on nil literal.");
     generate(FM_NIL);
   } else if(la1value("$false")) {
-    ensure_value("$false", "expected '$false' on false literal.");
+    ensure(TOKEN_GLOBAL, "expected '$false' on false literal.");
     generate(FM_FALSE);
   } else if(la1value("$true")) {
-    ensure_value("$true", "expected '$true' on true literal.");
+    ensure(TOKEN_GLOBAL, "expected '$true' on true literal.");
     generate(FM_TRUE);
   } else if(la1value("@self")) {
-    ensure_value("@self", "expected '@self' on instance variable declaration.");
+    ensure(
+      TOKEN_INSTANCE, "expected '@self' on instance variable declaration."
+    );
     generate(FM_SELF);
   } else if(la1value("@super")) {
-    ensure_value(
-      "@super", "expected '@super' on instance variable declaration."
+    ensure(
+      TOKEN_INSTANCE, "expected '@super' on instance variable declaration."
     );
     generate(FM_SUPER);
   } else if(la1type(TOKEN_GLOBAL)) {
     generate(FM_GLOBAL);
-    generate(ensure_type(
+    generate(ensure(
       TOKEN_GLOBAL, "expected identifier on global variable declaration."
     ));
   } else if(la1type(TOKEN_INSTANCE)) {
     generate(FM_INSTANCE);
-    generate(ensure_type(
+    generate(ensure(
       TOKEN_INSTANCE, "expected identifier on instance variable declaration."
     ));
   } else if(la1type(TOKEN_IDENTIFIER)) {
     generate(FM_LOCAL);
-    generate(ensure_type(
-      TOKEN_IDENTIFIER, "expected identifier on variable declaration."
-    ));
+    generate(
+      ensure(TOKEN_IDENTIFIER, "expected identifier on variable declaration.")
+    );
   }
 }
