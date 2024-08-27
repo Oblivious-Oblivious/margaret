@@ -321,7 +321,7 @@ void parser_param_list(VM *vm) {
     generate(ensure(TOKEN_IDENTIFIER, "missing identifier on proc parameter."));
     ensure(TOKEN_COMMA, "missing ',' on proc parameter list.");
     param_list();
-  } else if(la2value("|")) {
+  } else if(!la1value("#") && la2value("|")) {
     generate(FM_PROC_PARAMETER);
     generate(ensure(TOKEN_IDENTIFIER, "missing identifier on proc parameter."));
     ensure(TOKEN_MESSAGE_SYMBOL, "missing '|' on proc parameter list.");

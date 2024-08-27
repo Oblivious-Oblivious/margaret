@@ -151,6 +151,70 @@ module(errors_spec, {
       "5e", vector_new(FM_INTEGER, string_new("5"), FM_UNARY, string_new("e"))
     );
     parse("0b_101010", vector_new(FM_INTEGER, string_new("42")));
+
+    parse(
+      "{ a | # | b => a + b }",
+      vector_new(
+        FM_PROC_START,
+        FM_PROC_PARAMETER,
+        string_new("a"),
+        FM_METHOD_START,
+        FM_METHOD_RECEIVER,
+        FM_METHOD_ANY_OBJECT,
+        FM_METHOD_PARAMETER,
+        FM_LOCAL,
+        string_new("b"),
+        FM_METHOD_NAME,
+        string_new("|"),
+        FM_LOCAL,
+        string_new("a"),
+        FM_LOCAL,
+        string_new("b"),
+        FM_BINARY,
+        string_new("+"),
+        FM_METHOD_END,
+        FM_PROC_END
+      )
+    );
+
+    parse(
+      "{ # | a => a }",
+      vector_new(
+        FM_PROC_START,
+        FM_METHOD_START,
+        FM_METHOD_RECEIVER,
+        FM_METHOD_ANY_OBJECT,
+        FM_METHOD_PARAMETER,
+        FM_LOCAL,
+        string_new("a"),
+        FM_METHOD_NAME,
+        string_new("|"),
+        FM_LOCAL,
+        string_new("a"),
+        FM_METHOD_END,
+        FM_PROC_END
+      )
+    );
+
+    parse(
+      "{ # _ | a => a }",
+      vector_new(
+        FM_PROC_START,
+        FM_METHOD_START,
+        FM_METHOD_RECEIVER,
+        FM_LOCAL,
+        string_new("_"),
+        FM_METHOD_PARAMETER,
+        FM_LOCAL,
+        string_new("a"),
+        FM_METHOD_NAME,
+        string_new("|"),
+        FM_LOCAL,
+        string_new("a"),
+        FM_METHOD_END,
+        FM_PROC_END
+      )
+    );
   });
 })
 
