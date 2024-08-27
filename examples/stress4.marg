@@ -4,11 +4,11 @@ $Margaret -- # test => 42,
 puts: $Margaret test,puts: $Margaret test,puts: $Margaret test,puts: $Margaret test,
 puts: $Margaret test,puts: $Margaret test,puts: $Margaret test,puts: $Margaret test,
 
-$Margaret -- # first: p1 second: p2 => (
+$Margaret -- # first: p1 second: p2 => {
   puts: p1,
   puts: "---",
   puts: p2,
-),
+},
 
 first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,
 first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,first: 41 second: 42,

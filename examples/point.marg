@@ -4,11 +4,11 @@ $Point = $Margaret clone,
 $Point -- #x => @x,
 $Point -- #y => @y,
 
-$Point -- #x: xparam y: yparam => (
+$Point -- #x: xparam y: yparam => {
   @x = xparam,
   @y = yparam,
   @self,
-),
+},
 
 $Point -- #calc => @x + @y,
 
@@ -17,20 +17,20 @@ $Point -- #+ other => $Point x: @x + other x y: @y + other y,
 $Point3D = $Point clone,
 $Point3D -- #z => @z,
 
-$Point3D -- #x: x y: y z: z => (
+$Point3D -- #x: x y: y z: z => {
   @super x: x y: y,
   @x = x,
   @y = y,
   @z = z,
   @self,
-),
+},
 
 $Point3D -- #calc => @super calc + @z,
 
-$Point3D -- #+ other => (
+$Point3D -- #+ other => {
   point = @super + other super,
   $Point3D x: point x, y: point y, z: @z + other z,
-),
+},
 
 p1 = $Point3D x: 10 y: 20 z: 30,
 p2 = $Point3D x: 2 y: 4 z: 6,

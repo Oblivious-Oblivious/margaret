@@ -68,10 +68,14 @@ key:
   | STRING
 
 method_definition:
-    keyword_list '=>' unit
-  | IDENTIFIER '=>' unit
-  | MESSAGE_SYMBOL '=>' unit
-  | MESSAGE_SYMBOL literal '=>' unit
+    keyword_list '=>' method_body
+  | IDENTIFIER '=>' method_body
+  | MESSAGE_SYMBOL '=>' method_body
+  | MESSAGE_SYMBOL literal '=>' method_body
+
+method_body:
+    unit
+  | { unit_list }
 
 keyword_list:
     IDENTIFIER ':' literal

@@ -434,10 +434,10 @@ module(method_definition_spec, {
     );
 
     parse(
-      "#times: a_block => ( \
+      "#times: a_block => { \
         remaining = @self, \
         { (remaining = remaining - 1) >= 0 } while_true: { a_block value } \
-      )",
+      }",
       vector_new(
         FM_METHOD_START,
         FM_METHOD_RECEIVER,

@@ -38,6 +38,7 @@ void parser_bit(VM *vm);
 char *parser_association_list(VM *vm);
 void parser_key(VM *vm);
 void parser_method_definition(VM *vm);
+void parser_method_body(VM *vm);
 char *parser_keyword_list(VM *vm);
 void parser_scalar(VM *vm);
 void parser_variable(VM *vm);

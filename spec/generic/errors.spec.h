@@ -215,6 +215,67 @@ module(errors_spec, {
         FM_PROC_END
       )
     );
+
+    parse(
+      "# m => {{{}}}",
+      vector_new(
+        FM_METHOD_START,
+        FM_METHOD_RECEIVER,
+        FM_METHOD_ANY_OBJECT,
+        FM_METHOD_NAME,
+        string_new("m"),
+        FM_PROC_START,
+        FM_PROC_START,
+        FM_NIL,
+        FM_PROC_END,
+        FM_PROC_END,
+        FM_METHOD_END
+      )
+    );
+
+    parse(
+      "# m1 => { # m2 => { {} } }",
+      vector_new(
+        FM_METHOD_START,
+        FM_METHOD_RECEIVER,
+        FM_METHOD_ANY_OBJECT,
+        FM_METHOD_NAME,
+        string_new("m1"),
+        FM_METHOD_START,
+        FM_METHOD_RECEIVER,
+        FM_METHOD_ANY_OBJECT,
+        FM_METHOD_NAME,
+        string_new("m2"),
+        FM_PROC_START,
+        FM_NIL,
+        FM_PROC_END,
+        FM_METHOD_END,
+        FM_METHOD_END
+      )
+    );
+
+    parse(
+      "{ # m1 => { # m2 => { {} } } }",
+      vector_new(
+        FM_PROC_START,
+        FM_METHOD_START,
+        FM_METHOD_RECEIVER,
+        FM_METHOD_ANY_OBJECT,
+        FM_METHOD_NAME,
+        string_new("m1"),
+        FM_METHOD_START,
+        FM_METHOD_RECEIVER,
+        FM_METHOD_ANY_OBJECT,
+        FM_METHOD_NAME,
+        string_new("m2"),
+        FM_PROC_START,
+        FM_NIL,
+        FM_PROC_END,
+        FM_METHOD_END,
+        FM_METHOD_END,
+        FM_PROC_END
+      )
+    );
   });
 })
 

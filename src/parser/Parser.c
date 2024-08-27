@@ -41,6 +41,7 @@
 #define association_list()       parser_association_list(vm)
 #define key()                    parser_key(vm)
 #define method_definition()      parser_method_definition(vm)
+#define method_body()            parser_method_body(vm)
 #define keyword_list()           parser_keyword_list(vm)
 #define scalar()                 parser_scalar(vm)
 #define variable()               parser_variable(vm)
@@ -416,7 +417,17 @@ void parser_method_definition(VM *vm) {
 
   generate(FM_METHOD_NAME);
   generate(name);
-  unit();
+  method_body();
+}
+
+void parser_method_body(VM *vm) {
+  if(la1value("{")) {
+    ensure(TOKEN_LCURLY, "missing opening curly on method body.");
+    unit_list();
+    ensure(TOKEN_RCURLY, "missing closing curly on method body.");
+  } else {
+    unit();
+  }
 }
 
 char *parser_keyword_list(VM *vm) {

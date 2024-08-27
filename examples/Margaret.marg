@@ -41,13 +41,13 @@ $false -- #if_false: false_proc if_true: true_proc => false_proc call,
 $false -- #if_true: proc => $nil,
 $false -- #if_true: true_proc if_false: false_proc => false_proc call,
 
-$Margaret -- #if: condition then: proc => (
+$Margaret -- #if: condition then: proc => {
   condition
     if_true: proc
     if_false: {},
-),
-$Margaret -- #if: condition then: true_proc else: false_proc => (
+},
+$Margaret -- #if: condition then: true_proc else: false_proc => {
   condition
     if_true: true_proc
     if_false: false_proc,
-),
+},

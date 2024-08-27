@@ -3,7 +3,7 @@ include: "examples/Margaret.marg",
 $Margaret -- #a => @a,
 $Numeric -- #a => @a,
 
-$Integer -- #something => (
+$Integer -- #something => {
   @a = 42,
   p0 = {
     puts: "inside p0 inside of $Integer",
@@ -11,7 +11,7 @@ $Integer -- #something => (
     puts: @self,
     puts: @a,
   },
-),
+},
 
 $Integer -- #calculation: other => @self + @a + other,
 
@@ -49,12 +49,12 @@ puts: @y,
 puts: $Margaret x,
 puts: $Margaret y,
 
-$Integer -- #something_else => (
+$Integer -- #something_else => {
   @a = 44,
   @b = 41,
   puts: "OK -> ",
   puts: @self,
   puts: @super,
-),
+},
 
 55 something_else,

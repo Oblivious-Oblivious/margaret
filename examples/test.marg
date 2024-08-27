@@ -122,20 +122,20 @@ k0 = # add: element at: position => (),
 puts: k0,
 
 u1 = #test => puts: "inside of unary method",
-u2 = # test => (
+u2 = # test => {
   $a = 24,
   puts: "$a should be `24`:",
   puts: $a,
-),
-u3 = # test => (
+},
+u3 = # test => {
   puts: "@a should be `321`:",
   puts: @a,
-),
-u4 = # test => (
+},
+u4 = # test => {
   @a = 55,
   puts: "@a should be `55`:",
   puts: @a,
-),
+},
 
 b1 = # + other => puts: "inside of binary method",
 b2 = # - test => (puts: "@a should be `55`:", puts: @a),
