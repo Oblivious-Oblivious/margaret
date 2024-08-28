@@ -63,9 +63,9 @@ static char *normalize_integer(char *token) {
 }
 
 Token *tokenize(VM *vm) {
-  Type token_type = TOKEN_UNKNOWN;
-  char *token     = NULL;
   size_t i;
+  char *token     = vm->eof_token->value;
+  Type token_type = vm->eof_token->type;
 
   OnigEncoding encodings[1] = {ONIG_ENCODING_ASCII};
   onig_initialize(encodings, 1);

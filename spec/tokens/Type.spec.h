@@ -10,9 +10,8 @@ module(TypeSpec, {
   });
 
   it("contains whitespace symbols", {
-    assert_that_int(TOKEN_UNKNOWN equals to 1);
-    assert_that_int(TOKEN_NEWLINE equals to 2);
-    assert_that_int(TOKEN_WHITESPACE equals to 3);
+    assert_that_int(TOKEN_NEWLINE equals to 1);
+    assert_that_int(TOKEN_WHITESPACE equals to 2);
   });
 
   it("contains all terminal literal types", {
