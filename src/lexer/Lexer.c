@@ -62,7 +62,12 @@ static char *normalize_integer(char *token) {
   return token;
 }
 
-Token *tokenize(VM *vm) {
+/**
+ * @brief Tokenizes the next token from the source code
+ * @param vm -> The VM object
+ * @return Token* -> A token object
+ */
+static Token *tokenize(VM *vm) {
   size_t i;
   char *token     = vm->eof_token->value;
   Type token_type = vm->eof_token->type;
