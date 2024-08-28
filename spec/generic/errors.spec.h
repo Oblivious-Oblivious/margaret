@@ -7,13 +7,13 @@
 module(errors_spec, {
   it("enumerable literal errors", {
     error("(", "missing closing parenthesis on group.");
-    error(")", "missing opening parenthesis on group.");
+    error(")", "reached end of program.");
     error("(()", "missing closing parenthesis on group.");
     error("())", "reached end of program.");
     error("[", "missing closing bracket on tensor.");
-    error("]", "missing opening bracket on tensor.");
-    error("{", "missing closing curly brace on hash.");
-    error("}", "missing opening curly brace on hash.");
+    error("]", "reached end of program.");
+    error("{", "missing closing curly on proc.");
+    error("}", "reached end of program.");
     error(
       "#-invalid-syntax-symbol", "missing '=>' on binary method definition."
     );
