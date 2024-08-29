@@ -3,6 +3,6 @@
 
 #include "../../libs/cSpec/export/cSpec.h"
 
-module(MargHashSpec, {})
+xmodule(MargHashSpec, { it("tests hash", {}); })
 
 #endif

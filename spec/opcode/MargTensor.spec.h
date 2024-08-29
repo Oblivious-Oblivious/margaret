@@ -3,6 +3,6 @@
 
 #include "../../libs/cSpec/export/cSpec.h"
 
-module(MargTensorSpec, {})
+xmodule(MargTensorSpec, { it("tests tensor", {}); })
 
 #endif

@@ -4,6 +4,6 @@
 #include "../../libs/cSpec/export/cSpec.h"
 #include "../../src/vm/vm.h"
 
-module(VmSpec, {})
+xmodule(VmSpec, { it("tests vm", {}); })
 
 #endif

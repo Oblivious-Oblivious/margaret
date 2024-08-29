@@ -3,6 +3,6 @@
 
 #include "../../libs/cSpec/export/cSpec.h"
 
-module(MargIntegerSpec, {})
+xmodule(MargIntegerSpec, { it("tests integer", {}); })
 
 #endif

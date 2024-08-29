@@ -4,6 +4,6 @@
 #include "../../libs/cSpec/export/cSpec.h"
 #include "../../src/vm/byte_conversions.h"
 
-module(byte_conversions_spec, {})
+xmodule(byte_conversions_spec, { it("tests byte conversions", {}); })
 
 #endif

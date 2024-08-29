@@ -4,6 +4,6 @@
 #include "../../libs/cSpec/export/cSpec.h"
 #include "../../src/scanner/Scanner.h"
 
-module(ScannerSpec, {})
+xmodule(ScannerSpec, { it("tests scanner", {}); })
 
 #endif

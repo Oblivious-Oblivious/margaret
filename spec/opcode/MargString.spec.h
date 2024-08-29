@@ -3,6 +3,6 @@
 
 #include "../../libs/cSpec/export/cSpec.h"
 
-module(MargStringSpec, {})
+xmodule(MargStringSpec, { it("tests string", {}); })
 
 #endif

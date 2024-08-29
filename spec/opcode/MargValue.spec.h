@@ -3,6 +3,6 @@
 
 #include "../../libs/cSpec/export/cSpec.h"
 
-module(MargValueSpec, {})
+xmodule(MargValueSpec, { it("tests NaN boxing", {}); })
 
 #endif

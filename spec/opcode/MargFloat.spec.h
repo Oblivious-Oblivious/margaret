@@ -3,6 +3,6 @@
 
 #include "../../libs/cSpec/export/cSpec.h"
 
-module(MargFloatSpec, {})
+xmodule(MargFloatSpec, { it("tests float", {}); })
 
 #endif

@@ -3,6 +3,6 @@
 
 #include "../../libs/cSpec/export/cSpec.h"
 
-module(MargProcSpec, {})
+xmodule(MargProcSpec, { it("tests proc", {}); })
 
 #endif
