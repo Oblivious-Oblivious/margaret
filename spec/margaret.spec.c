@@ -47,6 +47,7 @@
 /* lexer */
 #include "lexer/alternate_to_dec.spec.h"
 #include "lexer/Lexer.spec.h"
+#include "lexer/token_types.spec.h"
 
 /* loader */
 #include "loader/Loader.spec.h"
@@ -121,6 +122,7 @@ int main(void) {
 
     alternate_to_dec_spec();
     LexerSpec();
+    token_types_spec();
 
     LoaderSpec();
 
