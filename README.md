@@ -19,7 +19,7 @@ TODO - Write installation instructions
 ## "Postcard"
 
 ```margaret
-$Margaret -- #ultimate_answer: x => (
+$Margaret -- #ultimate_answer: x => {
   $true && !$false not not && ($nil is_nil?) if_false: { exit: 0 },
   y = @self methods size + @super to_string length * 42,
   [::label, 42, 42.2, "str", 0b0110, 0xbeef, 0o741, %[y, 42, "val"],
@@ -27,7 +27,7 @@ $Margaret -- #ultimate_answer: x => (
       puts: elem object_id,
     },
   if: x < y then: { x } else: { y },
-),
+},
 puts: (ultimate_answer: 42),
 ```
 

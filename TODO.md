@@ -16,6 +16,7 @@
     🟩 #put: element at: position => ()                      -> ($MethodProto clone)
   🟥 Add visual literals of trees, graphs and matrices (2-dimentional data representation).
      Most likely part of an IDE that casts the data into tensors.
+  🟥 Add a way to encode/encrypt bytecode deployables with some sort of PGP/Diffie Hellman.
 
 ## (✗) ver. 0.0.4
 -----------------
@@ -53,6 +54,7 @@
   🟥 Add a custom mark and sweep garbage collector.
   🟥 Optimize repeating bytecodes that offer no state change outside the loop.
   🟥 Think of most syntax, semantic or runtime errors and spec them.
+  🟥 Add UTF8 and Unicode support.
 
 ## (✗) ver. 0.0.1
 -----------------
