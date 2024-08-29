@@ -103,7 +103,7 @@ static Token *tokenize(VM *vm) {
       } else if(token_type == TOKEN_STRING) {
         string_skip_first(token, 1);
         string_ignore_last(token, 1);
-        vm->lineno += vector_size(string_split(token, '\n'));
+        vm->lineno += vector_size(string_split(token, '\n')) - 1;
       } else if(token_type == TOKEN_MESSAGE_SYMBOL) {
         if(string_size(token) == 2 && token[0] == '=' && token[1] == '>') {
           token_type = TOKEN_ROCKET;
