@@ -103,7 +103,14 @@ static Token *tokenize(VM *vm) {
       } else if(token_type == TOKEN_STRING) {
         string_skip_first(token, 1);
         string_ignore_last(token, 1);
-        vm->lineno += vector_size(string_split(token, '\n')) - 1;
+        char **tokens_split_in_newlines = string_split(token, '\n');
+        size_t number_of_extra_newlines =
+          vector_size(tokens_split_in_newlines) - 1;
+        if(number_of_extra_newlines > 0) {
+          vm->charno =
+            string_size(tokens_split_in_newlines[number_of_extra_newlines]);
+          vm->lineno += number_of_extra_newlines;
+        }
       } else if(token_type == TOKEN_MESSAGE_SYMBOL) {
         if(string_size(token) == 2 && token[0] == '=' && token[1] == '>') {
           token_type = TOKEN_ROCKET;

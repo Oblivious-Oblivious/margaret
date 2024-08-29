@@ -24,24 +24,15 @@
     assert_that_charptr(vm->tokens[0]->value equals to res); \
   } while(0)
 
-#define tokenize_and_assert_multiline(str, no_lines)         \
-  do {                                                       \
-    VM *vm     = vm_new("file.marg");                        \
-    vm->source = string_new(str);                            \
-    lexer_make_tokens(vm);                                   \
-    assert_that_int(vector_size(vm->tokens) equals to 2);    \
-    assert_that_int(vm->lineno equals to no_lines);          \
-    assert_that_charptr(vm->tokens[0]->value equals to str); \
-  } while(0)
-
-#define tokenize_and_assert_multiline_res(str, res, no_lines) \
-  do {                                                        \
-    VM *vm     = vm_new("file.marg");                         \
-    vm->source = string_new(str);                             \
-    lexer_make_tokens(vm);                                    \
-    assert_that_int(vector_size(vm->tokens) equals to 2);     \
-    assert_that_int(vm->lineno equals to no_lines);           \
-    assert_that_charptr(vm->tokens[0]->value equals to res);  \
+#define tokenize_and_assert_multiline_res(str, res, no_lines, no_chars) \
+  do {                                                                  \
+    VM *vm     = vm_new("file.marg");                                   \
+    vm->source = string_new(str);                                       \
+    lexer_make_tokens(vm);                                              \
+    assert_that_int(vector_size(vm->tokens) equals to 2);               \
+    assert_that_int(vm->lineno equals to no_lines);                     \
+    assert_that_int(vm->charno equals to no_chars);                     \
+    assert_that_charptr(vm->tokens[0]->value equals to res);            \
   } while(0)
 
 module(token_types_spec, {
@@ -199,33 +190,34 @@ module(token_types_spec, {
       tokenize_and_assert_res("'quoted text'", "quoted text");
       tokenize_and_assert_res("\"with quotes\"", "with quotes");
 
-      tokenize_and_assert_multiline_res("'hello\nworld'", "hello\nworld", 2);
+      tokenize_and_assert_multiline_res("'hello\nworld'", "hello\nworld", 2, 5);
       tokenize_and_assert_multiline_res(
-        "\"multi\nline\nstring\"", "multi\nline\nstring", 3
+        "\"multi\nline\nstring\"", "multi\nline\nstring", 3, 6
       );
       tokenize_and_assert_multiline_res(
-        "'example\nwith\nnewlines'", "example\nwith\nnewlines", 3
+        "'example\nwith\nnewlines'", "example\nwith\nnewlines", 3, 8
+      );
+      tokenize_and_assert_multiline_res("'hello\n'", "hello\n", 2, 0);
+      tokenize_and_assert_multiline_res(
+        "\"another\nexample\"", "another\nexample", 2, 7
       );
       tokenize_and_assert_multiline_res(
-        "\"another\nexample\"", "another\nexample", 2
+        "'this\nis a\ntest'", "this\nis a\ntest", 3, 4
       );
       tokenize_and_assert_multiline_res(
-        "'this\nis a\ntest'", "this\nis a\ntest", 3
+        "\"multi\nline\nregex\npattern\"", "multi\nline\nregex\npattern", 4, 7
       );
       tokenize_and_assert_multiline_res(
-        "\"multi\nline\nregex\npattern\"", "multi\nline\nregex\npattern", 4
+        "'quotes\nwith\nnewlines'", "quotes\nwith\nnewlines", 3, 8
       );
       tokenize_and_assert_multiline_res(
-        "'quotes\nwith\nnewlines'", "quotes\nwith\nnewlines", 3
+        "\"new\nline\ntest\"", "new\nline\ntest", 3, 4
       );
       tokenize_and_assert_multiline_res(
-        "\"new\nline\ntest\"", "new\nline\ntest", 3
+        "'string\nwith\nmultiple\nlines'", "string\nwith\nmultiple\nlines", 4, 5
       );
       tokenize_and_assert_multiline_res(
-        "'string\nwith\nmultiple\nlines'", "string\nwith\nmultiple\nlines", 4
-      );
-      tokenize_and_assert_multiline_res(
-        "\"testing\nnew\nline\nhandling\"", "testing\nnew\nline\nhandling", 4
+        "\"testing\nnew\nline\nhandling\"", "testing\nnew\nline\nhandling", 4, 8
       );
     });
   });
