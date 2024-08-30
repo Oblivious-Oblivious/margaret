@@ -30,51 +30,6 @@ module(errors_spec, {
     parser_analyze_syntax(vm);
   });
 
-  context("on ignoring invalid and unknown characters", {
-    it("skips non ascii characters", {
-      parse(
-        "©©42©,42©",
-        vector_new(FM_INTEGER, string_new("42"), FM_INTEGER, string_new("42"))
-      );
-      parse(
-        "☺☺42☺,42☺",
-        vector_new(FM_INTEGER, string_new("42"), FM_INTEGER, string_new("42"))
-      );
-      parse(
-        "😊😊42😊,42😊",
-        vector_new(FM_INTEGER, string_new("42"), FM_INTEGER, string_new("42"))
-      );
-      parse(
-        "¤¤42¤,42¤",
-        vector_new(FM_INTEGER, string_new("42"), FM_INTEGER, string_new("42"))
-      );
-      parse(
-        "ΩΩ42Ω,42Ω",
-        vector_new(FM_INTEGER, string_new("42"), FM_INTEGER, string_new("42"))
-      );
-      parse(
-        "日日42日,42日",
-        vector_new(FM_INTEGER, string_new("42"), FM_INTEGER, string_new("42"))
-      );
-      parse(
-        "𠜎𠜎42𠜎,42𠜎",
-        vector_new(FM_INTEGER, string_new("42"), FM_INTEGER, string_new("42"))
-      );
-      parse(
-        "∆∆42∆,42∆",
-        vector_new(FM_INTEGER, string_new("42"), FM_INTEGER, string_new("42"))
-      );
-      parse(
-        "🙂🙂42🙂,42🙂",
-        vector_new(FM_INTEGER, string_new("42"), FM_INTEGER, string_new("42"))
-      );
-      parse(
-        "⚽⚽42⚽,42⚽",
-        vector_new(FM_INTEGER, string_new("42"), FM_INTEGER, string_new("42"))
-      );
-    });
-  });
-
   it("tests weird edge cases", {
     parse(
       "***(not a valid operator sequence)",

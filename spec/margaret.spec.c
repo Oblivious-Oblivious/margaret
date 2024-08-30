@@ -39,6 +39,7 @@
 #include "generic/strings.spec.h"
 #include "generic/tensors.spec.h"
 #include "generic/tuples.spec.h"
+#include "generic/unicode.spec.h"
 #include "generic/variables.spec.h"
 
 /* inspector */
@@ -116,6 +117,7 @@ int main(void) {
     strings_spec();
     tensors_spec();
     tuples_spec();
+    unicode_spec();
     variables_spec();
 
     InspectorSpec();

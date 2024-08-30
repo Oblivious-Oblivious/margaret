@@ -4,33 +4,46 @@
 #include "../../libs/EmeraldsString/export/EmeraldsString.h"
 #include "alternate_to_dec.h"
 
+#include <stdio.h>
+
 #define is_valid(s, c) ((c) != '\0' && strchr((s), (c)))
 
 #define is_decimal(c) (is_valid("0123456789", (c)))
-#define is_identifier_start(c) \
+#define is_ascii_start(c) \
   (is_valid("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_", (c)))
-#define is_identifier_rest(c) (is_identifier_start(c) || is_decimal(c))
+#define is_ascii_rest(c) (is_ascii_start(c) || is_decimal(c))
+
+#define utf8_char_length(input)        \
+  ((((input)[0] & 0x80) == 0x00)   ? 1 \
+   : (((input)[0] & 0xE0) == 0xC0) ? 2 \
+   : (((input)[0] & 0xF0) == 0xE0) ? 3 \
+   : (((input)[0] & 0xF8) == 0xF0) ? 4 \
+                                   : 0)
+#define is_unicode(char_len) ((char_len) > 1)
 
 #define is_newline(c) ((c) == '\n')
 #define is_whitespace(c) \
   ((c) == ' ' || (c) == '\t' || (c) == '\v' || (c) == '\f' || (c) == '\r')
-#define is_identifier(c)         (is_identifier_start(c) || is_identifier_rest(c))
+#define is_ascii(c)              (is_ascii_start(c) || is_ascii_rest(c))
 #define is_numeric(c)            (is_valid("0123456789abcdefABCDEF_", (c)))
 #define is_non_base_10(c)        (is_valid("bBoOxX", (c)))
 #define is_special_identifier(c) (is_valid("!?", (c)))
 #define is_message_symbol(c)     (is_valid("!?+\\-*/~<>=|&^;.`", (c)))
 #define is_string_quote(c)       (is_valid("'\"", (c)))
 
-#define next_char()              \
-  do {                           \
-    string_skip_first(input, 1); \
-    vm->charno++;                \
+#define next_charn(char_len)            \
+  do {                                  \
+    string_skip_first(input, char_len); \
+    vm->charno += char_len;             \
   } while(0)
-#define append_char()                          \
+#define append_charn(char_len)                 \
   do {                                         \
-    string_addf(&token_value, "%c", input[0]); \
-    next_char();                               \
+    string_addn(token_value, input, char_len); \
+    next_charn(char_len);                      \
   } while(0)
+#define next_char()   next_charn(1)
+#define append_char() append_charn(1)
+
 #define generate_token()                                           \
   (vector_add(                                                     \
     vm->tokens,                                                    \
@@ -55,14 +68,16 @@
     }                               \
   } while(0)
 
-#define append_identifier_part()          \
-  do {                                    \
-    while(is_identifier(input[0])) {      \
-      append_char();                      \
-    }                                     \
-    if(is_special_identifier(input[0])) { \
-      append_char();                      \
-    }                                     \
+#define append_identifier_part()                        \
+  do {                                                  \
+    int char_len = utf8_char_length(input);             \
+    while(is_ascii(input[0]) || is_unicode(char_len)) { \
+      append_charn(char_len);                           \
+      char_len = utf8_char_length(input);               \
+    }                                                   \
+    if(is_special_identifier(input[0])) {               \
+      append_char();                                    \
+    }                                                   \
   } while(0)
 
 #define normalize_integer(token)                                         \
@@ -125,16 +140,18 @@ VM *lexer_make_tokens(VM *vm) {
         }
       }
     } else if(input[0] == '@' && string_size(input) > 1 &&
-              is_identifier_start(input[1])) {
+              (is_ascii_start(input[1]) ||
+               is_unicode(utf8_char_length(input + 1)))) {
       append_char();
       append_identifier_part();
       token_type = TOKEN_INSTANCE;
     } else if(input[0] == '$' && string_size(input) > 1 &&
-              is_identifier_start(input[1])) {
+              (is_ascii_start(input[1]) ||
+               is_unicode(utf8_char_length(input + 1)))) {
       append_char();
       append_identifier_part();
       token_type = TOKEN_GLOBAL;
-    } else if(is_identifier_start(input[0])) {
+    } else if(is_ascii_start(input[0]) || is_unicode(utf8_char_length(input))) {
       append_identifier_part();
       token_type = TOKEN_IDENTIFIER;
     } else if(is_message_symbol(input[0])) {
