@@ -16,7 +16,6 @@ typedef struct MargProc MargProc;
  * @param source -> Source code read from file
  * @param lineno -> Current line number
  * @param charno -> Current character number
- * @param index -> Current index in source code
  *
  * @param tokens -> List of tokenized values
  * @param formal_bytecode -> Formal bytecode representation
@@ -33,7 +32,6 @@ typedef struct VM {
   char *source;
   size_t lineno;
   size_t charno;
-  size_t index;
   bool has_error;
 
   Token *eof_token;
