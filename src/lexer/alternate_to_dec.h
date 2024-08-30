@@ -1,3 +1,6 @@
+#ifndef __ALTERNATE_TO_DEC_H_
+#define __ALTERNATE_TO_DEC_H_
+
 #include "../../libs/EmeraldsString/export/EmeraldsString.h"
 
 /**
@@ -45,3 +48,5 @@
     string_free(hex);                                 \
     string_addf(&(hex), "%zu", dec);                  \
   } while(0)
+
+#endif

@@ -1,5 +1,5 @@
-#ifndef __BYTES_H_
-#define __BYTES_H_
+#ifndef __BYTE_CONVERSIONS_H_
+#define __BYTE_CONVERSIONS_H_
 
 #include <stdint.h> /* uint8_t, uint16_t, uint32_t */
 

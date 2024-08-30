@@ -1,6 +1,9 @@
 $Margaret _PRIM_BIND_METHOD: (#-- method => _PRIM_BIND_METHOD: method to: @self) to: @self,
 $Margaret -- #-- message => -- method to: @self,
 
+$Margaret -- #comment: str => _PRIM_NOP: @self,
+$Margaret -- #todo: str => $TodoComments shared << str,
+
 $Margaret -- #self => @self,
 $Margaret -- #super => @super,
 

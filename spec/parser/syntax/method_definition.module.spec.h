@@ -3,6 +3,7 @@
 
 #include "../../generic/_helpers.h"
 #include "keyword_list.module.spec.h"
+#include "method_body.module.spec.h"
 
 module(method_definition, {
   it("parses method definitions", {
@@ -136,6 +137,7 @@ module(method_definition, {
     );
   });
 
+  method_body();
   keyword_list();
 })
 

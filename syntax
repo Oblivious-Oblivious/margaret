@@ -102,13 +102,14 @@ FLOAT:                ^\d+(_\d+)*\.\d+(_\d+)*
 INTEGER:              ^(?:0[bBoOxX][\da-fA-F_]+|0|[1-9][\d_]*)
 STRING:               ^(['"]).*?\1
 
-IDENTIFIER:           ^[a-zA-Z_][a-zA-Z0-9_]*
-INSTANCE:             ^@[a-zA-Z_][a-zA-Z0-9_]*
-GLOBAL:               ^$[a-zA-Z_][a-zA-Z0-9_]*
+IDENTIFIER:           ^[a-zA-Z_\p{L}\p{S}][a-zA-Z0-9_\p{L}\p{N}\p{M}\p{S}]*
+INSTANCE:             ^@[a-zA-Z_\p{L}\p{S}][a-zA-Z0-9_\p{L}\p{N}\p{M}\p{S}]*
+GLOBAL:               ^$[a-zA-Z_\p{L}\p{S}][a-zA-Z0-9_\p{L}\p{N}\p{M}\p{S}]*
 
 MESSAGE_SYMBOL:       ^[!?+\-*/\\~<>=|&^;.`]+
 SYNTAX_SYMBOL:        ^[()\[\]{},:#%]
 
+NEWLINE:              ^\n
+WHITESPACE:           ^\s+
+
 EOF:                  ends parsing
-NEWLINE:              for counting lines
-WHITESPACE:           to ignore
