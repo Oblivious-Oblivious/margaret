@@ -1,0 +1,59 @@
+🟥 runtime code generation
+  "42 puts" eval,
+  "def foo(x); x; end;" eval,
+  foo(42),
+  Disallowed such that all generation comes strictly from text.
+  LSP can lexically define the VM context at all times.
+
+🟩 monkey patching
+  $Margaret -- #dnu: message_name => puts: "custom dnu message",
+  Natural in margaret by simply redefining the message.
+
+🟩 introspection
+  puts: $Margaret messages
+  Add inspection capabilities to the VM and expose them to the front end.
+
+🟥 homoiconic macros (runtime code evaluation)
+  $Integer -- #add: other => @self + other,
+  add_msg = %["add", other],
+  add_msg send,
+  Probably cannot use because we could technically send a bind message resulting in runtime code generation.
+  Possible solution would be to disallow the `bind` primitive explicitely.  All other messages sent would be already defined.
+
+🟥 decorators
+  Technically possible only with introspection but also requires runtime code evaluation.
+  Can restrict dynamic evaluation to messages that already exist using homoiconic macros.
+  Find alternative patterns, or try to rebind objects themselves.
+
+🟥 self-modifying code
+  (defun increment-func ()
+  (setf (symbol-function 'inc)
+    (lambda (x) (+ x 1))))
+  (increment-func)
+  (inc 5)  ;; Output: 6
+  Only really possible in LISP and breaks the no runtime code generation assumption.
+
+🟩 generics (compile time polymorphism)
+  Using object orientation removes the need for generic definitions.
+  Method dispatching and late binding solves this automatically.
+
+🟥 referentially transparent macros
+  #define code "any symbol 
+  int main(void) { printf(code\n"); }
+  Can choose to do that as long as the LSP can integrate them and only at parse-time.
+
+🟥 compile-time code generation
+  Some comptime code generation can be inlined if we define constants.
+  Otherwise avoid becuase it creates equivalent problems to runtime code generation.
+
+🟩 compile-time code evaluation
+  Potentially define primitives that do calculations but do not generate bytecode.
+  Comments are essentially defined this way.
+  All these messages are predefined in the VM and do not correspond to bytecode.
+
+🟥 conditional compilation
+  Could only happen at parse-time and requires referentially transparent macros.
+  Could not be done with compile-time code evaluation because that happens at optimize-time.
+
+🟩 DSLs
+  A natural result of adding new messages to existing objects.

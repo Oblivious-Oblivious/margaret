@@ -33,6 +33,8 @@ MargValue create_new_proto_object(VM *vm, char *parent_name, char *name) {
  * @param vm -> Current vm
  */
 static void setup_proto_object_chain(VM *vm) {
+  /* TODO - Define as $(obj)Proto $Float = $FloatProto clone, or have literals
+   * define themselves as $(obj)Literal like $FloatInstance = $Float clone  */
   create_new_proto_object(vm, "$Margaret", "$Margaret");
 
   create_new_proto_object(vm, "$Margaret", "$nil");

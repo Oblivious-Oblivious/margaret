@@ -54,15 +54,13 @@
   🟥 Add a custom mark and sweep garbage collector.
   🟥 Optimize repeating bytecodes that offer no state change outside the loop.
   🟥 Think of most syntax, semantic or runtime errors and spec them.
-  🟥 Add UTF8 and Unicode support.
+  🟩 Add UTF8 and Unicode support.
+  🟥 Add regular expressions
 
 ## (✗) ver. 0.0.1
 -----------------
   🟥 Add lexically removed comments.
-  🟥 Make comments part of the language (Comment new: "...").
-  🟥 Add a macro system where you can pass formal bytecode as a message implementation.
-     primitive `bytecode:` message that simply places the formal bytecodes in between the rest of the code.
-  🟥 Add code-as-data functionality, storing bytecode as byte arrays and messages to interpret them.
+  🟥 Make comments part of the language (comment: "...", todo: "...").
   🟥 Figure out dynamic send for dynamically called messages.
   🟥 Add symbol objects and frozen strings.
   🟥 Make comments dynamic and persistent on code files.
@@ -70,10 +68,9 @@
   🟥 Since comments are dynamic, we can use interpolation to change them according to data (for documentation comments).
   🟥 Separate value types from object types.
      Add atomic types that become atemporal (cannot be extended through prototypes).
-  🟥 Add spec for missing code from C side.
-     Scanner module.
-     byte_conversions module.
-     Stack tests and vm data tests.
+  🟥 Add a `@this` or equivalent that refers to the original object.
+     @this would always refer to object where original method is defined,
+     not the object where the method is called.
   🟩 Procs and methods return tensors of bytecodes.
   🟩 Implement if:then:else: using lambda calculus.
   🟥 Implement `while:` using the `goto:` primitive to avoid endless recursion.
@@ -84,12 +81,17 @@
   🟥 Add complex numbers `(0+2i)`, and rational numbers `(1/2r)` -> unary messages.
   🟥 Add complex and rational specific messages.
   🟥 Use GOTO for break and continue. -> `list iterate: { elem | if: { elem == 42 } then: { goto: exit_label } elem puts } ::exit_label`.
+  🟥 Create compile-time messages, which will make calculations in the emitter phase but will not generate bytecode.
   🟥 Create an object `detatch` functionality that removes the inheritance link and object model metadata.
      Add object `freezing` that removes state modification capabilities.
   🟩 Create an `import/require` Margaret message.
      Probably simple concatenation of files (C-like include), not actual module system.
   🟥 Add an internal include guard for the require primitive.
   🟥 Add functionality for reading multiple files and changing the VM pointer to the currect file we are scanning.
+  🟥 Add a primitive for raising errors.  The raise: message is the only one that crashes the VM.
+     $Numeric -- #/ 0 => raise: "division by zero",
+     $Numeric -- #/ other => @self / other,
+     If the analyzer cannot figure out the inputs of the division message, LSP warns for potential runtime crash.
   ---------------------------
   🟥 Add functional features:
   🟥 %[a, b, c] = %["hello", "world", 42]
