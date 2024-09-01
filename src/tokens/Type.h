@@ -30,7 +30,7 @@ typedef enum Type {
   TOKEN_COLON          = 1010,
   TOKEN_HASH           = 1011,
   TOKEN_PERCENT        = 1012,
-  TOKEN_ROCKET         = 2001,
+  TOKEN_ROCKET         = 2001
 } Type;
 
 #endif
