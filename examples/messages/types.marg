@@ -1,0 +1,29 @@
+$Margaret       = $Margaret clone,
+
+$Nil            = $Margaret clone,
+$False          = $Margaret clone,
+$True           = $Margaret clone,
+
+$Numeric        = $Margaret clone,
+$Float          = $FloatProto clone,
+$Integer        = $IntegerProto clone,
+
+$String         = $Margaret clone,
+$Label          = $Margaret clone,
+
+$Enumerable     = $Margaret clone,
+$Tensor         = $Enumerable clone,
+$Tuple          = $Enumerable clone,
+$Bitstring      = $Enumerable clone,
+$Hash           = $Enumerable clone,
+
+$Method         = $Margaret clone,
+$Proc           = $Margaret clone,
+
+comment: "Math related types",
+
+$Real           = $Numeric clone,     $𝑅 = $Real clone,
+$Complex        = $Real clone,        $𝐶 = $Complex clone,
+$Quaternion     = $Complex clone,     $𝐻 = $Quaternion clone,
+$Octonions      = $Quaternion clone,  $𝑂 = $Octonions clone,
+$Sedenions      = $Octonions clone,   $𝑃 = $𝑆 = $Sedenions clone,

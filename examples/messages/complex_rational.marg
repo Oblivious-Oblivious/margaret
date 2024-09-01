@@ -1,0 +1,35 @@
+(1 + 2i),
+(1 + 2i) * (2 - 3im),
+
+(1 + 2i) real,       comment: "real part => 1",
+(1 + 2i) imag,       comment: "imaginary part => 2",
+(1 + 2i) conj,       comment: "complex conjugate => 1 - 2i",
+(1 + 2i) abs,        comment: "absolute value => 2.23606797749979",
+(1 + 2i) abs2,       comment: "squared absolute value => 5",
+(1 + 2i) angle,      comment: "angle in radians => 1.1071487177940904",
+
+1i sqrt,             comment: "0.7071067811865475 + 0.7071067811865476i",
+(1 + 2i) cos,        comment: "2.0327230070196656 - 3.0518977991517997i",
+(1 + 2i) exp,        comment: "-1.1312043837568135 + 2.4717266720048188i",
+(1 + 2i) sinh,       comment: "-0.4890562590412937 + 1.4031192506220405i",
+
+2//3,                comment: "2//3",
+6//9,                comment: "2//3",
+-4//8,               comment: "-1//2",
+5//-15,              comment: "-1//3",
+-4//-12,             comment: "1//3",
+
+(2//3) numerator,    comment "2",
+(2//3) denominator,  comment "3",
+
+2//3 == 6//9,        comment: "true",
+2//3 == 9//27,       comment: "false",
+3//7 < 1//2,         comment: "true",
+3//4 > 2//3,         comment: "true",
+2//4 + 1//6,         comment: "2//3",
+5//12 - 1//4,        comment: "1//6",
+5//8 * 3//12,        comment: "5//32",
+6//5 / 10//7,        comment: "21//25",
+
+5//0,                comment: "1//0",
+-3//0,               comment: "-1//0",

@@ -78,6 +78,7 @@
      `$Object extend: [m1, m2, m3]` binds those methods into $Object.
   🟥 Add a switch matcher -> `obj match: %[%[1, 100], %[2, 200], %[3, 300],]`.
   🟥 Make bang (!) messages denote persistant changes in object state.
+  🟥 Add __LINE__ __FILE__ and __DIR__ macros.
   🟥 Add complex numbers `(0+2i)`, and rational numbers `(1/2r)` -> unary messages.
   🟥 Add complex and rational specific messages.
   🟥 Use GOTO for break and continue. -> `list iterate: { elem | if: { elem == 42 } then: { goto: exit_label } elem puts } ::exit_label`.
