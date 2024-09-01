@@ -4,14 +4,11 @@
 #include "../../libs/EmeraldsString/export/EmeraldsString.h"
 #include "alternate_to_dec.h"
 
-#include <stdio.h>
+#define is_included_in(s, c) ((c) != '\0' && strchr((s), (c)))
 
-#define is_valid(s, c) ((c) != '\0' && strchr((s), (c)))
-
-#define is_decimal(c) (is_valid("0123456789", (c)))
+#define is_numeric_start(c) (is_included_in("0123456789", (c)))
 #define is_ascii_start(c) \
-  (is_valid("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_", (c)))
-#define is_ascii_rest(c) (is_ascii_start(c) || is_decimal(c))
+  (is_included_in("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_", (c)))
 
 #define utf8_char_length(input)        \
   ((((input)[0] & 0x80) == 0x00)   ? 1 \
@@ -19,17 +16,22 @@
    : (((input)[0] & 0xF0) == 0xE0) ? 3 \
    : (((input)[0] & 0xF8) == 0xF0) ? 4 \
                                    : 0)
-#define is_unicode(char_len) ((char_len) > 1)
+#define is_unicode(input) (utf8_char_length(input) > 1)
+#define is_non_base_10(char_set, check)         \
+  (string_size(input) > 2 && input[0] == '0' && \
+   is_included_in(char_set, input[1]) && check(input[2]))
 
-#define is_newline(c) ((c) == '\n')
-#define is_whitespace(c) \
-  ((c) == ' ' || (c) == '\t' || (c) == '\v' || (c) == '\f' || (c) == '\r')
-#define is_ascii(c)              (is_ascii_start(c) || is_ascii_rest(c))
-#define is_numeric(c)            (is_valid("0123456789abcdefABCDEF_", (c)))
-#define is_non_base_10(c)        (is_valid("bBoOxX", (c)))
-#define is_special_identifier(c) (is_valid("!?", (c)))
-#define is_message_symbol(c)     (is_valid("!?+\\-*/~<>=|&^;.`", (c)))
-#define is_string_quote(c)       (is_valid("'\"", (c)))
+#define is_newline(c)            ((c) == '\n')
+#define is_ascii(c)              (is_ascii_start(c) || is_numeric(c))
+#define is_numeric(c)            (is_numeric_start(c) || (c) == '_')
+#define is_binary(c)             (is_included_in("01_", (c)))
+#define is_octal(c)              (is_included_in("01234567_", (c)))
+#define is_hex(c)                (is_included_in("0123456789abcdefABCDEF_", (c)))
+#define is_special_identifier(c) (is_included_in("!?", (c)))
+#define is_message_symbol(c)     (is_included_in("!?+\\-*/~<>=|&^;.`", (c)))
+#define is_string_quote(c)       (is_included_in("'\"", (c)))
+#define is_rocket_symbol() \
+  (string_size(input) > 1 && input[0] == '=' && input[1] == '>')
 
 #define next_charn(char_len)            \
   do {                                  \
@@ -44,60 +46,45 @@
 #define next_char()   next_charn(1)
 #define append_char() append_charn(1)
 
-#define generate_token()                                           \
-  (vector_add(                                                     \
-    vm->tokens,                                                    \
-    token_value == NULL                                            \
-      ? vm->eof_token                                              \
-      : token_new(token_value, token_type, vm->lineno, vm->charno) \
-  ))
+#define generate_token()                                                   \
+  vector_add(                                                              \
+    vm->tokens, token_new(token_value, token_type, vm->lineno, vm->charno) \
+  )
 
-#define append_integer_part()       \
-  do {                              \
-    while(is_decimal(input[0])) {   \
-      append_char();                \
-    }                               \
-    while(input[0] == '_') {        \
-      append_char();                \
-      if(!is_decimal(input[0])) {   \
-        break;                      \
-      }                             \
-      while(is_decimal(input[0])) { \
-        append_char();              \
-      }                             \
-    }                               \
+#define append_integer_part(check) \
+  do {                             \
+    while(check(input[0])) {       \
+      if(input[0] == '_') {        \
+        next_char();               \
+      } else {                     \
+        append_char();             \
+      }                            \
+    }                              \
   } while(0)
 
-#define append_identifier_part()                        \
-  do {                                                  \
-    int char_len = utf8_char_length(input);             \
-    while(is_ascii(input[0]) || is_unicode(char_len)) { \
-      append_charn(char_len);                           \
-      char_len = utf8_char_length(input);               \
-    }                                                   \
-    if(is_special_identifier(input[0])) {               \
-      append_char();                                    \
-    }                                                   \
+#define append_identifier_part()                     \
+  do {                                               \
+    while(is_ascii(input[0]) || is_unicode(input)) { \
+      append_charn(utf8_char_length(input));         \
+    }                                                \
+    if(is_special_identifier(input[0])) {            \
+      append_char();                                 \
+    }                                                \
   } while(0)
 
-#define normalize_integer(token)                                         \
-  do {                                                                   \
-    if(token[0] == '0' && (token[1] == 'b' || token[1] == 'B')) {        \
-      string_skip_first(token, 2);                                       \
-      bin_to_dec(token);                                                 \
-    } else if(token[0] == '0' && (token[1] == 'o' || token[1] == 'O')) { \
-      string_skip_first(token, 2);                                       \
-      oct_to_dec(token);                                                 \
-    } else if(token[0] == '0' && (token[1] == 'x' || token[1] == 'X')) { \
-      string_skip_first(token, 2);                                       \
-      hex_to_dec(token);                                                 \
-    }                                                                    \
+#define append_non_base_10_part(check, converter) \
+  do {                                            \
+    next_char();                                  \
+    next_char();                                  \
+    append_integer_part(check);                   \
+    converter(token_value);                       \
+    token_type = TOKEN_INTEGER;                   \
   } while(0)
 
 VM *lexer_make_tokens(VM *vm) {
   char *input = vm->source;
 
-  while(*input) {
+  while(input && *input) {
     char *token_value = string_new("");
     Type token_type   = vm->eof_token->type;
 
@@ -106,64 +93,48 @@ VM *lexer_make_tokens(VM *vm) {
       vm->lineno++;
       vm->charno = 0;
       continue;
-    } else if(is_whitespace(input[0])) {
-      while(is_whitespace(input[0])) {
-        next_char();
-      }
-      continue;
-    } else if(input[0] == '0' && string_size(input) > 1 &&
-              is_non_base_10(input[1]) && string_size(input) > 2 &&
-              is_numeric(input[2])) {
-      append_char();
-      append_char();
-      while(is_numeric(input[0])) {
-        append_char();
-      }
-      string_remove_underscores(token_value);
-      normalize_integer(token_value);
-      token_type = TOKEN_INTEGER;
-    } else if(is_decimal(input[0])) {
-      if(input[0] == '0' && string_size(input) > 1 &&
-         (is_decimal(input[1]) || input[1] == '_')) {
+    } else if(is_non_base_10("bB", is_binary)) {
+      append_non_base_10_part(is_binary, bin_to_dec);
+    } else if(is_non_base_10("oO", is_octal)) {
+      append_non_base_10_part(is_octal, oct_to_dec);
+    } else if(is_non_base_10("xX", is_hex)) {
+      append_non_base_10_part(is_hex, hex_to_dec);
+    } else if(is_numeric_start(input[0])) {
+      if(string_size(input) > 1 && input[0] == '0' && input[1] != '.') {
         append_char();
         token_type = TOKEN_INTEGER;
       } else {
-        append_integer_part();
+        append_integer_part(is_numeric);
         if(input[0] == '.') {
           append_char();
-          append_integer_part();
-          string_remove_underscores(token_value);
+          append_integer_part(is_numeric);
           token_type = TOKEN_FLOAT;
         } else {
-          string_remove_underscores(token_value);
           token_type = TOKEN_INTEGER;
         }
       }
-    } else if(input[0] == '@' && string_size(input) > 1 &&
-              (is_ascii_start(input[1]) ||
-               is_unicode(utf8_char_length(input + 1)))) {
+    } else if(string_size(input) > 1 && input[0] == '@' &&
+              (is_ascii_start(input[1]) || is_unicode(input + 1))) {
       append_char();
       append_identifier_part();
       token_type = TOKEN_INSTANCE;
-    } else if(input[0] == '$' && string_size(input) > 1 &&
-              (is_ascii_start(input[1]) ||
-               is_unicode(utf8_char_length(input + 1)))) {
+    } else if(string_size(input) > 1 && input[0] == '$' &&
+              (is_ascii_start(input[1]) || is_unicode(input + 1))) {
       append_char();
       append_identifier_part();
       token_type = TOKEN_GLOBAL;
-    } else if(is_ascii_start(input[0]) || is_unicode(utf8_char_length(input))) {
+    } else if(is_ascii_start(input[0]) || is_unicode(input)) {
       append_identifier_part();
       token_type = TOKEN_IDENTIFIER;
+    } else if(is_rocket_symbol()) {
+      append_char();
+      append_char();
+      token_type = TOKEN_ROCKET;
     } else if(is_message_symbol(input[0])) {
       while(is_message_symbol(input[0])) {
         append_char();
       }
-      if(string_size(token_value) == 2 && token_value[0] == '=' &&
-         token_value[1] == '>') {
-        token_type = TOKEN_ROCKET;
-      } else {
-        token_type = TOKEN_MESSAGE_SYMBOL;
-      }
+      token_type = TOKEN_MESSAGE_SYMBOL;
     } else if(input[0] == '(') {
       append_char();
       token_type = TOKEN_LPAREN;
@@ -219,7 +190,7 @@ VM *lexer_make_tokens(VM *vm) {
   }
 
   vm->eof_token->lineno = vm->lineno;
-  /* NOTE - Figure out why the charno is off by 3 */
+  /* TODO - Figure out why the charno is off by 3 */
   vm->eof_token->charno = vm->charno + 3;
   vector_add(vm->tokens, vm->eof_token);
 

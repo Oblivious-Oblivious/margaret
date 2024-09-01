@@ -5,6 +5,7 @@
 
 module(numeric_spec, {
   it("parses numeric expressions", {
+    parse("0", vector_new(FM_INTEGER, string_new("0")));
     parse("(0)", vector_new(FM_INTEGER, string_new("0")));
     parse(
       "(0,0,0)",
@@ -98,6 +99,9 @@ module(numeric_spec, {
   });
 
   it("parses float literals", {
+    parse("0.0", vector_new(FM_FLOAT, string_new("0.0")));
+    parse("0.42", vector_new(FM_FLOAT, string_new("0.42")));
+    parse("0.000042", vector_new(FM_FLOAT, string_new("0.000042")));
     parse("42.0", vector_new(FM_FLOAT, string_new("42.0")));
     parse(
       "-42.0", vector_new(FM_FLOAT, string_new("42.0"), FM_LHS, string_new("-"))
@@ -283,6 +287,24 @@ module(numeric_spec, {
         string_new("+")
       )
     );
+  });
+
+  it("parses special invalid uses of special integers", {
+    parse(
+      "0babcdef",
+      vector_new(FM_INTEGER, string_new("0"), FM_UNARY, string_new("babcdef"))
+    );
+    parse(
+      "0oabcdef",
+      vector_new(FM_INTEGER, string_new("0"), FM_UNARY, string_new("oabcdef"))
+    );
+    parse("0xabcdef", vector_new(FM_INTEGER, string_new("11259375")));
+    parse(
+      "0xqwerty",
+      vector_new(FM_INTEGER, string_new("0"), FM_UNARY, string_new("xqwerty"))
+    );
+    parse("0b_1010_0110", vector_new(FM_INTEGER, string_new("166")));
+    parse("_12345", vector_new(FM_LOCAL, string_new("_12345")));
   });
 
   it("parses negative characters", {

@@ -5,6 +5,11 @@
 #include "_helpers.h"
 
 module(errors_spec, {
+  it("parses empty programs as NULL", {
+    char **v = NULL;
+    parse("", v);
+  });
+
   it("enumerable literal errors", {
     error("(", "missing closing parenthesis on group.");
     error(")", "reached end of program.");
@@ -21,6 +26,7 @@ module(errors_spec, {
     error(
       "# => l2 => [@self, l2]", "grouped items should be separated by commas."
     );
+    error("0000.000", "grouped items should be separated by commas.");
   });
 
   it("other syntax errors", {
