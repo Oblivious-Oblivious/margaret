@@ -12,8 +12,8 @@
 #include "MargTensor.h"
 #include "MargValueType.h"
 
-/* QNAN = 0b    0     11111111111       1            1       ('0' * 50)
-             (sign) (exponent bits) (qnan bit) (qnan fp ind)   (rest)        */
+/** QNAN = 0b    0     11111111111       1            1       ('0' * 50)
+              (sign) (exponent bits) (qnan bit) (qnan fp ind)   (rest)        */
 #define SIGN_BIT  ((size_t)0x8000000000000000)
 #define EXPONENTS ((size_t)0x7ff0000000000000)
 #define QNAN      ((size_t)0x0008000000000000)

@@ -82,14 +82,14 @@ static MargValue retrieve_all_messages_in_delegation_chain(
 }
 
 static void op_send_helper(VM *vm, MargValue message_name) {
-  /* Read temporary values */
+  /* NOTE - Read temporary values */
   ptrdiff_t i;
   MargObject *object;
   MargValue method_value;
   MargMethod *method             = NULL;
   ptrdiff_t number_of_parameters = AS_INTEGER(fs_pop(vm->sp))->value;
 
-  /* Pop all parameters first */
+  /* NOTE - Pop all parameters first */
   MargValue *actual_parameters = NULL;
   vector_initialize_n(actual_parameters, number_of_parameters);
 
@@ -97,7 +97,7 @@ static void op_send_helper(VM *vm, MargValue message_name) {
     actual_parameters[i] = fs_pop(vm->sp);
   }
 
-  /* Pop object after parameters */
+  /* NOTE - Pop object after parameters */
   object       = AS_OBJECT(fs_pop(vm->sp));
   method_value = dispatch_method_from_delegation_chain(object, message_name);
   if(IS_UNDEFINED(method_value)) {
@@ -110,12 +110,12 @@ static void op_send_helper(VM *vm, MargValue message_name) {
     method->bound_object     = object;
     method->proc->bound_proc = vm->current;
 
-    /* Close over local variables */
+    /* NOTE - Close over local variables */
     table_add_all(
       &vm->current->local_variables, &method->proc->local_variables
     );
 
-    /* Inject method parameters */
+    /* NOTE - Inject method parameters */
     for(i = 0; i < number_of_parameters; i++) {
       MargValue parameter_name = marg_tensor_get(method->parameter_names, i);
       table_add(
@@ -529,11 +529,11 @@ static void evaluator_run(VM *vm) {
       break;
     }
     case OP_EXIT_ACTIVATION_RECORD: {
-      /* Reset proc's IP */
+      /* NOTE - Reset proc's IP */
       vm->current->ip = vm->current->bytecode;
-      /* Reset parameter table */
+      /* NOTE - Reset parameter table */
       table_init(&vm->current->parameters);
-      /* Reset back to enclosing bound proc */
+      /* NOTE - Reset back to enclosing bound proc */
       vm->current = vm->current->bound_proc;
       if(on_explicit_send) {
         goto exit_explicit_send;
@@ -552,8 +552,7 @@ static void evaluator_run(VM *vm) {
           fs_push(vm->sp, MARG_INTEGER(0));
           op_send_helper(vm, MARG_STRING("to_string"));
 
-          /**
-           * `puts` either prints the characters of a string or
+          /* NOTE - `puts` either prints the characters of a string or
            * tries to send `to_string` to the object in question.
            * When sending a new message in the middle of execution
            * of an opcode, we need to store a panic state where
@@ -615,7 +614,7 @@ static void evaluator_run(VM *vm) {
         size_t i;
         AS_PROC(proc)->bound_proc = vm->current;
 
-        /* Inject proc parameters */
+        /* NOTE - Inject proc parameters */
         for(i = 0; i < parameters->alloced; i++) {
           MargHashEntry *entry = &parameters->entries[i];
           if(!IS_NOT_INTERNED(entry->key)) {

@@ -58,7 +58,7 @@
 #define OP_PROC_CALL              0x36
 #define OP_PROC_CALL_PARAMS       0x37
 
-/* primitives */
+/* NOTE - primitives */
 #define OP_PRIM_MESSAGES       0xff
 #define OP_PRIM_OBJECT_ID      0xfe
 #define OP_PRIM_TO_STRING      0xfd

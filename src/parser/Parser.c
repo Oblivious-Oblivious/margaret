@@ -11,7 +11,7 @@
   ((index) < vector_size((vm)->tokens) ? (vm)->tokens[(index)]->type \
                                        : vm->eof_token->type)
 
-/** Lookaheads */
+/* NOTE - Lookaheads */
 #define la1value(token)        (string_equals(token_get_value_safe(0), token))
 #define la2value(token)        (string_equals(token_get_value_safe(1), token))
 #define la3value(token)        (string_equals(token_get_value_safe(2), token))

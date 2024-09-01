@@ -32,7 +32,6 @@ marg_hash_find_entry(MargHashEntry *entries, size_t alloced, MargValue key) {
   size_t hash  = fnv_1a_64_hash(AS_STRING(key)->chars, AS_STRING(key)->size);
   size_t index = hash & (alloced - 1);
 
-  /* Linear probing */
   MargHashEntry *tombstone = NULL;
   while(true) {
     MargHashEntry *entry = &entries[index];
@@ -149,7 +148,6 @@ void marg_hash_delete(MargHash *self, MargValue key) {
     return;
   }
 
-  /* Places a `tombstone` entry in the deleted position */
   entry->key   = MARG_NOT_INTERNED;
   entry->value = MARG_UNDEFINED;
 }
