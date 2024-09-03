@@ -79,6 +79,10 @@
   🟥 Add a switch matcher -> `obj match: %[%[1, 100], %[2, 200], %[3, 300],]`.
   🟥 Make bang (!) messages denote persistant changes in object state.
   🟥 Add __LINE__ __FILE__ and __DIR__ macros.
+  🟥 The LSP should recusively track all messages and warn about the ones that raise.
+     Raising errors should theoretically define all boundaries in whether an object can receive some message or not.
+     When we send a message the LSP analyzes all paths and figures out which conditions would trigger a #dnu with a raise.
+     If we lexically understand all state (which requires non-dynamically evaluated code) all potential #dnus should be caught.
   🟥 Add complex numbers `(0+2i)`, and rational numbers `(1/2r)` -> unary messages.
   🟥 Add complex and rational specific messages.
   🟥 Use GOTO for break and continue. -> `list iterate: { elem | if: { elem == 42 } then: { goto: exit_label } elem puts } ::exit_label`.
