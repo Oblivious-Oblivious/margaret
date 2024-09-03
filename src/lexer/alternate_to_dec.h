@@ -3,50 +3,31 @@
 
 #include "../../libs/EmeraldsString/export/EmeraldsString.h"
 
+#define convert_to_dec(str, base)            \
+  do {                                       \
+    size_t i   = 0;                          \
+    size_t dec = 0;                          \
+    size_t len = string_size(str);           \
+    for(i = 0; i < len; i++) {               \
+      size_t c = str[i];                     \
+      if(c >= '0' && c <= '9') {             \
+        dec = dec * (base) + (c - '0');      \
+      } else if(c >= 'A' && c <= 'F') {      \
+        dec = dec * (base) + (c - 'A' + 10); \
+      } else if(c >= 'a' && c <= 'f') {      \
+        dec = dec * (base) + (c - 'a' + 10); \
+      }                                      \
+    }                                        \
+    string_free(str);                        \
+    string_addf(&(str), "%zu", dec);         \
+  } while(0)
+
 /**
  * @brief Converts character representations
     of non base 10 numbers into base 10 ones
  */
-#define bin_to_dec(bin)                 \
-  do {                                  \
-    size_t i;                           \
-    size_t dec = 0;                     \
-    size_t len = string_size(bin);      \
-    for(i = 0; i < len; i++) {          \
-      dec = dec * 2 + ((bin)[i] - '0'); \
-    }                                   \
-    string_free(bin);                   \
-    string_addf(&(bin), "%zu", dec);    \
-  } while(0)
-
-#define oct_to_dec(oct)                 \
-  do {                                  \
-    size_t i;                           \
-    size_t dec = 0;                     \
-    size_t len = string_size(oct);      \
-    for(i = 0; i < len; i++) {          \
-      dec = dec * 8 + ((oct)[i] - '0'); \
-    }                                   \
-    string_free(oct);                   \
-    string_addf(&(oct), "%zu", dec);    \
-  } while(0)
-
-#define hex_to_dec(hex)                               \
-  do {                                                \
-    size_t i;                                         \
-    size_t dec = 0;                                   \
-    size_t len = string_size(hex);                    \
-    for(i = 0; i < len; i++) {                        \
-      if((hex)[i] >= '0' && (hex)[i] <= '9') {        \
-        dec = dec * 16 + (hex)[i] - '0';              \
-      } else if((hex)[i] >= 'A' && (hex)[i] <= 'Z') { \
-        dec = dec * 16 + (hex)[i] - 'A' + 10;         \
-      } else if((hex)[i] >= 'a' && (hex)[i] <= 'z') { \
-        dec = dec * 16 + (hex)[i] - 'a' + 10;         \
-      }                                               \
-    }                                                 \
-    string_free(hex);                                 \
-    string_addf(&(hex), "%zu", dec);                  \
-  } while(0)
+#define bin_to_dec(bin) convert_to_dec(bin, 2)
+#define oct_to_dec(oct) convert_to_dec(oct, 8)
+#define hex_to_dec(hex) convert_to_dec(hex, 16)
 
 #endif
