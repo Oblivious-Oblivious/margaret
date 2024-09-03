@@ -23,6 +23,8 @@
     if(!IS_UNDEFINED(evaluated)) {                    \
       printf("%s\n", marg_value_format((evaluated))); \
     }                                                 \
+    vector_free(vm->current->bytecode);               \
+    vm->has_error = false;                            \
   } while(0)
 
 #endif

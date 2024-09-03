@@ -5,7 +5,7 @@
 
 VM *optimizer_optimize(VM *vm) {
   if(vm->has_error) {
-    return vm;
+    goto exit;
   }
 
   vm->current->ip = vm->current->bytecode;
@@ -21,5 +21,6 @@ VM *optimizer_optimize(VM *vm) {
     }
   }
 
+exit:
   return vm;
 }
