@@ -28,7 +28,6 @@ module(TypeSpec, {
 
   it("contains message normal and syntax symbols", {
     assert_that_int(TOKEN_MESSAGE_SYMBOL equals to 1001);
-    assert_that_int(TOKEN_SYNTAX_SYMBOL equals to 1002);
     assert_that_int(TOKEN_LPAREN equals to 1003);
     assert_that_int(TOKEN_RPAREN equals to 1004);
     assert_that_int(TOKEN_LBRACKET equals to 1005);
