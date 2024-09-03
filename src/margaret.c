@@ -36,10 +36,12 @@ static void margaret_repl(VM *vm) {
   while(true) {
     PRINT(EVAL(OPTIMIZE(EMIT(FORMALIZE(READ(SCAN(vm, "> ")))))));
   }
+  vm_free(vm);
 }
 
 static void margaret_run_file(VM *vm) {
   EVAL(OPTIMIZE(EMIT(FORMALIZE(READ(LOAD(vm))))));
+  vm_free(vm);
 }
 
 int main(int argc, char **argv) {

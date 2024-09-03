@@ -64,4 +64,11 @@ typedef struct VM {
  */
 VM *vm_new(const char *filename);
 
+/**
+ * @brief Frees the VM instance.  Most of its values are freed over time by
+ * other parts of the pipeline.  This handles remaining fields
+ * @param vm -> The VM to be freed
+ */
+void vm_free(VM *vm);
+
 #endif

@@ -100,6 +100,11 @@ static void parser_free_parsing_specific_values(VM *vm) {
     string_free(vm->tokens[i]->value);
     free(vm->tokens[i]);
   }
+
+  if(!vm->has_error) {
+    string_free(vm->eof_token->value);
+    free(vm->eof_token);
+  }
   vector_free(vm->tokens);
 }
 

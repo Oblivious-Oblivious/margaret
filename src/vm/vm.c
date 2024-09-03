@@ -100,3 +100,9 @@ VM *vm_new(const char *filename) {
 
   return vm;
 }
+
+void vm_free(VM *vm) {
+  table_deinit(&vm->global_variables);
+  table_deinit(&vm->interned_strings);
+  free(vm);
+}
