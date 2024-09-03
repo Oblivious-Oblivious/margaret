@@ -4,14 +4,14 @@
 #include "../../libs/EmeraldsString/export/EmeraldsString.h"
 
 #define FM_NIL               string_new("NIL")
-#define FM_TRUE              string_new("TRUE")
 #define FM_FALSE             string_new("FALSE")
+#define FM_TRUE              string_new("TRUE")
 #define FM_SELF              string_new("SELF")
 #define FM_SUPER             string_new("SUPER")
-#define FM_LABEL             string_new("LABEL")
 #define FM_INTEGER           string_new("INTEGER")
 #define FM_FLOAT             string_new("FLOAT")
 #define FM_STRING            string_new("STRING")
+#define FM_LABEL             string_new("LABEL")
 #define FM_TENSOR            string_new("TENSOR")
 #define FM_TUPLE             string_new("TUPLE")
 #define FM_BITSTRING         string_new("BITSTRING")
