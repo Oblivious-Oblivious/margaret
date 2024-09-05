@@ -2,6 +2,6 @@ include: "examples/Margaret.marg",
 
 proc = {n |
   puts: n,
-  proc call: %{n: n - 1},
+  proc <- (n - 1),
 },
-proc call: %{n: 0},
+proc <- 0,

@@ -44,7 +44,7 @@
   🟥 Optimize the design Hash to be data-oriented (separate keys from values for locality).
   🟥 Optimize hash function for better string interning.
   🟥 Add big integers and big floats.
-  🟥 Refactor `include:`, `call` and `call:` into primitive messages.
+  🟥 Refactor `include:`, `call` and `call:`, `<-` into primitive messages.
   🟥 Use comments for docs or TODO graphs.
   🟥 Add cascaded messages.
   🟥 Add a custom mark and sweep garbage collector.

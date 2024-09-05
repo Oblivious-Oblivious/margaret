@@ -19,28 +19,28 @@ puts: v,
 puts: p0,
 
 p1 = { v | v * 2 },
-res = p1 call: %{v: 11},
+res = p1 <- 11,
 puts: res,
 
-external_proc = {
+external_headless = {
   {
     value = 42,
-    puts: "calling internal proc",
+    puts: "calling internal headless method",
     {
-      puts: "double internal proc",
+      puts: "double internal headless method",
     } call,
     { param |
       puts: "internal with param(42):",
       puts: param,
-    } call: %{param: value},
+    } <- value,
     puts: value,
   },
 },
 
-internal_proc = external_proc call,
-internal_proc call,
-internal_proc call,
-internal_proc call,
+internal_headless = external_headless call,
+internal_headless call,
+internal_headless call,
+internal_headless call,
 
 puts: "",
 
