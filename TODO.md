@@ -14,25 +14,21 @@
     🟩 %(1::1, 0::1)                                         -> ($BitstringProto clone)
     🟩 {a | a + 1}                                           -> ($ProcProto clone)
     🟩 #put: element at: position => ()                      -> ($MethodProto clone)
+  🟥 Add an IDE that live inspects all values next to the code similar to Quokka.js
   🟥 Add visual literals of trees, graphs and matrices (2-dimentional data representation).
      Most likely part of an IDE that casts the data into tensors.
   🟥 Add a way to encode/encrypt bytecode deployables with some sort of PGP/Diffie Hellman.
 
-## (✗) ver. 0.0.4
+## (✗) ver. 0.0.3
 -----------------
   🟥 Add green threads.
-  🟥 Upgrade to a concurrent tricolor generational mark & sweep gc.
+  🟥 Upgrade to a mark & sweep generational gc, gen0, gen1, gen2.
+  🟥 Upgrade to a tricolor generational mark & sweep gc.
      Employ a separate process/thread for collection.
      Store a fiber in each object that listens for collections.
      This fiber can choose to give itself for collection or not depending on whether the objects is being used for performance oriented calculation.
   🟥 Upgrade to a compacting concurrent tricolor generational mark & sweep gc.
      Stress test for fragmentation issues.
-
-## (✗) ver. 0.0.3
------------------
-  🟥 Upgrade to a mark & sweep generational gc, gen0, gen1, gen2.
-  🟥 Upgrade to a tricolor generational mark & sweep gc.
-     Precursor to concurrent implementation.
   🟥 Modify the pipeline for cocurrent execution (tokenization -> parsing -> evaluation) token by token.
   🟥 Add syntax for using user defined inferred objects -> Inferred start_using: MyObject, one: 1 two: 2   -> (MyObject one: 1 two: 2) Inferred stop_using: MyObject
      Possibly MyObject can inherit from Margaret to not lose predefined marg messages
@@ -55,7 +51,11 @@
   🟥 Optimize repeating bytecodes that offer no state change outside the loop.
   🟥 Think of most syntax, semantic or runtime errors and spec them.
   🟩 Add UTF8 and Unicode support.
-  🟥 Add regular expressions
+  🟥 Add regular expressions.
+  🟥 Create an object `detatch` functionality that removes the inheritance link and object model metadata.
+     Add object `freezing` that removes state modification capabilities.
+  🟥 Separate value types from object types.
+     Add atomic types that become atemporal (cannot be extended through prototypes).
 
 ## (✗) ver. 0.0.1
 -----------------
@@ -66,29 +66,42 @@
   🟥 Make comments dynamic and persistent on code files.
   🟥 Add string interpolation and formatting with `#{..}` or similar.
   🟥 Since comments are dynamic, we can use interpolation to change them according to data (for documentation comments).
-  🟥 Separate value types from object types.
-     Add atomic types that become atemporal (cannot be extended through prototypes).
-  🟥 Add a `@this` or equivalent that refers to the original object.
+  🟥 Add a `@this`, `@it` or equivalent that refers to the original object.
      @this would always refer to object where original method is defined,
      not the object where the method is called.
   🟩 Procs and methods return tensors of bytecodes.
   🟩 Implement if:then:else: using lambda calculus.
   🟥 Implement `while:` using the `goto:` primitive to avoid endless recursion.
   🟥 Add a `bind:` message to tensors so we can add tensors of unbound methods.
-     `$Object extend: [m1, m2, m3]` binds those methods into $Object.
+     `$Object bind: [m1, m2, m3]` binds those methods into $Object.
   🟥 Add a switch matcher -> `obj match: %[%[1, 100], %[2, 200], %[3, 300],]`.
   🟥 Make bang (!) messages denote persistant changes in object state.
   🟥 Add __LINE__ __FILE__ and __DIR__ macros.
-  🟥 The LSP should recusively track all messages and warn about the ones that raise.
+  🟥 Disallow all dynamic code generation.
+     All code should be lexically defined.
+     Extension happens only through the primitive bind message.
+     Primitive bind only accepts method objects.
+     Creating method objects are restricted to the literal definition.
+     Method.new is NOT exposed to the front end directly, only indirectly through literal.
+     The LSP should recusively track all messages and warn about the ones that raise.
      Raising errors should theoretically define all boundaries in whether an object can receive some message or not.
      When we send a message the LSP analyzes all paths and figures out which conditions would trigger a #dnu with a raise.
      If we lexically understand all state (which requires non-dynamically evaluated code) all potential #dnus should be caught.
+       $Margaret -- #raise: message_name => _PRIM_RAISE_a1: @self a2: message_name,
+       $Margaret -- #dnu: message_name => _PRIM_DNU_RAISE_a1: @self a2: message_name,
+       $Numeric -- #/ 0 => raise: "division by zero",
+       $Numeric -- #/ other => _PRIM_DIV_a1: @self a2: other,
+     Here the LSP catches all `raise_from_dnu` messages.
+     Normal raises are only caught when the multimethod can be lexically resovled.
+       v1 = 0,
+       v2 = $Margaret some_service,
+       42 / 0,  comment: "static            -> always caught by the multimethod",
+       42 / v1, comment: "deterministic     -> caught if we perform constant folding",
+       42 / v2, comment: "non-deterministic -> cannot be caught",
   🟥 Add complex numbers `(0+2i)`, and rational numbers `(1/2r)` -> unary messages.
   🟥 Add complex and rational specific messages.
   🟥 Use GOTO for break and continue. -> `list iterate: { elem | if: { elem == 42 } then: { goto: exit_label } elem puts } ::exit_label`.
   🟥 Create compile-time messages, which will make calculations in the emitter phase but will not generate bytecode.
-  🟥 Create an object `detatch` functionality that removes the inheritance link and object model metadata.
-     Add object `freezing` that removes state modification capabilities.
   🟩 Create an `import/require` Margaret message.
      Probably simple concatenation of files (C-like include), not actual module system.
   🟥 Add an internal include guard for the require primitive.

@@ -22,6 +22,7 @@ struct MargProc {
   EmeraldsHashtable parameters;
   EmeraldsHashtable local_variables;
 
+  /* TODO - Potentially define these as `register` */
   uint8_t *bytecode;
   MargValue *temporaries;
   uint8_t *ip;
