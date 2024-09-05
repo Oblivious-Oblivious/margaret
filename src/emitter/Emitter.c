@@ -422,23 +422,6 @@ VM *emitter_emit(VM *vm) {
       (void)variable_name;
     }
 
-    case_fmcode(FM_PROC_START) {
-      /* TODO - Switch vm pointer to the new proc */
-      /* MargValue new_proc = MARG_PROC(vm->current->bound_method)
-      AS_PROC(new_proc)->bound_proc = vm->current;
-      emit_variable_length(OP_OBJECT);
-      emit_temporary(new_proc);
-      vm->current = AS_PROC(new_proc); */
-    }
-    case_fmcode(FM_PROC_END) {
-      /* TODO - Switch vm pointer to the proc's parent */
-      /* emit_byte(OP_EXIT_ACTIVATION_RECORD); */
-      /* vm->current = vm->current->bound_proc; */
-    }
-    case_fmcode(FM_PROC_PARAMETER) {
-      char *parameter_name = formal_bytecode[++ip];
-      (void)parameter_name;
-    }
     case_fmcode(FM_METHOD_START) {
       /* TODO - Switch vm pointer to the new method's proc */
       /* MargValue new_method = MARG_METHOD(

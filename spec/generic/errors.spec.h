@@ -17,7 +17,7 @@ module(errors_spec, {
     error("())", "reached end of program.");
     error("[", "missing closing bracket on tensor.");
     error("]", "reached end of program.");
-    error("{", "missing closing curly on proc.");
+    error("{", "missing closing curly on headless method.");
     error("}", "reached end of program.");
     error(
       "#-invalid-syntax-symbol", "missing '=>' on binary method definition."
@@ -116,8 +116,8 @@ module(errors_spec, {
     parse(
       "{ a | # | b => a + b }",
       vector_new(
-        FM_PROC_START,
-        FM_PROC_PARAMETER,
+        FM_METHOD_START,
+        FM_METHOD_PARAMETER,
         string_new("a"),
         FM_METHOD_START,
         FM_METHOD_RECEIVER,
@@ -134,14 +134,14 @@ module(errors_spec, {
         FM_BINARY,
         string_new("+"),
         FM_METHOD_END,
-        FM_PROC_END
+        FM_METHOD_END
       )
     );
 
     parse(
       "{ # | a => a }",
       vector_new(
-        FM_PROC_START,
+        FM_METHOD_START,
         FM_METHOD_START,
         FM_METHOD_RECEIVER,
         FM_METHOD_ANY_OBJECT,
@@ -153,14 +153,14 @@ module(errors_spec, {
         FM_LOCAL,
         string_new("a"),
         FM_METHOD_END,
-        FM_PROC_END
+        FM_METHOD_END
       )
     );
 
     parse(
       "{ # _ | a => a }",
       vector_new(
-        FM_PROC_START,
+        FM_METHOD_START,
         FM_METHOD_START,
         FM_METHOD_RECEIVER,
         FM_LOCAL,
@@ -173,7 +173,7 @@ module(errors_spec, {
         FM_LOCAL,
         string_new("a"),
         FM_METHOD_END,
-        FM_PROC_END
+        FM_METHOD_END
       )
     );
 
@@ -185,11 +185,11 @@ module(errors_spec, {
         FM_METHOD_ANY_OBJECT,
         FM_METHOD_NAME,
         string_new("m"),
-        FM_PROC_START,
-        FM_PROC_START,
+        FM_METHOD_START,
+        FM_METHOD_START,
         FM_NIL,
-        FM_PROC_END,
-        FM_PROC_END,
+        FM_METHOD_END,
+        FM_METHOD_END,
         FM_METHOD_END
       )
     );
@@ -207,9 +207,9 @@ module(errors_spec, {
         FM_METHOD_ANY_OBJECT,
         FM_METHOD_NAME,
         string_new("m2"),
-        FM_PROC_START,
+        FM_METHOD_START,
         FM_NIL,
-        FM_PROC_END,
+        FM_METHOD_END,
         FM_METHOD_END,
         FM_METHOD_END
       )
@@ -218,7 +218,7 @@ module(errors_spec, {
     parse(
       "{ # m1 => { # m2 => { {} } } }",
       vector_new(
-        FM_PROC_START,
+        FM_METHOD_START,
         FM_METHOD_START,
         FM_METHOD_RECEIVER,
         FM_METHOD_ANY_OBJECT,
@@ -229,12 +229,12 @@ module(errors_spec, {
         FM_METHOD_ANY_OBJECT,
         FM_METHOD_NAME,
         string_new("m2"),
-        FM_PROC_START,
+        FM_METHOD_START,
         FM_NIL,
-        FM_PROC_END,
         FM_METHOD_END,
         FM_METHOD_END,
-        FM_PROC_END
+        FM_METHOD_END,
+        FM_METHOD_END
       )
     );
   });

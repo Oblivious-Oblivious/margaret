@@ -257,21 +257,21 @@ void parser_literal(VM *vm) {
     generate(FM_TENSOR);
     generate(number_of_elements);
   } else if(la1value("{")) {
-    ensure(TOKEN_LCURLY, "missing opening curly on proc.");
-    generate(FM_PROC_START);
+    ensure(TOKEN_LCURLY, "missing opening curly on headless method.");
+    generate(FM_METHOD_START);
 
     if(la1value("}")) {
       generate(FM_NIL);
     } else if(la1value("|") && la2value("}")) {
-      ensure(TOKEN_MESSAGE_SYMBOL, "missing '|' on proc.");
+      ensure(TOKEN_MESSAGE_SYMBOL, "missing '|' on headless method.");
       generate(FM_NIL);
     } else {
       param_list();
       unit_list();
     }
 
-    ensure(TOKEN_RCURLY, "missing closing curly on proc.");
-    generate(FM_PROC_END);
+    ensure(TOKEN_RCURLY, "missing closing curly on headless method.");
+    generate(FM_METHOD_END);
   } else if(la1value("%") && la2value("(")) {
     char *number_of_elements = NULL;
     ensure(TOKEN_PERCENT, "missing `%` on bitstring.");
@@ -323,14 +323,20 @@ void parser_literal(VM *vm) {
 
 void parser_param_list(VM *vm) {
   if(la2value(",")) {
-    generate(FM_PROC_PARAMETER);
-    generate(ensure(TOKEN_IDENTIFIER, "missing identifier on proc parameter."));
-    ensure(TOKEN_COMMA, "missing ',' on proc parameter list.");
+    generate(FM_METHOD_PARAMETER);
+    generate(ensure(
+      TOKEN_IDENTIFIER, "missing identifier on headless method parameter."
+    ));
+    ensure(TOKEN_COMMA, "missing ',' on headless method parameter list.");
     param_list();
   } else if(!la1value("#") && la2value("|")) {
-    generate(FM_PROC_PARAMETER);
-    generate(ensure(TOKEN_IDENTIFIER, "missing identifier on proc parameter."));
-    ensure(TOKEN_MESSAGE_SYMBOL, "missing '|' on proc parameter list.");
+    generate(FM_METHOD_PARAMETER);
+    generate(ensure(
+      TOKEN_IDENTIFIER, "missing identifier on headless method parameter."
+    ));
+    ensure(
+      TOKEN_MESSAGE_SYMBOL, "missing '|' on headless method parameter list."
+    );
   }
 }
 

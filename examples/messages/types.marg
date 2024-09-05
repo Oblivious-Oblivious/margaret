@@ -18,7 +18,6 @@ $Bitstring      = $Enumerable clone,
 $Hash           = $Enumerable clone,
 
 $Method         = $Margaret clone,
-$Proc           = $Margaret clone,
 
 comment: "Math related types",
 

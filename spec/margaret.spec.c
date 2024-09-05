@@ -25,6 +25,7 @@
 #include "generic/errors.spec.h"
 #include "generic/groups.spec.h"
 #include "generic/hashes.spec.h"
+#include "generic/headless_methods.spec.h"
 #include "generic/identifiers.spec.h"
 #include "generic/intervals.spec.h"
 #include "generic/iterations.spec.h"
@@ -34,7 +35,6 @@
 #include "generic/method_definition.spec.h"
 #include "generic/numeric.spec.h"
 #include "generic/postcard.spec.h"
-#include "generic/procs.spec.h"
 #include "generic/rational.spec.h"
 #include "generic/strings.spec.h"
 #include "generic/tensors.spec.h"
@@ -103,6 +103,7 @@ int main(void) {
     errors_spec();
     groups_spec();
     hashes_spec();
+    headless_methods_spec();
     identifiers_spec();
     intervals_spec();
     iterations_spec();
@@ -112,7 +113,6 @@ int main(void) {
     method_definition_spec();
     numeric_spec();
     postcard_spec();
-    procs_spec();
     rational_spec();
     strings_spec();
     tensors_spec();

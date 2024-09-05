@@ -8,12 +8,12 @@ module(param_list, {
     parse(
       "{ a, b, c | (a, b, c) }",
       vector_new(
-        FM_PROC_START,
-        FM_PROC_PARAMETER,
+        FM_METHOD_START,
+        FM_METHOD_PARAMETER,
         string_new("a"),
-        FM_PROC_PARAMETER,
+        FM_METHOD_PARAMETER,
         string_new("b"),
-        FM_PROC_PARAMETER,
+        FM_METHOD_PARAMETER,
         string_new("c"),
         FM_LOCAL,
         string_new("a"),
@@ -21,7 +21,7 @@ module(param_list, {
         string_new("b"),
         FM_LOCAL,
         string_new("c"),
-        FM_PROC_END
+        FM_METHOD_END
       )
     );
   });

@@ -12,8 +12,8 @@
     🟩 %{"a": 1, b: 2}                                       -> ($HashProto clone)
     🟩 %[1, 2]                                               -> ($TupleProto clone)
     🟩 %(1::1, 0::1)                                         -> ($BitstringProto clone)
-    🟩 {a | a + 1}                                           -> ($ProcProto clone)
-    🟩 #put: element at: position => ()                      -> ($MethodProto clone)
+    🟩 {a | a + 1}                                           -> ($MethodProto clone) -> headless
+    🟩 #put: element at: position => ()                      -> ($MethodProto clone) -> object bound
   🟥 Add an IDE that live inspects all values next to the code similar to Quokka.js
   🟥 Add visual literals of trees, graphs and matrices (2-dimentional data representation).
      Most likely part of an IDE that casts the data into tensors.
@@ -69,7 +69,7 @@
   🟥 Add a `@this`, `@it` or equivalent that refers to the original object.
      @this would always refer to object where original method is defined,
      not the object where the method is called.
-  🟩 Procs and methods return tensors of bytecodes.
+  🟩 Methods return tensors of bytecodes.
   🟩 Implement if:then:else: using lambda calculus.
   🟥 Implement `while:` using the `goto:` primitive to avoid endless recursion.
   🟥 Add a `bind:` message to tensors so we can add tensors of unbound methods.

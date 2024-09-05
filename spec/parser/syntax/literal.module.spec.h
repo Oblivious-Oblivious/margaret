@@ -61,22 +61,22 @@ module(literal, {
     );
   });
 
-  it("parses procs", {
-    parse("{}", vector_new(FM_PROC_START, FM_NIL, FM_PROC_END));
-    parse("{|}", vector_new(FM_PROC_START, FM_NIL, FM_PROC_END));
+  it("parses headless methods", {
+    parse("{}", vector_new(FM_METHOD_START, FM_NIL, FM_METHOD_END));
+    parse("{|}", vector_new(FM_METHOD_START, FM_NIL, FM_METHOD_END));
     parse(
       "{ 42 }",
-      vector_new(FM_PROC_START, FM_INTEGER, string_new("42"), FM_PROC_END)
+      vector_new(FM_METHOD_START, FM_INTEGER, string_new("42"), FM_METHOD_END)
     );
     parse(
       "{ a | a }",
       vector_new(
-        FM_PROC_START,
-        FM_PROC_PARAMETER,
+        FM_METHOD_START,
+        FM_METHOD_PARAMETER,
         string_new("a"),
         FM_LOCAL,
         string_new("a"),
-        FM_PROC_END
+        FM_METHOD_END
       )
     );
   });
