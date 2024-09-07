@@ -83,7 +83,7 @@ keyword_list:
   | IDENTIFIER ':' literal keyword_list
 
 scalar:
-  | ':' ':' IDENTIFIER
+    ':' ':' IDENTIFIER
   | INTEGER
   | FLOAT
   | STRING

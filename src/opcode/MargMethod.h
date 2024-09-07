@@ -19,10 +19,18 @@
 typedef struct MargMethod {
   MargObject _;
   MargObject *bound_object;
+  struct MargMethod *bound_method;
 
   MargString *message_name;
   MargTensor *parameter_names;
-  MargProc *proc;
+  MargValue *temporaries;
+  EmeraldsHashtable local_variables;
+  /* TODO - Potentially define these as `register` */
+  uint8_t *bytecode;
+  uint8_t *ip;
+  uint8_t *sp;
+
+  MargProc *proc; /* TODO - Remove */
 } MargMethod;
 
 /**

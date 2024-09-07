@@ -3,6 +3,7 @@
 #include "../../libs/EmeraldsString/export/EmeraldsString.h"
 #include "MargValue.h"
 
+/* TODO - Remove */
 MargProc *marg_proc_new(VM *vm, MargMethod *bound_method) {
   MargObject *obj =
     marg_object_new(vm, sizeof(MargProc), string_new("$ProcClone"));

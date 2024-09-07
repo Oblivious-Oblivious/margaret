@@ -4,6 +4,8 @@
 #include "MargMethod.h"
 #include "MargObject.h"
 
+/* TODO - Remove */
+
 /**
  * @brief Defines a MargProc structure
  * @param _ -> Inherited object properties

@@ -15,10 +15,18 @@ marg_method_new(VM *vm, MargObject *bound_object, char *message_name) {
   obj->instance_variables = obj->parent->instance_variables;
 
   self->bound_object = bound_object;
+  /* self->bound_method = bound_method; */
 
   self->message_name    = AS_STRING(MARG_STRING(message_name));
   self->parameter_names = AS_TENSOR(MARG_TENSOR(2));
-  self->proc            = marg_proc_new(vm, self);
+  self->temporaries     = NULL;
+  table_init(&self->local_variables);
+
+  self->bytecode = NULL;
+  self->ip       = self->bytecode;
+  self->sp       = self->bytecode;
+
+  self->proc = marg_proc_new(vm, self); /* TODO - Remove */
 
   return self;
 }
