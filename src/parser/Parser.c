@@ -297,7 +297,7 @@ void parser_literal(VM *vm) {
     generate(FM_METHOD_START);
 
     generate(FM_METHOD_RECEIVER);
-    prev_size = vector_size(vm->formal_bytecode);
+    prev_size = vector_size(vm->tokens);
 
     if(!((la1type(TOKEN_MESSAGE_SYMBOL) && la2value("=>")) ||
          (la1type(TOKEN_IDENTIFIER) && la2value("=>")) ||
@@ -305,7 +305,7 @@ void parser_literal(VM *vm) {
          (la1type(TOKEN_IDENTIFIER) && la2value(":")))) {
       literal();
     }
-    if(vector_size(vm->formal_bytecode) == prev_size) {
+    if(vector_size(vm->tokens) == prev_size) {
       generate(FM_METHOD_ANY_OBJECT);
     }
 
