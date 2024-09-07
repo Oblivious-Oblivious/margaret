@@ -205,18 +205,22 @@ void parser_unary_selector_chain(VM *vm) {
 }
 
 void parser_lhs_message(VM *vm) {
-  char *message_name = NULL;
-  if(la1type(TOKEN_MESSAGE_SYMBOL) && !la1value("=")) {
-    message_name =
-      ensure(TOKEN_MESSAGE_SYMBOL, "missing message symbol on lhs selector.");
+  size_t i;
+  char **messages_list = NULL;
+  while(la1type(TOKEN_MESSAGE_SYMBOL) && !la1value("=")) {
+    vector_add(
+      messages_list,
+      ensure(TOKEN_MESSAGE_SYMBOL, "missing message symbol on lhs selector.")
+    );
   }
 
   literal();
 
-  if(message_name != NULL) {
+  for(i = 0; i < vector_size(messages_list); i++) {
     generate(FM_LHS);
-    generate(message_name);
+    generate(messages_list[i]);
   }
+  vector_free(messages_list);
 }
 
 void parser_literal(VM *vm) {

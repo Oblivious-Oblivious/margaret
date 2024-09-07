@@ -36,6 +36,7 @@ unary_selector_chain:
 
 lhs_message:
     MESSAGE_SYMBOL literal
+    MESSAGE_SYMBOL literal lhs_message
 
 literal:
     scalar

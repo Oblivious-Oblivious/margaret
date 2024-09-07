@@ -20,6 +20,25 @@ module(lhs_message, {
         string_new("-")
       )
     );
+    parse(
+      "- -42 - - - 41",
+      vector_new(
+        FM_INTEGER,
+        string_new("42"),
+        FM_LHS,
+        string_new("-"),
+        FM_LHS,
+        string_new("-"),
+        FM_INTEGER,
+        string_new("41"),
+        FM_LHS,
+        string_new("-"),
+        FM_LHS,
+        string_new("-"),
+        FM_BINARY,
+        string_new("-")
+      )
+    );
   });
 
   literal();
