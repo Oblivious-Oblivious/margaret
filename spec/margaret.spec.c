@@ -4,9 +4,6 @@
 /* margaret */
 #include "version.spec.h"
 
-/* emitter */
-#include "emitter/Emitter.spec.h"
-
 /* evaluator */
 #include "evaluator/Evaluator.spec.h"
 
@@ -84,8 +81,6 @@
 int main(void) {
   cspec_run_suite("all", {
     VersionSpec();
-
-    EmitterSpec();
 
     EvaluatorSpec();
 
