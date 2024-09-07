@@ -14,7 +14,7 @@ module(VersionSpec, {
   });
 
   it("validates link", {
-    assert_that_charptr(MARGARET_LINK equals to "margaret.org");
+    assert_that_charptr(MARGARET_LINK equals to "margaret-lang.org");
   });
 
   it("validates city", {
