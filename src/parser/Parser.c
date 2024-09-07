@@ -3,21 +3,21 @@
 #include "../../libs/EmeraldsVector/export/EmeraldsVector.h"
 #include "../opcode/fmcodes.h"
 
-#define token_get_value_safe(index)                                   \
+#define token_get_value(index)                                        \
   ((index) < vector_size((vm)->tokens) ? (vm)->tokens[(index)]->value \
                                        : vm->eof_token->value)
 
-#define token_get_type_safe(index)                                   \
+#define token_get_type(index)                                        \
   ((index) < vector_size((vm)->tokens) ? (vm)->tokens[(index)]->type \
                                        : vm->eof_token->type)
 
 /* NOTE - Lookaheads */
-#define la1value(token)        (string_equals(token_get_value_safe(0), token))
-#define la2value(token)        (string_equals(token_get_value_safe(1), token))
-#define la3value(token)        (string_equals(token_get_value_safe(2), token))
-#define la1type(expected_type) (token_get_type_safe(0) == (expected_type))
-#define la2type(expected_type) (token_get_type_safe(1) == (expected_type))
-#define la3type(expected_type) (token_get_type_safe(2) == (expected_type))
+#define la1value(token)        (string_equals(token_get_value(vm->tid), token))
+#define la2value(token)        (string_equals(token_get_value(vm->tid + 1), token))
+#define la3value(token)        (string_equals(token_get_value(vm->tid + 2), token))
+#define la1type(expected_type) (token_get_type(vm->tid) == (expected_type))
+#define la2type(expected_type) (token_get_type(vm->tid + 1) == (expected_type))
+#define la3type(expected_type) (token_get_type(vm->tid + 2) == (expected_type))
 
 #define ensure(type, msg) parser_ensure(vm, (type), (msg))
 #define generate(value)   vector_add(vm->formal_bytecode, value)
@@ -73,13 +73,10 @@ static char *parser_error(VM *vm, Token *token, const char *message) {
  * @return Token* -> The token consumed
  */
 static Token *parser_consume(VM *vm) {
-  if(vector_size(vm->tokens) == 0) {
+  if(vector_size(vm->tokens) == vm->tid) {
     return vm->eof_token;
   } else {
-    Token *token = vm->tokens[0];
-    /* TODO - Handle memory leaking right here */
-    vector_remove(vm->tokens, 0);
-    return token;
+    return vm->tokens[vm->tid++];
   }
 }
 
@@ -92,20 +89,10 @@ char *parser_ensure(VM *vm, Type type, const char *error_msg) {
   }
 }
 
-static void parser_free_parsing_specific_values(VM *vm) {
-  size_t i;
-
-  string_free(vm->source);
-  for(i = 0; i < vector_size(vm->tokens); i++) {
-    string_free(vm->tokens[i]->value);
-    free(vm->tokens[i]);
-  }
-  vector_free(vm->tokens);
-}
-
 VM *parser_analyze_syntax(VM *vm) {
   parser_first_unit(vm);
-  parser_free_parsing_specific_values(vm);
+  vm_free_eof_token();
+  vm_free_tokens();
   return vm;
 }
 
@@ -297,7 +284,7 @@ void parser_literal(VM *vm) {
     generate(FM_METHOD_START);
 
     generate(FM_METHOD_RECEIVER);
-    prev_size = vector_size(vm->tokens);
+    prev_size = vm->tid;
 
     if(!((la1type(TOKEN_MESSAGE_SYMBOL) && la2value("=>")) ||
          (la1type(TOKEN_IDENTIFIER) && la2value("=>")) ||
@@ -305,7 +292,7 @@ void parser_literal(VM *vm) {
          (la1type(TOKEN_IDENTIFIER) && la2value(":")))) {
       literal();
     }
-    if(vector_size(vm->tokens) == prev_size) {
+    if(vm->tid == prev_size) {
       generate(FM_METHOD_ANY_OBJECT);
     }
 

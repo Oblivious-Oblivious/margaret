@@ -86,18 +86,22 @@ module(ParserSpec, {
       vm2->source = string_new("(42 factorial)");
       lexer_make_tokens(vm2);
       assert_that_size_t(vector_size(vm2->tokens) equals to 5);
+      assert_that_size_t(vm2->tid equals to 0);
       assert_that_charptr(parser_ensure(vm2, TOKEN_LPAREN, "") equals to "(");
       assert_that_charptr(parser_ensure(vm2, TOKEN_INTEGER, "") equals to "42");
       assert_that_charptr(parser_ensure(vm2, TOKEN_IDENTIFIER, "") equals to
                           "factorial");
       assert_that_charptr(parser_ensure(vm2, TOKEN_RPAREN, "") equals to ")");
-      assert_that_size_t(vector_size(vm2->tokens) equals to 1);
+      assert_that_size_t(vector_size(vm2->tokens) equals to 5);
+      assert_that_size_t(vm2->tid equals to 4);
       assert_that_charptr(parser_ensure(vm2, TOKEN_EOF, "") equals to "eof");
-      assert_that_size_t(vector_size(vm2->tokens) equals to 0);
+      assert_that_size_t(vector_size(vm2->tokens) equals to 5);
+      assert_that_size_t(vm2->tid equals to 5);
       assert_that_charptr(parser_ensure(vm2, TOKEN_EOF, "") equals to "eof");
       assert_that_charptr(parser_ensure(vm2, TOKEN_EOF, "") equals to "eof");
       assert_that_charptr(parser_ensure(vm2, TOKEN_EOF, "") equals to "eof");
-      assert_that_size_t(vector_size(vm2->tokens) equals to 0);
+      assert_that_size_t(vector_size(vm2->tokens) equals to 5);
+      assert_that_size_t(vm2->tid equals to 5);
     });
   });
 

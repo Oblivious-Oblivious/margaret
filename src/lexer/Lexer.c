@@ -194,5 +194,7 @@ VM *lexer_make_tokens(VM *vm) {
   vm->eof_token->charno = vm->charno + 3;
   vector_add(vm->tokens, vm->eof_token);
 
+  vm_free_source();
+
   return vm;
 }

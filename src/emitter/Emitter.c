@@ -315,14 +315,6 @@ VM *emitter_emit(VM *vm) {
 #define message_case(message)        else if(string_equals(message_name, message))
 #define message_default              else
 
-static void emitter_free_formal_bytecode(VM *vm) {
-  size_t i;
-  for(i = 0; i < vector_size(vm->formal_bytecode); i++) {
-    string_free(vm->formal_bytecode[i]);
-  }
-  vector_free(vm->formal_bytecode);
-}
-
 VM *emitter_emit(VM *vm) {
   size_t ip;
   char **formal_bytecode = vm->formal_bytecode;
@@ -506,6 +498,6 @@ VM *emitter_emit(VM *vm) {
   vector_add(vm->current->bytecode, OP_HALT);
 
 exit:
-  emitter_free_formal_bytecode(vm);
+  vm_free_formal_bytecode();
   return vm;
 }

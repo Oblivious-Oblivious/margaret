@@ -16,7 +16,10 @@ typedef struct MargProc MargProc;
  * @param source -> Source code read from file
  * @param lineno -> Current line number
  * @param charno -> Current character number
+ * @param has_error -> Flag signaling if the VM has encountered an error
  *
+ * @param eof_token -> Singleton token that signals the end of the program
+ * @param tid -> Current token index
  * @param tokens -> List of tokenized values
  * @param formal_bytecode -> Formal bytecode representation
  *
@@ -35,6 +38,7 @@ typedef struct VM {
   bool has_error;
 
   Token *eof_token;
+  size_t tid;
   Token **tokens;
   char **formal_bytecode;
 
@@ -69,6 +73,32 @@ VM *vm_new(const char *filename);
  * other parts of the pipeline.  This handles remaining fields
  * @param vm -> The VM to be freed
  */
-void vm_free(VM *vm);
+#define vm_free()                        \
+  do {                                   \
+    vm_free_source();                    \
+    vm_free_eof_token();                 \
+    vm_free_tokens();                    \
+    vm_free_formal_bytecode();           \
+    table_deinit(&vm->global_variables); \
+    table_deinit(&vm->interned_strings); \
+    free(vm);                            \
+  } while(0)
+
+/* TODO - Ensure there are no leaks throughout the pipeline */
+
+#define vm_free_source() string_free(vm->source)
+
+#define vm_free_eof_token()
+
+#define vm_free_tokens()
+
+#define vm_free_formal_bytecode()                           \
+  do {                                                      \
+    size_t i;                                               \
+    for(i = 0; i < vector_size(vm->formal_bytecode); i++) { \
+      string_free(vm->formal_bytecode[i]);                  \
+    }                                                       \
+    vector_free(vm->formal_bytecode);                       \
+  } while(0)
 
 #endif

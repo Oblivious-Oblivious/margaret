@@ -85,6 +85,7 @@ VM *vm_new(const char *filename) {
   vm->has_error = false;
 
   vm->eof_token       = token_new(string_new("eof"), TOKEN_EOF, 1, 1);
+  vm->tid             = 0;
   vm->tokens          = NULL;
   vm->formal_bytecode = NULL;
 
@@ -99,10 +100,4 @@ VM *vm_new(const char *filename) {
   point_ip_to_main_method(vm);
 
   return vm;
-}
-
-void vm_free(VM *vm) {
-  table_deinit(&vm->global_variables);
-  table_deinit(&vm->interned_strings);
-  free(vm);
 }
