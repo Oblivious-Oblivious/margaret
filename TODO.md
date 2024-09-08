@@ -110,8 +110,6 @@
      $Numeric -- #/ 0 => raise: "division by zero",
      $Numeric -- #/ other => @self / other,
      If the analyzer cannot figure out the inputs of the division message, LSP warns for potential runtime crash.
-  ---------------------------
-  🟥 Add functional features:
   🟥 %[a, b, c] = %["hello", "world", 42]
   [a, b, c] = [1, 2, 3]
   $List bind: #= other => self.size.times: { i |
@@ -130,22 +128,8 @@
      Array bind: # [] add: element at: position => 17
      Array bind: # [] add: 'a' at 0 => ['a']
      Array bind: # _ add: 'a' at 0 => ['a'] ++ self
-  🟩 Setup message binding and sending:
-     $Lhs msg -> Method {name: "msg", parameters: {}}
-     msg $Lhs (no change)
-
-     $Unary msg -> Method {name: "msg", parameters: {}}
-     $Unary msg -> (no change)
-
-     $Binary + other -> Method {name: "+", parameters: ["other"]}
-     $Binary + 3 -> parameters: "+": 3 -> table_add(locals, parameters.get[0], 3)
-
-     $Keyword at: position put: element -> Method {name: "at:put:", parameters: ["position", "element"]}
-     $Keyword at: 0 put: 42 -> parameters: "at": 0, "put": 42
-        -> actual_params = [0, 42]
-        -> foreach param:
-            table_add(locals, parameters.get[i], actual_params[i])
-  ---------------------------
+  🟩 Setup 6 types of message binding and sending:
+     subscript, lhs, unary, binary, keyword, assignment
   🟩 Compile time bytecodes
      Stored along with runtime ones.
      Executed only once.

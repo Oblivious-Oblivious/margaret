@@ -35,8 +35,15 @@ unary_selector_chain:
   | IDENTIFIER unary_selector_chain
 
 lhs_message:
-    MESSAGE_SYMBOL literal
-    MESSAGE_SYMBOL literal lhs_message
+    MESSAGE_SYMBOL subscript_message
+  | lhs_message MESSAGE_SYMBOL subscript_message
+
+subscript_message:
+    literal subscript_selector_chain
+
+subscript_selector_chain:
+    '[' unit_list ']'
+  | '[' unit_list ']' subscript_selector_chain
 
 literal:
     scalar
@@ -73,6 +80,7 @@ method_definition:
   | IDENTIFIER '=>' method_body
   | MESSAGE_SYMBOL '=>' method_body
   | MESSAGE_SYMBOL literal '=>' method_body
+  | '[' IDENTIFIER ']' '=>' method_body
 
 method_body:
     unit

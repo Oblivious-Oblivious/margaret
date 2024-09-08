@@ -4,6 +4,28 @@
 #include "_helpers.h"
 
 module(method_definition_spec, {
+  it("parses subscript methods", {
+    parse(
+      "#[param] => 42.param",
+      vector_new(
+        FM_METHOD_START,
+        FM_METHOD_RECEIVER,
+        FM_METHOD_ANY_OBJECT,
+        FM_METHOD_PARAMETER,
+        string_new("param"),
+        FM_METHOD_NAME,
+        string_new("[]"),
+        FM_INTEGER,
+        string_new("42"),
+        FM_LOCAL,
+        string_new("param"),
+        FM_BINARY,
+        string_new("."),
+        FM_METHOD_END
+      )
+    );
+  });
+
   it("parses lhs methods", {
     parse(
       "# - => 42",
@@ -151,6 +173,42 @@ module(method_definition_spec, {
         string_new("fact"),
         FM_BINARY,
         string_new("*"),
+        FM_METHOD_END
+      )
+    );
+
+    parse(
+      "# [a] msg => 42",
+      vector_new(
+        FM_METHOD_START,
+        FM_METHOD_RECEIVER,
+        FM_LOCAL,
+        string_new("a"),
+        FM_TENSOR,
+        string_new("1"),
+        FM_METHOD_NAME,
+        string_new("msg"),
+        FM_INTEGER,
+        string_new("42"),
+        FM_METHOD_END
+      )
+    );
+
+    parse(
+      "# [0, 1] msg => 43",
+      vector_new(
+        FM_METHOD_START,
+        FM_METHOD_RECEIVER,
+        FM_INTEGER,
+        string_new("0"),
+        FM_INTEGER,
+        string_new("1"),
+        FM_TENSOR,
+        string_new("2"),
+        FM_METHOD_NAME,
+        string_new("msg"),
+        FM_INTEGER,
+        string_new("43"),
         FM_METHOD_END
       )
     );

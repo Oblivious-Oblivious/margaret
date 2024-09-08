@@ -15,36 +15,39 @@
 #define la1value(token)        (string_equals(token_get_value(vm->tid), token))
 #define la2value(token)        (string_equals(token_get_value(vm->tid + 1), token))
 #define la3value(token)        (string_equals(token_get_value(vm->tid + 2), token))
+#define la4value(token)        (string_equals(token_get_value(vm->tid + 3), token))
 #define la1type(expected_type) (token_get_type(vm->tid) == (expected_type))
 #define la2type(expected_type) (token_get_type(vm->tid + 1) == (expected_type))
 #define la3type(expected_type) (token_get_type(vm->tid + 2) == (expected_type))
+#define la4type(expected_type) (token_get_type(vm->tid + 3) == (expected_type))
 
 #define ensure(type, msg) parser_ensure(vm, (type), (msg))
 #define generate(value)   vector_add(vm->formal_bytecode, value)
 
-#define first_unit()             parser_first_unit(vm)
-#define unit_list()              parser_unit_list(vm)
-#define unit()                   parser_unit(vm)
-#define assignment_message()     parser_assignment_message(vm)
-#define keyword_message()        parser_keyword_message(vm)
-#define keyword_selector_chain() parser_keyword_selector_chain(vm)
-#define binary_message()         parser_binary_message(vm)
-#define binary_selector_chain()  parser_binary_selector_chain(vm)
-#define unary_message()          parser_unary_message(vm)
-#define unary_selector_chain()   parser_unary_selector_chain(vm)
-#define lhs_message()            parser_lhs_message(vm)
-#define lhs_selector()           parser_lhs_selector(vm)
-#define literal()                parser_literal(vm)
-#define param_list()             parser_param_list(vm)
-#define bit_list()               parser_bit_list(vm)
-#define bit()                    parser_bit(vm)
-#define association_list()       parser_association_list(vm)
-#define key()                    parser_key(vm)
-#define method_definition()      parser_method_definition(vm)
-#define method_body()            parser_method_body(vm)
-#define keyword_list()           parser_keyword_list(vm)
-#define scalar()                 parser_scalar(vm)
-#define variable()               parser_variable(vm)
+#define first_unit()               parser_first_unit(vm)
+#define unit_list()                parser_unit_list(vm)
+#define unit()                     parser_unit(vm)
+#define assignment_message()       parser_assignment_message(vm)
+#define keyword_message()          parser_keyword_message(vm)
+#define keyword_selector_chain()   parser_keyword_selector_chain(vm)
+#define binary_message()           parser_binary_message(vm)
+#define binary_selector_chain()    parser_binary_selector_chain(vm)
+#define unary_message()            parser_unary_message(vm)
+#define unary_selector_chain()     parser_unary_selector_chain(vm)
+#define lhs_message()              parser_lhs_message(vm)
+#define subscript_message()        parser_subscript_message(vm)
+#define subscript_selector_chain() parser_subscript_selector_chain(vm)
+#define literal()                  parser_literal(vm)
+#define param_list()               parser_param_list(vm)
+#define bit_list()                 parser_bit_list(vm)
+#define bit()                      parser_bit(vm)
+#define association_list()         parser_association_list(vm)
+#define key()                      parser_key(vm)
+#define method_definition()        parser_method_definition(vm)
+#define method_body()              parser_method_body(vm)
+#define keyword_list()             parser_keyword_list(vm)
+#define scalar()                   parser_scalar(vm)
+#define variable()                 parser_variable(vm)
 
 /**
  * @brief Displays a parser-level error message (grabs latest line and column)
@@ -214,7 +217,7 @@ void parser_lhs_message(VM *vm) {
     );
   }
 
-  literal();
+  subscript_message();
 
   if(vector_size(messages_list) > 0) {
     for(i = vector_size(messages_list) - 1; i > 0; i--) {
@@ -224,6 +227,20 @@ void parser_lhs_message(VM *vm) {
     generate(FM_LHS);
     generate(messages_list[0]);
     vector_free(messages_list);
+  }
+}
+
+void parser_subscript_message(VM *vm) {
+  literal();
+  subscript_selector_chain();
+}
+
+void parser_subscript_selector_chain(VM *vm) {
+  while(la1type(TOKEN_LBRACKET)) {
+    ensure(TOKEN_LBRACKET, "missing opening bracket on subscript.");
+    unit_list();
+    generate(FM_SUBSCRIPT);
+    ensure(TOKEN_RBRACKET, "missing closing bracket on subscript.");
   }
 }
 
@@ -297,7 +314,9 @@ void parser_literal(VM *vm) {
     if(!((la1type(TOKEN_MESSAGE_SYMBOL) && la2value("=>")) ||
          (la1type(TOKEN_IDENTIFIER) && la2value("=>")) ||
          (la1type(TOKEN_MESSAGE_SYMBOL) && la3value("=>")) ||
-         (la1type(TOKEN_IDENTIFIER) && la2value(":")))) {
+         (la1type(TOKEN_IDENTIFIER) && la2value(":")) ||
+         (la1type(TOKEN_LBRACKET) && la2type(TOKEN_IDENTIFIER) &&
+          la3type(TOKEN_RBRACKET) && la4value("=>")))) {
       literal();
     }
     if(vm->tid == prev_size) {
@@ -414,6 +433,15 @@ void parser_method_definition(VM *vm) {
     generate(FM_METHOD_PARAMETER);
     literal();
     ensure(TOKEN_ROCKET, "missing '=>' on binary method definition.");
+  } else if(la1type(TOKEN_LBRACKET)) {
+    ensure(TOKEN_LBRACKET, "missing '[' on subscript method definition.");
+    generate(FM_METHOD_PARAMETER);
+    generate(ensure(
+      TOKEN_IDENTIFIER, "missing identifier on subscript method definition."
+    ));
+    ensure(TOKEN_RBRACKET, "missing ']' on subscript method definition.");
+    ensure(TOKEN_ROCKET, "missing '=>' on subscript method definition.");
+    name = string_new("[]");
   }
 
   generate(FM_METHOD_NAME);

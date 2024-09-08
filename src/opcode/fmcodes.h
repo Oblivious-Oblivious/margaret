@@ -29,5 +29,6 @@
 #define FM_BINARY            string_new("BINARY")
 #define FM_UNARY             string_new("UNARY")
 #define FM_LHS               string_new("LHS")
+#define FM_SUBSCRIPT         string_new("SUBSCRIPT")
 
 #endif

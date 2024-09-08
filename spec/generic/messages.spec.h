@@ -798,6 +798,96 @@ module(messages_spec, {
       )
     );
   });
+
+  it("parses subscript messages", {
+    parse(
+      "arr[1]",
+      vector_new(
+        FM_LOCAL, string_new("arr"), FM_INTEGER, string_new("1"), FM_SUBSCRIPT
+      )
+    );
+    parse(
+      "arr[1, 2, 3]",
+      vector_new(
+        FM_LOCAL,
+        string_new("arr"),
+        FM_INTEGER,
+        string_new("1"),
+        FM_INTEGER,
+        string_new("2"),
+        FM_INTEGER,
+        string_new("3"),
+        FM_SUBSCRIPT
+      )
+    );
+    parse(
+      "arr[1, 2, 3][2]",
+      vector_new(
+        FM_LOCAL,
+        string_new("arr"),
+        FM_INTEGER,
+        string_new("1"),
+        FM_INTEGER,
+        string_new("2"),
+        FM_INTEGER,
+        string_new("3"),
+        FM_SUBSCRIPT,
+        FM_INTEGER,
+        string_new("2"),
+        FM_SUBSCRIPT
+      )
+    );
+    parse(
+      "arr[1, 2, 3][2][1]",
+      vector_new(
+        FM_LOCAL,
+        string_new("arr"),
+        FM_INTEGER,
+        string_new("1"),
+        FM_INTEGER,
+        string_new("2"),
+        FM_INTEGER,
+        string_new("3"),
+        FM_SUBSCRIPT,
+        FM_INTEGER,
+        string_new("2"),
+        FM_SUBSCRIPT,
+        FM_INTEGER,
+        string_new("1"),
+        FM_SUBSCRIPT
+      )
+    );
+    parse(
+      "x = keyword: !arr[0][0] msg + 42",
+      vector_new(
+        FM_LOCAL,
+        string_new("x"),
+        FM_GLOBAL,
+        string_new("$Margaret"),
+        FM_LOCAL,
+        string_new("arr"),
+        FM_INTEGER,
+        string_new("0"),
+        FM_SUBSCRIPT,
+        FM_INTEGER,
+        string_new("0"),
+        FM_SUBSCRIPT,
+        FM_LHS,
+        string_new("!"),
+        FM_UNARY,
+        string_new("msg"),
+        FM_INTEGER,
+        string_new("42"),
+        FM_BINARY,
+        string_new("+"),
+        FM_KEYWORD,
+        string_new("keyword:"),
+        string_new("1"),
+        FM_BINARY,
+        string_new("=")
+      )
+    );
+  });
 })
 
 #endif
