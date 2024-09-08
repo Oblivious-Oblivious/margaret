@@ -65,6 +65,7 @@
     }                                                                         \
   } while(0)
 
+/* TODO - Throw when error occurs */
 #define error(code, error_message)    \
   do {                                \
     VM *vm     = vm_new("file.marg"); \

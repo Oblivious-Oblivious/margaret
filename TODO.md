@@ -76,6 +76,7 @@
      `$Object bind: [m1, m2, m3]` binds those methods into $Object.
   🟥 Add a switch matcher -> `obj match: %[%[1, 100], %[2, 200], %[3, 300],]`.
   🟥 Make bang (!) messages denote persistant changes in object state.
+  🟥 In the NaN boxing scheme do not reallocate integer and float representations, instead use unboxed values directly.
   🟥 Add __LINE__ __FILE__ and __DIR__ macros.
   🟥 Disallow all dynamic code generation.
      All code should be lexically defined.
