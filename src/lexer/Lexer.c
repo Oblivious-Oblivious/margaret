@@ -105,7 +105,7 @@ VM *lexer_make_tokens(VM *vm) {
         token_type = TOKEN_INTEGER;
       } else {
         append_integer_part(is_numeric);
-        if(input[0] == '.') {
+        if(input[0] == '.' && is_numeric(input[1])) {
           append_char();
           append_integer_part(is_numeric);
           token_type = TOKEN_FLOAT;

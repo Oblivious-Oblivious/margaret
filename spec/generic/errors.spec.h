@@ -237,6 +237,18 @@ module(errors_spec, {
         FM_METHOD_END
       )
     );
+
+    parse(
+      "42.param",
+      vector_new(
+        FM_INTEGER,
+        string_new("42"),
+        FM_LOCAL,
+        string_new("param"),
+        FM_BINARY,
+        string_new(".")
+      )
+    );
   });
 })
 
