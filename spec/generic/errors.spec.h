@@ -19,6 +19,8 @@ module(errors_spec, {
     error("]", "reached end of program.");
     error("{", "missing closing curly on headless method.");
     error("}", "reached end of program.");
+    error("=1", "grouped items should be separated by commas.");
+    error("x = = 1", "grouped items should be separated by commas.");
     error(
       "#-invalid-syntax-symbol", "missing '=>' on binary method definition."
     );
@@ -37,6 +39,21 @@ module(errors_spec, {
   });
 
   it("tests weird edge cases", {
+
+    parse("-, ++, --, +<><+", v);
+
+    parse(
+      "x == = 1",
+      vector_new(
+        FM_LOCAL,
+        string_new("x"),
+        FM_INTEGER,
+        string_new("1"),
+        FM_BINARY,
+        string_new("=")
+      )
+    );
+
     parse(
       "***(not a valid operator sequence)",
       vector_new(
@@ -92,7 +109,7 @@ module(errors_spec, {
         FM_LOCAL, string_new("newline"), FM_UNARY, string_new("inside")
       )
     );
-    parse("\\", vector_new(FM_LHS, string_new("\\")));
+    parse("\\", v);
     parse(
       "double--dash",
       vector_new(

@@ -90,7 +90,11 @@ VM *vm_new(const char *filename);
 
 #define vm_free_eof_token()
 
-#define vm_free_tokens()
+#define vm_free_tokens()     \
+  do {                       \
+    vector_free(vm->tokens); \
+    vm->tid = 0;             \
+  } while(0)
 
 #define vm_free_formal_bytecode()                           \
   do {                                                      \

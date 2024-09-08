@@ -125,8 +125,10 @@ char *parser_unit_list(VM *vm) {
 void parser_unit(VM *vm) { assignment_message(); }
 
 void parser_assignment_message(VM *vm) {
+  size_t prev_size = vm->tid;
+
   keyword_message();
-  if(la1value("=")) {
+  if(la1value("=") && prev_size < vm->tid) {
     char *eq =
       ensure(TOKEN_MESSAGE_SYMBOL, "missing '=' on assignment message.");
     assignment_message();
@@ -187,9 +189,12 @@ void parser_binary_selector_chain(VM *vm) {
     char *message_name = ensure(
       TOKEN_MESSAGE_SYMBOL, "missing message symbol on binary selector."
     );
+    size_t prev_size = vm->tid;
     unary_message();
-    generate(FM_BINARY);
-    generate(message_name);
+    if(prev_size < vm->tid) {
+      generate(FM_BINARY);
+      generate(message_name);
+    }
   }
 }
 
@@ -209,6 +214,7 @@ void parser_unary_selector_chain(VM *vm) {
 
 void parser_lhs_message(VM *vm) {
   size_t i;
+  size_t prev_size;
   char **messages_list = NULL;
   while(la1type(TOKEN_MESSAGE_SYMBOL) && !la1value("=")) {
     vector_add(
@@ -217,9 +223,10 @@ void parser_lhs_message(VM *vm) {
     );
   }
 
+  prev_size = vm->tid;
   subscript_message();
 
-  if(vector_size(messages_list) > 0) {
+  if(vector_size(messages_list) > 0 && prev_size < vm->tid) {
     for(i = vector_size(messages_list) - 1; i > 0; i--) {
       generate(FM_LHS);
       generate(messages_list[i]);
