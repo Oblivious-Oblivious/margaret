@@ -100,7 +100,9 @@ VM *vm_new(const char *filename);
   do {                                                      \
     size_t i;                                               \
     for(i = 0; i < vector_size(vm->formal_bytecode); i++) { \
-      string_free(vm->formal_bytecode[i]);                  \
+      if(!string_equals(vm->formal_bytecode[i], "eof")) {   \
+        string_free(vm->formal_bytecode[i]);                \
+      }                                                     \
     }                                                       \
     vector_free(vm->formal_bytecode);                       \
   } while(0)
