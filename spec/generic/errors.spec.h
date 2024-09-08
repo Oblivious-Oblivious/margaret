@@ -10,7 +10,7 @@ module(errors_spec, {
     parse("", v);
   });
 
-  it("enumerable literal errors", {
+  it("validates syntax symbol errors", {
     error("(", "missing closing parenthesis on group.");
     error(")", "reached end of program.");
     error("(()", "missing closing parenthesis on group.");
@@ -19,8 +19,20 @@ module(errors_spec, {
     error("]", "reached end of program.");
     error("{", "missing closing curly on headless method.");
     error("}", "reached end of program.");
+    error(":", "grouped items should be separated by commas.");
+    error("::", "expected identifier on label.");
+    error(":::", "expected identifier on label.");
+    error(":::::::", "expected identifier on label.");
     error("=1", "grouped items should be separated by commas.");
     error("x = = 1", "grouped items should be separated by commas.");
+    /* TODO - Fix errors below
+  - #
+  - ##
+  - ##...
+*/
+  });
+
+  it("validates special case errors", {
     error(
       "#-invalid-syntax-symbol", "missing '=>' on binary method definition."
     );
@@ -39,6 +51,13 @@ module(errors_spec, {
   });
 
   it("tests weird edge cases", {
+    char **v = NULL;
+    parse("$", v);
+    parse("$$", v);
+    parse("$$$x", vector_new(FM_GLOBAL, string_new("$x")));
+    parse("@", v);
+    parse("@@", v);
+    parse("@@@x", vector_new(FM_INSTANCE, string_new("@x")));
 
     parse("-, ++, --, +<><+", v);
 
