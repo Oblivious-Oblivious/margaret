@@ -728,6 +728,76 @@ module(messages_spec, {
       )
     );
   });
+
+  it("parses lhs messages", {
+    parse("!$false", vector_new(FM_FALSE, FM_LHS, string_new("!")));
+    parse(
+      "-42 - 42",
+      vector_new(
+        FM_INTEGER,
+        string_new("42"),
+        FM_LHS,
+        string_new("-"),
+        FM_INTEGER,
+        string_new("42"),
+        FM_BINARY,
+        string_new("-")
+      )
+    );
+    parse(
+      "-42 - - -41",
+      vector_new(
+        FM_INTEGER,
+        string_new("42"),
+        FM_LHS,
+        string_new("-"),
+        FM_INTEGER,
+        string_new("41"),
+        FM_LHS,
+        string_new("-"),
+        FM_LHS,
+        string_new("-"),
+        FM_BINARY,
+        string_new("-")
+      )
+    );
+    parse(
+      "! + - !!42",
+      vector_new(
+        FM_INTEGER,
+        string_new("42"),
+        FM_LHS,
+        string_new("!!"),
+        FM_LHS,
+        string_new("-"),
+        FM_LHS,
+        string_new("+"),
+        FM_LHS,
+        string_new("!")
+      )
+    );
+    parse(
+      "! + !!42 msg + 123 msg",
+      vector_new(
+        FM_INTEGER,
+        string_new("42"),
+        FM_LHS,
+        string_new("!!"),
+        FM_LHS,
+        string_new("+"),
+        FM_LHS,
+        string_new("!"),
+        FM_UNARY,
+        string_new("msg"),
+        FM_INTEGER,
+        string_new("123"),
+        FM_UNARY,
+        string_new("msg"),
+        FM_BINARY,
+        string_new("+")
+      )
+    );
+  });
 })
 
 #endif

@@ -216,11 +216,15 @@ void parser_lhs_message(VM *vm) {
 
   literal();
 
-  for(i = 0; i < vector_size(messages_list); i++) {
+  if(vector_size(messages_list) > 0) {
+    for(i = vector_size(messages_list) - 1; i > 0; i--) {
+      generate(FM_LHS);
+      generate(messages_list[i]);
+    }
     generate(FM_LHS);
-    generate(messages_list[i]);
+    generate(messages_list[0]);
+    vector_free(messages_list);
   }
-  vector_free(messages_list);
 }
 
 void parser_literal(VM *vm) {
