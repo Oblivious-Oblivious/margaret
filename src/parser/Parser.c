@@ -191,7 +191,11 @@ void parser_binary_selector_chain(VM *vm) {
     );
     size_t prev_size = vm->tid;
     unary_message();
-    if(prev_size < vm->tid) {
+    if(prev_size == vm->tid) {
+      parser_error(
+        vm, vm->tokens[vm->tid - 1], "missing binary message parameter."
+      );
+    } else {
       generate(FM_BINARY);
       generate(message_name);
     }
@@ -226,7 +230,9 @@ void parser_lhs_message(VM *vm) {
   prev_size = vm->tid;
   subscript_message();
 
-  if(vector_size(messages_list) > 0 && prev_size < vm->tid) {
+  if(prev_size == vm->tid && vm->tid > 0) {
+    parser_error(vm, vm->tokens[vm->tid - 1], "missing lhs message parameter.");
+  } else if(vector_size(messages_list) > 0) {
     for(i = vector_size(messages_list) - 1; i > 0; i--) {
       generate(FM_LHS);
       generate(messages_list[i]);
@@ -330,7 +336,11 @@ void parser_literal(VM *vm) {
       generate(FM_METHOD_ANY_OBJECT);
     }
 
+    prev_size = vm->tid;
     method_definition();
+    if(prev_size == vm->tid) {
+      parser_error(vm, vm->tokens[vm->tid - 1], "missing method body.");
+    }
     generate(FM_METHOD_END);
   } else {
     scalar();
@@ -417,7 +427,8 @@ void parser_key(VM *vm) {
 }
 
 void parser_method_definition(VM *vm) {
-  char *name = NULL;
+  char *name       = NULL;
+  size_t prev_size = vm->tid;
 
   if(la1type(TOKEN_IDENTIFIER) && la2value(":")) {
     name = keyword_list();
@@ -451,9 +462,11 @@ void parser_method_definition(VM *vm) {
     name = string_new("[]");
   }
 
-  generate(FM_METHOD_NAME);
-  generate(name);
-  method_body();
+  if(prev_size < vm->tid) {
+    generate(FM_METHOD_NAME);
+    generate(name);
+    method_body();
+  }
 }
 
 void parser_method_body(VM *vm) {

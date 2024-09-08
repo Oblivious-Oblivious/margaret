@@ -19,17 +19,20 @@ module(errors_spec, {
     error("]", "reached end of program.");
     error("{", "missing closing curly on headless method.");
     error("}", "reached end of program.");
+    error("#", "missing method body.");
+    error("##", "missing method body.");
+    error("###", "missing method body.");
+    error("#x", "missing method body.");
+    error("##x", "missing method body.");
+    error("##x=>", "missing method body.");
     error(":", "grouped items should be separated by commas.");
     error("::", "expected identifier on label.");
     error(":::", "expected identifier on label.");
     error(":::::::", "expected identifier on label.");
     error("=1", "grouped items should be separated by commas.");
     error("x = = 1", "grouped items should be separated by commas.");
-    /* TODO - Fix errors below
-  - #
-  - ##
-  - ##...
-*/
+    error("x == = 1", "missing lhs message parameter.");
+    error("-, ++, --, +<><+", "missing lhs message parameter.");
   });
 
   it("validates special case errors", {
@@ -58,20 +61,6 @@ module(errors_spec, {
     parse("@", v);
     parse("@@", v);
     parse("@@@x", vector_new(FM_INSTANCE, string_new("@x")));
-
-    parse("-, ++, --, +<><+", v);
-
-    parse(
-      "x == = 1",
-      vector_new(
-        FM_LOCAL,
-        string_new("x"),
-        FM_INTEGER,
-        string_new("1"),
-        FM_BINARY,
-        string_new("=")
-      )
-    );
 
     parse(
       "***(not a valid operator sequence)",
