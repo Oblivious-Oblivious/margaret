@@ -17,6 +17,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+/* TODO - Potentially switch to MIT from GPLv3 */
+
 #include "version.h"
 #include "vm/on_demand_compilation_pipeline.h"
 

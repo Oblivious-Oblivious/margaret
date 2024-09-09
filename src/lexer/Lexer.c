@@ -10,6 +10,9 @@
 #define is_ascii_start(c) \
   (is_included_in("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_", (c)))
 
+/* TODO - try to identify unicode like `√` to be used as message symbols instead
+ * of identifiers.  also update `strchr` for unicode as well */
+
 #define utf8_char_length(input)        \
   ((((input)[0] & 0x80) == 0x00)   ? 1 \
    : (((input)[0] & 0xE0) == 0xC0) ? 2 \
