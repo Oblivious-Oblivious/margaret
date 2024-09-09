@@ -24,8 +24,7 @@
         assert_that_charptr(res[i] equals to(expected_result)[i]);            \
       }                                                                       \
     } else {                                                                  \
-      /* TODO - Use `fail` once implemented */                                \
-      assert_that(true is false);                                             \
+      fail("formal bytecode has different size than expected.");              \
     }                                                                         \
   } while(0)
 
@@ -60,8 +59,7 @@
         assert_that_charptr(res[i] equals to(expected_result)[i]);            \
       }                                                                       \
     } else {                                                                  \
-      /* TODO - Use `fail` once implemented */                                \
-      assert_that(true is false);                                             \
+      fail("formal bytecode has different size than expected.");              \
     }                                                                         \
   } while(0)
 
