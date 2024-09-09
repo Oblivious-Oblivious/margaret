@@ -1,7 +1,6 @@
 #ifndef __SCANNER_H_
 #define __SCANNER_H_
 
-#include "../../libs/EmeraldsCrossline/export/crossline/crossline.h"
 #include "../vm/vm.h"
 
 /**
