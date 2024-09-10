@@ -2,7 +2,6 @@
 #define __LEXER_SPEC_H_
 
 #include "../../libs/cSpec/export/cSpec.h"
-#include "../../libs/EmeraldsReadHandler/export/EmeraldsReadHandler.h"
 #include "../../libs/EmeraldsString/export/EmeraldsString.h"
 #include "../../src/lexer/Lexer.h"
 #include "../../src/loader/Loader.h"

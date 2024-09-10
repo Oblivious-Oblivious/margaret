@@ -51,6 +51,6 @@ int main(int argc, char **argv) {
     (void)argv;
     margaret_repl(vm_new("repl"));
   } else {
-    margaret_run_file(vm_new(argv[0]));
+    margaret_run_file(vm_new(argv[1]));
   }
 }

@@ -1,12 +1,28 @@
 #include "Loader.h"
 
-#include "../../libs/EmeraldsReadHandler/export/EmeraldsReadHandler.h"
+#include "../../libs/EmeraldsFileHandler/export/EmeraldsFileHandler.h"
+#include "../errors.h"
+
+/**
+ * @brief Displays a loader-level error message
+ * @param vm -> The vm containing the filename
+ * @param message -> The message to display
+ */
+void loader_error(VM *vm, const char *message) {
+  printf(
+    "\033[1;31merror:\033[0m %s: \033[1;31m`%s`\033[0m\n", message, vm->filename
+  );
+  vm->has_error = true;
+}
 
 VM *loader_load(VM *vm) {
-  EmeraldsReadHandler *fd = read_handler_new();
-  /* TODO - Ensure loading returns errors that I can print as marg errors */
-  char *res               = read_handler_load(fd, vm->filename);
-  read_handler_close(fd);
-  vm->source = res;
+  char *res = file_handler_read(vm->filename);
+
+  if(res == NULL) {
+    loader_error(vm, ERROR_LOADER_FILE_NOT_FOUND);
+  } else {
+    vm->source = res;
+  }
+
   return vm;
 }
