@@ -31,7 +31,7 @@ module(errors_spec, {
     error(":::::::", "expected identifier on label.");
     error("=1", "grouped items should be separated by commas.");
     error("x = = 1", "grouped items should be separated by commas.");
-    error("x == = 1", "missing lhs message parameter.");
+    error("x == = 1", "missing binary message parameter.");
     error("-, ++, --, +<><+", "missing lhs message parameter.");
   });
 

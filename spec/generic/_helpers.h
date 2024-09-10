@@ -63,13 +63,19 @@
     }                                                                         \
   } while(0)
 
-/* TODO - Throw when error occurs */
-#define error(code, error_message)    \
-  do {                                \
-    VM *vm     = vm_new("file.marg"); \
-    vm->source = string_new(code);    \
-    lexer_make_tokens(vm);            \
-    parser_analyze_syntax(vm);        \
+#define error(code, error_message)                            \
+  do {                                                        \
+    VM *vm     = vm_new("file.marg");                         \
+    vm->source = string_new(code);                            \
+    lexer_make_tokens(vm);                                    \
+    parser_analyze_syntax(vm);                                \
+    if(vm->error) {                                           \
+      assert_that_charptr(vm->error equals to error_message); \
+    } else {                                                  \
+      char *failstr = string_new("expected error message: "); \
+      string_addf(&failstr, "`%s`", error_message);           \
+      fail(failstr);                                          \
+    }                                                         \
   } while(0)
 
 #endif

@@ -825,7 +825,7 @@ static void evaluator_run(VM *vm) {
 }
 
 MargValue evaluator_evaluate(VM *vm) {
-  if(vm->has_error) {
+  if(vm->error) {
     return MARG_UNDEFINED;
   }
 

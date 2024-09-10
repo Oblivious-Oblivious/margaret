@@ -24,7 +24,7 @@
       printf("%s\n", marg_value_format((evaluated))); \
     }                                                 \
     vector_free(vm->current->bytecode);               \
-    if(vm->has_error) {                               \
+    if(vm->error) {                                   \
       vm_free();                                      \
       vm = vm_new("repl");                            \
     }                                                 \

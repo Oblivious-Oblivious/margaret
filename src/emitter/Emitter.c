@@ -91,7 +91,7 @@ VM *emitter_emit(VM *vm) {
   MargObject *marg_object = NULL;
   MargMethod *main_method = NULL;
 
-  if(vm->has_error) {
+  if(vm->error) {
     return vm;
   }
 
@@ -320,7 +320,7 @@ VM *emitter_emit(VM *vm) {
   char **formal_bytecode = vm->formal_bytecode;
   size_t bytecode_size   = vector_size(formal_bytecode);
 
-  if(vm->has_error) {
+  if(vm->error) {
     goto exit;
   }
 

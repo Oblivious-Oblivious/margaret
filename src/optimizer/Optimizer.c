@@ -4,7 +4,7 @@
 #include "../opcode/opcodes.h"
 
 VM *optimizer_optimize(VM *vm) {
-  if(vm->has_error) {
+  if(vm->error) {
     goto exit;
   }
 

@@ -2,6 +2,7 @@
 #define __LOADER_SPEC_H_
 
 #include "../../libs/cSpec/export/cSpec.h"
+#include "../../src/errors.h"
 #include "../../src/loader/Loader.h"
 
 module(LoaderSpec, {
@@ -12,6 +13,7 @@ module(LoaderSpec, {
 
     VM *vm = vm_new("test.marg");
     loader_load(vm);
+    assert_that(vm->error is NULL);
 
     assert_that_int(vm->source[0] equals to 't');
     assert_that_int(vm->source[1] equals to 'e');
@@ -23,6 +25,7 @@ module(LoaderSpec, {
   it("does not load non-existing file", {
     VM *vm = vm_new("__this name does not exist__");
     loader_load(vm);
+    assert_that_charptr(vm->error equals to ERROR_LOADER_FILE_NOT_FOUND);
     assert_that(vm->source is NULL);
   });
 

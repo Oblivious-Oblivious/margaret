@@ -12,7 +12,7 @@ void loader_error(VM *vm, const char *message) {
   printf(
     "\033[1;31merror:\033[0m %s: \033[1;31m`%s`\033[0m\n", message, vm->filename
   );
-  vm->has_error = true;
+  vm->error = message;
 }
 
 VM *loader_load(VM *vm) {
