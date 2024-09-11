@@ -33,6 +33,7 @@ module(errors_spec, {
     error("x = = 1", "grouped items should be separated by commas.");
     error("x == = 1", "missing binary message parameter.");
     error("-, ++, --, +<><+", "missing lhs message parameter.");
+    error("++", "missing lhs message parameter.");
   });
 
   it("validates special case errors", {

@@ -84,10 +84,10 @@ module(unicode_spec, {
         )
       );
       parse(
-        "∆∆ = 42",
+        "çç = 42",
         vector_new(
           FM_LOCAL,
-          string_new("∆∆"),
+          string_new("çç"),
           FM_INTEGER,
           string_new("42"),
           FM_BINARY,

@@ -41,10 +41,6 @@ module(margaret_messages_spec, {
     parse("myvar", vector_new(FM_LOCAL, string_new("myvar")));
   });
 
-  it("fails on parsing standalone binary messages", {
-    error("++", "missing lhs message parameter.");
-  });
-
   it("binds to the Margaret object using standalone margaret messages", {
     parse(
       "$Margaret bind: # while: condition_block do: block => \

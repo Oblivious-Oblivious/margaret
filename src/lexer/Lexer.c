@@ -4,37 +4,62 @@
 #include "../../libs/EmeraldsString/export/EmeraldsString.h"
 #include "alternate_to_dec.h"
 
-#define is_included_in(s, c) ((c) != '\0' && strchr((s), (c)))
-
-#define is_numeric_start(c) (is_included_in("0123456789", (c)))
-#define is_ascii_start(c) \
-  (is_included_in("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_", (c)))
-
-/* TODO - try to identify unicode like `√` to be used as message symbols instead
- * of identifiers.  also update `strchr` for unicode as well */
-
 #define utf8_char_length(input)        \
   ((((input)[0] & 0x80) == 0x00)   ? 1 \
    : (((input)[0] & 0xE0) == 0xC0) ? 2 \
    : (((input)[0] & 0xF0) == 0xE0) ? 3 \
    : (((input)[0] & 0xF8) == 0xF0) ? 4 \
                                    : 0)
-#define is_unicode(input) (utf8_char_length(input) > 1)
-#define is_non_base_10(char_set, check)         \
-  (string_size(input) > 2 && input[0] == '0' && \
-   is_included_in(char_set, input[1]) && check(input[2]))
 
-#define is_newline(c)            ((c) == '\n')
+bool is_included_in(const char *s, const char *c) {
+  int target_len = utf8_char_length(c);
+  int len        = utf8_char_length(s);
+
+  for(; *s; s += len) {
+    if(strncmp(s, c, target_len) == 0) {
+      return true;
+    }
+  }
+  return false;
+}
+
+#define is_numeric_start(c) (is_included_in("0123456789", (c)))
+#define is_ascii_start(c) \
+  (is_included_in("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_", (c)))
+#define is_unicode(input) (utf8_char_length(input) > 1)
+#define is_non_base_10(char_set, check)       \
+  (string_size(input) > 2 && *input == '0' && \
+   is_included_in(char_set, input + 1) && check(input + 2))
+
+#define is_newline(c)            ((*c) == '\n')
 #define is_ascii(c)              (is_ascii_start(c) || is_numeric(c))
-#define is_numeric(c)            (is_numeric_start(c) || (c) == '_')
+#define is_numeric(c)            (is_numeric_start(c) || (*c) == '_')
 #define is_binary(c)             (is_included_in("01_", (c)))
 #define is_octal(c)              (is_included_in("01234567_", (c)))
 #define is_hex(c)                (is_included_in("0123456789abcdefABCDEF_", (c)))
 #define is_special_identifier(c) (is_included_in("!?", (c)))
-#define is_message_symbol(c)     (is_included_in("!?+\\-*/~<>=|&^;.`", (c)))
-#define is_string_quote(c)       (is_included_in("'\"", (c)))
-#define is_rocket_symbol() \
-  (string_size(input) > 1 && input[0] == '=' && input[1] == '>')
+#define is_math_symbol1(c)                                                                                                                                                                                                     \
+  (is_included_in(                                                                                                                                                                                                             \
+    "∀∁∂∃∄∅∆∇∈∉∊∋∌∍∎∏∐∑−∓∔∕∖∗∘∙√∛∜∝∞∟∠∡∢∣∤∥∦∧∨∩∪∫∬∭∮∯∰∱∲∳∴∵∶∷∸∹∺∻∼∽∾∿≀≁≂≃≄≅≆≇" \
+    "≈≉≊≋≌≍≎≏≐≑≒≓≔≕≖≗",                                                                                                                                                                                                        \
+    (c)                                                                                                                                                                                                                        \
+  ))
+#define is_math_symbol2(c)                                                                                                                                                                                                     \
+  (is_included_in(                                                                                                                                                                                                             \
+    "≘≙≚≛≜≝≞≟≠≡≢≣≤≥≦≧≨≩≪≫≬≭≮≯≰≱≲≳≴≵≶≷≸≹≺≻≼≽≾≿⊀⊁⊂⊃⊄⊅⊆⊇⊈⊉⊊⊋⊌⊍⊎⊏⊐⊑⊒⊓⊔⊕⊖⊗⊘⊙⊚⊛⊜⊝⊞⊟" \
+    "⊠⊡⊢⊣⊤⊥⊦⊧⊨⊩⊪⊫⊬⊭⊮⊯⊰⊱⊲⊳⊴⊵⊶⊷⊸⊹⊺⊻⊼⊽⊾⊿⋀⋁⋂⋃⋄⋅⋆⋇⋈⋉⋊⋋⋌⋍⋎⋏⋐⋑⋒⋓⋔⋕⋖⋗⋘⋙⋚⋛⋜⋝⋞⋟⋠⋡⋢⋣⋤⋥⋦⋧" \
+    "⋨⋩⋪⋫⋬⋭⋮⋯⋰⋱⋲⋳⋴⋵⋶⋷⋸⋹⋺⋻⋼⋽⋾⋿",                                                                                                                                                                                                \
+    (c)                                                                                                                                                                                                                        \
+  ))
+#define is_ascii_message_symbol(c) (is_included_in("!?+\\-*/~<>=|&^;.`", (c)))
+#define is_unicode_message_symbol(c)                                \
+  (is_included_in(                                                  \
+    "¡¦§¨¬«¯°±´·º»¿×÷†‡•…‰′″‹›‼←↑→↓↔↕↖↗↘↙▲△▴▵▶▷▸▹►▻▼▽▾▿◀◁◂◃◄◅", (c) \
+  ))
+#define is_message_symbol(c)                                     \
+  (is_ascii_message_symbol(c) || is_unicode_message_symbol(c) || \
+   is_math_symbol1(c) || is_math_symbol2(c))
+#define is_string_quote(c) (is_included_in("'\"", (c)))
 
 #define next_charn(char_len)            \
   do {                                  \
@@ -56,8 +81,8 @@
 
 #define append_integer_part(check) \
   do {                             \
-    while(check(input[0])) {       \
-      if(input[0] == '_') {        \
+    while(check(input)) {          \
+      if(*input == '_') {          \
         next_char();               \
       } else {                     \
         append_char();             \
@@ -65,14 +90,14 @@
     }                              \
   } while(0)
 
-#define append_identifier_part()                     \
-  do {                                               \
-    while(is_ascii(input[0]) || is_unicode(input)) { \
-      append_charn(utf8_char_length(input));         \
-    }                                                \
-    if(is_special_identifier(input[0])) {            \
-      append_char();                                 \
-    }                                                \
+#define append_identifier_part()                  \
+  do {                                            \
+    while(is_ascii(input) || is_unicode(input)) { \
+      append_charn(utf8_char_length(input));      \
+    }                                             \
+    if(is_special_identifier(input)) {            \
+      append_char();                              \
+    }                                             \
   } while(0)
 
 #define append_non_base_10_part(check, converter) \
@@ -91,7 +116,7 @@ VM *lexer_make_tokens(VM *vm) {
     char *token_value = string_new("");
     Type token_type   = vm->eof_token->type;
 
-    if(is_newline(input[0])) {
+    if(is_newline(input)) {
       next_char();
       vm->lineno++;
       vm->charno = 0;
@@ -102,13 +127,13 @@ VM *lexer_make_tokens(VM *vm) {
       append_non_base_10_part(is_octal, oct_to_dec);
     } else if(is_non_base_10("xX", is_hex)) {
       append_non_base_10_part(is_hex, hex_to_dec);
-    } else if(is_numeric_start(input[0])) {
-      if(string_size(input) > 1 && input[0] == '0' && input[1] != '.') {
+    } else if(is_numeric_start(input)) {
+      if(string_size(input) > 1 && *input == '0' && *(input + 1) != '.') {
         append_char();
         token_type = TOKEN_INTEGER;
       } else {
         append_integer_part(is_numeric);
-        if(input[0] == '.' && is_numeric(input[1])) {
+        if(*input == '.' && is_numeric(input + 1)) {
           append_char();
           append_integer_part(is_numeric);
           token_type = TOKEN_FLOAT;
@@ -116,74 +141,74 @@ VM *lexer_make_tokens(VM *vm) {
           token_type = TOKEN_INTEGER;
         }
       }
-    } else if(string_size(input) > 1 && input[0] == '@' &&
-              (is_ascii_start(input[1]) || is_unicode(input + 1))) {
-      append_char();
-      append_identifier_part();
-      token_type = TOKEN_INSTANCE;
-    } else if(string_size(input) > 1 && input[0] == '$' &&
-              (is_ascii_start(input[1]) || is_unicode(input + 1))) {
-      append_char();
-      append_identifier_part();
-      token_type = TOKEN_GLOBAL;
-    } else if(is_ascii_start(input[0]) || is_unicode(input)) {
-      append_identifier_part();
-      token_type = TOKEN_IDENTIFIER;
-    } else if(is_rocket_symbol()) {
+    } else if(string_size(input) > 1 && *input == '=' && *(input + 1) == '>') {
       append_char();
       append_char();
       token_type = TOKEN_ROCKET;
-    } else if(is_message_symbol(input[0])) {
-      while(is_message_symbol(input[0])) {
+    } else if(is_message_symbol(input)) {
+      while(is_message_symbol(input)) {
         append_char();
       }
       token_type = TOKEN_MESSAGE_SYMBOL;
-    } else if(input[0] == '(') {
+    } else if(*input == '(') {
       append_char();
       token_type = TOKEN_LPAREN;
-    } else if(input[0] == ')') {
+    } else if(*input == ')') {
       append_char();
       token_type = TOKEN_RPAREN;
-    } else if(input[0] == '[') {
+    } else if(*input == '[') {
       append_char();
       token_type = TOKEN_LBRACKET;
-    } else if(input[0] == ']') {
+    } else if(*input == ']') {
       append_char();
       token_type = TOKEN_RBRACKET;
-    } else if(input[0] == '{') {
+    } else if(*input == '{') {
       append_char();
       token_type = TOKEN_LCURLY;
-    } else if(input[0] == '}') {
+    } else if(*input == '}') {
       append_char();
       token_type = TOKEN_RCURLY;
-    } else if(input[0] == ':') {
+    } else if(*input == ':') {
       append_char();
       token_type = TOKEN_COLON;
-    } else if(input[0] == ',') {
+    } else if(*input == ',') {
       append_char();
       token_type = TOKEN_COMMA;
-    } else if(input[0] == '#') {
+    } else if(*input == '#') {
       append_char();
       token_type = TOKEN_HASH;
-    } else if(input[0] == '%') {
+    } else if(*input == '%') {
       append_char();
       token_type = TOKEN_PERCENT;
-    } else if(is_string_quote(input[0])) {
-      char quote = input[0];
+    } else if(is_string_quote(input)) {
+      char quote = *input;
       next_char();
-      while(input[0] != '\0' && input[0] != quote) {
-        if(input[0] == '\n') {
+      while(*input != '\0' && *input != quote) {
+        if(*input == '\n') {
           vm->lineno++;
           vm->charno = 0;
         }
         append_char();
       }
-      if(input[0] == quote) {
+      if(*input == quote) {
         next_char();
       }
       /* NOTE - One for the quote and one for the newline */
       vm->charno -= 2;
       token_type = TOKEN_STRING;
+    } else if(string_size(input) > 1 && *input == '@' &&
+              (is_ascii_start(input + 1) || is_unicode(input + 1))) {
+      append_char();
+      append_identifier_part();
+      token_type = TOKEN_INSTANCE;
+    } else if(string_size(input) > 1 && *input == '$' &&
+              (is_ascii_start(input + 1) || is_unicode(input + 1))) {
+      append_char();
+      append_identifier_part();
+      token_type = TOKEN_GLOBAL;
+    } else if(is_ascii_start(input) || is_unicode(input)) {
+      append_identifier_part();
+      token_type = TOKEN_IDENTIFIER;
     } else {
       next_char();
       continue;
