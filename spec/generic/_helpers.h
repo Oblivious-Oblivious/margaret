@@ -37,20 +37,7 @@
     char **res                     = vm->formal_bytecode;                     \
     size_t size_of_formal_bytecode = vector_size(res);                        \
     size_t same_size_as_expected   = vector_size(expected_result);            \
-    printf("[");                                                              \
-    for(size_t i = 0; i < size_of_formal_bytecode - 1; i++) {                 \
-      if(res == NULL || res[i] == NULL || res[i] == NULL) {                   \
-        printf("(NULL), ");                                                   \
-      } else {                                                                \
-        printf("%s, ", res[i]);                                               \
-      }                                                                       \
-    }                                                                         \
-    if(res == NULL || res[size_of_formal_bytecode - 1] == NULL ||             \
-       res[size_of_formal_bytecode - 1] == NULL) {                            \
-      printf("(NULL), ");                                                     \
-    } else {                                                                  \
-      printf("%s]\n", res[size_of_formal_bytecode - 1]);                      \
-    }                                                                         \
+    vector_display(res, "%s");                                                \
                                                                               \
     assert_that_int(size_of_formal_bytecode equals to same_size_as_expected); \
                                                                               \
@@ -69,6 +56,7 @@
     vm->source = string_new(code);                            \
     lexer_make_tokens(vm);                                    \
     parser_analyze_syntax(vm);                                \
+    vector_display(vm->formal_bytecode, "%s");                \
     if(vm->error) {                                           \
       assert_that_charptr(vm->error equals to error_message); \
     } else {                                                  \
