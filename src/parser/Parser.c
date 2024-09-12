@@ -230,7 +230,7 @@ void parser_lhs_message(VM *vm) {
   prev_size = vm->tid;
   subscript_message();
 
-  if(prev_size == vm->tid && vm->tid > 0) {
+  if(prev_size == vm->tid && vm->tid > 0 && !la1value(",")) {
     parser_error(vm, vm->tokens[vm->tid - 1], "missing lhs message parameter.");
   } else if(vector_size(messages_list) > 0) {
     for(i = vector_size(messages_list) - 1; i > 0; i--) {
