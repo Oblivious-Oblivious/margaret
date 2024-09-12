@@ -193,10 +193,13 @@ VM *lexer_make_tokens(VM *vm) {
       }
       if(*input == quote) {
         next_char();
+        /* NOTE - One for the quote and one for the newline */
+        vm->charno -= 2;
+        token_type = TOKEN_STRING;
+      } else {
+        /* TODO - Move to parser as (' IDENTIFIER ' | " IDNETIFIER ") syntax */
+        token_type = TOKEN_EOF;
       }
-      /* NOTE - One for the quote and one for the newline */
-      vm->charno -= 2;
-      token_type = TOKEN_STRING;
     } else if(string_size(input) > 1 && *input == '@' &&
               (is_identfier_start(input + 1))) {
       append_char();

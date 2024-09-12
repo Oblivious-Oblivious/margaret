@@ -73,7 +73,7 @@
       assert_that_charptr(vm->error equals to error_message); \
     } else {                                                  \
       char *failstr = string_new("expected error message: "); \
-      string_addf(&failstr, "`%s`", error_message);           \
+      string_addf(&failstr, "'%s'", error_message);           \
       fail(failstr);                                          \
     }                                                         \
   } while(0)

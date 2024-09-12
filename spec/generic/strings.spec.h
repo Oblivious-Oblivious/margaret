@@ -4,6 +4,11 @@
 #include "_helpers.h"
 
 module(strings_spec, {
+  it("parses empty strings", {
+    parse("'\"'", vector_new(FM_STRING, string_new("\"")));
+    parse("\"'\"", vector_new(FM_STRING, string_new("'")));
+  });
+
   it("parses string literals", {
     parse(
       "(\"hello\" puts)",
