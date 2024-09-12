@@ -26,7 +26,8 @@ bool is_included_in(const char *s, const char *c) {
 #define is_numeric_start(c) (is_included_in("0123456789", (c)))
 #define is_ascii_start(c) \
   (is_included_in("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_", (c)))
-#define is_unicode(input) (utf8_char_length(input) > 1)
+#define is_unicode(input)     (utf8_char_length(input) > 1)
+#define is_identfier_start(c) (is_ascii_start(c) || is_unicode(c))
 #define is_non_base_10(char_set, check)       \
   (string_size(input) > 2 && *input == '0' && \
    is_included_in(char_set, input + 1) && check(input + 2))
@@ -197,16 +198,16 @@ VM *lexer_make_tokens(VM *vm) {
       vm->charno -= 2;
       token_type = TOKEN_STRING;
     } else if(string_size(input) > 1 && *input == '@' &&
-              (is_ascii_start(input + 1) || is_unicode(input + 1))) {
+              (is_identfier_start(input + 1))) {
       append_char();
       append_identifier_part();
       token_type = TOKEN_INSTANCE;
     } else if(string_size(input) > 1 && *input == '$' &&
-              (is_ascii_start(input + 1) || is_unicode(input + 1))) {
+              (is_identfier_start(input + 1))) {
       append_char();
       append_identifier_part();
       token_type = TOKEN_GLOBAL;
-    } else if(is_ascii_start(input) || is_unicode(input)) {
+    } else if(is_identfier_start(input)) {
       append_identifier_part();
       token_type = TOKEN_IDENTIFIER;
     } else {
