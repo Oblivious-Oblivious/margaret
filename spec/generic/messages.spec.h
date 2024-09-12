@@ -888,6 +888,73 @@ module(messages_spec, {
       )
     );
   });
+
+  it("parses unicode messages", {
+    parse("√x", vector_new(FM_LOCAL, string_new("x"), FM_LHS, string_new("√")));
+    parse("∛x", vector_new(FM_LOCAL, string_new("x"), FM_LHS, string_new("∛")));
+    parse("∜x", vector_new(FM_LOCAL, string_new("x"), FM_LHS, string_new("∜")));
+    parse(
+      "[1, 2, 3] ∀ {x > 1}",
+      vector_new(
+        FM_INTEGER,
+        string_new("1"),
+        FM_INTEGER,
+        string_new("2"),
+        FM_INTEGER,
+        string_new("3"),
+        FM_TENSOR,
+        string_new("3"),
+        FM_METHOD_START,
+        FM_LOCAL,
+        string_new("x"),
+        FM_INTEGER,
+        string_new("1"),
+        FM_BINARY,
+        string_new(">"),
+        FM_METHOD_END,
+        FM_BINARY,
+        string_new("∀")
+      )
+    );
+    parse(
+      "arr ∃ {x > 0}",
+      vector_new(
+        FM_LOCAL,
+        string_new("arr"),
+        FM_METHOD_START,
+        FM_LOCAL,
+        string_new("x"),
+        FM_INTEGER,
+        string_new("0"),
+        FM_BINARY,
+        string_new(">"),
+        FM_METHOD_END,
+        FM_BINARY,
+        string_new("∃")
+      )
+    );
+    parse(
+      "%[2, 3, 5] ∈ %[3, 5]",
+      vector_new(
+        FM_INTEGER,
+        string_new("2"),
+        FM_INTEGER,
+        string_new("3"),
+        FM_INTEGER,
+        string_new("5"),
+        FM_TUPLE,
+        string_new("3"),
+        FM_INTEGER,
+        string_new("3"),
+        FM_INTEGER,
+        string_new("5"),
+        FM_TUPLE,
+        string_new("2"),
+        FM_BINARY,
+        string_new("∈")
+      )
+    );
+  });
 })
 
 #endif
