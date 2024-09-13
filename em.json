@@ -24,7 +24,7 @@
     "debug": {
       "opt": "-Og",
       "version": "-std=c89",
-      "flags": "-g -fsanitize=address",
+      "flags": "-g -fsanitize=address -DMARG_SPEC",
       "warnings": "-Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic"
     },
     "release": {
