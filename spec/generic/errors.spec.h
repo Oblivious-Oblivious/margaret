@@ -1,6 +1,7 @@
 #ifndef __ERRORS_SPEC_H_
 #define __ERRORS_SPEC_H_
 
+#include "../../src/errors.h"
 #include "../../src/loader/Loader.h"
 #include "_helpers.h"
 
@@ -43,6 +44,13 @@ module(errors_spec, {
     /* NOTE - Figure out why strings are in reverse */
     error("\"'", "grouped items should be separated by commas.", "'\"");
     error("'\"", "grouped items should be separated by commas.", "\"'");
+  });
+
+  it("does not load non-existing file", {
+    VM *vm = vm_new("__this name does not exist__");
+    loader_load(vm);
+    assert_that_charptr(vm->error equals to ERROR_LOADER_FILE_NOT_FOUND);
+    assert_that(vm->source is NULL);
   });
 
   it("validates special case errors", {

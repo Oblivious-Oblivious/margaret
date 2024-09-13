@@ -56,7 +56,6 @@
     vm->source = string_new(code);                            \
     lexer_make_tokens(vm);                                    \
     parser_analyze_syntax(vm);                                \
-    vector_display(vm->formal_bytecode, "%s");                \
     if(vm->error && vm->error_token) {                        \
       assert_that_charptr(vm->error equals to error_message); \
       assert_that_charptr(vm->error_token equals to token);   \
