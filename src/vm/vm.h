@@ -17,6 +17,7 @@ typedef struct MargProc MargProc;
  * @param lineno -> Current line number
  * @param charno -> Current character number
  * @param error -> Stores the latest error message found during the pipeline
+ * @param error_token -> Stores the latest error token found during the pipeline
  *
  * @param eof_token -> Singleton token that signals the end of the program
  * @param tid -> Current token index
@@ -36,6 +37,7 @@ typedef struct VM {
   size_t lineno;
   size_t charno;
   const char *error;
+  const char *error_token;
 
   Token *eof_token;
   size_t tid;

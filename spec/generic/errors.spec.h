@@ -11,45 +11,55 @@ module(errors_spec, {
   });
 
   it("validates syntax symbol errors", {
-    error("(", "missing closing parenthesis on group.");
-    error(")", "reached end of program.");
-    error("(()", "missing closing parenthesis on group.");
-    error("())", "reached end of program.");
-    error("[", "missing closing bracket on tensor.");
-    error("]", "reached end of program.");
-    error("{", "missing closing curly on headless method.");
-    error("}", "reached end of program.");
-    error("#", "missing method body.");
-    error("##", "missing method body.");
-    error("###", "missing method body.");
-    error("#x", "missing method body.");
-    error("##x", "missing method body.");
-    error("##x=>", "missing method body.");
-    error(":", "grouped items should be separated by commas.");
-    error("::", "expected identifier on label.");
-    error(":::", "expected identifier on label.");
-    error(":::::::", "expected identifier on label.");
-    error("=1", "grouped items should be separated by commas.");
-    error("x = = 1", "grouped items should be separated by commas.");
-    error("x == = 1", "missing binary message parameter.");
-    error("-, ++, --, +<><+", "missing lhs message parameter.");
-    error("++", "missing lhs message parameter.");
+    error("(", "missing closing parenthesis on group.", "(");
+    error(")", "reached end of program.", ")");
+    error("(()", "missing closing parenthesis on group.", ")");
+    error("())", "reached end of program.", ")");
+    error("[", "missing closing bracket on tensor.", "[");
+    error("]", "reached end of program.", "]");
+    error("{", "missing closing curly on headless method.", "{");
+    error("}", "reached end of program.", "}");
+    error("#", "missing method body.", "#");
+    error("##", "missing method body.", "#");
+    error("###", "missing method body.", "#");
+    error("#x", "missing method body.", "x");
+    error("##x", "missing method body.", "x");
+    error("##x=>", "missing method body.", "=>");
+    error(":", "grouped items should be separated by commas.", ":");
+    error("::", "expected identifier on label.", ":");
+    error(":::", "expected identifier on label.", ":");
+    error(":::::::", "expected identifier on label.", ":");
+    error("=1", "grouped items should be separated by commas.", "=");
+    error("x = = 1", "grouped items should be separated by commas.", "=");
+    error("x == = 1", "grouped items should be separated by commas.", "=");
+    error("-, ++, --, +<><+", "missing lhs message parameter.", "+<><+");
+    error("++", "missing lhs message parameter.", "++");
 
-    error("'", "grouped items should be separated by commas.");
-    error("\"", "grouped items should be separated by commas.");
-    error("\"\"\"", "grouped items should be separated by commas.");
-    error("'", "grouped items should be separated by commas.");
+    error("'", "grouped items should be separated by commas.", "'");
+    error("\"", "grouped items should be separated by commas.", "\"");
+    error("\"\"\"", "grouped items should be separated by commas.", "");
+    error("'''", "grouped items should be separated by commas.", "");
+
+    /* NOTE - Figure out why strings are in reverse */
+    error("\"'", "grouped items should be separated by commas.", "'\"");
+    error("'\"", "grouped items should be separated by commas.", "\"'");
   });
 
   it("validates special case errors", {
     error(
-      "#-invalid-syntax-symbol", "missing '=>' on binary method definition."
+      "#-invalid-syntax-symbol",
+      "missing '=>' on binary method definition.",
+      "invalid"
     );
-    error("global$var", "grouped items should be separated by commas.");
     error(
-      "# => l2 => [@self, l2]", "grouped items should be separated by commas."
+      "global$var", "grouped items should be separated by commas.", "global"
     );
-    error("0000.000", "grouped items should be separated by commas.");
+    error(
+      "# => l2 => [@self, l2]",
+      "grouped items should be separated by commas.",
+      "l2"
+    );
+    error("0000.000", "grouped items should be separated by commas.", "0");
   });
 
   it("other syntax errors", {

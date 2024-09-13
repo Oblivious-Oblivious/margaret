@@ -50,15 +50,16 @@
     }                                                                         \
   } while(0)
 
-#define error(code, error_message)                            \
+#define error(code, error_message, token)                     \
   do {                                                        \
     VM *vm     = vm_new("file.marg");                         \
     vm->source = string_new(code);                            \
     lexer_make_tokens(vm);                                    \
     parser_analyze_syntax(vm);                                \
     vector_display(vm->formal_bytecode, "%s");                \
-    if(vm->error) {                                           \
+    if(vm->error && vm->error_token) {                        \
       assert_that_charptr(vm->error equals to error_message); \
+      assert_that_charptr(vm->error_token equals to token);   \
     } else {                                                  \
       char *failstr = string_new("expected error message: "); \
       string_addf(&failstr, "'%s'", error_message);           \
