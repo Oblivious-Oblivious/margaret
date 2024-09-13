@@ -6,22 +6,22 @@
 #include "../../libs/EmeraldsVector/export/EmeraldsVector.h"
 #include "../../src/lexer/Lexer.h"
 
-#define tokenize_and_assert(str)                             \
-  do {                                                       \
-    VM *vm     = vm_new("file.marg");                        \
-    vm->source = string_new(str);                            \
-    lexer_make_tokens(vm);                                   \
-    assert_that_int(vector_size(vm->tokens) equals to 2);    \
-    assert_that_charptr(vm->tokens[0]->value equals to str); \
+#define tokenize_and_assert(str)                                 \
+  do {                                                           \
+    VM *vm     = vm_new("file.marg");                            \
+    vm->source = string_new(str);                                \
+    lexer_make_tokens(vm);                                       \
+    assert_that_int(vector_size(vm->tokens.values) equals to 2); \
+    assert_that_charptr(vm->tokens.values[0] equals to str);     \
   } while(0)
 
-#define tokenize_and_assert_res(str, res)                    \
-  do {                                                       \
-    VM *vm     = vm_new("file.marg");                        \
-    vm->source = string_new(str);                            \
-    lexer_make_tokens(vm);                                   \
-    assert_that_int(vector_size(vm->tokens) equals to 2);    \
-    assert_that_charptr(vm->tokens[0]->value equals to res); \
+#define tokenize_and_assert_res(str, res)                        \
+  do {                                                           \
+    VM *vm     = vm_new("file.marg");                            \
+    vm->source = string_new(str);                                \
+    lexer_make_tokens(vm);                                       \
+    assert_that_int(vector_size(vm->tokens.values) equals to 2); \
+    assert_that_charptr(vm->tokens.values[0] equals to res);     \
   } while(0)
 
 #define tokenize_and_assert_multiline_res(str, res, no_lines, no_chars) \
@@ -29,10 +29,10 @@
     VM *vm     = vm_new("file.marg");                                   \
     vm->source = string_new(str);                                       \
     lexer_make_tokens(vm);                                              \
-    assert_that_int(vector_size(vm->tokens) equals to 2);               \
+    assert_that_int(vector_size(vm->tokens.values) equals to 2);        \
     assert_that_int(vm->lineno equals to no_lines);                     \
     assert_that_int(vm->charno equals to no_chars);                     \
-    assert_that_charptr(vm->tokens[0]->value equals to res);            \
+    assert_that_charptr(vm->tokens.values[0] equals to res);            \
   } while(0)
 
 module(token_types_spec, {
@@ -41,30 +41,27 @@ module(token_types_spec, {
       VM *vm     = vm_new("file.marg");
       vm->source = string_new("\n12\n");
       lexer_make_tokens(vm);
-      Token **tokens = vm->tokens;
-      assert_that_int(vector_size(tokens) equals to 2);
+      assert_that_int(vector_size(vm->tokens.values) equals to 2);
       assert_that_int(vm->lineno equals to 3);
-      assert_that_charptr(tokens[0]->value equals to "12");
+      assert_that_charptr(vm->tokens.values[0] equals to "12");
     });
 
     it("tokenizes around whitespace", {
       VM *vm     = vm_new("file.marg");
       vm->source = string_new(" 12 ");
       lexer_make_tokens(vm);
-      Token **tokens = vm->tokens;
-      assert_that_int(vector_size(tokens) equals to 2);
+      assert_that_int(vector_size(vm->tokens.values) equals to 2);
       assert_that_int(vm->lineno equals to 1);
-      assert_that_charptr(tokens[0]->value equals to "12");
+      assert_that_charptr(vm->tokens.values[0] equals to "12");
     });
 
     it("ignores multiple types of whitespace", {
       VM *vm     = vm_new("file.marg");
       vm->source = string_new(" \t\r\v\f ");
       lexer_make_tokens(vm);
-      Token **tokens = vm->tokens;
-      assert_that_int(vector_size(tokens) equals to 1);
+      assert_that_int(vector_size(vm->tokens.values) equals to 1);
       assert_that_int(vm->lineno equals to 1);
-      assert_that_charptr(tokens[0]->value equals to "eof");
+      assert_that(vm->tokens.values[0] is NULL);
     });
 
     it("tokenizes different types of floats", {

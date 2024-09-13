@@ -3,13 +3,15 @@
 #include "../../libs/EmeraldsVector/export/EmeraldsVector.h"
 #include "../opcode/fmcodes.h"
 
-#define token_get_value(index)                                        \
-  ((index) < vector_size((vm)->tokens) ? (vm)->tokens[(index)]->value \
-                                       : vm->eof_token->value)
+#include <stdio.h> /* printf */
 
-#define token_get_type(index)                                        \
-  ((index) < vector_size((vm)->tokens) ? (vm)->tokens[(index)]->type \
-                                       : vm->eof_token->type)
+#define token_get_value(index)                                               \
+  ((index) < vector_size((vm)->tokens.values) ? (vm)->tokens.values[(index)] \
+                                              : NULL)
+
+#define token_get_type(index)                                               \
+  ((index) < vector_size((vm)->tokens.values) ? (vm)->tokens.types[(index)] \
+                                              : TOKEN_EOF)
 
 /* NOTE - Lookaheads */
 #define la1value(token)        (string_equals(token_get_value(vm->tid), token))
@@ -56,45 +58,46 @@
  * @param message -> The message to display
  * @return Token* -> EOF token
  */
-static Token *parser_error(VM *vm, Token *token, const char *message) {
+static char *parser_error(VM *vm, size_t curr_tid, const char *message) {
   printf(
     "%s:%zu:%zu \033[1;31merror:\033[0m %s  Token: \033[1;31m`%s`\033[0m\n",
     vm->filename,
-    token->lineno,
-    token->charno - (string_size(token->value) - 1),
+    vm->tokens.linenos[curr_tid],
+    vm->tokens.charnos[curr_tid] -
+      (string_size(vm->tokens.values[curr_tid]) - 1),
     message,
-    token->value
+    vm->tokens.values[curr_tid]
   );
   vm->error       = message;
-  vm->error_token = token->value;
+  vm->error_token = vm->tokens.values[curr_tid];
 
   vm->tid++;
-  return vm->eof_token;
+  return NULL;
 }
 
-static Token *parser_handle_error(VM *vm, const char *error_msg) {
-  if(vm->tid >= vector_size(vm->tokens) && vector_size(vm->tokens) > 1) {
-    return parser_error(vm, vm->tokens[vector_size(vm->tokens) - 2], error_msg);
+static char *parser_handle_error(VM *vm, const char *error_msg) {
+  if(vm->tid >= vector_size(vm->tokens.values) &&
+     vector_size(vm->tokens.values) > 1) {
+    return parser_error(vm, vector_size(vm->tokens.values) - 2, error_msg);
   } else if(vm->tid > 0) {
-    return parser_error(vm, vm->tokens[vm->tid - 1], error_msg);
+    return parser_error(vm, vm->tid - 1, error_msg);
   } else {
-    return parser_error(vm, vm->tokens[vm->tid], error_msg);
+    return parser_error(vm, vm->tid, error_msg);
   }
 }
 
 char *parser_consume(VM *vm, Type type, const char *error_msg) {
-  if(vm->tid >= vector_size(vm->tokens)) {
-    return vm->eof_token->value;
-  } else if(vm->tokens[vm->tid]->type == type) {
-    return vm->tokens[vm->tid++]->value;
+  if(vm->tid >= vector_size(vm->tokens.values)) {
+    return NULL;
+  } else if(vm->tokens.types[vm->tid] == type) {
+    return vm->tokens.values[vm->tid++];
   } else {
-    return parser_handle_error(vm, error_msg)->value;
+    return parser_handle_error(vm, error_msg);
   }
 }
 
 VM *parser_analyze_syntax(VM *vm) {
   parser_first_unit(vm);
-  vm_free_eof_token();
   vm_free_tokens();
   return vm;
 }
@@ -108,12 +111,13 @@ char *parser_unit_list(VM *vm) {
   size_t no_elements       = 0;
   char *number_of_elements = NULL;
 
-  while(!la1value(")") && !la1value("]") && !la1value("}") && !la1value("eof")
-  ) {
+  while(!la1value(")") && !la1value("]") && !la1value("}") &&
+        !la1type(TOKEN_EOF)) {
     unit();
     no_elements++;
 
-    if(!la1value(")") && !la1value("]") && !la1value("}") && !la1value("eof")) {
+    if(!la1value(")") && !la1value("]") && !la1value("}") &&
+       !la1type(TOKEN_EOF)) {
       consume(TOKEN_COMMA, "grouped items should be separated by commas.");
     }
   }
@@ -369,7 +373,7 @@ char *parser_bit_list(VM *vm) {
   size_t no_elements       = 0;
   char *number_of_elements = NULL;
 
-  while(!la1value(")") && !la1value("eof")) {
+  while(!la1value(")") && !la1type(TOKEN_EOF)) {
     bit();
     no_elements++;
 
@@ -400,7 +404,7 @@ char *parser_association_list(VM *vm) {
   size_t no_elements       = 0;
   char *number_of_elements = NULL;
 
-  while(!la1value("}") && !la1value("eof")) {
+  while(!la1value("}") && !la1type(TOKEN_EOF)) {
     key();
     consume(TOKEN_COLON, "missing ':' on association list.");
     unit();

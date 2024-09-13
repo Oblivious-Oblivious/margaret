@@ -75,10 +75,8 @@ bool is_included_in(const char *s, const char *c) {
 #define next_char()   next_charn(1)
 #define append_char() append_charn(1)
 
-#define generate_token(token_value, token_type, lineno, charno)            \
-  vector_add(                                                              \
-    vm->tokens, token_new((token_value), (token_type), (lineno), (charno)) \
-  )
+#define generate_token(token_value, token_type, lineno, charno) \
+  tokens_add(&vm->tokens, (token_value), (token_type), (lineno), (charno))
 
 #define append_integer_part(check) \
   do {                             \
@@ -115,7 +113,7 @@ VM *lexer_make_tokens(VM *vm) {
 
   while(input && *input) {
     char *token_value = string_new("");
-    Type token_type   = vm->eof_token->type;
+    Type token_type   = TOKEN_EOF;
 
     if(is_newline(input)) {
       next_char();
@@ -199,7 +197,7 @@ VM *lexer_make_tokens(VM *vm) {
       } else {
         /* NOTE - Handles the case of non-terminated strings */
         string_addf(&token_value, "%c", quote);
-        token_type = TOKEN_EOF;
+        token_type = -1;
       }
     } else if(string_size(input) > 1 && *input == '@' &&
               (is_identfier_start(input + 1))) {
@@ -223,9 +221,7 @@ VM *lexer_make_tokens(VM *vm) {
   }
 
   /* TODO - Figure out why the charno is off by 3 */
-  generate_token(
-    vm->eof_token->value, vm->eof_token->type, vm->lineno, vm->charno + 3
-  );
+  generate_token(NULL, TOKEN_EOF, vm->lineno, vm->charno + 3);
 
   vm_free_source();
 

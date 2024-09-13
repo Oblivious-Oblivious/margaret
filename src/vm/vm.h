@@ -74,26 +74,24 @@ VM *vm_new(const char *filename);
  * other parts of the pipeline.  This handles remaining fields
  * @param vm -> The VM to be freed
  */
+#define vm_free()                        \
+  do {                                   \
+    vm_free_source();                    \
+    vm_free_tokens();                    \
+    vm_free_formal_bytecode();           \
+    table_deinit(&vm->global_variables); \
+    table_deinit(&vm->interned_strings); \
+    free(vm);                            \
+  } while(0)
+
+/* TODO - Ensure there are no leaks throughout the pipeline */
 #ifndef MARG_SPEC
-  #define vm_free()                        \
-    do {                                   \
-      vm_free_source();                    \
-      vm_free_eof_token();                 \
-      vm_free_tokens();                    \
-      vm_free_formal_bytecode();           \
-      table_deinit(&vm->global_variables); \
-      table_deinit(&vm->interned_strings); \
-      free(vm);                            \
-    } while(0)
-
-  /* TODO - Ensure there are no leaks throughout the pipeline */
-
   #define vm_free_source() string_free(vm->source)
 
-  #define vm_free_tokens()     \
-    do {                       \
-      vector_free(vm->tokens); \
-      vm->tid = 0;             \
+  #define vm_free_tokens()        \
+    do {                          \
+      tokens_deinit(&vm->tokens); \
+      vm->tid = 0;                \
     } while(0)
 
   #define vm_free_formal_bytecode()                           \
@@ -108,7 +106,6 @@ VM *vm_new(const char *filename);
     } while(0)
 
 #else
-  #define vm_free()
   #define vm_free_source()
   #define vm_free_tokens()
   #define vm_free_formal_bytecode()
