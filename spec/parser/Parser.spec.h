@@ -33,15 +33,15 @@ module(ParserSpec, {
     });
 
     it("consumes a token and returns the value", {
-      assert_that_charptr(parser_ensure(vm, TOKEN_IDENTIFIER, "") equals to "a"
+      assert_that_charptr(parser_consume(vm, TOKEN_IDENTIFIER, "") equals to "a"
       );
-      assert_that_charptr(parser_ensure(vm, TOKEN_MESSAGE_SYMBOL, "") equals to
+      assert_that_charptr(parser_consume(vm, TOKEN_MESSAGE_SYMBOL, "") equals to
                           "+");
-      assert_that_charptr(parser_ensure(vm, TOKEN_INTEGER, "") equals to "2");
-      assert_that_charptr(parser_ensure(vm, TOKEN_EOF, "") equals to "eof");
+      assert_that_charptr(parser_consume(vm, TOKEN_INTEGER, "") equals to "2");
+      assert_that_charptr(parser_consume(vm, TOKEN_EOF, "") equals to "eof");
 
-      assert_that_charptr(parser_ensure(vm, TOKEN_EOF, "") equals to "eof");
-      assert_that_charptr(parser_ensure(vm, TOKEN_EOF, "") equals to "eof");
+      assert_that_charptr(parser_consume(vm, TOKEN_EOF, "") equals to "eof");
+      assert_that_charptr(parser_consume(vm, TOKEN_EOF, "") equals to "eof");
     });
 
     it("gets a list element by index", {
@@ -52,21 +52,21 @@ module(ParserSpec, {
     });
 
     it("ensures it consumes a specific value", {
-      assert_that_charptr(parser_ensure(vm, TOKEN_IDENTIFIER, "") equals to "a"
+      assert_that_charptr(parser_consume(vm, TOKEN_IDENTIFIER, "") equals to "a"
       );
-      assert_that_charptr(parser_ensure(vm, TOKEN_MESSAGE_SYMBOL, "") equals to
+      assert_that_charptr(parser_consume(vm, TOKEN_MESSAGE_SYMBOL, "") equals to
                           "+");
-      assert_that_charptr(parser_ensure(vm, TOKEN_INTEGER, "") equals to "2");
-      assert_that_charptr(parser_ensure(vm, TOKEN_EOF, "") equals to "eof");
+      assert_that_charptr(parser_consume(vm, TOKEN_INTEGER, "") equals to "2");
+      assert_that_charptr(parser_consume(vm, TOKEN_EOF, "") equals to "eof");
     });
 
     it("ensures it consumes of a specific token type", {
-      assert_that_charptr(parser_ensure(vm, TOKEN_IDENTIFIER, "") equals to "a"
+      assert_that_charptr(parser_consume(vm, TOKEN_IDENTIFIER, "") equals to "a"
       );
-      assert_that_charptr(parser_ensure(vm, TOKEN_MESSAGE_SYMBOL, "") equals to
+      assert_that_charptr(parser_consume(vm, TOKEN_MESSAGE_SYMBOL, "") equals to
                           "+");
-      assert_that_charptr(parser_ensure(vm, TOKEN_INTEGER, "") equals to "2");
-      assert_that_charptr(parser_ensure(vm, TOKEN_EOF, "") equals to "eof");
+      assert_that_charptr(parser_consume(vm, TOKEN_INTEGER, "") equals to "2");
+      assert_that_charptr(parser_consume(vm, TOKEN_EOF, "") equals to "eof");
     });
 
     it("peeks on top of the token table", {
@@ -87,19 +87,20 @@ module(ParserSpec, {
       lexer_make_tokens(vm2);
       assert_that_size_t(vector_size(vm2->tokens) equals to 5);
       assert_that_size_t(vm2->tid equals to 0);
-      assert_that_charptr(parser_ensure(vm2, TOKEN_LPAREN, "") equals to "(");
-      assert_that_charptr(parser_ensure(vm2, TOKEN_INTEGER, "") equals to "42");
-      assert_that_charptr(parser_ensure(vm2, TOKEN_IDENTIFIER, "") equals to
+      assert_that_charptr(parser_consume(vm2, TOKEN_LPAREN, "") equals to "(");
+      assert_that_charptr(parser_consume(vm2, TOKEN_INTEGER, "") equals to "42"
+      );
+      assert_that_charptr(parser_consume(vm2, TOKEN_IDENTIFIER, "") equals to
                           "factorial");
-      assert_that_charptr(parser_ensure(vm2, TOKEN_RPAREN, "") equals to ")");
+      assert_that_charptr(parser_consume(vm2, TOKEN_RPAREN, "") equals to ")");
       assert_that_size_t(vector_size(vm2->tokens) equals to 5);
       assert_that_size_t(vm2->tid equals to 4);
-      assert_that_charptr(parser_ensure(vm2, TOKEN_EOF, "") equals to "eof");
+      assert_that_charptr(parser_consume(vm2, TOKEN_EOF, "") equals to "eof");
       assert_that_size_t(vector_size(vm2->tokens) equals to 5);
       assert_that_size_t(vm2->tid equals to 5);
-      assert_that_charptr(parser_ensure(vm2, TOKEN_EOF, "") equals to "eof");
-      assert_that_charptr(parser_ensure(vm2, TOKEN_EOF, "") equals to "eof");
-      assert_that_charptr(parser_ensure(vm2, TOKEN_EOF, "") equals to "eof");
+      assert_that_charptr(parser_consume(vm2, TOKEN_EOF, "") equals to "eof");
+      assert_that_charptr(parser_consume(vm2, TOKEN_EOF, "") equals to "eof");
+      assert_that_charptr(parser_consume(vm2, TOKEN_EOF, "") equals to "eof");
       assert_that_size_t(vector_size(vm2->tokens) equals to 5);
       assert_that_size_t(vm2->tid equals to 5);
     });

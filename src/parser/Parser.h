@@ -10,7 +10,7 @@
  * @param error_msg -> Prints in case of consumption of wrong type
  * @return string*
  */
-char *parser_ensure(VM *vm, Type type, const char *error_msg);
+char *parser_consume(VM *vm, Type type, const char *error_msg);
 
 /**
  * @brief Starts the parsing process and constructs the token table
