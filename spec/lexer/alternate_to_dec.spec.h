@@ -6,6 +6,20 @@
 #include "../../src/lexer/alternate_to_dec.h"
 
 module(alternate_to_dec_spec, {
+  it("tries to convert NULL strings", {
+    char *bin = string_new(NULL);
+    bin_to_dec(bin);
+    assert_that(bin is NULL);
+
+    char *oct = string_new(NULL);
+    oct_to_dec(oct);
+    assert_that(oct is NULL);
+
+    char *hex = string_new(NULL);
+    hex_to_dec(hex);
+    assert_that(hex is NULL);
+  });
+
   it("converts from binary to decimal", {
     char *bin = string_new("101010");
     bin_to_dec(bin);
