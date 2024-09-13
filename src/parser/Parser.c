@@ -54,9 +54,9 @@
  * @param vm -> The vm containing the token table
  * @param token -> The token where the error occured at
  * @param message -> The message to display
- * @return string* -> NULL pointer
+ * @return Token* -> EOF token
  */
-static char *parser_error(VM *vm, Token *token, const char *message) {
+static Token *parser_error(VM *vm, Token *token, const char *message) {
   printf(
     "%s:%zu:%zu \033[1;31merror:\033[0m %s  Token: \033[1;31m`%s`\033[0m\n",
     vm->filename,
@@ -68,28 +68,27 @@ static char *parser_error(VM *vm, Token *token, const char *message) {
   vm->error       = message;
   vm->error_token = token->value;
 
-  return vm->eof_token->value;
+  vm->tid++;
+  return vm->eof_token;
 }
 
-/**
- * @brief Consumes and removes the next token from the table
- * @param vm -> The vm containing the token table
- * @return Token* -> The token consumed
- */
-static Token *parser_consume(VM *vm) {
-  if(vector_size(vm->tokens) == vm->tid) {
-    return vm->eof_token;
+static Token *parser_handle_error(VM *vm, const char *error_msg) {
+  if(vm->tid >= vector_size(vm->tokens) && vector_size(vm->tokens) > 1) {
+    return parser_error(vm, vm->tokens[vector_size(vm->tokens) - 2], error_msg);
+  } else if(vm->tid > 0) {
+    return parser_error(vm, vm->tokens[vm->tid - 1], error_msg);
   } else {
-    return vm->tokens[vm->tid++];
+    return parser_error(vm, vm->tokens[vm->tid], error_msg);
   }
 }
 
 char *parser_ensure(VM *vm, Type type, const char *error_msg) {
-  Token *token = parser_consume(vm);
-  if(token->type == type) {
-    return token->value;
+  if(vm->tid >= vector_size(vm->tokens)) {
+    return vm->eof_token->value;
+  } else if(vm->tokens[vm->tid]->type == type) {
+    return vm->tokens[vm->tid++]->value;
   } else {
-    return parser_error(vm, token, error_msg);
+    return parser_handle_error(vm, error_msg)->value;
   }
 }
 
@@ -193,9 +192,7 @@ void parser_binary_selector_chain(VM *vm) {
     size_t prev_size = vm->tid;
     unary_message();
     if(prev_size == vm->tid) {
-      parser_error(
-        vm, vm->tokens[vm->tid - 1], "missing binary message parameter."
-      );
+      parser_handle_error(vm, "missing binary message parameter.");
     } else {
       generate(FM_BINARY);
       generate(message_name);
@@ -232,7 +229,7 @@ void parser_lhs_message(VM *vm) {
   subscript_message();
 
   if(prev_size == vm->tid && vm->tid > 0 && !la1value(",")) {
-    parser_error(vm, vm->tokens[vm->tid - 1], "missing lhs message parameter.");
+    parser_handle_error(vm, "missing lhs message parameter.");
   } else if(vector_size(messages_list) > 0) {
     for(i = vector_size(messages_list) - 1; i > 0; i--) {
       generate(FM_LHS);
@@ -340,7 +337,7 @@ void parser_literal(VM *vm) {
     prev_size = vm->tid;
     method_definition();
     if(prev_size == vm->tid) {
-      parser_error(vm, vm->tokens[vm->tid - 1], "missing method body.");
+      parser_handle_error(vm, "missing method body.");
     }
     generate(FM_METHOD_END);
   } else {

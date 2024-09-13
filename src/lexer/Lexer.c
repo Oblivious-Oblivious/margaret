@@ -198,6 +198,7 @@ VM *lexer_make_tokens(VM *vm) {
         token_type = TOKEN_STRING;
       } else {
         /* TODO - Move to parser as (' IDENTIFIER ' | " IDNETIFIER ") syntax */
+        string_addf(&token_value, "%c", quote);
         token_type = TOKEN_EOF;
       }
     } else if(string_size(input) > 1 && *input == '@' &&
