@@ -75,9 +75,9 @@ bool is_included_in(const char *s, const char *c) {
 #define next_char()   next_charn(1)
 #define append_char() append_charn(1)
 
-#define generate_token()                                                   \
+#define generate_token(token_value, token_type, lineno, charno)            \
   vector_add(                                                              \
-    vm->tokens, token_new(token_value, token_type, vm->lineno, vm->charno) \
+    vm->tokens, token_new((token_value), (token_type), (lineno), (charno)) \
   )
 
 #define append_integer_part(check) \
@@ -197,7 +197,7 @@ VM *lexer_make_tokens(VM *vm) {
         vm->charno -= 2;
         token_type = TOKEN_STRING;
       } else {
-        /* TODO - Move to parser as (' IDENTIFIER ' | " IDNETIFIER ") syntax */
+        /* NOTE - Handles the case of non-terminated strings */
         string_addf(&token_value, "%c", quote);
         token_type = TOKEN_EOF;
       }
@@ -219,13 +219,13 @@ VM *lexer_make_tokens(VM *vm) {
       continue;
     }
 
-    generate_token();
+    generate_token(token_value, token_type, vm->lineno, vm->charno);
   }
 
-  vm->eof_token->lineno = vm->lineno;
   /* TODO - Figure out why the charno is off by 3 */
-  vm->eof_token->charno = vm->charno + 3;
-  vector_add(vm->tokens, vm->eof_token);
+  generate_token(
+    vm->eof_token->value, vm->eof_token->type, vm->lineno, vm->charno + 3
+  );
 
   vm_free_source();
 
