@@ -24,7 +24,7 @@ typedef struct MargMethod {
   MargString *message_name;
   MargTensor *parameter_names;
   MargValue *temporaries;
-  EmeraldsHashtable local_variables;
+  EmeraldsTable local_variables;
   /* TODO - Potentially define these as `register` */
   uint8_t *bytecode;
   uint8_t *ip;

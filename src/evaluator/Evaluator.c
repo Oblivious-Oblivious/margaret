@@ -59,7 +59,7 @@ static MargValue dispatch_method_from_delegation_chain(
 static MargValue retrieve_all_messages_in_delegation_chain(
   VM *vm, MargValue messages_tensor, MargObject *object
 ) {
-  EmeraldsHashtable *messages = &object->messages;
+  EmeraldsTable *messages = &object->messages;
 
   size_t i;
   for(i = 0; i < messages->size; i++) {

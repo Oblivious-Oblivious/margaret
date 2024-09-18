@@ -21,8 +21,8 @@ struct MargProc {
   MargMethod *bound_method;
   MargProc *bound_proc;
 
-  EmeraldsHashtable parameters;
-  EmeraldsHashtable local_variables;
+  EmeraldsTable parameters;
+  EmeraldsTable local_variables;
 
   /* TODO - Potentially define these as `register` */
   uint8_t *bytecode;

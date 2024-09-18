@@ -25,8 +25,8 @@ struct MargObject {
 
   char *name;
   MargObject *parent;
-  EmeraldsHashtable instance_variables;
-  EmeraldsHashtable messages;
+  EmeraldsTable instance_variables;
+  EmeraldsTable messages;
 };
 
 /**

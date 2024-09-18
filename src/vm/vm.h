@@ -1,7 +1,7 @@
 #ifndef __VM_H_
 #define __VM_H_
 
-#include "../../libs/EmeraldsHashtable/export/EmeraldsHashtable.h"
+#include "../../libs/EmeraldsTable/export/EmeraldsTable.h"
 #include "../opcode/MargValueType.h"
 #include "../tokens/Tokens.h"
 #include "byte_conversions.h"
@@ -46,8 +46,8 @@ typedef struct VM {
   MargValue stack[65536];
   MargValue *sp;
 
-  EmeraldsHashtable global_variables;
-  EmeraldsHashtable interned_strings;
+  EmeraldsTable global_variables;
+  EmeraldsTable interned_strings;
   MargProc *current;
 } VM;
 
