@@ -4,7 +4,7 @@
 #include "../../libs/EmeraldsString/export/EmeraldsString.h"
 #include "../opcode/MargValue.h"
 #include "../opcode/opcodes.h"
-#include "../vm/on_demand_compilation_pipeline.h"
+#include "../vm/compilation_pipeline.h"
 
 #include <inttypes.h> /* PRIx64 */
 #include <stdint.h>

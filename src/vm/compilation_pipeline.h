@@ -1,5 +1,5 @@
-#ifndef __ON_DEMAND_COMPILATION_PIPELINE_H_
-#define __ON_DEMAND_COMPILATION_PIPELINE_H_
+#ifndef __COMPILATION_PIPELINE_H_
+#define __COMPILATION_PIPELINE_H_
 
 #include "../emitter/Emitter.h"
 #include "../evaluator/Evaluator.h"

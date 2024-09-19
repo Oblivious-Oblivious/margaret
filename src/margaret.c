@@ -20,7 +20,7 @@
 /* TODO - Potentially switch to MIT from GPLv3 */
 
 #include "version.h"
-#include "vm/on_demand_compilation_pipeline.h"
+#include "vm/compilation_pipeline.h"
 
 #include <stdio.h> /* printf */
 
