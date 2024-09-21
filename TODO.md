@@ -61,23 +61,30 @@
 -----------------
   🟥 Add lexically removed comments.
   🟥 Make comments part of the language (comment: "...", todo: "...").
-  🟥 Figure out dynamic send for dynamically called messages.
+  🟥 Separate value representation for small strings that stores the characters inline in the value.
   🟥 Add symbol objects and frozen strings.
   🟥 Make comments dynamic and persistent on code files.
   🟥 Add string interpolation and formatting with `#{..}` or similar.
   🟥 Since comments are dynamic, we can use interpolation to change them according to data (for documentation comments).
+  🟥 In the NaN boxing scheme do not reallocate integer and float representations, instead use unboxed values directly.
   🟥 Add a `@this`, `@it` or equivalent that refers to the original object.
      @this would always refer to object where original method is defined,
      not the object where the method is called.
   🟩 Methods return tensors of bytecodes.
   🟩 Implement if:then:else: using lambda calculus.
+  🟥 Add functionality for reading multiple files and changing the VM pointer to the currect file we are scanning.
   🟥 Implement `while:` using the `goto:` primitive to avoid endless recursion.
   🟥 Add a `bind:` message to tensors so we can add tensors of unbound methods.
      `$Object bind: [m1, m2, m3]` binds those methods into $Object.
   🟥 Add a switch matcher -> `obj match: %[%[1, 100], %[2, 200], %[3, 300],]`.
   🟥 Make bang (!) messages denote persistant changes in object state.
-  🟥 In the NaN boxing scheme do not reallocate integer and float representations, instead use unboxed values directly.
   🟥 Add __LINE__ __FILE__ and __DIR__ macros.
+  🟥 Add a primitive for raising errors.  The raise: message is the only one that crashes the VM.
+     $Numeric -- #/ 0 => raise: "division by zero",
+     $Numeric -- #/ other => @self / other,
+     If the analyzer cannot figure out the inputs of the division message, LSP warns for potential runtime crash.
+  🟥 Create compile-time messages, which will make calculations in the emitter phase but will not generate bytecode.
+  🟥 Use GOTO for break and continue. -> `list iterate: { elem | if: { elem == 42 } then: { goto: exit_label } elem puts } ::exit_label`.
   🟥 Disallow all dynamic code generation.
      All code should be lexically defined.
      Extension happens only through the primitive bind message.
@@ -101,16 +108,9 @@
        42 / v2, comment: "non-deterministic -> cannot be caught",
   🟥 Add complex numbers `(0+2i)`, and rational numbers `(1/2r)` -> unary messages.
   🟥 Add complex and rational specific messages.
-  🟥 Use GOTO for break and continue. -> `list iterate: { elem | if: { elem == 42 } then: { goto: exit_label } elem puts } ::exit_label`.
-  🟥 Create compile-time messages, which will make calculations in the emitter phase but will not generate bytecode.
   🟩 Create an `import/require` Margaret message.
      Probably simple concatenation of files (C-like include), not actual module system.
   🟥 Add an internal include guard for the require primitive.
-  🟥 Add functionality for reading multiple files and changing the VM pointer to the currect file we are scanning.
-  🟥 Add a primitive for raising errors.  The raise: message is the only one that crashes the VM.
-     $Numeric -- #/ 0 => raise: "division by zero",
-     $Numeric -- #/ other => @self / other,
-     If the analyzer cannot figure out the inputs of the division message, LSP warns for potential runtime crash.
   🟥 %[a, b, c] = %["hello", "world", 42]
   [a, b, c] = [1, 2, 3]
   $List bind: #= other => self.size.times: { i |
