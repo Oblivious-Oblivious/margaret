@@ -1,0 +1,43 @@
+Registers:
+  General-Purpose Registers: R0 to R15 (16 registers) for holding intermediate values.
+
+Special Registers:
+  Program Counter (PC): Points to the current instruction.
+  Stack Pointer (SP): Points to the top of the stack.
+  Frame Pointer (FP): Points to the start of the current stack frame.
+
+Memory:
+  Heap: For dynamic memory allocation (objects, method definitions).
+  Stack: For function calls, local variables, and intermediate computations.
+
+LOAD_NIL          Load nil into a register                 dest_reg
+LOAD_FALSE        Load false into a register               dest_reg
+LOAD_TRUE         Load true into a register                dest_reg
+LOAD_INT          Load integer constant into a register    dest_reg, integer_value
+LOAD_FLOAT        Load float constant into a register      dest_reg, float_value
+LOAD_STRING       Load string constant into a register     dest_reg, string_value
+LOAD_GLOBAL       Load global variable into a register     dest_reg, global_name
+LOAD_INSTANCE     Load instance variable into a register   dest_reg, instance_name
+LOAD_LOCAL        Load local variable into a register      dest_reg, local_name
+
+BINARY_ADD        Add two registers                        dest_reg, src_reg1, src_reg2
+BINARY_SUB        Subtract two registers                   dest_reg, src_reg1, src_reg2
+BINARY_MUL        Multiply two registers                   dest_reg, src_reg1, src_reg2
+BINARY_DIV        Divide two registers                     dest_reg, src_reg1, src_reg2
+UNARY_NEG         Negate a register                        dest_reg, src_reg
+BINARY_OP         General binary operation                 dest_reg, src_reg1, src_reg2, operator
+UNARY_OP          General unary operation                  dest_reg, src_reg, operator
+
+CALL_METHOD       Call a method                            dest_reg, receiver_reg, method_name, arg_count
+LOAD_METHOD       Load a method to be called               dest_reg, receiver_reg, method_name
+RETURN            Return from a method/function            src_reg
+METHOD_START      Start of a method definition             method_name, param_count
+DEFINE_METHOD     Define a new method                      method_name, method_address
+METHOD_END        End of a method definition
+
+JUMP              Unconditional jump to a label            label
+JUMP_IF_FALSE     Jump if a register is false              src_reg, label
+LABEL             Define a label                           label_name
+
+LOAD_SUBSCRIPT    Load value from subscript                dest_reg, collection_reg, index_reg
+STORE_SUBSCRIPT   Store value into subscript               collection_reg, index_reg, value_reg
