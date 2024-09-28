@@ -4,22 +4,22 @@
 #include <stdio.h>
 
 typedef enum {
-  OP_NIL           = 0x01,
-  OP_FALSE         = 0x02,
-  OP_TRUE          = 0x03,
-  OP_INT           = 0x04,
-  OP_FLOAT         = 0x05,
-  OP_STRING        = 0x06,
-  OP_ADD           = 0x07,
-  OP_SUB           = 0x08,
-  OP_MUL           = 0x09,
-  OP_DIV           = 0x0A,
-  OP_JUMP          = 0x0B,
-  OP_JUMP_IF_FALSE = 0x0C,
-  OP_HALT          = 0x0D
+  OP_NIL           = 0x00,
+  OP_FALSE         = 0x01,
+  OP_TRUE          = 0x02,
+  OP_INT           = 0x03,
+  OP_FLOAT         = 0x04,
+  OP_STRING        = 0x05,
+  OP_ADD           = 0x06,
+  OP_SUB           = 0x07,
+  OP_MUL           = 0x08,
+  OP_DIV           = 0x09,
+  OP_JUMP          = 0x0A,
+  OP_JUMP_IF_FALSE = 0x0B,
+  OP_HALT          = 0x0C
 } OpCode;
 
-#define MAX_REGISTERS 16
+#define MAX_REGISTERS 32
 
 typedef struct {
   OpCode opcode;
@@ -68,41 +68,82 @@ void vm_init(VM *vm, Instruction **bytecode) {
   vm->ip       = 0;
 }
 
-#define if_opcode(op)    if(instr->opcode == (op))
-#define elsif_opcode(op) else if(instr->opcode == (op))
-
 void vm_execute(VM *vm) {
-  while(vm->ip < vector_size(vm->bytecode)) {
-    Instruction *instr = vm->bytecode[vm->ip];
+#if defined(__GNUC__) || defined(__clang__)
+  static void *_computed_gotos[] = {
+    &&_computed_goto_OP_NIL,
+    &&_computed_goto_OP_FALSE,
+    &&_computed_goto_OP_TRUE,
+    &&_computed_goto_OP_INT,
+    &&_computed_goto_OP_FLOAT,
+    &&_computed_goto_OP_STRING,
+    &&_computed_goto_OP_ADD,
+    &&_computed_goto_OP_SUB,
+    &&_computed_goto_OP_MUL,
+    &&_computed_goto_OP_DIV,
+    &&_computed_goto_OP_JUMP,
+    &&_computed_goto_OP_JUMP_IF_FALSE,
+    &&_computed_goto_OP_HALT
+  };
+  #define switch_opcode                        \
+    Instruction *instr = vm->bytecode[vm->ip]; \
+    goto *_computed_gotos[instr->opcode];
+  #define case_opcode(op) _computed_goto_##op:
+  #define default_opcode \
+  _err:
+  #define next_opcode               \
+    instr = vm->bytecode[++vm->ip]; \
+    goto *_computed_gotos[instr->opcode]
+  #define skip_opcode goto *_computed_gotos[instr->opcode]
+#else
+  #define switch_opcode           \
+    Instruction *instr;           \
+  _opcode_loop:                   \
+    instr = vm->bytecode[vm->ip]; \
+    switch(instr->opcode)
+  #define case_opcode(op) case((op)):
+  #define default_opcode  default:
+  #define next_opcode \
+    vm->ip++;         \
+    goto _opcode_loop
+  #define skip_opcode goto _opcode_loop
+#endif
 
-    if_opcode(OP_NIL) {
+  switch_opcode {
+    case_opcode(OP_NIL) {
       vm->registers[instr->operands[0]] = 0.0;
       printf("NIL: R%d = nil\n", instr->operands[0]);
+      next_opcode;
     }
-    elsif_opcode(OP_FALSE) {
+    case_opcode(OP_FALSE) {
       vm->registers[instr->operands[0]] = 0.0;
       printf("FALSE: R%d = false\n", instr->operands[0]);
+      next_opcode;
     }
-    elsif_opcode(OP_TRUE) {
+    case_opcode(OP_TRUE) {
       vm->registers[instr->operands[0]] = 1.0;
       printf("TRUE: R%d = true\n", instr->operands[0]);
+      next_opcode;
     }
-    elsif_opcode(OP_INT) {
+    case_opcode(OP_INT) {
       vm->registers[instr->operands[0]] = (double)instr->operands[1];
       printf("INT: R%d = %d\n", instr->operands[0], instr->operands[1]);
+      next_opcode;
     }
-    elsif_opcode(OP_FLOAT) {
+    case_opcode(OP_FLOAT) {
       vm->registers[instr->operands[0]] = instr->data.float_val;
       printf("FLOAT: R%d = %g\n", instr->operands[0], instr->data.float_val);
+      next_opcode;
     }
-    elsif_opcode(OP_STRING) {
+    case_opcode(OP_STRING) {
       vm->registers[instr->operands[0]] =
         (double)(intptr_t)instr->data.string_val;
       printf(
         "STRING: R%d = \"%s\"\n", instr->operands[0], instr->data.string_val
       );
+      next_opcode;
     }
-    elsif_opcode(OP_ADD) {
+    case_opcode(OP_ADD) {
       vm->registers[instr->operands[0]] =
         vm->registers[instr->operands[1]] + vm->registers[instr->operands[2]];
       printf(
@@ -114,8 +155,9 @@ void vm_execute(VM *vm) {
         vm->registers[instr->operands[2]],
         vm->registers[instr->operands[0]]
       );
+      next_opcode;
     }
-    elsif_opcode(OP_SUB) {
+    case_opcode(OP_SUB) {
       vm->registers[instr->operands[0]] =
         vm->registers[instr->operands[1]] - vm->registers[instr->operands[2]];
       printf(
@@ -127,8 +169,9 @@ void vm_execute(VM *vm) {
         vm->registers[instr->operands[2]],
         vm->registers[instr->operands[0]]
       );
+      next_opcode;
     }
-    elsif_opcode(OP_MUL) {
+    case_opcode(OP_MUL) {
       vm->registers[instr->operands[0]] =
         vm->registers[instr->operands[1]] * vm->registers[instr->operands[2]];
       printf(
@@ -140,8 +183,9 @@ void vm_execute(VM *vm) {
         vm->registers[instr->operands[2]],
         vm->registers[instr->operands[0]]
       );
+      next_opcode;
     }
-    elsif_opcode(OP_DIV) {
+    case_opcode(OP_DIV) {
       if(vm->registers[instr->operands[2]] == 0.0) {
         fprintf(stderr, "Runtime Error: Division by zero\n");
         exit(1);
@@ -157,8 +201,9 @@ void vm_execute(VM *vm) {
         vm->registers[instr->operands[2]],
         vm->registers[instr->operands[0]]
       );
+      next_opcode;
     }
-    elsif_opcode(OP_JUMP) {
+    case_opcode(OP_JUMP) {
       if(instr->operands[0] < 0 ||
          instr->operands[0] >= vector_size(vm->bytecode)) {
         fprintf(stderr, "Invalid jump target: %d\n", instr->operands[0]);
@@ -166,9 +211,9 @@ void vm_execute(VM *vm) {
       }
       printf("JUMP: Jumping to instruction %d\n", instr->operands[0]);
       vm->ip = instr->operands[0];
-      continue; // Skip PC increment
+      skip_opcode;
     }
-    elsif_opcode(OP_JUMP_IF_FALSE) {
+    case_opcode(OP_JUMP_IF_FALSE) {
       int condition = (int)vm->registers[instr->operands[0]];
       printf(
         "JUMP_IF_FALSE: R%d(%d) is %s, jumping to instruction %d\n",
@@ -184,20 +229,21 @@ void vm_execute(VM *vm) {
           exit(1);
         }
         vm->ip = instr->operands[1];
-        continue; // Skip PC increment
+        skip_opcode;
+      } else {
+        next_opcode;
       }
     }
-    elsif_opcode(OP_HALT) {
+    case_opcode(OP_HALT) {
       printf("HALT: Stopping VM execution.\n");
       exit(0);
     }
-    else {
+    default_opcode {
       fprintf(
         stderr, "Unknown opcode: %d at instruction %zu\n", instr->opcode, vm->ip
       );
       exit(1);
     }
-    vm->ip++;
   }
 }
 
