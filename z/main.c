@@ -384,7 +384,10 @@ void load_bytecode(const char *filename, Instruction ***bc) {
 
   while(true) {
     Instruction *instr = load_instruction(fp);
-    if(!instr || instr->opcode == OP_HALT) {
+    if(!instr) {
+      break;
+    } else if(instr->opcode == OP_HALT) {
+      emit(*bc, instr);
       break;
     } else {
       emit(*bc, instr);
