@@ -2,6 +2,20 @@
 #include "../libs/EmeraldsTable/export/EmeraldsTable.h"
 #include "../libs/EmeraldsVector/export/EmeraldsVector.h"
 
+/**
+ * -- single --
+ * O - opcode (8)
+ *
+ * -- constants --
+ * OAk - opcode (8) - operand Ak (24)
+ * OABk - opcode (8) - operand A (8) - operand Bk (16)
+ *
+ * -- commands --
+ * OA - opcode (8) - operand A (8)
+ * OAB - opcode (8) - operand A (8) - operand B (8)
+ * OABC - opcode (8) - operand A (8) - operand B (8) - operand C (8)
+ */
+
 #define OP_NIL           0x00
 #define OP_FALSE         0x01
 #define OP_TRUE          0x02
@@ -19,8 +33,7 @@
 #define MAX_REGISTERS 256
 
 typedef struct {
-  uint8_t opcode;
-  int operands[3];
+  uint8_t operands[4];
   union {
     double float_val;
     char *string_val;
@@ -36,13 +49,15 @@ typedef struct {
 
 
 
-Instruction *create_instruction(uint8_t opcode, int op1, int op2, int op3) {
+
+Instruction *
+create_instruction(uint8_t opcode, uint8_t op1, uint8_t op2, uint8_t op3) {
   Instruction *i = (Instruction *)malloc(sizeof(Instruction));
 
-  i->opcode          = opcode;
-  i->operands[0]     = op1;
-  i->operands[1]     = op2;
-  i->operands[2]     = op3;
+  i->operands[0]     = opcode;
+  i->operands[1]     = op1;
+  i->operands[2]     = op2;
+  i->operands[3]     = op3;
   i->data.float_val  = 0.0;
   i->data.string_val = NULL;
 
@@ -54,7 +69,7 @@ Instruction *create_instruction(uint8_t opcode, int op1, int op2, int op3) {
 void free_bytecode(Instruction **bc) {
   for(size_t index = 0; index < vector_size(bc); index++) {
     Instruction *i = bc[index];
-    if(i->opcode == OP_STRING && i->data.string_val != NULL) {
+    if(i->operands[0] == OP_STRING && i->data.string_val != NULL) {
       free(i->data.string_val);
     }
     free(i);
@@ -87,21 +102,21 @@ void vm_execute(VM *vm) {
   };
   #define switch_opcode                    \
     Instruction *i = vm->bytecode[vm->ip]; \
-    goto *_computed_gotos[i->opcode];
+    goto *_computed_gotos[i->operands[0]];
   #define case_opcode(op) _computed_goto_##op:
   #define default_opcode \
   _err:
   #define next_opcode         \
     vm->ip++;                 \
     i = vm->bytecode[vm->ip]; \
-    goto *_computed_gotos[i->opcode]
-  #define skip_opcode goto *_computed_gotos[i->opcode]
+    goto *_computed_gotos[i->operands[0]]
+  #define skip_opcode goto *_computed_gotos[i->operands[0]]
 #else
   #define switch_opcode       \
     Instruction *i;           \
   _opcode_loop:               \
     i = vm->bytecode[vm->ip]; \
-    switch(i->opcode)
+    switch(i->operands[0])
   #define case_opcode(op) case((op)):
   #define default_opcode  default:
   #define next_opcode \
@@ -112,119 +127,120 @@ void vm_execute(VM *vm) {
 
   switch_opcode {
     case_opcode(OP_NIL) {
-      vm->registers[i->operands[0]] = 0.0;
-      printf("NIL: R%d = nil\n", i->operands[0]);
+      vm->registers[i->operands[1]] = 0.0;
+      printf("NIL: R%d = nil\n", i->operands[1]);
       next_opcode;
     }
     case_opcode(OP_FALSE) {
-      vm->registers[i->operands[0]] = 0.0;
-      printf("FALSE: R%d = false\n", i->operands[0]);
+      vm->registers[i->operands[1]] = 0.0;
+      printf("FALSE: R%d = false\n", i->operands[1]);
       next_opcode;
     }
     case_opcode(OP_TRUE) {
-      vm->registers[i->operands[0]] = 1.0;
-      printf("TRUE: R%d = true\n", i->operands[0]);
+      vm->registers[i->operands[1]] = 1.0;
+      printf("TRUE: R%d = true\n", i->operands[1]);
       next_opcode;
     }
     case_opcode(OP_INT) {
-      vm->registers[i->operands[0]] = (double)i->operands[1];
-      printf("INT: R%d = %d\n", i->operands[0], i->operands[1]);
+      vm->registers[i->operands[1]] = (double)i->operands[2];
+      printf("INT: R%d = %d\n", i->operands[1], i->operands[2]);
       next_opcode;
     }
     case_opcode(OP_FLOAT) {
-      vm->registers[i->operands[0]] = i->data.float_val;
-      printf("FLOAT: R%d = %g\n", i->operands[0], i->data.float_val);
+      vm->registers[i->operands[1]] = i->data.float_val;
+      printf("FLOAT: R%d = %g\n", i->operands[1], i->data.float_val);
       next_opcode;
     }
     case_opcode(OP_STRING) {
-      vm->registers[i->operands[0]] = (double)(intptr_t)i->data.string_val;
-      printf("STRING: R%d = \"%s\"\n", i->operands[0], i->data.string_val);
+      vm->registers[i->operands[1]] = (double)(intptr_t)i->data.string_val;
+      printf("STRING: R%d = \"%s\"\n", i->operands[1], i->data.string_val);
       next_opcode;
     }
     case_opcode(OP_ADD) {
-      vm->registers[i->operands[0]] =
-        vm->registers[i->operands[1]] + vm->registers[i->operands[2]];
+      vm->registers[i->operands[1]] =
+        vm->registers[i->operands[2]] + vm->registers[i->operands[3]];
       printf(
         "ADD: R%d = R%d(%g) + R%d(%g) = %g\n",
-        i->operands[0],
         i->operands[1],
-        vm->registers[i->operands[1]],
         i->operands[2],
         vm->registers[i->operands[2]],
-        vm->registers[i->operands[0]]
+        i->operands[3],
+        vm->registers[i->operands[3]],
+        vm->registers[i->operands[1]]
       );
       next_opcode;
     }
     case_opcode(OP_SUB) {
-      vm->registers[i->operands[0]] =
-        vm->registers[i->operands[1]] - vm->registers[i->operands[2]];
+      vm->registers[i->operands[1]] =
+        vm->registers[i->operands[2]] - vm->registers[i->operands[3]];
       printf(
         "SUB: R%d = R%d(%g) - R%d(%g) = %g\n",
-        i->operands[0],
         i->operands[1],
-        vm->registers[i->operands[1]],
         i->operands[2],
         vm->registers[i->operands[2]],
-        vm->registers[i->operands[0]]
+        i->operands[3],
+        vm->registers[i->operands[3]],
+        vm->registers[i->operands[1]]
       );
       next_opcode;
     }
     case_opcode(OP_MUL) {
-      vm->registers[i->operands[0]] =
-        vm->registers[i->operands[1]] * vm->registers[i->operands[2]];
+      vm->registers[i->operands[1]] =
+        vm->registers[i->operands[2]] * vm->registers[i->operands[3]];
       printf(
         "MUL: R%d = R%d(%g) * R%d(%g) = %g\n",
-        i->operands[0],
         i->operands[1],
-        vm->registers[i->operands[1]],
         i->operands[2],
         vm->registers[i->operands[2]],
-        vm->registers[i->operands[0]]
+        i->operands[3],
+        vm->registers[i->operands[3]],
+        vm->registers[i->operands[1]]
       );
       next_opcode;
     }
     case_opcode(OP_DIV) {
-      if(vm->registers[i->operands[2]] == 0.0) {
+      if(vm->registers[i->operands[3]] == 0.0) {
         fprintf(stderr, "Runtime Error: Division by zero\n");
         exit(1);
       }
-      vm->registers[i->operands[0]] =
-        vm->registers[i->operands[1]] / vm->registers[i->operands[2]];
+      vm->registers[i->operands[1]] =
+        vm->registers[i->operands[2]] / vm->registers[i->operands[3]];
       printf(
         "DIV: R%d = R%d(%g) / R%d(%g) = %g\n",
-        i->operands[0],
         i->operands[1],
-        vm->registers[i->operands[1]],
         i->operands[2],
         vm->registers[i->operands[2]],
-        vm->registers[i->operands[0]]
+        i->operands[3],
+        vm->registers[i->operands[3]],
+        vm->registers[i->operands[1]]
       );
       next_opcode;
     }
     case_opcode(OP_JUMP) {
-      if(i->operands[0] < 0 || i->operands[0] >= vector_size(vm->bytecode)) {
-        fprintf(stderr, "Invalid jump target: %d\n", i->operands[0]);
+      if(i->operands[1] < 0 || i->operands[1] >= vector_size(vm->bytecode)) {
+        fprintf(stderr, "Invalid jump target: %d\n", i->operands[1]);
         exit(1);
       }
-      printf("JUMP: Jumping to instruction %d\n", i->operands[0]);
-      vm->ip = i->operands[0];
+      printf("JUMP: Jumping to instruction %d\n", i->operands[1]);
+      vm->ip = i->operands[1];
       skip_opcode;
     }
     case_opcode(OP_JUMP_IF_FALSE) {
-      int condition = (int)vm->registers[i->operands[0]];
+      uint8_t condition = vm->registers[i->operands[1]];
       printf(
         "JUMP_IF_FALSE: R%d(%d) is %s, jumping to instruction %d\n",
-        i->operands[0],
+        i->operands[1],
         condition,
         condition ? "true" : "false",
-        i->operands[1]
+        i->operands[2]
       );
       if(!condition) {
-        if(i->operands[1] < 0 || i->operands[1] >= vector_size(vm->bytecode)) {
-          fprintf(stderr, "Invalid jump target: %d\n", i->operands[1]);
+        if(i->operands[2] < 0 || i->operands[2] >= vector_size(vm->bytecode))
+        {
+          fprintf(stderr, "Invalid jump target: %d\n", i->operands[2]);
           exit(1);
         }
-        vm->ip = i->operands[1];
+        vm->ip = i->operands[2];
         skip_opcode;
       } else {
         next_opcode;
@@ -235,7 +251,7 @@ void vm_execute(VM *vm) {
       exit(0);
     }
     default_opcode {
-      fprintf(stderr, "Unknown opcode: %d\n", i->opcode);
+      fprintf(stderr, "Unknown opcode: %d\n", i->operands[0]);
       exit(1);
     }
   }
@@ -266,12 +282,13 @@ void emit_data(FILE *fp, uint8_t opcode, void *data) {
   }
 }
 
-int get_register(EmeraldsTable *map, int *current_reg_ptr, const char *var) {
+uint8_t
+get_register(EmeraldsTable *map, uint8_t *current_reg_ptr, const char *var) {
   size_t reg_ptr = table_get(map, var);
   if(reg_ptr != TABLE_UNDEFINED) {
     return reg_ptr;
   } else {
-    int reg = *current_reg_ptr;
+    uint8_t reg = *current_reg_ptr;
     table_add(map, var, reg);
     *current_reg_ptr = (*current_reg_ptr % MAX_REGISTERS) + 1;
     return reg;
@@ -336,13 +353,28 @@ Instruction *load_instruction(FILE *fp) {
   Instruction *i = create_instruction(opcode, 0, 0, 0);
 
   switch(opcode) {
-  case OP_NIL:
-  case OP_FALSE:
-  case OP_TRUE:
+  case OP_NIL: {
+    uint8_t reg;
+    fread(&reg, 1, 1, fp);
+    i->operands[1] = reg;
+    break;
+  }
+  case OP_FALSE: {
+    uint8_t reg;
+    fread(&reg, 1, 1, fp);
+    i->operands[1] = reg;
+    break;
+  }
+  case OP_TRUE: {
+    uint8_t reg;
+    fread(&reg, 1, 1, fp);
+    i->operands[1] = reg;
+    break;
+  }
   case OP_HALT: {
     uint8_t reg;
     fread(&reg, 1, 1, fp);
-    i->operands[0] = reg;
+    i->operands[1] = reg;
     break;
   }
   case OP_INT: {
@@ -350,8 +382,8 @@ Instruction *load_instruction(FILE *fp) {
     int32_t int_val;
     fread(&reg, 1, 1, fp);
     fread(&int_val, sizeof(int32_t), 1, fp);
-    i->operands[0] = reg;
-    i->operands[1] = int_val;
+    i->operands[1] = reg;
+    i->operands[2] = int_val;
     break;
   }
   case OP_FLOAT: {
@@ -359,7 +391,7 @@ Instruction *load_instruction(FILE *fp) {
     double float_val;
     fread(&reg, 1, 1, fp);
     fread(&float_val, sizeof(double), 1, fp);
-    i->operands[0]    = reg;
+    i->operands[1]    = reg;
     i->data.float_val = float_val;
     break;
   }
@@ -371,7 +403,7 @@ Instruction *load_instruction(FILE *fp) {
     char *str = (char *)malloc(str_length + 1);
     fread(str, 1, str_length, fp);
     str[str_length]    = '\0';
-    i->operands[0]     = reg;
+    i->operands[1]     = reg;
     i->data.string_val = str;
     break;
   }
@@ -383,15 +415,15 @@ Instruction *load_instruction(FILE *fp) {
     fread(&dest, 1, 1, fp);
     fread(&src1, 1, 1, fp);
     fread(&src2, 1, 1, fp);
-    i->operands[0] = dest;
-    i->operands[1] = src1;
-    i->operands[2] = src2;
+    i->operands[1] = dest;
+    i->operands[2] = src1;
+    i->operands[3] = src2;
     break;
   }
   case OP_JUMP: {
     uint32_t target_idx;
     fread(&target_idx, sizeof(uint32_t), 1, fp);
-    i->operands[0] = target_idx;
+    i->operands[1] = target_idx;
     break;
   }
   case OP_JUMP_IF_FALSE: {
@@ -399,8 +431,8 @@ Instruction *load_instruction(FILE *fp) {
     uint32_t target_idx;
     fread(&reg, 1, 1, fp);
     fread(&target_idx, sizeof(uint32_t), 1, fp);
-    i->operands[0] = reg;
-    i->operands[1] = target_idx;
+    i->operands[1] = reg;
+    i->operands[2] = target_idx;
     break;
   }
   default:
@@ -426,7 +458,7 @@ void load_bytecode(const char *filename, Instruction ***bc) {
     Instruction *i = load_instruction(fp);
     if(!i) {
       break;
-    } else if(i->opcode == OP_HALT) {
+    } else if(i->operands[0] == OP_HALT) {
       emit(*bc, i);
       break;
     } else {
@@ -442,7 +474,7 @@ void create_example_bytecode(const char *filename) {
 
   EmeraldsTable registers;
   table_init(&registers);
-  int next_reg = 0;
+  uint8_t next_reg = 0;
 
   fwrite("MARG", 1, 4, fp);
   uint8_t version = 1;
