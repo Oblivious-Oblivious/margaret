@@ -218,7 +218,7 @@ void vm_execute(VM *vm) {
     uint32_t i;               \
   _opcode_loop:               \
     i = vm->bytecode[vm->ip]; \
-    switch(i->operands[0])
+    switch(FETCH(i))
   #define case_opcode(op) case(op):
   #define default_opcode  default:
 #endif
