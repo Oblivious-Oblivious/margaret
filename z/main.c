@@ -74,16 +74,25 @@ typedef size_t Value;
 #define MAX_REGISTERS (2 << 7)
 #define MAX_CONSTANTS (2 << 7)
 
-typedef struct {
-  uint8_t operands[4];
-} Instruction;
+#define O(op)             ((op) << 24)
+#define OAk(op, a, k)     (((op) << 24) | ((a) << 16) | ((k) & 0x0000ffff))
+#define OABk(op, a, bk)   (((op) << 24) | ((a) << 16) | ((bk) & 0x0000ffff))
+#define OA(op, a)         (((op) << 24) | ((a) << 16))
+#define OAB(op, a, b)     (((op) << 24) | ((a) << 16) | ((b) << 8))
+#define OABC(op, a, b, c) (((op) << 24) | ((a) << 16) | ((b) << 8) | ((c) << 0))
+
+#define FETCH(i) (((i) & 0xff000000) >> 24)
+#define A(i)     (((i) & 0x00ff0000) >> 16)
+#define B(i)     (((i) & 0x0000ff00) >> 8)
+#define C(i)     (((i) & 0x000000ff) >> 0)
 
 typedef struct {
   Value registers[MAX_REGISTERS];
   Value constants[MAX_CONSTANTS];
   uint8_t num_constants;
   size_t ip;
-  Instruction **bytecode;
+  uint32_t *bytecode;
+  uint8_t current_reg_index;
 } VM;
 
 typedef struct Object {
@@ -166,23 +175,13 @@ String *value_string_new(VM *vm, char *chars) {
   return self;
 }
 
-Instruction *
-instruction_new(uint8_t opcode, uint8_t op1, uint8_t op2, uint8_t op3) {
-  Instruction *i = (Instruction *)malloc(sizeof(Instruction));
-
-  i->operands[0] = opcode;
-  i->operands[1] = op1;
-  i->operands[2] = op2;
-  i->operands[3] = op3;
-
-  return i;
-}
-
-void vm_init(VM *vm, Instruction **bytecode) {
-  vm->num_constants = 0;
-  vm->bytecode      = bytecode;
-  vm->ip            = 0;
-}
+#define vm_init(vm, bc)         \
+  do {                          \
+    vm->num_constants     = 0;  \
+    vm->ip                = 0;  \
+    vm->bytecode          = bc; \
+    vm->current_reg_index = 0;  \
+  } while(0)
 
 uint8_t make_constant(VM *vm, Value value) {
   vm->constants[vm->num_constants++] = value;
@@ -206,210 +205,218 @@ void vm_execute(VM *vm) {
     &&_computed_goto_OP_PRINT,
     &&_computed_goto_OP_HALT
   };
-  #define switch_opcode                    \
-    Instruction *i = vm->bytecode[vm->ip]; \
-    goto *_computed_gotos[i->operands[0]];
+  #define switch_opcode       \
+    uint32_t i;               \
+  _opcode_loop:               \
+    i = vm->bytecode[vm->ip]; \
+    goto *_computed_gotos[FETCH(i)];
   #define case_opcode(op) _computed_goto_##op:
   #define default_opcode \
   _err:
-  #define next_opcode         \
-    vm->ip++;                 \
-    i = vm->bytecode[vm->ip]; \
-    goto *_computed_gotos[i->operands[0]]
-  #define skip_opcode goto *_computed_gotos[i->operands[0]]
 #else
   #define switch_opcode       \
-    Instruction *i;           \
+    uint32_t i;               \
   _opcode_loop:               \
     i = vm->bytecode[vm->ip]; \
     switch(i->operands[0])
-  #define case_opcode(op) case((op)):
+  #define case_opcode(op) case(op):
   #define default_opcode  default:
-  #define next_opcode \
-    vm->ip++;         \
-    goto _opcode_loop
-  #define skip_opcode goto _opcode_loop
 #endif
+
+#define next_opcode \
+  vm->ip++;         \
+  goto _opcode_loop
+#define skip_opcode goto _opcode_loop
 
   switch_opcode {
     case_opcode(OP_NIL) {
-      vm->registers[i->operands[1]] = NIL();
+      uint8_t a        = A(i);
+      vm->registers[a] = NIL();
       next_opcode;
     }
     case_opcode(OP_FALSE) {
-      vm->registers[i->operands[1]] = FALSE();
+      uint8_t a        = A(i);
+      vm->registers[a] = FALSE();
       next_opcode;
     }
     case_opcode(OP_TRUE) {
-      vm->registers[i->operands[1]] = TRUE();
+      uint8_t a        = A(i);
+      vm->registers[a] = TRUE();
       next_opcode;
     }
     case_opcode(OP_NUMBER) {
-      vm->registers[i->operands[1]] = vm->constants[i->operands[2]];
+      uint8_t a        = A(i);
+      uint16_t k       = (B(i) << 8) | C(i);
+      vm->registers[a] = vm->constants[k];
       next_opcode;
     }
     case_opcode(OP_STRING) {
-      vm->registers[i->operands[1]] = vm->constants[i->operands[2]];
+      uint8_t a        = A(i);
+      uint16_t k       = (B(i) << 8) | C(i);
+      vm->registers[a] = vm->constants[k];
       next_opcode;
     }
     case_opcode(OP_ADD) {
-      vm->registers[i->operands[1]] = NUMBER(
-        AS_NUMBER(vm->registers[i->operands[2]])->value +
-        AS_NUMBER(vm->registers[i->operands[3]])->value
+      uint8_t a        = A(i);
+      uint8_t b        = B(i);
+      uint8_t c        = C(i);
+      vm->registers[a] = NUMBER(
+        AS_NUMBER(vm->registers[b])->value + AS_NUMBER(vm->registers[c])->value
       );
-    }
-    next_opcode;
-  }
-  case_opcode(OP_SUB) {
-    vm->registers[i->operands[1]] = NUMBER(
-      AS_NUMBER(vm->registers[i->operands[2]])->value -
-      AS_NUMBER(vm->registers[i->operands[3]])->value
-    );
-    next_opcode;
-  }
-  case_opcode(OP_MUL) {
-    vm->registers[i->operands[1]] = NUMBER(
-      AS_NUMBER(vm->registers[i->operands[2]])->value *
-      AS_NUMBER(vm->registers[i->operands[3]])->value
-    );
-    next_opcode;
-  }
-  case_opcode(OP_DIV) {
-    if(AS_NUMBER(vm->registers[i->operands[3]])->value == 0.0) {
-      fprintf(stderr, "Runtime Error: Division by zero\n");
-      exit(1);
-    }
-    vm->registers[i->operands[1]] = NUMBER(
-      AS_NUMBER(vm->registers[i->operands[2]])->value /
-      AS_NUMBER(vm->registers[i->operands[3]])->value
-    );
-    next_opcode;
-  }
-  case_opcode(OP_JUMP) {
-    uint8_t target = i->operands[1];
-    if(target >= vector_size(vm->bytecode)) {
-      fprintf(stderr, "Invalid jump target: %d\n", target);
-      exit(1);
-    }
-    vm->ip = target;
-    skip_opcode;
-  }
-  case_opcode(OP_JUMP_IF_FALSE) {
-    uint8_t condition = vm->registers[i->operands[1]];
-    uint8_t target    = i->operands[2];
-    if(!condition) {
-      if(target >= vector_size(vm->bytecode)) {
-        fprintf(stderr, "Invalid jump target: %d\n", target);
-        exit(1);
-      }
-      vm->ip = target;
-      skip_opcode;
-    } else {
       next_opcode;
     }
-  }
-  case_opcode(OP_PRINT) {
-    Value v = vm->registers[i->operands[1]];
-    if(IS_NIL(v)) {
-      printf("R%d = nil\n", i->operands[1]);
-    } else if(IS_FALSE(v)) {
-      printf("R%d = false\n", i->operands[1]);
-    } else if(IS_TRUE(v)) {
-      printf("R%d = true\n", i->operands[1]);
-    } else if(IS_NUMBER(v)) {
-      printf("R%d = %g\n", i->operands[1], AS_NUMBER(v)->value);
-    } else if(IS_STRING(v)) {
-      printf("R%d = \"%s\"\n", i->operands[1], AS_STRING(v)->value);
-    } else {
-      printf("R%d = UNKNOWN\n", i->operands[1]);
+    case_opcode(OP_SUB) {
+      uint8_t a        = A(i);
+      uint8_t b        = B(i);
+      uint8_t c        = C(i);
+      vm->registers[a] = NUMBER(
+        AS_NUMBER(vm->registers[b])->value - AS_NUMBER(vm->registers[c])->value
+      );
+      next_opcode;
     }
-    next_opcode;
-  }
-  case_opcode(OP_HALT) {
-    printf("HALT: Stopping VM execution.\n");
-    exit(0);
-  }
-  default_opcode {
-    fprintf(stderr, "Unknown opcode: %d\n", i->operands[0]);
-    exit(1);
+    case_opcode(OP_MUL) {
+      uint8_t a        = A(i);
+      uint8_t b        = B(i);
+      uint8_t c        = C(i);
+      vm->registers[a] = NUMBER(
+        AS_NUMBER(vm->registers[b])->value * AS_NUMBER(vm->registers[c])->value
+      );
+      next_opcode;
+    }
+    case_opcode(OP_DIV) {
+      uint8_t a      = A(i);
+      uint8_t b      = B(i);
+      uint8_t c      = C(i);
+      double divisor = AS_NUMBER(vm->registers[c])->value;
+      if(divisor == 0.0) {
+        fprintf(stderr, "Runtime Error: Division by zero\n");
+        exit(1);
+      }
+      vm->registers[a] = NUMBER(AS_NUMBER(vm->registers[b])->value / divisor);
+      next_opcode;
+    }
+    case_opcode(OP_JUMP) {
+      uint8_t a  = A(i);
+      uint16_t k = (B(i) << 8) | C(i);
+      if(k >= MAX_CONSTANTS) {
+        fprintf(stderr, "Invalid jump target: %u\n", k);
+        exit(1);
+      }
+      vm->ip = k;
+      skip_opcode;
+    }
+    case_opcode(OP_JUMP_IF_FALSE) {
+      uint8_t a       = A(i);
+      uint16_t k      = (B(i) << 8) | C(i);
+      Value condition = vm->registers[a];
+      bool is_false   = IS_FALSE(condition) || IS_NIL(condition);
+      if(is_false) {
+        if(k >= MAX_CONSTANTS) {
+          fprintf(stderr, "Invalid jump target: %u\n", k);
+          exit(1);
+        }
+        vm->ip = k;
+        skip_opcode;
+      } else {
+        next_opcode;
+      }
+    }
+    case_opcode(OP_PRINT) {
+      uint8_t a = A(i);
+      Value v   = vm->registers[a];
+      if(IS_NIL(v)) {
+        printf("R%d = nil\n", a);
+      } else if(IS_FALSE(v)) {
+        printf("R%d = false\n", a);
+      } else if(IS_TRUE(v)) {
+        printf("R%d = true\n", a);
+      } else if(IS_NUMBER(v)) {
+        printf("R%d = %g\n", a, AS_NUMBER(v)->value);
+      } else if(IS_STRING(v)) {
+        printf("R%d = \"%s\"\n", a, AS_STRING(v)->value);
+      } else {
+        printf("R%d = UNKNOWN\n", a);
+      }
+      next_opcode;
+    }
+    case_opcode(OP_HALT) {
+      printf("HALT: Stopping VM execution.\n");
+      exit(0);
+    }
+    default_opcode {
+      fprintf(stderr, "Unknown opcode: %d\n", FETCH(i));
+      exit(1);
+    }
   }
 }
 
-uint8_t
-get_register(EmeraldsTable *map, uint8_t *current_reg_ptr, const char *var) {
-  size_t reg_ptr = table_get(map, var);
+uint8_t get_register(VM *vm, EmeraldsTable *local_variables, const char *var) {
+  size_t reg_ptr = table_get(local_variables, var);
   if(reg_ptr != TABLE_UNDEFINED) {
     return reg_ptr;
   } else {
-    uint8_t reg = *current_reg_ptr;
-    table_add(map, var, reg);
-    *current_reg_ptr = (*current_reg_ptr % MAX_REGISTERS) + 1;
+    uint8_t reg = vm->current_reg_index;
+    table_add(local_variables, var, reg);
+    vm->current_reg_index = (vm->current_reg_index % MAX_REGISTERS) + 1;
     return reg;
   }
 }
 
 #define emit(i)        vector_add(bc, i)
-#define emit_0(opcode) emit(instruction_new((opcode), 0, 0, 0));
-#define emit_1(opcode, op1)                                    \
-  emit(instruction_new(                                        \
-    (opcode), get_register(&registers, &next_reg, (op1)), 0, 0 \
+#define emit_0(opcode) emit(O(opcode))
+#define emit_k(opcode, var, k) \
+  emit(OAk(opcode, get_register(vm, &local_variables, var), k))
+#define emit_1(opcode, var_a) \
+  emit(OA(opcode, get_register(vm, &local_variables, var_a)))
+#define emit_2(opcode, var_a, var_bk) \
+  emit(OABk(opcode, get_register(vm, &local_variables, var_a), var_bk))
+#define emit_3(opcode, var_a, var_b, var_c)    \
+  emit(OABC(                                   \
+    opcode,                                    \
+    get_register(vm, &local_variables, var_a), \
+    get_register(vm, &local_variables, var_b), \
+    get_register(vm, &local_variables, var_c)  \
   ))
-#define emit_2(opcode, op1, op2)                \
-  emit(instruction_new(                         \
-    (opcode),                                   \
-    get_register(&registers, &next_reg, (op1)), \
-    get_register(&registers, &next_reg, (op2)), \
-    0                                           \
-  ))
-#define emit_3(opcode, op1, op2, op3)           \
-  emit(instruction_new(                         \
-    (opcode),                                   \
-    get_register(&registers, &next_reg, (op1)), \
-    get_register(&registers, &next_reg, (op2)), \
-    get_register(&registers, &next_reg, (op3))  \
-  ))
-#define emit_k(opcode, op1, op2)                                   \
-  emit(instruction_new(                                            \
-    (opcode), get_register(&registers, &next_reg, (op1)), (op2), 0 \
-  ));
 
-#define emit_example_bytecode()                                   \
-  do {                                                            \
-    emit_k(OP_NIL, "x", make_constant(vm, NIL()));                \
-    emit_k(OP_FALSE, "y", make_constant(vm, FALSE()));            \
-    emit_k(OP_TRUE, "y2", make_constant(vm, TRUE()));             \
-    emit_k(OP_NUMBER, "y3", make_constant(vm, NUMBER(1)));        \
-    emit_k(OP_NUMBER, "z", make_constant(vm, NUMBER(10)));        \
-    emit_k(OP_NUMBER, "a", make_constant(vm, NUMBER(3.14)));      \
-    emit_k(OP_STRING, "msg", make_constant(vm, STRING("Hello"))); \
-    emit_3(OP_ADD, "result_add", "z", "a");                       \
-    emit_3(OP_SUB, "result_sub", "result_add", "y3");             \
-    emit_3(OP_MUL, "result_mul", "result_sub", "z");              \
-    emit_3(OP_DIV, "result_div", "result_mul", "a");              \
-    emit_1(OP_PRINT, "x");                                        \
-    emit_1(OP_PRINT, "y");                                        \
-    emit_1(OP_PRINT, "y2");                                       \
-    emit_1(OP_PRINT, "z");                                        \
-    emit_1(OP_PRINT, "a");                                        \
-    emit_1(OP_PRINT, "msg");                                      \
-    emit_1(OP_PRINT, "result_add");                               \
-    emit_1(OP_PRINT, "result_sub");                               \
-    emit_1(OP_PRINT, "result_mul");                               \
-    emit_1(OP_PRINT, "result_div");                               \
-    emit_0(OP_HALT);                                              \
-  } while(0)
+uint32_t *emit_example_bytecode(VM *vm) {
+  uint32_t *bc = NULL;
+  EmeraldsTable local_variables;
+  table_init(&local_variables);
+
+  emit_k(OP_NIL, "x", make_constant(vm, NIL()));
+  emit_k(OP_FALSE, "y", make_constant(vm, FALSE()));
+  emit_k(OP_TRUE, "y2", make_constant(vm, TRUE()));
+  emit_k(OP_NUMBER, "y3", make_constant(vm, NUMBER(1)));
+  emit_k(OP_NUMBER, "z", make_constant(vm, NUMBER(10)));
+  emit_k(OP_NUMBER, "a", make_constant(vm, NUMBER(3.14)));
+  emit_k(OP_STRING, "msg", make_constant(vm, STRING("Hello")));
+  emit_3(OP_ADD, "result_add", "z", "a");
+  emit_3(OP_SUB, "result_sub", "result_add", "y3");
+  emit_3(OP_MUL, "result_mul", "result_sub", "z");
+  emit_3(OP_DIV, "result_div", "result_mul", "a");
+  emit_1(OP_PRINT, "x");
+  emit_1(OP_PRINT, "y");
+  emit_1(OP_PRINT, "y2");
+  emit_1(OP_PRINT, "y3");
+  emit_1(OP_PRINT, "z");
+  emit_1(OP_PRINT, "a");
+  emit_1(OP_PRINT, "msg");
+  emit_1(OP_PRINT, "result_add");
+  emit_1(OP_PRINT, "result_sub");
+  emit_1(OP_PRINT, "result_mul");
+  emit_1(OP_PRINT, "result_div");
+  emit_0(OP_HALT);
+
+  table_deinit(&local_variables);
+
+  return bc;
+}
 
 int main(int argc, char **argv) {
-  VM _vm           = {0};
-  VM *vm           = &_vm;
-  Instruction **bc = NULL;
-  uint8_t next_reg = 0;
-  EmeraldsTable registers;
-  table_init(&registers);
+  VM _vm = {0};
+  VM *vm = &_vm;
 
-  emit_example_bytecode();
+  uint32_t *bc = emit_example_bytecode(vm);
   vm_init(vm, bc);
   vm_execute(vm);
-
-  table_deinit(&registers);
 }
