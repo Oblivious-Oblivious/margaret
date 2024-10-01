@@ -93,6 +93,7 @@ typedef struct {
   size_t ip;
   uint32_t *bytecode;
   uint8_t current_reg_index;
+  EmeraldsTable local_variables;
 } VM;
 
 typedef struct Object {
@@ -175,13 +176,13 @@ String *value_string_new(VM *vm, char *chars) {
   return self;
 }
 
-#define vm_init(vm, bc)         \
-  do {                          \
-    vm->num_constants     = 0;  \
-    vm->ip                = 0;  \
-    vm->bytecode          = bc; \
-    vm->current_reg_index = 0;  \
-  } while(0)
+void vm_init(VM *vm) {
+  vm->num_constants     = 0;
+  vm->ip                = 0;
+  vm->bytecode          = NULL;
+  vm->current_reg_index = 0;
+  table_init(&vm->local_variables);
+}
 
 uint8_t make_constant(VM *vm, Value value) {
   vm->constants[vm->num_constants++] = value;
@@ -350,64 +351,58 @@ void vm_execute(VM *vm) {
   }
 }
 
-uint8_t get_register(VM *vm, EmeraldsTable *local_variables, const char *var) {
-  size_t reg_ptr = table_get(local_variables, var);
+uint8_t get_register(VM *vm, const char *var) {
+  size_t reg_ptr = table_get(&vm->local_variables, var);
   if(reg_ptr != TABLE_UNDEFINED) {
     return reg_ptr;
   } else {
     uint8_t reg = vm->current_reg_index;
-    table_add(local_variables, var, reg);
+    table_add(&vm->local_variables, var, reg);
     vm->current_reg_index = (vm->current_reg_index % MAX_REGISTERS) + 1;
     return reg;
   }
 }
 
-#define emit(i)        vector_add(bc, i)
-#define emit_0(opcode) emit(O(opcode))
-#define emit_k(opcode, var, k) \
-  emit(OAk(opcode, get_register(vm, &local_variables, var), k))
-#define emit_1(opcode, var_a) \
-  emit(OA(opcode, get_register(vm, &local_variables, var_a)))
-#define emit_2(opcode, var_a, var_bk) \
-  emit(OABk(opcode, get_register(vm, &local_variables, var_a), var_bk))
-#define emit_3(opcode, var_a, var_b, var_c)    \
+#define emit(i)                  vector_add(bc, i)
+#define emit_O(opcode)           emit(O(opcode))
+#define emit_OAk(opcode, var, k) emit(OAk(opcode, get_register(vm, var), k))
+#define emit_OA(opcode, var_a)   emit(OA(opcode, get_register(vm, var_a)))
+#define emit_OABk(opcode, var_a, var_bk) \
+  emit(OABk(opcode, get_register(vm, var_a), var_bk))
+#define emit_OABC(opcode, var_a, var_b, var_c) \
   emit(OABC(                                   \
     opcode,                                    \
-    get_register(vm, &local_variables, var_a), \
-    get_register(vm, &local_variables, var_b), \
-    get_register(vm, &local_variables, var_c)  \
+    get_register(vm, var_a),                   \
+    get_register(vm, var_b),                   \
+    get_register(vm, var_c)                    \
   ))
 
 uint32_t *emit_example_bytecode(VM *vm) {
   uint32_t *bc = NULL;
-  EmeraldsTable local_variables;
-  table_init(&local_variables);
 
-  emit_k(OP_NIL, "x", make_constant(vm, NIL()));
-  emit_k(OP_FALSE, "y", make_constant(vm, FALSE()));
-  emit_k(OP_TRUE, "y2", make_constant(vm, TRUE()));
-  emit_k(OP_NUMBER, "y3", make_constant(vm, NUMBER(1)));
-  emit_k(OP_NUMBER, "z", make_constant(vm, NUMBER(10)));
-  emit_k(OP_NUMBER, "a", make_constant(vm, NUMBER(3.14)));
-  emit_k(OP_STRING, "msg", make_constant(vm, STRING("Hello")));
-  emit_3(OP_ADD, "result_add", "z", "a");
-  emit_3(OP_SUB, "result_sub", "result_add", "y3");
-  emit_3(OP_MUL, "result_mul", "result_sub", "z");
-  emit_3(OP_DIV, "result_div", "result_mul", "a");
-  emit_1(OP_PRINT, "x");
-  emit_1(OP_PRINT, "y");
-  emit_1(OP_PRINT, "y2");
-  emit_1(OP_PRINT, "y3");
-  emit_1(OP_PRINT, "z");
-  emit_1(OP_PRINT, "a");
-  emit_1(OP_PRINT, "msg");
-  emit_1(OP_PRINT, "result_add");
-  emit_1(OP_PRINT, "result_sub");
-  emit_1(OP_PRINT, "result_mul");
-  emit_1(OP_PRINT, "result_div");
-  emit_0(OP_HALT);
-
-  table_deinit(&local_variables);
+  emit_OAk(OP_NIL, "x", make_constant(vm, NIL()));
+  emit_OAk(OP_FALSE, "y", make_constant(vm, FALSE()));
+  emit_OAk(OP_TRUE, "y2", make_constant(vm, TRUE()));
+  emit_OAk(OP_NUMBER, "y3", make_constant(vm, NUMBER(1)));
+  emit_OAk(OP_NUMBER, "z", make_constant(vm, NUMBER(10)));
+  emit_OAk(OP_NUMBER, "a", make_constant(vm, NUMBER(3.14)));
+  emit_OAk(OP_STRING, "msg", make_constant(vm, STRING("Hello")));
+  emit_OABC(OP_ADD, "result_add", "z", "a");
+  emit_OABC(OP_SUB, "result_sub", "result_add", "y3");
+  emit_OABC(OP_MUL, "result_mul", "result_sub", "z");
+  emit_OABC(OP_DIV, "result_div", "result_mul", "a");
+  emit_OA(OP_PRINT, "x");
+  emit_OA(OP_PRINT, "y");
+  emit_OA(OP_PRINT, "y2");
+  emit_OA(OP_PRINT, "y3");
+  emit_OA(OP_PRINT, "z");
+  emit_OA(OP_PRINT, "a");
+  emit_OA(OP_PRINT, "msg");
+  emit_OA(OP_PRINT, "result_add");
+  emit_OA(OP_PRINT, "result_sub");
+  emit_OA(OP_PRINT, "result_mul");
+  emit_OA(OP_PRINT, "result_div");
+  emit_O(OP_HALT);
 
   return bc;
 }
@@ -416,7 +411,7 @@ int main(int argc, char **argv) {
   VM _vm = {0};
   VM *vm = &_vm;
 
-  uint32_t *bc = emit_example_bytecode(vm);
-  vm_init(vm, bc);
+  vm_init(vm);
+  vm->bytecode = emit_example_bytecode(vm);
   vm_execute(vm);
 }
