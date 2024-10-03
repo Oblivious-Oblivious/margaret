@@ -7,12 +7,14 @@
 #define MAX_REGISTERS (2 << 7)
 #define MAX_CONSTANTS (2 << 7)
 
+typedef uint32_t Instruction;
+
 typedef struct {
   Value registers[MAX_REGISTERS];
   Value constants[MAX_CONSTANTS];
   uint8_t num_constants;
   size_t ip;
-  uint32_t *bytecode;
+  Instruction *bytecode;
   uint8_t current_reg_index;
   EmeraldsTable local_variables;
 } VM;

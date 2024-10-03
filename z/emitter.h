@@ -6,8 +6,8 @@
 #include "object.h"
 #include "opcode.h"
 
-static uint32_t *emit_example_bytecode(VM *vm) {
-  uint32_t *bc = NULL;
+static Instruction *emit_example_bytecode(VM *vm) {
+  Instruction *bc = NULL;
 
   OAk(OP_NIL, "x", NIL());
   OAk(OP_FALSE, "y", FALSE());

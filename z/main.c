@@ -18,7 +18,7 @@ static void evaluate(VM *vm) {
   goto _opcode_loop
 #define skip_opcode goto _opcode_loop
 
-  uint32_t i;
+  Instruction i;
 _opcode_loop:;
   i = vm->bytecode[vm->ip];
 
