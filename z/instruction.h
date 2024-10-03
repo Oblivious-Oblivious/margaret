@@ -50,9 +50,8 @@ static uint8_t get_register(VM *vm, const char *var) {
   if(reg_ptr != TABLE_UNDEFINED) {
     return reg_ptr;
   } else {
-    uint8_t reg = vm->current_reg_index;
+    uint8_t reg = table_size(&vm->local_variables) % MAX_REGISTERS;
     table_add(&vm->local_variables, var, reg);
-    vm->current_reg_index = (vm->current_reg_index % MAX_REGISTERS) + 1;
     return reg;
   }
 }

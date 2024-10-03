@@ -76,10 +76,6 @@ _opcode_loop:;
       next_opcode;
     }
     case_opcode(OP_JUMP) {
-      if(Bk(i) >= MAX_CONSTANTS) {
-        fprintf(stderr, "Invalid jump target: %u\n", Bk(i));
-        exit(1);
-      }
       vm->ip = Bk(i);
       skip_opcode;
     }
@@ -87,10 +83,6 @@ _opcode_loop:;
       Value condition = vm->registers[A(i)];
       bool is_false   = IS_FALSE(condition) || IS_NIL(condition);
       if(is_false) {
-        if(Bk(i) >= MAX_CONSTANTS) {
-          fprintf(stderr, "Invalid jump target: %u\n", Bk(i));
-          exit(1);
-        }
         vm->ip = Bk(i);
         skip_opcode;
       } else {
