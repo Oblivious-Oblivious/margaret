@@ -1,108 +1,108 @@
 #include "emitter.h"
 
+#define FETCH() (vm->ip++, OP)
+#define READ()  (vm->bytecode[vm->ip - 1])
+
+#define R(i) (vm->registers[i])
+#define K(i) (vm->constants[i])
+
+#define OP (((READ()) & 0xff000000) >> 24)
+#define A  (((READ()) & 0x00ff0000) >> 16)
+#define B  (((READ()) & 0x0000ff00) >> 8)
+#define C  (((READ()) & 0x000000ff) >> 0)
+/* TODO - Implement Ak */
+#define Bk ((B << 8) | C)
+
+#define RA  R(A)
+#define RB  R(B)
+#define RC  R(C)
+/* TODO - Implement KAk */
+#define KBk K(Bk)
+
 static void evaluate(VM *vm) {
 #if defined(__GNUC__) || defined(__clang__)
-  #include "dispatch_table.h"
   dispatch_table();
-  #define switch_opcode   goto *_computed_gotos[FETCH(i)];
+  #define switch_opcode   goto *_computed_gotos[FETCH()];
   #define case_opcode(op) _computed_goto_##op:
   #define default_opcode  _computed_goto_##ERROR:
 #else
-  #define switch_opcode   switch(FETCH(i))
+  #define switch_opcode   switch(FETCH())
   #define case_opcode(op) case(op):
   #define default_opcode  default:
 #endif
 
-#define next_opcode \
-  vm->ip++;         \
-  goto _opcode_loop
+#define next_opcode goto _opcode_loop
 #define skip_opcode goto _opcode_loop
 
-  Instruction i;
 _opcode_loop:;
-  i = vm->bytecode[vm->ip];
-
   switch_opcode {
-    case_opcode(OP_NIL) {
-      vm->registers[A(i)] = NIL();
+    case_opcode(OP_FALSE) {
+      RA = FALSE();
       next_opcode;
     }
-    case_opcode(OP_FALSE) {
-      vm->registers[A(i)] = FALSE();
+    case_opcode(OP_NIL) {
+      RA = NIL();
       next_opcode;
     }
     case_opcode(OP_TRUE) {
-      vm->registers[A(i)] = TRUE();
+      RA = TRUE();
       next_opcode;
     }
     case_opcode(OP_NUMBER) {
-      vm->registers[A(i)] = vm->constants[Bk(i)];
+      RA = KBk;
       next_opcode;
     }
     case_opcode(OP_STRING) {
-      vm->registers[A(i)] = vm->constants[Bk(i)];
+      RA = KBk;
       next_opcode;
     }
     case_opcode(OP_ADD) {
-      vm->registers[A(i)] = NUMBER(
-        AS_NUMBER(vm->registers[B(i)])->value +
-        AS_NUMBER(vm->registers[C(i)])->value
-      );
+      RA = NUMBER(AS_NUMBER(RB)->value + AS_NUMBER(RC)->value);
       next_opcode;
     }
     case_opcode(OP_SUB) {
-      vm->registers[A(i)] = NUMBER(
-        AS_NUMBER(vm->registers[B(i)])->value -
-        AS_NUMBER(vm->registers[C(i)])->value
-      );
+      RA = NUMBER(AS_NUMBER(RB)->value - AS_NUMBER(RC)->value);
       next_opcode;
     }
     case_opcode(OP_MUL) {
-      vm->registers[A(i)] = NUMBER(
-        AS_NUMBER(vm->registers[B(i)])->value *
-        AS_NUMBER(vm->registers[C(i)])->value
-      );
+      RA = NUMBER(AS_NUMBER(RB)->value * AS_NUMBER(RC)->value);
       next_opcode;
     }
     case_opcode(OP_DIV) {
-      if(AS_NUMBER(vm->registers[C(i)])->value == 0.0) {
+      if(AS_NUMBER(RC)->value == 0.0) {
         fprintf(stderr, "Runtime Error: Division by zero\n");
         exit(1);
       }
-      vm->registers[A(i)] = NUMBER(
-        AS_NUMBER(vm->registers[B(i)])->value /
-        AS_NUMBER(vm->registers[C(i)])->value
-      );
+      RA = NUMBER(AS_NUMBER(RB)->value / AS_NUMBER(RC)->value);
       next_opcode;
     }
     case_opcode(OP_JUMP) {
-      vm->ip = Bk(i);
+      vm->ip = Bk;
       skip_opcode;
     }
     case_opcode(OP_JUMP_IF_FALSE) {
-      Value condition = vm->registers[A(i)];
-      bool is_false   = IS_FALSE(condition) || IS_NIL(condition);
-      if(is_false) {
-        vm->ip = Bk(i);
+      if(IS_FALSE(RA) || IS_NIL(RA)) {
+        vm->ip = Bk;
         skip_opcode;
       } else {
         next_opcode;
       }
     }
     case_opcode(OP_PRINT) {
-      Value v = vm->registers[A(i)];
-      if(IS_NIL(v)) {
-        printf("R%d = nil\n", A(i));
-      } else if(IS_FALSE(v)) {
-        printf("R%d = false\n", A(i));
-      } else if(IS_TRUE(v)) {
-        printf("R%d = true\n", A(i));
-      } else if(IS_NUMBER(v)) {
-        printf("R%d = %g\n", A(i), AS_NUMBER(v)->value);
-      } else if(IS_STRING(v)) {
-        printf("R%d = \"%s\"\n", A(i), AS_STRING(v)->value);
+      if(RA == 0) {
+        printf("ZERO ??\n");
+      } else if(IS_NIL(RA)) {
+        printf("R%d = nil\n", A);
+      } else if(IS_FALSE(RA)) {
+        printf("R%d = false\n", A);
+      } else if(IS_TRUE(RA)) {
+        printf("R%d = true\n", A);
+      } else if(IS_NUMBER(RA)) {
+        printf("R%d = %g\n", A, AS_NUMBER(RA)->value);
+      } else if(IS_STRING(RA)) {
+        printf("R%d = \"%s\"\n", A, AS_STRING(RA)->value);
       } else {
-        printf("R%d = UNKNOWN\n", A(i));
+        printf("R%d = UNKNOWN\n", A);
       }
       next_opcode;
     }
@@ -111,7 +111,7 @@ _opcode_loop:;
       exit(0);
     }
     default_opcode {
-      fprintf(stderr, "Unknown opcode: %d\n", FETCH(i));
+      fprintf(stderr, "Unknown opcode: %d\n", OP);
       exit(1);
     }
   }

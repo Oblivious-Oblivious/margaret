@@ -38,13 +38,6 @@
      (get_register(vm, (b)) << 8) | (get_register(vm, (c)) << 0)) \
   )
 
-#define FETCH(i) (((i) & 0xff000000) >> 24)
-#define A(i)     (((i) & 0x00ff0000) >> 16)
-#define B(i)     (((i) & 0x0000ff00) >> 8)
-#define C(i)     (((i) & 0x000000ff) >> 0)
-/* TODO - Implement Ak */
-#define Bk(i)    ((B(i) << 8) | C(i))
-
 static uint8_t get_register(VM *vm, const char *var) {
   size_t reg_ptr = table_get(&vm->local_variables, var);
   if(reg_ptr != TABLE_UNDEFINED) {
