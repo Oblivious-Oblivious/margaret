@@ -1,19 +1,21 @@
 #ifndef __OPCODE_H_
 #define __OPCODE_H_
 
-#define OP_NIL           0x00
-#define OP_FALSE         0x01
-#define OP_TRUE          0x02
-#define OP_NUMBER        0x03
-#define OP_STRING        0x04
-#define OP_ADD           0x05
-#define OP_SUB           0x06
-#define OP_MUL           0x07
-#define OP_DIV           0x08
-#define OP_JUMP          0x09
-#define OP_JUMP_IF_FALSE 0x0a
-#define OP_PRINT         0x0b
-#define OP_HALT          0x0c
+#include "vm.h"
+
+#define OP_NIL           ((Instruction)0x00)
+#define OP_FALSE         ((Instruction)0x01)
+#define OP_TRUE          ((Instruction)0x02)
+#define OP_NUMBER        ((Instruction)0x03)
+#define OP_STRING        ((Instruction)0x04)
+#define OP_ADD           ((Instruction)0x05)
+#define OP_SUB           ((Instruction)0x06)
+#define OP_MUL           ((Instruction)0x07)
+#define OP_DIV           ((Instruction)0x08)
+#define OP_JUMP          ((Instruction)0x09)
+#define OP_JUMP_IF_FALSE ((Instruction)0x0a)
+#define OP_PRINT         ((Instruction)0x0b)
+#define OP_HALT          ((Instruction)0x0c)
 
 #define dispatch_table()                \
   static void *_computed_gotos[256] = { \

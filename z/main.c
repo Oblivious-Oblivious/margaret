@@ -6,12 +6,12 @@
 #define R(i) (vm->registers[i])
 #define K(i) (vm->constants[i])
 
-#define OP (((READ()) & 0xff000000) >> 24)
-#define A  (((READ()) & 0x00ff0000) >> 16)
-#define B  (((READ()) & 0x0000ff00) >> 8)
-#define C  (((READ()) & 0x000000ff) >> 0)
+#define OP (((READ()) & 0xffff000000000000) >> 48)
+#define A  (((READ()) & 0x0000ffff00000000) >> 32)
+#define B  (((READ()) & 0x00000000ffff0000) >> 16)
+#define C  (((READ()) & 0x000000000000ffff) >> 0)
 /* TODO - Implement Ak */
-#define Bk ((B << 8) | C)
+#define Bk ((B << 16) | C)
 
 #define RA  R(A)
 #define RB  R(B)
@@ -92,17 +92,17 @@ _opcode_loop:;
       if(RA == 0) {
         printf("ZERO ??\n");
       } else if(IS_NIL(RA)) {
-        printf("R%d = nil\n", A);
+        printf("R%zu = nil\n", A);
       } else if(IS_FALSE(RA)) {
-        printf("R%d = false\n", A);
+        printf("R%zu = false\n", A);
       } else if(IS_TRUE(RA)) {
-        printf("R%d = true\n", A);
+        printf("R%zu = true\n", A);
       } else if(IS_NUMBER(RA)) {
-        printf("R%d = %g\n", A, AS_NUMBER(RA)->value);
+        printf("R%zu = %g\n", A, AS_NUMBER(RA)->value);
       } else if(IS_STRING(RA)) {
-        printf("R%d = \"%s\"\n", A, AS_STRING(RA)->value);
+        printf("R%zu = \"%s\"\n", A, AS_STRING(RA)->value);
       } else {
-        printf("R%d = UNKNOWN\n", A);
+        printf("R%zu = UNKNOWN\n", A);
       }
       next_opcode;
     }
@@ -111,7 +111,7 @@ _opcode_loop:;
       exit(0);
     }
     default_opcode {
-      fprintf(stderr, "Unknown opcode: %d\n", OP);
+      fprintf(stderr, "Unknown opcode: %zu\n", OP);
       exit(1);
     }
   }

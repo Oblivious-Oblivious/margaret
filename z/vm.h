@@ -4,9 +4,9 @@
 #include "../libs/EmeraldsTable/export/EmeraldsTable.h"
 #include "nan_tagging.h"
 
-#define MAX_REGISTERS (2 << 7)
+#define MAX_REGISTERS (1 << 16)
 
-typedef uint32_t Instruction;
+typedef size_t Instruction;
 
 typedef struct {
   Value registers[MAX_REGISTERS];
@@ -17,6 +17,6 @@ typedef struct {
 } VM;
 
 void vm_init(VM *vm);
-uint8_t vm_make_constant(VM *vm, Value value);
+Instruction vm_make_constant(VM *vm, Value value);
 
 #endif
