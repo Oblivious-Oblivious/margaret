@@ -13,7 +13,6 @@ typedef struct {
   Value *constants;
   size_t ip;
   Instruction *bytecode;
-  uint8_t current_reg_index;
   EmeraldsTable local_variables;
 } VM;
 
