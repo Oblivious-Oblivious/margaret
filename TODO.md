@@ -21,6 +21,9 @@
 
 ## (✗) ver. 0.0.3
 -----------------
+  🟥 Decrease the size of the Instruction to 32 bits to imporove performance.
+     This will require that registers are at most 256 in size since `A` value will be 8 bits.
+     Handle spilling by splitting methods into smaller ones.
   🟥 Add green threads.
   🟥 Upgrade to a mark & sweep generational gc, gen0, gen1, gen2.
   🟥 Upgrade to a tricolor generational mark & sweep gc.
@@ -42,6 +45,8 @@
   🟥 Pattern-match multimethods by hashing receiver and parameters.
      Every multi-method is hashed into a unique value and searched for in the method table of the receiver.
   🟥 Optimize the design Hash to be data-oriented (separate keys from values for locality).
+  🟥 Implement storing and loading bytecode from compiled files, similar to Java.
+     Pipeline: compile constants to direct data -> load and store constants in VM -> execute by loading constants from table.
   🟥 Optimize hash function for better string interning.
   🟥 Add big integers and big floats.
   🟥 Refactor `include:`, `call` and `call:`, `<-` into primitive messages.
@@ -106,6 +111,7 @@
        42 / 0,  comment: "static            -> always caught by the multimethod",
        42 / v1, comment: "deterministic     -> caught if we perform constant folding",
        42 / v2, comment: "non-deterministic -> cannot be caught",
+  🟥 Double check that vm works on 16-bit word machines with 32-bit pointers/doubles.
   🟥 Add complex numbers `(0+2i)`, and rational numbers `(1/2r)` -> unary messages.
   🟥 Add complex and rational specific messages.
   🟩 Create an `import/require` Margaret message.
