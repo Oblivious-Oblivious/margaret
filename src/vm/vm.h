@@ -8,8 +8,6 @@
 
 #include <stdint.h> /* uint8_t */
 
-typedef struct MargProc MargProc;
-
 /**
  * @brief Virtual Machine Engine
  * @param filename -> Current filename to lex tokens from
@@ -48,7 +46,7 @@ typedef struct VM {
 
   EmeraldsTable global_variables;
   EmeraldsTable interned_strings;
-  MargProc *current;
+  struct MargProc *current;
 } VM;
 
 /** @brief Works for any IP pointer no matter what context current is in */

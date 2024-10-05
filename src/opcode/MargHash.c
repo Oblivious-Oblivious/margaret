@@ -1,9 +1,4 @@
-#include "MargHash.h"
-
-#include "../../libs/EmeraldsString/export/EmeraldsString.h"
 #include "MargValue.h"
-
-#include <stdint.h>
 
 #define MARG_HASH_MAX_LOAD    0.75
 #define MARG_HASH_GROW_FACTOR 2

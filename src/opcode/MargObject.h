@@ -1,9 +1,6 @@
 #ifndef __MARG_OBJECT_H_
 #define __MARG_OBJECT_H_
 
-typedef struct MargObject MargObject;
-
-#include "../../libs/EmeraldsBool/export/EmeraldsBool.h"
 #include "../vm/vm.h"
 
 /**
@@ -17,17 +14,17 @@ typedef struct MargObject MargObject;
  * @param instance_variables -> Object scoped @variables
  * @param messages -> A table for messages pointing to a vector of methods
  */
-struct MargObject {
+typedef struct MargObject {
   bool is_marked;
-  MargObject *next;
+  struct MargObject *next;
 
   VM *bound_vm;
 
   char *name;
-  MargObject *parent;
+  struct MargObject *parent;
   EmeraldsTable instance_variables;
   EmeraldsTable messages;
-};
+} MargObject;
 
 /**
  * @brief Creates a new object instance

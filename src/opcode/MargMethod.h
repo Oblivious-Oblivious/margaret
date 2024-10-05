@@ -1,7 +1,6 @@
 #ifndef __MARG_METHOD_H_
 #define __MARG_METHOD_H_
 
-#include "MargObject.h"
 #include "MargString.h"
 #include "MargTensor.h"
 
@@ -30,7 +29,7 @@ typedef struct MargMethod {
   uint8_t *ip;
   uint8_t *sp;
 
-  MargProc *proc; /* TODO - Remove */
+  struct MargProc *proc; /* TODO - Remove */
 } MargMethod;
 
 /**

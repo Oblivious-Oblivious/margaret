@@ -32,17 +32,16 @@ MargTensor *marg_tensor_new(VM *vm, size_t initial_size);
  * @desc: Ensure there is enough space for values in the tensor
  * @param self -> The tensor to use
  **/
-#define marg_tensor_ensure_space(self)                               \
-  do {                                                               \
-    size_t new_capacity = (self)->alloced * MARG_TENSOR_GROW_FACTOR; \
-    MargValue *items    = (MargValue *)realloc(            \
-      (self)->items, sizeof(MargValue) * new_capacity             \
-    );                                                            \
-                                                                     \
-    if(items) {                                                      \
-      (self)->alloced = new_capacity;                                \
-      (self)->items   = items;                                       \
-    }                                                                \
+#define marg_tensor_ensure_space(self)                                       \
+  do {                                                                       \
+    size_t new_capacity = (self)->alloced * MARG_TENSOR_GROW_FACTOR;         \
+    MargValue *items =                                                       \
+      (MargValue *)realloc((self)->items, sizeof(MargValue) * new_capacity); \
+                                                                             \
+    if(items) {                                                              \
+      (self)->alloced = new_capacity;                                        \
+      (self)->items   = items;                                               \
+    }                                                                        \
   } while(0)
 
 /**

@@ -1,7 +1,5 @@
 #include "MargValue.h"
 
-#include "../../libs/EmeraldsString/export/EmeraldsString.h"
-
 char *marg_value_format(MargValue self) {
   if(IS_UNDEFINED(self)) {
     return string_new("<unbound>");

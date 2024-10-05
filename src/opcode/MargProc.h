@@ -2,7 +2,6 @@
 #define __MARG_PROC_H_
 
 #include "MargMethod.h"
-#include "MargObject.h"
 
 /* TODO - Remove */
 
@@ -16,10 +15,10 @@
  * @param bytecode -> List of bytecode
  * @param ip -> Instruction Pointer
  */
-struct MargProc {
+typedef struct MargProc {
   MargObject _;
   MargMethod *bound_method;
-  MargProc *bound_proc;
+  struct MargProc *bound_proc;
 
   EmeraldsTable parameters;
   EmeraldsTable local_variables;
@@ -28,7 +27,7 @@ struct MargProc {
   uint8_t *bytecode;
   MargValue *temporaries;
   uint8_t *ip;
-};
+} MargProc;
 
 /**
  * @brief Creates a new MargProc object

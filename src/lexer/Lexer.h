@@ -1,7 +1,6 @@
 #ifndef __LEXER_H_
 #define __LEXER_H_
 
-#include "../tokens/Tokens.h"
 #include "../vm/vm.h"
 
 /**

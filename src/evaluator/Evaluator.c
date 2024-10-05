@@ -7,8 +7,7 @@
 #include "../vm/compilation_pipeline.h"
 
 #include <inttypes.h> /* PRIx64 */
-#include <stdint.h>
-#include <stdio.h> /* pritnf, snprintf */
+#include <stdio.h>    /* pritnf, snprintf */
 
 static void op_put_tensor_helper(VM *vm, MargValue temporary) {
   ptrdiff_t number_of_elements = AS_INTEGER(temporary)->value;
