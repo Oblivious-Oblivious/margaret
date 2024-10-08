@@ -1,15 +1,13 @@
 #include "MargValue.h"
 
 MargInteger *marg_integer_new(VM *vm, ptrdiff_t value) {
-  MargObject *obj = (MargObject *)marg_object_new(
-    vm, sizeof(MargInteger), string_new("$IntegerClone")
+  MargObject *obj = marg_object_new(
+    vm,
+    sizeof(MargInteger),
+    table_get(&vm->global_variables, "$IntegerProto"),
+    "$Integer"
   );
   MargInteger *self = (MargInteger *)obj;
-
-  MargValue proto_object = table_get(&vm->global_variables, "$Integer");
-  obj->parent            = AS_OBJECT(proto_object);
-
-  obj->instance_variables = obj->parent->instance_variables;
 
   self->value = value;
 

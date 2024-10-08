@@ -9,7 +9,6 @@
  */
 typedef struct MargInteger {
   MargObject _;
-
   ptrdiff_t value;
 } MargInteger;
 
