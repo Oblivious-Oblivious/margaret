@@ -3,31 +3,6 @@
 #include "../opcode/MargValue.h"
 
 /**
- * @brief Creates a proto object with a predefined parent slot.
-    Sets up @self and @super instances and initially has no methods.
-    Proto chain is always global.
- * @param vm -> Current vm
- * @param parent_name -> Name of parent object to bind to
- * @param name -> Name of the new proto
- * @return MargValue -> New object value
- */
-MargValue create_new_proto_object(VM *vm, char *parent_name, char *name) {
-  MargValue proto_object  = MARG_OBJECT(name);
-  MargValue parent_object = table_get(&vm->global_variables, parent_name);
-
-  table_add(&vm->global_variables, name, proto_object);
-  table_add(
-    &AS_OBJECT(proto_object)->instance_variables, "@self", proto_object
-  );
-  table_add(
-    &AS_OBJECT(proto_object)->instance_variables, "@super", parent_object
-  );
-  AS_OBJECT(proto_object)->parent = AS_OBJECT(parent_object);
-
-  return proto_object;
-}
-
-/**
  * @brief Sets up the delegation chain of proto objects
     and defines rudimentary messages like self and super
  * @param vm -> Current vm
@@ -35,26 +10,26 @@ MargValue create_new_proto_object(VM *vm, char *parent_name, char *name) {
 static void setup_proto_object_chain(VM *vm) {
   /* TODO - Define as $(obj)Proto $Float = $FloatProto clone, or have literals
    * define themselves as $(obj)Literal like $FloatInstance = $Float clone  */
-  create_new_proto_object(vm, "$Margaret", "$Margaret");
+  MARG_OBJECT(table_get(&vm->global_variables, "$Margaret"), "$Margaret");
 
-  create_new_proto_object(vm, "$Margaret", "$nil");
-  create_new_proto_object(vm, "$Margaret", "$false");
-  create_new_proto_object(vm, "$Margaret", "$true");
+  MARG_OBJECT(table_get(&vm->global_variables, "$Margaret"), "$nil");
+  MARG_OBJECT(table_get(&vm->global_variables, "$Margaret"), "$false");
+  MARG_OBJECT(table_get(&vm->global_variables, "$Margaret"), "$true");
 
-  create_new_proto_object(vm, "$Margaret", "$Numeric");
-  create_new_proto_object(vm, "$Numeric", "$Integer");
-  create_new_proto_object(vm, "$Numeric", "$Float");
+  MARG_OBJECT(table_get(&vm->global_variables, "$Margaret"), "$Numeric");
+  MARG_OBJECT(table_get(&vm->global_variables, "$Numeric"), "$Integer");
+  MARG_OBJECT(table_get(&vm->global_variables, "$Numeric"), "$Float");
 
-  create_new_proto_object(vm, "$Margaret", "$String");
+  MARG_OBJECT(table_get(&vm->global_variables, "$Margaret"), "$Label");
+  MARG_OBJECT(table_get(&vm->global_variables, "$Margaret"), "$String");
 
-  create_new_proto_object(vm, "$Margaret", "$Enumerable");
-  create_new_proto_object(vm, "$Enumerable", "$Tensor");
-  /* create_new_proto_object(vm, "$Tensor", "$Tuple"); */
-  create_new_proto_object(vm, "$Enumerable", "$Hash");
-  /* create_new_proto_object(vm, "$Enumerable", "$Bitstring"); */
+  MARG_OBJECT(table_get(&vm->global_variables, "$Margaret"), "$Enumerable");
+  MARG_OBJECT(table_get(&vm->global_variables, "$Enumerable"), "$Tensor");
+  MARG_OBJECT(table_get(&vm->global_variables, "$Tensor"), "$Tuple");
+  MARG_OBJECT(table_get(&vm->global_variables, "$Enumerable"), "$Hash");
+  MARG_OBJECT(table_get(&vm->global_variables, "$Enumerable"), "$Bitstring");
 
-  create_new_proto_object(vm, "$Margaret", "$Method");
-  create_new_proto_object(vm, "$Margaret", "$Proc");
+  MARG_OBJECT(table_get(&vm->global_variables, "$Margaret"), "$Method");
 }
 
 /**
@@ -88,6 +63,7 @@ VM *vm_new(const char *filename) {
   tokens_init(&vm->tokens);
   vm->formal_bytecode = NULL;
 
+  /* TODO - Remove */
   vm->sp = vm->stack;
 
   table_init(&vm->global_variables);
@@ -95,8 +71,8 @@ VM *vm_new(const char *filename) {
   vm->current = NULL;
 
   setup_proto_object_chain(vm);
-  define_main_method(vm);
-  point_ip_to_main_method(vm);
+  /* define_main_method(vm);
+  point_ip_to_main_method(vm); */
 
   return vm;
 }

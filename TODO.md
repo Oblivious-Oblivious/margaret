@@ -4,13 +4,13 @@
     🟩 $nil                                                  -> ($NilProto clone)   -> singleton
     🟩 $true                                                 -> ($TrueProto clone)  -> singleton
     🟩 $false                                                -> ($FalseProto clone) -> singleton
-    🟩 ::label                                               -> ($LabelProto clone)
     🟩 42, 4_200, 0b0110, 0B10, 0xbeef, 0X0427, 0o741, 0O210 -> ($IntegerProto clone)
     🟩 42.0, 42_42.42_42                                     -> ($FloatProto clone)
+    🟩 ::label                                               -> ($LabelProto clone)
     🟩 "foo\tbar"                                            -> ($StringProto clone)
     🟩 [42, "Hello", false]                                  -> ($TensorProto clone)
-    🟩 %{"a": 1, b: 2}                                       -> ($HashProto clone)
     🟩 %[1, 2]                                               -> ($TupleProto clone)
+    🟩 %{"a": 1, b: 2}                                       -> ($HashProto clone)
     🟩 %(1::1, 0::1)                                         -> ($BitstringProto clone)
     🟩 {a | a + 1}                                           -> ($MethodProto clone) -> headless
     🟩 #put: element at: position => ()                      -> ($MethodProto clone) -> object bound

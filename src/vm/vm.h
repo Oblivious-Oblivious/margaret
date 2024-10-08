@@ -1,6 +1,7 @@
 #ifndef __VM_H_
 #define __VM_H_
 
+#define TABLE_UNDEFINED MARG_UNDEFINED
 #include "../../libs/EmeraldsTable/export/EmeraldsTable.h"
 #include "../opcode/MargValueType.h"
 #include "../tokens/Tokens.h"
@@ -17,13 +18,9 @@
  * @param error -> Stores the latest error message found during the pipeline
  * @param error_token -> Stores the latest error token found during the pipeline
  *
- * @param eof_token -> Singleton token that signals the end of the program
  * @param tid -> Current token index
  * @param tokens -> List of tokenized values
  * @param formal_bytecode -> Formal bytecode representation
- *
- * @param stack -> Stack data structure for storing bytecode results
- * @param sp -> Stack pointer
  *
  * @param global_variables -> Global without namespacing or scoping
  * @param interned_strings -> Stores all strings (variables, messages, etc.)
@@ -41,6 +38,7 @@ typedef struct VM {
   Tokens tokens;
   char **formal_bytecode;
 
+  /* TODO - Remove */
   MargValue stack[65536];
   MargValue *sp;
 
