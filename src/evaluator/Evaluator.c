@@ -47,7 +47,7 @@ static MargValue dispatch_method_from_delegation_chain(
       return method_value;
     } else {
       return dispatch_method_from_delegation_chain(
-        object->parent, message_name
+        AS_OBJECT(object->parent), message_name
       );
     }
   } else {
@@ -75,7 +75,7 @@ static MargValue retrieve_all_messages_in_delegation_chain(
     return messages_tensor;
   } else {
     return retrieve_all_messages_in_delegation_chain(
-      vm, messages_tensor, object->parent
+      vm, messages_tensor, AS_OBJECT(object->parent)
     );
   }
 }
@@ -220,8 +220,6 @@ static bool op_prim_to_string_helper(VM *vm, MargValue object) {
     fs_push(vm->sp, object);
   } else if(IS_METHOD_CLONE(object)) {
     fs_push(vm->sp, MARG_STRING(marg_method_to_string(AS_METHOD(object))));
-  } else if(IS_PROC_CLONE(object)) {
-    fs_push(vm->sp, MARG_STRING(marg_proc_to_string(AS_PROC(object))));
   }
 
   /* TODO - Implement to_string inside of $Tensor and $Hash */
@@ -277,9 +275,7 @@ static void evaluator_run(VM *vm) {
       break;
     }
     case OP_PUT_SUPER: {
-      fs_push(
-        vm->sp, QNAN_BOX(vm->current->bound_method->bound_object->parent)
-      );
+      fs_push(vm->sp, vm->current->bound_method->bound_object->parent);
       break;
     }
 
@@ -302,31 +298,31 @@ static void evaluator_run(VM *vm) {
 
     case OP_PUT_OBJECT: {
       MargValue object = READ_TEMPORARY();
-      if(IS_PROC(object)) {
+      /* if(IS_PROC(object)) {
         table_add_all(
           &vm->current->local_variables, &AS_PROC(object)->local_variables
         );
-      }
+      } */
       fs_push(vm->sp, object);
       break;
     }
     case OP_PUT_OBJECT_WORD: {
       MargValue object = READ_TEMPORARY_WORD();
-      if(IS_PROC(object)) {
+      /* if(IS_PROC(object)) {
         table_add_all(
           &vm->current->local_variables, &AS_PROC(object)->local_variables
         );
-      }
+      } */
       fs_push(vm->sp, object);
       break;
     }
     case OP_PUT_OBJECT_DWORD: {
       MargValue object = READ_TEMPORARY_DWORD();
-      if(IS_PROC(object)) {
+      /* if(IS_PROC(object)) {
         table_add_all(
           &vm->current->local_variables, &AS_PROC(object)->local_variables
         );
-      }
+      } */
       fs_push(vm->sp, object);
       break;
     }
@@ -592,45 +588,44 @@ static void evaluator_run(VM *vm) {
       break;
     }
 
-    case OP_PROC_CALL: {
-      MargValue proc = fs_pop(vm->sp);
-      /* fs_pop(vm->sp); */
-      if(IS_PROC_CLONE(proc)) {
-        AS_PROC(proc)->bound_proc = vm->current;
-        vm->current               = AS_PROC(proc);
-      } else {
-        fs_push(vm->sp, MARG_NIL);
-      }
-      break;
-    }
-
-    case OP_PROC_CALL_PARAMS: {
-      MargHash *parameters = AS_HASH(fs_pop(vm->sp));
-      MargValue proc       = fs_pop(vm->sp);
-      /* fs_pop(vm->sp); */
-
-      if(IS_PROC_CLONE(proc)) {
-        size_t i;
-        AS_PROC(proc)->bound_proc = vm->current;
-
-        /* NOTE - Inject proc parameters */
-        for(i = 0; i < parameters->alloced; i++) {
-          MargHashEntry *entry = &parameters->entries[i];
-          if(!IS_NOT_INTERNED(entry->key)) {
-            table_add(
-              &AS_PROC(proc)->local_variables,
-              AS_STRING(entry->key)->chars,
-              entry->value
-            );
-          }
+      /* case OP_PROC_CALL: {
+        MargValue proc = fs_pop(vm->sp);
+        fs_pop(vm->sp);
+        if(IS_PROC_CLONE(proc)) {
+          AS_PROC(proc)->bound_proc = vm->current;
+          vm->current               = AS_PROC(proc);
+        } else {
+          fs_push(vm->sp, MARG_NIL);
         }
+        break;
+      } */
 
-        vm->current = AS_PROC(proc);
-      } else {
-        fs_push(vm->sp, MARG_NIL);
-      }
-      break;
-    }
+      /* case OP_PROC_CALL_PARAMS: {
+        MargHash *parameters = AS_HASH(fs_pop(vm->sp));
+        MargValue proc       = fs_pop(vm->sp);
+        fs_pop(vm->sp);
+
+        if(IS_PROC_CLONE(proc)) {
+          size_t i;
+          AS_PROC(proc)->bound_proc = vm->current;
+
+          for(i = 0; i < parameters->alloced; i++) {
+            MargHashEntry *entry = &parameters->entries[i];
+            if(!IS_NOT_INTERNED(entry->key)) {
+              table_add(
+                &AS_PROC(proc)->local_variables,
+                AS_STRING(entry->key)->chars,
+                entry->value
+              );
+            }
+          }
+
+          vm->current = AS_PROC(proc);
+        } else {
+          fs_push(vm->sp, MARG_NIL);
+        }
+        break;
+      } */
 
     case OP_PRIM_MESSAGES: {
       MargValue object = fs_pop(vm->sp);
@@ -707,15 +702,9 @@ static void evaluator_run(VM *vm) {
       MargValue parent_object   = fs_pop(vm->sp);
       fs_pop(vm->sp);
       if(!IS_UNDEFINED(parent_object) && IS_STRING_CLONE(new_object_name)) {
-        MargValue child_object = MARG_OBJECT(AS_STRING(new_object_name)->chars);
-        AS_OBJECT(child_object)->parent = AS_OBJECT(parent_object);
-        table_add(
-          &AS_OBJECT(child_object)->instance_variables, "@self", child_object
+        fs_push(
+          vm->sp, MARG_OBJECT(parent_object, AS_STRING(new_object_name)->chars)
         );
-        table_add(
-          &AS_OBJECT(child_object)->instance_variables, "@super", parent_object
-        );
-        fs_push(vm->sp, child_object);
       } else {
         fs_push(vm->sp, MARG_NIL);
       }

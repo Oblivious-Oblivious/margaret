@@ -2,25 +2,9 @@
 
 /* TODO - Remove */
 MargProc *marg_proc_new(VM *vm, MargMethod *bound_method) {
-  MargObject *obj =
-    marg_object_new(vm, sizeof(MargProc), string_new("$ProcClone"));
-  MargProc *self = (MargProc *)obj;
-
-  MargValue proto_object = table_get(&vm->global_variables, "$Proc");
-  obj->parent            = AS_OBJECT(proto_object);
-
-  obj->instance_variables = obj->parent->instance_variables;
-
-  self->bound_method = bound_method;
-  self->bound_proc   = bound_method->proc;
-
-  table_init(&self->parameters);
-  table_init(&self->local_variables);
-
-  self->bytecode = NULL;
-  self->ip       = self->bytecode;
-
-  return self;
+  (void)vm;
+  (void)bound_method;
+  return NULL;
 }
 
 char *marg_proc_to_string(MargProc *object) {

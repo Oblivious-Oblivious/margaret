@@ -13,8 +13,6 @@ char *marg_value_format(MargValue self) {
     return res;
   } else if(IS_METHOD_CLONE(self)) {
     return string_new(marg_method_to_string(AS_METHOD(self)));
-  } else if(IS_PROC_CLONE(self)) {
-    return string_new(marg_proc_to_string(AS_PROC(self)));
   } else if(IS_TENSOR_CLONE(self)) {
     return string_new(marg_tensor_to_string(AS_TENSOR(self)));
   } else if(IS_HASH_CLONE(self)) {

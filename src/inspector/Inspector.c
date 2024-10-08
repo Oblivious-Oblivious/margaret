@@ -483,10 +483,6 @@ static size_t inspect_instruction(char ***res, MargProc *proc, size_t offset) {
     return instruction_single(res, "PUTS", proc, offset);
   case OP_INCLUDE:
     return instruction_single(res, "INCLUDE", proc, offset);
-  case OP_PROC_CALL:
-    return instruction_single(res, "PROC_CALL", proc, offset);
-  case OP_PROC_CALL_PARAMS:
-    return instruction_single(res, "PROC_CALL_PARAMS", proc, offset);
 
   case OP_PRIM_MESSAGES:
     return instruction_single(res, "PRIM_MESSAGES", proc, offset);

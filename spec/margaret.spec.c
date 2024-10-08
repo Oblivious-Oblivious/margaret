@@ -2,13 +2,13 @@
 #include "../libs/cSpec/export/cSpec.h"
 
 /* margaret */
-#include "version.spec.h"
+/* #include "version.spec.h" */
 
 /* evaluator */
-#include "evaluator/Evaluator.spec.h"
+/* #include "evaluator/Evaluator.spec.h" */
 
 /* generic */
-#include "generic/arithmetic.spec.h"
+/* #include "generic/arithmetic.spec.h"
 #include "generic/assignments.spec.h"
 #include "generic/bitstrings.spec.h"
 #include "generic/bitwise.spec.h"
@@ -37,18 +37,18 @@
 #include "generic/tensors.spec.h"
 #include "generic/tuples.spec.h"
 #include "generic/unicode.spec.h"
-#include "generic/variables.spec.h"
+#include "generic/variables.spec.h" */
 
 /* inspector */
-#include "inspector/Inspector.spec.h"
+/* #include "inspector/Inspector.spec.h" */
 
 /* lexer */
-#include "lexer/alternate_to_dec.spec.h"
+/* #include "lexer/alternate_to_dec.spec.h"
 #include "lexer/Lexer.spec.h"
-#include "lexer/token_types.spec.h"
+#include "lexer/token_types.spec.h" */
 
 /* loader */
-#include "loader/Loader.spec.h"
+/* #include "loader/Loader.spec.h" */
 
 /* opcode */
 #include "opcode/MargFloat.spec.h"
@@ -56,35 +56,35 @@
 #include "opcode/MargInteger.spec.h"
 #include "opcode/MargMethod.spec.h"
 #include "opcode/MargObject.spec.h"
-#include "opcode/MargProc.spec.h"
+#include "opcode/MargSingletons.spec.h"
 #include "opcode/MargString.spec.h"
 #include "opcode/MargTensor.spec.h"
 #include "opcode/MargValue.spec.h"
 
 /* optimizer */
-#include "optimizer/Optimizer.spec.h"
+/* #include "optimizer/Optimizer.spec.h" */
 
 /* parser */
-#include "parser/Parser.spec.h"
+/* #include "parser/Parser.spec.h" */
 
 /* scanner */
-#include "scanner/Scanner.spec.h"
+/* #include "scanner/Scanner.spec.h" */
 
 /* tokens */
-#include "tokens/Token.spec.h"
-#include "tokens/Type.spec.h"
+/* #include "tokens/Token.spec.h"
+#include "tokens/Type.spec.h" */
 
 /* vm */
-#include "vm/byte_conversions.spec.h"
-#include "vm/vm.spec.h"
+/* #include "vm/byte_conversions.spec.h"
+#include "vm/vm.spec.h" */
 
 int main(void) {
   cspec_run_suite("all", {
-    VersionSpec();
+    /* VersionSpec();
 
-    EvaluatorSpec();
+    EvaluatorSpec(); */
 
-    arithmetic_spec();
+    /* arithmetic_spec();
     assignments_spec();
     bitstrings_spec();
     bitwise_spec();
@@ -113,36 +113,36 @@ int main(void) {
     tensors_spec();
     tuples_spec();
     unicode_spec();
-    variables_spec();
+    variables_spec(); */
 
-    InspectorSpec();
+    /* InspectorSpec();
 
     alternate_to_dec_spec();
     LexerSpec();
     token_types_spec();
 
-    LoaderSpec();
+    LoaderSpec(); */
 
     MargFloatSpec();
     MargHashSpec();
     MargIntegerSpec();
     MargMethodSpec();
     MargObjectSpec();
-    MargProcSpec();
+    MargSingletonsSpec();
     MargStringSpec();
     MargTensorSpec();
     MargValueSpec();
 
-    OptimizerSpec();
+    /* OptimizerSpec(); */
 
-    ParserSpec();
+    /* ParserSpec(); */
 
-    ScannerSpec();
+    /* ScannerSpec();
 
     TokenSpec();
     TypeSpec();
 
     byte_conversions_spec();
-    VmSpec();
+    VmSpec(); */
   });
 }

@@ -55,8 +55,6 @@
 #define OP_EXIT_ACTIVATION_RECORD 0x33
 #define OP_PUTS                   0x34
 #define OP_INCLUDE                0x35
-#define OP_PROC_CALL              0x36
-#define OP_PROC_CALL_PARAMS       0x37
 
 /* NOTE - primitives */
 #define OP_PRIM_MESSAGES       0xff
