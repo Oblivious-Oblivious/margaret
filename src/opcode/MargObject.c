@@ -31,10 +31,9 @@ char *marg_object_to_string_with_hash(MargValue object) {
   char *object_name = AS_OBJECT(object)->name;
   string_addf(
     &res,
-    "%s@%s",
+    "%s@0x%zx",
     object_name,
-    /* TODO - Add hash */
-    "somehash"
+    komihash_hash(AS_OBJECT(object), sizeof(MargObject))
   );
   return res;
 }
