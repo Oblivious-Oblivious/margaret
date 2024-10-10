@@ -11,6 +11,13 @@ module(MargFloatSpec, {
     assert_that_double(AS_FLOAT(x)->value equals to 42.42);
   });
 
+  it("ensures that the same float creates different QNAN boxed values", {
+    VM *vm      = vm_new("file.marg");
+    MargValue x = MARG_FLOAT(42.42);
+    MargValue y = MARG_FLOAT(42.42);
+    nassert_that_double(x equals to y);
+  });
+
   it("tests to_string", {
     VM *vm      = vm_new("file.marg");
     MargValue x = MARG_FLOAT(42.42);

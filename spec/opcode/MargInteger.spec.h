@@ -11,6 +11,13 @@ module(MargIntegerSpec, {
     assert_that_ptrdiff_t(AS_INTEGER(x)->value equals to 42);
   });
 
+  it("ensures that the same integer creates different QNAN boxed values", {
+    VM *vm      = vm_new("file.marg");
+    MargValue x = MARG_INTEGER(42);
+    MargValue y = MARG_INTEGER(42);
+    nassert_that_ptrdiff_t(x equals to y);
+  });
+
   it("tests to_string", {
     VM *vm      = vm_new("file.marg");
     MargValue x = MARG_INTEGER(42);
