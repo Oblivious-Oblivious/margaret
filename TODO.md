@@ -76,6 +76,14 @@
   🟥 Add a `@this`, `@it` or equivalent that refers to the original object.
      @this would always refer to object where original method is defined,
      not the object where the method is called.
+  🟥 Define an opcode for calling native C functions and extensions.
+     OABC command where:
+       O is the opcode.
+       A is the function name.
+       B is the output register.
+       C is the input tensor of arguments.
+     Native C extensions require rebuilding of the language
+     Use a ./margaret rebuild command of some sort that rebuilds with user-defined extensions and replaces itself.
   🟩 Methods return tensors of bytecodes.
   🟩 Implement if:then:else: using lambda calculus.
   🟥 Add functionality for reading multiple files and changing the VM pointer to the currect file we are scanning.
