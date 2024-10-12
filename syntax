@@ -92,6 +92,7 @@ keyword_list:
 
 scalar:
     ':' ':' IDENTIFIER
+  | ':' IDENTIFIER
   | INTEGER
   | FLOAT
   | STRING

@@ -6,6 +6,7 @@
     🟩 $false                                                -> ($FalseProto clone) -> singleton
     🟩 42, 4_200, 0b0110, 0B10, 0xbeef, 0X0427, 0o741, 0O210 -> ($IntegerProto clone)
     🟩 42.0, 42_42.42_42                                     -> ($FloatProto clone)
+    🟩 :some_symbol                                          -> ($SymbolProto clone)
     🟩 ::label                                               -> ($LabelProto clone)
     🟩 "foo\tbar"                                            -> ($StringProto clone)
     🟩 [42, "Hello", false]                                  -> ($TensorProto clone)
@@ -125,7 +126,10 @@
       "STORE_LOCAL", self get: i,
     ]
   }
-  🟥 %[car, cdr] = %[1, 2, 3] # car = 1, cdr = [2, 3]
+  🟥 %[:car, :cdr] = %[1, 2, 3] # car = 1, cdr = %[2, 3]
+  🟥 %[:car, :cdr] = %[1, 2] # car = 1, cdr = %[2], (flatten), cdr = 2
+  🟥 %[:car, :cdr] = %[1] # car = 1, cdr = %[], (flatten), cdr = nil
+  🟥 %[:car, :cdr] = %[] # car = nil, cdr = nil
   🟥 l = [1,2,3], [[list, 4], 5] compact!. # [1,2,3,4,5]
   🟥 hash = {a: 1, b: 2}, hash = hash ++ {c: 3}. #{a: 1, b: 2, c: 3}
   🟥 Numeric bind: # 0 fact => 1

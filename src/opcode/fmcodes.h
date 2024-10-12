@@ -12,6 +12,7 @@
 #define FM_FLOAT             string_new("FLOAT")
 #define FM_STRING            string_new("STRING")
 #define FM_LABEL             string_new("LABEL")
+#define FM_SYMBOL            string_new("SYMBOL")
 #define FM_TENSOR            string_new("TENSOR")
 #define FM_TUPLE             string_new("TUPLE")
 #define FM_BITSTRING         string_new("BITSTRING")

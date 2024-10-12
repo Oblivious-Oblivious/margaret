@@ -505,6 +505,10 @@ void parser_scalar(VM *vm) {
     consume(TOKEN_COLON, "expected ':' on label.");
     generate(FM_LABEL);
     generate(consume(TOKEN_IDENTIFIER, "expected identifier on label."));
+  } else if(la1value(":") && la2type(TOKEN_IDENTIFIER)) {
+    consume(TOKEN_COLON, "expected ':' on symbol.");
+    generate(FM_SYMBOL);
+    generate(consume(TOKEN_IDENTIFIER, "expected identifier on symbol."));
   } else if(la1type(TOKEN_INTEGER)) {
     generate(FM_INTEGER);
     generate(consume(TOKEN_INTEGER, "expected integer literal."));
