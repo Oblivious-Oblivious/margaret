@@ -41,13 +41,11 @@
   ((MargValue)(size_t)(SIGN_BIT | ENCODING | NOT_INTERNED_TAG))
 #define IS_NOT_INTERNED(value) ((value) == MARG_NOT_INTERNED)
 
-#define MARG_NIL             (table_get(&vm->global_variables, "$nil"))
-#define MARG_FALSE           (table_get(&vm->global_variables, "$false"))
-#define MARG_TRUE            (table_get(&vm->global_variables, "$true"))
-#define MARG_INTEGER(number) (QNAN_BOX(marg_integer_new(vm, (number))))
-#define MARG_FLOAT(number)   (QNAN_BOX(marg_float_new(vm, (number))))
-#define MARG_STRING_INTERNED(chars) \
-  (QNAN_BOX(table_get(&vm->interned_strings, (chars))))
+#define MARG_NIL            (table_get(&vm->global_variables, "$nil"))
+#define MARG_FALSE          (table_get(&vm->global_variables, "$false"))
+#define MARG_TRUE           (table_get(&vm->global_variables, "$true"))
+#define MARG_INTEGER(value) (QNAN_BOX(marg_integer_new(vm, (value))))
+#define MARG_FLOAT(value)   (QNAN_BOX(marg_float_new(vm, (value))))
 #define MARG_LABEL(value, index) \
   (QNAN_BOX(marg_label_new(vm, (value), (index))))
 #define MARG_SYMBOL(value) (QNAN_BOX(marg_symbol_new(vm, (value))))
