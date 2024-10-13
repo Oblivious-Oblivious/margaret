@@ -6,8 +6,8 @@ MargFloat *marg_float_new(VM *vm, double value) {
   MargObject *obj = marg_object_new(
     vm,
     sizeof(MargFloat),
-    table_get(&vm->global_variables, "$FloatProto"),
-    "$Float"
+    table_get(&vm->global_variables, "$Float"),
+    string_new("$Float")
   );
   MargFloat *self = (MargFloat *)obj;
 

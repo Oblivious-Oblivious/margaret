@@ -206,26 +206,26 @@ static void op_send_helper(VM *vm, MargValue message_name) {
 static bool op_prim_to_string_helper(VM *vm, MargValue object) {
   if(IS_UNDEFINED(object)) {
     fs_push(vm->sp, MARG_STRING("<unbound>"));
-  } else if(IS_NIL_CLONE(object)) {
+  } else if(IS_NIL(object)) {
     fs_push(vm->sp, MARG_STRING(AS_OBJECT(object)->name));
-  } else if(IS_FALSE_CLONE(object)) {
+  } else if(IS_FALSE(object)) {
     fs_push(vm->sp, MARG_STRING(AS_OBJECT(object)->name));
-  } else if(IS_TRUE_CLONE(object)) {
+  } else if(IS_TRUE(object)) {
     fs_push(vm->sp, MARG_STRING(AS_OBJECT(object)->name));
-  } else if(IS_INTEGER_CLONE(object)) {
+  } else if(IS_INTEGER(object)) {
     fs_push(vm->sp, MARG_STRING(marg_integer_to_string(AS_INTEGER(object))));
-  } else if(IS_FLOAT_CLONE(object)) {
+  } else if(IS_FLOAT(object)) {
     fs_push(vm->sp, MARG_STRING(marg_float_to_string(AS_FLOAT(object))));
-  } else if(IS_STRING_CLONE(object)) {
+  } else if(IS_STRING(object)) {
     fs_push(vm->sp, object);
-  } else if(IS_METHOD_CLONE(object)) {
+  } else if(IS_METHOD(object)) {
     fs_push(vm->sp, MARG_STRING(marg_method_to_string(AS_METHOD(object))));
   }
 
   /* TODO - Implement to_string inside of $Tensor and $Hash */
-  else if(IS_TENSOR_CLONE(object)) {
+  else if(IS_TENSOR(object)) {
     fs_push(vm->sp, MARG_STRING(marg_tensor_to_string(AS_TENSOR(object))));
-  } else if(IS_HASH_CLONE(object)) {
+  } else if(IS_HASH(object)) {
     fs_push(vm->sp, MARG_STRING(marg_hash_to_string(AS_HASH(object))));
   }
 
@@ -539,8 +539,8 @@ static void evaluator_run(VM *vm) {
     case OP_PUTS: {
       MargValue object = fs_pop(vm->sp);
       fs_pop(vm->sp);
-      if(IS_STRING_CLONE(object)) {
         printf("%s\n", AS_STRING(object)->chars);
+      if(IS_STRING(object)) {
       } else {
         if(op_prim_to_string_helper(vm, object)) {
           fs_push(vm->sp, object);
@@ -680,7 +680,7 @@ static void evaluator_run(VM *vm) {
       MargValue message_name = fs_pop(vm->sp);
       MargValue object       = fs_pop(vm->sp);
       fs_pop(vm->sp);
-      if(!IS_UNDEFINED(object) && IS_STRING_CLONE(message_name)) {
+      if(!IS_UNDEFINED(object) && IS_STRING(message_name)) {
         char *dnu_message = string_new("");
         string_addf(
           &dnu_message,
@@ -701,7 +701,7 @@ static void evaluator_run(VM *vm) {
       MargValue new_object_name = fs_pop(vm->sp);
       MargValue parent_object   = fs_pop(vm->sp);
       fs_pop(vm->sp);
-      if(!IS_UNDEFINED(parent_object) && IS_STRING_CLONE(new_object_name)) {
+      if(!IS_UNDEFINED(parent_object) && IS_STRING(new_object_name)) {
         fs_push(
           vm->sp, MARG_OBJECT(parent_object, AS_STRING(new_object_name)->chars)
         );
@@ -715,7 +715,7 @@ static void evaluator_run(VM *vm) {
       MargValue object = fs_pop(vm->sp);
       MargValue method = fs_pop(vm->sp);
       fs_pop(vm->sp);
-      if(!IS_UNDEFINED(object) && IS_METHOD_CLONE(method)) {
+      if(!IS_UNDEFINED(object) && IS_METHOD(method)) {
         table_add(
           &AS_OBJECT(object)->messages,
           AS_METHOD(method)->message_name->chars,

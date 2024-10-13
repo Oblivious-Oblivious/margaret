@@ -108,45 +108,6 @@
   "$Bitstring"))) */
 #define IS_METHOD(value) \
   (!IS_UNDEFINED(value) && (string_equals(QNAN_UNBOX(value)->name, "$Method")))
-#define IS_OBJECT(value) \
-  (!IS_UNDEFINED(value) && (string_equals(QNAN_UNBOX(value)->name, "$Object")))
-
-#define IS_NIL_CLONE(value)   (IS_NIL(value))
-#define IS_FALSE_CLONE(value) (IS_FALSE(value))
-#define IS_TRUE_CLONE(value)  (IS_TRUE(value))
-#define IS_INTEGER_CLONE(value) \
-  (!IS_UNDEFINED(value) &&      \
-   (string_equals(QNAN_UNBOX(value)->name, "$IntegerClone")))
-#define IS_FLOAT_CLONE(value) \
-  (!IS_UNDEFINED(value) &&    \
-   (string_equals(QNAN_UNBOX(value)->name, "$FloatClone")))
-/* TODO - Implement */
-/* #define IS_LABEL_CLONE(value) \
-  (!IS_UNDEFINED(value) &&    \
-   (string_equals(QNAN_UNBOX(value)->name, "$LabelClone"))) */
-#define IS_STRING_CLONE(value) \
-  (!IS_UNDEFINED(value) &&     \
-   (string_equals(QNAN_UNBOX(value)->name, "$StringClone")))
-#define IS_TENSOR_CLONE(value) \
-  (!IS_UNDEFINED(value) &&     \
-   (string_equals(QNAN_UNBOX(value)->name, "$TensorClone")))
-/* TODO - Implement */
-/* #define IS_TUPLE_CLONE(value) \
-  (!IS_UNDEFINED(value) &&     \
-   (string_equals(QNAN_UNBOX(value)->name, "$TupleClone"))) */
-#define IS_HASH_CLONE(value) \
-  (!IS_UNDEFINED(value) &&   \
-   (string_equals(QNAN_UNBOX(value)->name, "$HashClone")))
-/* TODO - Implement */
-/* #define IS_BITSTRING_CLONE(value) \
-  (!IS_UNDEFINED(value) &&   \
-   (string_equals(QNAN_UNBOX(value)->name, "$BitstringClone"))) */
-#define IS_METHOD_CLONE(value) \
-  (!IS_UNDEFINED(value) &&     \
-   (string_equals(QNAN_UNBOX(value)->name, "$MethodClone")))
-#define IS_OBJECT_CLONE(value) \
-  (!IS_UNDEFINED(value) &&     \
-   (string_equals(QNAN_UNBOX(value)->name, "$ObjectClone")))
 
 /**
  * @brief Formats a marg value using QNAN boxing
