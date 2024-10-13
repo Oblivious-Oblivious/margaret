@@ -32,6 +32,35 @@ module(MargValueSpec, {
       assert_that_size_t(MARG_UNDEFINED equals to 18445618173802708992ull);
       assert_that_size_t(MARG_UNDEFINED equals to 18445618173802708992ull);
     });
+
+    it("uses marg_value_format by calling the equivalent to_string functions", {
+      VM *vm = vm_new("file.marg");
+      assert_that_charptr(marg_value_format(MARG_NIL) equals to "$nil");
+      assert_that_charptr(marg_value_format(MARG_FALSE) equals to "$false");
+      assert_that_charptr(marg_value_format(MARG_TRUE) equals to "$true");
+      assert_that_charptr(marg_value_format(MARG_INTEGER(42)) equals to "42");
+      assert_that_charptr(marg_value_format(MARG_FLOAT(42.4)) equals to "42.4");
+      assert_that_charptr(marg_value_format(MARG_LABEL("::l", 42)) equals to
+                          "<::l:42>");
+      assert_that_charptr(marg_value_format(MARG_STRING("hello world"))
+                            equals to "\"hello world\"");
+      assert_that_charptr(marg_value_format(MARG_SYMBOL(":sym")) equals to
+                          ":sym");
+      /* assert_that_charptr(marg_value_format(MARG_TENSOR) equals to "[]");
+       */
+      /* assert_that_charptr(marg_value_format(MARG_TUPLE) equals to "%[]");
+       */
+      /* assert_that_charptr(marg_value_format(MARG_HASH) equals to "%{}");
+       */
+      /* assert_that_charptr(marg_value_format(MARG_BITSTRING) equals to
+      "%()");
+       */
+      assert_that_charptr(marg_value_format(
+        MARG_OBJECT(table_get(&vm->global_variables, "$Margaret"), "Name")
+      ) equals to "Name");
+      /* assert_that_charptr(marg_value_format(MARG_METHOD) equals to "#3");
+       */
+    });
   });
 })
 
