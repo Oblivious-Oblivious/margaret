@@ -31,7 +31,7 @@ marg_method_new(VM *vm, MargObject *bound_object, char *message_name) {
 char *marg_method_to_string(MargMethod *object) {
   char *res = string_new("");
   string_addf(
-    &res, "< %s#%s >", object->bound_object->name, object->message_name->chars
+    &res, "< %s#%s >", object->bound_object->name, object->message_name->value
   );
   return res;
 }

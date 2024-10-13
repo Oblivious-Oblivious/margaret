@@ -1,6 +1,3 @@
-/* cspec */
-#include "../libs/cSpec/export/cSpec.h"
-
 /* margaret */
 /* #include "version.spec.h" */
 
@@ -54,10 +51,12 @@
 #include "opcode/MargFloat.spec.h"
 #include "opcode/MargHash.spec.h"
 #include "opcode/MargInteger.spec.h"
+#include "opcode/MargLabel.spec.h"
 #include "opcode/MargMethod.spec.h"
 #include "opcode/MargObject.spec.h"
 #include "opcode/MargSingletons.spec.h"
 #include "opcode/MargString.spec.h"
+#include "opcode/MargSymbol.spec.h"
 #include "opcode/MargTensor.spec.h"
 #include "opcode/MargValue.spec.h"
 
@@ -126,10 +125,12 @@ int main(void) {
     MargFloatSpec();
     MargHashSpec();
     MargIntegerSpec();
+    MargLabelSpec();
     MargMethodSpec();
     MargObjectSpec();
     MargSingletonsSpec();
     MargStringSpec();
+    MargSymbolSpec();
     MargTensorSpec();
     MargValueSpec();
 

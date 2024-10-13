@@ -20,8 +20,9 @@ static void setup_proto_object_chain(VM *vm) {
   MARG_OBJECT(table_get(&vm->global_variables, "$Numeric"), "$Integer");
   MARG_OBJECT(table_get(&vm->global_variables, "$Numeric"), "$Float");
 
-  MARG_OBJECT(table_get(&vm->global_variables, "$Margaret"), "$Label");
   MARG_OBJECT(table_get(&vm->global_variables, "$Margaret"), "$String");
+  MARG_OBJECT(table_get(&vm->global_variables, "$String"), "$Label");
+  MARG_OBJECT(table_get(&vm->global_variables, "$String"), "$Symbol");
 
   MARG_OBJECT(table_get(&vm->global_variables, "$Margaret"), "$Enumerable");
   MARG_OBJECT(table_get(&vm->global_variables, "$Enumerable"), "$Tensor");

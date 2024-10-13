@@ -1,22 +1,21 @@
 #include "MargValue.h"
 
-MargString *marg_string_new(VM *vm, char *chars) {
-  size_t size     = string_size(chars);
-  MargObject *obj = (MargObject *)marg_object_new(
-    vm, sizeof(MargString) + size + 1, string_new("$StringClone")
+MargString *marg_string_new(VM *vm, const char *value) {
+  MargObject *obj = marg_object_new(
+    vm,
+    sizeof(MargString),
+    table_get(&vm->global_variables, "$String"),
+    string_new("$String")
   );
   MargString *self = (MargString *)obj;
 
-  MargValue proto_object = table_get(&vm->global_variables, "$String");
-  obj->parent            = AS_OBJECT(proto_object);
-
-  if(!IS_UNDEFINED(proto_object)) {
-    obj->instance_variables = obj->parent->instance_variables;
-  }
-
-  self->size = size;
-  memcpy(self->chars, chars, size);
-  /* self->chars[size] = '\0'; */
+  self->value = string_new(value);
 
   return self;
+}
+
+char *marg_string_to_string(MargString *object) {
+  char *res = string_new("");
+  string_addf(&res, "\"%s\"", object->value);
+  return res;
 }

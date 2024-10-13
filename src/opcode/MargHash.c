@@ -24,15 +24,16 @@ static size_t custom_fnv_1a_64_hash(char *key, size_t size) {
  */
 static MargHashEntry *
 marg_hash_find_entry(MargHashEntry *entries, size_t alloced, MargValue key) {
-  size_t hash =
-    custom_fnv_1a_64_hash(AS_STRING(key)->chars, AS_STRING(key)->size);
+  size_t hash = custom_fnv_1a_64_hash(
+    AS_STRING(key)->value, marg_string_size(AS_STRING(key))
+  );
   size_t index = hash & (alloced - 1);
 
   MargHashEntry *tombstone = NULL;
   while(true) {
     MargHashEntry *entry = &entries[index];
     size_t entry_hash    = custom_fnv_1a_64_hash(
-      AS_STRING(entry->key)->chars, AS_STRING(entry->key)->size
+      AS_STRING(entry->key)->value, marg_string_size(AS_STRING(entry->key))
     );
     if(IS_NOT_INTERNED(entry->key)) {
       if(IS_UNDEFINED(entry->value)) {

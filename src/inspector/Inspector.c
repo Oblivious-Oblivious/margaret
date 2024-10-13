@@ -565,7 +565,7 @@ void inspect_and_print_proc(VM *vm) {
 void inspect_and_print_method(VM *vm) {
   printf(
     "\n/--------------- Disassembly: < #%s > ---------\\\n",
-    vm->current->bound_method->message_name->chars
+    vm->current->bound_method->message_name->value
   );
   inspect_and_print_vm_bytecode(vm);
   printf("\\-----------------------------------------------/\n\n");

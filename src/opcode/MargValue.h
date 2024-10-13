@@ -5,10 +5,12 @@
 #include "MargFloat.h"
 #include "MargHash.h"
 #include "MargInteger.h"
+#include "MargLabel.h"
 #include "MargMethod.h"
 #include "MargObject.h"
 #include "MargProc.h"
 #include "MargString.h"
+#include "MargSymbol.h"
 #include "MargTensor.h"
 #include "MargValueType.h"
 
@@ -44,11 +46,12 @@
 #define MARG_TRUE            (table_get(&vm->global_variables, "$true"))
 #define MARG_INTEGER(number) (QNAN_BOX(marg_integer_new(vm, (number))))
 #define MARG_FLOAT(number)   (QNAN_BOX(marg_float_new(vm, (number))))
-/* TODO - Implement */
-/* #define MARG_LABEL(value)    (QNAN_BOX(marg_label_new(vm, (value)))) */
-#define MARG_STRING(chars)   (QNAN_BOX(marg_string_new(vm, string_new(chars))))
 #define MARG_STRING_INTERNED(chars) \
   (QNAN_BOX(table_get(&vm->interned_strings, (chars))))
+#define MARG_LABEL(value, index) \
+  (QNAN_BOX(marg_label_new(vm, (value), (index))))
+#define MARG_SYMBOL(value) (QNAN_BOX(marg_symbol_new(vm, (value))))
+#define MARG_STRING(value) (QNAN_BOX(marg_string_new(vm, value)))
 #define MARG_TENSOR(initial_alloced) \
   (QNAN_BOX(marg_tensor_new(vm, (initial_alloced))))
 /* TODO - Implement */
@@ -66,9 +69,9 @@
 #define AS_TRUE(value)    ((MargTrue *)QNAN_UNBOX(value))
 #define AS_INTEGER(value) ((MargInteger *)QNAN_UNBOX(value))
 #define AS_FLOAT(value)   ((MargFloat *)QNAN_UNBOX(value))
-/* TODO - Implement */
-/* #define AS_LABEL(value)   ((MargLabel *)QNAN_UNBOX(value)) */
+#define AS_LABEL(value)   ((MargLabel *)QNAN_UNBOX(value))
 #define AS_STRING(value)  ((MargString *)QNAN_UNBOX(value))
+#define AS_SYMBOL(value)  ((MargSymbol *)QNAN_UNBOX(value))
 #define AS_TENSOR(value)  ((MargTensor *)QNAN_UNBOX(value))
 /* TODO - Implement */
 /* #define AS_TUPLE(value)   ((MargTuple *)QNAN_UNBOX(value)) */
@@ -88,10 +91,10 @@
   (!IS_UNDEFINED(value) && (string_equals(QNAN_UNBOX(value)->name, "$Integer")))
 #define IS_FLOAT(value) \
   (!IS_UNDEFINED(value) && (string_equals(QNAN_UNBOX(value)->name, "$Float")))
-/* TODO - Implement */
-/* #define IS_LABEL(value) \
+#define IS_LABEL(value) \
   (!IS_UNDEFINED(value) && (string_equals(QNAN_UNBOX(value)->name, "$Label")))
-*/
+#define IS_SYMBOL(value) \
+  (!IS_UNDEFINED(value) && (string_equals(QNAN_UNBOX(value)->name, "$Symbol")))
 #define IS_STRING(value) \
   (!IS_UNDEFINED(value) && (string_equals(QNAN_UNBOX(value)->name, "$String")))
 #define IS_TENSOR(value) \
