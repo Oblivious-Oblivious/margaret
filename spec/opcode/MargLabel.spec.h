@@ -26,6 +26,15 @@ module(MargLabelSpec, {
     MargValue x = MARG_LABEL("::l", 42);
     assert_that_charptr(marg_label_to_string(AS_LABEL(x)) equals to "<::l:42>");
   });
+
+  it("ensures that self and super are set correctly", {
+    VM *vm          = vm_new("file.marg");
+    MargValue x     = MARG_LABEL("::l", 42);
+    MargValue self  = table_get(&AS_OBJECT(x)->instance_variables, "@self");
+    MargValue super = table_get(&AS_OBJECT(x)->instance_variables, "@super");
+    assert_that_charptr(AS_OBJECT(self)->name equals to "$Label");
+    assert_that_charptr(AS_OBJECT(super)->name equals to "$String");
+  });
 })
 
 #endif

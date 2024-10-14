@@ -29,6 +29,34 @@ module(MargSingletonsSpec, {
     MargValue z2 = MARG_TRUE;
     assert_that(z1 is z2);
   });
+
+  it("ensures that self and super are set correctly", {
+    VM *vm = vm_new("file.marg");
+    assert_that_charptr(
+      AS_OBJECT(table_get(&AS_OBJECT(MARG_NIL)->instance_variables, "@self"))
+        ->name equals to "$nil"
+    );
+    assert_that_charptr(
+      AS_OBJECT(table_get(&AS_OBJECT(MARG_NIL)->instance_variables, "@super"))
+        ->name equals to "$Margaret"
+    );
+    assert_that_charptr(
+      AS_OBJECT(table_get(&AS_OBJECT(MARG_FALSE)->instance_variables, "@self"))
+        ->name equals to "$false"
+    );
+    assert_that_charptr(
+      AS_OBJECT(table_get(&AS_OBJECT(MARG_FALSE)->instance_variables, "@super"))
+        ->name equals to "$Margaret"
+    );
+    assert_that_charptr(
+      AS_OBJECT(table_get(&AS_OBJECT(MARG_TRUE)->instance_variables, "@self"))
+        ->name equals to "$true"
+    );
+    assert_that_charptr(
+      AS_OBJECT(table_get(&AS_OBJECT(MARG_TRUE)->instance_variables, "@super"))
+        ->name equals to "$Margaret"
+    );
+  });
 })
 
 #endif

@@ -8,8 +8,6 @@
  * @param vm -> Current vm
  */
 static void setup_proto_object_chain(VM *vm) {
-  /* TODO - Define as $(obj)Proto $Float = $FloatProto clone, or have literals
-   * define themselves as $(obj)Literal like $FloatInstance = $Float clone  */
   MARG_OBJECT(table_get(&vm->global_variables, "$Margaret"), "$Margaret");
 
   MARG_OBJECT(table_get(&vm->global_variables, "$Margaret"), "$nil");

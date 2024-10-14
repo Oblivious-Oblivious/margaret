@@ -23,6 +23,15 @@ module(MargIntegerSpec, {
     MargValue x = MARG_INTEGER(42);
     assert_that_charptr(marg_integer_to_string(AS_INTEGER(x)) equals to "42");
   });
+
+  it("ensures that self and super are set correctly", {
+    VM *vm          = vm_new("file.marg");
+    MargValue x     = MARG_INTEGER(42);
+    MargValue self  = table_get(&AS_OBJECT(x)->instance_variables, "@self");
+    MargValue super = table_get(&AS_OBJECT(x)->instance_variables, "@super");
+    assert_that_charptr(AS_OBJECT(self)->name equals to "$Integer");
+    assert_that_charptr(AS_OBJECT(super)->name equals to "$Numeric");
+  });
 })
 
 #endif

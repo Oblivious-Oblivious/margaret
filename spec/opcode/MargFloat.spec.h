@@ -23,6 +23,15 @@ module(MargFloatSpec, {
     MargValue x = MARG_FLOAT(42.42);
     assert_that_charptr(marg_float_to_string(AS_FLOAT(x)) equals to "42.42");
   });
+
+  it("ensures that self and super are set correctly", {
+    VM *vm          = vm_new("file.marg");
+    MargValue x     = MARG_FLOAT(42.42);
+    MargValue self  = table_get(&AS_OBJECT(x)->instance_variables, "@self");
+    MargValue super = table_get(&AS_OBJECT(x)->instance_variables, "@super");
+    assert_that_charptr(AS_OBJECT(self)->name equals to "$Float");
+    assert_that_charptr(AS_OBJECT(super)->name equals to "$Numeric");
+  });
 })
 
 #endif
