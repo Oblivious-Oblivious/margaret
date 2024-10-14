@@ -150,31 +150,5 @@ void marg_hash_delete(MargHash *self, MargValue key) {
   entry->value = MARG_UNDEFINED;
 }
 
-char *marg_hash_to_string(MargHash *object) {
-  char *res        = string_new("");
-  size_t hash_size = marg_hash_size(object);
-
-  string_add(res, "{");
-  if(hash_size > 0) {
-    size_t i;
-    for(i = 0; i < object->alloced; i++) {
-      MargHashEntry *entry = &object->entries[i];
-      if(!IS_NOT_INTERNED(entry->key)) {
-        string_addf(
-          &res,
-          "%s: %s, ",
-          marg_value_format(entry->key),
-          marg_value_format(entry->value)
-        );
-      }
-    }
-    string_ignore_last(res, 2);
-  }
-
-  string_add(res, "}");
-
-  return res;
-}
-
 #undef MARG_HASH_MAX_LOAD
 #undef MARG_HASH_GROW_FACTOR

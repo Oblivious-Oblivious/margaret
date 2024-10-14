@@ -203,38 +203,8 @@ static void op_send_helper(VM *vm, MargValue message_name) {
     }                                                               \
   } while(0)
 
-static bool op_prim_to_string_helper(VM *vm, MargValue object) {
-  if(IS_UNDEFINED(object)) {
-    fs_push(vm->sp, MARG_STRING("<unbound>"));
-  } else if(IS_NIL(object)) {
-    fs_push(vm->sp, MARG_STRING(AS_OBJECT(object)->name));
-  } else if(IS_FALSE(object)) {
-    fs_push(vm->sp, MARG_STRING(AS_OBJECT(object)->name));
-  } else if(IS_TRUE(object)) {
-    fs_push(vm->sp, MARG_STRING(AS_OBJECT(object)->name));
-  } else if(IS_INTEGER(object)) {
-    fs_push(vm->sp, MARG_STRING(marg_integer_to_string(AS_INTEGER(object))));
-  } else if(IS_FLOAT(object)) {
-    fs_push(vm->sp, MARG_STRING(marg_float_to_string(AS_FLOAT(object))));
-  } else if(IS_STRING(object)) {
-    fs_push(vm->sp, object);
-  } else if(IS_METHOD(object)) {
-    fs_push(vm->sp, MARG_STRING(marg_method_to_string(AS_METHOD(object))));
-  }
-
-  /* TODO - Implement to_string inside of $Tensor and $Hash */
-  else if(IS_TENSOR(object)) {
-    fs_push(vm->sp, MARG_STRING(marg_tensor_to_string(AS_TENSOR(object))));
-  } else if(IS_HASH(object)) {
-    fs_push(vm->sp, MARG_STRING(marg_hash_to_string(AS_HASH(object))));
-  }
-
-  else {
-    fs_push(vm->sp, MARG_STRING(marg_object_to_string_with_hash(object)));
-    return true;
-  }
-
-  return false;
+static void op_prim_to_string_helper(VM *vm, MargValue object) {
+  fs_push(vm->sp, MARG_STRING(marg_value_format(object)));
 }
 
 /**
@@ -542,30 +512,29 @@ static void evaluator_run(VM *vm) {
       if(IS_STRING(object)) {
         printf("%s\n", AS_STRING(object)->value);
       } else {
-        if(op_prim_to_string_helper(vm, object)) {
-          fs_push(vm->sp, object);
-          fs_push(vm->sp, MARG_INTEGER(0));
-          op_send_helper(vm, MARG_STRING("to_string"));
+        op_prim_to_string_helper(vm, object);
+        fs_push(vm->sp, object);
+        fs_push(vm->sp, MARG_INTEGER(0));
+        op_send_helper(vm, MARG_STRING("to_string"));
 
-          /* NOTE - `puts` either prints the characters of a string or
-           * tries to send `to_string` to the object in question.
-           * When sending a new message in the middle of execution
-           * of an opcode, we need to store a panic state where
-           * sending the `to_string` message modifies the stack
-           * and then returns back to finish execution of `puts`.
-           * We first enable an `explicit_send` flag before
-           * directly jumping to the beginning of the jump table
-           * executing `to_string`, and then we jump back to
-           * continue with printf'ing the top of the stack.
-           * We make sure that OP_EXIT_ACTIVATION_RECORD checks
-           * for an explicit_send state to either jump here or
-           * continue normally.
-           */
-          on_explicit_send = true;
-          goto enter_explicit_send;
-        exit_explicit_send:;
-          on_explicit_send = false;
-        }
+        /* NOTE - `puts` either prints the characters of a string or
+         * tries to send `to_string` to the object in question.
+         * When sending a new message in the middle of execution
+         * of an opcode, we need to store a panic state where
+         * sending the `to_string` message modifies the stack
+         * and then returns back to finish execution of `puts`.
+         * We first enable an `explicit_send` flag before
+         * directly jumping to the beginning of the jump table
+         * executing `to_string`, and then we jump back to
+         * continue with printf'ing the top of the stack.
+         * We make sure that OP_EXIT_ACTIVATION_RECORD checks
+         * for an explicit_send state to either jump here or
+         * continue normally.
+         */
+        on_explicit_send = true;
+        goto enter_explicit_send;
+      exit_explicit_send:;
+        on_explicit_send = false;
         printf("%s\n", AS_STRING(fs_pop(vm->sp))->value);
       }
       fs_push(vm->sp, object);

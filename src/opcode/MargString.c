@@ -13,9 +13,3 @@ MargString *marg_string_new(VM *vm, const char *value) {
 
   return self;
 }
-
-char *marg_string_to_string(MargString *object) {
-  char *res = string_new("");
-  string_addf(&res, "\"%s\"", object->value);
-  return res;
-}

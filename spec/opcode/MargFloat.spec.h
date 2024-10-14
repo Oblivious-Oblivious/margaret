@@ -18,12 +18,6 @@ module(MargFloatSpec, {
     nassert_that_double(x equals to y);
   });
 
-  it("tests to_string", {
-    VM *vm      = vm_new("file.marg");
-    MargValue x = MARG_FLOAT(42.42);
-    assert_that_charptr(marg_float_to_string(AS_FLOAT(x)) equals to "42.42");
-  });
-
   it("ensures that self and super are set correctly", {
     VM *vm          = vm_new("file.marg");
     MargValue x     = MARG_FLOAT(42.42);

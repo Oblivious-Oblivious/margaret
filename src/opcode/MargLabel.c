@@ -14,9 +14,3 @@ MargLabel *marg_label_new(VM *vm, char *value, size_t index) {
 
   return self;
 }
-
-char *marg_label_to_string(MargLabel *object) {
-  char *res = string_new("");
-  string_addf(&res, "<%s:%zu>", object->value, object->index);
-  return res;
-}

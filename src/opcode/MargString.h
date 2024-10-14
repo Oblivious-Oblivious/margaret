@@ -48,6 +48,4 @@ p_inline void marg_string_addf(MargString *self, const char *f, ...) {
 #define marg_string_remove(self, len)      string_remove(self->value, len)
 #define marg_string_equals(self, other)    string_equals(self->value, other->value)
 
-char *marg_string_to_string(MargString *object);
-
 #endif

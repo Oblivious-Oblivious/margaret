@@ -80,13 +80,6 @@ module(MargStringSpec, {
     });
   });
 
-  it("tests to_string", {
-    VM *vm      = vm_new("file.marg");
-    MargValue x = MARG_STRING("hello world");
-    assert_that_charptr(marg_string_to_string(AS_STRING(x)) equals to
-                        "\"hello world\"");
-  });
-
   it("ensures that self and super are set correctly", {
     VM *vm          = vm_new("file.marg");
     MargValue x     = MARG_STRING("hello world");

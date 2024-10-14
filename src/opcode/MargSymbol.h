@@ -21,11 +21,4 @@ typedef struct MargSymbol {
  */
 MargSymbol *marg_symbol_new(VM *vm, char *value);
 
-/**
- * @brief Casts to string
- * @param object -> The symbol object
- * @return char*
- */
-char *marg_symbol_to_string(MargSymbol *object);
-
 #endif

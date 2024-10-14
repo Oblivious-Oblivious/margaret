@@ -21,12 +21,6 @@ module(MargLabelSpec, {
     assert_that_charptr(AS_LABEL(x)->value equals to AS_LABEL(x)->value);
   });
 
-  it("tests to_string", {
-    VM *vm      = vm_new("file.marg");
-    MargValue x = MARG_LABEL("::l", 42);
-    assert_that_charptr(marg_label_to_string(AS_LABEL(x)) equals to "<::l:42>");
-  });
-
   it("ensures that self and super are set correctly", {
     VM *vm          = vm_new("file.marg");
     MargValue x     = MARG_LABEL("::l", 42);

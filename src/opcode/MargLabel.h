@@ -24,11 +24,4 @@ typedef struct MargLabel {
  */
 MargLabel *marg_label_new(VM *vm, char *value, size_t index);
 
-/**
- * @brief Casts to string
- * @param object -> The label object
- * @return char*
- */
-char *marg_label_to_string(MargLabel *object);
-
 #endif

@@ -20,12 +20,6 @@ module(MargSymbolSpec, {
     assert_that_charptr(AS_SYMBOL(x)->value equals to AS_SYMBOL(x)->value);
   });
 
-  it("tests to_string", {
-    VM *vm      = vm_new("file.marg");
-    MargValue x = MARG_SYMBOL(":sym");
-    assert_that_charptr(marg_symbol_to_string(AS_SYMBOL(x)) equals to ":sym");
-  });
-
   it("ensures that self and super are set correctly", {
     VM *vm          = vm_new("file.marg");
     MargValue x     = MARG_SYMBOL(":sym");
