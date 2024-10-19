@@ -2,6 +2,7 @@
 #define __MARG_VALUE_H_
 
 #include "../../libs/EmeraldsString/export/EmeraldsString.h"
+#include "MargBitstring.h"
 #include "MargFloat.h"
 #include "MargHash.h"
 #include "MargInteger.h"
@@ -12,6 +13,7 @@
 #include "MargString.h"
 #include "MargSymbol.h"
 #include "MargTensor.h"
+#include "MargTuple.h"
 #include "MargValueType.h"
 
 /** QNAN = 0b    0     11111111111       1            1       ('0' * 50)
@@ -50,34 +52,29 @@
   (QNAN_BOX(marg_label_new(vm, (value), (index))))
 #define MARG_SYMBOL(value) (QNAN_BOX(marg_symbol_new(vm, (value))))
 #define MARG_STRING(value) (QNAN_BOX(marg_string_new(vm, value)))
-#define MARG_TENSOR(initial_alloced) \
-  (QNAN_BOX(marg_tensor_new(vm, (initial_alloced))))
-/* TODO - Implement */
-#define MARG_TUPLE
-#define MARG_HASH (QNAN_BOX(marg_hash_new(vm)))
-/* TODO - Implement */
-#define MARG_BITSTRING
+#define MARG_TENSOR()      (QNAN_BOX(marg_tensor_new(vm)))
+#define MARG_TUPLE()       (QNAN_BOX(marg_tuple_new(vm)))
+#define MARG_HASH()        (QNAN_BOX(marg_hash_new(vm)))
+#define MARG_BITSTRING()   (QNAN_BOX(marg_bitstring_new(vm)))
 #define MARG_METHOD(bound_object, message_name) \
   (QNAN_BOX(marg_method_new(vm, (bound_object), (message_name))))
 #define MARG_OBJECT(proto, name) \
   (QNAN_BOX(marg_object_new(vm, sizeof(MargObject), proto, string_new(name))))
 
-#define AS_NIL(value)     ((MargNil *)QNAN_UNBOX(value))
-#define AS_FALSE(value)   ((MargFalse *)QNAN_UNBOX(value))
-#define AS_TRUE(value)    ((MargTrue *)QNAN_UNBOX(value))
-#define AS_INTEGER(value) ((MargInteger *)QNAN_UNBOX(value))
-#define AS_FLOAT(value)   ((MargFloat *)QNAN_UNBOX(value))
-#define AS_LABEL(value)   ((MargLabel *)QNAN_UNBOX(value))
-#define AS_STRING(value)  ((MargString *)QNAN_UNBOX(value))
-#define AS_SYMBOL(value)  ((MargSymbol *)QNAN_UNBOX(value))
-#define AS_TENSOR(value)  ((MargTensor *)QNAN_UNBOX(value))
-/* TODO - Implement */
-/* #define AS_TUPLE(value)   ((MargTuple *)QNAN_UNBOX(value)) */
-#define AS_HASH(value)    ((MargHash *)QNAN_UNBOX(value))
-/* TODO - Implement */
-/* #define AS_BITSTRING(value) ((MargBitstring *)QNAN_UNBOX(value)) */
-#define AS_METHOD(value)  ((MargMethod *)QNAN_UNBOX(value))
-#define AS_OBJECT(value)  ((MargObject *)QNAN_UNBOX(value))
+#define AS_NIL(value)       ((MargNil *)QNAN_UNBOX(value))
+#define AS_FALSE(value)     ((MargFalse *)QNAN_UNBOX(value))
+#define AS_TRUE(value)      ((MargTrue *)QNAN_UNBOX(value))
+#define AS_INTEGER(value)   ((MargInteger *)QNAN_UNBOX(value))
+#define AS_FLOAT(value)     ((MargFloat *)QNAN_UNBOX(value))
+#define AS_LABEL(value)     ((MargLabel *)QNAN_UNBOX(value))
+#define AS_STRING(value)    ((MargString *)QNAN_UNBOX(value))
+#define AS_SYMBOL(value)    ((MargSymbol *)QNAN_UNBOX(value))
+#define AS_TENSOR(value)    ((MargTensor *)QNAN_UNBOX(value))
+#define AS_TUPLE(value)     ((MargTuple *)QNAN_UNBOX(value))
+#define AS_HASH(value)      ((MargHash *)QNAN_UNBOX(value))
+#define AS_BITSTRING(value) ((MargBitstring *)QNAN_UNBOX(value))
+#define AS_METHOD(value)    ((MargMethod *)QNAN_UNBOX(value))
+#define AS_OBJECT(value)    ((MargObject *)QNAN_UNBOX(value))
 
 #define IS_NIL(value) \
   (!IS_UNDEFINED(value) && (string_equals(QNAN_UNBOX(value)->name, "$nil")))
@@ -97,16 +94,13 @@
   (!IS_UNDEFINED(value) && (string_equals(QNAN_UNBOX(value)->name, "$String")))
 #define IS_TENSOR(value) \
   (!IS_UNDEFINED(value) && (string_equals(QNAN_UNBOX(value)->name, "$Tensor")))
-/* TODO - Implement */
-/* #define IS_TUPLE(value) \
+#define IS_TUPLE(value) \
   (!IS_UNDEFINED(value) && (string_equals(QNAN_UNBOX(value)->name, "$Tuple")))
-*/
 #define IS_HASH(value) \
   (!IS_UNDEFINED(value) && (string_equals(QNAN_UNBOX(value)->name, "$Hash")))
-/* TODO - Implement */
-/* #define IS_BITSTRING(value) \
-  (!IS_UNDEFINED(value) && (string_equals(QNAN_UNBOX(value)->name,
-  "$Bitstring"))) */
+#define IS_BITSTRING(value) \
+  (!IS_UNDEFINED(value) &&  \
+   (string_equals(QNAN_UNBOX(value)->name, "$Bitstring")))
 #define IS_METHOD(value) \
   (!IS_UNDEFINED(value) && (string_equals(QNAN_UNBOX(value)->name, "$Method")))
 

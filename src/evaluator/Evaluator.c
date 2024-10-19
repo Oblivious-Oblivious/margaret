@@ -11,12 +11,12 @@
 
 static void op_put_tensor_helper(VM *vm, MargValue temporary) {
   ptrdiff_t number_of_elements = AS_INTEGER(temporary)->value;
-  MargValue tensor_value       = MARG_TENSOR(number_of_elements);
+  MargValue tensor_value       = MARG_TENSOR();
   MargTensor *tensor_object    = AS_TENSOR(tensor_value);
 
   ptrdiff_t i;
   for(i = number_of_elements - 1; i >= 0; i--) {
-    marg_tensor_add_at(tensor_object, fs_pop(vm->sp), i);
+    tensor_object->value[i] = fs_pop(vm->sp);
   }
 
   fs_push(vm->sp, tensor_value);
@@ -24,14 +24,14 @@ static void op_put_tensor_helper(VM *vm, MargValue temporary) {
 
 static void op_put_hash_helper(VM *vm, MargValue temporary) {
   ptrdiff_t number_of_elements = AS_INTEGER(temporary)->value / 2;
-  MargValue hash_value         = MARG_HASH;
+  MargValue hash_value         = MARG_HASH();
   MargHash *hash_object        = AS_HASH(hash_value);
 
   ptrdiff_t i;
   for(i = 0; i < number_of_elements; i++) {
     MargValue value = fs_pop(vm->sp);
     MargValue key   = fs_pop(vm->sp);
-    marg_hash_add(hash_object, key, value);
+    marg_hash_add(hash_object, AS_STRING(key)->value, value);
   }
 
   fs_push(vm->sp, hash_value);
@@ -116,7 +116,7 @@ static void op_send_helper(VM *vm, MargValue message_name) {
 
     /* NOTE - Inject method parameters */
     for(i = 0; i < number_of_parameters; i++) {
-      MargValue parameter_name = marg_tensor_get(method->parameter_names, i);
+      MargValue parameter_name = method->parameter_names->value[i];
       table_add(
         &method->proc->local_variables,
         AS_STRING(parameter_name)->value,
@@ -603,7 +603,7 @@ static void evaluator_run(VM *vm) {
         fs_push(
           vm->sp,
           retrieve_all_messages_in_delegation_chain(
-            vm, MARG_TENSOR(32), AS_OBJECT(object)
+            vm, MARG_TENSOR(), AS_OBJECT(object)
           )
         );
       } else {
