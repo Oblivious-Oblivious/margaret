@@ -139,20 +139,20 @@ module(literal, {
     );
   });
 
-  it("parses hashes", {
-    parse("%{}", vector_new(FM_HASH, string_new("0")));
+  it("parses tables", {
+    parse("%{}", vector_new(FM_TABLE, string_new("0")));
     parse(
       "%{\"a\": %{}, \"b\": %{}}",
       vector_new(
         FM_STRING,
         string_new("a"),
-        FM_HASH,
+        FM_TABLE,
         string_new("0"),
         FM_STRING,
         string_new("b"),
-        FM_HASH,
+        FM_TABLE,
         string_new("0"),
-        FM_HASH,
+        FM_TABLE,
         string_new("4")
       )
     );
@@ -171,7 +171,7 @@ module(literal, {
         string_new("c"),
         FM_INTEGER,
         string_new("5"),
-        FM_HASH,
+        FM_TABLE,
         string_new("6")
       )
     );

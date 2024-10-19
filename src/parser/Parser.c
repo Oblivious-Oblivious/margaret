@@ -313,15 +313,15 @@ void parser_literal(VM *vm) {
     generate(number_of_elements);
   } else if(la1value("%") && la2value("{")) {
     char *number_of_elements = NULL;
-    consume(TOKEN_PERCENT, "missing `%` on hash.");
-    consume(TOKEN_LCURLY, "missing opening curly on hash.");
+    consume(TOKEN_PERCENT, "missing `%` on table.");
+    consume(TOKEN_LCURLY, "missing opening curly on table.");
     number_of_elements = association_list();
-    consume(TOKEN_RCURLY, "missing closing curly on hash.");
-    generate(FM_HASH);
+    consume(TOKEN_RCURLY, "missing closing curly on table.");
+    generate(FM_TABLE);
     generate(number_of_elements);
   } else if(la1value("#")) {
     size_t prev_size;
-    consume(TOKEN_HASH, "missing `#` on method definition.");
+    consume(TOKEN_TABLE, "missing `#` on method definition.");
     generate(FM_METHOD_START);
 
     generate(FM_METHOD_RECEIVER);

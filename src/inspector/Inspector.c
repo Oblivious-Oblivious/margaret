@@ -410,12 +410,12 @@ static size_t inspect_instruction(char ***res, MargProc *proc, size_t offset) {
   case OP_PUT_TUPLE_DWORD:
       return instruction_array_type_dword(res, "PUT_TUPLE_DWORD", proc,
       offset); */
-  case OP_PUT_HASH:
-    return instruction_array_type(res, "PUT_HASH", proc, offset);
-  case OP_PUT_HASH_WORD:
-    return instruction_array_type_word(res, "PUT_HASH_WORD", proc, offset);
-  case OP_PUT_HASH_DWORD:
-    return instruction_array_type_dword(res, "PUT_HASH_DWORD", proc, offset);
+  case OP_PUT_TABLE:
+    return instruction_array_type(res, "PUT_TABLE", proc, offset);
+  case OP_PUT_TABLE_WORD:
+    return instruction_array_type_word(res, "PUT_TABLE_WORD", proc, offset);
+  case OP_PUT_TABLE_DWORD:
+    return instruction_array_type_dword(res, "PUT_TABLE_DWORD", proc, offset);
     /* case OP_PUT_BITSTRING:
         return instruction_array_type(res, "PUT_BITSTRING", proc, offset);
     case OP_PUT_BITSTRING_WORD:

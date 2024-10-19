@@ -186,11 +186,11 @@ VM *emitter_emit(VM *vm) {
       emit_temporary(temporary);
     }
     fmcode_case(FM_TUPLE) {}
-    fmcode_case(FM_HASH) {
+    fmcode_case(FM_TABLE) {
       char *end;
       char *number_of_elements = formal_bytecode[++ip];
       MargValue temporary = MARG_INTEGER(strtol(number_of_elements, &end, 10));
-      emit_variable_length_op(OP_PUT_HASH);
+      emit_variable_length_op(OP_PUT_TABLE);
       emit_temporary(temporary);
     }
     fmcode_case(FM_BITSTRING) {}
@@ -388,9 +388,9 @@ VM *emitter_emit(VM *vm) {
       emit_temporary(number_of_bits); */
       (void)number_of_bits;
     }
-    case_fmcode(FM_HASH) {
+    case_fmcode(FM_TABLE) {
       char *number_of_pairs = formal_bytecode[++ip];
-      /* emit_variable_length(OP_HASH);
+      /* emit_variable_length(OP_TABLE);
       emit_temporary(number_of_pairs); */
       (void)number_of_pairs;
     }

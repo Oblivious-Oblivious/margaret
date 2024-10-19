@@ -60,11 +60,11 @@ module(MargValueSpec, {
       marg_tensor_add(AS_TENSOR(tup), MARG_STRING("hello"));
       assert_that_charptr(marg_value_format(tup) equals to
                           "%[42, 42.123, \"hello\"]");
-      assert_that_charptr(marg_value_format(MARG_HASH()) equals to "%{}");
-      MargValue h = MARG_HASH();
-      marg_hash_add(AS_HASH(h), string_new("a"), MARG_INTEGER(42));
-      marg_hash_add(AS_HASH(h), string_new("b"), MARG_FLOAT(42.123));
-      marg_hash_add(AS_HASH(h), string_new("c"), MARG_STRING("hello"));
+      assert_that_charptr(marg_value_format(MARG_TABLE()) equals to "%{}");
+      MargValue h = MARG_TABLE();
+      marg_table_add(AS_TABLE(h), string_new("a"), MARG_INTEGER(42));
+      marg_table_add(AS_TABLE(h), string_new("b"), MARG_FLOAT(42.123));
+      marg_table_add(AS_TABLE(h), string_new("c"), MARG_STRING("hello"));
       assert_that_charptr(marg_value_format(h) equals to
                           "%{c: \"hello\", b: 42.123, a: 42}");
       assert_that_charptr(marg_value_format(MARG_BITSTRING()) equals to "%()");

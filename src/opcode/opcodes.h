@@ -21,9 +21,9 @@
 #define OP_PUT_TUPLE              0x11
 #define OP_PUT_TUPLE_WORD         0x12
 #define OP_PUT_TUPLE_DWORD        0x13
-#define OP_PUT_HASH               0x14
-#define OP_PUT_HASH_WORD          0x15
-#define OP_PUT_HASH_DWORD         0x16
+#define OP_PUT_TABLE              0x14
+#define OP_PUT_TABLE_WORD         0x15
+#define OP_PUT_TABLE_DWORD        0x16
 #define OP_PUT_BITSTRING          0x17
 #define OP_PUT_BITSTRING_WORD     0x18
 #define OP_PUT_BITSTRING_DWORD    0x19

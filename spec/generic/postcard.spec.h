@@ -104,7 +104,7 @@ module(postcard_spec, {
         string_new("k2"),
         FM_INTEGER,
         string_new("43"),
-        FM_HASH,
+        FM_TABLE,
         string_new("4"),
         FM_INTEGER,
         string_new("42"),

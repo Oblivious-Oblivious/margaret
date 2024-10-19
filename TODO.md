@@ -11,7 +11,7 @@
     🟩 "foo\tbar"                                            -> ($StringProto clone)
     🟩 [42, "Hello", false]                                  -> ($TensorProto clone)
     🟩 %[1, 2]                                               -> ($TupleProto clone)
-    🟩 %{"a": 1, b: 2}                                       -> ($HashProto clone)
+    🟩 %{"a": 1, b: 2}                                       -> ($TableProto clone)
     🟩 %(1::1, 0::1)                                         -> ($BitstringProto clone)
     🟩 {a | a + 1}                                           -> ($MethodProto clone) -> headless
     🟩 #put: element at: position => ()                      -> ($MethodProto clone) -> object bound
@@ -45,10 +45,10 @@
 -----------------
   🟥 Pattern-match multimethods by hashing receiver and parameters.
      Every multi-method is hashed into a unique value and searched for in the method table of the receiver.
-  🟥 Optimize the design Hash to be data-oriented (separate keys from values for locality).
+  🟩 Optimize the design Table to be data-oriented (separate keys from values for locality).
   🟥 Implement storing and loading bytecode from compiled files, similar to Java.
      Pipeline: compile constants to direct data -> load and store constants in VM -> execute by loading constants from table.
-  🟥 Optimize hash function for better string interning.
+  🟩 Optimize hash function for better string interning.
   🟥 Add big integers and big floats.
   🟥 Refactor `include:`, `call` and `call:`, `<-` into primitive messages.
   🟥 Use comments for docs or TODO graphs.
@@ -139,7 +139,7 @@
   🟥 %[:car, :cdr] = %[1] # car = 1, cdr = %[], (flatten), cdr = nil
   🟥 %[:car, :cdr] = %[] # car = nil, cdr = nil
   🟥 l = [1,2,3], [[list, 4], 5] compact!. # [1,2,3,4,5]
-  🟥 hash = {a: 1, b: 2}, hash = hash ++ {c: 3}. #{a: 1, b: 2, c: 3}
+  🟥 table = {a: 1, b: 2}, table = table ++ {c: 3}. #{a: 1, b: 2, c: 3}
   🟥 Numeric bind: # 0 fact => 1
      Numeric bind: # _ fact => self * (self - 1) fact
      Numeric bind: # 0 ** a_number => 0
@@ -155,5 +155,5 @@
      End-to-end optimization.
   🟩 Methods and functions compile to procs with own context.
      Procs compile to bitstrings/tensors/arrays of opcodes and are first class literals.
-  🟩 Objects are (maybe?) represented as hashmap of slots.
+  🟩 Objects are (maybe?) represented as table of slots.
      Preferably only one parent.

@@ -35,7 +35,7 @@ module(MargObjectSpec, {
     MargValue enumerable_obj = table_get(&vm->global_variables, "$Enumerable");
     MargValue tensor_obj     = table_get(&vm->global_variables, "$Tensor");
     MargValue tuple_obj      = table_get(&vm->global_variables, "$Tuple");
-    MargValue hash_obj       = table_get(&vm->global_variables, "$Hash");
+    MargValue table_obj      = table_get(&vm->global_variables, "$Table");
     MargValue bitstring_obj  = table_get(&vm->global_variables, "$Bitstring");
     MargValue method_obj     = table_get(&vm->global_variables, "$Method");
 
@@ -51,7 +51,7 @@ module(MargObjectSpec, {
     assert_that(enumerable_obj isnot MARG_UNDEFINED);
     assert_that(tensor_obj isnot MARG_UNDEFINED);
     assert_that(tuple_obj isnot MARG_UNDEFINED);
-    assert_that(hash_obj isnot MARG_UNDEFINED);
+    assert_that(table_obj isnot MARG_UNDEFINED);
     assert_that(bitstring_obj isnot MARG_UNDEFINED);
     assert_that(method_obj isnot MARG_UNDEFINED);
 

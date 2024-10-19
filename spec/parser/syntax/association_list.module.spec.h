@@ -21,7 +21,7 @@ module(association_list, {
         string_new("c"),
         FM_INTEGER,
         string_new("3"),
-        FM_HASH,
+        FM_TABLE,
         string_new("6")
       )
     );
