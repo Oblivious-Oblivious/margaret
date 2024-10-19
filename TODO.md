@@ -62,6 +62,7 @@
      Add object `freezing` that removes state modification capabilities.
   🟥 Separate value types from object types.
      Add atomic types that become atemporal (cannot be extended through prototypes).
+  🟥 Potentially use any type of local/instance/global variable as labels.  Requires that variables store their ip memory location.
 
 ## (✗) ver. 0.0.1
 -----------------
@@ -86,6 +87,9 @@
      Use a ./margaret rebuild command of some sort that rebuilds with user-defined extensions and replaces itself.
   🟩 Methods return tensors of bytecodes.
   🟩 Implement if:then:else: using lambda calculus.
+  🟥 Store labels in the variable tables but check for uniqueness and raise or ignore otherwise.
+     Care for cloning that only variables are being copied not labels.
+  🟥 Manually add a `fillable` type instance for dead code bindings.
   🟥 Add functionality for reading multiple files and changing the VM pointer to the currect file we are scanning.
   🟥 Implement `while:` using the `goto:` primitive to avoid endless recursion.
   🟥 Add a `bind:` message to tensors so we can add tensors of unbound methods.
