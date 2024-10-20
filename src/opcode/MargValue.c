@@ -106,7 +106,7 @@ char *marg_value_format(MargValue self) {
       &res,
       "< %s#%s >",
       AS_METHOD(self)->bound_object->name,
-      AS_METHOD(self)->message_name->value
+      AS_METHOD(self)->message_name
     );
     return res;
   } else {

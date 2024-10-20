@@ -85,18 +85,18 @@ static void op_send_helper(VM *vm, MargValue message_name) {
   ptrdiff_t i;
   MargObject *object;
   MargValue method_value;
-  MargMethod *method             = NULL;
-  ptrdiff_t number_of_parameters = AS_INTEGER(fs_pop(vm->sp))->value;
+  MargMethod *method            = NULL;
+  ptrdiff_t number_of_arguments = AS_INTEGER(fs_pop(vm->sp))->value;
 
-  /* NOTE - Pop all parameters first */
-  MargValue *actual_parameters = NULL;
-  vector_initialize_n(actual_parameters, number_of_parameters);
+  /* NOTE - Pop all arguments first */
+  MargValue *actual_arguments = NULL;
+  vector_initialize_n(actual_arguments, number_of_arguments);
 
-  for(i = number_of_parameters - 1; i >= 0; i--) {
-    actual_parameters[i] = fs_pop(vm->sp);
+  for(i = number_of_arguments - 1; i >= 0; i--) {
+    actual_arguments[i] = fs_pop(vm->sp);
   }
 
-  /* NOTE - Pop object after parameters */
+  /* NOTE - Pop object after arguments */
   object       = AS_OBJECT(fs_pop(vm->sp));
   method_value = dispatch_method_from_delegation_chain(object, message_name);
   if(IS_UNDEFINED(method_value)) {
@@ -105,26 +105,21 @@ static void op_send_helper(VM *vm, MargValue message_name) {
     fs_push(vm->sp, MARG_INTEGER(1));
     op_send_helper(vm, MARG_STRING("dnu:"));
   } else {
-    method                   = AS_METHOD(method_value);
-    method->bound_object     = object;
-    method->proc->bound_proc = vm->current;
+    method               = AS_METHOD(method_value);
+    method->bound_object = object;
+    method->bound_method = vm->current;
 
     /* NOTE - Close over local variables */
-    table_add_all(
-      &vm->current->local_variables, &method->proc->local_variables
-    );
+    table_add_all(&vm->current->local_variables, &method->local_variables);
 
-    /* NOTE - Inject method parameters */
-    for(i = 0; i < number_of_parameters; i++) {
-      MargValue parameter_name = method->parameter_names->value[i];
+    /* NOTE - Inject method arguments */
+    for(i = 0; i < number_of_arguments; i++) {
       table_add(
-        &method->proc->local_variables,
-        AS_STRING(parameter_name)->value,
-        actual_parameters[i]
+        &method->local_variables, method->arguments[i], actual_arguments[i]
       );
     }
 
-    vm->current = method->proc;
+    vm->current = method;
   }
 }
 
@@ -336,28 +331,28 @@ static void evaluator_run(VM *vm) {
       case OP_PUT_LABEL_DWORD: {break;} */
 
     case OP_SET_GLOBAL: {
-      MargValue temp = vm->current->temporaries[READ_TEMPORARY()];
+      MargValue temp = vm->current->constants[READ_TEMPORARY()];
       table_add(
         &vm->global_variables, AS_STRING(temp)->value, fs_peek(vm->sp, 0)
       );
       break;
     }
     case OP_SET_GLOBAL_WORD: {
-      MargValue temp = vm->current->temporaries[READ_TEMPORARY_WORD()];
+      MargValue temp = vm->current->constants[READ_TEMPORARY_WORD()];
       table_add(
         &vm->global_variables, AS_STRING(temp)->value, fs_peek(vm->sp, 0)
       );
       break;
     }
     case OP_SET_GLOBAL_DWORD: {
-      MargValue temp = vm->current->temporaries[READ_TEMPORARY_DWORD()];
+      MargValue temp = vm->current->constants[READ_TEMPORARY_DWORD()];
       table_add(
         &vm->global_variables, AS_STRING(temp)->value, fs_peek(vm->sp, 0)
       );
       break;
     }
     case OP_SET_INSTANCE: {
-      MargValue temp = vm->current->temporaries[READ_TEMPORARY()];
+      MargValue temp = vm->current->constants[READ_TEMPORARY()];
       table_add(
         &vm->current->bound_method->bound_object->instance_variables,
         AS_STRING(temp)->value,
@@ -366,7 +361,7 @@ static void evaluator_run(VM *vm) {
       break;
     }
     case OP_SET_INSTANCE_WORD: {
-      MargValue temp = vm->current->temporaries[READ_TEMPORARY_WORD()];
+      MargValue temp = vm->current->constants[READ_TEMPORARY_WORD()];
       table_add(
         &vm->current->bound_method->bound_object->instance_variables,
         AS_STRING(temp)->value,
@@ -375,7 +370,7 @@ static void evaluator_run(VM *vm) {
       break;
     }
     case OP_SET_INSTANCE_DWORD: {
-      MargValue temp = vm->current->temporaries[READ_TEMPORARY_DWORD()];
+      MargValue temp = vm->current->constants[READ_TEMPORARY_DWORD()];
       table_add(
         &vm->current->bound_method->bound_object->instance_variables,
         AS_STRING(temp)->value,
@@ -384,7 +379,7 @@ static void evaluator_run(VM *vm) {
       break;
     }
     case OP_SET_LOCAL: {
-      MargValue temp = vm->current->temporaries[READ_TEMPORARY()];
+      MargValue temp = vm->current->constants[READ_TEMPORARY()];
       table_add(
         &vm->current->local_variables,
         AS_STRING(temp)->value,
@@ -393,7 +388,7 @@ static void evaluator_run(VM *vm) {
       break;
     }
     case OP_SET_LOCAL_WORD: {
-      MargValue temp = vm->current->temporaries[READ_TEMPORARY_WORD()];
+      MargValue temp = vm->current->constants[READ_TEMPORARY_WORD()];
       table_add(
         &vm->current->local_variables,
         AS_STRING(temp)->value,
@@ -402,7 +397,7 @@ static void evaluator_run(VM *vm) {
       break;
     }
     case OP_SET_LOCAL_DWORD: {
-      MargValue temp = vm->current->temporaries[READ_TEMPORARY_DWORD()];
+      MargValue temp = vm->current->constants[READ_TEMPORARY_DWORD()];
       table_add(
         &vm->current->local_variables,
         AS_STRING(temp)->value,
@@ -412,22 +407,22 @@ static void evaluator_run(VM *vm) {
     }
 
     case OP_GET_GLOBAL: {
-      MargValue temp = vm->current->temporaries[READ_TEMPORARY()];
+      MargValue temp = vm->current->constants[READ_TEMPORARY()];
       fs_push(vm->sp, table_get(&vm->global_variables, AS_STRING(temp)->value));
       break;
     }
     case OP_GET_GLOBAL_WORD: {
-      MargValue temp = vm->current->temporaries[READ_TEMPORARY_WORD()];
+      MargValue temp = vm->current->constants[READ_TEMPORARY_WORD()];
       fs_push(vm->sp, table_get(&vm->global_variables, AS_STRING(temp)->value));
       break;
     }
     case OP_GET_GLOBAL_DWORD: {
-      MargValue temp = vm->current->temporaries[READ_TEMPORARY_DWORD()];
+      MargValue temp = vm->current->constants[READ_TEMPORARY_DWORD()];
       fs_push(vm->sp, table_get(&vm->global_variables, AS_STRING(temp)->value));
       break;
     }
     case OP_GET_INSTANCE: {
-      MargValue temp = vm->current->temporaries[READ_TEMPORARY()];
+      MargValue temp = vm->current->constants[READ_TEMPORARY()];
       fs_push(
         vm->sp,
         table_get(
@@ -438,7 +433,7 @@ static void evaluator_run(VM *vm) {
       break;
     }
     case OP_GET_INSTANCE_WORD: {
-      MargValue temp = vm->current->temporaries[READ_TEMPORARY_WORD()];
+      MargValue temp = vm->current->constants[READ_TEMPORARY_WORD()];
       fs_push(
         vm->sp,
         table_get(
@@ -449,7 +444,7 @@ static void evaluator_run(VM *vm) {
       break;
     }
     case OP_GET_INSTANCE_DWORD: {
-      MargValue temp = vm->current->temporaries[READ_TEMPORARY_DWORD()];
+      MargValue temp = vm->current->constants[READ_TEMPORARY_DWORD()];
       fs_push(
         vm->sp,
         table_get(
@@ -460,21 +455,21 @@ static void evaluator_run(VM *vm) {
       break;
     }
     case OP_GET_LOCAL: {
-      MargValue temp = vm->current->temporaries[READ_TEMPORARY()];
+      MargValue temp = vm->current->constants[READ_TEMPORARY()];
       fs_push(
         vm->sp, table_get(&vm->current->local_variables, AS_STRING(temp)->value)
       );
       break;
     }
     case OP_GET_LOCAL_WORD: {
-      MargValue temp = vm->current->temporaries[READ_TEMPORARY_WORD()];
+      MargValue temp = vm->current->constants[READ_TEMPORARY_WORD()];
       fs_push(
         vm->sp, table_get(&vm->current->local_variables, AS_STRING(temp)->value)
       );
       break;
     }
     case OP_GET_LOCAL_DWORD: {
-      MargValue temp = vm->current->temporaries[READ_TEMPORARY_DWORD()];
+      MargValue temp = vm->current->constants[READ_TEMPORARY_DWORD()];
       fs_push(
         vm->sp, table_get(&vm->current->local_variables, AS_STRING(temp)->value)
       );
@@ -497,9 +492,9 @@ static void evaluator_run(VM *vm) {
       /* NOTE - Reset proc's IP */
       vm->current->ip = vm->current->bytecode;
       /* NOTE - Reset parameter table */
-      table_init(&vm->current->parameters);
-      /* NOTE - Reset back to enclosing bound proc */
-      vm->current = vm->current->bound_proc;
+      vector_free(vm->current->arguments);
+      /* NOTE - Reset back to enclosing bound method */
+      vm->current = vm->current->bound_method;
       if(on_explicit_send) {
         goto exit_explicit_send;
       }
@@ -570,7 +565,7 @@ static void evaluator_run(VM *vm) {
       } */
 
       /* case OP_PROC_CALL_PARAMS: {
-        MargHash *parameters = AS_HASH(fs_pop(vm->sp));
+        MargHash *arguments = AS_HASH(fs_pop(vm->sp));
         MargValue proc       = fs_pop(vm->sp);
         fs_pop(vm->sp);
 
@@ -578,8 +573,8 @@ static void evaluator_run(VM *vm) {
           size_t i;
           AS_PROC(proc)->bound_proc = vm->current;
 
-          for(i = 0; i < parameters->alloced; i++) {
-            MargHashEntry *entry = &parameters->entries[i];
+          for(i = 0; i < arguments->alloced; i++) {
+            MargHashEntry *entry = &arguments->entries[i];
             if(!IS_NOT_INTERNED(entry->key)) {
               table_add(
                 &AS_PROC(proc)->local_variables,
@@ -686,9 +681,7 @@ static void evaluator_run(VM *vm) {
       fs_pop(vm->sp);
       if(!IS_UNDEFINED(object) && IS_METHOD(method)) {
         table_add(
-          &AS_OBJECT(object)->messages,
-          AS_METHOD(method)->message_name->value,
-          method
+          &AS_OBJECT(object)->messages, AS_METHOD(method)->message_name, method
         );
         AS_METHOD(method)->bound_object = AS_OBJECT(object);
         fs_push(vm->sp, method);

@@ -36,11 +36,10 @@ static void setup_proto_object_chain(VM *vm) {
  * @param vm -> Current vm
  */
 static void define_main_method(VM *vm) {
-  MargObject *margaret =
-    AS_OBJECT(table_get(&vm->global_variables, "$Margaret"));
+  MargValue margaret = table_get(&vm->global_variables, "$Margaret");
   MargMethod *method = AS_METHOD(MARG_METHOD(margaret, ""));
-  table_add(&margaret->messages, "", QNAN_BOX(method));
-  vm->current = method->proc;
+  table_add(&AS_OBJECT(margaret)->messages, "", QNAN_BOX(method));
+  vm->current = method;
 }
 
 VM *vm_new(const char *filename) {

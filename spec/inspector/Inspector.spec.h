@@ -9,12 +9,12 @@
 
 xmodule(InspectorSpec, {
   /* TODO - Test a `postcard` mini program including every single feature. */
-  it("tests multiple long temporaries", {
+  it("tests multiple long constants", {
     VM *vm = vm_new("test.marg");
 
     for(int i = 0; i <= 4000; i++) {
-      vector_add(vm->current->temporaries, MARG_FLOAT(42.42));
-      uint32_t word_temporary_index = vector_size(vm->current->temporaries) - 1;
+      vector_add(vm->current->constants, MARG_FLOAT(42.42));
+      uint32_t word_temporary_index = vector_size(vm->current->constants) - 1;
 
       vector_add(vm->current->bytecode, OP_PUT_OBJECT_WORD);
       uint8_t temporary_in_bytes[2];

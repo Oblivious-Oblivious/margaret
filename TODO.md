@@ -43,7 +43,7 @@
 
 ## (✗) ver. 0.0.2
 -----------------
-  🟥 Pattern-match multimethods by hashing receiver and parameters.
+  🟥 Pattern-match multimethods by hashing receiver and arguments.
      Every multi-method is hashed into a unique value and searched for in the method table of the receiver.
   🟥 Optimize the design Hash to be data-oriented (separate keys from values for locality).
   🟥 Implement storing and loading bytecode from compiled files, similar to Java.

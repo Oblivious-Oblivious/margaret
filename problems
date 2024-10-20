@@ -24,8 +24,8 @@ In the LSP we can denote potentially dead code definitions differently from the 
 🟥 %[car, cdr] = %[1] # car = 1, cdr = %[], (flatten), cdr = nil
 🟥 %[car, cdr] = %[] # car = nil, cdr = nil
 🟥 $Margaret -- #method: v => v + 5,
-   GET_PARAMETER(v) {
-     table_add(&self->parameters, AS_VARIABLE(v)->name, unfold_variable(v))
+   GET_ARGUMENT(v) {
+     table_add(&self->arguments, AS_VARIABLE(v)->name, unfold_variable(v))
      table_add(&self->local_variables, AS_VARIABLE(v)->name, unfold_variable(v))
    }
    GET_LOCAL/GET_INSTANCE/GET_GLOBAL(v) {

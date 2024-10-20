@@ -7,29 +7,36 @@
 /**
  * @brief Defines a MargMethod object
  * @param _ -> Inherited object properties
- * @param bound_object -> Pointer to the bound object this method is defined
- * under
- * @param message_name -> String representation of the message name derived by
- * the parsed method
- * @param parameter_names -> A Tensor that saves formal parameter names
- * @param proc -> The proc this method executes (Encapsulates the activation
- * record)
+ *
+ * @param bound_object -> Points to bound object this method is defined under
+ * @param bound_method -> Points to the enclosing method
+ *
+ * @param message_name -> Name of current message derived by the parsed method
+ *
+ * @param arguments -> A Tensor that saves formal argument names
+ * @param constants -> A Tensor that saves intermediate values
+ * @param local_variables -> A table for method-local variables
+ * @param bytecode -> Bytecode array
+ *
+ * @param ip -> Instruction Pointer
+ * @param sp -> Stack pointer
  */
 typedef struct MargMethod {
   MargObject _;
+
   MargObject *bound_object;
   struct MargMethod *bound_method;
 
-  MargString *message_name;
-  MargTensor *parameter_names;
-  MargValue *temporaries;
+  char *message_name;
+
+  char **arguments;
+  MargValue *constants;
   EmeraldsTable local_variables;
-  /* TODO - Potentially define these as `register` */
   uint8_t *bytecode;
+
+  /* TODO - Potentially define these as `register` */
   uint8_t *ip;
   uint8_t *sp;
-
-  struct MargProc *proc; /* TODO - Remove */
 } MargMethod;
 
 /**
@@ -39,7 +46,6 @@ typedef struct MargMethod {
  * @param message_name
  * @return MargMethod*
  */
-MargMethod *
-marg_method_new(VM *vm, MargObject *bound_object, char *message_name);
+MargMethod *marg_method_new(VM *vm, MargValue bound_object, char *message_name);
 
 #endif

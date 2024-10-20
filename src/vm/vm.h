@@ -44,7 +44,7 @@ typedef struct VM {
 
   EmeraldsTable global_variables;
   EmeraldsTable interned_strings;
-  struct MargProc *current;
+  struct MargMethod *current;
 } VM;
 
 /** @brief Works for any IP pointer no matter what context current is in */

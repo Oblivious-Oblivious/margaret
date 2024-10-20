@@ -9,7 +9,6 @@
 #include "MargLabel.h"
 #include "MargMethod.h"
 #include "MargObject.h"
-#include "MargProc.h"
 #include "MargString.h"
 #include "MargSymbol.h"
 #include "MargTensor.h"

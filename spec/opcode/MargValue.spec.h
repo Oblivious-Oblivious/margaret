@@ -72,7 +72,9 @@ module(MargValueSpec, {
       marg_bitstring_add(AS_BITSTRING(b), MARG_INTEGER(42), MARG_INTEGER(2));
       marg_bitstring_add(AS_BITSTRING(b), MARG_INTEGER(43), MARG_INTEGER(4));
       assert_that_charptr(marg_value_format(b) equals to "%(42::2, 43::4)");
-      // assert_that_charptr(marg_value_format(MARG_METHOD) equals to "#3");
+      assert_that_charptr(marg_value_format(
+        MARG_METHOD(table_get(&vm->global_variables, "$Margaret"), "msg")
+      ) equals to "< $Margaret#msg >");
       assert_that_charptr(marg_value_format(
         MARG_OBJECT(table_get(&vm->global_variables, "$Margaret"), "Name")
       ) equals to "Name");

@@ -55,8 +55,8 @@
   } while(0)
 
 #define make_temporary(vm, temporary, index)         \
-  vector_add((vm)->current->temporaries, temporary); \
-  *(index) = vector_size((vm)->current->temporaries) - 1;
+  vector_add((vm)->current->constants, temporary); \
+  *(index) = vector_size((vm)->current->constants) - 1;
 
 #define add_temporary(vm, temporary_index) \
   _add_temporary_function((vm), (temporary_index), 256 + 1, 65536 + 1);
@@ -229,7 +229,7 @@ VM *emitter_emit(VM *vm) {
     fmcode_case(FM_METHOD_PARAMETER) {
       char *parameter_name = formal_bytecode[++ip];
       marg_tensor_add(
-        vm->current->bound_method->parameter_names, MARG_STRING(parameter_name)
+        vm->current->bound_method->arguments, MARG_STRING(parameter_name)
       );
     }
 
