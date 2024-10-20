@@ -5,12 +5,12 @@
 Margaret is a modern programming language focused around objects and messages.
 It offers powerful literals, easy to use objects and smalltalk-like message structures.
 
-- Every value in margaret is treated as an object.
-- There are no reserved words and no explicit syntax apart from message sends.
-- Uses prototype based objects in the likes of Self or Javascript.
+- Every value in margaret is a pure object.
+- There are no reserved words and no explicit syntax apart from message sending.
+- Uses prototypal inheritance similar to Self or Javascript.
 - Uses C-style literals like int, float, string.
-- Implements tensors, tables, tuples as modern built-in data structures.
-- Runs on a portable, lightweight and embeddable stack based VM.
+- Implements tensors, tuples, tables, and bitstrings as modern built-in data structures.
+- Runs on a portable, lightweight, embeddable, register based VM.
 
 ## Installation
 
