@@ -16,7 +16,7 @@
 #define FM_TENSOR            string_new("TENSOR")
 #define FM_TUPLE             string_new("TUPLE")
 #define FM_BITSTRING         string_new("BITSTRING")
-#define FM_HASH              string_new("HASH")
+#define FM_TABLE             string_new("TABLE")
 #define FM_GLOBAL            string_new("GLOBAL")
 #define FM_INSTANCE          string_new("INSTANCE")
 #define FM_LOCAL             string_new("LOCAL")

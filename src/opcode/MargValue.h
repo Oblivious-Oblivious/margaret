@@ -4,13 +4,13 @@
 #include "../../libs/EmeraldsString/export/EmeraldsString.h"
 #include "MargBitstring.h"
 #include "MargFloat.h"
-#include "MargHash.h"
 #include "MargInteger.h"
 #include "MargLabel.h"
 #include "MargMethod.h"
 #include "MargObject.h"
 #include "MargString.h"
 #include "MargSymbol.h"
+#include "MargTable.h"
 #include "MargTensor.h"
 #include "MargTuple.h"
 #include "MargValueType.h"
@@ -53,7 +53,7 @@
 #define MARG_STRING(value) (QNAN_BOX(marg_string_new(vm, value)))
 #define MARG_TENSOR()      (QNAN_BOX(marg_tensor_new(vm)))
 #define MARG_TUPLE()       (QNAN_BOX(marg_tuple_new(vm)))
-#define MARG_HASH()        (QNAN_BOX(marg_hash_new(vm)))
+#define MARG_TABLE()       (QNAN_BOX(marg_table_new(vm)))
 #define MARG_BITSTRING()   (QNAN_BOX(marg_bitstring_new(vm)))
 #define MARG_METHOD(bound_object, message_name) \
   (QNAN_BOX(marg_method_new(vm, (bound_object), (message_name))))
@@ -70,7 +70,7 @@
 #define AS_SYMBOL(value)    ((MargSymbol *)QNAN_UNBOX(value))
 #define AS_TENSOR(value)    ((MargTensor *)QNAN_UNBOX(value))
 #define AS_TUPLE(value)     ((MargTuple *)QNAN_UNBOX(value))
-#define AS_HASH(value)      ((MargHash *)QNAN_UNBOX(value))
+#define AS_TABLE(value)     ((MargTable *)QNAN_UNBOX(value))
 #define AS_BITSTRING(value) ((MargBitstring *)QNAN_UNBOX(value))
 #define AS_METHOD(value)    ((MargMethod *)QNAN_UNBOX(value))
 #define AS_OBJECT(value)    ((MargObject *)QNAN_UNBOX(value))
@@ -95,8 +95,8 @@
   (!IS_UNDEFINED(value) && (string_equals(QNAN_UNBOX(value)->name, "$Tensor")))
 #define IS_TUPLE(value) \
   (!IS_UNDEFINED(value) && (string_equals(QNAN_UNBOX(value)->name, "$Tuple")))
-#define IS_HASH(value) \
-  (!IS_UNDEFINED(value) && (string_equals(QNAN_UNBOX(value)->name, "$Hash")))
+#define IS_TABLE(value) \
+  (!IS_UNDEFINED(value) && (string_equals(QNAN_UNBOX(value)->name, "$Table")))
 #define IS_BITSTRING(value) \
   (!IS_UNDEFINED(value) &&  \
    (string_equals(QNAN_UNBOX(value)->name, "$Bitstring")))

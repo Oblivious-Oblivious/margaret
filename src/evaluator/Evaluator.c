@@ -22,19 +22,19 @@ static void op_put_tensor_helper(VM *vm, MargValue temporary) {
   fs_push(vm->sp, tensor_value);
 }
 
-static void op_put_hash_helper(VM *vm, MargValue temporary) {
+static void op_put_table_helper(VM *vm, MargValue temporary) {
   ptrdiff_t number_of_elements = AS_INTEGER(temporary)->value / 2;
-  MargValue hash_value         = MARG_HASH();
-  MargHash *hash_object        = AS_HASH(hash_value);
+  MargValue table_value        = MARG_TABLE();
+  MargTable *table_object      = AS_TABLE(table_value);
 
   ptrdiff_t i;
   for(i = 0; i < number_of_elements; i++) {
     MargValue value = fs_pop(vm->sp);
     MargValue key   = fs_pop(vm->sp);
-    marg_hash_add(hash_object, AS_STRING(key)->value, value);
+    marg_table_add(table_object, AS_STRING(key)->value, value);
   }
 
-  fs_push(vm->sp, hash_value);
+  fs_push(vm->sp, table_value);
 }
 
 static MargValue dispatch_method_from_delegation_chain(
@@ -308,16 +308,16 @@ static void evaluator_run(VM *vm) {
       case OP_PUT_TUPLE_WORD: {break;}
       case OP_PUT_TUPLE_DWORD: {break;} */
 
-    case OP_PUT_HASH: {
-      op_put_hash_helper(vm, READ_TEMPORARY());
+    case OP_PUT_TABLE: {
+      op_put_table_helper(vm, READ_TEMPORARY());
       break;
     }
-    case OP_PUT_HASH_WORD: {
-      op_put_hash_helper(vm, READ_TEMPORARY_WORD());
+    case OP_PUT_TABLE_WORD: {
+      op_put_table_helper(vm, READ_TEMPORARY_WORD());
       break;
     }
-    case OP_PUT_HASH_DWORD: {
-      op_put_hash_helper(vm, READ_TEMPORARY_DWORD());
+    case OP_PUT_TABLE_DWORD: {
+      op_put_table_helper(vm, READ_TEMPORARY_DWORD());
       break;
     }
       /* case OP_PUT_BITSTRING: {break;}
@@ -565,7 +565,7 @@ static void evaluator_run(VM *vm) {
       } */
 
       /* case OP_PROC_CALL_PARAMS: {
-        MargHash *arguments = AS_HASH(fs_pop(vm->sp));
+        MargTable *arguments = AS_TABLE(fs_pop(vm->sp));
         MargValue proc       = fs_pop(vm->sp);
         fs_pop(vm->sp);
 
@@ -574,7 +574,7 @@ static void evaluator_run(VM *vm) {
           AS_PROC(proc)->bound_proc = vm->current;
 
           for(i = 0; i < arguments->alloced; i++) {
-            MargHashEntry *entry = &arguments->entries[i];
+            MargTableEntry *entry = &arguments->entries[i];
             if(!IS_NOT_INTERNED(entry->key)) {
               table_add(
                 &AS_PROC(proc)->local_variables,

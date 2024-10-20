@@ -25,7 +25,7 @@ static void setup_proto_object_chain(VM *vm) {
   MARG_OBJECT(table_get(&vm->global_variables, "$Margaret"), "$Enumerable");
   MARG_OBJECT(table_get(&vm->global_variables, "$Enumerable"), "$Tensor");
   MARG_OBJECT(table_get(&vm->global_variables, "$Tensor"), "$Tuple");
-  MARG_OBJECT(table_get(&vm->global_variables, "$Enumerable"), "$Hash");
+  MARG_OBJECT(table_get(&vm->global_variables, "$Enumerable"), "$Table");
   MARG_OBJECT(table_get(&vm->global_variables, "$Enumerable"), "$Bitstring");
 
   MARG_OBJECT(table_get(&vm->global_variables, "$Margaret"), "$Method");

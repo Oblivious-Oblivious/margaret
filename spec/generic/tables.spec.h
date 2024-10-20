@@ -1,23 +1,23 @@
-#ifndef __HASHES_SPEC_H_
-#define __HASHES_SPEC_H_
+#ifndef __TABLES_SPEC_H_
+#define __TABLES_SPEC_H_
 
 #include "_helpers.h"
 
-module(hashes_spec, {
-  it("parses hash literals", {
-    parse("(%{})", vector_new(FM_HASH, string_new("0")));
+module(tables_spec, {
+  it("parses table literals", {
+    parse("(%{})", vector_new(FM_TABLE, string_new("0")));
     parse(
       "(%{a: %{}, b: %{}})",
       vector_new(
         FM_STRING,
         string_new("a"),
-        FM_HASH,
+        FM_TABLE,
         string_new("0"),
         FM_STRING,
         string_new("b"),
-        FM_HASH,
+        FM_TABLE,
         string_new("0"),
-        FM_HASH,
+        FM_TABLE,
         string_new("4")
       )
     );
@@ -36,7 +36,7 @@ module(hashes_spec, {
         string_new("c"),
         FM_INTEGER,
         string_new("3"),
-        FM_HASH,
+        FM_TABLE,
         string_new("6")
       )
     );
@@ -55,7 +55,7 @@ module(hashes_spec, {
         string_new("c"),
         FM_INTEGER,
         string_new("3"),
-        FM_HASH,
+        FM_TABLE,
         string_new("6")
       )
     );
@@ -74,7 +74,7 @@ module(hashes_spec, {
         string_new("k3"),
         FM_STRING,
         string_new("v3"),
-        FM_HASH,
+        FM_TABLE,
         string_new("6")
       )
     );
@@ -91,7 +91,7 @@ module(hashes_spec, {
         string_new("b"),
         FM_INTEGER,
         string_new("2"),
-        FM_HASH,
+        FM_TABLE,
         string_new("4"),
         FM_STRING,
         string_new("y"),
@@ -103,9 +103,9 @@ module(hashes_spec, {
         string_new("d"),
         FM_INTEGER,
         string_new("4"),
-        FM_HASH,
+        FM_TABLE,
         string_new("4"),
-        FM_HASH,
+        FM_TABLE,
         string_new("4")
       )
     );
@@ -147,13 +147,13 @@ module(hashes_spec, {
         string_new("41"),
         FM_UNARY,
         string_new("incr"),
-        FM_HASH,
+        FM_TABLE,
         string_new("8")
       )
     );
   });
 
-  it("parses hashes", {
+  it("parses tables", {
     parse(
       "(x at: 'a' put: 3)",
       vector_new(

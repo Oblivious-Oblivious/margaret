@@ -12,7 +12,7 @@ module(key, {
         string_new("a"),
         FM_INTEGER,
         string_new("42"),
-        FM_HASH,
+        FM_TABLE,
         string_new("2")
       )
     );

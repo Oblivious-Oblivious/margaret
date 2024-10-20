@@ -82,7 +82,7 @@ module(tensors_spec, {
         FM_NIL,
         FM_TENSOR,
         string_new("0"),
-        FM_HASH,
+        FM_TABLE,
         string_new("0"),
         FM_LOCAL,
         string_new("x"),

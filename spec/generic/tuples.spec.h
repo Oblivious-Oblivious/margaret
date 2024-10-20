@@ -82,7 +82,7 @@ module(tuples_spec, {
         FM_NIL,
         FM_TENSOR,
         string_new("0"),
-        FM_HASH,
+        FM_TABLE,
         string_new("0"),
         FM_TUPLE,
         string_new("0"),
