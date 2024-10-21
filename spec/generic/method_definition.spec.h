@@ -214,6 +214,7 @@ module(method_definition_spec, {
     );
   });
 
+  /* TODO = Figure out how to store nameless parameters */
   it("parses binary methods", {
     parse(
       "# 0 ** 0 => $nil",

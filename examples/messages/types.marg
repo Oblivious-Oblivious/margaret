@@ -13,9 +13,9 @@ $Label          = $Margaret clone,
 
 $Enumerable     = $Margaret clone,
 $Tensor         = $Enumerable clone,
-$Tuple          = $Enumerable clone,
+$Tuple          = $Tensor clone,
+$Table          = $Enumerable clone,
 $Bitstring      = $Enumerable clone,
-$Hash           = $Enumerable clone,
 
 $Method         = $Margaret clone,
 

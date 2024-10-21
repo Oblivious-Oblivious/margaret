@@ -1,6 +1,3 @@
-/* cspec */
-#include "../libs/cSpec/export/cSpec.h"
-
 /* margaret */
 #include "version.spec.h"
 
@@ -21,7 +18,6 @@
 #include "generic/date_time.spec.h"
 #include "generic/errors.spec.h"
 #include "generic/groups.spec.h"
-#include "generic/hashes.spec.h"
 #include "generic/headless_methods.spec.h"
 #include "generic/identifiers.spec.h"
 #include "generic/intervals.spec.h"
@@ -34,6 +30,7 @@
 #include "generic/postcard.spec.h"
 #include "generic/rational.spec.h"
 #include "generic/strings.spec.h"
+#include "generic/tables.spec.h"
 #include "generic/tensors.spec.h"
 #include "generic/tuples.spec.h"
 #include "generic/unicode.spec.h"
@@ -51,14 +48,18 @@
 #include "loader/Loader.spec.h"
 
 /* opcode */
+#include "opcode/MargBitstring.spec.h"
 #include "opcode/MargFloat.spec.h"
-#include "opcode/MargHash.spec.h"
 #include "opcode/MargInteger.spec.h"
+#include "opcode/MargLabel.spec.h"
 #include "opcode/MargMethod.spec.h"
 #include "opcode/MargObject.spec.h"
-#include "opcode/MargProc.spec.h"
+#include "opcode/MargSingletons.spec.h"
 #include "opcode/MargString.spec.h"
+#include "opcode/MargSymbol.spec.h"
+#include "opcode/MargTable.spec.h"
 #include "opcode/MargTensor.spec.h"
+#include "opcode/MargTuple.spec.h"
 #include "opcode/MargValue.spec.h"
 
 /* optimizer */
@@ -97,7 +98,7 @@ int main(void) {
     date_time_spec();
     errors_spec();
     groups_spec();
-    hashes_spec();
+    tables_spec();
     headless_methods_spec();
     identifiers_spec();
     intervals_spec();
@@ -123,14 +124,18 @@ int main(void) {
 
     LoaderSpec();
 
+    MargBitstringSpec();
     MargFloatSpec();
-    MargHashSpec();
     MargIntegerSpec();
+    MargLabelSpec();
     MargMethodSpec();
     MargObjectSpec();
-    MargProcSpec();
+    MargSingletonsSpec();
     MargStringSpec();
+    MargSymbolSpec();
+    MargTableSpec();
     MargTensorSpec();
+    MargTupleSpec();
     MargValueSpec();
 
     OptimizerSpec();

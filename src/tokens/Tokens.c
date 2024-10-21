@@ -1,6 +1,6 @@
 #include "Tokens.h"
 
-#include "../../libs/EmeraldsString/export/EmeraldsString.h"
+#include "../../libs/EmeraldsVector/export/EmeraldsVector.h"
 
 void tokens_init(Tokens *self) {
   self->values  = NULL;

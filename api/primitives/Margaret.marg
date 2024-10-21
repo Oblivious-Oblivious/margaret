@@ -5,7 +5,7 @@ $Margaret -- [
   #!= other => _PRIM_3_NOT_EQUALS: other,
   #== other => _PRIM_4_EQUALS: other,
   #object_id => _PRIM_5_OBJECT_ID,
-  #hash => _PRIM_6_HASH,
+  #table => _PRIM_6_TABLE,
   #inspect => _PRIM_7_INSPECT,
   #is_nil? => _PRIM_8_IS_NIL?,
   #pp => _PRIM_9_PP,

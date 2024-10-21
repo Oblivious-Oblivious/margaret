@@ -36,7 +36,7 @@ module(TypeSpec, {
     assert_that_int(TOKEN_RCURLY equals to 1008);
     assert_that_int(TOKEN_COMMA equals to 1009);
     assert_that_int(TOKEN_COLON equals to 1010);
-    assert_that_int(TOKEN_HASH equals to 1011);
+    assert_that_int(TOKEN_TABLE equals to 1011);
     assert_that_int(TOKEN_PERCENT equals to 1012);
   });
 

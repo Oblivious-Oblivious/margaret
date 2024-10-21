@@ -9,6 +9,10 @@ module(scalar, {
     parse("::ab", vector_new(FM_LABEL, string_new("ab")));
   });
 
+  it("parses symbols", {
+    parse(":ab", vector_new(FM_SYMBOL, string_new("ab")));
+  });
+
   it("parses integers", {
     parse("0", vector_new(FM_INTEGER, string_new("0")));
     parse("1", vector_new(FM_INTEGER, string_new("1")));

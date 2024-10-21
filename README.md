@@ -5,12 +5,12 @@
 Margaret is a modern programming language focused around objects and messages.
 It offers powerful literals, easy to use objects and smalltalk-like message structures.
 
-- Every value in margaret is treated as an object.
-- There are no reserved words and no explicit syntax apart from message sends.
-- Uses prototype based objects in the likes of Self or Javascript.
+- Every value in margaret is a pure object.
+- There are no reserved words and no explicit syntax apart from message sending.
+- Uses prototypal inheritance similar to Self or Javascript.
 - Uses C-style literals like int, float, string.
-- Implements tensors, hashes, tuples as modern built-in data structures.
-- Runs on a portable, lightweight and embeddable stack based VM.
+- Implements tensors, tuples, tables, and bitstrings as modern built-in data structures.
+- Runs on a portable, lightweight, embeddable, register based VM.
 
 ## Installation
 
@@ -22,7 +22,7 @@ TODO - Write installation instructions
 $Margaret -- #ultimate_answer: x => {
   $true && !$false not not && ($nil is_nil?) if_false: { exit: 0 },
   y = @self methods size + @super to_string length * 42,
-  [::label, 42, 42.2, "str", 0b0110, 0xbeef, 0o741, %[y, 42, "val"],
+  [:symbol, ::label, 42, 42.2, "str", 0b0110, 0xbeef, 0o741, %[y, 42, "val"],
     %{"k1": -42, k2: 43}, %(42, 1::1, 0::1)] each: { elem |
       puts: elem object_id,
     },

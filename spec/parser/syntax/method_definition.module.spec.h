@@ -121,7 +121,7 @@ module(method_definition, {
       vector_new(
         FM_METHOD_START,
         FM_METHOD_RECEIVER,
-        FM_HASH,
+        FM_TABLE,
         string_new("0"),
         FM_METHOD_PARAMETER,
         FM_INTEGER,

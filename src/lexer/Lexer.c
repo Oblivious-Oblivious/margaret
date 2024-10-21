@@ -175,7 +175,7 @@ VM *lexer_make_tokens(VM *vm) {
       token_type = TOKEN_COMMA;
     } else if(*input == '#') {
       append_char();
-      token_type = TOKEN_HASH;
+      token_type = TOKEN_TABLE;
     } else if(*input == '%') {
       append_char();
       token_type = TOKEN_PERCENT;

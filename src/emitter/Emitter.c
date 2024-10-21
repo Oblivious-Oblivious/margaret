@@ -55,8 +55,8 @@
   } while(0)
 
 #define make_temporary(vm, temporary, index)         \
-  vector_add((vm)->current->temporaries, temporary); \
-  *(index) = vector_size((vm)->current->temporaries) - 1;
+  vector_add((vm)->current->constants, temporary); \
+  *(index) = vector_size((vm)->current->constants) - 1;
 
 #define add_temporary(vm, temporary_index) \
   _add_temporary_function((vm), (temporary_index), 256 + 1, 65536 + 1);
@@ -186,11 +186,11 @@ VM *emitter_emit(VM *vm) {
       emit_temporary(temporary);
     }
     fmcode_case(FM_TUPLE) {}
-    fmcode_case(FM_HASH) {
+    fmcode_case(FM_TABLE) {
       char *end;
       char *number_of_elements = formal_bytecode[++ip];
       MargValue temporary = MARG_INTEGER(strtol(number_of_elements, &end, 10));
-      emit_variable_length_op(OP_PUT_HASH);
+      emit_variable_length_op(OP_PUT_TABLE);
       emit_temporary(temporary);
     }
     fmcode_case(FM_BITSTRING) {}
@@ -229,7 +229,7 @@ VM *emitter_emit(VM *vm) {
     fmcode_case(FM_METHOD_PARAMETER) {
       char *parameter_name = formal_bytecode[++ip];
       marg_tensor_add(
-        vm->current->bound_method->parameter_names, MARG_STRING(parameter_name)
+        vm->current->bound_method->arguments, MARG_STRING(parameter_name)
       );
     }
 
@@ -388,9 +388,9 @@ VM *emitter_emit(VM *vm) {
       emit_temporary(number_of_bits); */
       (void)number_of_bits;
     }
-    case_fmcode(FM_HASH) {
+    case_fmcode(FM_TABLE) {
       char *number_of_pairs = formal_bytecode[++ip];
-      /* emit_variable_length(OP_HASH);
+      /* emit_variable_length(OP_TABLE);
       emit_temporary(number_of_pairs); */
       (void)number_of_pairs;
     }
