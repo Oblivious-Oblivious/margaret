@@ -81,30 +81,23 @@ VM *vm_new(const char *filename);
   } while(0)
 
 /* TODO - Ensure there are no leaks throughout the pipeline */
-#ifndef MARG_SPEC
-  #define vm_free_source() string_free(vm->source)
+#define vm_free_source() string_free(vm->source)
 
-  #define vm_free_tokens()        \
-    do {                          \
-      tokens_deinit(&vm->tokens); \
-      vm->tid = 0;                \
-    } while(0)
+#define vm_free_tokens()        \
+  do {                          \
+    tokens_deinit(&vm->tokens); \
+    vm->tid = 0;                \
+  } while(0)
 
-  #define vm_free_formal_bytecode()                           \
-    do {                                                      \
-      size_t i;                                               \
-      for(i = 0; i < vector_size(vm->formal_bytecode); i++) { \
-        if(!string_equals(vm->formal_bytecode[i], "eof")) {   \
-          string_free(vm->formal_bytecode[i]);                \
-        }                                                     \
-      }                                                       \
-      vector_free(vm->formal_bytecode);                       \
-    } while(0)
-
-#else
-  #define vm_free_source()
-  #define vm_free_tokens()
-  #define vm_free_formal_bytecode()
-#endif
+#define vm_free_formal_bytecode()                           \
+  do {                                                      \
+    size_t i;                                               \
+    for(i = 0; i < vector_size(vm->formal_bytecode); i++) { \
+      if(!string_equals(vm->formal_bytecode[i], "eof")) {   \
+        string_free(vm->formal_bytecode[i]);                \
+      }                                                     \
+    }                                                       \
+    vector_free(vm->formal_bytecode);                       \
+  } while(0)
 
 #endif

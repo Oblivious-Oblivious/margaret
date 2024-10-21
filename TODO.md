@@ -77,7 +77,6 @@
 
   🟥 FT-01 - Proposal for cc0-v1 license.
   🟥 FT-02 - Add lexically removed comments.
-  🟥 FT-02 - Add lexically removed comments.
   🟥 FT-03 - Add string interpolation and formatting with `#{..}` or similar.
   🟥 FT-04 - Make comments part of the language (comment: "...", todo: "...").
              Make comments dynamic and persistent on code files.
