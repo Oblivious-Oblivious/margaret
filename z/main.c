@@ -1,4 +1,5 @@
 #include "emitter.h"
+#include "scanner.h"
 
 #define FETCH() (vm->ip++, OP)
 #define READ()  (vm->bytecode[vm->ip - 1])
@@ -33,6 +34,8 @@ static void evaluate(VM *vm) {
 
 #define next_opcode goto _opcode_loop
 #define skip_opcode goto _opcode_loop
+
+  vm->ip = 0;
 
 _opcode_loop:;
   switch_opcode {
@@ -106,10 +109,7 @@ _opcode_loop:;
       }
       next_opcode;
     }
-    case_opcode(OP_HALT) {
-      printf("HALT: Stopping VM execution.\n");
-      exit(0);
-    }
+    case_opcode(OP_HALT) { return; }
     default_opcode {
       fprintf(stderr, "Unknown opcode: %zu\n", OP);
       exit(1);
@@ -117,11 +117,18 @@ _opcode_loop:;
   }
 }
 
-int main(void) {
+int main(int argc, char **argv) {
   VM _vm = {0};
   VM *vm = &_vm;
-
   vm_init(vm);
-  vm->bytecode = emit_example_bytecode(vm);
-  evaluate(vm);
+
+  if(argc == 2 && string_equals(string_new(argv[1]), "-i")) {
+    while(true) {
+      vm->bytecode = emit_tokens(vm, scan("> "));
+      evaluate(vm);
+    }
+  } else {
+    vm->bytecode = emit_example_bytecode(vm);
+    evaluate(vm);
+  }
 }
