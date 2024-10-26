@@ -5,11 +5,11 @@
 
 typedef uint8_t Type;
 
-#define TYPE_NIL    0x00
-#define TYPE_FALSE  0x01
-#define TYPE_TRUE   0x02
-#define TYPE_NUMBER 0x03
-#define TYPE_STRING 0x04
+#define TYPE_MARG_NIL    0x00
+#define TYPE_MARG_FALSE  0x01
+#define TYPE_MARG_TRUE   0x02
+#define TYPE_MARG_NUMBER 0x03
+#define TYPE_MARG_STRING 0x04
 
 typedef struct Object {
   bool is_marked;

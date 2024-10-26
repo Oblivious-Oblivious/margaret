@@ -1,26 +1,27 @@
 #include "emitter.h"
+#include "opcode.h"
 #include "scanner.h"
 
-#define FETCH() (vm->ip++, OP)
+#define FETCH() (vm->ip++, O)
 #define READ()  (vm->bytecode[vm->ip - 1])
 
 #define R(i) (vm->registers[i])
 #define K(i) (vm->constants[i])
 
-#define OP (((READ()) & 0xffff000000000000) >> 48)
-#define A  (((READ()) & 0x0000ffff00000000) >> 32)
-#define B  (((READ()) & 0x00000000ffff0000) >> 16)
-#define C  (((READ()) & 0x000000000000ffff) >> 0)
-/* TODO - Implement Ak */
-#define Bk ((B << 16) | C)
+#define O  ((READ() & 0xffff000000000000) >> 48)
+#define A  ((READ() & 0x0000ffff00000000) >> 32)
+#define B  ((READ() & 0x00000000ffff0000) >> 16)
+#define C  ((READ() & 0x000000000000ffff) >> 0)
+#define Ak ((READ() & 0x0000ffffffff0000) >> 16)
+#define Bk ((READ() & 0x00000000ffffffff) >> 0)
 
 #define RA  R(A)
 #define RB  R(B)
 #define RC  R(C)
-/* TODO - Implement KAk */
+#define KAk K(Ak)
 #define KBk K(Bk)
 
-static void evaluate(VM *vm) {
+p_inline void evaluate(VM *vm) {
 #if defined(__GNUC__) || defined(__clang__)
   dispatch_table();
   #define switch_opcode   goto *_computed_gotos[FETCH()];
@@ -33,85 +34,80 @@ static void evaluate(VM *vm) {
 #endif
 
 #define next_opcode goto _opcode_loop
-#define skip_opcode goto _opcode_loop
+#define raise       goto *_computed_gotos[OP_RAISE]
 
   vm->ip = 0;
 
 _opcode_loop:;
   switch_opcode {
-    case_opcode(OP_FALSE) {
-      RA = FALSE();
-      next_opcode;
-    }
-    case_opcode(OP_NIL) {
-      RA = NIL();
-      next_opcode;
-    }
-    case_opcode(OP_TRUE) {
-      RA = TRUE();
-      next_opcode;
-    }
-    case_opcode(OP_NUMBER) {
-      RA = KBk;
-      next_opcode;
-    }
-    case_opcode(OP_STRING) {
+    case_opcode(OP_LOCAL) {
       RA = KBk;
       next_opcode;
     }
     case_opcode(OP_ADD) {
-      RA = NUMBER(AS_NUMBER(RB)->value + AS_NUMBER(RC)->value);
-      next_opcode;
+      if(IS_MARG_NUMBER(RB) && IS_MARG_NUMBER(RC)) {
+        RA = MARG_NUMBER(AS_MARG_NUMBER(RB)->value + AS_MARG_NUMBER(RC)->value);
+        next_opcode;
+      } else {
+        RA = MARG_STRING("TypeError: cannot add non-number values.");
+        raise;
+      }
     }
     case_opcode(OP_SUB) {
-      RA = NUMBER(AS_NUMBER(RB)->value - AS_NUMBER(RC)->value);
-      next_opcode;
+      if(IS_MARG_NUMBER(RB) && IS_MARG_NUMBER(RC)) {
+        RA = MARG_NUMBER(AS_MARG_NUMBER(RB)->value - AS_MARG_NUMBER(RC)->value);
+        next_opcode;
+      } else {
+        RA = MARG_STRING("TypeError: cannot subtract non-number values.");
+        raise;
+      }
     }
     case_opcode(OP_MUL) {
-      RA = NUMBER(AS_NUMBER(RB)->value * AS_NUMBER(RC)->value);
-      next_opcode;
+      if(IS_MARG_NUMBER(RB) && IS_MARG_NUMBER(RC)) {
+        RA = MARG_NUMBER(AS_MARG_NUMBER(RB)->value * AS_MARG_NUMBER(RC)->value);
+        next_opcode;
+      } else {
+        RA = MARG_STRING("TypeError: cannot multiply non-number values.");
+        raise;
+      }
     }
     case_opcode(OP_DIV) {
-      if(AS_NUMBER(RC)->value == 0.0) {
-        fprintf(stderr, "Runtime Error: Division by zero\n");
-        exit(1);
-      }
-      RA = NUMBER(AS_NUMBER(RB)->value / AS_NUMBER(RC)->value);
-      next_opcode;
-    }
-    case_opcode(OP_JUMP) {
-      vm->ip = Bk;
-      skip_opcode;
-    }
-    case_opcode(OP_JUMP_IF_FALSE) {
-      if(IS_FALSE(RA) || IS_NIL(RA)) {
-        vm->ip = Bk;
-        skip_opcode;
-      } else {
+      if(IS_MARG_NUMBER(RC) && AS_MARG_NUMBER(RC)->value == 0.0) {
+        RA = MARG_STRING("Runtime Error: Division by zero");
+        raise;
+      } else if(IS_MARG_NUMBER(RB) && IS_MARG_NUMBER(RC)) {
+        RA = MARG_NUMBER(AS_MARG_NUMBER(RB)->value / AS_MARG_NUMBER(RC)->value);
         next_opcode;
+      } else {
+        RA = MARG_STRING("TypeError: cannot divide non-number values.");
+        raise;
       }
     }
     case_opcode(OP_PRINT) {
       if(RA == 0) {
         printf("ZERO ??\n");
-      } else if(IS_NIL(RA)) {
+      } else if(IS_MARG_NIL(RA)) {
         printf("R%zu = nil\n", A);
-      } else if(IS_FALSE(RA)) {
+      } else if(IS_MARG_FALSE(RA)) {
         printf("R%zu = false\n", A);
-      } else if(IS_TRUE(RA)) {
+      } else if(IS_MARG_TRUE(RA)) {
         printf("R%zu = true\n", A);
-      } else if(IS_NUMBER(RA)) {
-        printf("R%zu = %g\n", A, AS_NUMBER(RA)->value);
-      } else if(IS_STRING(RA)) {
-        printf("R%zu = \"%s\"\n", A, AS_STRING(RA)->value);
+      } else if(IS_MARG_NUMBER(RA)) {
+        printf("R%zu = %g\n", A, AS_MARG_NUMBER(RA)->value);
+      } else if(IS_MARG_STRING(RA)) {
+        printf("R%zu = \"%s\"\n", A, AS_MARG_STRING(RA)->value);
       } else {
         printf("R%zu = UNKNOWN\n", A);
       }
       next_opcode;
     }
+    case_opcode(OP_RAISE) {
+      fprintf(stderr, "raise: `%s`\n", AS_MARG_STRING(RA)->value);
+      next_opcode;
+    }
     case_opcode(OP_HALT) { return; }
     default_opcode {
-      fprintf(stderr, "Unknown opcode: %zu\n", OP);
+      fprintf(stderr, "raise: `Unknown Opcode: %zu`\n", O);
       exit(1);
     }
   }

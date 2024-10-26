@@ -5,45 +5,40 @@
 
 /**
  * -- single --
- * O - opcode (16)
+ * OP - opcode (16) - rest (48)
  *
  * -- constants --
- * OAk - opcode (16) - operand Ak (48)
+ * OAk  - opcode (16) - operand Ak (32) - rest (16)
  * OABk - opcode (16) - operand A (16) - operand Bk (32)
  *
- * -- commands --
- * OA - opcode (16) - operand A (48)
- * OAB - opcode (16) - operand A (24) - operand B (24)
+ * -- registers --
+ * OA   - opcode (16) - operand A (16) - rest (32)
+ * OAB  - opcode (16) - operand A (16) - operand B (16) - rest (16)
  * OABC - opcode (16) - operand A (16) - operand B (16) - operand C (16)
  */
-#define O(op) vector_add(bc, ((op) << 48))
-#define OAk(op, a, k)                                  \
-  vector_add(                                          \
-    bc,                                                \
-    (((op) << 48) | (get_register(vm, (a)) << 32) |    \
-     (vm_make_constant(vm, (k)) & 0x00000000ffffffff)) \
-  )
-#define OABk(op, a, bk)                                 \
-  vector_add(                                           \
-    bc,                                                 \
-    (((op) << 48) | (get_register(vm, (a)) << 32) |     \
-     (vm_make_constant(vm, (bk)) & 0x00000000ffffffff)) \
-  )
-#define OA(op, a)     vector_add(bc, (((op) << 48) | (get_register(vm, (a)) << 32)))
-#define OAB(op, a, b) vector_add(bc, (((op) << 48) | ((a) << 32) | ((b) << 16)))
-#define OABC(op, a, b, c)                                          \
-  vector_add(                                                      \
-    bc,                                                            \
-    (((op) << 48) | (get_register(vm, (a)) << 32) |                \
-     (get_register(vm, (b)) << 16) | (get_register(vm, (c)) << 0)) \
-  )
+#define OP(op)      vector_add(bc, ((op) << 48))
+#define OAk(op, ak) vector_add(bc, ((op) << 48) | (CONST(ak) << 16))
+#define OABk(op, a, bk) \
+  vector_add(bc, ((op) << 48) | (REG(a) << 32) | CONST(bk))
+#define OA(op, a) vector_add(bc, ((op) << 48) | (REG(a) << 32))
+#define OAB(op, a, b) \
+  vector_add(bc, ((op) << 48) | (REG(a) << 32) | (REG(b) << 16))
+#define OABC(op, a, b, c) \
+  vector_add(bc, ((op) << 48) | (REG(a) << 32) | (REG(b) << 16) | (REG(c) << 0))
 
-static Instruction get_register(VM *vm, const char *var) {
+#define CONST(value) (make_constant((vm), (value)))
+#define REG(var)     (make_register((vm), (var)))
+
+p_inline Instruction make_constant(VM *vm, Value value) {
+  vector_add(vm->constants, value);
+  return vector_size(vm->constants) - 1;
+}
+p_inline Instruction make_register(VM *vm, const char *var) {
   Instruction reg_ptr = table_get(&vm->local_variables, var);
   if(reg_ptr != TABLE_UNDEFINED) {
     return reg_ptr;
   } else {
-    Instruction reg = table_size(&vm->local_variables) % MAX_REGISTERS;
+    Instruction reg = table_size(&vm->local_variables) & (MAX_REGISTERS - 1);
     table_add(&vm->local_variables, var, reg);
     return reg;
   }

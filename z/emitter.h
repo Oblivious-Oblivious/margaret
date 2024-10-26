@@ -6,7 +6,7 @@
 #include "object.h"
 #include "opcode.h"
 
-static Instruction *emit_tokens(VM *vm, char *source) {
+p_inline Instruction *emit_tokens(VM *vm, char *source) {
   Instruction *bc = NULL;
   size_t i;
   char **tokens = string_split(source, ' ');
@@ -20,22 +20,22 @@ static Instruction *emit_tokens(VM *vm, char *source) {
       i++;
     } else if(string_equals(tokens[i + 1], "=")) {
       if(string_equals(tokens[i + 2], "nil")) {
-        OAk(OP_NIL, tokens[i], NIL());
+        OABk(OP_LOCAL, tokens[i], MARG_NIL());
         i += 2;
       } else if(string_equals(tokens[i + 2], "false")) {
-        OAk(OP_FALSE, tokens[i], FALSE());
+        OABk(OP_LOCAL, tokens[i], MARG_FALSE());
         i += 2;
       } else if(string_equals(tokens[i + 2], "true")) {
-        OAk(OP_TRUE, tokens[i], TRUE());
+        OABk(OP_LOCAL, tokens[i], MARG_TRUE());
         i += 2;
       } else if(string_equals(tokens[i + 2], "number")) {
-        OAk(OP_NUMBER, tokens[i], NUMBER(atof(tokens[i + 3])));
+        OABk(OP_LOCAL, tokens[i], MARG_NUMBER(atof(tokens[i + 3])));
         i += 3;
       } else if(string_equals(tokens[i + 2], "string")) {
         char *str = tokens[i + 3];
         string_skip_first(str, 1);
         string_ignore_last(str, 1);
-        OAk(OP_STRING, tokens[i], STRING(tokens[i + 3]));
+        OABk(OP_LOCAL, tokens[i], MARG_STRING(tokens[i + 3]));
         i += 3;
       } else if(string_equals(tokens[i + 3], "+")) {
         OABC(OP_ADD, tokens[i], tokens[i + 2], tokens[i + 4]);
@@ -55,23 +55,23 @@ static Instruction *emit_tokens(VM *vm, char *source) {
     }
   }
 
-  O(OP_HALT);
+  OP(OP_HALT);
   return bc;
 }
 
-static Instruction *emit_example_bytecode(VM *vm) {
+p_inline Instruction *emit_example_bytecode(VM *vm) {
   Instruction *bc = NULL;
 
   /* x = nil */
-  OAk(OP_NIL, "x", NIL());
-  OAk(OP_FALSE, "y", FALSE());
-  OAk(OP_TRUE, "y2", TRUE());
+  OABk(OP_LOCAL, "x", MARG_NIL());
+  OABk(OP_LOCAL, "y", MARG_FALSE());
+  OABk(OP_LOCAL, "y2", MARG_TRUE());
   /* y3 = number 1 */
-  OAk(OP_NUMBER, "y3", NUMBER(1));
-  OAk(OP_NUMBER, "z", NUMBER(10));
-  OAk(OP_NUMBER, "a", NUMBER(3.14));
+  OABk(OP_LOCAL, "y3", MARG_NUMBER(1));
+  OABk(OP_LOCAL, "z", MARG_NUMBER(10));
+  OABk(OP_LOCAL, "a", MARG_NUMBER(3.14));
   /* msg = string "hello" */
-  OAk(OP_STRING, "msg", STRING("Hello"));
+  OABk(OP_LOCAL, "msg", MARG_STRING("Hello"));
   /* result_add = z + a */
   OABC(OP_ADD, "result_add", "z", "a");
   OABC(OP_SUB, "result_sub", "result_add", "y3");
@@ -90,7 +90,7 @@ static Instruction *emit_example_bytecode(VM *vm) {
   OA(OP_PRINT, "result_mul");
   OA(OP_PRINT, "result_div");
   /* exit */
-  O(OP_HALT);
+  OP(OP_HALT);
 
   return bc;
 }

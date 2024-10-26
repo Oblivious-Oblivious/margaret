@@ -17,6 +17,5 @@ typedef struct {
 } VM;
 
 void vm_init(VM *vm);
-Instruction vm_make_constant(VM *vm, Value value);
 
 #endif
