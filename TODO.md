@@ -108,6 +108,7 @@
   🟥 FT-16 - Add complex numbers `(0+2i)`, and rational numbers `(1/2r)` -> unary messages.
              Add complex and rational specific messages.
   🟥 FT-17 - Add an internal include guard for the require primitive.
+             LSP can track inlucded files and warn about redefinitions.
   🟥 FT-18 - Add pattern matching and LISP style handling of items
              %[:car, :cdr] = %[1, 2, 3] # car = 1, cdr = %[2, 3]
              %[:car, :cdr] = %[1, 2] # car = 1, cdr = %[2], (flatten), cdr = 2
