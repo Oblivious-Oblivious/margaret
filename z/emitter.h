@@ -6,11 +6,11 @@
 #include "object.h"
 #include "opcode.h"
 
-p_inline Instruction *emit_tokens(VM *vm, char *source) {
-  Instruction *bc = NULL;
+p_inline void emit_tokens(VM *vm, char *source) {
   size_t i;
   char **tokens = string_split(source, ' ');
   size_t size   = vector_size(tokens);
+  vm->bytecode  = NULL;
 
   for(i = 0; i < size; i++) {
     if(string_equals(tokens[i], "exit")) {
@@ -56,12 +56,9 @@ p_inline Instruction *emit_tokens(VM *vm, char *source) {
   }
 
   OP(OP_HALT);
-  return bc;
 }
 
-p_inline Instruction *emit_example_bytecode(VM *vm) {
-  Instruction *bc = NULL;
-
+p_inline void emit_example_bytecode(VM *vm) {
   /* x = nil */
   OABk(OP_LOCAL, "x", MARG_NIL());
   OABk(OP_LOCAL, "y", MARG_FALSE());
@@ -91,8 +88,6 @@ p_inline Instruction *emit_example_bytecode(VM *vm) {
   OA(OP_PRINT, "result_div");
   /* exit */
   OP(OP_HALT);
-
-  return bc;
 }
 
 #endif

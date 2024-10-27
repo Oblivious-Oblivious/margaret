@@ -3,23 +3,6 @@
 #include "scanner.h"
 
 #define FETCH() (vm->ip++, O)
-#define READ()  (vm->bytecode[vm->ip - 1])
-
-#define R(i) (vm->registers[i])
-#define K(i) (vm->constants[i])
-
-#define O  ((READ() & 0xffff000000000000) >> 48)
-#define A  ((READ() & 0x0000ffff00000000) >> 32)
-#define B  ((READ() & 0x00000000ffff0000) >> 16)
-#define C  ((READ() & 0x000000000000ffff) >> 0)
-#define Ak ((READ() & 0x0000ffffffff0000) >> 16)
-#define Bk ((READ() & 0x00000000ffffffff) >> 0)
-
-#define RA  R(A)
-#define RB  R(B)
-#define RC  R(C)
-#define KAk K(Ak)
-#define KBk K(Bk)
 
 p_inline void evaluate(VM *vm) {
 #if defined(__GNUC__) || defined(__clang__)
@@ -87,17 +70,17 @@ _opcode_loop:;
       if(RA == 0) {
         printf("ZERO ??\n");
       } else if(IS_MARG_NIL(RA)) {
-        printf("R%zu = nil\n", A);
+        printf("R%u = nil\n", A);
       } else if(IS_MARG_FALSE(RA)) {
-        printf("R%zu = false\n", A);
+        printf("R%u = false\n", A);
       } else if(IS_MARG_TRUE(RA)) {
-        printf("R%zu = true\n", A);
+        printf("R%u = true\n", A);
       } else if(IS_MARG_NUMBER(RA)) {
-        printf("R%zu = %g\n", A, AS_MARG_NUMBER(RA)->value);
+        printf("R%u = %g\n", A, AS_MARG_NUMBER(RA)->value);
       } else if(IS_MARG_STRING(RA)) {
-        printf("R%zu = \"%s\"\n", A, AS_MARG_STRING(RA)->value);
+        printf("R%u = \"%s\"\n", A, AS_MARG_STRING(RA)->value);
       } else {
-        printf("R%zu = UNKNOWN\n", A);
+        printf("R%u = UNKNOWN\n", A);
       }
       next_opcode;
     }
@@ -107,7 +90,7 @@ _opcode_loop:;
     }
     case_opcode(OP_HALT) { return; }
     default_opcode {
-      fprintf(stderr, "raise: `Unknown Opcode: %zu`\n", O);
+      fprintf(stderr, "raise: `Unknown Opcode: %u`\n", O);
       exit(1);
     }
   }
@@ -120,11 +103,11 @@ int main(int argc, char **argv) {
 
   if(argc == 2 && string_equals(string_new(argv[1]), "-i")) {
     while(true) {
-      vm->bytecode = emit_tokens(vm, scan("> "));
+      emit_tokens(vm, scan("> "));
       evaluate(vm);
     }
   } else {
-    vm->bytecode = emit_example_bytecode(vm);
+    emit_example_bytecode(vm);
     evaluate(vm);
   }
 }

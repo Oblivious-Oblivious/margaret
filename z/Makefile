@@ -1,8 +1,8 @@
 NAME = main
 
 CC = clang
-VERSION = -std=c89
-FLAGS =
+VERSION = -Og -std=c89
+FLAGS = -g -fsanitize=address
 WARNINGS = -Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic -Wno-gnu-label-as-value -Wno-unused-function
 
 SRC = object.c vm.c scanner.c ../libs/EmeraldsReadline/export/libreadline.a ../libs/EmeraldsReadline/export/libcurses.a ../libs/EmeraldsReadline/export/libhistory.a
@@ -20,4 +20,4 @@ test:
 	$(CC) $(OPT) -std=c99 $(FLAGS) $(WARNINGS) -o spec $(SPECINPUT) && ./$(SPECOUTPUT)
 
 clean:
-	$(RM) -f $(OUTPUT) *.dSYM
+	$(RM) -r $(OUTPUT) spec *.dSYM
