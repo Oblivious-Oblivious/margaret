@@ -3,71 +3,70 @@
 
 #include "../libs/cSpec/export/cSpec.h"
 #include "instruction.h"
+#include "object.h"
+#include "opcode.h"
+#include "vm.h"
 
 VM _vm = {0};
 VM *vm = &_vm;
 
-static void reset_vm(void) {
-  vm_init(vm);
-  vm->ip++;
-}
+static void reset_vm(void) { vm_init(vm); }
 
 module(instruction_format_spec, {
   before_each(&reset_vm);
 
-  it("#OP", {
-    OP((Instruction)0xffff);
-    assert_that_size_t(vm->bytecode[0] equals to 0xffff000000000000);
-    assert_that_size_t(O equals to 0xffff);
-  });
+  it("correctly encodes and decodes mov instructions", {
+    OAB(OP_MOV, LOCAL("x"), CONST(MARG_NUMBER(123)));
+    OAB(OP_MOV, INSTANCE("@y"), CONST(MARG_NUMBER(456)));
+    OAB(OP_MOV, GLOBAL("$z"), CONST(MARG_NUMBER(789)));
+    OABC(OP_ADD, GLOBAL("$z"), INSTANCE("@y"), LOCAL("x"));
 
-  it("#OAk", {
-    OAk((Instruction)0xffff, 0xabcd);
-    OAk((Instruction)0xffff, 0xabcd);
-    vm->ip++;
-    assert_that_size_t(vm->bytecode[1] equals to 0xffff000000010000);
-    assert_that_size_t(O equals to 0xffff);
-    assert_that_size_t(KAk equals to 0xabcd);
-  });
+    vm->ip = 0;
+    SRA(RB);
 
-  it("#OABk", {
-    OABk((Instruction)0xffff, "x", 0xabcd);
-    OABk((Instruction)0xffff, "y", 0xabcd);
-    vm->ip++;
-    assert_that_size_t(vm->bytecode[1] equals to 0xffff000100000001);
-    assert_that_size_t(O equals to 0xffff);
-    assert_that_size_t(A equals to 0x0001);
-    assert_that_size_t(KBk equals to 0xabcd);
-  });
+    assert_that_size_t(O equals to OP_MOV);
+    assert_that(IS_LOCAL(A));
+    assert_that_size_t(GET_INDEX(A) equals to 0);
+    assert_that(IS_CONSTANT(B));
+    assert_that_size_t(GET_INDEX(B) equals to 0);
+    assert_that_size_t(AS_MARG_NUMBER(RA)->value equals to 123);
+    assert_that_size_t(AS_MARG_NUMBER(RB)->value equals to 123);
 
-  it("#OA", {
-    OA((Instruction)0xffff, "x");
-    OA((Instruction)0xffff, "y");
-    vm->ip++;
-    assert_that_size_t(vm->bytecode[1] equals to 0xffff000100000000);
-    assert_that_size_t(O equals to 0xffff);
-    assert_that_size_t(A equals to 0x0001);
-  });
+    vm->ip = 1;
+    SRA(RB);
 
-  it("#OAB", {
-    OAB((Instruction)0xffff, "a", "a");
-    OAB((Instruction)0xffff, "c", "d");
-    vm->ip++;
-    assert_that_size_t(vm->bytecode[1] equals to 0xffff000100020000);
-    assert_that_size_t(O equals to 0xffff);
-    assert_that_size_t(A equals to 0x0001);
-    assert_that_size_t(B equals to 0x0002);
-  });
+    assert_that_size_t(O equals to OP_MOV);
+    assert_that(IS_INSTANCE(A));
+    assert_that_size_t(GET_INDEX(A) equals to 0);
+    assert_that(IS_CONSTANT(B));
+    assert_that_size_t(GET_INDEX(B) equals to 1);
+    assert_that_size_t(AS_MARG_NUMBER(RA)->value equals to 456);
+    assert_that_size_t(AS_MARG_NUMBER(RB)->value equals to 456);
 
-  it("#OABC", {
-    OABC((Instruction)0xffff, "a", "b", "c");
-    OABC((Instruction)0xffff, "d", "e", "f");
-    vm->ip++;
-    assert_that_size_t(vm->bytecode[1] equals to 0xffff000300040005);
-    assert_that_size_t(O equals to 0xffff);
-    assert_that_size_t(A equals to 0x0003);
-    assert_that_size_t(B equals to 0x0004);
-    assert_that_size_t(C equals to 0x0005);
+    vm->ip = 2;
+    SRA(RB);
+
+    assert_that_size_t(O equals to OP_MOV);
+    assert_that(IS_GLOBAL(A));
+    assert_that_size_t(GET_INDEX(A) equals to 0);
+    assert_that(IS_CONSTANT(B));
+    assert_that_size_t(GET_INDEX(B) equals to 2);
+    assert_that_size_t(AS_MARG_NUMBER(RA)->value equals to 789);
+    assert_that_size_t(AS_MARG_NUMBER(RB)->value equals to 789);
+
+    vm->ip = 3;
+    SRA(MARG_NUMBER(AS_MARG_NUMBER(RB)->value + AS_MARG_NUMBER(RC)->value));
+
+    assert_that_size_t(O equals to OP_ADD);
+    assert_that(IS_GLOBAL(A));
+    assert_that_size_t(GET_INDEX(A) equals to 0);
+    assert_that(IS_INSTANCE(B));
+    assert_that_size_t(GET_INDEX(B) equals to 0);
+    assert_that(IS_LOCAL(C));
+    assert_that_size_t(GET_INDEX(C) equals to 0);
+    assert_that_size_t(AS_MARG_NUMBER(RA)->value equals to 579);
+    assert_that_size_t(AS_MARG_NUMBER(RB)->value equals to 456);
+    assert_that_size_t(AS_MARG_NUMBER(RC)->value equals to 123);
   });
 })
 

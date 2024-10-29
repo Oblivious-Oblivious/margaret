@@ -6,86 +6,36 @@
 #include "object.h"
 #include "opcode.h"
 
-p_inline void emit_tokens(VM *vm, char *source) {
-  size_t i;
-  char **tokens = string_split(source, ' ');
-  size_t size   = vector_size(tokens);
-  vm->bytecode  = NULL;
-
-  for(i = 0; i < size; i++) {
-    if(string_equals(tokens[i], "exit")) {
-      exit(0);
-    } else if(string_equals(tokens[i], "print")) {
-      OA(OP_PRINT, tokens[i + 1]);
-      i++;
-    } else if(string_equals(tokens[i + 1], "=")) {
-      if(string_equals(tokens[i + 2], "nil")) {
-        OABk(OP_LOCAL, tokens[i], MARG_NIL());
-        i += 2;
-      } else if(string_equals(tokens[i + 2], "false")) {
-        OABk(OP_LOCAL, tokens[i], MARG_FALSE());
-        i += 2;
-      } else if(string_equals(tokens[i + 2], "true")) {
-        OABk(OP_LOCAL, tokens[i], MARG_TRUE());
-        i += 2;
-      } else if(string_equals(tokens[i + 2], "number")) {
-        OABk(OP_LOCAL, tokens[i], MARG_NUMBER(atof(tokens[i + 3])));
-        i += 3;
-      } else if(string_equals(tokens[i + 2], "string")) {
-        char *str = tokens[i + 3];
-        string_skip_first(str, 1);
-        string_ignore_last(str, 1);
-        OABk(OP_LOCAL, tokens[i], MARG_STRING(tokens[i + 3]));
-        i += 3;
-      } else if(string_equals(tokens[i + 3], "+")) {
-        OABC(OP_ADD, tokens[i], tokens[i + 2], tokens[i + 4]);
-        i += 4;
-      } else if(string_equals(tokens[i + 3], "-")) {
-        OABC(OP_SUB, tokens[i], tokens[i + 2], tokens[i + 4]);
-        i += 4;
-      } else if(string_equals(tokens[i + 3], "*")) {
-        OABC(OP_MUL, tokens[i], tokens[i + 2], tokens[i + 4]);
-        i += 4;
-      } else if(string_equals(tokens[i + 3], "/")) {
-        OABC(OP_DIV, tokens[i], tokens[i + 2], tokens[i + 4]);
-        i += 4;
-      } else {
-        printf("unknown token: %s\n", tokens[i]);
-      }
-    }
-  }
-
-  OP(OP_HALT);
-}
-
 p_inline void emit_example_bytecode(VM *vm) {
-  /* x = nil */
-  OABk(OP_LOCAL, "x", MARG_NIL());
-  OABk(OP_LOCAL, "y", MARG_FALSE());
-  OABk(OP_LOCAL, "y2", MARG_TRUE());
-  /* y3 = number 1 */
-  OABk(OP_LOCAL, "y3", MARG_NUMBER(1));
-  OABk(OP_LOCAL, "z", MARG_NUMBER(10));
-  OABk(OP_LOCAL, "a", MARG_NUMBER(3.14));
-  /* msg = string "hello" */
-  OABk(OP_LOCAL, "msg", MARG_STRING("Hello"));
-  /* result_add = z + a */
-  OABC(OP_ADD, "result_add", "z", "a");
-  OABC(OP_SUB, "result_sub", "result_add", "y3");
-  OABC(OP_MUL, "result_mul", "result_sub", "z");
-  OABC(OP_DIV, "result_div", "result_mul", "a");
-  /* print x */
-  OA(OP_PRINT, "x");
-  OA(OP_PRINT, "y");
-  OA(OP_PRINT, "y2");
-  OA(OP_PRINT, "y3");
-  OA(OP_PRINT, "z");
-  OA(OP_PRINT, "a");
-  OA(OP_PRINT, "msg");
-  OA(OP_PRINT, "result_add");
-  OA(OP_PRINT, "result_sub");
-  OA(OP_PRINT, "result_mul");
-  OA(OP_PRINT, "result_div");
+  OAB(OP_MOV, LOCAL("x"), CONST(MARG_NIL()));
+  OAB(OP_MOV, LOCAL("y"), CONST(MARG_FALSE()));
+  OAB(OP_MOV, LOCAL("y2"), CONST(MARG_TRUE()));
+  OAB(OP_MOV, LOCAL("y3"), CONST(MARG_NUMBER(1)));
+  OAB(OP_MOV, LOCAL("z"), CONST(MARG_NUMBER(10)));
+  OAB(OP_MOV, LOCAL("a"), CONST(MARG_NUMBER(3.14)));
+  OAB(OP_MOV, LOCAL("msg"), CONST(MARG_STRING("Hello")));
+  OABC(OP_ADD, LOCAL("result_add"), LOCAL("z"), LOCAL("a"));
+  OABC(OP_SUB, LOCAL("result_sub"), LOCAL("result_add"), LOCAL("y3"));
+  OABC(OP_MUL, LOCAL("result_mul"), LOCAL("result_sub"), LOCAL("z"));
+  OABC(OP_DIV, LOCAL("result_div"), LOCAL("result_mul"), LOCAL("a"));
+  OA(OP_PRINT, LOCAL("x"));
+  OA(OP_PRINT, LOCAL("y"));
+  OA(OP_PRINT, LOCAL("y2"));
+  OA(OP_PRINT, LOCAL("y3"));
+  OA(OP_PRINT, LOCAL("z"));
+  OA(OP_PRINT, LOCAL("a"));
+  OA(OP_PRINT, LOCAL("msg"));
+  OA(OP_PRINT, LOCAL("result_add"));
+  OA(OP_PRINT, LOCAL("result_sub"));
+  OA(OP_PRINT, LOCAL("result_mul"));
+  OA(OP_PRINT, LOCAL("result_div"));
+
+  OAB(OP_MOV, INSTANCE("@count"), CONST(MARG_NUMBER(0)));
+  OAB(OP_MOV, GLOBAL("$max"), CONST(MARG_NUMBER(3)));
+  OABC(OP_ADD, LOCAL("total"), INSTANCE("@count"), GLOBAL("$max"));
+  OABC(OP_ADD, LOCAL("total"), LOCAL("total"), CONST(MARG_NUMBER(39)));
+  OA(OP_PRINT, LOCAL("total"));
+
   /* exit */
   OP(OP_HALT);
 }

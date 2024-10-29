@@ -3,7 +3,7 @@
 
 #include "vm.h"
 
-#define OP_LOCAL ((Instruction)0x00)
+#define OP_MOV   ((Instruction)0x00)
 #define OP_ADD   ((Instruction)0x01)
 #define OP_SUB   ((Instruction)0x02)
 #define OP_MUL   ((Instruction)0x03)
@@ -14,7 +14,7 @@
 
 #define dispatch_table()                                  \
   static void *_computed_gotos[256] = {                   \
-    &&_computed_goto_OP_LOCAL, &&_computed_goto_OP_ADD,   \
+    &&_computed_goto_OP_MOV,   &&_computed_goto_OP_ADD,   \
     &&_computed_goto_OP_SUB,   &&_computed_goto_OP_MUL,   \
     &&_computed_goto_OP_DIV,   &&_computed_goto_OP_PRINT, \
     &&_computed_goto_OP_RAISE, &&_computed_goto_ERROR,    \
