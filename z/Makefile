@@ -5,7 +5,7 @@ VERSION = -Og -std=c89
 FLAGS = -g -fsanitize=address
 WARNINGS = -Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic -Wno-gnu-label-as-value -Wno-unused-function -Wno-gnu-statement-expression-from-macro-expansion
 
-SRC = object.c vm.c scanner.c ../libs/EmeraldsReadline/export/libreadline.a ../libs/EmeraldsReadline/export/libcurses.a ../libs/EmeraldsReadline/export/libhistory.a
+SRC = object.c vm.c evaluator.c ../libs/EmeraldsReadline/export/libreadline.a ../libs/EmeraldsReadline/export/libcurses.a ../libs/EmeraldsReadline/export/libhistory.a
 INPUT = $(SRC) $(NAME).c
 SPECINPUT = $(SRC) $(NAME).spec.c
 OUTPUT = a.out

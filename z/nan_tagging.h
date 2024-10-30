@@ -1,7 +1,7 @@
 #ifndef __NAN_TAGGING_H_
 #define __NAN_TAGGING_H_
 
-#include <stddef.h> /* size_t */
+#include "../libs/EmeraldsString/export/EmeraldsString.h"
 
 /** @brief Ex nihilo value */
 typedef size_t Value;

@@ -1,7 +1,6 @@
 #ifndef __EMITTER_H_
 #define __EMITTER_H_
 
-#include "../libs/EmeraldsString/export/EmeraldsString.h"
 #include "instruction.h"
 #include "object.h"
 #include "opcode.h"

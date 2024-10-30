@@ -1,7 +1,5 @@
 #include "object.h"
 
-#include "../libs/EmeraldsString/export/EmeraldsString.h"
-
 Object *value_object_new(VM *bound_vm, size_t size, Type type) {
   Object *self = (Object *)malloc(sizeof(Object) * size);
 
