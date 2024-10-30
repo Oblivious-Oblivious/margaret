@@ -15,16 +15,13 @@ module(headless_methods_spec, {
         string_new("x"),
         FM_INTEGER,
         string_new("1"),
-        FM_BINARY,
-        string_new("="),
+        FM_ASSIGNMENT,
         FM_LOCAL,
         string_new("y"),
         FM_INTEGER,
         string_new("2"),
-        FM_BINARY,
-        string_new("="),
-        FM_BINARY,
-        string_new("="),
+        FM_ASSIGNMENT,
+        FM_ASSIGNMENT,
         FM_METHOD_END
       )
     );
@@ -63,8 +60,7 @@ module(headless_methods_spec, {
         FM_BINARY,
         string_new("*"),
         FM_METHOD_END,
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
   });
@@ -109,14 +105,12 @@ module(headless_methods_spec, {
         string_new("x"),
         FM_INTEGER,
         string_new("1"),
-        FM_BINARY,
-        string_new("="),
+        FM_ASSIGNMENT,
         FM_LOCAL,
         string_new("y"),
         FM_INTEGER,
         string_new("2"),
-        FM_BINARY,
-        string_new("="),
+        FM_ASSIGNMENT,
         FM_LOCAL,
         string_new("x"),
         FM_LOCAL,
@@ -158,8 +152,7 @@ module(headless_methods_spec, {
         string_new("x"),
         FM_INTEGER,
         string_new("2"),
-        FM_BINARY,
-        string_new("="),
+        FM_ASSIGNMENT,
         FM_METHOD_END,
         FM_UNARY,
         string_new("call")

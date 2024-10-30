@@ -133,11 +133,9 @@ void parser_assignment_message(VM *vm) {
 
   keyword_message();
   if(la1value("=") && prev_size < vm->tid) {
-    char *eq =
-      consume(TOKEN_MESSAGE_SYMBOL, "missing '=' on assignment message.");
+    consume(TOKEN_MESSAGE_SYMBOL, "missing '=' on assignment message.");
     assignment_message();
-    generate(FM_BINARY);
-    generate(eq);
+    generate(FM_ASSIGNMENT);
   }
 }
 

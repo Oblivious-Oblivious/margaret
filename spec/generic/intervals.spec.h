@@ -19,8 +19,7 @@ module(intervals_spec, {
         FM_KEYWORD,
         string_new("from:to:"),
         string_new("2"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -39,8 +38,7 @@ module(intervals_spec, {
         FM_KEYWORD,
         string_new("from:to:by:"),
         string_new("3"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -55,8 +53,7 @@ module(intervals_spec, {
         FM_KEYWORD,
         string_new("to:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -73,8 +70,7 @@ module(intervals_spec, {
         FM_KEYWORD,
         string_new("to:by:"),
         string_new("2"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
   });

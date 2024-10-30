@@ -31,8 +31,7 @@ module(meta_evaluation_spec, {
         string_new("String"),
         FM_UNARY,
         string_new("name"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -44,8 +43,7 @@ module(meta_evaluation_spec, {
         string_new("String"),
         FM_UNARY,
         string_new("category"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -57,8 +55,7 @@ module(meta_evaluation_spec, {
         string_new("String"),
         FM_UNARY,
         string_new("description"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -70,8 +67,7 @@ module(meta_evaluation_spec, {
         string_new("String"),
         FM_UNARY,
         string_new("kind_of_subclass"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -83,8 +79,7 @@ module(meta_evaluation_spec, {
         string_new("String"),
         FM_UNARY,
         string_new("definition"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -96,8 +91,7 @@ module(meta_evaluation_spec, {
         string_new("String"),
         FM_UNARY,
         string_new("field_names"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -109,8 +103,7 @@ module(meta_evaluation_spec, {
         string_new("String"),
         FM_UNARY,
         string_new("all_field_names"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -122,8 +115,7 @@ module(meta_evaluation_spec, {
         string_new("String"),
         FM_UNARY,
         string_new("selectors"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -138,8 +130,7 @@ module(meta_evaluation_spec, {
         FM_KEYWORD,
         string_new("source_code_at:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -151,8 +142,7 @@ module(meta_evaluation_spec, {
         string_new("String"),
         FM_UNARY,
         string_new("all_instances"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -164,8 +154,7 @@ module(meta_evaluation_spec, {
         string_new("String"),
         FM_UNARY,
         string_new("superclass"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -177,8 +166,7 @@ module(meta_evaluation_spec, {
         string_new("String"),
         FM_UNARY,
         string_new("all_superclasses"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -190,8 +178,7 @@ module(meta_evaluation_spec, {
         string_new("String"),
         FM_UNARY,
         string_new("subclasses"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -203,8 +190,7 @@ module(meta_evaluation_spec, {
         string_new("String"),
         FM_UNARY,
         string_new("all_subclasses"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -216,8 +202,7 @@ module(meta_evaluation_spec, {
         string_new("String"),
         FM_UNARY,
         string_new("number_of_instances"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
   });

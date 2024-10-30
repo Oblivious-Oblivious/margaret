@@ -193,8 +193,7 @@ module(numeric_spec, {
         string_new("11"),
         FM_BINARY,
         string_new("+"),
-        FM_BINARY,
-        string_new("="),
+        FM_ASSIGNMENT,
         FM_LOCAL,
         string_new("x"),
         FM_UNARY,
@@ -229,8 +228,7 @@ module(numeric_spec, {
         string_new("to_int"),
         FM_UNARY,
         string_new("puts"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -272,8 +270,7 @@ module(numeric_spec, {
         string_new("to_int"),
         FM_UNARY,
         string_new("puts"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(

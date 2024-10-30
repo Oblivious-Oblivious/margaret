@@ -47,6 +47,11 @@
 
 ## (✗) ver. 0.0.2
 -----------------
+  🟥 FT-18 - Add pattern matching and LISP style handling of items
+             %[:car, :cdr] = %[1, 2, 3] # car = 1, cdr = %[2, 3]
+             %[:car, :cdr] = %[1, 2] # car = 1, cdr = %[2], (flatten), cdr = 2
+             %[:car, :cdr] = %[1] # car = 1, cdr = %[], (flatten), cdr = nil
+             %[:car, :cdr] = %[] # car = nil, cdr = nil
   🟥 FM-22 - Pattern-match multimethods by hashing receiver and arguments.
              Every multi-method is hashed into a unique value and searched for in the method table of the receiver.
   🟥 FM-23 - Implement storing and loading bytecode from compiled files, similar to Java.
@@ -74,6 +79,7 @@
 
   🟥 BUG-01 - Fix headless method bytecode definitions and add tests.
   🟥 BUG-02 - Double check that vm works on 16-bit word machines with 32-bit pointers/doubles.
+  🟥 BUG-03 - Disallow rebinding/reassigning the assignment message (=).
 
   🟥 FT-01 - Proposal for cc0-v1 license.
   🟥 FT-02 - Add lexically removed comments.
@@ -109,13 +115,8 @@
              Add complex and rational specific messages.
   🟥 FT-17 - Add an internal include guard for the require primitive.
              LSP can track inlucded files and warn about redefinitions.
-  🟥 FT-18 - Add pattern matching and LISP style handling of items
-             %[:car, :cdr] = %[1, 2, 3] # car = 1, cdr = %[2, 3]
-             %[:car, :cdr] = %[1, 2] # car = 1, cdr = %[2], (flatten), cdr = 2
-             %[:car, :cdr] = %[1] # car = 1, cdr = %[], (flatten), cdr = nil
-             %[:car, :cdr] = %[] # car = nil, cdr = nil
-             l = [1,2,3], [[list, 4], 5] compact!. # [1,2,3,4,5]
   🟥 FT-19 - table = {a: 1, b: 2}, table = table ++ {c: 3}. #{a: 1, b: 2, c: 3}
+             l = [1,2,3], [[list, 4], 5] compact!. # [1,2,3,4,5]
   🟥 FT-20 - Add multimethod in a first-come-first-serve precedence
              Numeric bind: # 0 fact => 1
              Numeric bind: # _ fact => self * (self - 1) fact

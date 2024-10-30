@@ -87,8 +87,7 @@ module(groups_spec, {
         string_new("4"),
         FM_TENSOR,
         string_new("4"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -158,8 +157,7 @@ module(groups_spec, {
         string_new("arr"),
         FM_UNARY,
         string_new("is_empty?"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -171,8 +169,7 @@ module(groups_spec, {
         string_new("arr"),
         FM_UNARY,
         string_new("size"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -187,8 +184,7 @@ module(groups_spec, {
         FM_KEYWORD,
         string_new("at:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -203,8 +199,7 @@ module(groups_spec, {
         FM_KEYWORD,
         string_new("includes?:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -219,8 +214,7 @@ module(groups_spec, {
         FM_KEYWORD,
         string_new("includes:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -237,8 +231,7 @@ module(groups_spec, {
         FM_KEYWORD,
         string_new("copy_from:to:"),
         string_new("2"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -257,8 +250,7 @@ module(groups_spec, {
         FM_KEYWORD,
         string_new("index_of:if_absent:"),
         string_new("2"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -273,8 +265,7 @@ module(groups_spec, {
         FM_KEYWORD,
         string_new("occurrences_of:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -323,8 +314,7 @@ module(groups_spec, {
         FM_KEYWORD,
         string_new("conform:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -347,8 +337,7 @@ module(groups_spec, {
         FM_KEYWORD,
         string_new("select:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -371,8 +360,7 @@ module(groups_spec, {
         FM_KEYWORD,
         string_new("reject:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -395,8 +383,7 @@ module(groups_spec, {
         FM_KEYWORD,
         string_new("collect:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -420,8 +407,7 @@ module(groups_spec, {
         FM_KEYWORD,
         string_new("detect:if_none:"),
         string_new("2"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -443,14 +429,12 @@ module(groups_spec, {
         string_new("4"),
         FM_TENSOR,
         string_new("4"),
-        FM_BINARY,
-        string_new("="),
+        FM_ASSIGNMENT,
         FM_LOCAL,
         string_new("sum"),
         FM_INTEGER,
         string_new("0"),
-        FM_BINARY,
-        string_new("="),
+        FM_ASSIGNMENT,
         FM_LOCAL,
         string_new("arr"),
         FM_METHOD_START,
@@ -494,8 +478,7 @@ module(groups_spec, {
         FM_KEYWORD,
         string_new("inject:into:"),
         string_new("2"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -522,8 +505,7 @@ module(groups_spec, {
         FM_KEYWORD,
         string_new("fold:into:"),
         string_new("2"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -563,8 +545,7 @@ module(groups_spec, {
         FM_KEYWORD,
         string_new("inject:into:"),
         string_new("2"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -576,8 +557,7 @@ module(groups_spec, {
         string_new("arr"),
         FM_UNARY,
         string_new("shuffled"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
   });

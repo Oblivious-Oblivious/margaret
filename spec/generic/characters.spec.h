@@ -20,8 +20,7 @@ module(characters_spec, {
         string_new("a"),
         FM_UNARY,
         string_new("is_lowercase?"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -33,8 +32,7 @@ module(characters_spec, {
         string_new("a"),
         FM_UNARY,
         string_new("is_uppercase?"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -46,8 +44,7 @@ module(characters_spec, {
         string_new("a"),
         FM_UNARY,
         string_new("is_letter?"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -59,8 +56,7 @@ module(characters_spec, {
         string_new("a"),
         FM_UNARY,
         string_new("is_digit?"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -72,8 +68,7 @@ module(characters_spec, {
         string_new("a"),
         FM_UNARY,
         string_new("is_alphanumeric?"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -85,8 +80,7 @@ module(characters_spec, {
         string_new("a"),
         FM_UNARY,
         string_new("is_separator?"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -98,8 +92,7 @@ module(characters_spec, {
         string_new("a"),
         FM_UNARY,
         string_new("is_vowel?"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -111,8 +104,7 @@ module(characters_spec, {
         string_new("a"),
         FM_UNARY,
         string_new("to_digit"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -124,8 +116,7 @@ module(characters_spec, {
         string_new("a"),
         FM_UNARY,
         string_new("to_lowercase"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -137,8 +128,7 @@ module(characters_spec, {
         string_new("a"),
         FM_UNARY,
         string_new("to_uppercase"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -150,8 +140,7 @@ module(characters_spec, {
         string_new("a"),
         FM_UNARY,
         string_new("to_ascii"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -165,8 +154,7 @@ module(characters_spec, {
         string_new("b"),
         FM_BINARY,
         string_new("<="),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
   });

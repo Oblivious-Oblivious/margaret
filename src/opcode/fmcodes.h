@@ -31,5 +31,6 @@
 #define FM_UNARY             string_new("UNARY")
 #define FM_LHS               string_new("LHS")
 #define FM_SUBSCRIPT         string_new("SUBSCRIPT")
+#define FM_ASSIGNMENT        string_new("ASSIGNMENT")
 
 #endif

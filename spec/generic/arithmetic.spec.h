@@ -16,8 +16,7 @@ module(arithmetic_spec, {
         string_new("3"),
         FM_BINARY,
         string_new("+"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -31,8 +30,7 @@ module(arithmetic_spec, {
         string_new("3"),
         FM_BINARY,
         string_new("-"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -46,8 +44,7 @@ module(arithmetic_spec, {
         string_new("3"),
         FM_BINARY,
         string_new("*"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -65,8 +62,7 @@ module(arithmetic_spec, {
         string_new("3"),
         FM_BINARY,
         string_new("*"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -80,8 +76,7 @@ module(arithmetic_spec, {
         string_new("3"),
         FM_BINARY,
         string_new("/"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -95,8 +90,7 @@ module(arithmetic_spec, {
         string_new("3.0"),
         FM_BINARY,
         string_new("/"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -110,8 +104,7 @@ module(arithmetic_spec, {
         string_new("3.0"),
         FM_BINARY,
         string_new("//"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -126,8 +119,7 @@ module(arithmetic_spec, {
         FM_KEYWORD,
         string_new("rem:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -139,8 +131,7 @@ module(arithmetic_spec, {
         string_new("5"),
         FM_LHS,
         string_new("-"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -152,8 +143,7 @@ module(arithmetic_spec, {
         string_new("5"),
         FM_UNARY,
         string_new("sign"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -165,8 +155,7 @@ module(arithmetic_spec, {
         string_new("5"),
         FM_UNARY,
         string_new("negated"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -178,8 +167,7 @@ module(arithmetic_spec, {
         string_new("1.2"),
         FM_UNARY,
         string_new("integer_part"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -191,8 +179,7 @@ module(arithmetic_spec, {
         string_new("1.2"),
         FM_UNARY,
         string_new("fraction_part"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -204,8 +191,7 @@ module(arithmetic_spec, {
         string_new("5"),
         FM_UNARY,
         string_new("reciprocal"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -219,8 +205,7 @@ module(arithmetic_spec, {
         string_new("3.1"),
         FM_BINARY,
         string_new("*"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -232,8 +217,7 @@ module(arithmetic_spec, {
         string_new("5"),
         FM_UNARY,
         string_new("squared"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -245,8 +229,7 @@ module(arithmetic_spec, {
         string_new("25"),
         FM_UNARY,
         string_new("sqrt"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -261,8 +244,7 @@ module(arithmetic_spec, {
         FM_KEYWORD,
         string_new("raised_to:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -277,8 +259,7 @@ module(arithmetic_spec, {
         FM_KEYWORD,
         string_new("raised_to_integer:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -290,8 +271,7 @@ module(arithmetic_spec, {
         string_new("5"),
         FM_UNARY,
         string_new("exp"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -305,8 +285,7 @@ module(arithmetic_spec, {
         string_new("-"),
         FM_UNARY,
         string_new("abs"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -318,8 +297,7 @@ module(arithmetic_spec, {
         string_new("3.99"),
         FM_UNARY,
         string_new("rounded"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -331,8 +309,7 @@ module(arithmetic_spec, {
         string_new("3.99"),
         FM_UNARY,
         string_new("truncated"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -347,8 +324,7 @@ module(arithmetic_spec, {
         FM_KEYWORD,
         string_new("round_to:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -363,8 +339,7 @@ module(arithmetic_spec, {
         FM_KEYWORD,
         string_new("truncate_to:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -376,8 +351,7 @@ module(arithmetic_spec, {
         string_new("3.99"),
         FM_UNARY,
         string_new("floor"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -389,8 +363,7 @@ module(arithmetic_spec, {
         string_new("3.99"),
         FM_UNARY,
         string_new("ceiling"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -402,8 +375,7 @@ module(arithmetic_spec, {
         string_new("5"),
         FM_UNARY,
         string_new("factorial"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -420,8 +392,7 @@ module(arithmetic_spec, {
         FM_KEYWORD,
         string_new("quotient:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -438,8 +409,7 @@ module(arithmetic_spec, {
         FM_KEYWORD,
         string_new("rem:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -454,8 +424,7 @@ module(arithmetic_spec, {
         FM_KEYWORD,
         string_new("gcd:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -470,8 +439,7 @@ module(arithmetic_spec, {
         FM_KEYWORD,
         string_new("lcm:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -483,8 +451,7 @@ module(arithmetic_spec, {
         string_new("100"),
         FM_UNARY,
         string_new("ln"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -496,8 +463,7 @@ module(arithmetic_spec, {
         string_new("100"),
         FM_UNARY,
         string_new("log"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -512,8 +478,7 @@ module(arithmetic_spec, {
         FM_KEYWORD,
         string_new("log:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -525,8 +490,7 @@ module(arithmetic_spec, {
         string_new("180"),
         FM_UNARY,
         string_new("deg_to_rad"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -538,8 +502,7 @@ module(arithmetic_spec, {
         string_new("3.14"),
         FM_UNARY,
         string_new("rad_to_deg"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -551,8 +514,7 @@ module(arithmetic_spec, {
         string_new("0.7"),
         FM_UNARY,
         string_new("sin"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -564,8 +526,7 @@ module(arithmetic_spec, {
         string_new("0.7"),
         FM_UNARY,
         string_new("cos"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -577,8 +538,7 @@ module(arithmetic_spec, {
         string_new("0.7"),
         FM_UNARY,
         string_new("tan"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -590,8 +550,7 @@ module(arithmetic_spec, {
         string_new("0.7"),
         FM_UNARY,
         string_new("arcsin"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -603,8 +562,7 @@ module(arithmetic_spec, {
         string_new("0.7"),
         FM_UNARY,
         string_new("arccos"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -616,8 +574,7 @@ module(arithmetic_spec, {
         string_new("0.7"),
         FM_UNARY,
         string_new("arctan"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -633,8 +590,7 @@ module(arithmetic_spec, {
         string_new("2"),
         FM_UNARY,
         string_new("max"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -650,8 +606,7 @@ module(arithmetic_spec, {
         string_new("2"),
         FM_UNARY,
         string_new("min"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -667,8 +622,7 @@ module(arithmetic_spec, {
         string_new("2"),
         FM_UNARY,
         string_new("random"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
 
@@ -681,8 +635,7 @@ module(arithmetic_spec, {
         string_new("Float"),
         FM_UNARY,
         string_new("PI"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -694,8 +647,7 @@ module(arithmetic_spec, {
         string_new("Float"),
         FM_UNARY,
         string_new("E"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -707,8 +659,7 @@ module(arithmetic_spec, {
         string_new("Float"),
         FM_UNARY,
         string_new("INF"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -720,8 +671,7 @@ module(arithmetic_spec, {
         string_new("Float"),
         FM_UNARY,
         string_new("NAN"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
   });

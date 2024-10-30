@@ -230,8 +230,7 @@ module(tables_spec, {
         FM_KEYWORD,
         string_new("includes_key:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(

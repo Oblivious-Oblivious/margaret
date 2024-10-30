@@ -9,12 +9,7 @@ module(assignment_message, {
     parse(
       "x = 4",
       vector_new(
-        FM_LOCAL,
-        string_new("x"),
-        FM_INTEGER,
-        string_new("4"),
-        FM_BINARY,
-        string_new("=")
+        FM_LOCAL, string_new("x"), FM_INTEGER, string_new("4"), FM_ASSIGNMENT
       )
     );
 
@@ -29,12 +24,9 @@ module(assignment_message, {
         string_new("z"),
         FM_INTEGER,
         string_new("6"),
-        FM_BINARY,
-        string_new("="),
-        FM_BINARY,
-        string_new("="),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT,
+        FM_ASSIGNMENT,
+        FM_ASSIGNMENT
       )
     );
   });

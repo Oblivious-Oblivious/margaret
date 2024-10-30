@@ -88,8 +88,7 @@ module(tensors_spec, {
         string_new("x"),
         FM_INTEGER,
         string_new("1"),
-        FM_BINARY,
-        string_new("="),
+        FM_ASSIGNMENT,
         FM_TENSOR,
         string_new("8")
       )
