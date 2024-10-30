@@ -72,17 +72,17 @@ _opcode_loop:;
       if(RA == 0) {
         printf("ZERO ??\n");
       } else if(IS_MARG_NIL(RA)) {
-        printf("R%zu = nil\n", A);
+        printf("R%zu = nil\n", GET_INDEX(A));
       } else if(IS_MARG_FALSE(RA)) {
-        printf("R%zu = false\n", A);
+        printf("R%zu = false\n", GET_INDEX(A));
       } else if(IS_MARG_TRUE(RA)) {
-        printf("R%zu = true\n", A);
+        printf("R%zu = true\n", GET_INDEX(A));
       } else if(IS_MARG_NUMBER(RA)) {
-        printf("R%zu = %g\n", A, AS_MARG_NUMBER(RA)->value);
+        printf("R%zu = %g\n", GET_INDEX(A), AS_MARG_NUMBER(RA)->value);
       } else if(IS_MARG_STRING(RA)) {
-        printf("R%zu = \"%s\"\n", A, AS_MARG_STRING(RA)->value);
+        printf("R%zu = \"%s\"\n", GET_INDEX(A), AS_MARG_STRING(RA)->value);
       } else {
-        printf("R%zu = UNKNOWN\n", A);
+        printf("R%zu = UNKNOWN\n", GET_INDEX(A));
       }
       next_opcode;
     }
