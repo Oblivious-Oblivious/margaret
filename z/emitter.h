@@ -13,10 +13,14 @@ p_inline void emit_example_bytecode(VM *vm) {
   OAB(OP_MOV, LOCAL("z"), CONST(MARG_NUMBER(10)));
   OAB(OP_MOV, LOCAL("a"), CONST(MARG_NUMBER(3.14)));
   OAB(OP_MOV, LOCAL("msg"), CONST(MARG_STRING("Hello")));
-  OABC(OP_ADD, LOCAL("result_add"), LOCAL("z"), LOCAL("a"));
-  OABC(OP_SUB, LOCAL("result_sub"), LOCAL("result_add"), LOCAL("y3"));
-  OABC(OP_MUL, LOCAL("result_mul"), LOCAL("result_sub"), LOCAL("z"));
-  OABC(OP_DIV, LOCAL("result_div"), LOCAL("result_mul"), LOCAL("a"));
+  OAB(OP_ADD, LOCAL("z"), LOCAL("a"));
+  OA(OP_MOVZ, LOCAL("result_add"));
+  OAB(OP_SUB, LOCAL("result_add"), LOCAL("y3"));
+  OA(OP_MOVZ, LOCAL("result_sub"));
+  OAB(OP_MUL, LOCAL("result_sub"), LOCAL("z"));
+  OA(OP_MOVZ, LOCAL("result_mul"));
+  OAB(OP_DIV, LOCAL("result_mul"), LOCAL("a"));
+  OA(OP_MOVZ, LOCAL("result_div"));
   OA(OP_PRINT, LOCAL("x"));
   OA(OP_PRINT, LOCAL("y"));
   OA(OP_PRINT, LOCAL("y2"));
@@ -31,8 +35,10 @@ p_inline void emit_example_bytecode(VM *vm) {
 
   OAB(OP_MOV, INSTANCE("@count"), CONST(MARG_NUMBER(0)));
   OAB(OP_MOV, GLOBAL("$max"), CONST(MARG_NUMBER(3)));
-  OABC(OP_ADD, LOCAL("total"), INSTANCE("@count"), GLOBAL("$max"));
-  OABC(OP_ADD, LOCAL("total"), LOCAL("total"), CONST(MARG_NUMBER(39)));
+  OAB(OP_ADD, INSTANCE("@count"), GLOBAL("$max"));
+  OA(OP_MOVZ, LOCAL("total"));
+  OAB(OP_ADD, LOCAL("total"), CONST(MARG_NUMBER(39)));
+  OA(OP_MOVZ, LOCAL("total"));
   OA(OP_PRINT, LOCAL("total"));
 
   /* exit */

@@ -29,42 +29,46 @@ _opcode_loop:;
       SRA(RB);
       next_opcode;
     }
+    case_opcode(OP_MOVZ) {
+      SRA(vm->constants[vector_size(vm->constants) - 1]);
+      next_opcode;
+    }
     case_opcode(OP_ADD) {
-      if(IS_MARG_NUMBER(RB) && IS_MARG_NUMBER(RC)) {
-        SRA(MARG_NUMBER(AS_MARG_NUMBER(RB)->value + AS_MARG_NUMBER(RC)->value));
+      if(IS_MARG_NUMBER(RA) && IS_MARG_NUMBER(RB)) {
+        SRZ(MARG_NUMBER(AS_MARG_NUMBER(RA)->value + AS_MARG_NUMBER(RB)->value));
         next_opcode;
       } else {
-        SRA(MARG_STRING("TypeError: cannot add non-number values."));
+        SRZ(MARG_STRING("TypeError: cannot add non-number values."));
         raise;
       }
     }
     case_opcode(OP_SUB) {
-      if(IS_MARG_NUMBER(RB) && IS_MARG_NUMBER(RC)) {
-        SRA(MARG_NUMBER(AS_MARG_NUMBER(RB)->value - AS_MARG_NUMBER(RC)->value));
+      if(IS_MARG_NUMBER(RA) && IS_MARG_NUMBER(RB)) {
+        SRZ(MARG_NUMBER(AS_MARG_NUMBER(RA)->value - AS_MARG_NUMBER(RB)->value));
         next_opcode;
       } else {
-        SRA(MARG_STRING("TypeError: cannot subtract non-number values."));
+        SRZ(MARG_STRING("TypeError: cannot subtract non-number values."));
         raise;
       }
     }
     case_opcode(OP_MUL) {
-      if(IS_MARG_NUMBER(RB) && IS_MARG_NUMBER(RC)) {
-        SRA(MARG_NUMBER(AS_MARG_NUMBER(RB)->value * AS_MARG_NUMBER(RC)->value));
+      if(IS_MARG_NUMBER(RA) && IS_MARG_NUMBER(RB)) {
+        SRZ(MARG_NUMBER(AS_MARG_NUMBER(RA)->value * AS_MARG_NUMBER(RB)->value));
         next_opcode;
       } else {
-        SRA(MARG_STRING("TypeError: cannot multiply non-number values."));
+        SRZ(MARG_STRING("TypeError: cannot multiply non-number values."));
         raise;
       }
     }
     case_opcode(OP_DIV) {
-      if(IS_MARG_NUMBER(RC) && AS_MARG_NUMBER(RC)->value == 0.0) {
-        SRA(MARG_STRING("Runtime Error: Division by zero"));
+      if(IS_MARG_NUMBER(RB) && AS_MARG_NUMBER(RB)->value == 0.0) {
+        SRZ(MARG_STRING("Runtime Error: Division by zero"));
         raise;
-      } else if(IS_MARG_NUMBER(RB) && IS_MARG_NUMBER(RC)) {
-        SRA(MARG_NUMBER(AS_MARG_NUMBER(RB)->value / AS_MARG_NUMBER(RC)->value));
+      } else if(IS_MARG_NUMBER(RA) && IS_MARG_NUMBER(RB)) {
+        SRZ(MARG_NUMBER(AS_MARG_NUMBER(RA)->value / AS_MARG_NUMBER(RB)->value));
         next_opcode;
       } else {
-        SRA(MARG_STRING("TypeError: cannot divide non-number values."));
+        SRZ(MARG_STRING("TypeError: cannot divide non-number values."));
         raise;
       }
     }
@@ -91,9 +95,6 @@ _opcode_loop:;
       next_opcode;
     }
     case_opcode(OP_HALT) { return; }
-    default_opcode {
-      fprintf(stderr, "raise: `Unknown Opcode: %zu`\n", O);
-      exit(1);
-    }
+    default_opcode { exit(1); }
   }
 }

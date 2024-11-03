@@ -25,7 +25,6 @@ module(instruction_format_spec, {
     SRA(RB);
 
     assert_that_size_t(O equals to OP_MOV);
-    assert_that(IS_LOCAL(A));
     assert_that_size_t(GET_INDEX(A) equals to 0);
     assert_that(IS_CONSTANT(B));
     assert_that_size_t(GET_INDEX(B) equals to 0);
@@ -36,7 +35,6 @@ module(instruction_format_spec, {
     SRA(RB);
 
     assert_that_size_t(O equals to OP_MOV);
-    assert_that(IS_INSTANCE(A));
     assert_that_size_t(GET_INDEX(A) equals to 1);
     assert_that(IS_CONSTANT(B));
     assert_that_size_t(GET_INDEX(B) equals to 1);
@@ -47,7 +45,6 @@ module(instruction_format_spec, {
     SRA(RB);
 
     assert_that_size_t(O equals to OP_MOV);
-    assert_that(IS_GLOBAL(A));
     assert_that_size_t(GET_INDEX(A) equals to 2);
     assert_that(IS_CONSTANT(B));
     assert_that_size_t(GET_INDEX(B) equals to 2);
@@ -58,11 +55,8 @@ module(instruction_format_spec, {
     SRA(MARG_NUMBER(AS_MARG_NUMBER(RB)->value + AS_MARG_NUMBER(RC)->value));
 
     assert_that_size_t(O equals to OP_ADD);
-    assert_that(IS_GLOBAL(A));
     assert_that_size_t(GET_INDEX(A) equals to 2);
-    assert_that(IS_INSTANCE(B));
     assert_that_size_t(GET_INDEX(B) equals to 1);
-    assert_that(IS_LOCAL(C));
     assert_that_size_t(GET_INDEX(C) equals to 0);
     assert_that_size_t(AS_MARG_NUMBER(RA)->value equals to 579);
     assert_that_size_t(AS_MARG_NUMBER(RB)->value equals to 456);

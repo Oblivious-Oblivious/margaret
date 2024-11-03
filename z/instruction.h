@@ -45,11 +45,11 @@ p_inline Instruction make_register(VM *vm, const char *var, RegisterType type) {
 
   reg_ptr = table_get(table, var);
   if(reg_ptr != TABLE_UNDEFINED) {
-    return reg_ptr | type;
+    return reg_ptr;
   } else {
     reg_ptr = total_table_size & (MAX_REGISTERS - 1);
     table_add(table, var, reg_ptr);
-    return reg_ptr | type;
+    return reg_ptr;
   }
 }
 
@@ -58,17 +58,13 @@ p_inline Instruction make_register(VM *vm, const char *var, RegisterType type) {
 #define GET_TYPE(i)  ((i) & 0x30000)
 #define GET_INDEX(i) ((i) & 0x0FFFF)
 
-#define IS_LOCAL(i)    (GET_TYPE(i) == REG_TYPE_LOCAL)
-#define IS_INSTANCE(i) (GET_TYPE(i) == REG_TYPE_INSTANCE)
-#define IS_GLOBAL(i)   (GET_TYPE(i) == REG_TYPE_GLOBAL)
 #define IS_CONSTANT(i) (GET_TYPE(i) == REG_TYPE_CONSTANT)
 
 #define GET_R(i) \
   (IS_CONSTANT(i) ? vm->constants[GET_INDEX(i)] : vm->registers[GET_INDEX(i)])
 
-#define SET_R(i, v)                                \
-  (IS_CONSTANT(i) ? (vector_add(vm->constants, v)) \
-                  : (vm->registers[GET_INDEX(i)] = (v)))
+#define SET_R(i, v) \
+  (IS_CONSTANT(i) ? (vector_add(vm->constants, v)) : (vm->registers[(i)] = (v)))
 
 #define CONST(value)  (make_constant((vm), (value)))
 #define LOCAL(var)    (make_register((vm), (var), REG_TYPE_LOCAL))
@@ -87,5 +83,6 @@ p_inline Instruction make_register(VM *vm, const char *var, RegisterType type) {
 #define SRA(v) SET_R(A, v)
 #define SRB(v) SET_R(B, v)
 #define SRC(v) SET_R(C, v)
+#define SRZ(v) (vector_add(vm->constants, v))
 
 #endif
