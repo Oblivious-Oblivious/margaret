@@ -4,6 +4,10 @@
 #include "object.h"
 #include "opcode.h"
 
+static void primitive_RAISE(Value message) {
+  fprintf(stderr, "raise: `%s`\n", AS_MARG_STRING(message)->value);
+}
+
 #define FETCH() (vm->ip++, O)
 
 void evaluate(VM *vm) {
@@ -19,7 +23,7 @@ void evaluate(VM *vm) {
 #endif
 
 #define next_opcode goto _opcode_loop
-#define raise       goto *_computed_gotos[OP_RAISE]
+#define raise(msg)  primitive_RAISE(MARG_STRING(msg))
 
   vm->ip = -1;
 
@@ -30,46 +34,53 @@ _opcode_loop:;
       next_opcode;
     }
     case_opcode(OP_MOVZ) {
-      SRA(vm->constants[vector_size(vm->constants) - 1]);
+      SRA(RZ);
+      next_opcode;
+    }
+    case_opcode(OP_LOD) {
+      SRZ(RA);
       next_opcode;
     }
     case_opcode(OP_ADD) {
-      if(IS_MARG_NUMBER(RA) && IS_MARG_NUMBER(RB)) {
-        SRZ(MARG_NUMBER(AS_MARG_NUMBER(RA)->value + AS_MARG_NUMBER(RB)->value));
+      if(IS_MARG_NUMBER(K(-2)) && IS_MARG_NUMBER(K(-1))) {
+        SRZ(MARG_NUMBER(
+          AS_MARG_NUMBER(K(-2))->value + AS_MARG_NUMBER(K(-1))->value
+        ));
         next_opcode;
       } else {
-        SRZ(MARG_STRING("TypeError: cannot add non-number values."));
-        raise;
+        raise("TypeError: cannot add non-number values.");
       }
     }
     case_opcode(OP_SUB) {
-      if(IS_MARG_NUMBER(RA) && IS_MARG_NUMBER(RB)) {
-        SRZ(MARG_NUMBER(AS_MARG_NUMBER(RA)->value - AS_MARG_NUMBER(RB)->value));
+      if(IS_MARG_NUMBER(K(-2)) && IS_MARG_NUMBER(K(-1))) {
+        SRZ(MARG_NUMBER(
+          AS_MARG_NUMBER(K(-2))->value - AS_MARG_NUMBER(K(-1))->value
+        ));
         next_opcode;
       } else {
-        SRZ(MARG_STRING("TypeError: cannot subtract non-number values."));
-        raise;
+        raise("TypeError: cannot subtract non-number values.");
       }
     }
     case_opcode(OP_MUL) {
-      if(IS_MARG_NUMBER(RA) && IS_MARG_NUMBER(RB)) {
-        SRZ(MARG_NUMBER(AS_MARG_NUMBER(RA)->value * AS_MARG_NUMBER(RB)->value));
+      if(IS_MARG_NUMBER(K(-2)) && IS_MARG_NUMBER(K(-1))) {
+        SRZ(MARG_NUMBER(
+          AS_MARG_NUMBER(K(-2))->value * AS_MARG_NUMBER(K(-1))->value
+        ));
         next_opcode;
       } else {
-        SRZ(MARG_STRING("TypeError: cannot multiply non-number values."));
-        raise;
+        raise("TypeError: cannot multiply non-number values.");
       }
     }
     case_opcode(OP_DIV) {
-      if(IS_MARG_NUMBER(RB) && AS_MARG_NUMBER(RB)->value == 0.0) {
-        SRZ(MARG_STRING("Runtime Error: Division by zero"));
-        raise;
-      } else if(IS_MARG_NUMBER(RA) && IS_MARG_NUMBER(RB)) {
-        SRZ(MARG_NUMBER(AS_MARG_NUMBER(RA)->value / AS_MARG_NUMBER(RB)->value));
+      if(IS_MARG_NUMBER(K(-1)) && AS_MARG_NUMBER(K(-1))->value == 0.0) {
+        raise("Runtime Error: Division by zero");
+      } else if(IS_MARG_NUMBER(K(-2)) && IS_MARG_NUMBER(K(-1))) {
+        SRZ(MARG_NUMBER(
+          AS_MARG_NUMBER(K(-2))->value / AS_MARG_NUMBER(K(-1))->value
+        ));
         next_opcode;
       } else {
-        SRZ(MARG_STRING("TypeError: cannot divide non-number values."));
-        raise;
+        raise("TypeError: cannot divide non-number values.");
       }
     }
     case_opcode(OP_PRINT) {
@@ -91,7 +102,7 @@ _opcode_loop:;
       next_opcode;
     }
     case_opcode(OP_RAISE) {
-      fprintf(stderr, "raise: `%s`\n", AS_MARG_STRING(RA)->value);
+      primitive_RAISE(RA);
       next_opcode;
     }
     case_opcode(OP_HALT) { return; }
