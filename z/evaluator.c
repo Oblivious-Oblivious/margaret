@@ -37,7 +37,7 @@ _opcode_loop:;
       SRA(RZ);
       next_opcode;
     }
-    case_opcode(OP_LOD) {
+    case_opcode(OP_LODZ) {
       SRZ(RA);
       next_opcode;
     }
