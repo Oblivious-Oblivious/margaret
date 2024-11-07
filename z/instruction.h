@@ -96,14 +96,13 @@ p_inline Instruction make_register(VM *vm, const char *var, RegisterType type) {
 #define RA GET_R(A)
 #define RB GET_R(B)
 #define RC GET_R(C)
-#define RZ (vm->current->constants[Z])
+#define KZ (vm->current->constants[Z])
 #define K(i) \
   (i < 0 ? vm->current->constants[Z + i + 1] : vm->current->constants[i])
 
 #define SRA(v) SET_R(A, v)
 #define SRB(v) SET_R(B, v)
 #define SRC(v) SET_R(C, v)
-/* TODO - If not needed, Convert this to store only the latest intermediate */
-#define SRZ(v) (vector_add(vm->current->constants, v))
+#define SKZ(v) (vector_add(vm->current->constants, v))
 
 #endif

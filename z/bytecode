@@ -1,14 +1,36 @@
 Registers:
-  General-Purpose Registers: R0 to R15 (16 registers) for holding intermediate values.
+  General-Purpose Registers: 1 << 16 registers holding variables.
+  Three, (1 << 16) sized tables for locals, instances and globals.
+  Constants: dynamic vector but limited to 1 << 16 elements.
 
 Special Registers:
-  Program Counter (PC): Points to the current instruction.
+  Instruction Pointer (IP): Points to the current instruction.
   Stack Pointer (SP): Points to the top of the stack.
   Frame Pointer (FP): Points to the start of the current stack frame.
 
 Memory:
   Heap: For dynamic memory allocation (objects, method definitions).
   Stack: For function calls, local variables, and intermediate computations.
+
+Method Emission:
+  $Margaret -- #m1 => {
+    a = 2,
+    b = 3,
+    c = a + b,
+  },
+  $Numeric -- #+ other => _PRIM_ADD: @self TO: other,
+
+  send `+` with [`a`, `b`]
+  object_of_a = find object of `a`
+  method = table_get(object_of_a, message_name)
+  method->bound_object = object_of_a
+  method->bound_method = self (meaning m1)
+  method->arguments append [a, b]
+  vm->current = method
+
+Method Evaluation:
+  point vm->ip to vm->current->bytecode;
+  understand when to exit the activation record.
 
 LOAD_NIL          Load nil into a register                 dest_reg
 LOAD_FALSE        Load false into a register               dest_reg

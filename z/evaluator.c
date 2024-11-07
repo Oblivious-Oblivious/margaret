@@ -34,16 +34,16 @@ _opcode_loop:;
       next_opcode;
     }
     case_opcode(OP_MOVZ) {
-      SRA(RZ);
+      SRA(KZ);
       next_opcode;
     }
     case_opcode(OP_LODZ) {
-      SRZ(RA);
+      SKZ(RA);
       next_opcode;
     }
     case_opcode(OP_ADD) {
       if(IS_MARG_NUMBER(K(-2)) && IS_MARG_NUMBER(K(-1))) {
-        SRZ(MARG_NUMBER(
+        SKZ(MARG_NUMBER(
           AS_MARG_NUMBER(K(-2))->value + AS_MARG_NUMBER(K(-1))->value
         ));
         next_opcode;
@@ -53,7 +53,7 @@ _opcode_loop:;
     }
     case_opcode(OP_SUB) {
       if(IS_MARG_NUMBER(K(-2)) && IS_MARG_NUMBER(K(-1))) {
-        SRZ(MARG_NUMBER(
+        SKZ(MARG_NUMBER(
           AS_MARG_NUMBER(K(-2))->value - AS_MARG_NUMBER(K(-1))->value
         ));
         next_opcode;
@@ -63,7 +63,7 @@ _opcode_loop:;
     }
     case_opcode(OP_MUL) {
       if(IS_MARG_NUMBER(K(-2)) && IS_MARG_NUMBER(K(-1))) {
-        SRZ(MARG_NUMBER(
+        SKZ(MARG_NUMBER(
           AS_MARG_NUMBER(K(-2))->value * AS_MARG_NUMBER(K(-1))->value
         ));
         next_opcode;
@@ -75,7 +75,7 @@ _opcode_loop:;
       if(IS_MARG_NUMBER(K(-1)) && AS_MARG_NUMBER(K(-1))->value == 0.0) {
         raise("Runtime Error: Division by zero");
       } else if(IS_MARG_NUMBER(K(-2)) && IS_MARG_NUMBER(K(-1))) {
-        SRZ(MARG_NUMBER(
+        SKZ(MARG_NUMBER(
           AS_MARG_NUMBER(K(-2))->value / AS_MARG_NUMBER(K(-1))->value
         ));
         next_opcode;
