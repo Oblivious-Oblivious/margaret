@@ -2,7 +2,7 @@
 #define __EMITTER_H_
 
 #include "instruction.h"
-#include "object.h"
+#include "nan_tagging.h"
 #include "opcode.h"
 
 p_inline void emit_example_bytecode(VM *vm) {
@@ -53,6 +53,8 @@ p_inline void emit_example_bytecode(VM *vm) {
   OP(OP_ADD);
   OA(OP_MOVZ, LOCAL("total"));
   OA(OP_PRINT, LOCAL("total"));
+  OA(OP_PRINT, INSTANCE("@count"));
+  OA(OP_PRINT, GLOBAL("$max"));
 
   /* 1 + 2 + 3 + 5 + 7 + 11 + 13 */
   /* (+ (+ (+ (+ (+ (+ 1 2) 3) 5) 7) 11) 13) */

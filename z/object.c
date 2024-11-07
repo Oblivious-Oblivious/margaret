@@ -1,40 +1,39 @@
 #include "object.h"
 
-Object *value_object_new(VM *bound_vm, size_t size, Type type) {
+#include "../libs/EmeraldsString/export/EmeraldsString.h"
+#include "nan_tagging.h"
+
+Object *value_object_new(VM *bound_vm, size_t size, Value proto, char *name) {
   Object *self = (Object *)malloc(sizeof(Object) * size);
 
   self->is_marked = false;
-  self->type      = type;
   self->next      = NULL;
   self->bound_vm  = bound_vm;
 
-  return self;
-}
+  self->name   = name;
+  self->parent = proto;
 
-Nil *value_nil_new(VM *vm) {
-  Object *obj = (Object *)value_object_new(vm, sizeof(Nil), TYPE_MARG_NIL);
-  Nil *self   = (Nil *)obj;
+  table_init(&self->instance_variables);
+  table_init(&self->messages);
 
-  return self;
-}
+  table_add_all(
+    &self->instance_variables, &AS_MARG_OBJECT(self->parent)->instance_variables
+  );
 
-False *value_false_new(VM *vm) {
-  Object *obj = (Object *)value_object_new(vm, sizeof(False), TYPE_MARG_FALSE);
-  False *self = (False *)obj;
-
-  return self;
-}
-
-True *value_true_new(VM *vm) {
-  Object *obj = (Object *)value_object_new(vm, sizeof(True), TYPE_MARG_TRUE);
-  True *self  = (True *)obj;
+  table_add(&self->instance_variables, "@self", QNAN_BOX(self));
+  table_add(&self->instance_variables, "@super", self->parent);
+  table_add(&bound_vm->global_variables, name, QNAN_BOX(self));
 
   return self;
 }
 
 Number *value_number_new(VM *vm, double value) {
-  Object *obj =
-    (Object *)value_object_new(vm, sizeof(Number), TYPE_MARG_NUMBER);
+  Object *obj = (Object *)value_object_new(
+    vm,
+    sizeof(Number),
+    table_get(&vm->global_variables, "$Margaret"),
+    string_new("$Number")
+  );
   Number *self = (Number *)obj;
 
   self->value = value;
@@ -44,11 +43,41 @@ Number *value_number_new(VM *vm, double value) {
 
 String *value_string_new(VM *vm, char *chars) {
   size_t size = string_size(chars);
-  Object *obj =
-    (Object *)value_object_new(vm, sizeof(String) + size + 1, TYPE_MARG_STRING);
+  Object *obj = (Object *)value_object_new(
+    vm,
+    sizeof(String) + size + 1,
+    table_get(&vm->global_variables, "$Margaret"),
+    string_new("$String")
+  );
   String *self = (String *)obj;
 
   self->value = chars;
+
+  return self;
+}
+
+Method *value_method_new(
+  VM *vm, Object *bound_object, Method *bound_method, char *message_name
+) {
+  Object *obj = (Object *)value_object_new(
+    vm,
+    sizeof(Method),
+    table_get(&vm->global_variables, "$Margaret"),
+    string_new("$Method")
+  );
+  Method *self = (Method *)obj;
+
+  self->bound_object = bound_object;
+  self->bound_method = bound_method;
+
+  self->message_name = message_name;
+
+  self->arguments = NULL;
+  self->constants = NULL;
+  table_init(&self->local_variables);
+
+  self->bytecode = NULL;
+  self->ip       = 0;
 
   return self;
 }

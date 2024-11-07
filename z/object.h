@@ -3,19 +3,16 @@
 
 #include "vm.h"
 
-typedef uint8_t Type;
-
-#define TYPE_MARG_NIL    0x00
-#define TYPE_MARG_FALSE  0x01
-#define TYPE_MARG_TRUE   0x02
-#define TYPE_MARG_NUMBER 0x03
-#define TYPE_MARG_STRING 0x04
-
 typedef struct Object {
   bool is_marked;
-  Type type;
   struct Object *next;
   VM *bound_vm;
+
+  char *name;
+  Value parent;
+  Value instance_registers[MAX_REGISTERS];
+  EmeraldsTable instance_variables;
+  EmeraldsTable messages;
 } Object;
 
 typedef struct Nil {
@@ -41,11 +38,31 @@ typedef struct String {
   char *value;
 } String;
 
-Object *value_object_new(VM *bound_vm, size_t size, Type type);
+typedef struct Method {
+  Object _;
+
+  Object *bound_object;
+  struct Method *bound_method;
+
+  char *message_name;
+
+  char **arguments;
+  Value local_registers[MAX_REGISTERS];
+  Value *constants;
+  EmeraldsTable local_variables;
+
+  Instruction *bytecode;
+  size_t ip;
+} Method;
+
+Object *value_object_new(VM *bound_vm, size_t size, Value proto, char *name);
 Nil *value_nil_new(VM *vm);
 False *value_false_new(VM *vm);
 True *value_true_new(VM *vm);
 Number *value_number_new(VM *vm, double value);
 String *value_string_new(VM *vm, char *chars);
+Method *value_method_new(
+  VM *vm, Object *bound_object, Method *bound_method, char *message_name
+);
 
 #endif

@@ -1,14 +1,14 @@
 #include "evaluator.h"
 
 #include "instruction.h"
-#include "object.h"
+#include "nan_tagging.h"
 #include "opcode.h"
 
 static void primitive_RAISE(Value message) {
   fprintf(stderr, "raise: `%s`\n", AS_MARG_STRING(message)->value);
 }
 
-#define FETCH() (vm->ip++, O)
+#define FETCH() (vm->current->ip++, O)
 
 void evaluate(VM *vm) {
 #if defined(__GNUC__) || defined(__clang__)
@@ -25,7 +25,7 @@ void evaluate(VM *vm) {
 #define next_opcode goto _opcode_loop
 #define raise(msg)  primitive_RAISE(MARG_STRING(msg))
 
-  vm->ip = -1;
+  vm->current->ip = -1;
 
 _opcode_loop:;
   switch_opcode {
