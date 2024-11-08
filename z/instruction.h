@@ -92,13 +92,13 @@ p_inline Instruction make_register(VM *vm, const char *var, RegisterType type) {
 #define B ((READ() >> 18) & 0x3ffff)
 #define C ((READ() >> 0) & 0x3ffff)
 #define Z (vector_size(vm->current->constants) - 1)
+#define K(i) \
+  (i < 0 ? vm->current->constants[Z + i + 1] : vm->current->constants[i])
 
 #define RA GET_R(A)
 #define RB GET_R(B)
 #define RC GET_R(C)
 #define KZ (vm->current->constants[Z])
-#define K(i) \
-  (i < 0 ? vm->current->constants[Z + i + 1] : vm->current->constants[i])
 
 #define SRA(v) SET_R(A, v)
 #define SRB(v) SET_R(B, v)

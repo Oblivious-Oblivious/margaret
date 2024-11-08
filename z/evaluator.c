@@ -33,11 +33,11 @@ _opcode_loop:;
       SRA(RB);
       next_opcode;
     }
-    case_opcode(OP_MOVZ) {
+    case_opcode(OP_LODZ) {
       SRA(KZ);
       next_opcode;
     }
-    case_opcode(OP_LODZ) {
+    case_opcode(OP_STOZ) {
       SKZ(RA);
       next_opcode;
     }

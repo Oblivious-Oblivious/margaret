@@ -14,22 +14,22 @@ p_inline void emit_example_bytecode(VM *vm) {
   OAB(OP_MOV, LOCAL("a"), CONST(MARG_NUMBER(3.14)));
   OAB(OP_MOV, LOCAL("msg"), CONST(MARG_STRING("Hello")));
 
-  OA(OP_LODZ, LOCAL("z"));
-  OA(OP_LODZ, LOCAL("a"));
+  OA(OP_STOZ, LOCAL("z"));
+  OA(OP_STOZ, LOCAL("a"));
   OP(OP_ADD);
-  OA(OP_MOVZ, LOCAL("result_add"));
+  OA(OP_LODZ, LOCAL("result_add"));
 
-  OA(OP_LODZ, LOCAL("y3"));
+  OA(OP_STOZ, LOCAL("y3"));
   OP(OP_SUB);
-  OA(OP_MOVZ, LOCAL("result_sub"));
+  OA(OP_LODZ, LOCAL("result_sub"));
 
-  OA(OP_LODZ, LOCAL("z"));
+  OA(OP_STOZ, LOCAL("z"));
   OP(OP_MUL);
-  OA(OP_MOVZ, LOCAL("result_mul"));
+  OA(OP_LODZ, LOCAL("result_mul"));
 
-  OA(OP_LODZ, LOCAL("a"));
+  OA(OP_STOZ, LOCAL("a"));
   OP(OP_DIV);
-  OA(OP_MOVZ, LOCAL("result_div"));
+  OA(OP_LODZ, LOCAL("result_div"));
 
   OA(OP_PRINT, LOCAL("x"));
   OA(OP_PRINT, LOCAL("y"));
@@ -45,39 +45,39 @@ p_inline void emit_example_bytecode(VM *vm) {
 
   OAB(OP_MOV, INSTANCE("@count"), CONST(MARG_NUMBER(0)));
   OAB(OP_MOV, GLOBAL("$max"), CONST(MARG_NUMBER(3)));
-  OA(OP_LODZ, INSTANCE("@count"));
-  OA(OP_LODZ, GLOBAL("$max"));
+  OA(OP_STOZ, INSTANCE("@count"));
+  OA(OP_STOZ, GLOBAL("$max"));
   OP(OP_ADD);
-  OA(OP_MOVZ, LOCAL("total"));
-  OA(OP_LODZ, CONST(MARG_NUMBER(39)));
+  OA(OP_LODZ, LOCAL("total"));
+  OA(OP_STOZ, CONST(MARG_NUMBER(39)));
   OP(OP_ADD);
-  OA(OP_MOVZ, LOCAL("total"));
+  OA(OP_LODZ, LOCAL("total"));
   OA(OP_PRINT, LOCAL("total"));
   OA(OP_PRINT, INSTANCE("@count"));
   OA(OP_PRINT, GLOBAL("$max"));
 
   /* 1 + 2 + 3 + 5 + 7 + 11 + 13 */
   /* (+ (+ (+ (+ (+ (+ 1 2) 3) 5) 7) 11) 13) */
-  OA(OP_LODZ, CONST(MARG_NUMBER(1)));
-  OA(OP_LODZ, CONST(MARG_NUMBER(2)));
+  OA(OP_STOZ, CONST(MARG_NUMBER(1)));
+  OA(OP_STOZ, CONST(MARG_NUMBER(2)));
   OP(OP_ADD);
 
-  OA(OP_LODZ, CONST(MARG_NUMBER(3)));
+  OA(OP_STOZ, CONST(MARG_NUMBER(3)));
   OP(OP_ADD);
 
-  OA(OP_LODZ, CONST(MARG_NUMBER(5)));
+  OA(OP_STOZ, CONST(MARG_NUMBER(5)));
   OP(OP_ADD);
 
-  OA(OP_LODZ, CONST(MARG_NUMBER(7)));
+  OA(OP_STOZ, CONST(MARG_NUMBER(7)));
   OP(OP_ADD);
 
-  OA(OP_LODZ, CONST(MARG_NUMBER(11)));
+  OA(OP_STOZ, CONST(MARG_NUMBER(11)));
   OP(OP_ADD);
 
-  OA(OP_LODZ, CONST(MARG_NUMBER(13)));
+  OA(OP_STOZ, CONST(MARG_NUMBER(13)));
   OP(OP_ADD);
 
-  OA(OP_MOVZ, LOCAL("sum"));
+  OA(OP_LODZ, LOCAL("sum"));
   OA(OP_PRINT, LOCAL("sum"));
 
   /* exit */
