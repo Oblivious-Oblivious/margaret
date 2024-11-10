@@ -3,7 +3,8 @@
 #include "../libs/EmeraldsString/export/EmeraldsString.h"
 #include "nan_tagging.h"
 
-Object *value_object_new(VM *bound_vm, size_t size, Value proto, char *name) {
+Object *
+value_object_new(VM *bound_vm, size_t size, Value proto, const char *name) {
   Object *self = (Object *)malloc(sizeof(Object) * size);
 
   self->is_marked = false;
@@ -57,7 +58,7 @@ String *value_string_new(VM *vm, char *chars) {
 }
 
 Method *value_method_new(
-  VM *vm, Object *bound_object, Method *bound_method, char *message_name
+  VM *vm, Object *bound_object, Method *bound_method, const char *message_name
 ) {
   Object *obj = (Object *)value_object_new(
     vm,

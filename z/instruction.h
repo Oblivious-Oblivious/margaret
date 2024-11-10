@@ -37,17 +37,15 @@ p_inline Instruction make_register(VM *vm, const char *var, RegisterType type) {
   size_t table_size;
 
   if(type == REG_TYPE_LOCAL) {
-    table      = &vm->current->local_variables;
-    table_size = table_size(&vm->current->local_variables);
+    table = &vm->current->local_variables;
   } else if(type == REG_TYPE_INSTANCE) {
-    table      = &vm->current->bound_object->instance_variables;
-    table_size = table_size(&vm->current->bound_object->instance_variables);
+    table = &vm->current->bound_object->instance_variables;
   } else if(type == REG_TYPE_GLOBAL) {
-    table      = &vm->global_variables;
-    table_size = table_size(&vm->global_variables);
+    table = &vm->global_variables;
   }
 
-  reg_ptr = table_get(table, var);
+  table_size = table_size(table);
+  reg_ptr    = table_get(table, var);
   if(reg_ptr != TABLE_UNDEFINED) {
     return reg_ptr;
   } else {
