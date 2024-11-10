@@ -3,80 +3,81 @@
 
 #include "vm.h"
 
-typedef Value (*PrimitiveMessage)(VM *, Value, Value *);
+typedef MargValue (*MargPrimitiveFunction)(VM *, MargValue, MargValue *);
 
-typedef struct Object {
+typedef struct MargObject {
   bool is_marked;
-  struct Object *next;
+  struct MargObject *next;
   VM *bound_vm;
 
   const char *name;
-  Value parent;
-  Value instance_registers[MAX_REGISTERS];
+  struct MargObject *proto;
+  MargValue instance_registers[MAX_REGISTERS];
   EmeraldsTable instance_variables;
   EmeraldsTable messages;
   EmeraldsTable primitives;
-} Object;
+} MargObject;
 
-typedef struct Nil {
-  Object _;
-} Nil;
+typedef struct MargNil {
+  MargObject _;
+} MargNil;
 
-typedef struct False {
-  Object _;
-} False;
+typedef struct MargFalse {
+  MargObject _;
+} MargFalse;
 
-typedef struct True {
-  Object _;
-} True;
+typedef struct MargTrue {
+  MargObject _;
+} MargTrue;
 
-typedef struct Number {
-  Object _;
+typedef struct MargNumber {
+  MargObject _;
 
   double value;
-} Number;
+} MargNumber;
 
-typedef struct String {
-  Object _;
+typedef struct MargString {
+  MargObject _;
+
   char *value;
-} String;
+} MargString;
 
-typedef struct Method {
-  Object _;
+typedef struct MargMethod {
+  MargObject _;
 
-  Object *bound_object;
-  struct Method *bound_method;
+  MargObject *bound_object;
+  struct MargMethod *bound_method;
 
   const char *message_name;
 
   char **arguments;
-  Value local_registers[MAX_REGISTERS];
-  Value *constants;
+  MargValue local_registers[MAX_REGISTERS];
+  MargValue *constants;
   EmeraldsTable local_variables;
 
   Instruction *bytecode;
   size_t ip;
-} Method;
+} MargMethod;
 
-typedef struct Primitive {
-  Object _;
+typedef struct MargPrimitive {
+  MargObject _;
 
-  const char *message_name;
-  PrimitiveMessage primitive;
-} Primitive;
+  MargPrimitiveFunction function;
+} MargPrimitive;
 
-Object *
-value_object_new(VM *bound_vm, size_t size, Value proto, const char *name);
-Nil *value_nil_new(VM *vm);
-False *value_false_new(VM *vm);
-True *value_true_new(VM *vm);
-Number *value_number_new(VM *vm, double value);
-String *value_string_new(VM *vm, char *chars);
-Method *value_method_new(
-  VM *vm, Object *bound_object, Method *bound_method, const char *message_name
+MargObject *
+value_object_new(VM *bound_vm, size_t size, MargValue proto, const char *name);
+MargNil *value_nil_new(VM *vm);
+MargFalse *value_false_new(VM *vm);
+MargTrue *value_true_new(VM *vm);
+MargNumber *value_number_new(VM *vm, double value);
+MargString *value_string_new(VM *vm, char *chars);
+MargMethod *value_method_new(
+  VM *vm,
+  MargObject *bound_object,
+  MargMethod *bound_method,
+  const char *message_name
 );
-Primitive *value_primitive_new(
-  VM *vm, const char *message_name, PrimitiveMessage primitive
-);
+MargPrimitive *value_primitive_new(VM *vm, MargPrimitiveFunction function);
 
 #endif

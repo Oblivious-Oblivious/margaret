@@ -26,7 +26,7 @@ typedef enum RegisterType {
   REG_TYPE_CONSTANT = 0x30000
 } RegisterType;
 
-p_inline Instruction make_constant(VM *vm, Value value) {
+p_inline Instruction make_constant(VM *vm, MargValue value) {
   vector_add(vm->current->constants, value);
   return (vector_size(vm->current->constants) - 1) | REG_TYPE_CONSTANT;
 }

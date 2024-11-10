@@ -24,23 +24,17 @@ module(vm_spec, {
         assert_that_size_t(singleton_nil equals to new_nil);
         assert_that_size_t(singleton_false equals to new_false);
         assert_that_size_t(singleton_true equals to new_true);
-        assert_that(!IS_MARG_UNDEFINED(new_nil));
-        assert_that(!IS_MARG_UNDEFINED(new_false));
-        assert_that(!IS_MARG_UNDEFINED(new_true));
+        assert_that(!IS_UNDEFINED(new_nil));
+        assert_that(!IS_UNDEFINED(new_false));
+        assert_that(!IS_UNDEFINED(new_true));
       });
     });
 
     context("on non-singletons", {
       it("ensures we define global $Number, $String and $Method objects", {
-        assert_that(
-          !IS_MARG_UNDEFINED(table_get(&vm->global_variables, "$Number"))
-        );
-        assert_that(
-          !IS_MARG_UNDEFINED(table_get(&vm->global_variables, "$String"))
-        );
-        assert_that(
-          !IS_MARG_UNDEFINED(table_get(&vm->global_variables, "$Method"))
-        );
+        assert_that(!IS_UNDEFINED(table_get(&vm->global_variables, "$Number")));
+        assert_that(!IS_UNDEFINED(table_get(&vm->global_variables, "$String")));
+        assert_that(!IS_UNDEFINED(table_get(&vm->global_variables, "$Method")));
       });
     });
   });
@@ -48,7 +42,7 @@ module(vm_spec, {
   describe("main method", {
     it("ensures ip points to the main method", {
       assert_that(vm->current->bound_method is NULL);
-      Object *marg = vm->current->bound_object;
+      MargObject *marg = vm->current->bound_object;
       assert_that_charptr(marg->name equals to "$Margaret");
     });
   });

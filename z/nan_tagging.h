@@ -12,12 +12,13 @@
 #define FP_IND    ((size_t)0x0004000000000000)
 #define ENCODING  (EXPONENTS | QNAN | FP_IND)
 
-#define QNAN_BOX(pointer) ((Value)(ENCODING | (size_t)(uintptr_t)(pointer)))
-#define QNAN_UNBOX(value) ((Object *)(uintptr_t)((value) & ~(ENCODING)))
+#define QNAN_BOX(pointer) ((MargValue)(ENCODING | (size_t)(uintptr_t)(pointer)))
+#define QNAN_UNBOX(value) ((MargObject *)(uintptr_t)((value) & ~(ENCODING)))
 
-#define UNDEFINED_TAG            (0x00)
-#define MARG_UNDEFINED           ((Value)(size_t)(SIGN_BIT | ENCODING | UNDEFINED_TAG))
-#define IS_MARG_UNDEFINED(value) ((value) == MARG_UNDEFINED)
+#define UNDEFINED_TAG (0x00)
+#define MARG_UNDEFINED \
+  ((MargValue)(size_t)(SIGN_BIT | ENCODING | UNDEFINED_TAG))
+#define IS_UNDEFINED(value) ((value) == MARG_UNDEFINED)
 
 #define MARG_NIL()         (table_get(&vm->global_variables, "$nil"))
 #define MARG_FALSE()       (table_get(&vm->global_variables, "$false"))
@@ -26,40 +27,29 @@
 #define MARG_STRING(value) (QNAN_BOX(value_string_new(vm, string_new((value)))))
 #define MARG_METHOD(bound_object, bound_method, message_name) \
   (QNAN_BOX(value_method_new(vm, bound_object, bound_method, message_name)))
-#define MARG_PRIMITIVE(vm, message_name, prim) \
-  (QNAN_BOX(value_primitive_new(vm, message_name, prim)))
+#define MARG_PRIMITIVE(vm, prim) (QNAN_BOX(value_primitive_new(vm, prim)))
 #define MARG_OBJECT(proto, name) \
-  (QNAN_BOX(value_object_new(vm, sizeof(Object), proto, string_new(name))))
+  (QNAN_BOX(value_object_new(vm, sizeof(MargObject), proto, string_new(name))))
 
-#define AS_MARG_NIL(value)       ((Nil *)QNAN_UNBOX(value))
-#define AS_MARG_FALSE(value)     ((False *)QNAN_UNBOX(value))
-#define AS_MARG_TRUE(value)      ((True *)QNAN_UNBOX(value))
-#define AS_MARG_NUMBER(value)    ((Number *)QNAN_UNBOX(value))
-#define AS_MARG_STRING(value)    ((String *)QNAN_UNBOX(value))
-#define AS_MARG_METHOD(value)    ((Method *)QNAN_UNBOX(value))
-#define AS_MARG_PRIMITIVE(value) ((Primitive *)QNAN_UNBOX(value))
-#define AS_MARG_OBJECT(value)    ((Object *)QNAN_UNBOX(value))
+#define AS_NIL(value)       ((MargNil *)QNAN_UNBOX(value))
+#define AS_FALSE(value)     ((MargFalse *)QNAN_UNBOX(value))
+#define AS_TRUE(value)      ((MargTrue *)QNAN_UNBOX(value))
+#define AS_NUMBER(value)    ((MargNumber *)QNAN_UNBOX(value))
+#define AS_STRING(value)    ((MargString *)QNAN_UNBOX(value))
+#define AS_METHOD(value)    ((MargMethod *)QNAN_UNBOX(value))
+#define AS_PRIMITIVE(value) ((MargPrimitive *)QNAN_UNBOX(value))
+#define AS_OBJECT(value)    ((MargObject *)QNAN_UNBOX(value))
 
-#define IS_MARG_NIL(value) (string_equals(AS_MARG_OBJECT(value)->name, "$nil"))
-#define IS_MARG_FALSE(value) \
-  (string_equals(AS_MARG_OBJECT(value)->name, "$false"))
-#define IS_MARG_TRUE(value) \
-  (string_equals(AS_MARG_OBJECT(value)->name, "$true"))
-#define IS_MARG_NUMBER(value)                                      \
-  (string_equals(                                                  \
-    AS_MARG_OBJECT(AS_MARG_OBJECT(value)->parent)->name, "$Number" \
-  ))
-#define IS_MARG_STRING(value)                                      \
-  (string_equals(                                                  \
-    AS_MARG_OBJECT(AS_MARG_OBJECT(value)->parent)->name, "$String" \
-  ))
-#define IS_MARG_METHOD(value)                                      \
-  (string_equals(                                                  \
-    AS_MARG_OBJECT(AS_MARG_OBJECT(value)->parent)->name, "$Method" \
-  ))
-#define IS_MARG_PRIMITIVE(value)                                     \
-  (string_equals(                                                    \
-    AS_MARG_OBJECT(AS_MARG_OBJECT(value)->parent)->name, "Primitive" \
-  ))
+#define IS_NIL(value)   (string_equals(AS_OBJECT(value)->name, "$nil"))
+#define IS_FALSE(value) (string_equals(AS_OBJECT(value)->name, "$false"))
+#define IS_TRUE(value)  (string_equals(AS_OBJECT(value)->name, "$true"))
+#define IS_NUMBER(value) \
+  (string_equals(AS_OBJECT(value)->proto->name, "$Number"))
+#define IS_STRING(value) \
+  (string_equals(AS_OBJECT(value)->proto->name, "$String"))
+#define IS_METHOD(value) \
+  (string_equals(AS_OBJECT(value)->proto->name, "$Method"))
+#define IS_PRIMITIVE(value) \
+  (string_equals(AS_OBJECT(value)->proto->name, "Primitive"))
 
 #endif

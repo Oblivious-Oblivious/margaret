@@ -4,6 +4,6 @@
 #include <stddef.h> /* size_t */
 
 /** @brief Ex nihilo value */
-typedef size_t Value;
+typedef size_t MargValue;
 
 #endif

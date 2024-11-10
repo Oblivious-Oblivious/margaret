@@ -11,12 +11,19 @@ module(primitives_spec, {
     it("defines the +, -, * and / methods", {
       vm_init(vm);
 
-      Object *number =
-        AS_MARG_OBJECT(table_get(&vm->global_variables, "$Number"));
+      MargObject *number =
+        AS_OBJECT(table_get(&vm->global_variables, "$Number"));
       assert_that_charptr(number->name equals to "$Number");
-      Primitive *add = AS_MARG_PRIMITIVE(table_get(&number->primitives, "+"));
+      MargPrimitive *add = AS_PRIMITIVE(table_get(&number->primitives, "+"));
+      MargPrimitive *sub = AS_PRIMITIVE(table_get(&number->primitives, "-"));
+      MargPrimitive *mul = AS_PRIMITIVE(table_get(&number->primitives, "*"));
+      MargPrimitive *div = AS_PRIMITIVE(table_get(&number->primitives, "/"));
+      MargPrimitive *err = AS_PRIMITIVE(table_get(&number->primitives, "]"));
       assert_that(add isnot NULL);
-      assert_that_charptr(add->message_name equals to "+");
+      assert_that(sub isnot NULL);
+      assert_that(mul isnot NULL);
+      assert_that(div isnot NULL);
+      assert_that(err isnot NULL);
     });
   });
 })

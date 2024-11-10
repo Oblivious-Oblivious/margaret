@@ -8,9 +8,9 @@
 typedef size_t Instruction;
 
 typedef struct VM {
-  Value global_registers[MAX_REGISTERS];
+  MargValue global_registers[MAX_REGISTERS];
   EmeraldsTable global_variables;
-  struct Method *current;
+  struct MargMethod *current;
 } VM;
 
 void vm_init(VM *vm);

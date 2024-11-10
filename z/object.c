@@ -3,71 +3,72 @@
 #include "../libs/EmeraldsString/export/EmeraldsString.h"
 #include "nan_tagging.h"
 
-Object *
-value_object_new(VM *bound_vm, size_t size, Value proto, const char *name) {
-  Object *self = (Object *)malloc(sizeof(Object) * size);
+MargObject *
+value_object_new(VM *bound_vm, size_t size, MargValue proto, const char *name) {
+  MargObject *self = (MargObject *)malloc(sizeof(MargObject) * size);
 
   self->is_marked = false;
   self->next      = NULL;
   self->bound_vm  = bound_vm;
 
-  self->name   = name;
-  self->parent = proto;
+  self->name  = name;
+  self->proto = AS_OBJECT(proto);
 
   table_init(&self->instance_variables);
   table_init(&self->messages);
   table_init(&self->primitives);
 
-  table_add_all(
-    &self->instance_variables, &AS_MARG_OBJECT(self->parent)->instance_variables
-  );
+  table_add_all(&self->instance_variables, &self->proto->instance_variables);
 
   table_add(&self->instance_variables, "@self", QNAN_BOX(self));
-  table_add(&self->instance_variables, "@super", self->parent);
+  table_add(&self->instance_variables, "@super", QNAN_BOX(self->proto));
   table_add(&bound_vm->global_variables, name, QNAN_BOX(self));
 
   return self;
 }
 
-Number *value_number_new(VM *vm, double value) {
-  Object *obj = (Object *)value_object_new(
+MargNumber *value_number_new(VM *vm, double value) {
+  MargObject *obj = (MargObject *)value_object_new(
     vm,
-    sizeof(Number),
+    sizeof(MargNumber),
     table_get(&vm->global_variables, "$Number"),
     string_new("")
   );
-  Number *self = (Number *)obj;
+  MargNumber *self = (MargNumber *)obj;
 
   self->value = value;
 
   return self;
 }
 
-String *value_string_new(VM *vm, char *chars) {
-  size_t size = string_size(chars);
-  Object *obj = (Object *)value_object_new(
+MargString *value_string_new(VM *vm, char *chars) {
+  size_t size     = string_size(chars);
+  MargObject *obj = (MargObject *)value_object_new(
     vm,
-    sizeof(String) + size + 1,
+    sizeof(MargString) + size + 1,
     table_get(&vm->global_variables, "$String"),
     string_new("")
   );
-  String *self = (String *)obj;
+  MargString *self = (MargString *)obj;
 
   self->value = chars;
 
   return self;
 }
 
-Method *value_method_new(
-  VM *vm, Object *bound_object, Method *bound_method, const char *message_name
+MargMethod *value_method_new(
+  VM *vm,
+  MargObject *bound_object,
+  MargMethod *bound_method,
+  const char *message_name
 ) {
-  Object *obj = (Object *)value_object_new(
+  MargObject *obj = (MargObject *)value_object_new(
     vm,
-    sizeof(Method),
+    sizeof(MargMethod),
     table_get(&vm->global_variables, "$Method"),
     string_new("")
   );
-  Method *self = (Method *)obj;
+  MargMethod *self = (MargMethod *)obj;
 
   self->bound_object = bound_object;
   self->bound_method = bound_method;
@@ -84,20 +85,17 @@ Method *value_method_new(
   return self;
 }
 
-Primitive *value_primitive_new(
-  VM *vm, const char *message_name, PrimitiveMessage primitive
-) {
-  Object *obj = (Object *)value_object_new(
+MargPrimitive *value_primitive_new(VM *vm, MargPrimitiveFunction function) {
+  MargObject *obj = (MargObject *)value_object_new(
     vm,
-    sizeof(Primitive),
+    sizeof(MargPrimitive),
     table_get(&vm->global_variables, "Primitive"),
     string_new("")
   );
-  Primitive *self = (Primitive *)obj;
+  MargPrimitive *self = (MargPrimitive *)obj;
 
   table_remove(&obj->instance_variables, "@super");
-  self->message_name = message_name;
-  self->primitive    = primitive;
+  self->function = function;
 
   return self;
 }

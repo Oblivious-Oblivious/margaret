@@ -16,17 +16,17 @@ static void setup_proto_object_chain(VM *vm) {
 }
 
 static void setup_vm_main(VM *vm) {
-  Value marg = table_get(&vm->global_variables, "$Margaret");
-  Value main = MARG_METHOD(AS_MARG_OBJECT(marg), NULL, "");
-  table_add(&AS_MARG_OBJECT(marg)->messages, "", main);
-  vm->current = AS_MARG_METHOD(main);
+  MargValue marg = table_get(&vm->global_variables, "$Margaret");
+  MargValue main = MARG_METHOD(AS_OBJECT(marg), NULL, "");
+  table_add(&AS_OBJECT(marg)->messages, "", main);
+  vm->current = AS_METHOD(main);
 }
 
 static void setup_primitives(VM *vm) {
-  define_primitive(vm, "+", "$Number", (PrimitiveMessage)primitive_ADD);
-  define_primitive(vm, "-", "$Number", (PrimitiveMessage)primitive_SUB);
-  define_primitive(vm, "*", "$Number", (PrimitiveMessage)primitive_MUL);
-  define_primitive(vm, "/", "$Number", (PrimitiveMessage)primitive_DIV);
+  define_primitive(vm, "+", "$Number", (MargPrimitiveFunction)primitive_ADD);
+  define_primitive(vm, "-", "$Number", (MargPrimitiveFunction)primitive_SUB);
+  define_primitive(vm, "*", "$Number", (MargPrimitiveFunction)primitive_MUL);
+  define_primitive(vm, "/", "$Number", (MargPrimitiveFunction)primitive_DIV);
 }
 
 void vm_init(VM *vm) {
