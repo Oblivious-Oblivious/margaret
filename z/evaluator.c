@@ -2,11 +2,9 @@
 
 #include "instruction.h"
 #include "nan_tagging.h"
+#include "object.h"
 #include "opcode.h"
-
-static void primitive_RAISE(Value message) {
-  fprintf(stderr, "raise: `%s`\n", AS_MARG_STRING(message)->value);
-}
+#include "primitives.h"
 
 #define FETCH() (vm->current->ip++, O)
 
@@ -23,7 +21,6 @@ void evaluate(VM *vm) {
 #endif
 
 #define next_opcode goto _opcode_loop
-#define raise(msg)  primitive_RAISE(MARG_STRING(msg))
 
   vm->current->ip = -1;
 
@@ -41,68 +38,32 @@ _opcode_loop:;
       SKZ(RA);
       next_opcode;
     }
-    case_opcode(OP_ADD) {
-      if(IS_MARG_NUMBER(K(-2)) && IS_MARG_NUMBER(K(-1))) {
-        SKZ(MARG_NUMBER(
-          AS_MARG_NUMBER(K(-2))->value + AS_MARG_NUMBER(K(-1))->value
-        ));
-        next_opcode;
-      } else {
-        raise("TypeError: cannot add non-number values.");
+    case_opcode(OP_PRIM) {
+      ptrdiff_t i;
+      ptrdiff_t argc = (ptrdiff_t)AS_MARG_NUMBER(RB)->value;
+      Value self     = K(-1 - argc);
+      Value *args    = NULL;
+      PrimitiveMessage msg =
+        AS_MARG_PRIMITIVE(
+          table_get(
+            &AS_MARG_OBJECT(AS_MARG_OBJECT(self)->parent)->primitives,
+            AS_MARG_STRING(RA)->value
+          )
+        )
+          ->primitive;
+      for(i = 1; i <= argc; i++) {
+        vector_add(args, K(-i));
       }
+      SKZ(msg(vm, self, args));
+      next_opcode;
     }
-    case_opcode(OP_SUB) {
-      if(IS_MARG_NUMBER(K(-2)) && IS_MARG_NUMBER(K(-1))) {
-        SKZ(MARG_NUMBER(
-          AS_MARG_NUMBER(K(-2))->value - AS_MARG_NUMBER(K(-1))->value
-        ));
-        next_opcode;
-      } else {
-        raise("TypeError: cannot subtract non-number values.");
-      }
-    }
-    case_opcode(OP_MUL) {
-      if(IS_MARG_NUMBER(K(-2)) && IS_MARG_NUMBER(K(-1))) {
-        SKZ(MARG_NUMBER(
-          AS_MARG_NUMBER(K(-2))->value * AS_MARG_NUMBER(K(-1))->value
-        ));
-        next_opcode;
-      } else {
-        raise("TypeError: cannot multiply non-number values.");
-      }
-    }
-    case_opcode(OP_DIV) {
-      if(IS_MARG_NUMBER(K(-1)) && AS_MARG_NUMBER(K(-1))->value == 0.0) {
-        raise("Runtime Error: Division by zero");
-      } else if(IS_MARG_NUMBER(K(-2)) && IS_MARG_NUMBER(K(-1))) {
-        SKZ(MARG_NUMBER(
-          AS_MARG_NUMBER(K(-2))->value / AS_MARG_NUMBER(K(-1))->value
-        ));
-        next_opcode;
-      } else {
-        raise("TypeError: cannot divide non-number values.");
-      }
-    }
+    case_opcode(OP_SEND) { next_opcode; }
     case_opcode(OP_PRINT) {
-      if(RA == 0) {
-        printf("ZERO ??\n");
-      } else if(IS_MARG_NIL(RA)) {
-        printf("R%zu = nil\n", GET_INDEX(A));
-      } else if(IS_MARG_FALSE(RA)) {
-        printf("R%zu = false\n", GET_INDEX(A));
-      } else if(IS_MARG_TRUE(RA)) {
-        printf("R%zu = true\n", GET_INDEX(A));
-      } else if(IS_MARG_NUMBER(RA)) {
-        printf("R%zu = %g\n", GET_INDEX(A), AS_MARG_NUMBER(RA)->value);
-      } else if(IS_MARG_STRING(RA)) {
-        printf("R%zu = \"%s\"\n", GET_INDEX(A), AS_MARG_STRING(RA)->value);
-      } else {
-        printf("R%zu = UNKNOWN\n", GET_INDEX(A));
-      }
+      SKZ(primitive_PRINT(vm, RA, NULL));
       next_opcode;
     }
     case_opcode(OP_RAISE) {
-      primitive_RAISE(RA);
+      SKZ(primitive_RAISE(vm, RA, NULL));
       next_opcode;
     }
     case_opcode(OP_HALT) { return; }

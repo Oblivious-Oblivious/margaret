@@ -3,6 +3,8 @@
 
 #include "vm.h"
 
+typedef Value (*PrimitiveMessage)(VM *, Value, Value *);
+
 typedef struct Object {
   bool is_marked;
   struct Object *next;
@@ -13,6 +15,7 @@ typedef struct Object {
   Value instance_registers[MAX_REGISTERS];
   EmeraldsTable instance_variables;
   EmeraldsTable messages;
+  EmeraldsTable primitives;
 } Object;
 
 typedef struct Nil {
@@ -55,6 +58,13 @@ typedef struct Method {
   size_t ip;
 } Method;
 
+typedef struct Primitive {
+  Object _;
+
+  const char *message_name;
+  PrimitiveMessage primitive;
+} Primitive;
+
 Object *
 value_object_new(VM *bound_vm, size_t size, Value proto, const char *name);
 Nil *value_nil_new(VM *vm);
@@ -65,6 +75,8 @@ String *value_string_new(VM *vm, char *chars);
 Method *value_method_new(
   VM *vm, Object *bound_object, Method *bound_method, const char *message_name
 );
+Primitive *value_primitive_new(
+  VM *vm, const char *message_name, PrimitiveMessage primitive
 );
 
 #endif

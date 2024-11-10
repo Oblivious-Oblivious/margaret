@@ -26,27 +26,40 @@
 #define MARG_STRING(value) (QNAN_BOX(value_string_new(vm, string_new((value)))))
 #define MARG_METHOD(bound_object, bound_method, message_name) \
   (QNAN_BOX(value_method_new(vm, bound_object, bound_method, message_name)))
+#define MARG_PRIMITIVE(vm, message_name, prim) \
+  (QNAN_BOX(value_primitive_new(vm, message_name, prim)))
 #define MARG_OBJECT(proto, name) \
   (QNAN_BOX(value_object_new(vm, sizeof(Object), proto, string_new(name))))
 
-#define AS_MARG_NIL(value)    ((Nil *)QNAN_UNBOX(value))
-#define AS_MARG_FALSE(value)  ((False *)QNAN_UNBOX(value))
-#define AS_MARG_TRUE(value)   ((True *)QNAN_UNBOX(value))
-#define AS_MARG_NUMBER(value) ((Number *)QNAN_UNBOX(value))
-#define AS_MARG_STRING(value) ((String *)QNAN_UNBOX(value))
-#define AS_MARG_METHOD(value) ((Method *)QNAN_UNBOX(value))
-#define AS_MARG_OBJECT(value) ((Object *)QNAN_UNBOX(value))
+#define AS_MARG_NIL(value)       ((Nil *)QNAN_UNBOX(value))
+#define AS_MARG_FALSE(value)     ((False *)QNAN_UNBOX(value))
+#define AS_MARG_TRUE(value)      ((True *)QNAN_UNBOX(value))
+#define AS_MARG_NUMBER(value)    ((Number *)QNAN_UNBOX(value))
+#define AS_MARG_STRING(value)    ((String *)QNAN_UNBOX(value))
+#define AS_MARG_METHOD(value)    ((Method *)QNAN_UNBOX(value))
+#define AS_MARG_PRIMITIVE(value) ((Primitive *)QNAN_UNBOX(value))
+#define AS_MARG_OBJECT(value)    ((Object *)QNAN_UNBOX(value))
 
 #define IS_MARG_NIL(value) (string_equals(AS_MARG_OBJECT(value)->name, "$nil"))
 #define IS_MARG_FALSE(value) \
   (string_equals(AS_MARG_OBJECT(value)->name, "$false"))
 #define IS_MARG_TRUE(value) \
   (string_equals(AS_MARG_OBJECT(value)->name, "$true"))
-#define IS_MARG_NUMBER(value) \
-  (string_equals(AS_MARG_OBJECT(value)->name, "$Number"))
-#define IS_MARG_STRING(value) \
-  (string_equals(AS_MARG_OBJECT(value)->name, "$String"))
-#define IS_MARG_METHOD(value) \
-  (string_equals(AS_MARG_OBJECT(value)->name, "$Method"))
+#define IS_MARG_NUMBER(value)                                      \
+  (string_equals(                                                  \
+    AS_MARG_OBJECT(AS_MARG_OBJECT(value)->parent)->name, "$Number" \
+  ))
+#define IS_MARG_STRING(value)                                      \
+  (string_equals(                                                  \
+    AS_MARG_OBJECT(AS_MARG_OBJECT(value)->parent)->name, "$String" \
+  ))
+#define IS_MARG_METHOD(value)                                      \
+  (string_equals(                                                  \
+    AS_MARG_OBJECT(AS_MARG_OBJECT(value)->parent)->name, "$Method" \
+  ))
+#define IS_MARG_PRIMITIVE(value)                                     \
+  (string_equals(                                                    \
+    AS_MARG_OBJECT(AS_MARG_OBJECT(value)->parent)->name, "Primitive" \
+  ))
 
 #endif

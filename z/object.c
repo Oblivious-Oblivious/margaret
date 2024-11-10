@@ -16,6 +16,7 @@ value_object_new(VM *bound_vm, size_t size, Value proto, const char *name) {
 
   table_init(&self->instance_variables);
   table_init(&self->messages);
+  table_init(&self->primitives);
 
   table_add_all(
     &self->instance_variables, &AS_MARG_OBJECT(self->parent)->instance_variables
@@ -32,8 +33,8 @@ Number *value_number_new(VM *vm, double value) {
   Object *obj = (Object *)value_object_new(
     vm,
     sizeof(Number),
-    table_get(&vm->global_variables, "$Margaret"),
-    string_new("$Number")
+    table_get(&vm->global_variables, "$Number"),
+    string_new("")
   );
   Number *self = (Number *)obj;
 
@@ -47,8 +48,8 @@ String *value_string_new(VM *vm, char *chars) {
   Object *obj = (Object *)value_object_new(
     vm,
     sizeof(String) + size + 1,
-    table_get(&vm->global_variables, "$Margaret"),
-    string_new("$String")
+    table_get(&vm->global_variables, "$String"),
+    string_new("")
   );
   String *self = (String *)obj;
 
@@ -63,8 +64,8 @@ Method *value_method_new(
   Object *obj = (Object *)value_object_new(
     vm,
     sizeof(Method),
-    table_get(&vm->global_variables, "$Margaret"),
-    string_new("$Method")
+    table_get(&vm->global_variables, "$Method"),
+    string_new("")
   );
   Method *self = (Method *)obj;
 
@@ -79,6 +80,24 @@ Method *value_method_new(
 
   self->bytecode = NULL;
   self->ip       = 0;
+
+  return self;
+}
+
+Primitive *value_primitive_new(
+  VM *vm, const char *message_name, PrimitiveMessage primitive
+) {
+  Object *obj = (Object *)value_object_new(
+    vm,
+    sizeof(Primitive),
+    table_get(&vm->global_variables, "Primitive"),
+    string_new("")
+  );
+  Primitive *self = (Primitive *)obj;
+
+  table_remove(&obj->instance_variables, "@super");
+  self->message_name = message_name;
+  self->primitive    = primitive;
 
   return self;
 }

@@ -1,6 +1,7 @@
 #include "vm.h"
 
 #include "nan_tagging.h"
+#include "primitives.h"
 
 static void setup_proto_object_chain(VM *vm) {
   MARG_OBJECT(table_get(&vm->global_variables, "$Margaret"), "$Margaret");
@@ -21,9 +22,17 @@ static void setup_vm_main(VM *vm) {
   vm->current = AS_MARG_METHOD(main);
 }
 
+static void setup_primitives(VM *vm) {
+  define_primitive(vm, "+", "$Number", (PrimitiveMessage)primitive_ADD);
+  define_primitive(vm, "-", "$Number", (PrimitiveMessage)primitive_SUB);
+  define_primitive(vm, "*", "$Number", (PrimitiveMessage)primitive_MUL);
+  define_primitive(vm, "/", "$Number", (PrimitiveMessage)primitive_DIV);
+}
+
 void vm_init(VM *vm) {
   table_init(&vm->global_variables);
 
   setup_proto_object_chain(vm);
   setup_vm_main(vm);
+  setup_primitives(vm);
 }
