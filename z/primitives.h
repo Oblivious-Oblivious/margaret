@@ -64,6 +64,24 @@ static MargValue primitive_DIV(VM *vm, MargValue self, MargValue *args) {
   }
 }
 
+static MargValue primitive_PRIM(VM *vm) {
+  ptrdiff_t i;
+  ptrdiff_t argc  = AS_NUMBER(RB)->value;
+  MargValue self  = K(-1 - argc);
+  MargValue *args = NULL;
+  char *name      = AS_STRING(RA)->value;
+
+  MargValue prim_msg = table_get(&AS_OBJECT(self)->proto->primitives, name);
+  if(IS_UNDEFINED(prim_msg)) {
+    return raise("Error: cannot send because primitive does not exist.");
+  } else {
+    for(i = 1; i <= argc; i++) {
+      vector_add(args, K(-i));
+    }
+    return SKZ(AS_PRIMITIVE(prim_msg)->function(vm, self, args));
+  }
+}
+
 static MargValue primitive_PRINT(VM *vm, MargValue self, MargValue *args) {
   (void)vm;
   (void)args;

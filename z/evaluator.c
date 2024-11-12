@@ -39,17 +39,7 @@ _opcode_loop:;
       next_opcode;
     }
     case_opcode(OP_PRIM) {
-      ptrdiff_t i;
-      ptrdiff_t argc  = (ptrdiff_t)AS_NUMBER(RB)->value;
-      MargValue self  = K(-1 - argc);
-      MargValue *args = NULL;
-      char *name      = AS_STRING(RA)->value;
-      MargPrimitive *msg =
-        AS_PRIMITIVE(table_get(&AS_OBJECT(self)->proto->primitives, name));
-      for(i = 1; i <= argc; i++) {
-        vector_add(args, K(-i));
-      }
-      SKZ(msg->function(vm, self, args));
+      SKZ(primitive_PRIM(vm));
       next_opcode;
     }
     case_opcode(OP_SEND) { next_opcode; }
