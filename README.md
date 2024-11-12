@@ -2,8 +2,9 @@
 
 [![GPLv3 License](https://img.shields.io/badge/license-GPL%20v3-yellow.svg)](./LICENSE)
 
-Margaret is a modern programming language focused around objects and messages.
-It offers powerful literals, easy to use objects and smalltalk-like message structures.
+Margaret is a modern object-oriented programming language that emphasizes message-passing
+paradigms and intuitive object interactions.  Its design features powerful literals and
+Smalltalk-inspired messaging patterns for powerful object-oriented capabilities.
 
 - Every value in margaret is a pure object.
 - There are no reserved words and no explicit syntax apart from message sending.
