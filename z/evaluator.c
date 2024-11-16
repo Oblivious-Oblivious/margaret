@@ -22,8 +22,6 @@ void evaluate(VM *vm) {
 
 #define next_opcode goto _opcode_loop
 
-  vm->current->ip = -1;
-
 _opcode_loop:;
   switch_opcode {
     case_opcode(OP_MOV) {

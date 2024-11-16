@@ -24,7 +24,6 @@ value_object_new(VM *bound_vm, size_t size, MargValue proto, const char *name) {
 
   table_add(&self->instance_variables, "@self", QNAN_BOX(self));
   table_add(&self->instance_variables, "@super", QNAN_BOX(self->proto));
-  table_add(&bound_vm->global_variables, name, QNAN_BOX(self));
 
   return self;
 }
@@ -74,7 +73,7 @@ MargMethod *value_method_new(
   self->local_index = 0;
 
   self->bytecode = NULL;
-  self->ip       = 0;
+  self->ip       = -1;
 
   return self;
 }
