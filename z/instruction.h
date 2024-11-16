@@ -18,12 +18,10 @@
     vm->current->bytecode, (op << 54) | (a << 36) | (b << 18) | (c << 0) \
   )
 
-typedef enum RegisterType {
-  REG_TYPE_LOCAL    = 0x00000,
-  REG_TYPE_INSTANCE = 0x10000,
-  REG_TYPE_GLOBAL   = 0x20000,
-  REG_TYPE_CONSTANT = 0x30000
-} RegisterType;
+#define REG_TYPE_LOCAL    (0x00000)
+#define REG_TYPE_INSTANCE (0x10000)
+#define REG_TYPE_GLOBAL   (0x20000)
+#define REG_TYPE_CONSTANT (0x30000)
 
 p_inline Instruction make_constant(VM *vm, MargValue value) {
   size_t k_ptr;
