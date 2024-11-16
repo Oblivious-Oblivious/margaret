@@ -2,7 +2,6 @@
 #define __INSTRUCTION_H_
 
 #include "object.h"
-#include "vm.h"
 
 /**
  * OP   - opcode (10) - rest (54)
@@ -27,30 +26,49 @@ typedef enum RegisterType {
 } RegisterType;
 
 p_inline Instruction make_constant(VM *vm, MargValue value) {
+  size_t k_ptr;
   vector_add(vm->current->constants, value);
-  return (vector_size(vm->current->constants) - 1) | REG_TYPE_CONSTANT;
+  k_ptr = vector_size(vm->current->constants) - 1;
+  k_ptr |= REG_TYPE_CONSTANT;
+  return k_ptr;
 }
 
-p_inline Instruction make_register(VM *vm, const char *var, RegisterType type) {
-  EmeraldsTable *table = NULL;
-  Instruction reg_ptr;
-  size_t table_size;
-
-  if(type == REG_TYPE_LOCAL) {
-    table = &vm->current->local_variables;
-  } else if(type == REG_TYPE_INSTANCE) {
-    table = &vm->current->bound_object->instance_variables;
-  } else if(type == REG_TYPE_GLOBAL) {
-    table = &vm->global_variables;
-  }
-
-  table_size = table_size(table);
-  reg_ptr    = table_get(table, var);
+p_inline Instruction make_local(VM *vm, const char *var) {
+  Instruction reg_ptr = table_get(&vm->current->local_variables, var);
   if(reg_ptr != TABLE_UNDEFINED) {
     return reg_ptr;
   } else {
-    reg_ptr = table_size & (MAX_REGISTERS - 1);
-    table_add(table, var, reg_ptr);
+    reg_ptr = vm->current->local_index & (MAX_REGISTERS - 1);
+    reg_ptr |= REG_TYPE_LOCAL;
+    table_add(&vm->current->local_variables, var, reg_ptr);
+    vm->current->local_index++;
+    return reg_ptr;
+  }
+}
+
+p_inline Instruction make_instance(VM *vm, const char *var) {
+  Instruction reg_ptr =
+    table_get(&vm->current->bound_object->instance_variables, var);
+  if(reg_ptr != TABLE_UNDEFINED) {
+    return reg_ptr;
+  } else {
+    reg_ptr = vm->current->bound_object->instance_index & (MAX_REGISTERS - 1);
+    reg_ptr |= REG_TYPE_INSTANCE;
+    table_add(&vm->current->bound_object->instance_variables, var, reg_ptr);
+    vm->current->bound_object->instance_index++;
+    return reg_ptr;
+  }
+}
+
+p_inline Instruction make_global(VM *vm, const char *var) {
+  Instruction reg_ptr = table_get(&vm->global_variables, var);
+  if(reg_ptr != TABLE_UNDEFINED) {
+    return reg_ptr;
+  } else {
+    reg_ptr = vm->global_index & (MAX_REGISTERS - 1);
+    reg_ptr |= REG_TYPE_GLOBAL;
+    table_add(&vm->global_variables, var, reg_ptr);
+    vm->global_index++;
     return reg_ptr;
   }
 }
@@ -65,33 +83,44 @@ p_inline Instruction make_register(VM *vm, const char *var, RegisterType type) {
 #define IS_GLOBAL(i)   (GET_TYPE(i) == REG_TYPE_GLOBAL)
 #define IS_CONSTANT(i) (GET_TYPE(i) == REG_TYPE_CONSTANT)
 
-#define GET_R(i)                                                   \
-  (IS_CONSTANT(i) ? vm->current->constants[GET_INDEX(i)]           \
-   : IS_LOCAL(i)  ? vm->current->local_registers[GET_INDEX(i)]     \
-   : IS_INSTANCE(i)                                                \
-     ? vm->current->bound_object->instance_registers[GET_INDEX(i)] \
-   : IS_GLOBAL(i) ? vm->global_registers[GET_INDEX(i)]             \
-                  : 0)
+#define GET_K(i) (vm->current->constants[GET_INDEX(i)])
+#define GET_L(i) (vm->current->local_registers[GET_INDEX(i)])
+#define GET_I(i) (vm->current->bound_object->instance_registers[GET_INDEX(i)])
+#define GET_G(i) (vm->global_registers[GET_INDEX(i)])
+#define GET_R(i)               \
+  (IS_CONSTANT(i)   ? GET_K(i) \
+   : IS_LOCAL(i)    ? GET_L(i) \
+   : IS_INSTANCE(i) ? GET_I(i) \
+   : IS_GLOBAL(i)   ? GET_G(i) \
+                    : 0)
 
-#define SET_R(i, v)                                                              \
-  (IS_CONSTANT(i) ? vector_add(vm->current->constants, v)                        \
-   : IS_LOCAL(i)  ? vm->current->local_registers[(i)]                     = (v)  \
-   : IS_INSTANCE(i) ? vm->current->bound_object->instance_registers[(i)] = (v)   \
-   : IS_GLOBAL(i)   ? vm->global_registers[(i)]                            = (v) \
+#define SET_K(i, v) (vm->current->constants[GET_INDEX(i)] = (v))
+#define SET_L(i, v) (vm->current->local_registers[GET_INDEX(i)] = (v))
+#define SET_I(i, v) \
+  (vm->current->bound_object->instance_registers[GET_INDEX(i)] = (v))
+#define SET_G(i, v) (vm->global_registers[GET_INDEX(i)] = (v))
+#define SET_R(i, v)               \
+  (IS_CONSTANT(i)   ? SET_K(i, v) \
+   : IS_LOCAL(i)    ? SET_L(i, v) \
+   : IS_INSTANCE(i) ? SET_I(i, v) \
+   : IS_GLOBAL(i)   ? SET_G(i, v) \
                     : 0)
 
 #define CONST(value)  (make_constant((vm), (value)))
-#define LOCAL(var)    (make_register((vm), (var), REG_TYPE_LOCAL))
-#define INSTANCE(var) (make_register((vm), (var), REG_TYPE_INSTANCE))
-#define GLOBAL(var)   (make_register((vm), (var), REG_TYPE_GLOBAL))
+#define LOCAL(var)    (make_local((vm), (var)))
+#define INSTANCE(var) (make_instance((vm), (var)))
+#define GLOBAL(var)   (make_global((vm), (var)))
 
-#define O ((READ() >> 54) & 0x3ff)
-#define A ((READ() >> 36) & 0x3ffff)
-#define B ((READ() >> 18) & 0x3ffff)
-#define C ((READ() >> 0) & 0x3ffff)
-#define Z (vector_size(vm->current->constants) - 1)
-#define K(i) \
-  (i < 0 ? vm->current->constants[Z + i + 1] : vm->current->constants[i])
+#define O    ((READ() >> 54) & 0x3ff)
+#define A    ((READ() >> 36) & 0x3ffff)
+#define B    ((READ() >> 18) & 0x3ffff)
+#define C    ((READ() >> 0) & 0x3ffff)
+#define Z    (vector_size(vm->current->constants) - 1)
+#define K(i) (vm->current->constants[(i + Z + 1) % (Z + 1)])
+#define L(n) GET_L(table_get(&vm->current->local_variables, (n)))
+#define I(n) \
+  GET_I(table_get(&vm->current->bound_object->instance_variables, (n)))
+#define G(n) GET_G(table_get(&vm->global_variables, (n)))
 
 #define RA GET_R(A)
 #define RB GET_R(B)
@@ -102,5 +131,9 @@ p_inline Instruction make_register(VM *vm, const char *var, RegisterType type) {
 #define SRB(v) SET_R(B, v)
 #define SRC(v) SET_R(C, v)
 #define SKZ(v) (vector_add(vm->current->constants, v))
+
+#define SG(proto, name) SET_G(GLOBAL(name), MARG_OBJECT(proto, name))
+#define SI(proto, name) SET_I(INSTANCE(name), MARG_OBJECT(proto, name))
+#define SL(proto, name) SET_L(LOCAL(name), MARG_OBJECT(proto, name))
 
 #endif

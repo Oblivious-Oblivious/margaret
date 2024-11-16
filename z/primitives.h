@@ -12,13 +12,11 @@ static void define_primitive(
 ) {
   MargObject *obj = NULL;
   if(object_name && object_name[0] == '$') {
-    obj = AS_OBJECT(table_get(&vm->global_variables, object_name));
+    obj = AS_OBJECT(G(object_name));
   } else if(object_name && object_name[0] == '@') {
-    obj = AS_OBJECT(
-      table_get(&vm->current->bound_object->instance_variables, object_name)
-    );
+    obj = AS_OBJECT(I(object_name));
   } else {
-    obj = AS_OBJECT(table_get(&vm->current->local_variables, object_name));
+    obj = AS_OBJECT(L(object_name));
   }
   table_add(&obj->primitives, name, MARG_PRIMITIVE(vm, msg));
 }
@@ -31,7 +29,7 @@ static MargValue primitive_RAISE(VM *vm, MargValue self, MargValue *args) {
 }
 
 static MargValue primitive_ADD(VM *vm, MargValue self, MargValue *args) {
-  if(IS_NUMBER(K(-2)) && IS_NUMBER(K(-1))) {
+  if(IS_NUMBER(self) && IS_NUMBER(args[0])) {
     return MARG_NUMBER(AS_NUMBER(self)->value + AS_NUMBER(args[0])->value);
   } else {
     return raise("TypeError: cannot add non-number values.");
@@ -39,7 +37,7 @@ static MargValue primitive_ADD(VM *vm, MargValue self, MargValue *args) {
 }
 
 static MargValue primitive_SUB(VM *vm, MargValue self, MargValue *args) {
-  if(IS_NUMBER(K(-2)) && IS_NUMBER(K(-1))) {
+  if(IS_NUMBER(self) && IS_NUMBER(args[0])) {
     return MARG_NUMBER(AS_NUMBER(self)->value - AS_NUMBER(args[0])->value);
   } else {
     return raise("TypeError: cannot subtract non-number values.");
@@ -47,7 +45,7 @@ static MargValue primitive_SUB(VM *vm, MargValue self, MargValue *args) {
 }
 
 static MargValue primitive_MUL(VM *vm, MargValue self, MargValue *args) {
-  if(IS_NUMBER(K(-2)) && IS_NUMBER(K(-1))) {
+  if(IS_NUMBER(self) && IS_NUMBER(args[0])) {
     return MARG_NUMBER(AS_NUMBER(self)->value * AS_NUMBER(args[0])->value);
   } else {
     return raise("TypeError: cannot multiply non-number values.");
@@ -55,9 +53,9 @@ static MargValue primitive_MUL(VM *vm, MargValue self, MargValue *args) {
 }
 
 static MargValue primitive_DIV(VM *vm, MargValue self, MargValue *args) {
-  if(IS_NUMBER(K(-1)) && AS_NUMBER(K(-1))->value == 0.0) {
+  if(IS_NUMBER(args[0]) && AS_NUMBER(args[0])->value == 0.0) {
     return raise("Runtime Error: Division by zero");
-  } else if(IS_NUMBER(K(-2)) && IS_NUMBER(K(-1))) {
+  } else if(IS_NUMBER(self) && IS_NUMBER(args[0])) {
     return MARG_NUMBER(AS_NUMBER(self)->value / AS_NUMBER(args[0])->value);
   } else {
     return raise("TypeError: cannot divide non-number values.");
@@ -83,24 +81,42 @@ static MargValue primitive_PRIM(VM *vm) {
 }
 
 static MargValue primitive_PRINT(VM *vm, MargValue self, MargValue *args) {
+#define get_register_type(v) \
+  (IS_CONSTANT((v))   ? "K"  \
+   : IS_LOCAL((v))    ? "L"  \
+   : IS_INSTANCE((v)) ? "I"  \
+   : IS_GLOBAL((v))   ? "G"  \
+                      : "R")
+
   (void)vm;
   (void)args;
+
   if(RA == 0) {
     printf("ZERO ??\n");
+  } else if(IS_UNDEFINED(RA)) {
+    printf("%s%zu = UNDEFINED\n", get_register_type(A), GET_INDEX(A));
   } else if(IS_NIL(RA)) {
-    printf("R%zu = nil\n", GET_INDEX(A));
+    printf("%s%zu = nil\n", get_register_type(A), GET_INDEX(A));
   } else if(IS_FALSE(RA)) {
-    printf("R%zu = false\n", GET_INDEX(A));
+    printf("%s%zu = false\n", get_register_type(A), GET_INDEX(A));
   } else if(IS_TRUE(RA)) {
-    printf("R%zu = true\n", GET_INDEX(A));
+    printf("%s%zu = true\n", get_register_type(A), GET_INDEX(A));
   } else if(IS_NUMBER(RA)) {
-    printf("R%zu = %g\n", GET_INDEX(A), AS_NUMBER(RA)->value);
+    printf(
+      "%s%zu = %g\n", get_register_type(A), GET_INDEX(A), AS_NUMBER(RA)->value
+    );
   } else if(IS_STRING(RA)) {
-    printf("R%zu = \"%s\"\n", GET_INDEX(A), AS_STRING(RA)->value);
+    printf(
+      "%s%zu = \"%s\"\n",
+      get_register_type(A),
+      GET_INDEX(A),
+      AS_STRING(RA)->value
+    );
   } else {
-    printf("R%zu = UNKNOWN\n", GET_INDEX(A));
+    printf("%s%zu = UNKNOWN\n", get_register_type(A), GET_INDEX(A));
   }
   return self;
+#undef get_register_type
 }
 
 #endif

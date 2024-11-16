@@ -1,6 +1,7 @@
 #include "object.h"
 
 #include "../libs/EmeraldsString/export/EmeraldsString.h"
+#include "instruction.h"
 #include "nan_tagging.h"
 
 MargObject *
@@ -29,10 +30,7 @@ value_object_new(VM *bound_vm, size_t size, MargValue proto, const char *name) {
 
 MargNumber *value_number_new(VM *vm, double value) {
   MargObject *obj = (MargObject *)value_object_new(
-    vm,
-    sizeof(MargNumber),
-    table_get(&vm->global_variables, "$Number"),
-    string_new("")
+    vm, sizeof(MargNumber), G("$Number"), string_new("")
   );
   MargNumber *self = (MargNumber *)obj;
 
@@ -44,10 +42,7 @@ MargNumber *value_number_new(VM *vm, double value) {
 MargString *value_string_new(VM *vm, char *chars) {
   size_t size     = string_size(chars);
   MargObject *obj = (MargObject *)value_object_new(
-    vm,
-    sizeof(MargString) + size + 1,
-    table_get(&vm->global_variables, "$String"),
-    string_new("")
+    vm, sizeof(MargString) + size + 1, G("$String"), string_new("")
   );
   MargString *self = (MargString *)obj;
 
@@ -63,10 +58,7 @@ MargMethod *value_method_new(
   const char *message_name
 ) {
   MargObject *obj = (MargObject *)value_object_new(
-    vm,
-    sizeof(MargMethod),
-    table_get(&vm->global_variables, "$Method"),
-    string_new("")
+    vm, sizeof(MargMethod), G("$Method"), string_new("")
   );
   MargMethod *self = (MargMethod *)obj;
 
@@ -87,10 +79,7 @@ MargMethod *value_method_new(
 
 MargPrimitive *value_primitive_new(VM *vm, MargPrimitiveFunction function) {
   MargObject *obj = (MargObject *)value_object_new(
-    vm,
-    sizeof(MargPrimitive),
-    table_get(&vm->global_variables, "Primitive"),
-    string_new("")
+    vm, sizeof(MargPrimitive), G("Primitive"), string_new("")
   );
   MargPrimitive *self = (MargPrimitive *)obj;
 

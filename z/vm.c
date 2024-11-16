@@ -1,22 +1,24 @@
 #include "vm.h"
 
-#include "nan_tagging.h"
 #include "primitives.h"
 
 static void setup_proto_object_chain(VM *vm) {
-  MARG_OBJECT(table_get(&vm->global_variables, "$Margaret"), "$Margaret");
+  MargValue marg;
 
-  MARG_OBJECT(table_get(&vm->global_variables, "$Margaret"), "$nil");
-  MARG_OBJECT(table_get(&vm->global_variables, "$Margaret"), "$false");
-  MARG_OBJECT(table_get(&vm->global_variables, "$Margaret"), "$true");
+  SG(MARG_UNDEFINED, "$Margaret");
+  marg = G("$Margaret");
 
-  MARG_OBJECT(table_get(&vm->global_variables, "$Margaret"), "$Number");
-  MARG_OBJECT(table_get(&vm->global_variables, "$Margaret"), "$String");
-  MARG_OBJECT(table_get(&vm->global_variables, "$Margaret"), "$Method");
+  SG(marg, "$nil");
+  SG(marg, "$false");
+  SG(marg, "$true");
+
+  SG(marg, "$Number");
+  SG(marg, "$String");
+  SG(marg, "$Method");
 }
 
 static void setup_vm_main(VM *vm) {
-  MargValue marg = table_get(&vm->global_variables, "$Margaret");
+  MargValue marg = G("$Margaret");
   MargValue main = MARG_METHOD(AS_OBJECT(marg), NULL, "");
   table_add(&AS_OBJECT(marg)->messages, "", main);
   vm->current = AS_METHOD(main);

@@ -20,9 +20,9 @@
   ((MargValue)(size_t)(SIGN_BIT | ENCODING | UNDEFINED_TAG))
 #define IS_UNDEFINED(value) ((value) == MARG_UNDEFINED)
 
-#define MARG_NIL()         (table_get(&vm->global_variables, "$nil"))
-#define MARG_FALSE()       (table_get(&vm->global_variables, "$false"))
-#define MARG_TRUE()        (table_get(&vm->global_variables, "$true"))
+#define MARG_NIL()         G("$nil")
+#define MARG_FALSE()       G("$false")
+#define MARG_TRUE()        G("$true")
 #define MARG_NUMBER(value) (QNAN_BOX(value_number_new(vm, (value))))
 #define MARG_STRING(value) (QNAN_BOX(value_string_new(vm, string_new((value)))))
 #define MARG_METHOD(bound_object, bound_method, message_name) \

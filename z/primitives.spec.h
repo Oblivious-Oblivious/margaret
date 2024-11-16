@@ -3,7 +3,6 @@
 
 #include "../libs/cSpec/export/cSpec.h"
 #include "helpers.spec.h"
-#include "nan_tagging.h"
 #include "primitives.h"
 
 module(primitives_spec, {
@@ -11,8 +10,7 @@ module(primitives_spec, {
     it("defines the +, -, * and / methods", {
       vm_init(vm);
 
-      MargObject *number =
-        AS_OBJECT(table_get(&vm->global_variables, "$Number"));
+      MargObject *number = AS_OBJECT(G("$Number"));
       assert_that_charptr(number->name equals to "$Number");
       MargPrimitive *add = AS_PRIMITIVE(table_get(&number->primitives, "+"));
       MargPrimitive *sub = AS_PRIMITIVE(table_get(&number->primitives, "-"));

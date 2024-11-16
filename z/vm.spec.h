@@ -3,6 +3,7 @@
 
 #include "../libs/cSpec/export/cSpec.h"
 #include "helpers.spec.h"
+#include "instruction.h"
 #include "nan_tagging.h"
 
 module(vm_spec, {
@@ -15,12 +16,12 @@ module(vm_spec, {
 
     context("on singletons", {
       it("verifies that $nil, $false and $true are singleton implementations", {
-        size_t singleton_nil   = table_get(&vm->global_variables, "$nil");
-        size_t singleton_false = table_get(&vm->global_variables, "$false");
-        size_t singleton_true  = table_get(&vm->global_variables, "$true");
-        size_t new_nil         = MARG_NIL();
-        size_t new_false       = MARG_FALSE();
-        size_t new_true        = MARG_TRUE();
+        MargValue singleton_nil   = G("$nil");
+        MargValue singleton_false = G("$false");
+        MargValue singleton_true  = G("$true");
+        size_t new_nil            = MARG_NIL();
+        size_t new_false          = MARG_FALSE();
+        size_t new_true           = MARG_TRUE();
         assert_that_size_t(singleton_nil equals to new_nil);
         assert_that_size_t(singleton_false equals to new_false);
         assert_that_size_t(singleton_true equals to new_true);
