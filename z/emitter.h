@@ -5,6 +5,20 @@
 #include "nan_tagging.h"
 #include "opcode.h"
 
+p_inline void define_add_method_in_marg(VM *vm) {
+  /* $Margaret-- #add : other => 420 prim_ADD : other */
+  MargObject *marg = AS_OBJECT(G("$Margaret"));
+  MargValue m_add  = MARG_METHOD(marg, vm->current, "add:");
+  vm->current      = AS_METHOD(m_add);
+  vector_add(vm->current->arguments, "other");
+  OA(OP_STOZ, CONST(MARG_NUMBER(420)));
+  OA(OP_STOZ, LOCAL("other"));
+  OAB(OP_PRIM, CONST(MARG_STRING("+")), CONST(MARG_NUMBER(1)));
+  OP(OP_EXACTREC);
+  vm->current = AS_METHOD(m_add)->bound_method;
+  table_add(&marg->messages, "add:", m_add);
+}
+
 p_inline void emit_example_bytecode(VM *vm) {
   OAB(OP_MOV, LOCAL("x"), CONST(MARG_NIL()));
   OAB(OP_MOV, LOCAL("y"), CONST(MARG_FALSE()));
@@ -85,6 +99,15 @@ p_inline void emit_example_bytecode(VM *vm) {
 
   OA(OP_LODZ, LOCAL("sum"));
   OA(OP_PRINT, LOCAL("sum"));
+
+  define_add_method_in_marg(vm);
+
+  OA(OP_STOZ, GLOBAL("$Margaret"));
+  OA(OP_STOZ, CONST(MARG_NUMBER(3)));
+  OAB(OP_SEND, CONST(MARG_STRING("add:")), CONST(MARG_NUMBER(1)));
+
+  OA(OP_LODZ, LOCAL("result"));
+  OA(OP_PRINT, LOCAL("result"));
 
   /* exit */
   OP(OP_HALT);

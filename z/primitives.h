@@ -76,7 +76,7 @@ static MargValue primitive_PRIM(VM *vm) {
     for(i = 1; i <= argc; i++) {
       vector_add(args, K(-i));
     }
-    return SKZ(AS_PRIMITIVE(prim_msg)->function(vm, self, args));
+    return AS_PRIMITIVE(prim_msg)->function(vm, self, args);
   }
 }
 
@@ -117,6 +117,30 @@ static MargValue primitive_PRINT(VM *vm, MargValue self, MargValue *args) {
   }
   return self;
 #undef get_register_type
+}
+
+static void primitive_SEND(VM *vm) {
+  ptrdiff_t i;
+  MargValue msg_value;
+  EmeraldsTable object_messages;
+  ptrdiff_t argc  = AS_NUMBER(RB)->value;
+  MargValue self  = K(-1 - argc);
+  MargValue *args = NULL;
+  char *name      = AS_STRING(RA)->value;
+
+  object_messages = AS_OBJECT(self)->messages;
+  msg_value       = table_get(&object_messages, name);
+  if(IS_UNDEFINED(msg_value)) {
+    raise("Error: cannot send because message does not exist.");
+  } else {
+    for(i = 1; i <= argc; i++) {
+      vector_add(args, K(-i));
+    }
+    vm->current = AS_METHOD(msg_value);
+    for(i = 0; i < argc; i++) {
+      vm->current->local_registers[LOCAL(vm->current->arguments[i])] = args[i];
+    }
+  }
 }
 
 #endif

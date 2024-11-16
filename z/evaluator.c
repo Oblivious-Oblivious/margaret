@@ -40,13 +40,22 @@ _opcode_loop:;
       SKZ(primitive_PRIM(vm));
       next_opcode;
     }
-    case_opcode(OP_SEND) { next_opcode; }
+    case_opcode(OP_SEND) {
+      primitive_SEND(vm);
+      next_opcode;
+    }
     case_opcode(OP_PRINT) {
       SKZ(primitive_PRINT(vm, RA, NULL));
       next_opcode;
     }
     case_opcode(OP_RAISE) {
       SKZ(primitive_RAISE(vm, RA, NULL));
+      next_opcode;
+    }
+    case_opcode(OP_EXACTREC) {
+      MargValue ret_value = KZ;
+      vm->current         = vm->current->bound_method;
+      SKZ(ret_value);
       next_opcode;
     }
     case_opcode(OP_HALT) { return; }
