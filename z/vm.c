@@ -32,6 +32,7 @@ static void setup_primitives(VM *vm) {
 }
 
 void vm_init(VM *vm) {
+  vm->global_index = 0;
   table_init(&vm->global_variables);
 
   setup_proto_object_chain(vm);

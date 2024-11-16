@@ -13,6 +13,7 @@ typedef struct MargObject {
   const char *name;
   struct MargObject *proto;
   MargValue instance_registers[MAX_REGISTERS];
+  uint16_t instance_index;
   EmeraldsTable instance_variables;
   EmeraldsTable messages;
   EmeraldsTable primitives;
@@ -52,6 +53,7 @@ typedef struct MargMethod {
 
   char **arguments;
   MargValue local_registers[MAX_REGISTERS];
+  uint16_t local_index;
   MargValue *constants;
   EmeraldsTable local_variables;
 

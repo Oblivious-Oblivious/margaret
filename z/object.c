@@ -15,6 +15,7 @@ value_object_new(VM *bound_vm, size_t size, MargValue proto, const char *name) {
   self->name  = name;
   self->proto = AS_OBJECT(proto);
 
+  self->instance_index = 0;
   table_init(&self->instance_variables);
   table_init(&self->messages);
   table_init(&self->primitives);
@@ -70,6 +71,7 @@ MargMethod *value_method_new(
   self->arguments = NULL;
   self->constants = NULL;
   table_init(&self->local_variables);
+  self->local_index = 0;
 
   self->bytecode = NULL;
   self->ip       = 0;
