@@ -123,12 +123,12 @@ p_inline Instruction make_global(VM *vm, const char *var) {
 #define RA GET_R(A)
 #define RB GET_R(B)
 #define RC GET_R(C)
-#define KZ (vm->current->constants[Z])
+#define KZ GET_K(Z)
 
 #define SRA(v) SET_R(A, v)
 #define SRB(v) SET_R(B, v)
 #define SRC(v) SET_R(C, v)
-#define SKZ(v) (vector_add(vm->current->constants, v))
+#define SKZ(v) SET_K(Z, v)
 
 #define SG(proto, name) SET_G(GLOBAL(name), MARG_OBJECT(proto, name))
 #define SI(proto, name) SET_I(INSTANCE(name), MARG_OBJECT(proto, name))

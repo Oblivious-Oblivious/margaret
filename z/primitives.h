@@ -74,6 +74,7 @@ static MargValue primitive_PRIM(VM *vm) {
     return raise("Error: cannot send because primitive does not exist.");
   } else {
     for(i = 1; i <= argc; i++) {
+      /* TODO - Turn this into a MARG_TENSOR to be included in the GC */
       vector_add(args, K(-i));
     }
     return AS_PRIMITIVE(prim_msg)->function(vm, self, args);
@@ -88,7 +89,6 @@ static MargValue primitive_PRINT(VM *vm, MargValue self, MargValue *args) {
    : IS_GLOBAL((v))   ? "G"  \
                       : "R")
 
-  (void)vm;
   (void)args;
 
   if(RA == 0) {
@@ -134,12 +134,14 @@ static void primitive_SEND(VM *vm) {
     raise("Error: cannot send because message does not exist.");
   } else {
     for(i = 1; i <= argc; i++) {
+      /* TODO - Probably also should be a MARG_TENSOR */
       vector_add(args, K(-i));
     }
     vm->current = AS_METHOD(msg_value);
     for(i = 0; i < argc; i++) {
       vm->current->local_registers[LOCAL(vm->current->arguments[i])] = args[i];
     }
+    vector_free(args);
   }
 }
 

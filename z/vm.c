@@ -6,7 +6,8 @@ static void setup_proto_object_chain(VM *vm) {
   MargValue marg;
 
   SG(MARG_UNDEFINED, "$Margaret");
-  marg = G("$Margaret");
+  marg                   = G("$Margaret");
+  AS_OBJECT(marg)->proto = AS_OBJECT(marg);
 
   SG(marg, "$nil");
   SG(marg, "$false");

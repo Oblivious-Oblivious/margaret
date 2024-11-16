@@ -33,7 +33,7 @@ _opcode_loop:;
       next_opcode;
     }
     case_opcode(OP_STOZ) {
-      SKZ(RA);
+      CONST(RA);
       next_opcode;
     }
     case_opcode(OP_PRIM) {
@@ -49,7 +49,7 @@ _opcode_loop:;
       next_opcode;
     }
     case_opcode(OP_RAISE) {
-      SKZ(primitive_RAISE(vm, RA, NULL));
+      SKZ(primitive_RAISE(NULL, RA, NULL));
       next_opcode;
     }
     case_opcode(OP_EXACTREC) {

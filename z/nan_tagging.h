@@ -40,16 +40,23 @@
 #define AS_PRIMITIVE(value) ((MargPrimitive *)QNAN_UNBOX(value))
 #define AS_OBJECT(value)    ((MargObject *)QNAN_UNBOX(value))
 
-#define IS_NIL(value)   (string_equals(AS_OBJECT(value)->name, "$nil"))
-#define IS_FALSE(value) (string_equals(AS_OBJECT(value)->name, "$false"))
-#define IS_TRUE(value)  (string_equals(AS_OBJECT(value)->name, "$true"))
-#define IS_NUMBER(value) \
-  (string_equals(AS_OBJECT(value)->proto->name, "$Number"))
-#define IS_STRING(value) \
-  (string_equals(AS_OBJECT(value)->proto->name, "$String"))
-#define IS_METHOD(value) \
-  (string_equals(AS_OBJECT(value)->proto->name, "$Method"))
+#define IS_NIL(value) \
+  (!IS_UNDEFINED(value) && string_equals(AS_OBJECT(value)->name, "$nil"))
+#define IS_FALSE(value) \
+  (!IS_UNDEFINED(value) && string_equals(AS_OBJECT(value)->name, "$false"))
+#define IS_TRUE(value) \
+  (!IS_UNDEFINED(value) && string_equals(AS_OBJECT(value)->name, "$true"))
+#define IS_NUMBER(value)                                                  \
+  (!IS_UNDEFINED(value) && AS_OBJECT(value) && AS_OBJECT(value)->proto && \
+   string_equals(AS_OBJECT(value)->proto->name, "$Number"))
+#define IS_STRING(value)                                                  \
+  (!IS_UNDEFINED(value) && AS_OBJECT(value) && AS_OBJECT(value)->proto && \
+   string_equals(AS_OBJECT(value)->proto->name, "$String"))
+#define IS_METHOD(value)                                                  \
+  (!IS_UNDEFINED(value) && AS_OBJECT(value) && AS_OBJECT(value)->proto && \
+   string_equals(AS_OBJECT(value)->proto->name, "$Method"))
 #define IS_PRIMITIVE(value) \
-  (string_equals(AS_OBJECT(value)->proto->name, "Primitive"))
+  (!IS_UNDEFINED(value) &&  \
+   string_equals(AS_OBJECT(value)->proto->name, "Primitive"))
 
 #endif
