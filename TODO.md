@@ -21,17 +21,17 @@
 
 ## (✗) ver. 0.0.4
 -----------------
-  🟥 FM-33 - Add syntax for using user defined inferred objects -> Inferred start_using: MyObject, one: 1 two: 2   -> (MyObject one: 1 two: 2) Inferred stop_using: MyObject
+  🟥 FT-33 - Add syntax for using user defined inferred objects -> Inferred start_using: MyObject, one: 1 two: 2   -> (MyObject one: 1 two: 2) Inferred stop_using: MyObject
 
 ## (✗) ver. 0.0.3
 -----------------
-  🟥 FM-31 - Add green threads.
+  🟥 FT-31 - Add green threads.
      Possibly MyObject can inherit from Margaret to not lose predefined marg messages
      FormalMessages step can always infer `Margaret` because at runtime it can replace the correct object using the inheritance structures.
      `one:two:` can be sent to MyObject, but `if:then:` can be sent to Margaret.
      `Margaret` uses delegation pattern: maintains a priority queue of objects with priority based on inheritance, first sends message to all children and to itself at last.
      e.g. for `MyObject2 < MyObject1 < Margaret`, we send `one:two:` to MyObject2, it fowards it to parents and finally to Margaret, which responds or sends `method_missing`.
-  🟥 FM-32 - Add cascaded messages.
+  🟥 FT-32 - Add cascaded messages.
 
   🟥 QOL-06 - Decrease the size of the Instruction to 32 bits to imporove performance.
               This will require that registers are at most 256 in size since `A` value will be 8 bits.
@@ -52,19 +52,20 @@
              %[:car, :cdr] = %[1, 2] # car = 1, cdr = %[2], (flatten), cdr = 2
              %[:car, :cdr] = %[1] # car = 1, cdr = %[], (flatten), cdr = nil
              %[:car, :cdr] = %[] # car = nil, cdr = nil
-  🟥 FM-22 - Pattern-match multimethods by hashing receiver and arguments.
+  🟥 FT-22 - Pattern-match multimethods by hashing receiver and arguments.
              Every multi-method is hashed into a unique value and searched for in the method table of the receiver.
-  🟥 FM-23 - Implement storing and loading bytecode from compiled files, similar to Java.
+  🟥 FT-23 - Implement storing and loading bytecode from compiled files, similar to Java.
              Pipeline: compile constants to direct data -> load and store constants in VM -> execute by loading constants from table.
-  🟥 FM-24 - Add big integers and big floats.
-  🟥 FM-25 - Think of most syntax, semantic or runtime errors and spec them. 
-  🟥 FM-26 - Add regular expressions.
-  🟥 FM-27 - Create an object `detatch` functionality that removes the inheritance link and object model metadata.
+  🟥 FT-24 - Add big integers and big floats.
+  🟥 FT-25 - Think of most syntax, semantic or runtime errors and spec them. 
+  🟥 FT-26 - Add regular expressions.
+  🟥 FT-27 - Create an object `detatch` functionality that removes the inheritance link and object model metadata.
              Add object `freezing` that removes state modification capabilities.
-  🟥 FM-28 - Separate value types from object types.
+  🟥 FT-28 - Separate value types from object types.
              Add atomic types that become atemporal (cannot be extended through prototypes).
-  🟥 FM-29 - Add a switch matcher -> `obj match: %[%[1, 100], %[2, 200], %[3, 300],]`.
-  🟥 FM-30 - Create compile-time messages, which will make calculations in the emitter phase but will not generate bytecode.
+  🟥 FT-29 - Add a switch matcher -> `obj match: %[%[1, 100], %[2, 200], %[3, 300],]`.
+  🟥 FT-30 - Create compile-time messages, which will make calculations in the emitter phase but will not generate bytecode.
+  🟥 FT-34 - Keep formal bytecode as an easy to use intermediate for translating to other language VMs.
 
   🟥 QOL-05 - Potentially use any type of local/instance/global variable as labels.  Requires that variables store their ip memory location.
 
