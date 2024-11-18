@@ -58,6 +58,31 @@ _opcode_loop:;
       SKZ(ret_value);
       next_opcode;
     }
+    case_opcode(OP_GOTO) {
+      MargValue label  = MARG_UNDEFINED;
+      char *label_name = AS_STRING(RA)->value;
+      if(label_name && label_name[0] == '$' && label_name[1] == ':' &&
+         label_name[2] == ':') {
+        label = GET_R(table_get(&vm->global_variables, label_name));
+      } else if(label_name && label_name[0] == '@' && label_name[1] == ':' &&
+                label_name[2] == ':') {
+        label = GET_R(
+          table_get(&vm->current->bound_object->instance_variables, label_name)
+        );
+      } else if(label_name && label_name[0] == ':' && label_name[1] == ':') {
+        label = GET_R(table_get(&vm->current->local_variables, label_name));
+      } else {
+        label = MARG_UNDEFINED;
+      }
+
+      if(IS_LABEL(label)) {
+        vm->current->ip = AS_LABEL(label)->value;
+      } else {
+        SKZ(raise("Error: cannot goto to a non-label."));
+      }
+      next_opcode;
+    }
+    case_opcode(OP_NOP) { next_opcode; }
     case_opcode(OP_HALT) { return; }
     default_opcode { exit(1); }
   }

@@ -5,6 +5,8 @@
 #include "nan_tagging.h"
 #include "opcode.h"
 
+#define COMP_LABEL(a) (SET_R(a, MARG_LABEL()), OP(OP_NOP))
+
 p_inline void define_add_method_in_marg(VM *vm) {
   /* $Margaret-- #add : other => 420 prim_ADD : other */
   MargObject *marg = AS_OBJECT(G("$Margaret"));
@@ -32,7 +34,7 @@ p_inline void emit_example_bytecode(VM *vm) {
   OA(OP_STOZ, CONST(MARG_NUMBER(0)));
   OAB(OP_PRIM, CONST(MARG_STRING("/")), CONST(MARG_NUMBER(1)));
   OA(OP_LODZ, LOCAL("divres"));
-  OA(OP_PRINT, LOCAL("divres"));
+  OA(OP_INSPECT, LOCAL("divres"));
 
   OA(OP_STOZ, LOCAL("z"));
   OA(OP_STOZ, LOCAL("a"));
@@ -51,17 +53,17 @@ p_inline void emit_example_bytecode(VM *vm) {
   OAB(OP_PRIM, CONST(MARG_STRING("/")), CONST(MARG_NUMBER(1)));
   OA(OP_LODZ, LOCAL("result_div"));
 
-  OA(OP_PRINT, LOCAL("x"));
-  OA(OP_PRINT, LOCAL("y"));
-  OA(OP_PRINT, LOCAL("y2"));
-  OA(OP_PRINT, LOCAL("y3"));
-  OA(OP_PRINT, LOCAL("z"));
-  OA(OP_PRINT, LOCAL("a"));
-  OA(OP_PRINT, LOCAL("msg"));
-  OA(OP_PRINT, LOCAL("result_add"));
-  OA(OP_PRINT, LOCAL("result_sub"));
-  OA(OP_PRINT, LOCAL("result_mul"));
-  OA(OP_PRINT, LOCAL("result_div"));
+  OA(OP_INSPECT, LOCAL("x"));
+  OA(OP_INSPECT, LOCAL("y"));
+  OA(OP_INSPECT, LOCAL("y2"));
+  OA(OP_INSPECT, LOCAL("y3"));
+  OA(OP_INSPECT, LOCAL("z"));
+  OA(OP_INSPECT, LOCAL("a"));
+  OA(OP_INSPECT, LOCAL("msg"));
+  OA(OP_INSPECT, LOCAL("result_add"));
+  OA(OP_INSPECT, LOCAL("result_sub"));
+  OA(OP_INSPECT, LOCAL("result_mul"));
+  OA(OP_INSPECT, LOCAL("result_div"));
 
   OAB(OP_MOV, INSTANCE("@count"), CONST(MARG_NUMBER(0)));
   OAB(OP_MOV, GLOBAL("$max"), CONST(MARG_NUMBER(3)));
@@ -72,9 +74,9 @@ p_inline void emit_example_bytecode(VM *vm) {
   OA(OP_STOZ, CONST(MARG_NUMBER(39)));
   OAB(OP_PRIM, CONST(MARG_STRING("+")), CONST(MARG_NUMBER(1)));
   OA(OP_LODZ, LOCAL("total"));
-  OA(OP_PRINT, LOCAL("total"));
-  OA(OP_PRINT, INSTANCE("@count"));
-  OA(OP_PRINT, GLOBAL("$max"));
+  OA(OP_INSPECT, LOCAL("total"));
+  OA(OP_INSPECT, INSTANCE("@count"));
+  OA(OP_INSPECT, GLOBAL("$max"));
 
   /* 1 + 2 + 3 + 5 + 7 + 11 + 13 */
   /* (+ (+ (+ (+ (+ (+ 1 2) 3) 5) 7) 11) 13) */
@@ -85,11 +87,22 @@ p_inline void emit_example_bytecode(VM *vm) {
   OA(OP_STOZ, CONST(MARG_NUMBER(3)));
   OAB(OP_PRIM, CONST(MARG_STRING("+")), CONST(MARG_NUMBER(1)));
 
+  OA(OP_GOTO, CONST(MARG_STRING("::label")));
+
   OA(OP_STOZ, CONST(MARG_NUMBER(5)));
   OAB(OP_PRIM, CONST(MARG_STRING("+")), CONST(MARG_NUMBER(1)));
 
+  COMP_LABEL(INSTANCE("@::label"));
+
   OA(OP_STOZ, CONST(MARG_NUMBER(7)));
   OAB(OP_PRIM, CONST(MARG_STRING("+")), CONST(MARG_NUMBER(1)));
+
+  OA(OP_GOTO, CONST(MARG_STRING("$::label")));
+
+  COMP_LABEL(LOCAL("::label"));
+  OA(OP_GOTO, CONST(MARG_STRING("@::label")));
+
+  COMP_LABEL(GLOBAL("$::label"));
 
   OA(OP_STOZ, CONST(MARG_NUMBER(11)));
   OAB(OP_PRIM, CONST(MARG_STRING("+")), CONST(MARG_NUMBER(1)));
@@ -98,7 +111,7 @@ p_inline void emit_example_bytecode(VM *vm) {
   OAB(OP_PRIM, CONST(MARG_STRING("+")), CONST(MARG_NUMBER(1)));
 
   OA(OP_LODZ, LOCAL("sum"));
-  OA(OP_PRINT, LOCAL("sum"));
+  OA(OP_INSPECT, LOCAL("sum"));
 
   define_add_method_in_marg(vm);
 
@@ -107,7 +120,11 @@ p_inline void emit_example_bytecode(VM *vm) {
   OAB(OP_SEND, CONST(MARG_STRING("add:")), CONST(MARG_NUMBER(1)));
 
   OA(OP_LODZ, LOCAL("result"));
-  OA(OP_PRINT, LOCAL("result"));
+  OA(OP_INSPECT, LOCAL("result"));
+
+  OA(OP_INSPECT, LOCAL("::label"));
+  OA(OP_INSPECT, INSTANCE("@::label"));
+  OA(OP_INSPECT, GLOBAL("$::label"));
 
   /* exit */
   OP(OP_HALT);

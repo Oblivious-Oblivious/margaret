@@ -74,9 +74,6 @@
 
 ## (✗) ver. 0.0.1
 -----------------
-  🟥 Store labels in the variable tables but check for uniqueness and raise or ignore otherwise.
-     Care for cloning that only variables are being copied not labels.
-
   🟥 BUG-01 - Fix headless method bytecode definitions and add tests.
   🟥 BUG-02 - Double check that vm works on 16-bit word machines with 32-bit pointers/doubles.
   🟥 BUG-03 - Disallow rebinding/reassigning the assignment message (=).
@@ -110,7 +107,7 @@
              $Numeric -- #/ 0 => raise: "division by zero",
              $Numeric -- #/ other => @self / other,
              If the analyzer cannot figure out the inputs of the division message, LSP warns for potential runtime crash.
-  🟥 FT-15 - Use GOTO for break and continue. -> `list iterate: { elem | if: { elem == 42 } then: { goto: exit_label } elem puts } ::exit_label`.
+  🟩 FT-15 - Use GOTO for break and continue. -> `list iterate: { elem | if: { elem == 42 } then: { goto: "exit_label" } elem puts }, ::exit_label`.
   🟥 FT-16 - Add complex numbers `(0+2i)`, and rational numbers `(1/2r)` -> unary messages.
              Add complex and rational specific messages.
   🟥 FT-17 - Add an internal include guard for the require primitive.
@@ -167,3 +164,4 @@
      Procs compile to bitstrings/tensors/arrays of opcodes and are first class literals.
   🟩 Objects are (maybe?) represented as table of slots.
      Preferably only one parent.
+  🟩 Store labels in the variable tables but check for uniqueness and raise or ignore otherwise.

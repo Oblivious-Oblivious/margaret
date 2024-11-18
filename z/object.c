@@ -5,12 +5,13 @@
 #include "nan_tagging.h"
 
 MargObject *
-value_object_new(VM *bound_vm, size_t size, MargValue proto, const char *name) {
+value_object_new(VM *vm, size_t size, MargValue proto, const char *name) {
+  size_t i;
   MargObject *self = (MargObject *)malloc(sizeof(MargObject) * size);
 
   self->is_marked = false;
   self->next      = NULL;
-  self->bound_vm  = bound_vm;
+  self->bound_vm  = vm;
 
   self->name  = name;
   self->proto = AS_OBJECT(proto);
@@ -47,6 +48,17 @@ MargString *value_string_new(VM *vm, char *chars) {
   MargString *self = (MargString *)obj;
 
   self->value = chars;
+
+  return self;
+}
+
+MargLabel *value_label_new(VM *vm) {
+  MargObject *obj = (MargObject *)value_object_new(
+    vm, sizeof(MargLabel), G("$Label"), string_new("label value")
+  );
+  MargLabel *self = (MargLabel *)obj;
+
+  self->value = vector_size(vm->current->bytecode);
 
   return self;
 }
