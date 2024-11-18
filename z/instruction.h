@@ -90,7 +90,7 @@ p_inline Instruction make_global(VM *vm, const char *var) {
    : IS_LOCAL(i)    ? GET_L(i) \
    : IS_INSTANCE(i) ? GET_I(i) \
    : IS_GLOBAL(i)   ? GET_G(i) \
-                    : 0)
+                    : MARG_UNDEFINED)
 
 #define SET_K(i, v) (vm->current->constants[GET_INDEX(i)] = (v))
 #define SET_L(i, v) (vm->current->local_registers[GET_INDEX(i)] = (v))
@@ -102,7 +102,7 @@ p_inline Instruction make_global(VM *vm, const char *var) {
    : IS_LOCAL(i)    ? SET_L(i, v) \
    : IS_INSTANCE(i) ? SET_I(i, v) \
    : IS_GLOBAL(i)   ? SET_G(i, v) \
-                    : 0)
+                    : MARG_UNDEFINED)
 
 #define CONST(value)  (make_constant((vm), (value)))
 #define LOCAL(var)    (make_local((vm), (var)))

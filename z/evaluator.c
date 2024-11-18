@@ -37,11 +37,49 @@ _opcode_loop:;
       next_opcode;
     }
     case_opcode(OP_PRIM) {
-      SKZ(primitive_PRIM(vm));
+      ptrdiff_t i;
+      ptrdiff_t argc  = AS_NUMBER(RB)->value;
+      MargValue self  = K(-1 - argc);
+      MargValue *args = NULL;
+      char *name      = AS_STRING(RA)->value;
+
+      MargValue prim_msg = table_get(&AS_OBJECT(self)->proto->primitives, name);
+      if(IS_UNDEFINED(prim_msg)) {
+        SKZ(raise("Error: cannot call because primitive does not exist."));
+      } else {
+        for(i = 1; i <= argc; i++) {
+          /* TODO - Turn this into a MARG_TENSOR to be included in the GC */
+          vector_add(args, K(-i));
+        }
+        SKZ(AS_PRIMITIVE(prim_msg)->function(vm, self, args));
+      }
       next_opcode;
     }
     case_opcode(OP_SEND) {
-      primitive_SEND(vm);
+      ptrdiff_t i;
+      MargValue msg_value;
+      EmeraldsTable object_messages;
+      ptrdiff_t argc  = AS_NUMBER(RB)->value;
+      MargValue self  = K(-1 - argc);
+      MargValue *args = NULL;
+      char *name      = AS_STRING(RA)->value;
+
+      object_messages = AS_OBJECT(self)->messages;
+      msg_value       = table_get(&object_messages, name);
+      if(IS_UNDEFINED(msg_value)) {
+        raise("Error: cannot send because message does not exist.");
+      } else {
+        for(i = 1; i <= argc; i++) {
+          /* TODO - Probably also should be a MARG_TENSOR */
+          vector_add(args, K(-i));
+        }
+        vm->current = AS_METHOD(msg_value);
+        for(i = 0; i < argc; i++) {
+          vm->current->local_registers[LOCAL(vm->current->arguments[i])] =
+            args[i];
+        }
+        vector_free(args);
+      }
       next_opcode;
     }
     case_opcode(OP_PRINT) {
