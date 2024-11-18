@@ -44,8 +44,8 @@ _opcode_loop:;
       primitive_SEND(vm);
       next_opcode;
     }
-    case_opcode(OP_PRINT) {
-      SKZ(primitive_PRINT(vm, RA, NULL));
+    case_opcode(OP_INSPECT) {
+      SKZ(primitive_INSPECT(vm, RA, NULL));
       next_opcode;
     }
     case_opcode(OP_RAISE) {

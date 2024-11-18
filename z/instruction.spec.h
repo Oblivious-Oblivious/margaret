@@ -17,26 +17,26 @@ module(instruction_spec, {
     assert_that_size_t(GET_INDEX(l2) equals to 1);
 
     Instruction i1 = INSTANCE("@i1");
-    assert_that_size_t(GET_INDEX(i1) equals to 0);
+    assert_that_size_t(GET_INDEX(i1) equals to 2);
     Instruction i2 = INSTANCE("@i2");
-    assert_that_size_t(GET_INDEX(i2) equals to 1);
+    assert_that_size_t(GET_INDEX(i2) equals to 3);
 
     Instruction g1 = GLOBAL("$g1");
-    assert_that_size_t(GET_INDEX(g1) equals to 7);
+    assert_that_size_t(GET_INDEX(g1) equals to 8);
     Instruction g2 = GLOBAL("$g2");
-    assert_that_size_t(GET_INDEX(g2) equals to 8);
+    assert_that_size_t(GET_INDEX(g2) equals to 9);
 
     Instruction i3 = INSTANCE("@i3");
     Instruction g3 = GLOBAL("$g3");
     Instruction i4 = INSTANCE("@i4");
-    assert_that_size_t(GET_INDEX(i3) equals to 2);
-    assert_that_size_t(GET_INDEX(g3) equals to 9);
-    assert_that_size_t(GET_INDEX(i4) equals to 3);
+    assert_that_size_t(GET_INDEX(i3) equals to 4);
+    assert_that_size_t(GET_INDEX(g3) equals to 10);
+    assert_that_size_t(GET_INDEX(i4) equals to 5);
 
     Instruction l3 = LOCAL("l3");
     assert_that_size_t(GET_INDEX(l3) equals to 2);
     Instruction g4 = GLOBAL("$g4");
-    assert_that_size_t(GET_INDEX(g4) equals to 10);
+    assert_that_size_t(GET_INDEX(g4) equals to 11);
   });
 
   it("does not override values in each register table", {
@@ -45,8 +45,8 @@ module(instruction_spec, {
     OAB(OP_MOV, GLOBAL("$g1"), CONST(MARG_NUMBER(789)));
 
     assert_that_size_t(GET_INDEX(LOCAL("l1")) equals to 0);
-    assert_that_size_t(GET_INDEX(INSTANCE("@i1")) equals to 0);
-    assert_that_size_t(GET_INDEX(GLOBAL("$g1")) equals to 7);
+    assert_that_size_t(GET_INDEX(INSTANCE("@i1")) equals to 2);
+    assert_that_size_t(GET_INDEX(GLOBAL("$g1")) equals to 8);
 
     assert_that(IS_LOCAL(LOCAL("l1")));
     assert_that(IS_INSTANCE(INSTANCE("@i1")));
@@ -91,7 +91,7 @@ module(instruction_spec, {
 
     assert_that_size_t(O equals to OP_MOV);
     assert_that(IS_INSTANCE(A));
-    assert_that_size_t(GET_INDEX(A) equals to 0);
+    assert_that_size_t(GET_INDEX(A) equals to 2);
     assert_that(IS_CONSTANT(B));
     assert_that_size_t(GET_INDEX(B) equals to 1);
     assert_that_size_t(AS_NUMBER(RA)->value equals to 456);
@@ -102,7 +102,7 @@ module(instruction_spec, {
 
     assert_that_size_t(O equals to OP_MOV);
     assert_that(IS_GLOBAL(A));
-    assert_that_size_t(GET_INDEX(A) equals to 7);
+    assert_that_size_t(GET_INDEX(A) equals to 8);
     assert_that(IS_CONSTANT(B));
     assert_that_size_t(GET_INDEX(B) equals to 2);
     assert_that_size_t(AS_NUMBER(RA)->value equals to 789);
@@ -135,7 +135,7 @@ module(instruction_spec, {
 
     assert_that_size_t(O equals to OP_MOV);
     assert_that(IS_INSTANCE(A));
-    assert_that_size_t(GET_INDEX(A) equals to 1);
+    assert_that_size_t(GET_INDEX(A) equals to 3);
     assert_that(IS_CONSTANT(B));
     assert_that_size_t(GET_INDEX(B) equals to 5);
     assert_that_size_t(AS_NUMBER(RA)->value equals to 654);
@@ -146,7 +146,7 @@ module(instruction_spec, {
 
     assert_that_size_t(O equals to OP_MOV);
     assert_that(IS_GLOBAL(A));
-    assert_that_size_t(GET_INDEX(A) equals to 8);
+    assert_that_size_t(GET_INDEX(A) equals to 9);
     assert_that(IS_CONSTANT(B));
     assert_that_size_t(GET_INDEX(B) equals to 6);
     assert_that_size_t(AS_NUMBER(RA)->value equals to 987);
@@ -157,7 +157,7 @@ module(instruction_spec, {
 
     assert_that_size_t(O equals to OP_MOV);
     assert_that(IS_INSTANCE(A));
-    assert_that_size_t(GET_INDEX(A) equals to 2);
+    assert_that_size_t(GET_INDEX(A) equals to 4);
     assert_that(IS_CONSTANT(B));
     assert_that_size_t(GET_INDEX(B) equals to 7);
     assert_that_size_t(AS_NUMBER(RA)->value equals to 654654);

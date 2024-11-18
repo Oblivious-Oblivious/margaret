@@ -165,3 +165,4 @@
   🟩 Objects are (maybe?) represented as table of slots.
      Preferably only one parent.
   🟩 Store labels in the variable tables but check for uniqueness and raise or ignore otherwise.
+  🟩 Care when cloning that only variables are being copied not labels.
