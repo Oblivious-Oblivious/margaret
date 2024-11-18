@@ -4,13 +4,28 @@
 #include "instruction.h"
 #include "nan_tagging.h"
 
+#define table_add_all_non_labels(src, dst)                           \
+  do {                                                               \
+    size_t i;                                                        \
+    for(i = 0; i < vector_capacity((src)->keys); i++) {              \
+      if((src)->states[i] == TABLE_STATE_FILLED) {                   \
+        if((src)->keys[i] &&                                         \
+           !((src)->keys[i][0] == '@' && (src)->keys[i][1] == ':' && \
+             (src)->keys[i][2] == ':')) {                            \
+          table_add((dst), (src)->keys[i], (src)->values[i]);        \
+        }                                                            \
+      }                                                              \
+    }                                                                \
+  } while(0)
+
 MargObject *
-value_object_new(VM *bound_vm, size_t size, MargValue proto, const char *name) {
+value_object_new(VM *vm, size_t size, MargValue proto, const char *name) {
+  size_t i;
   MargObject *self = (MargObject *)malloc(sizeof(MargObject) * size);
 
   self->is_marked = false;
   self->next      = NULL;
-  self->bound_vm  = bound_vm;
+  self->bound_vm  = vm;
 
   self->name  = name;
   self->proto = AS_OBJECT(proto);
@@ -23,10 +38,16 @@ value_object_new(VM *bound_vm, size_t size, MargValue proto, const char *name) {
     self->instance_registers[i] = MARG_UNDEFINED;
   }
 
-  table_add_all(&self->instance_variables, &self->proto->instance_variables);
+  if(!IS_UNDEFINED(proto)) {
+    table_add_all_non_labels(
+      &self->proto->instance_variables, &self->instance_variables
+    );
+  }
 
-  table_add(&self->instance_variables, "@self", QNAN_BOX(self));
-  table_add(&self->instance_variables, "@super", QNAN_BOX(self->proto));
+  table_add(&self->instance_variables, "@self", 0);
+  self->instance_registers[self->instance_index++] = QNAN_BOX(self);
+  table_add(&self->instance_variables, "@super", 1);
+  self->instance_registers[self->instance_index++] = QNAN_BOX(self->proto);
 
   return self;
 }
@@ -50,6 +71,17 @@ MargString *value_string_new(VM *vm, char *chars) {
   MargString *self = (MargString *)obj;
 
   self->value = chars;
+
+  return self;
+}
+
+MargLabel *value_label_new(VM *vm) {
+  MargObject *obj = (MargObject *)value_object_new(
+    vm, sizeof(MargLabel), G("$Label"), string_new("label value")
+  );
+  MargLabel *self = (MargLabel *)obj;
+
+  self->value = vector_size(vm->current->bytecode);
 
   return self;
 }

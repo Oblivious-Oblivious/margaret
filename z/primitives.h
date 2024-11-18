@@ -81,7 +81,7 @@ static MargValue primitive_PRIM(VM *vm) {
   }
 }
 
-static MargValue primitive_PRINT(VM *vm, MargValue self, MargValue *args) {
+static MargValue primitive_INSPECT(VM *vm, MargValue self, MargValue *args) {
 #define get_register_type(v) \
   (IS_CONSTANT((v))   ? "K"  \
    : IS_LOCAL((v))    ? "L"  \
@@ -112,8 +112,20 @@ static MargValue primitive_PRINT(VM *vm, MargValue self, MargValue *args) {
       GET_INDEX(A),
       AS_STRING(RA)->value
     );
+  } else if(IS_LABEL(RA)) {
+    printf(
+      "%s%zu = <::%zu>\n",
+      get_register_type(A),
+      GET_INDEX(A),
+      AS_LABEL(RA)->value
+    );
   } else {
-    printf("%s%zu = UNKNOWN\n", get_register_type(A), GET_INDEX(A));
+    printf(
+      "%s%zu = UNKNOWN, proto name: %s\n",
+      get_register_type(A),
+      GET_INDEX(A),
+      AS_OBJECT(RA)->name
+    );
   }
   return self;
 #undef get_register_type

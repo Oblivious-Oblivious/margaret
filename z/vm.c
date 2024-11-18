@@ -2,27 +2,26 @@
 
 #include "primitives.h"
 
-static void setup_proto_object_chain(VM *vm) {
-  MargValue marg;
-
-  SG(MARG_UNDEFINED, "$Margaret");
-  marg                   = G("$Margaret");
+static void setup_margaret(VM *vm) {
+  MargValue main;
+  MargValue marg         = SG(MARG_UNDEFINED, "$Margaret");
   AS_OBJECT(marg)->proto = AS_OBJECT(marg);
+  main                   = MARG_METHOD(AS_OBJECT(marg), NULL, "");
+  table_add(&AS_OBJECT(marg)->messages, "", main);
+  vm->current = AS_METHOD(main);
+}
+
+static void setup_proto_object_chain(VM *vm) {
+  MargValue marg = G("$Margaret");
 
   SG(marg, "$nil");
   SG(marg, "$false");
   SG(marg, "$true");
 
   SG(marg, "$Number");
+  SG(marg, "$Label");
   SG(marg, "$String");
   SG(marg, "$Method");
-}
-
-static void setup_vm_main(VM *vm) {
-  MargValue marg = G("$Margaret");
-  MargValue main = MARG_METHOD(AS_OBJECT(marg), NULL, "");
-  table_add(&AS_OBJECT(marg)->messages, "", main);
-  vm->current = AS_METHOD(main);
 }
 
 static void setup_primitives(VM *vm) {
@@ -40,7 +39,7 @@ void vm_init(VM *vm) {
     vm->global_registers[i] = MARG_UNDEFINED;
   }
 
+  setup_margaret(vm);
   setup_proto_object_chain(vm);
-  setup_vm_main(vm);
   setup_primitives(vm);
 }

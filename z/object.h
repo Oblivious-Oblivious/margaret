@@ -43,6 +43,12 @@ typedef struct MargString {
   char *value;
 } MargString;
 
+typedef struct MargLabel {
+  MargObject _;
+
+  size_t value;
+} MargLabel;
+
 typedef struct MargMethod {
   MargObject _;
 
@@ -74,6 +80,7 @@ MargFalse *value_false_new(VM *vm);
 MargTrue *value_true_new(VM *vm);
 MargNumber *value_number_new(VM *vm, double value);
 MargString *value_string_new(VM *vm, char *chars);
+MargLabel *value_label_new(VM *vm);
 MargMethod *value_method_new(
   VM *vm,
   MargObject *bound_object,

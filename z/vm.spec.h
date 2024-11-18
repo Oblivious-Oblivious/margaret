@@ -10,8 +10,8 @@ module(vm_spec, {
   before_each(&reset_vm);
 
   describe("built-in objects", {
-    it("has 7 built-in objects", {
-      assert_that_size_t(table_size(&vm->global_variables) equals to 7);
+    it("has 8 built-in objects", {
+      assert_that_size_t(table_size(&vm->global_variables) equals to 8);
     });
 
     context("on singletons", {

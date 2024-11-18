@@ -131,7 +131,5 @@ p_inline Instruction make_global(VM *vm, const char *var) {
 #define SKZ(v) SET_K(Z, v)
 
 #define SG(proto, name) SET_G(GLOBAL(name), MARG_OBJECT(proto, name))
-#define SI(proto, name) SET_I(INSTANCE(name), MARG_OBJECT(proto, name))
-#define SL(proto, name) SET_L(LOCAL(name), MARG_OBJECT(proto, name))
 
 #endif
