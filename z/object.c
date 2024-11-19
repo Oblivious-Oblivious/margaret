@@ -4,20 +4,6 @@
 #include "instruction.h"
 #include "nan_tagging.h"
 
-#define table_add_all_non_labels(src, dst)                           \
-  do {                                                               \
-    size_t i;                                                        \
-    for(i = 0; i < vector_capacity((src)->keys); i++) {              \
-      if((src)->states[i] == TABLE_STATE_FILLED) {                   \
-        if((src)->keys[i] &&                                         \
-           !((src)->keys[i][0] == '@' && (src)->keys[i][1] == ':' && \
-             (src)->keys[i][2] == ':')) {                            \
-          table_add((dst), (src)->keys[i], (src)->values[i]);        \
-        }                                                            \
-      }                                                              \
-    }                                                                \
-  } while(0)
-
 MargObject *
 value_object_new(VM *vm, size_t size, MargValue proto, const char *name) {
   size_t i;
