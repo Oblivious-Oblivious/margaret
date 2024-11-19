@@ -7,7 +7,7 @@
 MargObject *
 value_object_new(VM *vm, size_t size, MargValue proto, const char *name) {
   size_t i;
-  MargObject *self = (MargObject *)malloc(sizeof(MargObject) * size);
+  MargObject *self = (MargObject *)malloc(size);
 
   self->is_marked = false;
   self->next      = NULL;
