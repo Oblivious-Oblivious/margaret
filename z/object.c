@@ -6,7 +6,6 @@
 
 MargObject *
 value_object_new(VM *vm, size_t size, MargValue proto, const char *name) {
-  size_t i;
   MargObject *self = (MargObject *)malloc(size);
 
   self->is_marked = false;
@@ -20,9 +19,6 @@ value_object_new(VM *vm, size_t size, MargValue proto, const char *name) {
   table_init(&self->instance_variables);
   table_init(&self->messages);
   table_init(&self->primitives);
-  for(i = 0; i < MAX_REGISTERS; i++) {
-    self->instance_registers[i] = MARG_UNDEFINED;
-  }
 
   if(!IS_UNDEFINED(proto)) {
     table_add_all_non_labels(
@@ -78,7 +74,6 @@ MargMethod *value_method_new(
   MargMethod *bound_method,
   const char *message_name
 ) {
-  size_t i;
   MargObject *obj = (MargObject *)value_object_new(
     vm, sizeof(MargMethod), G("$Method"), string_new("")
   );
@@ -93,9 +88,6 @@ MargMethod *value_method_new(
   self->constants = NULL;
   table_init(&self->local_variables);
   self->local_index = 0;
-  for(i = 0; i < MAX_REGISTERS; i++) {
-    self->local_registers[i] = MARG_UNDEFINED;
-  }
 
   self->bytecode = NULL;
   self->ip       = -1;

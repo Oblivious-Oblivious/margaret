@@ -32,12 +32,8 @@ static void setup_primitives(VM *vm) {
 }
 
 void vm_init(VM *vm) {
-  size_t i;
   vm->global_index = 0;
   table_init(&vm->global_variables);
-  for(i = 0; i < MAX_REGISTERS; i++) {
-    vm->global_registers[i] = MARG_UNDEFINED;
-  }
 
   setup_margaret(vm);
   setup_proto_object_chain(vm);
