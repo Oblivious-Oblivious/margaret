@@ -114,6 +114,7 @@ _opcode_loop:;
       }
 
       if(IS_LABEL(label)) {
+        vm->current     = AS_OBJECT(label)->bound_vm->current;
         vm->current->ip = AS_LABEL(label)->value;
       } else {
         SKZ(raise("Error: cannot goto to a non-label."));
