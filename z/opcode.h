@@ -1,8 +1,6 @@
 #ifndef __OPCODE_H_
 #define __OPCODE_H_
 
-#include "vm.h"
-
 #define OP_MOV      ((Instruction)0x00)
 #define OP_LODZ     ((Instruction)0x01)
 #define OP_STOZ     ((Instruction)0x02)

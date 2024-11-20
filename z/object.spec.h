@@ -2,6 +2,7 @@
 #define __OBJECT_SPEC_H_
 
 #include "../libs/cSpec/export/cSpec.h"
+#include "../libs/EmeraldsString/export/EmeraldsString.h"
 #include "helpers.spec.h"
 #include "instruction.h"
 #include "nan_tagging.h"

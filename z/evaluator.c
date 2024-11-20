@@ -1,8 +1,6 @@
 #include "evaluator.h"
 
-#include "instruction.h"
-#include "nan_tagging.h"
-#include "object.h"
+#include "../libs/EmeraldsString/export/EmeraldsString.h"
 #include "opcode.h"
 #include "primitives.h"
 

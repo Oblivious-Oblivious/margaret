@@ -4,9 +4,6 @@
 #include "../libs/EmeraldsTable/export/EmeraldsTable.h"
 #include "value.h"
 
-#define MAX_REGISTERS (1 << 16)
-typedef size_t Instruction;
-
 typedef struct VM {
   MargValue global_registers[MAX_REGISTERS];
   uint32_t global_index;

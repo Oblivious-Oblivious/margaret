@@ -1,9 +1,6 @@
 #ifndef __NAN_TAGGING_H_
 #define __NAN_TAGGING_H_
 
-#include "../libs/EmeraldsString/export/EmeraldsString.h"
-#include "object.h"
-
 /** QNAN = 0b    0     11111111111       1            1       ('0' * 50)
               (sign) (exponent bits) (qnan bit) (qnan fp ind)   (rest) */
 #define SIGN_BIT  ((size_t)0x8000000000000000)

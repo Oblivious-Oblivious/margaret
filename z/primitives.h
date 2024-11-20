@@ -1,6 +1,7 @@
 #ifndef __PRIMITIVES_H_
 #define __PRIMITIVES_H_
 
+#include "../libs/EmeraldsString/export/EmeraldsString.h"
 #include "instruction.h"
 #include "nan_tagging.h"
 
