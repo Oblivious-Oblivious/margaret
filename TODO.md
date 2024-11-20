@@ -47,6 +47,8 @@
 
 ## (✗) ver. 0.0.2
 -----------------
+  🟥 FT-05 - Separate value representation for small strings that store the characters inline in the value.
+  🟥 FT-06 - In the NaN boxing scheme do not reallocate integer and float representations, instead use unboxed values directly.
   🟥 FT-18 - Add pattern matching and LISP style handling of items
              %[:car, :cdr] = %[1, 2, 3] # car = 1, cdr = %[2, 3]
              %[:car, :cdr] = %[1, 2] # car = 1, cdr = %[2], (flatten), cdr = 2
@@ -85,8 +87,6 @@
   🟥 FT-04 - Make comments part of the language (comment: "...", todo: "...").
              Make comments dynamic and persistent on code files.
              Since comments are dynamic, we can use interpolation to change them according to data (for documentation comments).
-  🟥 FT-05 - Separate value representation for small strings that store the characters inline in the value.
-  🟥 FT-06 - In the NaN boxing scheme do not reallocate integer and float representations, instead use unboxed values directly.
   🟥 FT-07 - Add a `@this`, `@it` or equivalent that refers to the original object.
              @this would always refer to object where original method is defined,
              not the object where the method is called.
