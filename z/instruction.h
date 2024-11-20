@@ -4,19 +4,14 @@
 #include "object.h"
 
 /**
- * OP   - opcode (10) - rest (54)
- * OA   - opcode (10) - operand A (18) - rest (36)
- * OAB  - opcode (10) - operand A (18) - operand B (18) - rest (18)
- * OABC - opcode (10) - operand A (18) - operand B (18) - operand C (18)
+ * OP   - opcode (6) - rest (58)
+ * OA   - opcode (6) - operand A (29) - rest (29)
+ * OAB  - opcode (6) - operand A (29) - operand B (29)
  */
-#define OP(op)    vector_add(vm->current->bytecode, (op << 54))
-#define OA(op, a) vector_add(vm->current->bytecode, (op << 54) | (a << 36))
+#define OP(op)    vector_add(vm->current->bytecode, (op << 58))
+#define OA(op, a) vector_add(vm->current->bytecode, (op << 58) | (a << 29))
 #define OAB(op, a, b) \
-  vector_add(vm->current->bytecode, (op << 54) | (a << 36) | (b << 18))
-#define OABC(op, a, b, c)                                                \
-  vector_add(                                                            \
-    vm->current->bytecode, (op << 54) | (a << 36) | (b << 18) | (c << 0) \
-  )
+  vector_add(vm->current->bytecode, (op << 58) | (a << 29) | (b << 0))
 
 #define REG_TYPE_LOCAL    (0x00000)
 #define REG_TYPE_INSTANCE (0x10000)
@@ -74,7 +69,7 @@ p_inline Instruction make_global(VM *vm, const char *var) {
 #define READ() (vm->current->bytecode[vm->current->ip])
 
 #define GET_TYPE(i)  ((i) & 0x30000)
-#define GET_INDEX(i) ((i) & 0x0FFFF)
+#define GET_INDEX(i) ((i) & 0x0ffff)
 
 #define IS_LOCAL(i)    (GET_TYPE(i) == REG_TYPE_LOCAL)
 #define IS_INSTANCE(i) (GET_TYPE(i) == REG_TYPE_INSTANCE)
@@ -92,11 +87,10 @@ p_inline Instruction make_global(VM *vm, const char *var) {
    : IS_GLOBAL(i)   ? GET_G(i) \
                     : MARG_UNDEFINED)
 
-#define SET_K(i, v) (vm->current->constants[GET_INDEX(i)] = (v))
-#define SET_L(i, v) (vm->current->local_registers[GET_INDEX(i)] = (v))
-#define SET_I(i, v) \
-  (vm->current->bound_object->instance_registers[GET_INDEX(i)] = (v))
-#define SET_G(i, v) (vm->global_registers[GET_INDEX(i)] = (v))
+#define SET_K(i, v) (GET_K(i) = (v))
+#define SET_L(i, v) (GET_L(i) = (v))
+#define SET_I(i, v) (GET_I(i) = (v))
+#define SET_G(i, v) (GET_G(i) = (v))
 #define SET_R(i, v)               \
   (IS_CONSTANT(i)   ? SET_K(i, v) \
    : IS_LOCAL(i)    ? SET_L(i, v) \
@@ -109,10 +103,9 @@ p_inline Instruction make_global(VM *vm, const char *var) {
 #define INSTANCE(var) (make_instance((vm), (var)))
 #define GLOBAL(var)   (make_global((vm), (var)))
 
-#define O    ((READ() >> 54) & 0x3ff)
-#define A    ((READ() >> 36) & 0x3ffff)
-#define B    ((READ() >> 18) & 0x3ffff)
-#define C    ((READ() >> 0) & 0x3ffff)
+#define O    ((READ() >> 58) & 0x3f)
+#define A    ((READ() >> 29) & 0x1fffffff)
+#define B    ((READ() >> 0) & 0x1fffffff)
 #define Z    (vector_size(vm->current->constants) - 1)
 #define K(i) (vm->current->constants[(i + Z + 1) % (Z + 1)])
 #define L(n) GET_L(table_get(&vm->current->local_variables, (n)))
@@ -122,12 +115,10 @@ p_inline Instruction make_global(VM *vm, const char *var) {
 
 #define RA GET_R(A)
 #define RB GET_R(B)
-#define RC GET_R(C)
 #define KZ GET_K(Z)
 
 #define SRA(v) SET_R(A, v)
 #define SRB(v) SET_R(B, v)
-#define SRC(v) SET_R(C, v)
 #define SKZ(v) SET_K(Z, v)
 
 #define SG(proto, name) SET_G(GLOBAL(name), MARG_OBJECT(proto, name))

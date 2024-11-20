@@ -9,7 +9,7 @@ typedef size_t Instruction;
 
 typedef struct VM {
   MargValue global_registers[MAX_REGISTERS];
-  uint16_t global_index;
+  uint32_t global_index;
   EmeraldsTable global_variables;
   struct MargMethod *current;
 } VM;
