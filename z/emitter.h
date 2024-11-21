@@ -6,7 +6,12 @@
 #include "nan_tagging.h"
 #include "opcode.h"
 
-#define COMP_LABEL(a) (SET_R(a, MARG_LABEL()), OP(OP_NOP))
+#define COMP_LABEL_LOCAL(name) \
+  (SET_R(LOCAL(name), MARG_LABEL(name)), OP(OP_NOP))
+#define COMP_LABEL_INSTANCE(name) \
+  (SET_R(INSTANCE(name), MARG_LABEL(name)), OP(OP_NOP))
+#define COMP_LABEL_GLOBAL(name) \
+  (SET_R(GLOBAL(name), MARG_LABEL(name)), OP(OP_NOP))
 
 p_inline void define_add_method_in_marg(VM *vm) {
   /* $Margaret-- #add : other => 420 prim_ADD : other */
@@ -61,6 +66,12 @@ p_inline void emit_example_bytecode(VM *vm) {
   OA(OP_INSPECT, LOCAL("z"));
   OA(OP_INSPECT, LOCAL("a"));
   OA(OP_INSPECT, LOCAL("msg"));
+  OA(OP_INSPECT, CONST(MARG_LABEL("::random")));
+  OA(
+    OP_INSPECT,
+    CONST(MARG_METHOD(vm->current->bound_object, vm->current, "RANDOM"))
+  );
+  OA(OP_INSPECT, CONST(MARG_PRIMITIVE("PRIM_add", NULL)));
   OA(OP_INSPECT, LOCAL("result_add"));
   OA(OP_INSPECT, LOCAL("result_sub"));
   OA(OP_INSPECT, LOCAL("result_mul"));
@@ -93,17 +104,17 @@ p_inline void emit_example_bytecode(VM *vm) {
   OA(OP_STOZ, CONST(MARG_NUMBER(5)));
   OAB(OP_PRIM, CONST(MARG_STRING("+")), CONST(MARG_NUMBER(1)));
 
-  COMP_LABEL(INSTANCE("@::label"));
+  COMP_LABEL_INSTANCE("@::label");
 
   OA(OP_STOZ, CONST(MARG_NUMBER(7)));
   OAB(OP_PRIM, CONST(MARG_STRING("+")), CONST(MARG_NUMBER(1)));
 
   OA(OP_GOTO, CONST(MARG_STRING("$::label")));
 
-  COMP_LABEL(LOCAL("::label"));
+  COMP_LABEL_LOCAL("::label");
   OA(OP_GOTO, CONST(MARG_STRING("@::label")));
 
-  COMP_LABEL(GLOBAL("$::label"));
+  COMP_LABEL_GLOBAL("$::label");
 
   OA(OP_STOZ, CONST(MARG_NUMBER(11)));
   OAB(OP_PRIM, CONST(MARG_STRING("+")), CONST(MARG_NUMBER(1)));

@@ -14,8 +14,14 @@ module(object_spec, {
     MargValue marg = G("$Margaret");
     assert_that(marg isnot MARG_UNDEFINED);
     assert_that_charptr(AS_OBJECT(marg)->name equals to "$Margaret");
-    table_add(&AS_OBJECT(marg)->instance_variables, "@::l1", MARG_LABEL());
-    table_add(&AS_OBJECT(marg)->instance_variables, "@::l2", MARG_LABEL());
+    assert_that_size_t(AS_OBJECT(marg)->name_hash equals to 4789181502764186150
+    );
+    table_add(
+      &AS_OBJECT(marg)->instance_variables, "@::l1", MARG_LABEL("@::l1")
+    );
+    table_add(
+      &AS_OBJECT(marg)->instance_variables, "@::l2", MARG_LABEL("@::l2")
+    );
 
     assert_that_size_t(table_size(&AS_OBJECT(marg)->instance_variables)
                          equals to 4);

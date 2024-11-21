@@ -35,6 +35,7 @@ module(vm_spec, {
       it("ensures we define global $Number, $String and $Method objects", {
         assert_that(!IS_UNDEFINED(table_get(&vm->global_variables, "$Number")));
         assert_that(!IS_UNDEFINED(table_get(&vm->global_variables, "$String")));
+        assert_that(!IS_UNDEFINED(table_get(&vm->global_variables, "$Label")));
         assert_that(!IS_UNDEFINED(table_get(&vm->global_variables, "$Method")));
       });
     });

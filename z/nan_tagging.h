@@ -22,7 +22,7 @@
 #define MARG_TRUE()        G("$true")
 #define MARG_NUMBER(value) (QNAN_BOX(value_number_new(vm, (value))))
 #define MARG_STRING(value) (QNAN_BOX(value_string_new(vm, string_new((value)))))
-#define MARG_LABEL()       (QNAN_BOX(value_label_new(vm)))
+#define MARG_LABEL(name)   (QNAN_BOX(value_label_new(vm, name)))
 #define MARG_METHOD(bound_object, bound_method, message_name) \
   (QNAN_BOX(value_method_new(vm, bound_object, bound_method, message_name)))
 #define MARG_PRIMITIVE(vm, prim) (QNAN_BOX(value_primitive_new(vm, prim)))

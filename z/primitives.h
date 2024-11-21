@@ -115,9 +115,10 @@ static MargValue primitive_INSPECT(VM *vm, MargValue self, MargValue *args) {
     );
   } else if(IS_LABEL(RA)) {
     printf(
-      "%s%zu = <::%zu>\n",
+      "%s%zu = < %s#%zu >\n",
       get_register_type(A),
       GET_INDEX(A),
+      AS_LABEL(RA)->name,
       AS_LABEL(RA)->value
     );
   } else {
