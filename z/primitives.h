@@ -19,7 +19,7 @@ static void define_primitive(
   } else {
     obj = AS_OBJECT(L(object_name));
   }
-  table_add(&obj->primitives, name, MARG_PRIMITIVE(vm, msg));
+  table_add(&obj->primitives, name, MARG_PRIMITIVE(name, msg));
 }
 
 static MargValue primitive_RAISE(VM *vm, MargValue self, MargValue *args) {
@@ -120,6 +120,21 @@ static MargValue primitive_INSPECT(VM *vm, MargValue self, MargValue *args) {
       GET_INDEX(A),
       AS_LABEL(RA)->name,
       AS_LABEL(RA)->value
+    );
+  } else if(IS_METHOD(RA)) {
+    printf(
+      "%s%zu = < %s#%s >\n",
+      get_register_type(A),
+      GET_INDEX(A),
+      AS_METHOD(RA)->bound_object->name,
+      AS_METHOD(RA)->message_name
+    );
+  } else if(IS_PRIMITIVE(RA)) {
+    printf(
+      "%s%zu = < PRIM#%s >\n",
+      get_register_type(A),
+      GET_INDEX(A),
+      AS_PRIMITIVE(RA)->primitive_name
     );
   } else {
     printf(

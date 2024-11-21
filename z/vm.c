@@ -23,6 +23,7 @@ static void setup_proto_object_chain(VM *vm) {
   SG(marg, "$Label");
   SG(marg, "$String");
   SG(marg, "$Method");
+  SG(marg, "Primitive");
 }
 
 static void setup_primitives(VM *vm) {

@@ -10,8 +10,8 @@ module(vm_spec, {
   before_each(&reset_vm);
 
   describe("built-in objects", {
-    it("has 8 built-in objects", {
-      assert_that_size_t(table_size(&vm->global_variables) equals to 8);
+    it("has 9 built-in objects", {
+      assert_that_size_t(table_size(&vm->global_variables) equals to 9);
     });
 
     context("on singletons", {
@@ -37,6 +37,8 @@ module(vm_spec, {
         assert_that(!IS_UNDEFINED(table_get(&vm->global_variables, "$String")));
         assert_that(!IS_UNDEFINED(table_get(&vm->global_variables, "$Label")));
         assert_that(!IS_UNDEFINED(table_get(&vm->global_variables, "$Method")));
+        assert_that(!IS_UNDEFINED(table_get(&vm->global_variables, "Primitive"))
+        );
       });
     });
   });

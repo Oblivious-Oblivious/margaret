@@ -25,7 +25,8 @@
 #define MARG_LABEL(name)   (QNAN_BOX(value_label_new(vm, name)))
 #define MARG_METHOD(bound_object, bound_method, message_name) \
   (QNAN_BOX(value_method_new(vm, bound_object, bound_method, message_name)))
-#define MARG_PRIMITIVE(vm, prim) (QNAN_BOX(value_primitive_new(vm, prim)))
+#define MARG_PRIMITIVE(name, prim) \
+  (QNAN_BOX(value_primitive_new(vm, name, prim)))
 #define MARG_OBJECT(proto, name) \
   (QNAN_BOX(value_object_new(vm, sizeof(MargObject), proto, string_new(name))))
 

@@ -57,12 +57,13 @@ MargString *value_string_new(VM *vm, char *chars) {
   return self;
 }
 
-MargLabel *value_label_new(VM *vm) {
+MargLabel *value_label_new(VM *vm, const char *name) {
   MargObject *obj = (MargObject *)value_object_new(
     vm, sizeof(MargLabel), G("$Label"), string_new("label value")
   );
   MargLabel *self = (MargLabel *)obj;
 
+  self->name  = name;
   self->value = vector_size(vm->current->bytecode);
 
   return self;
@@ -95,7 +96,9 @@ MargMethod *value_method_new(
   return self;
 }
 
-MargPrimitive *value_primitive_new(VM *vm, MargPrimitiveFunction function) {
+MargPrimitive *value_primitive_new(
+  VM *vm, const char *primitive_name, MargPrimitiveFunction function
+) {
   MargObject *obj = (MargObject *)value_object_new(
     vm, sizeof(MargPrimitive), G("Primitive"), string_new("")
   );
@@ -103,7 +106,8 @@ MargPrimitive *value_primitive_new(VM *vm, MargPrimitiveFunction function) {
 
   obj->instance_registers[1] = MARG_UNDEFINED;
   table_remove(&obj->instance_variables, "@super");
-  self->function = function;
+  self->function       = function;
+  self->primitive_name = primitive_name;
 
   return self;
 }
