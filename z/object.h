@@ -11,6 +11,7 @@ typedef struct MargObject {
   VM *bound_vm;
 
   const char *name;
+  size_t name_hash;
   struct MargObject *proto;
   MargValue instance_registers[MAX_REGISTERS];
   uint32_t instance_index;

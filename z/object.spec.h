@@ -30,6 +30,11 @@ module(object_spec, {
     assert_that(clone isnot MARG_UNDEFINED);
     assert_that_charptr(AS_OBJECT(clone)->name equals to "ACLONE");
     assert_that_charptr(AS_OBJECT(clone)->proto->name equals to "$Margaret");
+    assert_that_size_t(AS_OBJECT(clone)->name_hash equals to 3455395588760667778
+    );
+    assert_that_size_t(
+      AS_OBJECT(clone)->proto->name_hash equals to 4789181502764186150
+    );
     assert_that_size_t(table_size(&AS_OBJECT(clone)->instance_variables)
                          equals to 2);
   });
@@ -41,6 +46,10 @@ module(object_spec, {
                           ->name equals to "ACLONE");
     assert_that_charptr(AS_OBJECT(AS_OBJECT(clone)->instance_registers[1])
                           ->name equals to "$Margaret");
+    assert_that_size_t(AS_OBJECT(AS_OBJECT(clone)->instance_registers[0])
+                         ->name_hash equals to 3455395588760667778);
+    assert_that_size_t(AS_OBJECT(AS_OBJECT(clone)->instance_registers[1])
+                         ->name_hash equals to 4789181502764186150);
   });
 })
 

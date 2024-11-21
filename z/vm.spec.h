@@ -48,6 +48,7 @@ module(vm_spec, {
       assert_that(vm->current->bound_method is vm->current);
       MargObject *marg = vm->current->bound_object;
       assert_that_charptr(marg->name equals to "$Margaret");
+      assert_that_size_t(marg->name_hash equals to 4789181502764186150);
     });
   });
 })

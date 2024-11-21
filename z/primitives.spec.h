@@ -12,6 +12,7 @@ module(primitives_spec, {
 
       MargObject *number = AS_OBJECT(G("$Number"));
       assert_that_charptr(number->name equals to "$Number");
+      assert_that_size_t(number->name_hash equals to 2797136090371334895);
       MargPrimitive *add = AS_PRIMITIVE(table_get(&number->primitives, "+"));
       MargPrimitive *sub = AS_PRIMITIVE(table_get(&number->primitives, "-"));
       MargPrimitive *mul = AS_PRIMITIVE(table_get(&number->primitives, "*"));

@@ -40,26 +40,29 @@
 #define AS_PRIMITIVE(value) ((MargPrimitive *)QNAN_UNBOX(value))
 #define AS_OBJECT(value)    ((MargObject *)QNAN_UNBOX(value))
 
-#define IS_NIL(value) \
-  (!IS_UNDEFINED(value) && string_equals(AS_OBJECT(value)->name, "$nil"))
-#define IS_FALSE(value) \
-  (!IS_UNDEFINED(value) && string_equals(AS_OBJECT(value)->name, "$false"))
-#define IS_TRUE(value) \
-  (!IS_UNDEFINED(value) && string_equals(AS_OBJECT(value)->name, "$true"))
+#define IS_NIL(value)                          \
+  (!IS_UNDEFINED(value) && AS_OBJECT(value) && \
+   AS_OBJECT(value)->name_hash == 18110527515211709592u)
+#define IS_FALSE(value)                        \
+  (!IS_UNDEFINED(value) && AS_OBJECT(value) && \
+   AS_OBJECT(value)->name_hash == 11637356562211384420u)
+#define IS_TRUE(value)                         \
+  (!IS_UNDEFINED(value) && AS_OBJECT(value) && \
+   AS_OBJECT(value)->name_hash == 4514072750546140253)
 #define IS_NUMBER(value)                                                  \
   (!IS_UNDEFINED(value) && AS_OBJECT(value) && AS_OBJECT(value)->proto && \
-   string_equals(AS_OBJECT(value)->proto->name, "$Number"))
+   AS_OBJECT(value)->proto->name_hash == 2797136090371334895)
 #define IS_STRING(value)                                                  \
   (!IS_UNDEFINED(value) && AS_OBJECT(value) && AS_OBJECT(value)->proto && \
-   string_equals(AS_OBJECT(value)->proto->name, "$String"))
+   AS_OBJECT(value)->proto->name_hash == 1247353075981998467)
 #define IS_LABEL(value)                                                   \
   (!IS_UNDEFINED(value) && AS_OBJECT(value) && AS_OBJECT(value)->proto && \
-   string_equals(AS_OBJECT(value)->proto->name, "$Label"))
+   AS_OBJECT(value)->proto->name_hash == 8423524640085775522)
 #define IS_METHOD(value)                                                  \
   (!IS_UNDEFINED(value) && AS_OBJECT(value) && AS_OBJECT(value)->proto && \
-   string_equals(AS_OBJECT(value)->proto->name, "$Method"))
-#define IS_PRIMITIVE(value) \
-  (!IS_UNDEFINED(value) &&  \
-   string_equals(AS_OBJECT(value)->proto->name, "Primitive"))
+   AS_OBJECT(value)->proto->name_hash == 15255530546787031708u)
+#define IS_PRIMITIVE(value)                                               \
+  (!IS_UNDEFINED(value) && AS_OBJECT(value) && AS_OBJECT(value)->proto && \
+   AS_OBJECT(value)->proto->name_hash == 5694381430705705196)
 
 #endif

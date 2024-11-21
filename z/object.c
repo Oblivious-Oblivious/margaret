@@ -12,8 +12,9 @@ value_object_new(VM *vm, size_t size, MargValue proto, const char *name) {
   self->next      = NULL;
   self->bound_vm  = vm;
 
-  self->name  = name;
-  self->proto = AS_OBJECT(proto);
+  self->name      = name;
+  self->name_hash = komihash_hash(name, string_size(name));
+  self->proto     = AS_OBJECT(proto);
 
   self->instance_index = 0;
   table_init(&self->instance_variables);
