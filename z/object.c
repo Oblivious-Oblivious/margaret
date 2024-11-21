@@ -26,9 +26,9 @@ value_object_new(VM *vm, size_t size, MargValue proto, const char *name) {
     );
   }
 
-  table_add(&self->instance_variables, "@self", 0);
+  table_add(&self->instance_variables, "@self", self->instance_index);
   self->instance_registers[self->instance_index++] = QNAN_BOX(self);
-  table_add(&self->instance_variables, "@super", 1);
+  table_add(&self->instance_variables, "@super", self->instance_index);
   self->instance_registers[self->instance_index++] = QNAN_BOX(self->proto);
 
   return self;

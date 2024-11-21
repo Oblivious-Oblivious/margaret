@@ -42,7 +42,7 @@ module(vm_spec, {
 
   describe("main method", {
     it("ensures ip points to the main method", {
-      assert_that(vm->current->bound_method is NULL);
+      assert_that(vm->current->bound_method is vm->current);
       MargObject *marg = vm->current->bound_object;
       assert_that_charptr(marg->name equals to "$Margaret");
     });

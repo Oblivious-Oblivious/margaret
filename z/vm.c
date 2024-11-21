@@ -4,9 +4,10 @@
 
 static void setup_margaret(VM *vm) {
   MargValue main;
-  MargValue marg         = SG(MARG_UNDEFINED, "$Margaret");
-  AS_OBJECT(marg)->proto = AS_OBJECT(marg);
-  main                   = MARG_METHOD(AS_OBJECT(marg), NULL, "");
+  MargValue marg                = SG(MARG_UNDEFINED, "$Margaret");
+  AS_OBJECT(marg)->proto        = AS_OBJECT(marg);
+  main                          = MARG_METHOD(AS_OBJECT(marg), NULL, "");
+  AS_METHOD(main)->bound_method = AS_METHOD(main);
   table_add(&AS_OBJECT(marg)->messages, "", main);
   vm->current = AS_METHOD(main);
 }
