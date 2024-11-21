@@ -101,6 +101,7 @@ MargPrimitive *value_primitive_new(VM *vm, MargPrimitiveFunction function) {
   );
   MargPrimitive *self = (MargPrimitive *)obj;
 
+  obj->instance_registers[1] = MARG_UNDEFINED;
   table_remove(&obj->instance_variables, "@super");
   self->function = function;
 
