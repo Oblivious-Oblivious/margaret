@@ -12,156 +12,68 @@ module(instruction_spec, {
 
   it("masks and unmasks values correctly", {
     Instruction l1 = LOCAL("l1");
-    assert_that_size_t(GET_INDEX(l1) equals to 0);
+    assert_that_size_t(l1 equals to 0);
     Instruction l2 = LOCAL("l2");
-    assert_that_size_t(GET_INDEX(l2) equals to 1);
+    assert_that_size_t(l2 equals to 1);
 
     Instruction i1 = INSTANCE("@i1");
-    assert_that_size_t(GET_INDEX(i1) equals to 2);
+    assert_that_size_t(i1 equals to 2);
     Instruction i2 = INSTANCE("@i2");
-    assert_that_size_t(GET_INDEX(i2) equals to 3);
+    assert_that_size_t(i2 equals to 3);
 
     Instruction g1 = GLOBAL("$g1");
-    assert_that_size_t(GET_INDEX(g1) equals to 9);
+    assert_that_size_t(g1 equals to 9);
     Instruction g2 = GLOBAL("$g2");
-    assert_that_size_t(GET_INDEX(g2) equals to 10);
+    assert_that_size_t(g2 equals to 10);
 
     Instruction i3 = INSTANCE("@i3");
     Instruction g3 = GLOBAL("$g3");
     Instruction i4 = INSTANCE("@i4");
-    assert_that_size_t(GET_INDEX(i3) equals to 4);
-    assert_that_size_t(GET_INDEX(g3) equals to 11);
-    assert_that_size_t(GET_INDEX(i4) equals to 5);
+    assert_that_size_t(i3 equals to 4);
+    assert_that_size_t(g3 equals to 11);
+    assert_that_size_t(i4 equals to 5);
 
     Instruction l3 = LOCAL("l3");
-    assert_that_size_t(GET_INDEX(l3) equals to 2);
+    assert_that_size_t(l3 equals to 2);
     Instruction g4 = GLOBAL("$g4");
-    assert_that_size_t(GET_INDEX(g4) equals to 12);
+    assert_that_size_t(g4 equals to 12);
   });
 
   it("does not override values in each register table", {
-    OAB(OP_MOV, LOCAL("l1"), CONST(MARG_NUMBER(123)));
-    OAB(OP_MOV, INSTANCE("@i1"), CONST(MARG_NUMBER(456)));
-    OAB(OP_MOV, GLOBAL("$g1"), CONST(MARG_NUMBER(789)));
+    OA(OP_STOZK, CONST(MARG_NUMBER(123)));
+    OA(OP_LODZL, LOCAL("l1"));
+    OA(OP_STOZK, CONST(MARG_NUMBER(456)));
+    OA(OP_LODZI, INSTANCE("@i1"));
+    OA(OP_STOZK, CONST(MARG_NUMBER(789)));
+    OA(OP_LODZG, GLOBAL("$g1"));
 
-    assert_that_size_t(GET_INDEX(LOCAL("l1")) equals to 0);
-    assert_that_size_t(GET_INDEX(INSTANCE("@i1")) equals to 2);
-    assert_that_size_t(GET_INDEX(GLOBAL("$g1")) equals to 9);
-
-    assert_that(IS_LOCAL(LOCAL("l1")));
-    assert_that(IS_INSTANCE(INSTANCE("@i1")));
-    assert_that(IS_GLOBAL(GLOBAL("$g1")));
-
-    vm->current->ip = 0;
-    SRA(RB);
-    assert_that_size_t(AS_NUMBER(RA)->value equals to 123);
-
-    vm->current->ip = 1;
-    SRA(RB);
-    assert_that_size_t(AS_NUMBER(RA)->value equals to 456);
-
-    vm->current->ip = 2;
-    SRA(RB);
-    assert_that_size_t(AS_NUMBER(RA)->value equals to 789);
-  });
-
-  it("correctly encodes and decodes mov instructions", {
-    OAB(OP_MOV, LOCAL("l1"), CONST(MARG_NUMBER(123)));
-    OAB(OP_MOV, INSTANCE("@i1"), CONST(MARG_NUMBER(456)));
-    OAB(OP_MOV, GLOBAL("$g1"), CONST(MARG_NUMBER(789)));
-    OAB(OP_MOV, LOCAL("l2"), CONST(MARG_NUMBER(321)));
-    OAB(OP_MOV, LOCAL("l3"), CONST(MARG_NUMBER(321321)));
-    OAB(OP_MOV, INSTANCE("@i2"), CONST(MARG_NUMBER(654)));
-    OAB(OP_MOV, GLOBAL("$g2"), CONST(MARG_NUMBER(987)));
-    OAB(OP_MOV, INSTANCE("@i3"), CONST(MARG_NUMBER(654654)));
+    assert_that_size_t(LOCAL("l1") equals to 0);
+    assert_that_size_t(INSTANCE("@i1") equals to 2);
+    assert_that_size_t(GLOBAL("$g1") equals to 9);
 
     vm->current->ip = 0;
-    SRA(RB);
+    CONST(KA);
+    assert_that_size_t(AS_NUMBER(KZ)->value equals to 123);
+    vm->current->ip++;
+    SLA(KZ);
+    assert_that_size_t(AS_NUMBER(LA)->value equals to 123);
+    assert_that_size_t(AS_NUMBER(KZ)->value equals to 123);
 
-    assert_that_size_t(O equals to OP_MOV);
-    assert_that(IS_LOCAL(A));
-    assert_that_size_t(GET_INDEX(A) equals to 0);
-    assert_that(IS_CONSTANT(B));
-    assert_that_size_t(GET_INDEX(B) equals to 0);
-    assert_that_size_t(AS_NUMBER(RA)->value equals to 123);
-    assert_that_size_t(AS_NUMBER(RB)->value equals to 123);
+    vm->current->ip++;
+    CONST(KA);
+    assert_that_size_t(AS_NUMBER(KZ)->value equals to 456);
+    vm->current->ip++;
+    SIA(KZ);
+    assert_that_size_t(AS_NUMBER(IA)->value equals to 456);
+    assert_that_size_t(AS_NUMBER(KZ)->value equals to 456);
 
-    vm->current->ip = 1;
-    SRA(RB);
-
-    assert_that_size_t(O equals to OP_MOV);
-    assert_that(IS_INSTANCE(A));
-    assert_that_size_t(GET_INDEX(A) equals to 2);
-    assert_that(IS_CONSTANT(B));
-    assert_that_size_t(GET_INDEX(B) equals to 1);
-    assert_that_size_t(AS_NUMBER(RA)->value equals to 456);
-    assert_that_size_t(AS_NUMBER(RB)->value equals to 456);
-
-    vm->current->ip = 2;
-    SRA(RB);
-
-    assert_that_size_t(O equals to OP_MOV);
-    assert_that(IS_GLOBAL(A));
-    assert_that_size_t(GET_INDEX(A) equals to 9);
-    assert_that(IS_CONSTANT(B));
-    assert_that_size_t(GET_INDEX(B) equals to 2);
-    assert_that_size_t(AS_NUMBER(RA)->value equals to 789);
-    assert_that_size_t(AS_NUMBER(RB)->value equals to 789);
-
-    vm->current->ip = 3;
-    SRA(RB);
-
-    assert_that_size_t(O equals to OP_MOV);
-    assert_that(IS_LOCAL(A));
-    assert_that_size_t(GET_INDEX(A) equals to 1);
-    assert_that(IS_CONSTANT(B));
-    assert_that_size_t(GET_INDEX(B) equals to 3);
-    assert_that_size_t(AS_NUMBER(RA)->value equals to 321);
-    assert_that_size_t(AS_NUMBER(RB)->value equals to 321);
-
-    vm->current->ip = 4;
-    SRA(RB);
-
-    assert_that_size_t(O equals to OP_MOV);
-    assert_that(IS_LOCAL(A));
-    assert_that_size_t(GET_INDEX(A) equals to 2);
-    assert_that(IS_CONSTANT(B));
-    assert_that_size_t(GET_INDEX(B) equals to 4);
-    assert_that_size_t(AS_NUMBER(RA)->value equals to 321321);
-    assert_that_size_t(AS_NUMBER(RB)->value equals to 321321);
-
-    vm->current->ip = 5;
-    SRA(RB);
-
-    assert_that_size_t(O equals to OP_MOV);
-    assert_that(IS_INSTANCE(A));
-    assert_that_size_t(GET_INDEX(A) equals to 3);
-    assert_that(IS_CONSTANT(B));
-    assert_that_size_t(GET_INDEX(B) equals to 5);
-    assert_that_size_t(AS_NUMBER(RA)->value equals to 654);
-    assert_that_size_t(AS_NUMBER(RB)->value equals to 654);
-
-    vm->current->ip = 6;
-    SRA(RB);
-
-    assert_that_size_t(O equals to OP_MOV);
-    assert_that(IS_GLOBAL(A));
-    assert_that_size_t(GET_INDEX(A) equals to 10);
-    assert_that(IS_CONSTANT(B));
-    assert_that_size_t(GET_INDEX(B) equals to 6);
-    assert_that_size_t(AS_NUMBER(RA)->value equals to 987);
-    assert_that_size_t(AS_NUMBER(RB)->value equals to 987);
-
-    vm->current->ip = 7;
-    SRA(RB);
-
-    assert_that_size_t(O equals to OP_MOV);
-    assert_that(IS_INSTANCE(A));
-    assert_that_size_t(GET_INDEX(A) equals to 4);
-    assert_that(IS_CONSTANT(B));
-    assert_that_size_t(GET_INDEX(B) equals to 7);
-    assert_that_size_t(AS_NUMBER(RA)->value equals to 654654);
-    assert_that_size_t(AS_NUMBER(RB)->value equals to 654654);
+    vm->current->ip++;
+    CONST(KA);
+    assert_that_size_t(AS_NUMBER(KZ)->value equals to 789);
+    vm->current->ip++;
+    SGA(KZ);
+    assert_that_size_t(AS_NUMBER(GA)->value equals to 789);
+    assert_that_size_t(AS_NUMBER(KZ)->value equals to 789);
   });
 })
 

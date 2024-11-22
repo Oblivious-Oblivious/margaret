@@ -7,11 +7,11 @@
 #include "opcode.h"
 
 #define COMP_LABEL_LOCAL(name) \
-  (SET_R(LOCAL(name), MARG_LABEL(name)), OP(OP_NOP))
+  (SET_L(LOCAL(name), MARG_LABEL(name)), OP(OP_NOP))
 #define COMP_LABEL_INSTANCE(name) \
-  (SET_R(INSTANCE(name), MARG_LABEL(name)), OP(OP_NOP))
+  (SET_I(INSTANCE(name), MARG_LABEL(name)), OP(OP_NOP))
 #define COMP_LABEL_GLOBAL(name) \
-  (SET_R(GLOBAL(name), MARG_LABEL(name)), OP(OP_NOP))
+  (SET_G(GLOBAL(name), MARG_LABEL(name)), OP(OP_NOP))
 
 p_inline void define_add_method_in_marg(VM *vm) {
   /* $Margaret-- #add : other => 420 prim_ADD : other */
@@ -19,8 +19,8 @@ p_inline void define_add_method_in_marg(VM *vm) {
   MargValue m_add  = MARG_METHOD(marg, vm->current, "add:");
   vm->current      = AS_METHOD(m_add);
   vector_add(vm->current->arguments, "other");
-  OA(OP_STOZ, CONST(MARG_NUMBER(420)));
-  OA(OP_STOZ, LOCAL("other"));
+  OA(OP_STOZK, CONST(MARG_NUMBER(420)));
+  OA(OP_STOZL, LOCAL("other"));
   OAB(OP_PRIM, CONST(MARG_STRING("+")), CONST(MARG_NUMBER(1)));
   OP(OP_EXACTREC);
   vm->current = AS_METHOD(m_add)->bound_method;
@@ -28,115 +28,165 @@ p_inline void define_add_method_in_marg(VM *vm) {
 }
 
 p_inline void emit_example_bytecode(VM *vm) {
-  OAB(OP_MOV, LOCAL("x"), CONST(MARG_NIL()));
-  OAB(OP_MOV, LOCAL("y"), CONST(MARG_FALSE()));
-  OAB(OP_MOV, LOCAL("y2"), CONST(MARG_TRUE()));
-  OAB(OP_MOV, LOCAL("y3"), CONST(MARG_NUMBER(1)));
-  OAB(OP_MOV, LOCAL("z"), CONST(MARG_NUMBER(10)));
-  OAB(OP_MOV, LOCAL("a"), CONST(MARG_NUMBER(3.14)));
-  OAB(OP_MOV, LOCAL("msg"), CONST(MARG_STRING("Hello")));
+  OA(OP_STOZK, CONST(MARG_NIL()));
+  OA(OP_LODZL, LOCAL("x"));
+  OA(OP_STOZK, CONST(MARG_FALSE()));
+  OA(OP_LODZL, LOCAL("y"));
+  OA(OP_STOZK, CONST(MARG_TRUE()));
+  OA(OP_LODZL, LOCAL("y2"));
+  OA(OP_STOZK, CONST(MARG_NUMBER(1)));
+  OA(OP_LODZL, LOCAL("y3"));
+  OA(OP_STOZK, CONST(MARG_NUMBER(10)));
+  OA(OP_LODZL, LOCAL("z"));
+  OA(OP_STOZK, CONST(MARG_NUMBER(3.14)));
+  OA(OP_LODZL, LOCAL("a"));
+  OA(OP_STOZK, CONST(MARG_STRING("Hello")));
+  OA(OP_LODZL, LOCAL("msg"));
 
-  OA(OP_STOZ, CONST(MARG_NUMBER(1)));
-  OA(OP_STOZ, CONST(MARG_NUMBER(0)));
+  OA(OP_STOZK, CONST(MARG_NUMBER(1)));
+  OA(OP_STOZK, CONST(MARG_NUMBER(0)));
   OAB(OP_PRIM, CONST(MARG_STRING("/")), CONST(MARG_NUMBER(1)));
-  OA(OP_LODZ, LOCAL("divres"));
-  OA(OP_INSPECT, LOCAL("divres"));
+  OA(OP_LODZL, LOCAL("divres"));
+  OA(OP_STOZG, GLOBAL("$Margaret"));
+  OA(OP_STOZL, LOCAL("divres"));
+  OAB(OP_PRIM, CONST(MARG_STRING("inspect:")), CONST(MARG_NUMBER(1)));
 
-  OA(OP_STOZ, LOCAL("z"));
-  OA(OP_STOZ, LOCAL("a"));
+  OA(OP_STOZL, LOCAL("z"));
+  OA(OP_STOZL, LOCAL("a"));
   OAB(OP_PRIM, CONST(MARG_STRING("+")), CONST(MARG_NUMBER(1)));
-  OA(OP_LODZ, LOCAL("result_add"));
+  OA(OP_LODZL, LOCAL("result_add"));
 
-  OA(OP_STOZ, LOCAL("y3"));
+  OA(OP_STOZL, LOCAL("y3"));
   OAB(OP_PRIM, CONST(MARG_STRING("-")), CONST(MARG_NUMBER(1)));
-  OA(OP_LODZ, LOCAL("result_sub"));
+  OA(OP_LODZL, LOCAL("result_sub"));
 
-  OA(OP_STOZ, LOCAL("z"));
+  OA(OP_STOZL, LOCAL("z"));
   OAB(OP_PRIM, CONST(MARG_STRING("*")), CONST(MARG_NUMBER(1)));
-  OA(OP_LODZ, LOCAL("result_mul"));
+  OA(OP_LODZL, LOCAL("result_mul"));
 
-  OA(OP_STOZ, LOCAL("a"));
+  OA(OP_STOZL, LOCAL("a"));
   OAB(OP_PRIM, CONST(MARG_STRING("/")), CONST(MARG_NUMBER(1)));
-  OA(OP_LODZ, LOCAL("result_div"));
+  OA(OP_LODZL, LOCAL("result_div"));
 
-  OA(OP_INSPECT, LOCAL("x"));
-  OA(OP_INSPECT, LOCAL("y"));
-  OA(OP_INSPECT, LOCAL("y2"));
-  OA(OP_INSPECT, LOCAL("y3"));
-  OA(OP_INSPECT, LOCAL("z"));
-  OA(OP_INSPECT, LOCAL("a"));
-  OA(OP_INSPECT, LOCAL("msg"));
-  OA(OP_INSPECT, CONST(MARG_LABEL("::random")));
-  OA(
-    OP_INSPECT,
-    CONST(MARG_METHOD(vm->current->bound_object, vm->current, "RANDOM"))
-  );
-  OA(OP_INSPECT, CONST(MARG_PRIMITIVE("PRIM_add", NULL)));
-  OA(OP_INSPECT, LOCAL("result_add"));
-  OA(OP_INSPECT, LOCAL("result_sub"));
-  OA(OP_INSPECT, LOCAL("result_mul"));
-  OA(OP_INSPECT, LOCAL("result_div"));
+  OA(OP_STOZG, GLOBAL("$Margaret"));
+  OA(OP_STOZL, LOCAL("x"));
+  OAB(OP_PRIM, CONST(MARG_STRING("inspect:")), CONST(MARG_NUMBER(1)));
+  OA(OP_STOZG, GLOBAL("$Margaret"));
+  OA(OP_STOZL, LOCAL("y"));
+  OAB(OP_PRIM, CONST(MARG_STRING("inspect:")), CONST(MARG_NUMBER(1)));
+  OA(OP_STOZG, GLOBAL("$Margaret"));
+  OA(OP_STOZL, LOCAL("y2"));
+  OAB(OP_PRIM, CONST(MARG_STRING("inspect:")), CONST(MARG_NUMBER(1)));
+  OA(OP_STOZG, GLOBAL("$Margaret"));
+  OA(OP_STOZL, LOCAL("y3"));
+  OAB(OP_PRIM, CONST(MARG_STRING("inspect:")), CONST(MARG_NUMBER(1)));
+  OA(OP_STOZG, GLOBAL("$Margaret"));
+  OA(OP_STOZL, LOCAL("z"));
+  OAB(OP_PRIM, CONST(MARG_STRING("inspect:")), CONST(MARG_NUMBER(1)));
+  OA(OP_STOZG, GLOBAL("$Margaret"));
+  OA(OP_STOZL, LOCAL("a"));
+  OAB(OP_PRIM, CONST(MARG_STRING("inspect:")), CONST(MARG_NUMBER(1)));
+  OA(OP_STOZG, GLOBAL("$Margaret"));
+  OA(OP_STOZL, LOCAL("msg"));
+  OAB(OP_PRIM, CONST(MARG_STRING("inspect:")), CONST(MARG_NUMBER(1)));
+  OA(OP_STOZG, GLOBAL("$Margaret"));
+  OA(OP_STOZK, CONST(MARG_LABEL("::random")));
+  OAB(OP_PRIM, CONST(MARG_STRING("inspect:")), CONST(MARG_NUMBER(1)));
+  OA(OP_STOZG, GLOBAL("$Margaret"));
+  OA(OP_STOZK, CONST(MARG_PRIMITIVE("PRIM_add", NULL)));
+  OAB(OP_PRIM, CONST(MARG_STRING("inspect:")), CONST(MARG_NUMBER(1)));
+  OA(OP_STOZG, GLOBAL("$Margaret"));
+  OA(OP_STOZL, LOCAL("result_add"));
+  OAB(OP_PRIM, CONST(MARG_STRING("inspect:")), CONST(MARG_NUMBER(1)));
+  OA(OP_STOZG, GLOBAL("$Margaret"));
+  OA(OP_STOZL, LOCAL("result_sub"));
+  OAB(OP_PRIM, CONST(MARG_STRING("inspect:")), CONST(MARG_NUMBER(1)));
+  OA(OP_STOZG, GLOBAL("$Margaret"));
+  OA(OP_STOZL, LOCAL("result_mul"));
+  OAB(OP_PRIM, CONST(MARG_STRING("inspect:")), CONST(MARG_NUMBER(1)));
+  OA(OP_STOZG, GLOBAL("$Margaret"));
+  OA(OP_STOZL, LOCAL("result_div"));
+  OAB(OP_PRIM, CONST(MARG_STRING("inspect:")), CONST(MARG_NUMBER(1)));
 
-  OAB(OP_MOV, INSTANCE("@count"), CONST(MARG_NUMBER(0)));
-  OAB(OP_MOV, GLOBAL("$max"), CONST(MARG_NUMBER(3)));
-  OA(OP_STOZ, INSTANCE("@count"));
-  OA(OP_STOZ, GLOBAL("$max"));
+  OA(OP_STOZK, CONST(MARG_NUMBER(0)));
+  OA(OP_LODZI, INSTANCE("@count"));
+  OA(OP_STOZK, CONST(MARG_NUMBER(3)));
+  OA(OP_LODZG, GLOBAL("$max"));
+  OA(OP_STOZI, INSTANCE("@count"));
+  OA(OP_STOZG, GLOBAL("$max"));
   OAB(OP_PRIM, CONST(MARG_STRING("+")), CONST(MARG_NUMBER(1)));
-  OA(OP_LODZ, LOCAL("total"));
-  OA(OP_STOZ, CONST(MARG_NUMBER(39)));
+  OA(OP_LODZL, LOCAL("total"));
+  OA(OP_STOZK, CONST(MARG_NUMBER(39)));
   OAB(OP_PRIM, CONST(MARG_STRING("+")), CONST(MARG_NUMBER(1)));
-  OA(OP_LODZ, LOCAL("total"));
-  OA(OP_INSPECT, LOCAL("total"));
-  OA(OP_INSPECT, INSTANCE("@count"));
-  OA(OP_INSPECT, GLOBAL("$max"));
+  OA(OP_LODZL, LOCAL("total"));
+
+  OA(OP_STOZG, GLOBAL("$Margaret"));
+  OA(OP_STOZL, LOCAL("total"));
+  OAB(OP_PRIM, CONST(MARG_STRING("inspect:")), CONST(MARG_NUMBER(1)));
+  OA(OP_STOZG, GLOBAL("$Margaret"));
+  OA(OP_STOZI, INSTANCE("@count"));
+  OAB(OP_PRIM, CONST(MARG_STRING("inspect:")), CONST(MARG_NUMBER(1)));
+  OA(OP_STOZG, GLOBAL("$Margaret"));
+  OA(OP_STOZG, GLOBAL("$max"));
+  OAB(OP_PRIM, CONST(MARG_STRING("inspect:")), CONST(MARG_NUMBER(1)));
 
   /* 1 + 2 + 3 + 5 + 7 + 11 + 13 */
   /* (+ (+ (+ (+ (+ (+ 1 2) 3) 5) 7) 11) 13) */
-  OA(OP_STOZ, CONST(MARG_NUMBER(1)));
-  OA(OP_STOZ, CONST(MARG_NUMBER(2)));
+  OA(OP_STOZK, CONST(MARG_NUMBER(1)));
+  OA(OP_STOZK, CONST(MARG_NUMBER(2)));
   OAB(OP_PRIM, CONST(MARG_STRING("+")), CONST(MARG_NUMBER(1)));
 
-  OA(OP_STOZ, CONST(MARG_NUMBER(3)));
+  OA(OP_STOZK, CONST(MARG_NUMBER(3)));
   OAB(OP_PRIM, CONST(MARG_STRING("+")), CONST(MARG_NUMBER(1)));
 
-  OA(OP_GOTO, CONST(MARG_STRING("::label")));
+  OA(OP_GOTOL, CONST(MARG_STRING("::label")));
 
-  OA(OP_STOZ, CONST(MARG_NUMBER(5)));
+  OA(OP_STOZK, CONST(MARG_NUMBER(5)));
   OAB(OP_PRIM, CONST(MARG_STRING("+")), CONST(MARG_NUMBER(1)));
 
   COMP_LABEL_INSTANCE("@::label");
 
-  OA(OP_STOZ, CONST(MARG_NUMBER(7)));
+  OA(OP_STOZK, CONST(MARG_NUMBER(7)));
   OAB(OP_PRIM, CONST(MARG_STRING("+")), CONST(MARG_NUMBER(1)));
 
-  OA(OP_GOTO, CONST(MARG_STRING("$::label")));
+  OA(OP_GOTOG, CONST(MARG_STRING("$::label")));
 
   COMP_LABEL_LOCAL("::label");
-  OA(OP_GOTO, CONST(MARG_STRING("@::label")));
+  OA(OP_GOTOI, CONST(MARG_STRING("@::label")));
 
   COMP_LABEL_GLOBAL("$::label");
 
-  OA(OP_STOZ, CONST(MARG_NUMBER(11)));
+  OA(OP_STOZK, CONST(MARG_NUMBER(11)));
   OAB(OP_PRIM, CONST(MARG_STRING("+")), CONST(MARG_NUMBER(1)));
 
-  OA(OP_STOZ, CONST(MARG_NUMBER(13)));
+  OA(OP_STOZK, CONST(MARG_NUMBER(13)));
   OAB(OP_PRIM, CONST(MARG_STRING("+")), CONST(MARG_NUMBER(1)));
 
-  OA(OP_LODZ, LOCAL("sum"));
-  OA(OP_INSPECT, LOCAL("sum"));
+  OA(OP_LODZL, LOCAL("sum"));
+  OA(OP_STOZG, GLOBAL("$Margaret"));
+  OA(OP_STOZL, LOCAL("sum"));
+  OAB(OP_PRIM, CONST(MARG_STRING("inspect:")), CONST(MARG_NUMBER(1)));
 
   define_add_method_in_marg(vm);
 
-  OA(OP_STOZ, GLOBAL("$Margaret"));
-  OA(OP_STOZ, CONST(MARG_NUMBER(3)));
+  OA(OP_STOZG, GLOBAL("$Margaret"));
+  OA(OP_STOZK, CONST(MARG_NUMBER(3)));
   OAB(OP_SEND, CONST(MARG_STRING("add:")), CONST(MARG_NUMBER(1)));
 
-  OA(OP_LODZ, LOCAL("result"));
-  OA(OP_INSPECT, LOCAL("result"));
+  OA(OP_LODZL, LOCAL("result"));
+  OA(OP_STOZG, GLOBAL("$Margaret"));
+  OA(OP_STOZL, LOCAL("result"));
+  OAB(OP_PRIM, CONST(MARG_STRING("inspect:")), CONST(MARG_NUMBER(1)));
 
-  OA(OP_INSPECT, LOCAL("::label"));
-  OA(OP_INSPECT, INSTANCE("@::label"));
-  OA(OP_INSPECT, GLOBAL("$::label"));
+  OA(OP_STOZG, GLOBAL("$Margaret"));
+  OA(OP_STOZL, LOCAL("::label"));
+  OAB(OP_PRIM, CONST(MARG_STRING("inspect:")), CONST(MARG_NUMBER(1)));
+  OA(OP_STOZG, GLOBAL("$Margaret"));
+  OA(OP_STOZI, INSTANCE("@::label"));
+  OAB(OP_PRIM, CONST(MARG_STRING("inspect:")), CONST(MARG_NUMBER(1)));
+  OA(OP_STOZG, GLOBAL("$Margaret"));
+  OA(OP_STOZG, GLOBAL("$::label"));
+  OAB(OP_PRIM, CONST(MARG_STRING("inspect:")), CONST(MARG_NUMBER(1)));
 
   /* exit */
   OP(OP_HALT);

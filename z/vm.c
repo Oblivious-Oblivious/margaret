@@ -31,6 +31,9 @@ static void setup_main(VM *vm) {
 }
 
 static void setup_primitives(VM *vm) {
+  define_primitive(
+    vm, "inspect:", "$Margaret", (MargPrimitiveFunction)primitive_INSPECT
+  );
   define_primitive(vm, "+", "$Number", (MargPrimitiveFunction)primitive_ADD);
   define_primitive(vm, "-", "$Number", (MargPrimitiveFunction)primitive_SUB);
   define_primitive(vm, "*", "$Number", (MargPrimitiveFunction)primitive_MUL);

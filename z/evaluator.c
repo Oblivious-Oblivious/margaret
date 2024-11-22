@@ -6,6 +6,14 @@
 
 #define FETCH() (vm->current->ip++, O)
 
+#define goto_helper(label)                                 \
+  if(IS_LABEL(label)) {                                    \
+    vm->current     = AS_OBJECT(label)->bound_vm->current; \
+    vm->current->ip = AS_LABEL(label)->value;              \
+  } else {                                                 \
+    SKZ(raise("Error: cannot goto to a non-label."));      \
+  }
+
 void evaluate(VM *vm) {
 #if defined(__GNUC__) || defined(__clang__)
   dispatch_table();
@@ -22,24 +30,59 @@ void evaluate(VM *vm) {
 
 _opcode_loop:;
   switch_opcode {
-    case_opcode(OP_MOV) {
-      SRA(RB);
+    case_opcode(OP_STOZK) {
+      CONST(KA);
       next_opcode;
     }
-    case_opcode(OP_LODZ) {
-      SRA(KZ);
+    case_opcode(OP_STOZL) {
+      CONST(LA);
       next_opcode;
     }
-    case_opcode(OP_STOZ) {
-      CONST(RA);
+    case_opcode(OP_STOZI) {
+      CONST(IA);
+      next_opcode;
+    }
+    case_opcode(OP_STOZG) {
+      CONST(GA);
+      next_opcode;
+    }
+    case_opcode(OP_LODZL) {
+      SLA(KZ);
+      next_opcode;
+    }
+    case_opcode(OP_LODZI) {
+      SIA(KZ);
+      next_opcode;
+    }
+    case_opcode(OP_LODZG) {
+      SGA(KZ);
+      next_opcode;
+    }
+    case_opcode(OP_GOTOL) {
+      MargValue label =
+        GET_L(table_get(&vm->current->local_variables, AS_STRING(KA)->value));
+      goto_helper(label);
+      next_opcode;
+    }
+    case_opcode(OP_GOTOI) {
+      MargValue label = GET_I(table_get(
+        &vm->current->bound_object->instance_variables, AS_STRING(KA)->value
+      ));
+      goto_helper(label);
+      next_opcode;
+    }
+    case_opcode(OP_GOTOG) {
+      MargValue label =
+        GET_G(table_get(&vm->global_variables, AS_STRING(KA)->value));
+      goto_helper(label);
       next_opcode;
     }
     case_opcode(OP_PRIM) {
       ptrdiff_t i;
-      ptrdiff_t argc  = AS_NUMBER(RB)->value;
+      ptrdiff_t argc  = AS_NUMBER(KB)->value;
       MargValue self  = K(-1 - argc);
       MargValue *args = NULL;
-      char *name      = AS_STRING(RA)->value;
+      char *name      = AS_STRING(KA)->value;
 
       MargValue prim_msg = table_get(&AS_OBJECT(self)->proto->primitives, name);
       if(IS_UNDEFINED(prim_msg)) {
@@ -57,10 +100,10 @@ _opcode_loop:;
       ptrdiff_t i;
       MargValue msg_value;
       EmeraldsTable object_messages;
-      ptrdiff_t argc  = AS_NUMBER(RB)->value;
+      ptrdiff_t argc  = AS_NUMBER(KB)->value;
       MargValue self  = K(-1 - argc);
       MargValue *args = NULL;
-      char *name      = AS_STRING(RA)->value;
+      char *name      = AS_STRING(KA)->value;
 
       object_messages = AS_OBJECT(self)->messages;
       msg_value       = table_get(&object_messages, name);
@@ -80,43 +123,14 @@ _opcode_loop:;
       }
       next_opcode;
     }
-    case_opcode(OP_INSPECT) {
-      SKZ(primitive_INSPECT(vm, RA, NULL));
-      next_opcode;
-    }
     case_opcode(OP_RAISE) {
-      SKZ(primitive_RAISE(NULL, RA, NULL));
+      SKZ(primitive_RAISE(NULL, KA, NULL));
       next_opcode;
     }
     case_opcode(OP_EXACTREC) {
       MargValue ret_value = KZ;
       vm->current         = vm->current->bound_method;
       SKZ(ret_value);
-      next_opcode;
-    }
-    case_opcode(OP_GOTO) {
-      MargValue label  = MARG_UNDEFINED;
-      char *label_name = AS_STRING(RA)->value;
-      if(label_name && label_name[0] == '$' && label_name[1] == ':' &&
-         label_name[2] == ':') {
-        label = GET_R(table_get(&vm->global_variables, label_name));
-      } else if(label_name && label_name[0] == '@' && label_name[1] == ':' &&
-                label_name[2] == ':') {
-        label = GET_R(
-          table_get(&vm->current->bound_object->instance_variables, label_name)
-        );
-      } else if(label_name && label_name[0] == ':' && label_name[1] == ':') {
-        label = GET_R(table_get(&vm->current->local_variables, label_name));
-      } else {
-        label = MARG_UNDEFINED;
-      }
-
-      if(IS_LABEL(label)) {
-        vm->current     = AS_OBJECT(label)->bound_vm->current;
-        vm->current->ip = AS_LABEL(label)->value;
-      } else {
-        SKZ(raise("Error: cannot goto to a non-label."));
-      }
       next_opcode;
     }
     case_opcode(OP_NOP) { next_opcode; }

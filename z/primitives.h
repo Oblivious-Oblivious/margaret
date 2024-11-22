@@ -63,115 +63,38 @@ static MargValue primitive_DIV(VM *vm, MargValue self, MargValue *args) {
   }
 }
 
-static MargValue primitive_PRIM(VM *vm) {
-  ptrdiff_t i;
-  ptrdiff_t argc  = AS_NUMBER(RB)->value;
-  MargValue self  = K(-1 - argc);
-  MargValue *args = NULL;
-  char *name      = AS_STRING(RA)->value;
-
-  MargValue prim_msg = table_get(&AS_OBJECT(self)->proto->primitives, name);
-  if(IS_UNDEFINED(prim_msg)) {
-    return raise("Error: cannot send because primitive does not exist.");
-  } else {
-    for(i = 1; i <= argc; i++) {
-      /* TODO - Turn this into a MARG_TENSOR to be included in the GC */
-      vector_add(args, K(-i));
-    }
-    return AS_PRIMITIVE(prim_msg)->function(vm, self, args);
-  }
-}
-
 static MargValue primitive_INSPECT(VM *vm, MargValue self, MargValue *args) {
-#define get_register_type(v) \
-  (IS_CONSTANT((v))   ? "K"  \
-   : IS_LOCAL((v))    ? "L"  \
-   : IS_INSTANCE((v)) ? "I"  \
-   : IS_GLOBAL((v))   ? "G"  \
-                      : "R")
+  (void)vm;
+  (void)self;
 
-  (void)args;
-
-  if(RA == 0) {
+  if(args[0] == 0) {
     printf("ZERO ??\n");
-  } else if(IS_UNDEFINED(RA)) {
-    printf("%s%zu = UNDEFINED\n", get_register_type(A), GET_INDEX(A));
-  } else if(IS_NIL(RA)) {
-    printf("%s%zu = nil\n", get_register_type(A), GET_INDEX(A));
-  } else if(IS_FALSE(RA)) {
-    printf("%s%zu = false\n", get_register_type(A), GET_INDEX(A));
-  } else if(IS_TRUE(RA)) {
-    printf("%s%zu = true\n", get_register_type(A), GET_INDEX(A));
-  } else if(IS_NUMBER(RA)) {
+  } else if(IS_UNDEFINED(args[0])) {
+    printf("<unbound>\n");
+  } else if(IS_NIL(args[0])) {
+    printf("$nil\n");
+  } else if(IS_FALSE(args[0])) {
+    printf("$false\n");
+  } else if(IS_TRUE(args[0])) {
+    printf("$true\n");
+  } else if(IS_NUMBER(args[0])) {
+    printf("%g\n", AS_NUMBER(args[0])->value);
+  } else if(IS_STRING(args[0])) {
+    printf("\"%s\"\n", AS_STRING(args[0])->value);
+  } else if(IS_LABEL(args[0])) {
+    printf("< %s#%zu >\n", AS_LABEL(args[0])->name, AS_LABEL(args[0])->value);
+  } else if(IS_METHOD(args[0])) {
     printf(
-      "%s%zu = %g\n", get_register_type(A), GET_INDEX(A), AS_NUMBER(RA)->value
+      "< %s#%s >\n",
+      AS_METHOD(args[0])->bound_object->name,
+      AS_METHOD(args[0])->message_name
     );
-  } else if(IS_STRING(RA)) {
-    printf(
-      "%s%zu = \"%s\"\n",
-      get_register_type(A),
-      GET_INDEX(A),
-      AS_STRING(RA)->value
-    );
-  } else if(IS_LABEL(RA)) {
-    printf(
-      "%s%zu = < %s#%zu >\n",
-      get_register_type(A),
-      GET_INDEX(A),
-      AS_LABEL(RA)->name,
-      AS_LABEL(RA)->value
-    );
-  } else if(IS_METHOD(RA)) {
-    printf(
-      "%s%zu = < %s#%s >\n",
-      get_register_type(A),
-      GET_INDEX(A),
-      AS_METHOD(RA)->bound_object->name,
-      AS_METHOD(RA)->message_name
-    );
-  } else if(IS_PRIMITIVE(RA)) {
-    printf(
-      "%s%zu = < PRIM#%s >\n",
-      get_register_type(A),
-      GET_INDEX(A),
-      AS_PRIMITIVE(RA)->primitive_name
-    );
+  } else if(IS_PRIMITIVE(args[0])) {
+    printf("< PRIM#%s >\n", AS_PRIMITIVE(args[0])->primitive_name);
   } else {
-    printf(
-      "%s%zu = UNKNOWN, proto name: %s\n",
-      get_register_type(A),
-      GET_INDEX(A),
-      AS_OBJECT(RA)->name
-    );
+    printf("UNKNOWN, proto name: %s\n", AS_OBJECT(args[0])->name);
   }
-  return self;
-#undef get_register_type
-}
-
-static void primitive_SEND(VM *vm) {
-  ptrdiff_t i;
-  MargValue msg_value;
-  EmeraldsTable object_messages;
-  ptrdiff_t argc  = AS_NUMBER(RB)->value;
-  MargValue self  = K(-1 - argc);
-  MargValue *args = NULL;
-  char *name      = AS_STRING(RA)->value;
-
-  object_messages = AS_OBJECT(self)->messages;
-  msg_value       = table_get(&object_messages, name);
-  if(IS_UNDEFINED(msg_value)) {
-    raise("Error: cannot send because message does not exist.");
-  } else {
-    for(i = 1; i <= argc; i++) {
-      /* TODO - Probably also should be a MARG_TENSOR */
-      vector_add(args, K(-i));
-    }
-    vm->current = AS_METHOD(msg_value);
-    for(i = 0; i < argc; i++) {
-      vm->current->local_registers[LOCAL(vm->current->arguments[i])] = args[i];
-    }
-    vector_free(args);
-  }
+  return args[0];
 }
 
 #endif
