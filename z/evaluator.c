@@ -134,8 +134,7 @@ _opcode_loop:;
         }
         vm->current = AS_METHOD(msg_value);
         for(i = 0; i < argc; i++) {
-          vm->current->local_registers[LOCAL(vm->current->arguments[i])] =
-            args[i];
+          SET_L(i, args[i]);
         }
         vector_free(args);
       }
