@@ -3,13 +3,8 @@
 #include "primitives.h"
 
 static void setup_margaret(VM *vm) {
-  MargValue main;
-  MargValue marg                = SG(MARG_UNDEFINED, "$Margaret");
-  AS_OBJECT(marg)->proto        = AS_OBJECT(marg);
-  main                          = MARG_METHOD(AS_OBJECT(marg), NULL, "");
-  AS_METHOD(main)->bound_method = AS_METHOD(main);
-  table_add(&AS_OBJECT(marg)->messages, "", main);
-  vm->current = AS_METHOD(main);
+  MargValue marg         = SG(MARG_UNDEFINED, "$Margaret");
+  AS_OBJECT(marg)->proto = AS_OBJECT(marg);
 }
 
 static void setup_proto_object_chain(VM *vm) {
@@ -26,6 +21,15 @@ static void setup_proto_object_chain(VM *vm) {
   SG(marg, "Primitive");
 }
 
+static void setup_main(VM *vm) {
+  MargValue main;
+  MargValue marg                = G("$Margaret");
+  main                          = MARG_METHOD(AS_OBJECT(marg), NULL, "");
+  AS_METHOD(main)->bound_method = AS_METHOD(main);
+  table_add(&AS_OBJECT(marg)->messages, "", main);
+  vm->current = AS_METHOD(main);
+}
+
 static void setup_primitives(VM *vm) {
   define_primitive(vm, "+", "$Number", (MargPrimitiveFunction)primitive_ADD);
   define_primitive(vm, "-", "$Number", (MargPrimitiveFunction)primitive_SUB);
@@ -39,5 +43,6 @@ void vm_init(VM *vm) {
 
   setup_margaret(vm);
   setup_proto_object_chain(vm);
+  setup_main(vm);
   setup_primitives(vm);
 }
