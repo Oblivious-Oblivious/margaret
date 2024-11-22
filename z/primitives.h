@@ -84,11 +84,15 @@ static MargValue primitive_INSPECT(VM *vm, MargValue self, MargValue *args) {
   } else if(IS_LABEL(self)) {
     printf("< %s#%zu >\n", AS_LABEL(self)->name, AS_LABEL(self)->value);
   } else if(IS_METHOD(self)) {
-    printf(
-      "< %s#%s >\n",
-      AS_METHOD(self)->bound_object->name,
-      AS_METHOD(self)->message_name
-    );
+    if(AS_METHOD(self)->message_name[0] == '\0') {
+      printf("< Proc#%zx >\n", self);
+    } else {
+      printf(
+        "< %s#%s >\n",
+        AS_METHOD(self)->bound_object->name,
+        AS_METHOD(self)->message_name
+      );
+    }
   } else if(IS_PRIMITIVE(self)) {
     printf("< PRIM#%s >\n", AS_PRIMITIVE(self)->primitive_name);
   } else {

@@ -27,7 +27,22 @@ p_inline void define_add_method_in_marg(VM *vm) {
   table_add(&marg->messages, "add:", m_add);
 }
 
+p_inline MargValue define_proc(VM *vm) {
+  /* p = { a | a * 2 } */
+  MargValue proc = MARG_METHOD(vm->current->bound_object, vm->current, "");
+  vm->current    = AS_METHOD(proc);
+  vector_add(vm->current->arguments, "a");
+  OA(OP_STOZL, LOCAL("a"));
+  OA(OP_STOZK, CONST(MARG_NUMBER(2)));
+  OAB(OP_PRIM, CONST(MARG_STRING("*")), CONST(MARG_NUMBER(1)));
+  OP(OP_EXACTREC);
+  vm->current = AS_METHOD(proc)->bound_method;
+  return proc;
+}
+
 p_inline void emit_example_bytecode(VM *vm) {
+  MargValue proc;
+
   OA(OP_STOZK, CONST(MARG_NIL()));
   OA(OP_LODZL, LOCAL("x"));
   OA(OP_STOZK, CONST(MARG_FALSE()));
@@ -161,6 +176,15 @@ p_inline void emit_example_bytecode(VM *vm) {
   OA(OP_STOZI, INSTANCE("@::label"));
   OAB(OP_PRIM, CONST(MARG_STRING("inspect:")), CONST(MARG_NUMBER(0)));
   OA(OP_STOZG, GLOBAL("$::label"));
+  OAB(OP_PRIM, CONST(MARG_STRING("inspect:")), CONST(MARG_NUMBER(0)));
+
+  proc = define_proc(vm);
+  OA(OP_STOZK, CONST(proc));
+  OA(OP_LODZL, LOCAL("p"));
+  OAB(OP_PRIM, CONST(MARG_STRING("inspect:")), CONST(MARG_NUMBER(0)));
+
+  OA(OP_STOZK, CONST(MARG_NUMBER(22)));
+  OAB(OP_PROCL, LOCAL("p"), CONST(MARG_NUMBER(1)));
   OAB(OP_PRIM, CONST(MARG_STRING("inspect:")), CONST(MARG_NUMBER(0)));
 
   /* exit */

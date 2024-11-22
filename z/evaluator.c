@@ -14,6 +14,23 @@
     SKZ(raise("Error: cannot goto to a non-label."));      \
   }
 
+#define proc_helper(proc_value)                    \
+  ptrdiff_t argc = AS_NUMBER(KB)->value;           \
+  if(IS_UNDEFINED(proc_value)) {                   \
+    raise("Error: cannot call a non-proc value."); \
+  } else {                                         \
+    ptrdiff_t i;                                   \
+    MargValue *args = NULL;                        \
+    for(i = 1; i <= argc; i++) {                   \
+      vector_add(args, K(-i));                     \
+    }                                              \
+    vm->current = AS_METHOD(proc_value);           \
+    for(i = 0; i < argc; i++) {                    \
+      SET_L(i, args[i]);                           \
+    }                                              \
+    vector_free(args);                             \
+  }
+
 static MargValue dispatch_method_from_delegation_chain(VM *vm, MargValue self) {
   char *name            = AS_STRING(KA)->value;
   MargValue curr_object = self;
@@ -138,6 +155,22 @@ _opcode_loop:;
         }
         vector_free(args);
       }
+      next_opcode;
+    }
+    case_opcode(OP_PROCK) {
+      proc_helper(KA);
+      next_opcode;
+    }
+    case_opcode(OP_PROCL) {
+      proc_helper(LA);
+      next_opcode;
+    }
+    case_opcode(OP_PROCI) {
+      proc_helper(IA);
+      next_opcode;
+    }
+    case_opcode(OP_PROCG) {
+      proc_helper(GA);
       next_opcode;
     }
     case_opcode(OP_RAISE) {
