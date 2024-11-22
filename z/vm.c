@@ -3,8 +3,9 @@
 #include "primitives.h"
 
 static void setup_margaret(VM *vm) {
-  MargValue marg         = SG(MARG_UNDEFINED, "$Margaret");
-  AS_OBJECT(marg)->proto = AS_OBJECT(marg);
+  MargValue marg                         = SG(MARG_UNDEFINED, "$Margaret");
+  AS_OBJECT(marg)->proto                 = AS_OBJECT(marg);
+  AS_OBJECT(marg)->instance_registers[1] = marg;
 }
 
 static void setup_proto_object_chain(VM *vm) {

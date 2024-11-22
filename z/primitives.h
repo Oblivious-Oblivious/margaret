@@ -92,7 +92,7 @@ static MargValue primitive_INSPECT(VM *vm, MargValue self, MargValue *args) {
   } else if(IS_PRIMITIVE(self)) {
     printf("< PRIM#%s >\n", AS_PRIMITIVE(self)->primitive_name);
   } else {
-    printf("UNKNOWN, proto name: %s\n", AS_OBJECT(self)->name);
+    printf("to_string on object with proto: %s\n", AS_OBJECT(self)->name);
   }
   return self;
 }
