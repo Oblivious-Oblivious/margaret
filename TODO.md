@@ -34,8 +34,10 @@
   🟥 FT-32 - Add cascaded messages.
 
   🟥 QOL-06 - Decrease the size of the Instruction to 32 bits to imporove performance.
-              This will require that registers are at most 256 in size since `A` value will be 8 bits.
-              Handle spilling by splitting methods into smaller ones.
+              Most likely 6 bits for opcode, and 13 bits for OAB commands that are PRIM and SEND.
+              OA commands use 1<<25 bits for the A operand.
+              OAB commands use 1<<13 for A and B and maybe draw from different pools.
+              Maybe handle spilling by splitting methods into smaller ones.
   🟥 QOL-07 - Upgrade to a mark & sweep generational gc, gen0, gen1, gen2.
               Upgrade to a tricolor generational mark & sweep gc.
               Employ a separate process/thread for collection.
