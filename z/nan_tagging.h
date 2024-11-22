@@ -40,6 +40,9 @@
 #define AS_PRIMITIVE(value) ((MargPrimitive *)QNAN_UNBOX(value))
 #define AS_OBJECT(value)    ((MargObject *)QNAN_UNBOX(value))
 
+#define IS_MARGARET(value)                     \
+  (!IS_UNDEFINED(value) && AS_OBJECT(value) && \
+   AS_OBJECT(value)->name_hash == 4789181502764186150u)
 #define IS_NIL(value)                          \
   (!IS_UNDEFINED(value) && AS_OBJECT(value) && \
    AS_OBJECT(value)->name_hash == 18110527515211709592u)

@@ -65,36 +65,36 @@ static MargValue primitive_DIV(VM *vm, MargValue self, MargValue *args) {
 
 static MargValue primitive_INSPECT(VM *vm, MargValue self, MargValue *args) {
   (void)vm;
-  (void)self;
+  (void)args;
 
-  if(args[0] == 0) {
+  if(self == 0) {
     printf("ZERO ??\n");
-  } else if(IS_UNDEFINED(args[0])) {
+  } else if(IS_UNDEFINED(self)) {
     printf("<unbound>\n");
-  } else if(IS_NIL(args[0])) {
+  } else if(IS_NIL(self)) {
     printf("$nil\n");
-  } else if(IS_FALSE(args[0])) {
+  } else if(IS_FALSE(self)) {
     printf("$false\n");
-  } else if(IS_TRUE(args[0])) {
+  } else if(IS_TRUE(self)) {
     printf("$true\n");
-  } else if(IS_NUMBER(args[0])) {
-    printf("%g\n", AS_NUMBER(args[0])->value);
-  } else if(IS_STRING(args[0])) {
-    printf("\"%s\"\n", AS_STRING(args[0])->value);
-  } else if(IS_LABEL(args[0])) {
-    printf("< %s#%zu >\n", AS_LABEL(args[0])->name, AS_LABEL(args[0])->value);
-  } else if(IS_METHOD(args[0])) {
+  } else if(IS_NUMBER(self)) {
+    printf("%g\n", AS_NUMBER(self)->value);
+  } else if(IS_STRING(self)) {
+    printf("\"%s\"\n", AS_STRING(self)->value);
+  } else if(IS_LABEL(self)) {
+    printf("< %s#%zu >\n", AS_LABEL(self)->name, AS_LABEL(self)->value);
+  } else if(IS_METHOD(self)) {
     printf(
       "< %s#%s >\n",
-      AS_METHOD(args[0])->bound_object->name,
-      AS_METHOD(args[0])->message_name
+      AS_METHOD(self)->bound_object->name,
+      AS_METHOD(self)->message_name
     );
-  } else if(IS_PRIMITIVE(args[0])) {
-    printf("< PRIM#%s >\n", AS_PRIMITIVE(args[0])->primitive_name);
+  } else if(IS_PRIMITIVE(self)) {
+    printf("< PRIM#%s >\n", AS_PRIMITIVE(self)->primitive_name);
   } else {
-    printf("UNKNOWN, proto name: %s\n", AS_OBJECT(args[0])->name);
+    printf("UNKNOWN, proto name: %s\n", AS_OBJECT(self)->name);
   }
-  return args[0];
+  return self;
 }
 
 #endif
