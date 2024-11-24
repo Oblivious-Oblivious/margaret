@@ -8,19 +8,6 @@ VM *optimizer_optimize(VM *vm) {
     goto exit;
   }
 
-  vm->current->ip = vm->current->bytecode;
-
-  while(true) {
-    uint8_t instruction;
-    switch(instruction = READ_BYTE()) {
-    case OP_HALT: {
-      return vm;
-    }
-    default: {
-    }
-    }
-  }
-
 exit:
   return vm;
 }
