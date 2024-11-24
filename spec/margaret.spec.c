@@ -73,7 +73,6 @@
 #include "tokens/Type.spec.h"
 
 /* vm */
-#include "vm/byte_conversions.spec.h"
 #include "vm/vm.spec.h"
 
 int main(void) {
@@ -142,7 +141,6 @@ int main(void) {
     TokenSpec();
     TypeSpec();
 
-    byte_conversions_spec();
     VmSpec();
   });
 }

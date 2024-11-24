@@ -5,9 +5,6 @@
 #include "../../libs/EmeraldsTable/export/EmeraldsTable.h"
 #include "../opcode/MargValueType.h"
 #include "../tokens/Tokens.h"
-#include "byte_conversions.h"
-
-#include <stdint.h> /* uint8_t */
 
 /**
  * @brief Virtual Machine Engine
@@ -46,16 +43,6 @@ typedef struct VM {
   EmeraldsTable interned_strings;
   struct MargMethod *current;
 } VM;
-
-/** @brief Works for any IP pointer no matter what context current is in */
-#define READ_BYTE() (*vm->current->ip++)
-#define READ_WORD() (bytes_to_word(READ_BYTE(), READ_BYTE()))
-#define READ_DWORD() \
-  (bytes_to_dword(READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE()))
-
-#define READ_TEMPORARY()       (vm->current->bytecode[READ_BYTE()])
-#define READ_TEMPORARY_WORD()  (vm->current->bytecode[READ_WORD()])
-#define READ_TEMPORARY_DWORD() (vm->current->bytecode[READ_DWORD()])
 
 /**
  * @brief Creates a new VM instance By being an explicit pointer can create
