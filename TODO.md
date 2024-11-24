@@ -70,6 +70,7 @@
   🟥 FT-29 - Add a switch matcher -> `obj match: %[%[1, 100], %[2, 200], %[3, 300],]`.
   🟥 FT-30 - Create compile-time messages, which will make calculations in the emitter phase but will not generate bytecode.
   🟥 FT-34 - Keep formal bytecode as an easy to use intermediate for translating to other language VMs.
+  🟥 FT-35 - Create an instruction inspector
 
   🟥 QOL-05 - Potentially use any type of local/instance/global variable as labels.  Requires that variables store their ip memory location.
 

@@ -36,9 +36,6 @@
 #include "generic/unicode.spec.h"
 #include "generic/variables.spec.h"
 
-/* inspector */
-#include "inspector/Inspector.spec.h"
-
 /* lexer */
 #include "lexer/alternate_to_dec.spec.h"
 #include "lexer/Lexer.spec.h"
@@ -115,8 +112,6 @@ int main(void) {
     tuples_spec();
     unicode_spec();
     variables_spec();
-
-    InspectorSpec();
 
     alternate_to_dec_spec();
     LexerSpec();
