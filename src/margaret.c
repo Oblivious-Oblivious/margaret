@@ -17,8 +17,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* TODO - Potentially switch to MIT/CC0 from GPLv3 */
-
 #include "version.h"
 #include "vm/compilation_pipeline.h"
 

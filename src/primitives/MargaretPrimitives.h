@@ -14,6 +14,53 @@ p_inline MargValue primitive_RAISE(VM *vm, MargValue self, MargValue *args) {
   return self;
 }
 
+/* p_inline MargValue primitive_DNU(VM *vm, MargValue self, MargValue *args) {
+  MargValue message_name = fs_pop(vm->sp);
+  MargValue object       = fs_pop(vm->sp);
+  fs_pop(vm->sp);
+  if(!IS_UNDEFINED(object) && IS_STRING(message_name)) {
+    char *dnu_message = string_new("");
+    string_addf(
+      &dnu_message,
+      "Object `%s` or any other object in the delegation chain does not "
+      "understand: `%s`",
+      AS_OBJECT(object)->name,
+      AS_STRING(message_name)->value
+    );
+    fs_push(vm->sp, MARG_STRING(dnu_message));
+  } else {
+    fs_push(vm->sp, MARG_NIL);
+  }
+} */
+
+/* p_inline MargValue primitive_CLONE(VM *vm, MargValue self, MargValue *args) {
+  MargValue new_object_name = fs_pop(vm->sp);
+  MargValue parent_object   = fs_pop(vm->sp);
+  fs_pop(vm->sp);
+  if(!IS_UNDEFINED(parent_object) && IS_STRING(new_object_name)) {
+    fs_push(
+      vm->sp, MARG_OBJECT(parent_object, AS_STRING(new_object_name)->value)
+    );
+  } else {
+    fs_push(vm->sp, MARG_NIL);
+  }
+} */
+
+/* p_inline MargValue primitive_CLONE(VM *vm, MargValue self, MargValue *args) {
+  MargValue object = fs_pop(vm->sp);
+  MargValue method = fs_pop(vm->sp);
+  fs_pop(vm->sp);
+  if(!IS_UNDEFINED(object) && IS_METHOD(method)) {
+    table_add(
+      &AS_OBJECT(object)->messages, AS_METHOD(method)->message_name, method
+    );
+    AS_METHOD(method)->bound_object = AS_OBJECT(object);
+    fs_push(vm->sp, method);
+  } else {
+    fs_push(vm->sp, MARG_NIL);
+  }
+} */
+
 p_inline MargValue primitive_INSPECT(VM *vm, MargValue self, MargValue *args) {
   (void)vm;
   (void)args;
