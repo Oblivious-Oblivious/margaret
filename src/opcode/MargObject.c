@@ -1,38 +1,44 @@
-#include "MargValue.h"
+#include "instruction.h"
 
 MargObject *
-marg_object_new(VM *bound_vm, size_t size, MargValue proto, char *name) {
-  MargObject *self = (MargObject *)malloc(sizeof(MargObject) * size);
+marg_object_new(VM *bound_vm, size_t size, MargValue proto, const char *name) {
+  MargObject *self = (MargObject *)malloc(size);
 
   self->is_marked = false;
   self->next      = NULL;
 
   self->bound_vm = bound_vm;
-  self->name     = name;
-  self->parent   = proto;
+
+  self->name      = name;
+  self->name_hash = komihash_hash(name, string_size(name));
+  self->proto     = AS_OBJECT(proto);
+
+  self->instance_index = 0;
   table_init(&self->instance_variables);
   table_init(&self->messages);
+  table_init(&self->primitives);
 
-  if(!IS_UNDEFINED(self->parent)) {
-    table_add_all(
-      &self->instance_variables, &AS_OBJECT(self->parent)->instance_variables
+  if(!IS_UNDEFINED(proto)) {
+    table_add_all_non_labels(
+      &self->proto->instance_variables, &self->instance_variables
     );
   }
 
-  table_add(&self->instance_variables, "@self", QNAN_BOX(self));
-  table_add(&self->instance_variables, "@super", self->parent);
-  table_add(&bound_vm->global_variables, name, QNAN_BOX(self));
+  table_add(&self->instance_variables, "@self", self->instance_index);
+  self->instance_registers[self->instance_index++] = QNAN_BOX(self);
+  table_add(&self->instance_variables, "@super", self->instance_index);
+  self->instance_registers[self->instance_index++] = QNAN_BOX(self->proto);
 
   return self;
 }
 
+/* TODO - Refactor as a $Margaret message */
 char *marg_object_to_string_with_hash(MargValue object) {
-  char *res         = string_new("");
-  char *object_name = AS_OBJECT(object)->name;
+  char *res = string_new("");
   string_addf(
     &res,
     "%s@0x%zx",
-    object_name,
+    AS_OBJECT(object)->name,
     komihash_hash(AS_OBJECT(object), sizeof(MargObject))
   );
   return res;

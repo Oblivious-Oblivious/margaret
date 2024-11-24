@@ -1,9 +1,10 @@
 #ifndef __VM_H_
 #define __VM_H_
 
+#include "../opcode/MargValueType.h"
+
 #define TABLE_UNDEFINED MARG_UNDEFINED
 #include "../../libs/EmeraldsTable/export/EmeraldsTable.h"
-#include "../opcode/MargValueType.h"
 #include "../tokens/Tokens.h"
 
 /**
@@ -19,8 +20,9 @@
  * @param tokens -> List of tokenized values
  * @param formal_bytecode -> Formal bytecode representation
  *
+ * @param global_registers -> Global register array
+ * @param global_index -> Global register index
  * @param global_variables -> Global without namespacing or scoping
- * @param interned_strings -> Stores all strings (variables, messages, etc.)
  * @param current -> Pointer to the currect method-derived proc
  */
 typedef struct VM {
@@ -35,12 +37,9 @@ typedef struct VM {
   Tokens tokens;
   char **formal_bytecode;
 
-  /* TODO - Remove */
-  MargValue stack[65536];
-  MargValue *sp;
-
+  MargValue global_registers[MAX_REGISTERS];
+  uint32_t global_index;
   EmeraldsTable global_variables;
-  EmeraldsTable interned_strings;
   struct MargMethod *current;
 } VM;
 
@@ -63,7 +62,6 @@ VM *vm_new(const char *filename);
     vm_free_tokens();                    \
     vm_free_formal_bytecode();           \
     table_deinit(&vm->global_variables); \
-    table_deinit(&vm->interned_strings); \
     free(vm);                            \
   } while(0)
 

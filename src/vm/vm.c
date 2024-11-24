@@ -1,6 +1,17 @@
 #include "vm.h"
 
-#include "../opcode/MargValue.h"
+#include "../opcode/instruction.h"
+#include "../primitives/Primitives.h"
+
+/**
+ * @brief Setup ad-hoc $Margaret object
+ * @param vm -> Current vm
+ */
+static void setup_margaret(VM *vm) {
+  MargValue marg                         = SG(MARG_UNDEFINED, "$Margaret");
+  AS_OBJECT(marg)->proto                 = AS_OBJECT(marg);
+  AS_OBJECT(marg)->instance_registers[1] = marg;
+}
 
 /**
  * @brief Sets up the delegation chain of proto objects
@@ -8,41 +19,61 @@
  * @param vm -> Current vm
  */
 static void setup_proto_object_chain(VM *vm) {
-  MARG_OBJECT(table_get(&vm->global_variables, "$Margaret"), "$Margaret");
+  MargValue margaret;
+  MargValue numeric;
+  MargValue string;
+  MargValue enumerable;
+  MargValue tensor;
 
-  MARG_OBJECT(table_get(&vm->global_variables, "$Margaret"), "$nil");
-  MARG_OBJECT(table_get(&vm->global_variables, "$Margaret"), "$false");
-  MARG_OBJECT(table_get(&vm->global_variables, "$Margaret"), "$true");
+  margaret = G("$Margaret");
 
-  MARG_OBJECT(table_get(&vm->global_variables, "$Margaret"), "$Numeric");
-  MARG_OBJECT(table_get(&vm->global_variables, "$Numeric"), "$Integer");
-  MARG_OBJECT(table_get(&vm->global_variables, "$Numeric"), "$Float");
+  SG(margaret, "$nil");
+  SG(margaret, "$false");
+  SG(margaret, "$true");
 
-  MARG_OBJECT(table_get(&vm->global_variables, "$Margaret"), "$String");
-  MARG_OBJECT(table_get(&vm->global_variables, "$String"), "$Label");
-  MARG_OBJECT(table_get(&vm->global_variables, "$String"), "$Symbol");
+  numeric = SG(margaret, "$Numeric");
+  SG(numeric, "$Integer");
+  SG(numeric, "$Float");
 
-  MARG_OBJECT(table_get(&vm->global_variables, "$Margaret"), "$Enumerable");
-  MARG_OBJECT(table_get(&vm->global_variables, "$Enumerable"), "$Tensor");
-  MARG_OBJECT(table_get(&vm->global_variables, "$Tensor"), "$Tuple");
-  MARG_OBJECT(table_get(&vm->global_variables, "$Enumerable"), "$Table");
-  MARG_OBJECT(table_get(&vm->global_variables, "$Enumerable"), "$Bitstring");
+  string = SG(margaret, "$String");
+  SG(string, "$Label");
+  SG(string, "$Symbol");
 
-  MARG_OBJECT(table_get(&vm->global_variables, "$Margaret"), "$Method");
+  enumerable = SG(margaret, "$Enumerable");
+  tensor     = SG(enumerable, "$Tensor");
+  SG(tensor, "$Tuple");
+  SG(enumerable, "$Table");
+  SG(enumerable, "$Bitstring");
+
+  SG(margaret, "$Method");
+  SG(margaret, "Primitive");
 }
 
 /**
- * @brief Defines the main entry point of execution
+ * @brief Defines main entry point that is inaccessible lexically
  * @param vm -> Current vm
  */
-static void define_main_method(VM *vm) {
-  MargValue marg = table_get(&vm->global_variables, "$Margaret");
-  MargMethod *method = AS_METHOD(MARG_METHOD(marg, ""));
-  table_add(&AS_OBJECT(marg)->messages, "", QNAN_BOX(method));
-  vm->current = method;
+static void setup_main(VM *vm) {
+  MargValue main_method;
+  MargValue margaret = G("$Margaret");
+  main_method        = MARG_METHOD(AS_OBJECT(margaret), NULL, "");
+  AS_METHOD(main_method)->bound_method = AS_METHOD(main_method);
+  table_add(&AS_OBJECT(margaret)->messages, "", main_method);
+  vm->current = AS_METHOD(main_method);
+}
+
+static void setup_primitives(VM *vm) {
+  define_primitive(
+    vm, "inspect:", "$Margaret", (MargPrimitiveFunction)primitive_INSPECT
+  );
+  define_primitive(vm, "+", "$Numeric", (MargPrimitiveFunction)primitive_ADD);
+  define_primitive(vm, "-", "$Numeric", (MargPrimitiveFunction)primitive_SUB);
+  define_primitive(vm, "*", "$Numeric", (MargPrimitiveFunction)primitive_MUL);
+  define_primitive(vm, "/", "$Numeric", (MargPrimitiveFunction)primitive_DIV);
 }
 
 VM *vm_new(const char *filename) {
+  /* TODO - Maybe convert to initializer */
   VM *vm = (VM *)malloc(sizeof(VM));
 
   vm->filename = filename;
@@ -55,15 +86,13 @@ VM *vm_new(const char *filename) {
   tokens_init(&vm->tokens);
   vm->formal_bytecode = NULL;
 
-  /* TODO - Remove */
-  vm->sp = vm->stack;
-
+  vm->global_index = 0;
   table_init(&vm->global_variables);
-  table_init(&vm->interned_strings);
-  vm->current = NULL;
 
+  setup_margaret(vm);
   setup_proto_object_chain(vm);
-  define_main_method(vm);
+  setup_main(vm);
+  setup_primitives(vm);
 
   return vm;
 }

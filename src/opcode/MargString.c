@@ -1,11 +1,8 @@
-#include "MargValue.h"
+#include "instruction.h"
 
 MargString *marg_string_new(VM *vm, const char *value) {
-  MargObject *obj = marg_object_new(
-    vm,
-    sizeof(MargString),
-    table_get(&vm->global_variables, "$Margaret"),
-    string_new("$String")
+  MargObject *obj = (MargObject *)marg_object_new(
+    vm, sizeof(MargString), G("$String"), string_new("")
   );
   MargString *self = (MargString *)obj;
 

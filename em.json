@@ -25,7 +25,7 @@
       "opt": "-Og",
       "version": "-std=c89",
       "flags": "-g -fsanitize=address",
-      "warnings": "-Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic -Wno-unused-function"
+      "warnings": "-Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic -Wno-unused-function -Wno-gnu-label-as-value"
     },
     "release": {
       "opt": "-O2",

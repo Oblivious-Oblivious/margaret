@@ -2,6 +2,7 @@
 #define __MARG_OBJECT_H_
 
 #include "../vm/vm.h"
+#include "MargValueType.h"
 
 /**
  * @brief A representation of user-defined object
@@ -21,10 +22,14 @@ typedef struct MargObject {
 
   VM *bound_vm;
 
-  char *name;
-  MargValue parent;
+  const char *name;
+  size_t name_hash;
+  struct MargObject *proto;
+  MargValue instance_registers[MAX_REGISTERS];
+  uint32_t instance_index;
   EmeraldsTable instance_variables;
   EmeraldsTable messages;
+  EmeraldsTable primitives;
 } MargObject;
 
 /**
@@ -35,7 +40,7 @@ typedef struct MargObject {
  * @return MargObject*
  */
 MargObject *
-marg_object_new(VM *bound_vm, size_t size, MargValue proto, char *name);
+marg_object_new(VM *bound_vm, size_t size, MargValue proto, const char *name);
 
 /**
  * @brief String representation for object literals in the Java style

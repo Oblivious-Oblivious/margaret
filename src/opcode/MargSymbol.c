@@ -1,12 +1,8 @@
-#include "MargObject.h"
-#include "MargValue.h"
+#include "instruction.h"
 
 MargSymbol *marg_symbol_new(VM *vm, char *value) {
-  MargObject *obj = marg_object_new(
-    vm,
-    sizeof(MargSymbol),
-    table_get(&vm->global_variables, "$String"),
-    string_new("$Symbol")
+  MargObject *obj = (MargObject *)marg_object_new(
+    vm, sizeof(MargSymbol), G("$Symbol"), string_new("")
   );
   MargSymbol *self = (MargSymbol *)obj;
 

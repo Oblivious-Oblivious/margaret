@@ -1,11 +1,8 @@
-#include "MargValue.h"
+#include "instruction.h"
 
 MargTable *marg_table_new(VM *vm) {
-  MargObject *obj = marg_object_new(
-    vm,
-    sizeof(MargTable),
-    table_get(&vm->global_variables, "$Enumerable"),
-    string_new("$Table")
+  MargObject *obj = (MargObject *)marg_object_new(
+    vm, sizeof(MargTable), G("$Table"), string_new("")
   );
   MargTable *self = (MargTable *)obj;
 

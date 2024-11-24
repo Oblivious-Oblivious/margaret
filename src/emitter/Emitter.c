@@ -301,10 +301,8 @@ VM *emitter_emit(VM *vm) {
   return vm;
 } */
 
-#include "../../libs/EmeraldsString/export/EmeraldsString.h"
-#include "../../libs/EmeraldsVector/export/EmeraldsVector.h"
 #include "../opcode/fmcodes.h"
-#include "../opcode/MargValue.h"
+#include "../opcode/instruction.h"
 #include "../opcode/opcodes.h"
 
 #define switch_fmcode(opstr) if(string_equals(fmcode, opstr))

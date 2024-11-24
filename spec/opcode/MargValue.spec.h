@@ -2,7 +2,7 @@
 #define __MARG_VALUE_SPEC_H_
 
 #include "../../libs/cSpec/export/cSpec.h"
-#include "../../src/opcode/MargValue.h"
+#include "../../src/opcode/instruction.h"
 
 module(MargValueSpec, {
   describe("tests NaN boxing", {
@@ -40,8 +40,8 @@ module(MargValueSpec, {
       assert_that_charptr(marg_value_format(MARG_TRUE) equals to "$true");
       assert_that_charptr(marg_value_format(MARG_INTEGER(42)) equals to "42");
       assert_that_charptr(marg_value_format(MARG_FLOAT(42.4)) equals to "42.4");
-      assert_that_charptr(marg_value_format(MARG_LABEL("::l", 42)) equals to
-                          "<::l:42>");
+      assert_that_charptr(marg_value_format(MARG_LABEL("::l")) equals to
+                          "<::l:0>");
       assert_that_charptr(marg_value_format(MARG_STRING("hello world"))
                             equals to "\"hello world\"");
       assert_that_charptr(marg_value_format(MARG_SYMBOL(":sym")) equals to
@@ -73,11 +73,56 @@ module(MargValueSpec, {
       marg_bitstring_add(AS_BITSTRING(b), MARG_INTEGER(43), MARG_INTEGER(4));
       assert_that_charptr(marg_value_format(b) equals to "%(42::2, 43::4)");
       assert_that_charptr(marg_value_format(
-        MARG_METHOD(table_get(&vm->global_variables, "$Margaret"), "msg")
+        MARG_METHOD(AS_OBJECT(G("$Margaret")), vm->current, "msg")
       ) equals to "< $Margaret#msg >");
-      assert_that_charptr(marg_value_format(
-        MARG_OBJECT(table_get(&vm->global_variables, "$Margaret"), "Name")
-      ) equals to "Name");
+      assert_that_charptr(marg_value_format(MARG_OBJECT(G("$Margaret"), "Name"))
+                            equals to "Name");
+    });
+
+    it("ensures cloned objects do not receive label values from parent", {
+      VM *vm         = vm_new("file.marg");
+      MargValue marg = G("$Margaret");
+      assert_that(marg isnot MARG_UNDEFINED);
+      assert_that_charptr(AS_OBJECT(marg)->name equals to "$Margaret");
+      assert_that_size_t(
+        AS_OBJECT(marg)->name_hash equals to 4789181502764186150
+      );
+      table_add(
+        &AS_OBJECT(marg)->instance_variables, "@::l1", MARG_LABEL("@::l1")
+      );
+      table_add(
+        &AS_OBJECT(marg)->instance_variables, "@::l2", MARG_LABEL("@::l2")
+      );
+
+      assert_that_size_t(table_size(&AS_OBJECT(marg)->instance_variables)
+                           equals to 4);
+
+      MargValue clone = SG(marg, "ACLONE");
+      assert_that(clone isnot MARG_UNDEFINED);
+      assert_that_charptr(AS_OBJECT(clone)->name equals to "ACLONE");
+      assert_that_charptr(AS_OBJECT(clone)->proto->name equals to "$Margaret");
+      assert_that_size_t(
+        AS_OBJECT(clone)->name_hash equals to 3455395588760667778
+      );
+      assert_that_size_t(
+        AS_OBJECT(clone)->proto->name_hash equals to 4789181502764186150
+      );
+      assert_that_size_t(table_size(&AS_OBJECT(clone)->instance_variables)
+                           equals to 2);
+    });
+
+    it("ensures @self and @super are setup correctly", {
+      VM *vm          = vm_new("file.marg");
+      MargValue clone = SG(G("$Margaret"), "ACLONE");
+
+      assert_that_charptr(AS_OBJECT(AS_OBJECT(clone)->instance_registers[0])
+                            ->name equals to "ACLONE");
+      assert_that_charptr(AS_OBJECT(AS_OBJECT(clone)->instance_registers[1])
+                            ->name equals to "$Margaret");
+      assert_that_size_t(AS_OBJECT(AS_OBJECT(clone)->instance_registers[0])
+                           ->name_hash equals to 3455395588760667778);
+      assert_that_size_t(AS_OBJECT(AS_OBJECT(clone)->instance_registers[1])
+                           ->name_hash equals to 4789181502764186150);
     });
   });
 })

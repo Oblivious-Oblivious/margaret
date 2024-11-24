@@ -27,25 +27,30 @@ typedef struct MargMethod {
   MargObject *bound_object;
   struct MargMethod *bound_method;
 
-  char *message_name;
+  const char *message_name;
 
-  char **arguments;
+  MargValue local_registers[MAX_REGISTERS];
+  uint32_t local_index;
   MargValue *constants;
   EmeraldsTable local_variables;
-  uint8_t *bytecode;
 
-  /* TODO - Potentially define these as `register` */
-  uint8_t *ip;
-  uint8_t *sp;
+  Instruction *bytecode;
+  Instruction ip;
 } MargMethod;
 
 /**
  * @brief Creates a new MargMethod object
  * @param vm -> Current VM
  * @param bound_object
+ * @param bound_method
  * @param message_name
  * @return MargMethod*
  */
-MargMethod *marg_method_new(VM *vm, MargValue bound_object, char *message_name);
+MargMethod *marg_method_new(
+  VM *vm,
+  MargObject *bound_object,
+  MargMethod *bound_method,
+  const char *message_name
+);
 
 #endif

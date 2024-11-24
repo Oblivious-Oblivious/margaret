@@ -2,7 +2,7 @@
 #define __MARG_INTEGER_SPEC_H_
 
 #include "../../libs/cSpec/export/cSpec.h"
-#include "../../src/opcode/MargValue.h"
+#include "../../src/opcode/instruction.h"
 
 module(MargIntegerSpec, {
   it("tests QNAN boxed integers", {
@@ -19,12 +19,14 @@ module(MargIntegerSpec, {
   });
 
   it("ensures that self and super are set correctly", {
-    VM *vm          = vm_new("file.marg");
-    MargValue x     = MARG_INTEGER(42);
-    MargValue self  = table_get(&AS_OBJECT(x)->instance_variables, "@self");
-    MargValue super = table_get(&AS_OBJECT(x)->instance_variables, "@super");
-    assert_that_charptr(AS_OBJECT(self)->name equals to "$Integer");
-    assert_that_charptr(AS_OBJECT(super)->name equals to "$Numeric");
+    VM *vm                    = vm_new("file.marg");
+    MargValue x               = MARG_INTEGER(42);
+    vm->current->bound_object = AS_OBJECT(x);
+    MargValue self            = I("@self");
+    MargValue super           = I("@super");
+    assert_that_charptr(AS_OBJECT(self)->name equals to "");
+    assert_that_charptr(AS_OBJECT(super)->name equals to "$Integer");
+    assert_that_charptr(AS_OBJECT(super)->proto->name equals to "$Numeric");
   });
 })
 

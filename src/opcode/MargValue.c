@@ -24,7 +24,7 @@ char *marg_value_format(MargValue self) {
     return res;
   } else if(IS_LABEL(self)) {
     char *res = string_new("");
-    string_addf(&res, "<%s:%zu>", AS_LABEL(self)->value, AS_LABEL(self)->index);
+    string_addf(&res, "<%s:%zu>", AS_LABEL(self)->name, AS_LABEL(self)->value);
     return res;
   } else if(IS_SYMBOL(self)) {
     char *res = string_new("");

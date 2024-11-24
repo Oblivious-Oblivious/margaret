@@ -4,6 +4,8 @@
 #include "../../libs/EmeraldsString/export/EmeraldsString.h"
 #include "MargObject.h"
 
+#include <stdio.h> /* vsnprintf */
+
 /**
  * @brief Defines a string representation for Margaret
  * @param _ -> Inherited object properties

@@ -1,6 +1,9 @@
 /* margaret */
 #include "version.spec.h"
 
+/* emitter */
+#include "emitter/Emmiter.spec.h"
+
 /* evaluator */
 #include "evaluator/Evaluator.spec.h"
 
@@ -45,12 +48,14 @@
 #include "loader/Loader.spec.h"
 
 /* opcode */
+#include "opcode/instruction.spec.h"
 #include "opcode/MargBitstring.spec.h"
 #include "opcode/MargFloat.spec.h"
 #include "opcode/MargInteger.spec.h"
 #include "opcode/MargLabel.spec.h"
 #include "opcode/MargMethod.spec.h"
 #include "opcode/MargObject.spec.h"
+#include "opcode/MargPrimitive.spec.h"
 #include "opcode/MargSingletons.spec.h"
 #include "opcode/MargString.spec.h"
 #include "opcode/MargSymbol.spec.h"
@@ -65,6 +70,9 @@
 /* parser */
 #include "parser/Parser.spec.h"
 
+/* primitives */
+#include "primitives/Primitives.spec.h"
+
 /* scanner */
 #include "scanner/Scanner.spec.h"
 
@@ -78,6 +86,8 @@
 int main(void) {
   cspec_run_suite("all", {
     VersionSpec();
+
+    EmmiterSpec();
 
     EvaluatorSpec();
 
@@ -118,12 +128,14 @@ int main(void) {
 
     LoaderSpec();
 
+    instruction_spec();
     MargBitstringSpec();
     MargFloatSpec();
     MargIntegerSpec();
     MargLabelSpec();
     MargMethodSpec();
     MargObjectSpec();
+    MargPrimitiveSpec();
     MargSingletonsSpec();
     MargStringSpec();
     MargSymbolSpec();
@@ -137,6 +149,8 @@ int main(void) {
     ParserSpec();
 
     ScannerSpec();
+
+    PrimitivesSpec();
 
     TokenSpec();
     TypeSpec();

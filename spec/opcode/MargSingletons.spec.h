@@ -2,7 +2,7 @@
 #define __MARG_SINGLETONS_SPEC_H_
 
 #include "../../libs/cSpec/export/cSpec.h"
-#include "../../src/opcode/MargValue.h"
+#include "../../src/opcode/instruction.h"
 
 module(MargSingletonsSpec, {
   it("tests QNAN boxed singletons", {
@@ -31,31 +31,28 @@ module(MargSingletonsSpec, {
   });
 
   it("ensures that self and super are set correctly", {
-    VM *vm = vm_new("file.marg");
-    assert_that_charptr(
-      AS_OBJECT(table_get(&AS_OBJECT(MARG_NIL)->instance_variables, "@self"))
-        ->name equals to "$nil"
-    );
-    assert_that_charptr(
-      AS_OBJECT(table_get(&AS_OBJECT(MARG_NIL)->instance_variables, "@super"))
-        ->name equals to "$Margaret"
-    );
-    assert_that_charptr(
-      AS_OBJECT(table_get(&AS_OBJECT(MARG_FALSE)->instance_variables, "@self"))
-        ->name equals to "$false"
-    );
-    assert_that_charptr(
-      AS_OBJECT(table_get(&AS_OBJECT(MARG_FALSE)->instance_variables, "@super"))
-        ->name equals to "$Margaret"
-    );
-    assert_that_charptr(
-      AS_OBJECT(table_get(&AS_OBJECT(MARG_TRUE)->instance_variables, "@self"))
-        ->name equals to "$true"
-    );
-    assert_that_charptr(
-      AS_OBJECT(table_get(&AS_OBJECT(MARG_TRUE)->instance_variables, "@super"))
-        ->name equals to "$Margaret"
-    );
+    VM *vm      = vm_new("file.marg");
+    MargValue n = G("$nil");
+    MargValue f = G("$false");
+    MargValue t = G("$true");
+
+    vm->current->bound_object = AS_OBJECT(n);
+    MargValue self            = I("@self");
+    MargValue super           = I("@super");
+    assert_that_charptr(AS_OBJECT(self)->name equals to "$nil");
+    assert_that_charptr(AS_OBJECT(super)->name equals to "$Margaret");
+
+    vm->current->bound_object = AS_OBJECT(f);
+    self                      = I("@self");
+    super                     = I("@super");
+    assert_that_charptr(AS_OBJECT(self)->name equals to "$false");
+    assert_that_charptr(AS_OBJECT(super)->name equals to "$Margaret");
+
+    vm->current->bound_object = AS_OBJECT(t);
+    self                      = I("@self");
+    super                     = I("@super");
+    assert_that_charptr(AS_OBJECT(self)->name equals to "$true");
+    assert_that_charptr(AS_OBJECT(super)->name equals to "$Margaret");
   });
 })
 

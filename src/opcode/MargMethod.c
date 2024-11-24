@@ -1,26 +1,27 @@
-#include "MargValue.h"
+#include "instruction.h"
 
-MargMethod *
-marg_method_new(VM *vm, MargValue bound_object, char *message_name) {
-  MargObject *obj = marg_object_new(
-    vm,
-    sizeof(MargMethod),
-    table_get(&vm->global_variables, "$Margaret"),
-    string_new("$Method")
+MargMethod *marg_method_new(
+  VM *vm,
+  MargObject *bound_object,
+  MargMethod *bound_method,
+  const char *message_name
+) {
+  MargObject *obj = (MargObject *)marg_object_new(
+    vm, sizeof(MargMethod), G("$Method"), string_new("")
   );
   MargMethod *self = (MargMethod *)obj;
 
-  self->bound_object = AS_OBJECT(bound_object);
-  self->bound_method = NULL;
+  self->bound_object = bound_object;
+  self->bound_method = bound_method;
 
   self->message_name = message_name;
-  self->arguments    = NULL;
-  self->constants    = NULL;
-  table_init(&self->local_variables);
-  self->bytecode = NULL;
 
-  self->ip = self->bytecode;
-  self->sp = self->bytecode;
+  self->constants = NULL;
+  table_init(&self->local_variables);
+  self->local_index = 0;
+
+  self->bytecode = NULL;
+  self->ip       = -1;
 
   return self;
 }

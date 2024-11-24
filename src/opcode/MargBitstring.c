@@ -1,12 +1,8 @@
-#include "MargObject.h"
-#include "MargValue.h"
+#include "instruction.h"
 
 MargBitstring *marg_bitstring_new(VM *vm) {
-  MargObject *obj = marg_object_new(
-    vm,
-    sizeof(MargBitstring),
-    table_get(&vm->global_variables, "$Enumerable"),
-    string_new("$Bitstring")
+  MargObject *obj = (MargObject *)marg_object_new(
+    vm, sizeof(MargBitstring), G("$Bitstring"), string_new("")
   );
   MargBitstring *self = (MargBitstring *)obj;
 

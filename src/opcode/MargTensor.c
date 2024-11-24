@@ -1,11 +1,8 @@
-#include "MargValue.h"
+#include "instruction.h"
 
 MargTensor *marg_tensor_new(VM *vm) {
-  MargObject *obj = marg_object_new(
-    vm,
-    sizeof(MargTensor),
-    table_get(&vm->global_variables, "$Enumerable"),
-    string_new("$Tensor")
+  MargObject *obj = (MargObject *)marg_object_new(
+    vm, sizeof(MargTensor), G("$Tensor"), string_new("")
   );
   MargTensor *self = (MargTensor *)obj;
 
