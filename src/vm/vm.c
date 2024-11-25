@@ -73,6 +73,7 @@ p_inline void setup_primitives(VM *vm) {
 }
 
 VM *vm_new(const char *filename) {
+  size_t i;
   /* TODO - Maybe convert to initializer */
   VM *vm = (VM *)malloc(sizeof(VM));
 
@@ -94,6 +95,16 @@ VM *vm_new(const char *filename) {
   setup_proto_object_chain(vm);
   setup_main(vm);
   setup_primitives(vm);
+
+  for(i = vm->global_index; i < MAX_REGISTERS; i++) {
+    vm->global_registers[i] = MARG_NIL;
+  }
+  for(i = vm->current->bound_object->instance_index; i < MAX_REGISTERS; i++) {
+    vm->current->bound_object->instance_registers[i] = MARG_NIL;
+  }
+  for(i = vm->current->local_index; i < MAX_REGISTERS; i++) {
+    vm->current->local_registers[i] = MARG_NIL;
+  }
 
   return vm;
 }

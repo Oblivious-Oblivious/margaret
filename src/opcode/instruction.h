@@ -18,9 +18,11 @@ p_inline Instruction make_constant(VM *vm, MargValue value) {
   return vector_size(vm->current->constants) - 1;
 }
 
-p_inline Instruction make_local(VM *vm, const char *var) {
+p_inline Instruction make_local(VM *vm, const char *_var) {
+  char *var           = string_new(_var);
   Instruction reg_ptr = table_get(&vm->current->local_variables, var);
   if(reg_ptr != TABLE_UNDEFINED) {
+    string_free(var);
     return reg_ptr;
   } else {
     reg_ptr = vm->current->local_index & (MAX_REGISTERS - 1);
@@ -30,10 +32,12 @@ p_inline Instruction make_local(VM *vm, const char *var) {
   }
 }
 
-p_inline Instruction make_instance(VM *vm, const char *var) {
+p_inline Instruction make_instance(VM *vm, const char *_var) {
+  char *var = string_new(_var);
   Instruction reg_ptr =
     table_get(&vm->current->bound_object->instance_variables, var);
   if(reg_ptr != TABLE_UNDEFINED) {
+    string_free(var);
     return reg_ptr;
   } else {
     reg_ptr = vm->current->bound_object->instance_index & (MAX_REGISTERS - 1);
@@ -43,9 +47,11 @@ p_inline Instruction make_instance(VM *vm, const char *var) {
   }
 }
 
-p_inline Instruction make_global(VM *vm, const char *var) {
+p_inline Instruction make_global(VM *vm, const char *_var) {
+  char *var           = string_new(_var);
   Instruction reg_ptr = table_get(&vm->global_variables, var);
   if(reg_ptr != TABLE_UNDEFINED) {
+    string_free(var);
     return reg_ptr;
   } else {
     reg_ptr = vm->global_index & (MAX_REGISTERS - 1);

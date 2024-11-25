@@ -219,9 +219,8 @@ MargValue evaluator_evaluate(VM *vm) {
   }
 
   evaluator_run(vm);
-  if(vector_size(vm->current->bytecode) == 1 &&
-     vm->current->bytecode[0] == OP_HALT) {
-    return MARG_NIL;
+  if(vector_size(vm->current->bytecode) == 1) {
+    return MARG_UNDEFINED;
   } else {
     return KZ;
   }
