@@ -6,7 +6,7 @@ MargLabel *marg_label_new(VM *vm, const char *name) {
   );
   MargLabel *self = (MargLabel *)obj;
 
-  self->name  = name;
+  self->name  = string_new(name);
   self->value = vector_size(vm->current->bytecode);
 
   return self;

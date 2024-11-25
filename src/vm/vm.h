@@ -53,21 +53,28 @@ typedef struct VM {
 VM *vm_new(const char *filename);
 
 /**
- * @brief Frees the VM instance.  Most of its values are freed over time by
+ * @brief Resets the VM instance.  Most of its values are freed over time by
  * other parts of the pipeline.  This handles remaining fields
- * @param vm -> The VM to be freed
+ * @param vm -> The VM to be reset
  */
-#define vm_free()                        \
-  do {                                   \
-    vm_free_source();                    \
-    vm_free_tokens();                    \
-    vm_free_formal_bytecode();           \
-    table_deinit(&vm->global_variables); \
-    free(vm);                            \
+#define vm_reset()             \
+  do {                         \
+    vm_free_source();          \
+    vm->error       = NULL;    \
+    vm->error_token = NULL;    \
+    vm_free_tokens();          \
+    tokens_init(&vm->tokens);  \
+    vm_free_formal_bytecode(); \
   } while(0)
 
 /* TODO - Ensure there are no leaks throughout the pipeline */
-#define vm_free_source() string_free(vm->source)
+#define vm_free_source()     \
+  do {                       \
+    string_free(vm->source); \
+    vm->source = NULL;       \
+    vm->lineno = 1;          \
+    vm->charno = 0;          \
+  } while(0)
 
 #define vm_free_tokens()        \
   do {                          \
@@ -84,6 +91,7 @@ VM *vm_new(const char *filename);
       }                                                     \
     }                                                       \
     vector_free(vm->formal_bytecode);                       \
+    vm->formal_bytecode = NULL;                             \
   } while(0)
 
 #endif

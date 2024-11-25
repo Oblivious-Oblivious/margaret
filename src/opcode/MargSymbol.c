@@ -6,7 +6,7 @@ MargSymbol *marg_symbol_new(VM *vm, char *value) {
   );
   MargSymbol *self = (MargSymbol *)obj;
 
-  self->value = value;
+  self->value = string_new(value);
 
   return self;
 }

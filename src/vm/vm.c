@@ -76,11 +76,12 @@ VM *vm_new(const char *filename) {
   /* TODO - Maybe convert to initializer */
   VM *vm = (VM *)malloc(sizeof(VM));
 
-  vm->filename = filename;
-  vm->source   = NULL;
-  vm->lineno   = 1;
-  vm->charno   = 0;
-  vm->error    = NULL;
+  vm->filename    = string_new(filename);
+  vm->source      = NULL;
+  vm->lineno      = 1;
+  vm->charno      = 0;
+  vm->error       = NULL;
+  vm->error_token = NULL;
 
   vm->tid = 0;
   tokens_init(&vm->tokens);

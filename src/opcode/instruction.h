@@ -57,16 +57,15 @@ p_inline Instruction make_global(VM *vm, const char *var) {
 
 #define READ_BYTECODE() (vm->current->bytecode[vm->current->ip])
 
-#define GET_K(i) (fetch_variable((vm), (i), vm->current->constants))
-#define GET_L(i) (fetch_variable((vm), (i), vm->current->local_registers))
-#define GET_I(i) \
-  (fetch_variable((vm), (i), vm->current->bound_object->instance_registers))
-#define GET_G(i) (fetch_variable((vm), (i), vm->global_registers))
+#define GET_K(i) ((vm)->current->constants[(i)])
+#define GET_L(i) ((vm)->current->local_registers[(i)])
+#define GET_I(i) ((vm)->current->bound_object->instance_registers[(i)])
+#define GET_G(i) ((vm)->global_registers[(i)])
 
-#define SET_K(i, v) (vm->current->constants[(i)] = (v))
-#define SET_L(i, v) (vm->current->local_registers[(i)] = (v))
-#define SET_I(i, v) (vm->current->bound_object->instance_registers[(i)] = (v))
-#define SET_G(i, v) (vm->global_registers[(i)] = (v))
+#define SET_K(i, v) (GET_K(i) = (v))
+#define SET_L(i, v) (GET_L(i) = (v))
+#define SET_I(i, v) (GET_I(i) = (v))
+#define SET_G(i, v) (GET_G(i) = (v))
 
 #define CONST(value)  (make_constant((vm), (value)))
 #define LOCAL(var)    (make_local((vm), (var)))
@@ -106,9 +105,5 @@ p_inline Instruction make_global(VM *vm, const char *var) {
 #define SKZ(v) SET_K(Z, v)
 
 #define SG(proto, name) SET_G(GLOBAL(name), MARG_OBJECT(proto, name))
-
-p_inline MargValue fetch_variable(VM *vm, Instruction i, MargValue *registers) {
-  return i == TABLE_UNDEFINED ? MARG_NIL : registers[i];
-}
 
 #endif
