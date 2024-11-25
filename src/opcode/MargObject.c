@@ -1,13 +1,13 @@
 #include "instruction.h"
 
 MargObject *
-marg_object_new(VM *bound_vm, size_t size, MargValue proto, const char *name) {
+marg_object_new(VM *vm, size_t size, MargValue proto, const char *name) {
   MargObject *self = (MargObject *)malloc(size);
 
   self->is_marked = false;
   self->next      = NULL;
 
-  self->bound_vm = bound_vm;
+  self->bound_vm = vm;
 
   self->name      = name;
   self->name_hash = komihash_hash(name, string_size(name));

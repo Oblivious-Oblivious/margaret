@@ -34,13 +34,14 @@ typedef struct MargObject {
 
 /**
  * @brief Creates a new object instance
+ * @param vm -> Current VM
  * @param size -> Size of the pointer
  * @param proto -> Value of the prototype object
  * @param name -> Name of the object
  * @return MargObject*
  */
 MargObject *
-marg_object_new(VM *bound_vm, size_t size, MargValue proto, const char *name);
+marg_object_new(VM *vm, size_t size, MargValue proto, const char *name);
 
 /**
  * @brief String representation for object literals in the Java style
