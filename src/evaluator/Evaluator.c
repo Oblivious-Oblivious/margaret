@@ -31,7 +31,8 @@
     vector_free(args);                             \
   }
 
-static MargValue dispatch_method_from_delegation_chain(VM *vm, MargValue self) {
+p_inline MargValue
+dispatch_method_from_delegation_chain(VM *vm, MargValue self) {
   char *name            = AS_STRING(KA)->value;
   MargValue curr_object = self;
   MargValue msg_value   = table_get(&AS_OBJECT(curr_object)->messages, name);
@@ -42,7 +43,7 @@ static MargValue dispatch_method_from_delegation_chain(VM *vm, MargValue self) {
   return msg_value;
 }
 
-static MargValue
+p_inline MargValue
 dispatch_primitive_from_delegation_chain(VM *vm, MargValue self) {
   char *name            = AS_STRING(KA)->value;
   MargValue curr_object = self;
@@ -59,7 +60,7 @@ dispatch_primitive_from_delegation_chain(VM *vm, MargValue self) {
     the result of the generated opcodes
  * @param vm -> result enum
  */
-static void evaluator_run(VM *vm) {
+p_inline void evaluator_run(VM *vm) {
 #if defined(__GNUC__) || defined(__clang__)
   dispatch_table();
   #define switch_opcode   goto *_computed_gotos[FETCH()];

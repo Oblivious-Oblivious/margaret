@@ -58,7 +58,7 @@
  * @param message -> The message to display
  * @return Token* -> EOF token
  */
-static char *parser_error(VM *vm, size_t curr_tid, const char *message) {
+p_inline char *parser_error(VM *vm, size_t curr_tid, const char *message) {
   printf(
     "%s:%zu:%zu \033[1;31merror:\033[0m %s  Token: \033[1;31m`%s`\033[0m\n",
     vm->filename,
@@ -75,7 +75,7 @@ static char *parser_error(VM *vm, size_t curr_tid, const char *message) {
   return NULL;
 }
 
-static char *parser_handle_error(VM *vm, const char *error_msg) {
+p_inline char *parser_handle_error(VM *vm, const char *error_msg) {
   if(vm->tid >= vector_size(vm->tokens.values) &&
      vector_size(vm->tokens.values) > 1) {
     return parser_error(vm, vector_size(vm->tokens.values) - 2, error_msg);

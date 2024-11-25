@@ -24,7 +24,7 @@
 
 /* TODO - Eventually merge emmiter with parser placing formalizer behind flag */
 
-static void margaret_repl(VM *vm) {
+p_inline void margaret_repl(VM *vm) {
   printf(
     "Margaret %s  Copyright (C) %s %s, %s\n",
     MARGARET_VERSION,
@@ -38,7 +38,7 @@ static void margaret_repl(VM *vm) {
   vm_free();
 }
 
-static void margaret_run_file(VM *vm) {
+p_inline void margaret_run_file(VM *vm) {
   EVAL(OPTIMIZE(EMIT(FORMALIZE(READ(LOAD(vm))))));
   vm_free();
 }

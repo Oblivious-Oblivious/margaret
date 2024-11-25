@@ -7,7 +7,7 @@
  * @brief Setup ad-hoc $Margaret object
  * @param vm -> Current vm
  */
-static void setup_margaret(VM *vm) {
+p_inline void setup_margaret(VM *vm) {
   MargValue marg                         = SG(MARG_UNDEFINED, "$Margaret");
   AS_OBJECT(marg)->proto                 = AS_OBJECT(marg);
   AS_OBJECT(marg)->instance_registers[1] = marg;
@@ -18,7 +18,7 @@ static void setup_margaret(VM *vm) {
     and defines rudimentary messages like self and super
  * @param vm -> Current vm
  */
-static void setup_proto_object_chain(VM *vm) {
+p_inline void setup_proto_object_chain(VM *vm) {
   MargValue margaret;
   MargValue numeric;
   MargValue string;
@@ -53,7 +53,7 @@ static void setup_proto_object_chain(VM *vm) {
  * @brief Defines main entry point that is inaccessible lexically
  * @param vm -> Current vm
  */
-static void setup_main(VM *vm) {
+p_inline void setup_main(VM *vm) {
   MargValue main_method;
   MargValue margaret = G("$Margaret");
   main_method        = MARG_METHOD(AS_OBJECT(margaret), NULL, "");
@@ -62,7 +62,7 @@ static void setup_main(VM *vm) {
   vm->current = AS_METHOD(main_method);
 }
 
-static void setup_primitives(VM *vm) {
+p_inline void setup_primitives(VM *vm) {
   define_primitive(
     vm, "inspect:", "$Margaret", (MargPrimitiveFunction)primitive_INSPECT
   );
