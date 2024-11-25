@@ -25,55 +25,54 @@ VM *emitter_emit(VM *vm) {
   for(ip = 0; ip < bytecode_size; ip++) {
     char *fmcode = formal_bytecode[ip];
 
-    switch_fmcode(FM_NIL) { /* emit_byte(OP_NIL); */ }
-    case_fmcode(FM_FALSE) { /* emit_byte(OP_FALSE); */ }
-    case_fmcode(FM_TRUE) { /* emit_byte(OP_TRUE); */ }
+    switch_fmcode(FM_NIL) { OA(OP_STOZK, CONST(MARG_NIL)); }
+    case_fmcode(FM_FALSE) { OA(OP_STOZK, CONST(MARG_FALSE)); }
+    case_fmcode(FM_TRUE) { OA(OP_STOZK, CONST(MARG_TRUE)); }
 
-    case_fmcode(FM_SELF) { /* emit_byte(OP_SELF); */ }
-    case_fmcode(FM_SUPER) { /* emit_byte(OP_SUPER); */ }
+    case_fmcode(FM_SELF) { OA(OP_STOZI, INSTANCE("@self")); }
+    case_fmcode(FM_SUPER) { OA(OP_STOZI, INSTANCE("@super")); }
 
     case_fmcode(FM_INTEGER) {
-      char *temp_int_value = formal_bytecode[++ip];
-      /* emit_variable_length(OP_OBJECT);
-      emit_temporary(temp_int_value); */
-      (void)temp_int_value;
+      ptrdiff_t int_value;
+      sscanf(formal_bytecode[++ip], "%td", &int_value);
+      OA(OP_STOZK, CONST(MARG_INTEGER(int_value)));
     }
     case_fmcode(FM_FLOAT) {
-      char *temp_float_value = formal_bytecode[++ip];
-      /* emit_variable_length(OP_OBJECT);
-      emit_temporary(temp_float_value); */
-      (void)temp_float_value;
+      double float_value;
+      sscanf(formal_bytecode[++ip], "%lf", &float_value);
+      OA(OP_STOZK, CONST(MARG_FLOAT(float_value)));
     }
 
     case_fmcode(FM_STRING) {
-      char *temp_string_value = formal_bytecode[++ip];
-      /* emit_variable_length(OP_OBJECT); */
-      (void)temp_string_value;
+      OA(OP_STOZK, CONST(MARG_STRING(formal_bytecode[++ip])));
     }
     case_fmcode(FM_LABEL) {
-      char *temp_label_value = formal_bytecode[++ip];
-      /* emit_variable_length(OP_OBJECT);
-      emit_temporary(temp_label_value); */
-      (void)temp_label_value;
+      OA(OP_STOZK, CONST(MARG_LABEL(formal_bytecode[++ip])));
     }
     case_fmcode(FM_SYMBOL) {
-      char *temp_symbol_value = formal_bytecode[++ip];
-      /* emit_variable_length(OP_OBJECT);
-      emit_temporary(temp_symbol_value); */
-      (void)temp_symbol_value;
+      OA(OP_STOZK, CONST(MARG_SYMBOL(formal_bytecode[++ip])));
     }
 
     case_fmcode(FM_TENSOR) {
-      char *number_of_elements = formal_bytecode[++ip];
-      /* emit_variable_length(OP_TENSOR);
-      emit_temporary(number_of_elements); */
-      (void)number_of_elements;
+      size_t i;
+      MargValue t_value = MARG_TENSOR();
+      MargTensor *t_obj = AS_TENSOR(t_value);
+      size_t number_of_elements;
+      sscanf(formal_bytecode[++ip], "%zu", &number_of_elements);
+      for(i = 1; i <= number_of_elements; i++) {
+        marg_tensor_add(t_obj, K(-i));
+      }
+      OA(OP_STOZK, CONST(t_value));
     }
     case_fmcode(FM_TUPLE) {
-      char *number_of_elements = formal_bytecode[++ip];
-      /* emit_variable_length(OP_TUPLE);
-      emit_temporary(number_of_elements); */
-      (void)number_of_elements;
+      size_t i;
+      MargValue t_value = MARG_TUPLE();
+      MargTuple *t_obj  = AS_TUPLE(t_value);
+      size_t number_of_elements;
+      sscanf(formal_bytecode[++ip], "%zu", &number_of_elements);
+      for(i = 1; i <= number_of_elements; i++) {
+        marg_tuple_add(t_obj, K(-i));
+      }
     }
     case_fmcode(FM_BITSTRING) {
       char *number_of_bits = formal_bytecode[++ip];
@@ -88,24 +87,9 @@ VM *emitter_emit(VM *vm) {
       (void)number_of_pairs;
     }
 
-    case_fmcode(FM_GLOBAL) {
-      char *variable_name = formal_bytecode[++ip];
-      /* emit_variable_length(OP_GLOBAL);
-      emit_temporary(variable_name); */
-      (void)variable_name;
-    }
-    case_fmcode(FM_INSTANCE) {
-      char *variable_name = formal_bytecode[++ip];
-      /* emit_variable_length(OP_INSTANCE);
-      emit_temporary(variable_name); */
-      (void)variable_name;
-    }
-    case_fmcode(FM_LOCAL) {
-      char *variable_name = formal_bytecode[++ip];
-      /* emit_variable_length(OP_LOCAL);
-      emit_temporary(variable_name); */
-      (void)variable_name;
-    }
+    case_fmcode(FM_GLOBAL) { OA(OP_STOZG, GLOBAL(formal_bytecode[++ip])); }
+    case_fmcode(FM_INSTANCE) { OA(OP_STOZI, INSTANCE(formal_bytecode[++ip])); }
+    case_fmcode(FM_LOCAL) { OA(OP_STOZL, LOCAL(formal_bytecode[++ip])); }
 
     case_fmcode(FM_METHOD_START) {
       /* MargValue new_method = MARG_METHOD(
@@ -196,7 +180,7 @@ VM *emitter_emit(VM *vm) {
     }
   }
 
-  vector_add(vm->current->bytecode, OP_HALT);
+  OP(OP_HALT);
 
 exit:
   vm_free_formal_bytecode();

@@ -21,4 +21,6 @@ typedef struct MargTuple {
  */
 MargTuple *marg_tuple_new(VM *vm);
 
+#define marg_tuple_add marg_tensor_add
+
 #endif
