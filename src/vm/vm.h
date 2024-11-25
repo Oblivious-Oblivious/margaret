@@ -60,6 +60,8 @@ VM *vm_new(const char *filename);
 #define vm_reset()             \
   do {                         \
     vm_free_source();          \
+    vm->lineno      = 1;       \
+    vm->charno      = 0;       \
     vm->error       = NULL;    \
     vm->error_token = NULL;    \
     vm_free_tokens();          \
@@ -72,8 +74,6 @@ VM *vm_new(const char *filename);
   do {                       \
     string_free(vm->source); \
     vm->source = NULL;       \
-    vm->lineno = 1;          \
-    vm->charno = 0;          \
   } while(0)
 
 #define vm_free_tokens()        \

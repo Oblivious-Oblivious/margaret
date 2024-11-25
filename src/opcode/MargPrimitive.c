@@ -10,6 +10,7 @@ MargPrimitive *marg_primitive_new(
 
   obj->instance_registers[1] = MARG_NIL;
   table_remove(&obj->instance_variables, "@super");
+  obj->instance_index--;
   self->function       = function;
   self->primitive_name = primitive_name;
 
