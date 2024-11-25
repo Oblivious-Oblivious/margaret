@@ -16,7 +16,7 @@ char *marg_value_format(MargValue self) {
     return string_new("$true");
   } else if(IS_INTEGER(self)) {
     char *res = string_new("");
-    string_addf(&res, "%lld", AS_INTEGER(self)->value);
+    string_addf(&res, "%td", AS_INTEGER(self)->value);
     return res;
   } else if(IS_FLOAT(self)) {
     char *res = string_new("");

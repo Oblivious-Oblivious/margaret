@@ -55,7 +55,7 @@ p_inline Instruction make_global(VM *vm, const char *var) {
   }
 }
 
-#define READ() (vm->current->bytecode[vm->current->ip])
+#define READ_BYTECODE() (vm->current->bytecode[vm->current->ip])
 
 #define GET_K(i) (fetch_variable((vm), (i), vm->current->constants))
 #define GET_L(i) (fetch_variable((vm), (i), vm->current->local_registers))
@@ -73,9 +73,9 @@ p_inline Instruction make_global(VM *vm, const char *var) {
 #define INSTANCE(var) (make_instance((vm), (var)))
 #define GLOBAL(var)   (make_global((vm), (var)))
 
-#define O    ((READ() >> 58) & 0x3f)
-#define A    ((READ() >> 29) & 0x1fffffff)
-#define B    ((READ() >> 0) & 0x1fffffff)
+#define O    ((READ_BYTECODE() >> 58) & 0x3f)
+#define A    ((READ_BYTECODE() >> 29) & 0x1fffffff)
+#define B    ((READ_BYTECODE() >> 0) & 0x1fffffff)
 #define Z    (vector_size(vm->current->constants) - 1)
 #define K(i) (vm->current->constants[(i + Z + 1) % (Z + 1)])
 #define L(n) GET_L(table_get(&vm->current->local_variables, (n)))
