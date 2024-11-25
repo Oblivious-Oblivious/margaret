@@ -7,6 +7,7 @@
 
 char *marg_value_format(MargValue self) {
   if(IS_UNDEFINED(self)) {
+    /* TODO - Eventually replace <unbound> with '' */
     return string_new("<unbound>");
   } else if(IS_NIL(self)) {
     return string_new("$nil");
