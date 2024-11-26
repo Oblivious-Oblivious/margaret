@@ -39,7 +39,7 @@ p_inline void margaret_repl(VM *vm) {
     MARGARET_CITY
   );
   while(true) {
-    PRINT(EVAL(OPTIMIZE(EMIT(FORMALIZE(READ(SCAN(vm, "> ")))))));
+    PRINT(EVAL(OPTIMIZE(EMIT(FORMALIZE(READ(SCAN("> ")))))));
   }
 }
 
