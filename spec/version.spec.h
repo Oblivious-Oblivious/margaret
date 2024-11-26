@@ -10,7 +10,7 @@ module(VersionSpec, {
   });
 
   it("validates date", {
-    assert_that_charptr(MARGARET_DATE equals to "2022-2024");
+    assert_that_charptr(MARGARET_DATE equals to "2022-2025");
   });
 
   it("validates link", {
