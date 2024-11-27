@@ -1,6 +1,6 @@
 /**
  * @author oblivious (https://www.dreamnotexpiring.com/about)
- * @brief An pure OOP system (https://www.margaret-lang.org)
+ * @brief A pure OOP system (https://www.margaret-lang.org)
  * @date Copyright (C) 2022-2025 Athanasios Papapostolou (oblivious)
  * @copyright Margaret by oblivious is marked with MIT License
  *
