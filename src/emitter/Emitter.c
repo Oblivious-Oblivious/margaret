@@ -13,6 +13,13 @@
 #define message_case(message)        else if(string_equals(message_name, message))
 #define message_default              else
 
+#define COMP_LABEL_LOCAL(name) \
+  (SET_L(LOCAL(name), MARG_LABEL(name)), OA(OP_STOZK, LOCAL(name)))
+#define COMP_LABEL_INSTANCE(name) \
+  (SET_I(INSTANCE(name), MARG_LABEL(name)), OA(OP_STOZK, INSTANCE(name)))
+#define COMP_LABEL_GLOBAL(name) \
+  (SET_G(GLOBAL(name), MARG_LABEL(name)), OA(OP_STOZK, GLOBAL(name)))
+
 #define emit_label_local() \
   ip++;                    \
   COMP_LABEL_LOCAL(formal_bytecode[ip])
