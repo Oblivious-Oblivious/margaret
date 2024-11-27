@@ -718,8 +718,8 @@ module(messages_spec, {
         FM_KEYWORD,
         string_new("if_true:if_false:"),
         string_new("2"),
-        FM_LABEL,
-        string_new("out")
+        FM_LABEL_LOCAL,
+        string_new("::out")
       )
     );
   });

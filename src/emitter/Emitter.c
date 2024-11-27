@@ -13,6 +13,15 @@
 #define message_case(message)        else if(string_equals(message_name, message))
 #define message_default              else
 
+#define emit_label_local() \
+  ip++;                    \
+  COMP_LABEL_LOCAL(formal_bytecode[ip])
+#define emit_label_instance() \
+  ip++;                       \
+  COMP_LABEL_INSTANCE(formal_bytecode[ip])
+#define emit_label_global() \
+  ip++;                     \
+  COMP_LABEL_GLOBAL(formal_bytecode[ip])
 VM *emitter_emit(VM *vm) {
   size_t ip;
   char **formal_bytecode = vm->formal_bytecode;
@@ -46,12 +55,12 @@ VM *emitter_emit(VM *vm) {
     case_fmcode(FM_STRING) {
       OA(OP_STOZK, CONST(MARG_STRING(formal_bytecode[++ip])));
     }
-    case_fmcode(FM_LABEL) {
-      OA(OP_STOZK, CONST(MARG_LABEL(formal_bytecode[++ip])));
-    }
     case_fmcode(FM_SYMBOL) {
       OA(OP_STOZK, CONST(MARG_SYMBOL(formal_bytecode[++ip])));
     }
+    case_fmcode(FM_LABEL_LOCAL) { emit_label_local(); }
+    case_fmcode(FM_LABEL_INSTANCE) { emit_label_instance(); }
+    case_fmcode(FM_LABEL_GLOBAL) { emit_label_global(); }
 
     case_fmcode(FM_TENSOR) {
       size_t i;
