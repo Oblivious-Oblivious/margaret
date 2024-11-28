@@ -173,24 +173,48 @@ module(EmmiterSpec, {
       emit(vm, "[42, 42.05, \"hello\"]");
       vm->current->ip++;
       assert_that(O is OP_STOZK);
+      assert_that(IS_INTEGER(K(A)));
       vm->current->ip++;
       assert_that(O is OP_STOZK);
+      assert_that(IS_FLOAT(K(A)));
       vm->current->ip++;
       assert_that(O is OP_STOZK);
+      assert_that(IS_STRING(K(A)));
       vm->current->ip++;
-      assert_that(O is OP_STOZK);
-      assert_that(IS_TENSOR(K(-1)));
-      assert_that_ptrdiff_t(
-        AS_INTEGER(AS_TENSOR(K(-1))->value[0])->value equals to 42
-      );
-      assert_that_double(
-        AS_FLOAT(AS_TENSOR(K(-1))->value[1])->value equals to 42.05
-      );
-      assert_that_charptr(
-        AS_STRING(AS_TENSOR(K(-1))->value[2])->value equals to "hello"
+      assert_that(O is OP_SEND);
+      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_tensor_new:"
       );
       vm->current->ip++;
       assert_that(O is OP_HALT);
+
+      emit(vm, "[42, [1, 2, [43, 44, 45]]]");
+      vm->current->ip++;
+      assert_that(O is OP_STOZK);
+      vm->current->ip++;
+      assert_that(O is OP_STOZK);
+      vm->current->ip++;
+      assert_that(O is OP_STOZK);
+      vm->current->ip++;
+      assert_that(O is OP_STOZK);
+      vm->current->ip++;
+      assert_that(O is OP_STOZK);
+      vm->current->ip++;
+      assert_that(O is OP_STOZK);
+      vm->current->ip++;
+      assert_that(O is OP_SEND);
+      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_tensor_new:"
+      );
+      assert_that_size_t(AS_INTEGER(K(B))->value equals to 3);
+      vm->current->ip++;
+      assert_that(O is OP_SEND);
+      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_tensor_new:"
+      );
+      assert_that_size_t(AS_INTEGER(K(B))->value equals to 3);
+      vm->current->ip++;
+      assert_that(O is OP_SEND);
+      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_tensor_new:"
+      );
+      assert_that_size_t(AS_INTEGER(K(B))->value equals to 2);
     });
 
     context("on headless methods", {
@@ -203,7 +227,43 @@ module(EmmiterSpec, {
       xit("executes headless and returns result of last instruction", {});
     });
 
-    xit("emits bitstrings", {});
+    it("emits bitstrings", {
+      emit(vm, "%(3::4)");
+      vm->current->ip++;
+      assert_that(O is OP_STOZK);
+      vm->current->ip++;
+      assert_that(O is OP_STOZK);
+      vm->current->ip++;
+      assert_that(O is OP_SEND);
+      assert_that_charptr(AS_STRING(K(A))->value equals to
+                          "__PRIM_bitstring_new:");
+      assert_that_size_t(AS_INTEGER(K(B))->value equals to 2);
+
+      emit(vm, "%(1::1, 0::1, 1::1, 0::1)");
+      vm->current->ip++;
+      assert_that(O is OP_STOZK);
+      vm->current->ip++;
+      assert_that(O is OP_STOZK);
+      vm->current->ip++;
+      assert_that(O is OP_STOZK);
+      vm->current->ip++;
+      assert_that(O is OP_STOZK);
+      vm->current->ip++;
+      assert_that(O is OP_STOZK);
+      vm->current->ip++;
+      assert_that(O is OP_STOZK);
+      vm->current->ip++;
+      assert_that(O is OP_STOZK);
+      vm->current->ip++;
+      assert_that(O is OP_STOZK);
+      vm->current->ip++;
+      assert_that(O is OP_SEND);
+      assert_that_charptr(AS_STRING(K(A))->value equals to
+                          "__PRIM_bitstring_new:");
+      assert_that_size_t(AS_INTEGER(K(B))->value equals to 8);
+      vm->current->ip++;
+      assert_that(O is OP_HALT);
+    });
 
     it("emits tuples", {
       emit(vm, "%[42, 42.05, \"hello\"]");
@@ -214,22 +274,105 @@ module(EmmiterSpec, {
       vm->current->ip++;
       assert_that(O is OP_STOZK);
       vm->current->ip++;
-      assert_that(O is OP_STOZK);
-      assert_that(IS_TUPLE(K(-1)));
-      assert_that_ptrdiff_t(
-        AS_INTEGER(AS_TUPLE(K(-1))->value[0])->value equals to 42
-      );
-      assert_that_double(
-        AS_FLOAT(AS_TUPLE(K(-1))->value[1])->value equals to 42.05
-      );
-      assert_that_charptr(
-        AS_STRING(AS_TUPLE(K(-1))->value[2])->value equals to "hello"
-      );
+      assert_that(O is OP_SEND);
+      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_tuple_new:");
+      assert_that_size_t(AS_INTEGER(K(B))->value equals to 3);
       vm->current->ip++;
       assert_that(O is OP_HALT);
+
+      emit(vm, "%[1, %[2, 3, %[4, 5, 6]]]");
+      vm->current->ip++;
+      assert_that(O is OP_STOZK);
+      vm->current->ip++;
+      assert_that(O is OP_STOZK);
+      vm->current->ip++;
+      assert_that(O is OP_STOZK);
+      vm->current->ip++;
+      assert_that(O is OP_STOZK);
+      vm->current->ip++;
+      assert_that(O is OP_STOZK);
+      vm->current->ip++;
+      assert_that(O is OP_STOZK);
+      vm->current->ip++;
+      assert_that(O is OP_SEND);
+      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_tuple_new:");
+      assert_that_size_t(AS_INTEGER(K(B))->value equals to 3);
+      vm->current->ip++;
+      assert_that(O is OP_SEND);
+      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_tuple_new:");
+      assert_that_size_t(AS_INTEGER(K(B))->value equals to 3);
+      vm->current->ip++;
+      assert_that(O is OP_SEND);
+      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_tuple_new:");
+      assert_that_size_t(AS_INTEGER(K(B))->value equals to 2);
     });
 
-    xit("emits tables", {});
+    it("emits tables", {
+      emit(vm, "%{a: 1, b: 2, c: 3}");
+      vm->current->ip++;
+      assert_that(O is OP_STOZK);
+      assert_that_charptr(AS_STRING(K(A))->value equals to "a");
+      vm->current->ip++;
+      assert_that(O is OP_STOZK);
+      vm->current->ip++;
+      assert_that(O is OP_STOZK);
+      assert_that_charptr(AS_STRING(K(A))->value equals to "b");
+      vm->current->ip++;
+      assert_that(O is OP_STOZK);
+      vm->current->ip++;
+      assert_that(O is OP_STOZK);
+      assert_that_charptr(AS_STRING(K(A))->value equals to "c");
+      vm->current->ip++;
+      assert_that(O is OP_STOZK);
+      vm->current->ip++;
+      assert_that(O is OP_SEND);
+      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_table_new:");
+      assert_that_size_t(AS_INTEGER(K(B))->value equals to 6);
+
+      emit(vm, "%{a: %{aa: 1, bb: 2}, b: %{cc: 3, dd: 4}}");
+      vm->current->ip++;
+      assert_that(O is OP_STOZK);
+      assert_that_charptr(AS_STRING(K(A))->value equals to "a");
+      vm->current->ip++;
+      assert_that(O is OP_STOZK);
+      assert_that_charptr(AS_STRING(K(A))->value equals to "aa");
+      vm->current->ip++;
+      assert_that(O is OP_STOZK);
+      assert_that_size_t(AS_INTEGER(K(A))->value equals to 1);
+      vm->current->ip++;
+      assert_that(O is OP_STOZK);
+      assert_that_charptr(AS_STRING(K(A))->value equals to "bb");
+      vm->current->ip++;
+      assert_that(O is OP_STOZK);
+      assert_that_size_t(AS_INTEGER(K(A))->value equals to 2);
+      vm->current->ip++;
+      assert_that(O is OP_SEND);
+      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_table_new:");
+      assert_that_size_t(AS_INTEGER(K(B))->value equals to 4);
+      vm->current->ip++;
+      assert_that(O is OP_STOZK);
+      assert_that_charptr(AS_STRING(K(A))->value equals to "b");
+      vm->current->ip++;
+      assert_that(O is OP_STOZK);
+      assert_that_charptr(AS_STRING(K(A))->value equals to "cc");
+      vm->current->ip++;
+      assert_that(O is OP_STOZK);
+      assert_that_size_t(AS_INTEGER(K(A))->value equals to 3);
+      vm->current->ip++;
+      assert_that(O is OP_STOZK);
+      assert_that_charptr(AS_STRING(K(A))->value equals to "dd");
+      vm->current->ip++;
+      assert_that(O is OP_STOZK);
+      assert_that_size_t(AS_INTEGER(K(A))->value equals to 4);
+      vm->current->ip++;
+      assert_that(O is OP_SEND);
+      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_table_new:");
+      assert_that_size_t(AS_INTEGER(K(B))->value equals to 4);
+      vm->current->ip++;
+      assert_that(O is OP_SEND);
+      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_table_new:");
+      assert_that_size_t(AS_INTEGER(K(B))->value equals to 4);
+    });
 
     context("on methods", {
       xit("creates keyword methods", {});
@@ -245,6 +388,8 @@ module(EmmiterSpec, {
       xit("creates assignment mqethods", {});
     });
   });
+
+  xdescribe("", {});
 })
 
 #endif

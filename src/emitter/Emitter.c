@@ -49,31 +49,37 @@
 #define emit_symbol() OA(OP_STOZK, CONST(MARG_SYMBOL(formal_bytecode[++ip])))
 
 #define emit_tensor()                                        \
-  size_t i;                                                  \
-  MargValue t_value = MARG_TENSOR();                         \
-  MargTensor *t_obj = AS_TENSOR(t_value);                    \
   size_t number_of_elements;                                 \
   sscanf(formal_bytecode[++ip], "%zu", &number_of_elements); \
-  for(i = number_of_elements; i >= 1; i--) {                 \
-    marg_tensor_add(t_obj, K(-i));                           \
-  }                                                          \
-  OA(OP_STOZK, CONST(t_value))
+  OAB(                                                       \
+    OP_SEND,                                                 \
+    CONST(MARG_STRING("__PRIM_tensor_new:")),                \
+    CONST(MARG_INTEGER(number_of_elements))                  \
+  )
 #define emit_tuple()                                         \
-  size_t i;                                                  \
-  MargValue t_value = MARG_TUPLE();                          \
-  MargTuple *t_obj  = AS_TUPLE(t_value);                     \
   size_t number_of_elements;                                 \
   sscanf(formal_bytecode[++ip], "%zu", &number_of_elements); \
-  for(i = number_of_elements; i >= 1; i--) {                 \
-    marg_tuple_add(t_obj, K(-i));                            \
-  }                                                          \
-  OA(OP_STOZK, CONST(t_value))
-#define emit_bitstring()                        \
-  char *number_of_bits = formal_bytecode[++ip]; \
-  (void)number_of_bits
-#define emit_table()                                \
-  char *number_of_elements = formal_bytecode[++ip]; \
-  (void)number_of_elements
+  OAB(                                                       \
+    OP_SEND,                                                 \
+    CONST(MARG_STRING("__PRIM_tuple_new:")),                 \
+    CONST(MARG_INTEGER(number_of_elements))                  \
+  )
+#define emit_bitstring()                                     \
+  size_t number_of_elements;                                 \
+  sscanf(formal_bytecode[++ip], "%zu", &number_of_elements); \
+  OAB(                                                       \
+    OP_SEND,                                                 \
+    CONST(MARG_STRING("__PRIM_bitstring_new:")),             \
+    CONST(MARG_INTEGER(number_of_elements))                  \
+  )
+#define emit_table()                                         \
+  size_t number_of_elements;                                 \
+  sscanf(formal_bytecode[++ip], "%zu", &number_of_elements); \
+  OAB(                                                       \
+    OP_SEND,                                                 \
+    CONST(MARG_STRING("__PRIM_table_new:")),                 \
+    CONST(MARG_INTEGER(number_of_elements))                  \
+  )
 
 #define emit_global()   OA(OP_STOZG, GLOBAL(formal_bytecode[++ip]))
 #define emit_instance() OA(OP_STOZI, INSTANCE(formal_bytecode[++ip]))

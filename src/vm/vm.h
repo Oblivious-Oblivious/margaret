@@ -57,14 +57,16 @@ VM *vm_new(const char *filename);
  * other parts of the pipeline.  This handles remaining fields
  * @param vm -> The VM to be reset
  */
-#define vm_reset()             \
-  do {                         \
-    vm_free_source();          \
-    vm->error       = NULL;    \
-    vm->error_token = NULL;    \
-    vm_free_tokens();          \
-    tokens_init(&vm->tokens);  \
-    vm_free_formal_bytecode(); \
+#define vm_reset()                \
+  do {                            \
+    vm_free_source();             \
+    vm->error       = NULL;       \
+    vm->error_token = NULL;       \
+    vm_free_tokens();             \
+    tokens_init(&vm->tokens);     \
+    vm_free_formal_bytecode();    \
+    vm->current->ip       = -1;   \
+    vm->current->bytecode = NULL; \
   } while(0)
 
 /* TODO - Ensure there are no leaks throughout the pipeline */
