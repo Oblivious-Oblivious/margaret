@@ -48,7 +48,7 @@ dispatch_primitive_from_delegation_chain(VM *vm, MargValue self) {
   char *name            = AS_STRING(KA)->value;
   MargValue curr_object = self;
   MargValue prim_msg    = table_get(&AS_OBJECT(curr_object)->primitives, name);
-  while(IS_UNDEFINED(prim_msg) && !IS_MARGARET(self)) {
+  while(IS_UNDEFINED(prim_msg) && !IS_MARGARET(curr_object)) {
     curr_object = QNAN_BOX(AS_OBJECT(curr_object)->proto);
     prim_msg    = table_get(&AS_OBJECT(curr_object)->primitives, name);
   }
