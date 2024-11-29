@@ -14,11 +14,11 @@
 #define message_default              else
 
 #define COMP_LABEL_LOCAL(name) \
-  (SET_L(LOCAL(name), MARG_LABEL(name)), OA(OP_STOZK, LOCAL(name)))
+  (SET_L(LOCAL(name), MARG_LABEL(name)), OA(OP_STOZL, LOCAL(name)))
 #define COMP_LABEL_INSTANCE(name) \
-  (SET_I(INSTANCE(name), MARG_LABEL(name)), OA(OP_STOZK, INSTANCE(name)))
+  (SET_I(INSTANCE(name), MARG_LABEL(name)), OA(OP_STOZI, INSTANCE(name)))
 #define COMP_LABEL_GLOBAL(name) \
-  (SET_G(GLOBAL(name), MARG_LABEL(name)), OA(OP_STOZK, GLOBAL(name)))
+  (SET_G(GLOBAL(name), MARG_LABEL(name)), OA(OP_STOZG, GLOBAL(name)))
 
 #define emit_nil()   OA(OP_STOZK, CONST(MARG_NIL))
 #define emit_false() OA(OP_STOZK, CONST(MARG_FALSE))

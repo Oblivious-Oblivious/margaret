@@ -125,6 +125,22 @@ _opcode_loop:;
       goto_helper(label);
       next_opcode;
     }
+    case_opcode(OP_PROCK) {
+      proc_helper(KA);
+      next_opcode;
+    }
+    case_opcode(OP_PROCL) {
+      proc_helper(LA);
+      next_opcode;
+    }
+    case_opcode(OP_PROCI) {
+      proc_helper(IA);
+      next_opcode;
+    }
+    case_opcode(OP_PROCG) {
+      proc_helper(GA);
+      next_opcode;
+    }
     case_opcode(OP_PRIM) {
       ptrdiff_t argc = AS_INTEGER(KB)->value;
       MargValue self = K(-1 - argc);
@@ -163,22 +179,6 @@ _opcode_loop:;
         }
         vector_free(args);
       }
-      next_opcode;
-    }
-    case_opcode(OP_PROCK) {
-      proc_helper(KA);
-      next_opcode;
-    }
-    case_opcode(OP_PROCL) {
-      proc_helper(LA);
-      next_opcode;
-    }
-    case_opcode(OP_PROCI) {
-      proc_helper(IA);
-      next_opcode;
-    }
-    case_opcode(OP_PROCG) {
-      proc_helper(GA);
       next_opcode;
     }
     case_opcode(OP_RAISE) {
