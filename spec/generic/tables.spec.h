@@ -6,6 +6,17 @@
 module(tables_spec, {
   it("parses table literals", {
     parse("(%{})", vector_new(FM_TABLE, string_new("0")));
+    debug(
+      "%{a: 2,,,,,,,,,}",
+      vector_new(
+        FM_STRING,
+        string_new("a"),
+        FM_INTEGER,
+        string_new("2"),
+        FM_TABLE,
+        string_new("2")
+      )
+    );
     parse(
       "(%{a: %{}, b: %{}})",
       vector_new(

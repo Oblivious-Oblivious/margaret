@@ -8,6 +8,17 @@ module(tuples_spec, {
     parse("%[]", vector_new(FM_TUPLE, string_new("0")));
     parse("(%[])", vector_new(FM_TUPLE, string_new("0")));
     parse(
+      "%[1,,,,,,%[],,,,]",
+      vector_new(
+        FM_INTEGER,
+        string_new("1"),
+        FM_TUPLE,
+        string_new("0"),
+        FM_TUPLE,
+        string_new("2")
+      )
+    );
+    parse(
       "%[%[], %[]]",
       vector_new(
         FM_TUPLE,

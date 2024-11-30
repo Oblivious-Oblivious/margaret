@@ -113,8 +113,11 @@ char *parser_unit_list(VM *vm) {
 
   while(!la1value(")") && !la1value("]") && !la1value("}") &&
         !la1type(TOKEN_EOF)) {
+    size_t prev_size = vm->tid;
     unit();
-    no_elements++;
+    if(prev_size < vm->tid) {
+      no_elements++;
+    }
 
     if(!la1value(")") && !la1value("]") && !la1value("}") &&
        !la1type(TOKEN_EOF)) {
@@ -372,8 +375,11 @@ char *parser_bit_list(VM *vm) {
   char *number_of_elements = NULL;
 
   while(!la1value(")") && !la1type(TOKEN_EOF)) {
+    size_t prev_size = vm->tid;
     bit();
-    no_elements++;
+    if(prev_size < vm->tid) {
+      no_elements++;
+    }
 
     if(!la1value(")")) {
       consume(TOKEN_COMMA, "missing ',' on bit list.");
@@ -385,6 +391,7 @@ char *parser_bit_list(VM *vm) {
 }
 
 void parser_bit(VM *vm) {
+  size_t prev_size = vm->tid;
   scalar();
 
   if(la1value(":") && la2value(":")) {
@@ -392,7 +399,7 @@ void parser_bit(VM *vm) {
     consume(TOKEN_COLON, "missing '::' on bit.");
     generate(FM_INTEGER);
     generate(consume(TOKEN_INTEGER, "missing integer on bit."));
-  } else {
+  } else if(prev_size < vm->tid) {
     generate(FM_INTEGER);
     generate(string_new("8"));
   }
@@ -403,10 +410,13 @@ char *parser_association_list(VM *vm) {
   char *number_of_elements = NULL;
 
   while(!la1value("}") && !la1type(TOKEN_EOF)) {
+    size_t prev_size = vm->tid;
     key();
-    consume(TOKEN_COLON, "missing ':' on association list.");
-    unit();
-    no_elements++;
+    if(prev_size < vm->tid) {
+      consume(TOKEN_COLON, "missing ':' on association list.");
+      unit();
+      no_elements++;
+    }
 
     if(!la1value("}")) {
       consume(TOKEN_COMMA, "missing ',' on association list.");
