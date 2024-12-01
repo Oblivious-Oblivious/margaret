@@ -99,7 +99,9 @@ p_inline Instruction make_global(VM *vm, const char *_var) {
 #define IB GET_I(B)
 #define GB GET_G(B)
 
-#define KZ GET_K(Z)
+#define KPUSH(i) (vector_push(vm->current->constants, (i)))
+#define KPOP     (vector_pop(vm->current->constants))
+#define KZ       (vector_peek(vm->current->constants))
 
 #define SLA(v) SET_L(A, v)
 #define SIA(v) SET_I(A, v)

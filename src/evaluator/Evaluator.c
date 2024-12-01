@@ -143,19 +143,18 @@ _opcode_loop:;
     }
     case_opcode(OP_PRIM) {
       ptrdiff_t argc = AS_INTEGER(KB)->value;
-      MargValue self = K(-1 - argc);
+      MargValue self = KPOP;
 
       MargValue prim_msg = dispatch_primitive_from_delegation_chain(vm, self);
       if(IS_UNDEFINED(prim_msg)) {
         SKZ(raise("Error: cannot call because primitive does not exist."));
       } else {
         ptrdiff_t i;
-        MargValue *args = NULL;
-        for(i = 1; i <= argc; i++) {
-          /* TODO - Turn this into a MARG_TENSOR to be included in the GC */
-          vector_add(args, K(-i));
+        MargValue args = MARG_TENSOR();
+        for(i = 0; i < argc; i++) {
+          vector_add(AS_TENSOR(args)->value, KPOP);
         }
-        SKZ(AS_PRIMITIVE(prim_msg)->function(vm, self, args));
+        KPUSH(AS_PRIMITIVE(prim_msg)->function(vm, self, args));
       }
       next_opcode;
     }
@@ -182,7 +181,7 @@ _opcode_loop:;
       next_opcode;
     }
     case_opcode(OP_RAISE) {
-      SKZ(primitive_RAISE(NULL, KA, NULL));
+      SKZ(primitive_RAISE(NULL, KA, MARG_UNDEFINED));
       next_opcode;
     }
     case_opcode(OP_EXACTREC) {

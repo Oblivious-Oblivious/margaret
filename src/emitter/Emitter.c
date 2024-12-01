@@ -48,38 +48,16 @@
   COMP_LABEL_GLOBAL(formal_bytecode[ip])
 #define emit_symbol() OA(OP_STOZK, CONST(MARG_SYMBOL(formal_bytecode[++ip])))
 
-#define emit_tensor()                                        \
-  size_t number_of_elements;                                 \
-  sscanf(formal_bytecode[++ip], "%zu", &number_of_elements); \
-  OAB(                                                       \
-    OP_SEND,                                                 \
-    CONST(MARG_STRING("__PRIM_tensor_new:")),                \
-    CONST(MARG_INTEGER(number_of_elements))                  \
-  )
-#define emit_tuple()                                         \
-  size_t number_of_elements;                                 \
-  sscanf(formal_bytecode[++ip], "%zu", &number_of_elements); \
-  OAB(                                                       \
-    OP_SEND,                                                 \
-    CONST(MARG_STRING("__PRIM_tuple_new:")),                 \
-    CONST(MARG_INTEGER(number_of_elements))                  \
-  )
-#define emit_bitstring()                                     \
-  size_t number_of_elements;                                 \
-  sscanf(formal_bytecode[++ip], "%zu", &number_of_elements); \
-  OAB(                                                       \
-    OP_SEND,                                                 \
-    CONST(MARG_STRING("__PRIM_bitstring_new:")),             \
-    CONST(MARG_INTEGER(number_of_elements))                  \
-  )
-#define emit_table()                                         \
-  size_t number_of_elements;                                 \
-  sscanf(formal_bytecode[++ip], "%zu", &number_of_elements); \
-  OAB(                                                       \
-    OP_SEND,                                                 \
-    CONST(MARG_STRING("__PRIM_table_new:")),                 \
-    CONST(MARG_INTEGER(number_of_elements))                  \
-  )
+#define emit_enumerable_new()                                  \
+  do {                                                         \
+    size_t number_of_elements;                                 \
+    sscanf(formal_bytecode[++ip], "%zu", &number_of_elements); \
+    OAB(                                                       \
+      OP_PRIM,                                                 \
+      CONST(MARG_STRING("__PRIM_NEW:")),                       \
+      CONST(MARG_INTEGER(number_of_elements))                  \
+    );                                                         \
+  } while(0)
 
 #define emit_global()   OA(OP_STOZG, GLOBAL(formal_bytecode[++ip]))
 #define emit_instance() OA(OP_STOZI, INSTANCE(formal_bytecode[++ip]))
@@ -113,10 +91,22 @@ VM *emitter_emit(VM *vm) {
     case_fmcode(FM_LABEL_GLOBAL) { emit_label_global(); }
     case_fmcode(FM_SYMBOL) { emit_symbol(); }
 
-    case_fmcode(FM_TENSOR) { emit_tensor(); }
-    case_fmcode(FM_TUPLE) { emit_tuple(); }
-    case_fmcode(FM_BITSTRING) { emit_bitstring(); }
-    case_fmcode(FM_TABLE) { emit_table(); }
+    case_fmcode(FM_TENSOR) {
+      OA(OP_STOZG, GLOBAL("$Tensor"));
+      emit_enumerable_new();
+    }
+    case_fmcode(FM_TUPLE) {
+      OA(OP_STOZG, GLOBAL("$Tuple"));
+      emit_enumerable_new();
+    }
+    case_fmcode(FM_TABLE) {
+      OA(OP_STOZG, GLOBAL("$Table"));
+      emit_enumerable_new();
+    }
+    case_fmcode(FM_BITSTRING) {
+      OA(OP_STOZG, GLOBAL("$Bitstring"));
+      emit_enumerable_new();
+    }
 
     case_fmcode(FM_GLOBAL) { emit_global(); }
     case_fmcode(FM_INSTANCE) { emit_instance(); }

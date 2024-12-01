@@ -3,6 +3,7 @@
 
 #include "../../libs/cSpec/export/cSpec.h"
 #include "../../src/opcode/instruction.h"
+#include "../../src/primitives/BitstringPrimitives.h"
 
 module(MargBitstringSpec, {
   it("tests QNAN boxed bitstrings", {
@@ -32,10 +33,17 @@ module(MargBitstringSpec, {
   });
 
   it("adds new elements to the bitstring", {
-    VM *vm      = vm_new("file.marg");
-    MargValue x = MARG_BITSTRING();
-    marg_bitstring_add(AS_BITSTRING(x), MARG_INTEGER(1), MARG_INTEGER(2));
-    marg_bitstring_add(AS_BITSTRING(x), MARG_INTEGER(3), MARG_INTEGER(4));
+    VM *vm         = vm_new("file.marg");
+    MargValue x    = MARG_BITSTRING();
+    MargValue args = MARG_TENSOR();
+    vector_add(AS_TENSOR(args)->value, MARG_INTEGER(1));
+    vector_add(AS_TENSOR(args)->value, MARG_INTEGER(2));
+    __PRIM_BITSTRING_ADD(NULL, x, args);
+    vector_free(AS_TENSOR(args)->value);
+    vector_add(AS_TENSOR(args)->value, MARG_INTEGER(3));
+    vector_add(AS_TENSOR(args)->value, MARG_INTEGER(4));
+    __PRIM_BITSTRING_ADD(NULL, x, args);
+    vector_free(AS_TENSOR(args)->value);
     assert_that_size_t(marg_tensor_size(AS_BITSTRING(x)->bits) equals to 2);
     assert_that_size_t(marg_tensor_size(AS_BITSTRING(x)->sizes) equals to 2);
     assert_that_int(
@@ -53,12 +61,22 @@ module(MargBitstringSpec, {
   });
 
   it("gets the number of elements in the bitstring", {
-    VM *vm      = vm_new("file.marg");
-    MargValue x = MARG_BITSTRING();
-    marg_bitstring_add(AS_BITSTRING(x), MARG_INTEGER(2), MARG_INTEGER(2));
-    marg_bitstring_add(AS_BITSTRING(x), MARG_INTEGER(3), MARG_INTEGER(4));
-    marg_bitstring_add(AS_BITSTRING(x), MARG_INTEGER(5), MARG_INTEGER(8));
-    assert_that_size_t(marg_bitstring_size(AS_BITSTRING(x)) equals to 3);
+    VM *vm         = vm_new("file.marg");
+    MargValue x    = MARG_BITSTRING();
+    MargValue args = MARG_TENSOR();
+    vector_add(AS_TENSOR(args)->value, MARG_INTEGER(2));
+    vector_add(AS_TENSOR(args)->value, MARG_INTEGER(2));
+    __PRIM_BITSTRING_ADD(NULL, x, args);
+    vector_free(AS_TENSOR(args)->value);
+    vector_add(AS_TENSOR(args)->value, MARG_INTEGER(3));
+    vector_add(AS_TENSOR(args)->value, MARG_INTEGER(4));
+    __PRIM_BITSTRING_ADD(NULL, x, args);
+    vector_free(AS_TENSOR(args)->value);
+    vector_add(AS_TENSOR(args)->value, MARG_INTEGER(5));
+    vector_add(AS_TENSOR(args)->value, MARG_INTEGER(8));
+    __PRIM_BITSTRING_ADD(NULL, x, args);
+    assert_that_size_t(__PRIM_BITSTRING_SIZE(NULL, x, MARG_UNDEFINED)
+                         equals to 3);
   });
 })
 

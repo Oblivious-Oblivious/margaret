@@ -25,21 +25,21 @@ module(EmmiterSpec, {
       it("emits labels", {
         emit(vm, "::l");
         vm->current->ip++;
-        assert_that(O is OP_STOZK);
+        assert_that(O is OP_STOZL);
         vm->current->ip++;
         assert_that(O is OP_HALT);
         assert_that(IS_LABEL(L("::l")));
 
         emit(vm, "::@l");
         vm->current->ip++;
-        assert_that(O is OP_STOZK);
+        assert_that(O is OP_STOZI);
         vm->current->ip++;
         assert_that(O is OP_HALT);
         assert_that(IS_LABEL(I("::@l")));
 
         emit(vm, "::$l");
         vm->current->ip++;
-        assert_that(O is OP_STOZK);
+        assert_that(O is OP_STOZG);
         vm->current->ip++;
         assert_that(O is OP_HALT);
         assert_that(IS_LABEL(G("::$l")));
@@ -49,8 +49,8 @@ module(EmmiterSpec, {
         emit(vm, ":s");
         vm->current->ip++;
         assert_that(O is OP_STOZK);
-        assert_that(IS_SYMBOL(K(-1)));
-        assert_that_charptr(AS_SYMBOL(K(-1))->value equals to "s");
+        assert_that(IS_SYMBOL(KZ));
+        assert_that_charptr(AS_SYMBOL(KZ)->value equals to "s");
         vm->current->ip++;
         assert_that(O is OP_HALT);
       });
@@ -59,8 +59,8 @@ module(EmmiterSpec, {
         emit(vm, "42");
         vm->current->ip++;
         assert_that(O is OP_STOZK);
-        assert_that(IS_INTEGER(K(-1)));
-        assert_that_int(AS_INTEGER(K(-1))->value equals to 42);
+        assert_that(IS_INTEGER(KZ));
+        assert_that_int(AS_INTEGER(KZ)->value equals to 42);
         vm->current->ip++;
         assert_that(O is OP_HALT);
       });
@@ -69,8 +69,8 @@ module(EmmiterSpec, {
         emit(vm, "42.05");
         vm->current->ip++;
         assert_that(O is OP_STOZK);
-        assert_that(IS_FLOAT(K(-1)));
-        assert_that_double(AS_FLOAT(K(-1))->value equals to 42.05);
+        assert_that(IS_FLOAT(KZ));
+        assert_that_double(AS_FLOAT(KZ)->value equals to 42.05);
         vm->current->ip++;
         assert_that(O is OP_HALT);
       });
@@ -79,8 +79,8 @@ module(EmmiterSpec, {
         emit(vm, "\"hello\"");
         vm->current->ip++;
         assert_that(O is OP_STOZK);
-        assert_that(IS_STRING(K(-1)));
-        assert_that_charptr(AS_STRING(K(-1))->value equals to "hello");
+        assert_that(IS_STRING(KZ));
+        assert_that_charptr(AS_STRING(KZ)->value equals to "hello");
         vm->current->ip++;
         assert_that(O is OP_HALT);
       });
@@ -90,7 +90,7 @@ module(EmmiterSpec, {
           emit(vm, "$nil");
           vm->current->ip++;
           assert_that(O is OP_STOZK);
-          assert_that(IS_NIL(K(-1)));
+          assert_that(IS_NIL(KZ));
           vm->current->ip++;
           assert_that(O is OP_HALT);
         });
@@ -99,7 +99,7 @@ module(EmmiterSpec, {
           emit(vm, "$false");
           vm->current->ip++;
           assert_that(O is OP_STOZK);
-          assert_that(IS_FALSE(K(-1)));
+          assert_that(IS_FALSE(KZ));
           vm->current->ip++;
           assert_that(O is OP_HALT);
         });
@@ -108,7 +108,7 @@ module(EmmiterSpec, {
           emit(vm, "$true");
           vm->current->ip++;
           assert_that(O is OP_STOZK);
-          assert_that(IS_TRUE(K(-1)));
+          assert_that(IS_TRUE(KZ));
           vm->current->ip++;
           assert_that(O is OP_HALT);
         });
@@ -181,40 +181,57 @@ module(EmmiterSpec, {
       assert_that(O is OP_STOZK);
       assert_that(IS_STRING(K(A)));
       vm->current->ip++;
-      assert_that(O is OP_SEND);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_tensor_new:"
-      );
+      assert_that(O is OP_STOZG);
+      assert_that_charptr(AS_OBJECT(GET_G(A))->name equals to "$Tensor");
+      vm->current->ip++;
+      assert_that(O is OP_PRIM);
+      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_NEW:");
+      assert_that_ptrdiff_t(AS_INTEGER(K(B))->value equals to 3);
       vm->current->ip++;
       assert_that(O is OP_HALT);
 
       emit(vm, "[42, [1, 2, [43, 44, 45]]]");
       vm->current->ip++;
       assert_that(O is OP_STOZK);
+      assert_that_ptrdiff_t(AS_INTEGER(K(A))->value equals to 42);
       vm->current->ip++;
       assert_that(O is OP_STOZK);
+      assert_that_ptrdiff_t(AS_INTEGER(K(A))->value equals to 1);
       vm->current->ip++;
       assert_that(O is OP_STOZK);
+      assert_that_ptrdiff_t(AS_INTEGER(K(A))->value equals to 2);
       vm->current->ip++;
       assert_that(O is OP_STOZK);
+      assert_that_ptrdiff_t(AS_INTEGER(K(A))->value equals to 43);
       vm->current->ip++;
       assert_that(O is OP_STOZK);
+      assert_that_ptrdiff_t(AS_INTEGER(K(A))->value equals to 44);
       vm->current->ip++;
       assert_that(O is OP_STOZK);
+      assert_that_ptrdiff_t(AS_INTEGER(K(A))->value equals to 45);
       vm->current->ip++;
-      assert_that(O is OP_SEND);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_tensor_new:"
-      );
+      assert_that(O is OP_STOZG);
+      assert_that_charptr(AS_OBJECT(GET_G(A))->name equals to "$Tensor");
+      vm->current->ip++;
+      assert_that(O is OP_PRIM);
+      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_NEW:");
       assert_that_size_t(AS_INTEGER(K(B))->value equals to 3);
       vm->current->ip++;
-      assert_that(O is OP_SEND);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_tensor_new:"
-      );
+      assert_that(O is OP_STOZG);
+      assert_that_charptr(AS_OBJECT(GET_G(A))->name equals to "$Tensor");
+      vm->current->ip++;
+      assert_that(O is OP_PRIM);
+      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_NEW:");
       assert_that_size_t(AS_INTEGER(K(B))->value equals to 3);
       vm->current->ip++;
-      assert_that(O is OP_SEND);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_tensor_new:"
-      );
+      assert_that(O is OP_STOZG);
+      assert_that_charptr(AS_OBJECT(GET_G(A))->name equals to "$Tensor");
+      vm->current->ip++;
+      assert_that(O is OP_PRIM);
+      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_NEW:");
       assert_that_size_t(AS_INTEGER(K(B))->value equals to 2);
+      vm->current->ip++;
+      assert_that(O is OP_HALT);
     });
 
     context("on headless methods", {
@@ -234,10 +251,14 @@ module(EmmiterSpec, {
       vm->current->ip++;
       assert_that(O is OP_STOZK);
       vm->current->ip++;
-      assert_that(O is OP_SEND);
-      assert_that_charptr(AS_STRING(K(A))->value equals to
-                          "__PRIM_bitstring_new:");
+      assert_that(O is OP_STOZG);
+      assert_that_charptr(AS_OBJECT(GET_G(A))->name equals to "$Bitstring");
+      vm->current->ip++;
+      assert_that(O is OP_PRIM);
+      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_NEW:");
       assert_that_size_t(AS_INTEGER(K(B))->value equals to 2);
+      vm->current->ip++;
+      assert_that(O is OP_HALT);
 
       emit(vm, "%(1::1, 0::1, 1::1, 0::1)");
       vm->current->ip++;
@@ -257,9 +278,11 @@ module(EmmiterSpec, {
       vm->current->ip++;
       assert_that(O is OP_STOZK);
       vm->current->ip++;
-      assert_that(O is OP_SEND);
-      assert_that_charptr(AS_STRING(K(A))->value equals to
-                          "__PRIM_bitstring_new:");
+      assert_that(O is OP_STOZG);
+      assert_that_charptr(AS_OBJECT(GET_G(A))->name equals to "$Bitstring");
+      vm->current->ip++;
+      assert_that(O is OP_PRIM);
+      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_NEW:");
       assert_that_size_t(AS_INTEGER(K(B))->value equals to 8);
       vm->current->ip++;
       assert_that(O is OP_HALT);
@@ -269,42 +292,65 @@ module(EmmiterSpec, {
       emit(vm, "%[42, 42.05, \"hello\"]");
       vm->current->ip++;
       assert_that(O is OP_STOZK);
+      assert_that(IS_INTEGER(K(A)));
       vm->current->ip++;
       assert_that(O is OP_STOZK);
+      assert_that(IS_FLOAT(K(A)));
       vm->current->ip++;
       assert_that(O is OP_STOZK);
+      assert_that(IS_STRING(K(A)));
       vm->current->ip++;
-      assert_that(O is OP_SEND);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_tuple_new:");
-      assert_that_size_t(AS_INTEGER(K(B))->value equals to 3);
+      assert_that(O is OP_STOZG);
+      assert_that_charptr(AS_OBJECT(GET_G(A))->name equals to "$Tuple");
+      vm->current->ip++;
+      assert_that(O is OP_PRIM);
+      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_NEW:");
+      assert_that_ptrdiff_t(AS_INTEGER(K(B))->value equals to 3);
       vm->current->ip++;
       assert_that(O is OP_HALT);
 
       emit(vm, "%[1, %[2, 3, %[4, 5, 6]]]");
       vm->current->ip++;
       assert_that(O is OP_STOZK);
+      assert_that_ptrdiff_t(AS_INTEGER(K(A))->value equals to 1);
       vm->current->ip++;
       assert_that(O is OP_STOZK);
+      assert_that_ptrdiff_t(AS_INTEGER(K(A))->value equals to 2);
       vm->current->ip++;
       assert_that(O is OP_STOZK);
+      assert_that_ptrdiff_t(AS_INTEGER(K(A))->value equals to 3);
       vm->current->ip++;
       assert_that(O is OP_STOZK);
+      assert_that_ptrdiff_t(AS_INTEGER(K(A))->value equals to 4);
       vm->current->ip++;
       assert_that(O is OP_STOZK);
+      assert_that_ptrdiff_t(AS_INTEGER(K(A))->value equals to 5);
       vm->current->ip++;
       assert_that(O is OP_STOZK);
+      assert_that_ptrdiff_t(AS_INTEGER(K(A))->value equals to 6);
       vm->current->ip++;
-      assert_that(O is OP_SEND);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_tuple_new:");
+      assert_that(O is OP_STOZG);
+      assert_that_charptr(AS_OBJECT(GET_G(A))->name equals to "$Tuple");
+      vm->current->ip++;
+      assert_that(O is OP_PRIM);
+      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_NEW:");
       assert_that_size_t(AS_INTEGER(K(B))->value equals to 3);
       vm->current->ip++;
-      assert_that(O is OP_SEND);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_tuple_new:");
+      assert_that(O is OP_STOZG);
+      assert_that_charptr(AS_OBJECT(GET_G(A))->name equals to "$Tuple");
+      vm->current->ip++;
+      assert_that(O is OP_PRIM);
+      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_NEW:");
       assert_that_size_t(AS_INTEGER(K(B))->value equals to 3);
       vm->current->ip++;
-      assert_that(O is OP_SEND);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_tuple_new:");
+      assert_that(O is OP_STOZG);
+      assert_that_charptr(AS_OBJECT(GET_G(A))->name equals to "$Tuple");
+      vm->current->ip++;
+      assert_that(O is OP_PRIM);
+      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_NEW:");
       assert_that_size_t(AS_INTEGER(K(B))->value equals to 2);
+      vm->current->ip++;
+      assert_that(O is OP_HALT);
     });
 
     it("emits tables", {
@@ -314,19 +360,25 @@ module(EmmiterSpec, {
       assert_that_charptr(AS_STRING(K(A))->value equals to "a");
       vm->current->ip++;
       assert_that(O is OP_STOZK);
+      assert_that_ptrdiff_t(AS_INTEGER(K(A))->value equals to 1);
       vm->current->ip++;
       assert_that(O is OP_STOZK);
       assert_that_charptr(AS_STRING(K(A))->value equals to "b");
       vm->current->ip++;
       assert_that(O is OP_STOZK);
+      assert_that_ptrdiff_t(AS_INTEGER(K(A))->value equals to 2);
       vm->current->ip++;
       assert_that(O is OP_STOZK);
       assert_that_charptr(AS_STRING(K(A))->value equals to "c");
       vm->current->ip++;
       assert_that(O is OP_STOZK);
+      assert_that_ptrdiff_t(AS_INTEGER(K(A))->value equals to 3);
       vm->current->ip++;
-      assert_that(O is OP_SEND);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_table_new:");
+      assert_that(O is OP_STOZG);
+      assert_that_charptr(AS_OBJECT(GET_G(A))->name equals to "$Table");
+      vm->current->ip++;
+      assert_that(O is OP_PRIM);
+      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_NEW:");
       assert_that_size_t(AS_INTEGER(K(B))->value equals to 6);
 
       emit(vm, "%{a: %{aa: 1, bb: 2}, b: %{cc: 3, dd: 4}}");
@@ -346,8 +398,11 @@ module(EmmiterSpec, {
       assert_that(O is OP_STOZK);
       assert_that_size_t(AS_INTEGER(K(A))->value equals to 2);
       vm->current->ip++;
-      assert_that(O is OP_SEND);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_table_new:");
+      assert_that(O is OP_STOZG);
+      assert_that_charptr(AS_OBJECT(GET_G(A))->name equals to "$Table");
+      vm->current->ip++;
+      assert_that(O is OP_PRIM);
+      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_NEW:");
       assert_that_size_t(AS_INTEGER(K(B))->value equals to 4);
       vm->current->ip++;
       assert_that(O is OP_STOZK);
@@ -365,12 +420,18 @@ module(EmmiterSpec, {
       assert_that(O is OP_STOZK);
       assert_that_size_t(AS_INTEGER(K(A))->value equals to 4);
       vm->current->ip++;
-      assert_that(O is OP_SEND);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_table_new:");
+      assert_that(O is OP_STOZG);
+      assert_that_charptr(AS_OBJECT(GET_G(A))->name equals to "$Table");
+      vm->current->ip++;
+      assert_that(O is OP_PRIM);
+      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_NEW:");
       assert_that_size_t(AS_INTEGER(K(B))->value equals to 4);
       vm->current->ip++;
-      assert_that(O is OP_SEND);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_table_new:");
+      assert_that(O is OP_STOZG);
+      assert_that_charptr(AS_OBJECT(GET_G(A))->name equals to "$Table");
+      vm->current->ip++;
+      assert_that(O is OP_PRIM);
+      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_NEW:");
       assert_that_size_t(AS_INTEGER(K(B))->value equals to 4);
     });
 
@@ -385,7 +446,7 @@ module(EmmiterSpec, {
 
       xit("creates subscript methods", {});
 
-      xit("creates assignment mqethods", {});
+      xit("creates assignment methods", {});
     });
   });
 

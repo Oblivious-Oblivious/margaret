@@ -1,5 +1,6 @@
 #include "MargValue.h"
 
+#include "../primitives/BitstringPrimitives.h"
 #include "MargBitstring.h"
 #include "MargTensor.h"
 
@@ -80,9 +81,8 @@ char *marg_value_format(MargValue self) {
     return res;
   } else if(IS_BITSTRING(self)) {
     size_t i;
-    char *res                = string_new("%(");
-    MargBitstring *bitstring = AS_BITSTRING(self);
-    size_t size              = marg_bitstring_size(bitstring);
+    char *res   = string_new("%(");
+    size_t size = __PRIM_BITSTRING_SIZE(NULL, self, MARG_UNDEFINED);
     if(size > 0) {
       for(i = 0; i < size - 1; i++) {
         string_addf(

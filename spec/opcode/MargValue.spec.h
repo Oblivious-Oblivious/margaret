@@ -3,6 +3,7 @@
 
 #include "../../libs/cSpec/export/cSpec.h"
 #include "../../src/opcode/instruction.h"
+#include "../../src/primitives/BitstringPrimitives.h"
 
 module(MargValueSpec, {
   describe("tests NaN boxing", {
@@ -68,9 +69,15 @@ module(MargValueSpec, {
       assert_that_charptr(marg_value_format(h) equals to
                           "%{c: \"hello\", b: 42.123, a: 42}");
       assert_that_charptr(marg_value_format(MARG_BITSTRING()) equals to "%()");
-      MargValue b = MARG_BITSTRING();
-      marg_bitstring_add(AS_BITSTRING(b), MARG_INTEGER(42), MARG_INTEGER(2));
-      marg_bitstring_add(AS_BITSTRING(b), MARG_INTEGER(43), MARG_INTEGER(4));
+      MargValue b    = MARG_BITSTRING();
+      MargValue args = MARG_TENSOR();
+      vector_add(AS_TENSOR(args)->value, MARG_INTEGER(42));
+      vector_add(AS_TENSOR(args)->value, MARG_INTEGER(2));
+      __PRIM_BITSTRING_ADD(NULL, b, args);
+      vector_free(AS_TENSOR(args)->value);
+      vector_add(AS_TENSOR(args)->value, MARG_INTEGER(43));
+      vector_add(AS_TENSOR(args)->value, MARG_INTEGER(4));
+      __PRIM_BITSTRING_ADD(NULL, b, args);
       assert_that_charptr(marg_value_format(b) equals to "%(42::2, 43::4)");
       assert_that_charptr(marg_value_format(
         MARG_METHOD(AS_OBJECT(G("$Margaret")), vm->current, "msg")

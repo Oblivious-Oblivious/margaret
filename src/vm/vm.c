@@ -64,12 +64,58 @@ p_inline void setup_main(VM *vm) {
 
 p_inline void setup_primitives(VM *vm) {
   define_primitive(
-    vm, "inspect:", "$Margaret", (MargPrimitiveFunction)primitive_INSPECT
+    vm, "__PRIM_INSPECT:", "$Margaret", (MargPrimitiveFunction)__PRIM_INSPECT
   );
-  define_primitive(vm, "+", "$Numeric", (MargPrimitiveFunction)primitive_ADD);
-  define_primitive(vm, "-", "$Numeric", (MargPrimitiveFunction)primitive_SUB);
-  define_primitive(vm, "*", "$Numeric", (MargPrimitiveFunction)primitive_MUL);
-  define_primitive(vm, "/", "$Numeric", (MargPrimitiveFunction)primitive_DIV);
+
+  define_primitive(
+    vm, "__PRIM_ADD:", "$Numeric", (MargPrimitiveFunction)__PRIM_ADD
+  );
+  define_primitive(
+    vm, "__PRIM_SUB:", "$Numeric", (MargPrimitiveFunction)__PRIM_SUB
+  );
+  define_primitive(
+    vm, "__PRIM_MUL:", "$Numeric", (MargPrimitiveFunction)__PRIM_MUL
+  );
+  define_primitive(
+    vm, "__PRIM_DIV:", "$Numeric", (MargPrimitiveFunction)__PRIM_DIV
+  );
+
+  define_primitive(
+    vm, "__PRIM_NEW:", "$Tensor", (MargPrimitiveFunction)__PRIM_TENSOR_NEW
+  );
+  /* define_primitive(
+    vm,
+    "__PRIM_TENSOR_ADD:",
+    "$Tensor",
+    (MargPrimitiveFunction)__PRIM_TENSOR_ADD
+  ); */
+
+  define_primitive(
+    vm, "__PRIM_NEW:", "$Tuple", (MargPrimitiveFunction)__PRIM_TUPLE_NEW
+  );
+  /* define_primitive(
+    vm,
+    "__PRIM_TUPLE_ADD:",
+    "$Tuple",
+    (MargPrimitiveFunction)__PRIM_TUPLE_ADD
+  ); */
+
+  define_primitive(
+    vm, "__PRIM_NEW:", "$Table", (MargPrimitiveFunction)__PRIM_TABLE_NEW
+  );
+  define_primitive(
+    vm, "__PRIM_TABLE_ADD:", "$Table", (MargPrimitiveFunction)__PRIM_TABLE_ADD
+  );
+
+  define_primitive(
+    vm, "__PRIM_NEW:", "$Bitstring", (MargPrimitiveFunction)__PRIM_BITSTRING_NEW
+  );
+  define_primitive(
+    vm,
+    "__PRIM_BITSTRING_ADD:",
+    "$Bitstring",
+    (MargPrimitiveFunction)__PRIM_BITSTRING_ADD
+  );
 }
 
 VM *vm_new(const char *filename) {

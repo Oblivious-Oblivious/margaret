@@ -3,7 +3,7 @@
 
 #include "MargObject.h"
 
-typedef MargValue (*MargPrimitiveFunction)(VM *, MargValue, MargValue *);
+typedef MargValue (*MargPrimitiveFunction)(VM *, MargValue, MargValue);
 
 /**
  * @brief Defines C-implemented primitives
