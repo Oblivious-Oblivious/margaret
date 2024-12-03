@@ -181,7 +181,7 @@ _opcode_loop:;
       next_opcode;
     }
     case_opcode(OP_RAISE) {
-      SKZ(primitive_RAISE(NULL, KA, MARG_UNDEFINED));
+      SKZ(__PRIM_RAISE(NULL, KA, MARG_UNDEFINED));
       next_opcode;
     }
     case_opcode(OP_EXACTREC) {

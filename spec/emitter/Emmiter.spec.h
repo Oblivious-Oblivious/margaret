@@ -6,7 +6,6 @@
 #include "../../src/emitter/Emitter.h"
 #include "../../src/lexer/Lexer.h"
 #include "../../src/opcode/instruction.h"
-#include "../../src/opcode/MargMethod.h"
 #include "../../src/opcode/opcodes.h"
 #include "../../src/parser/Parser.h"
 

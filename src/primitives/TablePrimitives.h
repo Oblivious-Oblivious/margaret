@@ -5,5 +5,8 @@
 
 MargValue __PRIM_TABLE_NEW(VM *vm, MargValue self, MargValue args_value);
 MargValue __PRIM_TABLE_ADD(VM *vm, MargValue self, MargValue args_value);
+MargValue __PRIM_TABLE_GET(VM *vm, MargValue self, MargValue args_value);
+MargValue __PRIM_TABLE_REMOVE(VM *vm, MargValue self, MargValue args_value);
+MargValue __PRIM_TABLE_SIZE(VM *vm, MargValue self, MargValue args_value);
 
 #endif

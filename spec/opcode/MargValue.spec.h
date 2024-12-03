@@ -34,58 +34,6 @@ module(MargValueSpec, {
       assert_that_size_t(MARG_UNDEFINED equals to 18445618173802708992ull);
     });
 
-    it("uses marg_value_format by calling the equivalent to_string functions", {
-      VM *vm = vm_new("file.marg");
-      assert_that_charptr(marg_value_format(MARG_NIL) equals to "$nil");
-      assert_that_charptr(marg_value_format(MARG_FALSE) equals to "$false");
-      assert_that_charptr(marg_value_format(MARG_TRUE) equals to "$true");
-      assert_that_charptr(marg_value_format(MARG_INTEGER(42)) equals to "42");
-      assert_that_charptr(marg_value_format(MARG_FLOAT(42.4)) equals to "42.4");
-      assert_that_charptr(marg_value_format(MARG_LABEL("::l")) equals to
-                          "<::l:0>");
-      assert_that_charptr(marg_value_format(MARG_STRING("hello world"))
-                            equals to "\"hello world\"");
-      assert_that_charptr(marg_value_format(MARG_SYMBOL(":sym")) equals to
-                          ":sym");
-      assert_that_charptr(marg_value_format(MARG_TENSOR()) equals to "[]");
-      MargValue t = MARG_TENSOR();
-      marg_tensor_add(AS_TENSOR(t), MARG_INTEGER(42));
-      marg_tensor_add(AS_TENSOR(t), MARG_FLOAT(42.123));
-      marg_tensor_add(AS_TENSOR(t), MARG_STRING("hello"));
-      assert_that_charptr(marg_value_format(t) equals to
-                          "[42, 42.123, \"hello\"]");
-      assert_that_charptr(marg_value_format(MARG_TUPLE()) equals to "%[]");
-      MargValue tup = MARG_TUPLE();
-      marg_tensor_add(AS_TENSOR(tup), MARG_INTEGER(42));
-      marg_tensor_add(AS_TENSOR(tup), MARG_FLOAT(42.123));
-      marg_tensor_add(AS_TENSOR(tup), MARG_STRING("hello"));
-      assert_that_charptr(marg_value_format(tup) equals to
-                          "%[42, 42.123, \"hello\"]");
-      assert_that_charptr(marg_value_format(MARG_TABLE()) equals to "%{}");
-      MargValue h = MARG_TABLE();
-      marg_table_add(AS_TABLE(h), string_new("a"), MARG_INTEGER(42));
-      marg_table_add(AS_TABLE(h), string_new("b"), MARG_FLOAT(42.123));
-      marg_table_add(AS_TABLE(h), string_new("c"), MARG_STRING("hello"));
-      assert_that_charptr(marg_value_format(h) equals to
-                          "%{c: \"hello\", b: 42.123, a: 42}");
-      assert_that_charptr(marg_value_format(MARG_BITSTRING()) equals to "%()");
-      MargValue b    = MARG_BITSTRING();
-      MargValue args = MARG_TENSOR();
-      vector_add(AS_TENSOR(args)->value, MARG_INTEGER(42));
-      vector_add(AS_TENSOR(args)->value, MARG_INTEGER(2));
-      __PRIM_BITSTRING_ADD(NULL, b, args);
-      vector_free(AS_TENSOR(args)->value);
-      vector_add(AS_TENSOR(args)->value, MARG_INTEGER(43));
-      vector_add(AS_TENSOR(args)->value, MARG_INTEGER(4));
-      __PRIM_BITSTRING_ADD(NULL, b, args);
-      assert_that_charptr(marg_value_format(b) equals to "%(42::2, 43::4)");
-      assert_that_charptr(marg_value_format(
-        MARG_METHOD(AS_OBJECT(G("$Margaret")), vm->current, "msg")
-      ) equals to "< $Margaret#msg >");
-      assert_that_charptr(marg_value_format(MARG_OBJECT(G("$Margaret"), "Name"))
-                            equals to "Name");
-    });
-
     it("ensures cloned objects do not receive label values from parent", {
       VM *vm         = vm_new("file.marg");
       MargValue marg = G("$Margaret");

@@ -17,6 +17,24 @@ MargValue __PRIM_TABLE_NEW(VM *vm, MargValue self, MargValue args_value) {
 MargValue __PRIM_TABLE_ADD(VM *vm, MargValue self, MargValue args_value) {
   MargValue *args = AS_TENSOR(args_value)->value;
   (void)vm;
-  marg_table_add(AS_TABLE(self), AS_STRING(args[0])->value, args[1]);
+  table_add(&AS_TABLE(self)->value, AS_STRING(args[0])->value, args[1]);
   return self;
+}
+
+MargValue __PRIM_TABLE_GET(VM *vm, MargValue self, MargValue args_value) {
+  MargValue *args = AS_TENSOR(args_value)->value;
+  (void)vm;
+  return table_get(&AS_TABLE(self)->value, AS_STRING(args[0])->value);
+}
+
+MargValue __PRIM_TABLE_REMOVE(VM *vm, MargValue self, MargValue args_value) {
+  MargValue *args = AS_TENSOR(args_value)->value;
+  (void)vm;
+  table_remove(&AS_TABLE(self)->value, AS_STRING(args[0])->value);
+  return self;
+}
+
+MargValue __PRIM_TABLE_SIZE(VM *vm, MargValue self, MargValue args_value) {
+  (void)args_value;
+  return MARG_INTEGER(table_size(&AS_TABLE(self)->value));
 }

@@ -85,7 +85,7 @@
   🟥 BUG-02 - Double check that vm works on 16-bit word machines with 32-bit pointers/doubles.
   🟥 BUG-03 - Disallow rebinding/reassigning the assignment message (=).
 
-  🟥 FT-01 - Proposal for cc0-v1 license.
+  🟩 FT-01 - Proposal for cc0-v1 license.
   🟥 FT-02 - Add lexically removed comments.
   🟥 FT-03 - Add string interpolation and formatting with `#{..}` or similar.
   🟥 FT-04 - Make comments part of the language (comment: "...", todo: "...").

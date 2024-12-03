@@ -6,6 +6,8 @@
 #include "../opcode/instruction.h"
 #include "../opcode/opcodes.h"
 
+#include <stdio.h> /* sscanf */
+
 #define switch_fmcode(opstr) if(string_equals(fmcode, opstr))
 #define case_fmcode(opstr)   else if(string_equals(fmcode, opstr))
 

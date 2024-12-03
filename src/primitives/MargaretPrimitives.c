@@ -1,8 +1,11 @@
 #include "MargaretPrimitives.h"
 
-#include "BitstringPrimitives.h"
+#include "Primitives.h"
 
-MargValue primitive_RAISE(VM *vm, MargValue self, MargValue args_value) {
+#include <float.h> /* LDBL_DIG */
+#include <stdio.h> /* fprintf, stdout */
+
+MargValue __PRIM_RAISE(VM *vm, MargValue self, MargValue args_value) {
   (void)vm;
   (void)args_value;
   fprintf(stdout, "raise: `%s`\n", AS_STRING(self)->value);
@@ -66,25 +69,27 @@ MargValue __PRIM_INSPECT(VM *vm, MargValue self, MargValue args_value) {
   } else if(IS_TENSOR(self)) {
     size_t i;
     MargTensor *tensor = AS_TENSOR(self);
-    size_t size        = marg_tensor_size(tensor);
+    size_t size =
+      AS_INTEGER(__PRIM_TENSOR_SIZE(vm, self, MARG_UNDEFINED))->value;
     printf("[");
     if(size > 0) {
       for(i = 0; i < size - 1; i++) {
-        printf("%s, ", marg_value_format(tensor->value[i]));
+        printf("%s, ", marg_value_format(vm, tensor->value[i]));
       }
-      printf("%s", marg_value_format(tensor->value[size - 1]));
+      printf("%s", marg_value_format(vm, tensor->value[size - 1]));
     }
     printf("]\n");
   } else if(IS_TUPLE(self)) {
     size_t i;
     MargTuple *tuple = AS_TUPLE(self);
-    size_t size      = marg_tensor_size(tuple);
+    size_t size =
+      AS_INTEGER(__PRIM_TUPLE_SIZE(vm, self, MARG_UNDEFINED))->value;
     printf("%%[");
     if(size > 0) {
       for(i = 0; i < size - 1; i++) {
-        printf("%s, ", marg_value_format(tuple->value[i]));
+        printf("%s, ", marg_value_format(vm, tuple->value[i]));
       }
-      printf("%s", marg_value_format(tuple->value[size - 1]));
+      printf("%s", marg_value_format(vm, tuple->value[size - 1]));
     }
     printf("]\n");
   } else if(IS_TABLE(self)) {
@@ -95,33 +100,34 @@ MargValue __PRIM_INSPECT(VM *vm, MargValue self, MargValue args_value) {
     if(table_size(&h) > 0) {
       for(i = 0; i < capacity; i++) {
         if(h.states[i] == TABLE_STATE_FILLED) {
-          printf("%s: %s, ", h.keys[i], marg_value_format(h.values[i]));
+          printf("%s: %s, ", h.keys[i], marg_value_format(vm, h.values[i]));
         }
       }
     }
     printf("}\n");
   } else if(IS_BITSTRING(self)) {
     size_t i;
-    size_t size = __PRIM_BITSTRING_SIZE(vm, self, MARG_UNDEFINED);
+    size_t size =
+      AS_INTEGER(__PRIM_BITSTRING_SIZE(vm, self, MARG_UNDEFINED))->value;
     printf("%%(");
     if(size > 0) {
       for(i = 0; i < size - 1; i++) {
         printf(
           "%s::%s, ",
-          marg_value_format(AS_BITSTRING(self)->bits->value[i]),
-          marg_value_format(AS_BITSTRING(self)->sizes->value[i])
+          marg_value_format(vm, AS_BITSTRING(self)->bits->value[i]),
+          marg_value_format(vm, AS_BITSTRING(self)->sizes->value[i])
         );
       }
       printf(
         "%s::%s",
-        marg_value_format(AS_BITSTRING(self)->bits->value[size - 1]),
-        marg_value_format(AS_BITSTRING(self)->sizes->value[size - 1])
+        marg_value_format(vm, AS_BITSTRING(self)->bits->value[size - 1]),
+        marg_value_format(vm, AS_BITSTRING(self)->sizes->value[size - 1])
       );
     }
     printf(
       "%s::%s",
-      marg_value_format(AS_BITSTRING(self)->bits->value[size - 1]),
-      marg_value_format(AS_BITSTRING(self)->sizes->value[size - 1])
+      marg_value_format(vm, AS_BITSTRING(self)->bits->value[size - 1]),
+      marg_value_format(vm, AS_BITSTRING(self)->sizes->value[size - 1])
     );
     printf(")\n");
   } else if(IS_METHOD(self)) {

@@ -23,7 +23,6 @@ MargValue __PRIM_BITSTRING_ADD(VM *vm, MargValue self, MargValue args_value) {
 }
 
 MargValue __PRIM_BITSTRING_SIZE(VM *vm, MargValue self, MargValue args_value) {
-  (void)vm;
   (void)args_value;
-  return marg_tensor_size(AS_BITSTRING(self)->bits);
+  return MARG_INTEGER(vector_size(AS_BITSTRING(self)->bits->value));
 }

@@ -12,3 +12,15 @@ MargValue __PRIM_TUPLE_NEW(VM *vm, MargValue self, MargValue args_value) {
 
   return tuple;
 }
+
+MargValue __PRIM_TUPLE_ADD(VM *vm, MargValue self, MargValue args_value) {
+  MargValue *args = AS_TENSOR(args_value)->value;
+  (void)vm;
+  vector_add(AS_TENSOR(self)->value, args[0]);
+  return self;
+}
+
+MargValue __PRIM_TUPLE_SIZE(VM *vm, MargValue self, MargValue args_value) {
+  (void)args_value;
+  return MARG_INTEGER(vector_size(AS_TENSOR(self)->value));
+}

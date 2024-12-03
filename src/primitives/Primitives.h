@@ -4,6 +4,7 @@
 #include "BitstringPrimitives.h"
 #include "MargaretPrimitives.h"
 #include "NumericPrimitives.h"
+#include "StringPrimitives.h"
 #include "TablePrimitives.h"
 #include "TensorPrimitives.h"
 #include "TuplePrimitives.h"

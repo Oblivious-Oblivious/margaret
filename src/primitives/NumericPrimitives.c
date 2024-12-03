@@ -1,6 +1,6 @@
 #include "NumericPrimitives.h"
 
-MargValue __PRIM_ADD(VM *vm, MargValue self, MargValue args_value) {
+MargValue __PRIM_NUMERIC_ADD(VM *vm, MargValue self, MargValue args_value) {
   MargValue *args = AS_TENSOR(args_value)->value;
   if(IS_INTEGER(self) && IS_INTEGER(args[0])) {
     return MARG_INTEGER(AS_INTEGER(self)->value + AS_INTEGER(args[0])->value);
@@ -15,7 +15,7 @@ MargValue __PRIM_ADD(VM *vm, MargValue self, MargValue args_value) {
   }
 }
 
-MargValue __PRIM_SUB(VM *vm, MargValue self, MargValue args_value) {
+MargValue __PRIM_NUMERIC_SUB(VM *vm, MargValue self, MargValue args_value) {
   MargValue *args = AS_TENSOR(args_value)->value;
   if(IS_INTEGER(self) && IS_INTEGER(args[0])) {
     return MARG_INTEGER(AS_INTEGER(self)->value - AS_INTEGER(args[0])->value);
@@ -30,7 +30,7 @@ MargValue __PRIM_SUB(VM *vm, MargValue self, MargValue args_value) {
   }
 }
 
-MargValue __PRIM_MUL(VM *vm, MargValue self, MargValue args_value) {
+MargValue __PRIM_NUMERIC_MUL(VM *vm, MargValue self, MargValue args_value) {
   MargValue *args = AS_TENSOR(args_value)->value;
   if(IS_INTEGER(self) && IS_INTEGER(args[0])) {
     return MARG_INTEGER(AS_INTEGER(self)->value * AS_INTEGER(args[0])->value);
@@ -45,7 +45,7 @@ MargValue __PRIM_MUL(VM *vm, MargValue self, MargValue args_value) {
   }
 }
 
-MargValue __PRIM_DIV(VM *vm, MargValue self, MargValue args_value) {
+MargValue __PRIM_NUMERIC_DIV(VM *vm, MargValue self, MargValue args_value) {
   MargValue *args = AS_TENSOR(args_value)->value;
   if(IS_INTEGER(args[0]) && AS_INTEGER(args[0])->value == 0) {
     return raise("Runtime Error: Division by zero");

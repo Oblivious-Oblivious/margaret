@@ -2,18 +2,7 @@
 #define __MARG_VALUE_H_
 
 #include "../../libs/EmeraldsString/export/EmeraldsString.h"
-#include "MargBitstring.h"
-#include "MargFloat.h"
-#include "MargInteger.h"
-#include "MargLabel.h"
-#include "MargMethod.h"
 #include "MargObject.h"
-#include "MargPrimitive.h"
-#include "MargString.h"
-#include "MargSymbol.h"
-#include "MargTable.h"
-#include "MargTensor.h"
-#include "MargTuple.h"
 #include "MargValueType.h"
 
 /** QNAN = 0b    0     11111111111       1            1       ('0' * 50)
@@ -41,23 +30,23 @@
 #define MARG_NIL            (G("$nil"))
 #define MARG_FALSE          (G("$false"))
 #define MARG_TRUE           (G("$true"))
-#define MARG_INTEGER(value) (QNAN_BOX(marg_integer_new(vm, (value))))
-#define MARG_FLOAT(value)   (QNAN_BOX(marg_float_new(vm, (value))))
-#define MARG_LABEL(value)   (QNAN_BOX(marg_label_new(vm, (value))))
-#define MARG_SYMBOL(value)  (QNAN_BOX(marg_symbol_new(vm, (value))))
-#define MARG_STRING(value)  (QNAN_BOX(marg_string_new(vm, value)))
-#define MARG_TENSOR()       (QNAN_BOX(marg_tensor_new(vm)))
-#define MARG_TUPLE()        (QNAN_BOX(marg_tuple_new(vm)))
-#define MARG_TABLE()        (QNAN_BOX(marg_table_new(vm)))
-#define MARG_BITSTRING()    (QNAN_BOX(marg_bitstring_new(vm)))
-#define MARG_METHOD(bound_object, bound_method, message_name)           \
-  (QNAN_BOX(                                                            \
-    marg_method_new(vm, (bound_object), (bound_method), (message_name)) \
+#define MARG_INTEGER(value) (QNAN_BOX(marg_integer_init(vm, (value))))
+#define MARG_FLOAT(value)   (QNAN_BOX(marg_float_init(vm, (value))))
+#define MARG_LABEL(value)   (QNAN_BOX(marg_label_init(vm, (value))))
+#define MARG_SYMBOL(value)  (QNAN_BOX(marg_symbol_init(vm, (value))))
+#define MARG_STRING(value)  (QNAN_BOX(marg_string_init(vm, value)))
+#define MARG_TENSOR()       (QNAN_BOX(marg_tensor_init(vm)))
+#define MARG_TUPLE()        (QNAN_BOX(marg_tuple_init(vm)))
+#define MARG_TABLE()        (QNAN_BOX(marg_table_init(vm)))
+#define MARG_BITSTRING()    (QNAN_BOX(marg_bitstring_init(vm)))
+#define MARG_METHOD(bound_object, bound_method, message_name)            \
+  (QNAN_BOX(                                                             \
+    marg_method_init(vm, (bound_object), (bound_method), (message_name)) \
   ))
 #define MARG_PRIMITIVE(name, prim) \
-  (QNAN_BOX(marg_primitive_new(vm, (name), (prim))))
+  (QNAN_BOX(marg_primitive_init(vm, (name), (prim))))
 #define MARG_OBJECT(proto, name) \
-  (QNAN_BOX(marg_object_new(vm, sizeof(MargObject), proto, string_new(name))))
+  (QNAN_BOX(marg_object_init(vm, sizeof(MargObject), proto, string_new(name))))
 
 #define AS_NIL(value)       ((MargNil *)QNAN_UNBOX(value))
 #define AS_FALSE(value)     ((MargFalse *)QNAN_UNBOX(value))
@@ -119,10 +108,11 @@
 
 /**
  * @brief Formats a marg value using QNAN boxing
+ * @param vm -> Current VM
  * @param self -> The MargValue represented as a double
  * @return string*
  */
-char *marg_value_format(MargValue self);
+char *marg_value_format(VM *vm, MargValue self);
 
 /**
  * @brief Formats a marg value as a margaret variable

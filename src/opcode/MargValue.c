@@ -1,12 +1,10 @@
 #include "MargValue.h"
 
-#include "../primitives/BitstringPrimitives.h"
-#include "MargBitstring.h"
-#include "MargTensor.h"
+#include "../primitives/Primitives.h"
 
 #include <float.h> /* LDBL_DIG */
 
-char *marg_value_format(MargValue self) {
+char *marg_value_format(VM *vm, MargValue self) {
   if(IS_UNDEFINED(self)) {
     /* TODO - Eventually replace <unbound> with '' */
     return string_new("<unbound>");
@@ -40,12 +38,13 @@ char *marg_value_format(MargValue self) {
     size_t i;
     char *res          = string_new("[");
     MargTensor *tensor = AS_TENSOR(self);
-    size_t size        = marg_tensor_size(tensor);
+    size_t size =
+      AS_INTEGER(__PRIM_TENSOR_SIZE(vm, self, MARG_UNDEFINED))->value;
     if(size > 0) {
       for(i = 0; i < size - 1; i++) {
-        string_addf(&res, "%s, ", marg_value_format(tensor->value[i]));
+        string_addf(&res, "%s, ", marg_value_format(vm, tensor->value[i]));
       }
-      string_addf(&res, "%s", marg_value_format(tensor->value[size - 1]));
+      string_addf(&res, "%s", marg_value_format(vm, tensor->value[size - 1]));
     }
     string_add(res, "]");
     return res;
@@ -53,12 +52,13 @@ char *marg_value_format(MargValue self) {
     size_t i;
     char *res        = string_new("%[");
     MargTuple *tuple = AS_TUPLE(self);
-    size_t size      = marg_tensor_size(tuple);
+    size_t size =
+      AS_INTEGER(__PRIM_TUPLE_SIZE(vm, self, MARG_UNDEFINED))->value;
     if(size > 0) {
       for(i = 0; i < size - 1; i++) {
-        string_addf(&res, "%s, ", marg_value_format(tuple->value[i]));
+        string_addf(&res, "%s, ", marg_value_format(vm, tuple->value[i]));
       }
-      string_addf(&res, "%s", marg_value_format(tuple->value[size - 1]));
+      string_addf(&res, "%s", marg_value_format(vm, tuple->value[size - 1]));
     }
     string_add(res, "]");
     return res;
@@ -71,7 +71,7 @@ char *marg_value_format(MargValue self) {
       for(i = 0; i < capacity; i++) {
         if(h.states[i] == TABLE_STATE_FILLED) {
           string_addf(
-            &res, "%s: %s, ", h.keys[i], marg_value_format(h.values[i])
+            &res, "%s: %s, ", h.keys[i], marg_value_format(vm, h.values[i])
           );
         }
       }
@@ -81,22 +81,23 @@ char *marg_value_format(MargValue self) {
     return res;
   } else if(IS_BITSTRING(self)) {
     size_t i;
-    char *res   = string_new("%(");
-    size_t size = __PRIM_BITSTRING_SIZE(NULL, self, MARG_UNDEFINED);
+    char *res = string_new("%(");
+    size_t size =
+      AS_INTEGER(__PRIM_BITSTRING_SIZE(vm, self, MARG_UNDEFINED))->value;
     if(size > 0) {
       for(i = 0; i < size - 1; i++) {
         string_addf(
           &res,
           "%s::%s, ",
-          marg_value_format(AS_BITSTRING(self)->bits->value[i]),
-          marg_value_format(AS_BITSTRING(self)->sizes->value[i])
+          marg_value_format(vm, AS_BITSTRING(self)->bits->value[i]),
+          marg_value_format(vm, AS_BITSTRING(self)->sizes->value[i])
         );
       }
       string_addf(
         &res,
         "%s::%s",
-        marg_value_format(AS_BITSTRING(self)->bits->value[size - 1]),
-        marg_value_format(AS_BITSTRING(self)->sizes->value[size - 1])
+        marg_value_format(vm, AS_BITSTRING(self)->bits->value[size - 1]),
+        marg_value_format(vm, AS_BITSTRING(self)->sizes->value[size - 1])
       );
     }
     string_add(res, ")");
