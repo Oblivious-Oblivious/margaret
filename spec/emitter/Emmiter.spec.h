@@ -234,7 +234,21 @@ module(EmmiterSpec, {
     });
 
     context("on headless methods", {
-      xit("emits headless without arguments", {});
+      it("emits headless without arguments", {
+        emit(vm, "{}");
+        vm->current->ip++;
+        assert_that(O is OP_STOZK);
+        assert_that(IS_METHOD(K(A)));
+        vm->current = AS_METHOD(KZ);
+        vm->current->ip++;
+        assert_that(O is OP_STOZK);
+        assert_that_charptr(AS_OBJECT(K(A))->name equals to "$nil");
+        vm->current->ip++;
+        assert_that(O is OP_EXACTREC);
+        vm->current = vm->current->bound_method;
+        vm->current->ip++;
+        assert_that(O is OP_HALT);
+      });
 
       xit("emits headless with 1 argument", {});
 

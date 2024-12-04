@@ -22,34 +22,6 @@
 #define COMP_LABEL_GLOBAL(name) \
   (SET_G(GLOBAL(name), MARG_LABEL(name)), OA(OP_STOZG, GLOBAL(name)))
 
-#define emit_nil()   OA(OP_STOZK, CONST(MARG_NIL))
-#define emit_false() OA(OP_STOZK, CONST(MARG_FALSE))
-#define emit_true()  OA(OP_STOZK, CONST(MARG_TRUE))
-
-#define emit_self()  OA(OP_STOZI, INSTANCE("@self"))
-#define emit_super() OA(OP_STOZI, INSTANCE("@super"))
-
-#define emit_integer()                              \
-  ptrdiff_t int_value;                              \
-  sscanf(formal_bytecode[++ip], "%td", &int_value); \
-  OA(OP_STOZK, CONST(MARG_INTEGER(int_value)))
-#define emit_float()                                  \
-  double float_value;                                 \
-  sscanf(formal_bytecode[++ip], "%lf", &float_value); \
-  OA(OP_STOZK, CONST(MARG_FLOAT(float_value)))
-
-#define emit_string() OA(OP_STOZK, CONST(MARG_STRING(formal_bytecode[++ip])))
-#define emit_label_local() \
-  ip++;                    \
-  COMP_LABEL_LOCAL(formal_bytecode[ip])
-#define emit_label_instance() \
-  ip++;                       \
-  COMP_LABEL_INSTANCE(formal_bytecode[ip])
-#define emit_label_global() \
-  ip++;                     \
-  COMP_LABEL_GLOBAL(formal_bytecode[ip])
-#define emit_symbol() OA(OP_STOZK, CONST(MARG_SYMBOL(formal_bytecode[++ip])))
-
 #define emit_enumerable_new()                                  \
   do {                                                         \
     size_t number_of_elements;                                 \
@@ -60,10 +32,6 @@
       CONST(MARG_INTEGER(number_of_elements))                  \
     );                                                         \
   } while(0)
-
-#define emit_global()   OA(OP_STOZG, GLOBAL(formal_bytecode[++ip]))
-#define emit_instance() OA(OP_STOZI, INSTANCE(formal_bytecode[++ip]))
-#define emit_local()    OA(OP_STOZL, LOCAL(formal_bytecode[++ip]))
 
 VM *emitter_emit(VM *vm) {
   size_t ip;
@@ -77,21 +45,42 @@ VM *emitter_emit(VM *vm) {
   for(ip = 0; ip < bytecode_size; ip++) {
     char *fmcode = formal_bytecode[ip];
 
-    switch_fmcode(FM_NIL) { emit_nil(); }
-    case_fmcode(FM_FALSE) { emit_false(); }
-    case_fmcode(FM_TRUE) { emit_true(); }
+    switch_fmcode(FM_NIL) { OA(OP_STOZK, CONST(MARG_NIL)); }
+    case_fmcode(FM_FALSE) { OA(OP_STOZK, CONST(MARG_FALSE)); }
+    case_fmcode(FM_TRUE) { OA(OP_STOZK, CONST(MARG_TRUE)); }
 
-    case_fmcode(FM_SELF) { emit_self(); }
-    case_fmcode(FM_SUPER) { emit_super(); }
+    case_fmcode(FM_SELF) { OA(OP_STOZI, INSTANCE("@self")); }
+    case_fmcode(FM_SUPER) { OA(OP_STOZI, INSTANCE("@super")); }
 
-    case_fmcode(FM_INTEGER) { emit_integer(); }
-    case_fmcode(FM_FLOAT) { emit_float(); }
+    case_fmcode(FM_INTEGER) {
+      ptrdiff_t int_value;
+      sscanf(formal_bytecode[++ip], "%td", &int_value);
+      OA(OP_STOZK, CONST(MARG_INTEGER(int_value)));
+    }
+    case_fmcode(FM_FLOAT) {
+      double float_value;
+      sscanf(formal_bytecode[++ip], "%lf", &float_value);
+      OA(OP_STOZK, CONST(MARG_FLOAT(float_value)));
+    }
 
-    case_fmcode(FM_STRING) { emit_string(); }
-    case_fmcode(FM_LABEL_LOCAL) { emit_label_local(); }
-    case_fmcode(FM_LABEL_INSTANCE) { emit_label_instance(); }
-    case_fmcode(FM_LABEL_GLOBAL) { emit_label_global(); }
-    case_fmcode(FM_SYMBOL) { emit_symbol(); }
+    case_fmcode(FM_STRING) {
+      OA(OP_STOZK, CONST(MARG_STRING(formal_bytecode[++ip])));
+    }
+    case_fmcode(FM_LABEL_LOCAL) {
+      ip++;
+      COMP_LABEL_LOCAL(formal_bytecode[ip]);
+    }
+    case_fmcode(FM_LABEL_INSTANCE) {
+      ip++;
+      COMP_LABEL_INSTANCE(formal_bytecode[ip]);
+    }
+    case_fmcode(FM_LABEL_GLOBAL) {
+      ip++;
+      COMP_LABEL_GLOBAL(formal_bytecode[ip]);
+    }
+    case_fmcode(FM_SYMBOL) {
+      OA(OP_STOZK, CONST(MARG_SYMBOL(formal_bytecode[++ip])));
+    }
 
     case_fmcode(FM_TENSOR) {
       OA(OP_STOZG, GLOBAL("$Tensor"));
@@ -110,22 +99,25 @@ VM *emitter_emit(VM *vm) {
       emit_enumerable_new();
     }
 
-    case_fmcode(FM_GLOBAL) { emit_global(); }
-    case_fmcode(FM_INSTANCE) { emit_instance(); }
-    case_fmcode(FM_LOCAL) { emit_local(); }
+    case_fmcode(FM_GLOBAL) { OA(OP_STOZG, GLOBAL(formal_bytecode[++ip])); }
+    case_fmcode(FM_INSTANCE) { OA(OP_STOZI, INSTANCE(formal_bytecode[++ip])); }
+    case_fmcode(FM_LOCAL) { OA(OP_STOZL, LOCAL(formal_bytecode[++ip])); }
 
     case_fmcode(FM_METHOD_START) {
-      /* MargValue new_method = MARG_METHOD(
-        vm->current->bound_method, formal_bytecode[++ip]
-      );
-      emit_variable_length(OP_OBJECT);
-      emit_temporary(new_method);
-      vm->current = AS_METHOD(new_method)->proc; */
+      vm->current = AS_METHOD(MARG_METHOD(NULL, vm->current, NULL));
     }
     case_fmcode(FM_METHOD_END) {
-      /* TODO - Call OP_EXACTREC */
-      /* emit_byte(OP_EXIT_ACTIVATION_RECORD);
-      vm->current = vm->current->bound_proc; */
+      MargValue new_method = QNAN_BOX(vm->current);
+      OP(OP_EXACTREC);
+      if(vm->current->bound_object != NULL) {
+        table_add(
+          &vm->current->bound_object->messages,
+          vm->current->message_name,
+          QNAN_BOX(vm->current)
+        );
+      }
+      vm->current = vm->current->bound_method;
+      OA(OP_STOZK, CONST(new_method));
     }
     case_fmcode(FM_METHOD_ANY_OBJECT) { /* TODO - Empty?? */ }
     case_fmcode(FM_METHOD_RECEIVER) {
