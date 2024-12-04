@@ -24,11 +24,11 @@ char *marg_value_format(VM *vm, MargValue self) {
     return res;
   } else if(IS_LABEL(self)) {
     char *res = string_new("");
-    string_addf(&res, "<%s:%zu>", AS_LABEL(self)->name, AS_LABEL(self)->value);
+    string_addf(&res, "<%s#%zu>", AS_LABEL(self)->name, AS_LABEL(self)->value);
     return res;
   } else if(IS_SYMBOL(self)) {
     char *res = string_new("");
-    string_addf(&res, "%s", AS_SYMBOL(self)->value);
+    string_addf(&res, ":%s", AS_SYMBOL(self)->value);
     return res;
   } else if(IS_STRING(self)) {
     char *res = string_new("");
@@ -104,25 +104,22 @@ char *marg_value_format(VM *vm, MargValue self) {
     return res;
   } else if(IS_METHOD(self)) {
     char *res = string_new("");
-    string_addf(
-      &res,
-      "< %s#%s >",
-      AS_METHOD(self)->bound_object->name,
-      AS_METHOD(self)->message_name
-    );
+    if(AS_METHOD(self)->message_name == NULL) {
+      string_addf(&res, "< proc#%zx >", self);
+    } else {
+      string_addf(
+        &res,
+        "< %s#%s >",
+        AS_METHOD(self)->bound_object->name,
+        AS_METHOD(self)->message_name
+      );
+    }
+    return res;
+  } else if(IS_PRIMITIVE(self)) {
+    char *res = string_new("");
+    string_addf(&res, "< PRIM#%s >\n", AS_PRIMITIVE(self)->primitive_name);
     return res;
   } else {
     return string_new(AS_OBJECT(self)->name);
   }
-}
-
-/* TODO - Check if needed */
-char *marg_value_as_variable(MargValue self) {
-  char *res = string_new("");
-
-  if(IS_STRING(self)) {
-    string_add(res, AS_STRING(self)->value);
-  }
-
-  return res;
 }

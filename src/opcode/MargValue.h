@@ -114,11 +114,4 @@
  */
 char *marg_value_format(VM *vm, MargValue self);
 
-/**
- * @brief Formats a marg value as a margaret variable
- * @param self
- * @return string*
- */
-char *marg_value_as_variable(MargValue self);
-
 #endif
