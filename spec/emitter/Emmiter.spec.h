@@ -250,11 +250,47 @@ module(EmmiterSpec, {
         assert_that(O is OP_HALT);
       });
 
-      xit("emits headless with 1 argument", {});
+      it("emits headless with 1 argument", {
+        emit(vm, "{a | a}");
+        vm->current->ip++;
+        assert_that(O is OP_STOZK);
+        assert_that(IS_METHOD(K(A)));
+        vm->current = AS_METHOD(KZ);
+        vm->current->ip++;
+        assert_that(O is OP_STOZL);
+        vm->current->ip++;
+        assert_that(O is OP_STOZL);
+        vm->current->ip++;
+        assert_that(O is OP_EXACTREC);
+        vm->current = vm->current->bound_method;
+        vm->current->ip++;
+        assert_that(O is OP_HALT);
+      });
 
-      xit("emits headless with 3 arguments", {});
-
-      xit("executes headless and returns result of last instruction", {});
+      it("emits headless with 3 arguments", {
+        emit(vm, "{a, b, c | (a, b, c)}");
+        vm->current->ip++;
+        assert_that(O is OP_STOZK);
+        assert_that(IS_METHOD(K(A)));
+        vm->current = AS_METHOD(KZ);
+        vm->current->ip++;
+        assert_that(O is OP_STOZL);
+        vm->current->ip++;
+        assert_that(O is OP_STOZL);
+        vm->current->ip++;
+        assert_that(O is OP_STOZL);
+        vm->current->ip++;
+        assert_that(O is OP_STOZL);
+        vm->current->ip++;
+        assert_that(O is OP_STOZL);
+        vm->current->ip++;
+        assert_that(O is OP_STOZL);
+        vm->current->ip++;
+        assert_that(O is OP_EXACTREC);
+        vm->current = vm->current->bound_method;
+        vm->current->ip++;
+        assert_that(O is OP_HALT);
+      });
     });
 
     it("emits bitstrings", {
@@ -449,17 +485,108 @@ module(EmmiterSpec, {
     });
 
     context("on methods", {
-      xit("creates keyword methods", {});
+      it("creates keyword methods", {
+        emit(vm, "#add: element at: position => 17");
+        vm->current->ip++;
+        assert_that(O is OP_STOZK);
+        MargValue method_value    = K(A);
+        MargMethod *method_object = AS_METHOD(K(A));
+        assert_that(IS_METHOD(method_value));
+        assert_that(method_object->bound_object is vm->current->bound_object);
+        assert_that(method_object->bound_method is vm->current);
+        assert_that_charptr(method_object->message_name equals to "add:at:");
+        vm->current->ip++;
+        assert_that(O is OP_HALT);
+      });
 
-      xit("creates binary methods", {});
+      it("creates binary methods", {
+        emit(vm, "# ** a_number => @self raised_to: a_number");
+        vm->current->ip++;
+        assert_that(O is OP_STOZK);
+        MargValue method_value    = K(A);
+        MargMethod *method_object = AS_METHOD(K(A));
+        assert_that(IS_METHOD(method_value));
+        assert_that(method_object->bound_object is vm->current->bound_object);
+        assert_that(method_object->bound_method is vm->current);
+        assert_that_charptr(method_object->message_name equals to "**");
+        vm->current->ip++;
+        assert_that(O is OP_HALT);
+      });
 
-      xit("creates unary methods", {});
+      it("creates unary methods", {
+        emit(vm, "#incr => @self + 1");
+        vm->current->ip++;
+        assert_that(O is OP_STOZK);
+        MargValue method_value    = K(A);
+        MargMethod *method_object = AS_METHOD(K(A));
+        assert_that(IS_METHOD(method_value));
+        assert_that(method_object->bound_object is vm->current->bound_object);
+        assert_that(method_object->bound_method is vm->current);
+        assert_that_charptr(method_object->message_name equals to "incr");
+        vm->current->ip++;
+        assert_that(O is OP_HALT);
+      });
 
-      xit("creates lhs methods", {});
+      it("creates lhs methods", {
+        emit(vm, "# - => 42");
+        vm->current->ip++;
+        assert_that(O is OP_STOZK);
+        MargValue method_value    = K(A);
+        MargMethod *method_object = AS_METHOD(K(A));
+        assert_that(IS_METHOD(method_value));
+        assert_that(method_object->bound_object is vm->current->bound_object);
+        assert_that(method_object->bound_method is vm->current);
+        assert_that_charptr(method_object->message_name equals to "-");
+        vm->current->ip++;
+        assert_that(O is OP_HALT);
+      });
 
-      xit("creates subscript methods", {});
+      it("creates subscript methods", {
+        emit(vm, "#[param] => 42.param");
+        vm->current->ip++;
+        assert_that(O is OP_STOZK);
+        MargValue method_value    = K(A);
+        MargMethod *method_object = AS_METHOD(K(A));
+        assert_that(IS_METHOD(method_value));
+        assert_that(method_object->bound_object is vm->current->bound_object);
+        assert_that(method_object->bound_method is vm->current);
+        assert_that_charptr(method_object->message_name equals to "[]");
+        vm->current->ip++;
+        assert_that(O is OP_HALT);
+      });
 
-      xit("creates assignment methods", {});
+      it("creates assignment methods", {
+        emit(vm, "# = other => 42");
+        vm->current->ip++;
+        assert_that(O is OP_STOZK);
+        MargValue method_value    = K(A);
+        MargMethod *method_object = AS_METHOD(K(A));
+        assert_that(IS_METHOD(method_value));
+        assert_that(method_object->bound_object is vm->current->bound_object);
+        assert_that(method_object->bound_method is vm->current);
+        assert_that_charptr(method_object->message_name equals to "=");
+        vm->current->ip++;
+        assert_that(O is OP_HALT);
+      });
+    });
+
+    context("on multimethods", {
+      xit("creates keyword multimethod", {
+        emit(vm, "# [] add: \"a\" at: 0 => [\"a\"]");
+      });
+
+      xit("creates binary multimethod", {});
+
+      xit("creates unary multimethod", {});
+
+      xit("creates lhs multimethod", {});
+
+      xit("creates subscript multimethod", {});
+
+      xit("creates assignment multimethod", {
+        debug("2 = 3", vector_new(FM_NIL));
+        debug("x = 5 + 7", vector_new(FM_NIL));
+      });
     });
   });
 

@@ -104,18 +104,12 @@ VM *emitter_emit(VM *vm) {
     case_fmcode(FM_LOCAL) { OA(OP_STOZL, LOCAL(formal_bytecode[++ip])); }
 
     case_fmcode(FM_METHOD_START) {
-      vm->current = AS_METHOD(MARG_METHOD(NULL, vm->current, NULL));
+      vm->current =
+        AS_METHOD(MARG_METHOD(vm->current->bound_object, vm->current, NULL));
     }
     case_fmcode(FM_METHOD_END) {
       MargValue new_method = QNAN_BOX(vm->current);
       OP(OP_EXACTREC);
-      if(vm->current->bound_object != NULL) {
-        table_add(
-          &vm->current->bound_object->messages,
-          vm->current->message_name,
-          QNAN_BOX(vm->current)
-        );
-      }
       vm->current = vm->current->bound_method;
       OA(OP_STOZK, CONST(new_method));
     }
@@ -124,17 +118,12 @@ VM *emitter_emit(VM *vm) {
       /* TODO - goto the beginning with formal_bytecode[ip + 1] and read the
        * next fmcode pair (like FM_LOCAL, a) and add to method properties */
       (void)formal_bytecode[++ip];
-      (void)formal_bytecode[++ip];
     }
     case_fmcode(FM_METHOD_PARAMETER) {
-      /* TODO - Similar to receiver */
-      (void)formal_bytecode[++ip];
-      (void)formal_bytecode[++ip];
+      OA(OP_STOZL, LOCAL(formal_bytecode[++ip]));
     }
     case_fmcode(FM_METHOD_NAME) {
-      char *method_name = formal_bytecode[++ip];
-      /* TODO - Add to method properties */
-      (void)method_name;
+      vm->current->message_name = formal_bytecode[++ip];
     }
 
     case_fmcode(FM_ASSIGNMENT) {
