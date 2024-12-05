@@ -13,8 +13,7 @@ module(unicode_spec, {
           string_new("©©"),
           FM_INTEGER,
           string_new("42"),
-          FM_BINARY,
-          string_new("=")
+          FM_ASSIGNMENT
         )
       );
       parse(
@@ -24,8 +23,7 @@ module(unicode_spec, {
           string_new("☺☺"),
           FM_INTEGER,
           string_new("42"),
-          FM_BINARY,
-          string_new("=")
+          FM_ASSIGNMENT
         )
       );
       parse(
@@ -35,8 +33,7 @@ module(unicode_spec, {
           string_new("😊😊"),
           FM_INTEGER,
           string_new("42"),
-          FM_BINARY,
-          string_new("=")
+          FM_ASSIGNMENT
         )
       );
       parse(
@@ -46,8 +43,7 @@ module(unicode_spec, {
           string_new("¤¤"),
           FM_INTEGER,
           string_new("42"),
-          FM_BINARY,
-          string_new("=")
+          FM_ASSIGNMENT
         )
       );
       parse(
@@ -57,8 +53,7 @@ module(unicode_spec, {
           string_new("ΩΩ"),
           FM_INTEGER,
           string_new("42"),
-          FM_BINARY,
-          string_new("=")
+          FM_ASSIGNMENT
         )
       );
       parse(
@@ -68,8 +63,7 @@ module(unicode_spec, {
           string_new("日日"),
           FM_INTEGER,
           string_new("42"),
-          FM_BINARY,
-          string_new("=")
+          FM_ASSIGNMENT
         )
       );
       parse(
@@ -79,8 +73,7 @@ module(unicode_spec, {
           string_new("𠜎𠜎"),
           FM_INTEGER,
           string_new("42"),
-          FM_BINARY,
-          string_new("=")
+          FM_ASSIGNMENT
         )
       );
       parse(
@@ -90,8 +83,7 @@ module(unicode_spec, {
           string_new("çç"),
           FM_INTEGER,
           string_new("42"),
-          FM_BINARY,
-          string_new("=")
+          FM_ASSIGNMENT
         )
       );
       parse(
@@ -101,8 +93,7 @@ module(unicode_spec, {
           string_new("🙂🙂"),
           FM_INTEGER,
           string_new("42"),
-          FM_BINARY,
-          string_new("=")
+          FM_ASSIGNMENT
         )
       );
       parse(
@@ -112,8 +103,7 @@ module(unicode_spec, {
           string_new("⚽⚽"),
           FM_INTEGER,
           string_new("42"),
-          FM_BINARY,
-          string_new("=")
+          FM_ASSIGNMENT
         )
       );
     });
@@ -126,8 +116,7 @@ module(unicode_spec, {
           string_new("@🙂🙂"),
           FM_INTEGER,
           string_new("42"),
-          FM_BINARY,
-          string_new("=")
+          FM_ASSIGNMENT
         )
       );
 
@@ -138,8 +127,7 @@ module(unicode_spec, {
           string_new("$🙂🙂"),
           FM_INTEGER,
           string_new("42"),
-          FM_BINARY,
-          string_new("=")
+          FM_ASSIGNMENT
         )
       );
     });

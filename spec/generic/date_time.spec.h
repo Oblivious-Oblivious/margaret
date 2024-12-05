@@ -14,8 +14,7 @@ module(date_time_spec, {
         string_new("Date"),
         FM_UNARY,
         string_new("today"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -27,8 +26,7 @@ module(date_time_spec, {
         string_new("Date"),
         FM_UNARY,
         string_new("day_and_time_now"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -43,8 +41,7 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("from_string:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -63,8 +60,7 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("day:month:year:"),
         string_new("3"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -79,8 +75,7 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("from_days:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -95,8 +90,7 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("day_of_week:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -111,8 +105,7 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("index_of_month:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -129,8 +122,7 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("days_in_month:for_year:"),
         string_new("2"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -145,8 +137,7 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("days_in_year:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -161,8 +152,7 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("name_of_day:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -177,8 +167,7 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("is_leap_year?:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
 
@@ -193,8 +182,7 @@ module(date_time_spec, {
         string_new("today"),
         FM_UNARY,
         string_new("weekday"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -208,8 +196,7 @@ module(date_time_spec, {
         string_new("today"),
         FM_UNARY,
         string_new("previous"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -223,8 +210,7 @@ module(date_time_spec, {
         string_new("today"),
         FM_UNARY,
         string_new("day_of_month"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -238,8 +224,7 @@ module(date_time_spec, {
         string_new("today"),
         FM_UNARY,
         string_new("day"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -253,8 +238,7 @@ module(date_time_spec, {
         string_new("today"),
         FM_UNARY,
         string_new("first_day_of_month"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -268,8 +252,7 @@ module(date_time_spec, {
         string_new("today"),
         FM_UNARY,
         string_new("month_name"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -283,8 +266,7 @@ module(date_time_spec, {
         string_new("today"),
         FM_UNARY,
         string_new("month_index"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -298,8 +280,7 @@ module(date_time_spec, {
         string_new("today"),
         FM_UNARY,
         string_new("days_in_month"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -313,8 +294,7 @@ module(date_time_spec, {
         string_new("today"),
         FM_UNARY,
         string_new("year"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -328,8 +308,7 @@ module(date_time_spec, {
         string_new("today"),
         FM_UNARY,
         string_new("days_in_year"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -343,8 +322,7 @@ module(date_time_spec, {
         string_new("today"),
         FM_UNARY,
         string_new("days_left_in_year"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -358,8 +336,7 @@ module(date_time_spec, {
         string_new("today"),
         FM_UNARY,
         string_new("to_seconds"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -376,8 +353,7 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("add_days:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -394,8 +370,7 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("subtract_days:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -414,8 +389,7 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("subtract_date:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
   });
@@ -430,8 +404,7 @@ module(date_time_spec, {
         string_new("Time"),
         FM_UNARY,
         string_new("now"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -443,8 +416,7 @@ module(date_time_spec, {
         string_new("Time"),
         FM_UNARY,
         string_new("date_and_time_now"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -459,8 +431,7 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("from_string:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -475,8 +446,7 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("from_string:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -499,8 +469,7 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("from_seconds:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -512,8 +481,7 @@ module(date_time_spec, {
         string_new("Time"),
         FM_UNARY,
         string_new("millisecond_clock_value"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -525,8 +493,7 @@ module(date_time_spec, {
         string_new("Time"),
         FM_UNARY,
         string_new("total_seconds"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
 
@@ -541,8 +508,7 @@ module(date_time_spec, {
         string_new("now"),
         FM_UNARY,
         string_new("seconds"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -556,8 +522,7 @@ module(date_time_spec, {
         string_new("now"),
         FM_UNARY,
         string_new("minutes"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -571,8 +536,7 @@ module(date_time_spec, {
         string_new("now"),
         FM_UNARY,
         string_new("hours"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -591,8 +555,7 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("add_time:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -611,8 +574,7 @@ module(date_time_spec, {
         FM_KEYWORD,
         string_new("subtract_time:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -626,8 +588,7 @@ module(date_time_spec, {
         string_new("now"),
         FM_UNARY,
         string_new("as_seconds"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
   });

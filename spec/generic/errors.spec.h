@@ -27,9 +27,9 @@ module(errors_spec, {
     error("##x", "missing method body.", "x");
     error("##x=>", "missing method body.", "=>");
     error(":", "grouped items should be separated by commas.", ":");
-    error("::", "expected identifier on label.", ":");
-    error(":::", "expected identifier on label.", ":");
-    error(":::::::", "expected identifier on label.", ":");
+    error("::", "missing lhs message parameter.", ":");
+    error(":::", "grouped items should be separated by commas.", ":");
+    error(":::::::", "grouped items should be separated by commas.", ":");
     error("=1", "grouped items should be separated by commas.", "=");
     error("x = = 1", "grouped items should be separated by commas.", "=");
     error("x == = 1", "grouped items should be separated by commas.", "=");

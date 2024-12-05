@@ -91,6 +91,8 @@ keyword_list:
   | IDENTIFIER ':' literal keyword_list
 
 scalar:
+    ':' ':' GLOBAL
+    ':' ':' INSTANCE
     ':' ':' IDENTIFIER
   | ':' IDENTIFIER
   | INTEGER

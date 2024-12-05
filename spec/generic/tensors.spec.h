@@ -8,6 +8,17 @@ module(tensors_spec, {
     parse("[]", vector_new(FM_TENSOR, string_new("0")));
     parse("([])", vector_new(FM_TENSOR, string_new("0")));
     parse(
+      "[1,,,,,,[],,,,]",
+      vector_new(
+        FM_INTEGER,
+        string_new("1"),
+        FM_TENSOR,
+        string_new("0"),
+        FM_TENSOR,
+        string_new("2")
+      )
+    );
+    parse(
       "[[], []]",
       vector_new(
         FM_TENSOR,
@@ -82,14 +93,13 @@ module(tensors_spec, {
         FM_NIL,
         FM_TENSOR,
         string_new("0"),
-        FM_HASH,
+        FM_TABLE,
         string_new("0"),
         FM_LOCAL,
         string_new("x"),
         FM_INTEGER,
         string_new("1"),
-        FM_BINARY,
-        string_new("="),
+        FM_ASSIGNMENT,
         FM_TENSOR,
         string_new("8")
       )

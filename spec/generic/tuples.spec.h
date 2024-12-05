@@ -8,6 +8,17 @@ module(tuples_spec, {
     parse("%[]", vector_new(FM_TUPLE, string_new("0")));
     parse("(%[])", vector_new(FM_TUPLE, string_new("0")));
     parse(
+      "%[1,,,,,,%[],,,,]",
+      vector_new(
+        FM_INTEGER,
+        string_new("1"),
+        FM_TUPLE,
+        string_new("0"),
+        FM_TUPLE,
+        string_new("2")
+      )
+    );
+    parse(
       "%[%[], %[]]",
       vector_new(
         FM_TUPLE,
@@ -82,7 +93,7 @@ module(tuples_spec, {
         FM_NIL,
         FM_TENSOR,
         string_new("0"),
-        FM_HASH,
+        FM_TABLE,
         string_new("0"),
         FM_TUPLE,
         string_new("0"),
@@ -90,8 +101,7 @@ module(tuples_spec, {
         string_new("x"),
         FM_INTEGER,
         string_new("1"),
-        FM_BINARY,
-        string_new("="),
+        FM_ASSIGNMENT,
         FM_TUPLE,
         string_new("9")
       )

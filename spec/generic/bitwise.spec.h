@@ -17,8 +17,7 @@ module(bitwise_spec, {
         FM_KEYWORD,
         string_new("bitand:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -33,8 +32,7 @@ module(bitwise_spec, {
         FM_KEYWORD,
         string_new("bitor:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -49,8 +47,7 @@ module(bitwise_spec, {
         FM_KEYWORD,
         string_new("bitxor:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -62,8 +59,7 @@ module(bitwise_spec, {
         string_new("255"),
         FM_UNARY,
         string_new("bitinvert"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -78,8 +74,7 @@ module(bitwise_spec, {
         FM_KEYWORD,
         string_new("bitshift:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -96,8 +91,7 @@ module(bitwise_spec, {
         FM_KEYWORD,
         string_new("bitshift:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -109,8 +103,7 @@ module(bitwise_spec, {
         string_new("128"),
         FM_UNARY,
         string_new("highbit"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -125,8 +118,7 @@ module(bitwise_spec, {
         FM_KEYWORD,
         string_new("all_mask:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -141,8 +133,7 @@ module(bitwise_spec, {
         FM_KEYWORD,
         string_new("any_mask:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -157,8 +148,7 @@ module(bitwise_spec, {
         FM_KEYWORD,
         string_new("no_mask:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
   });

@@ -65,8 +65,7 @@ module(messages_spec, {
         string_new("obj"),
         FM_UNARY,
         string_new("puts"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -125,8 +124,7 @@ module(messages_spec, {
         string_new("decr"),
         FM_UNARY,
         string_new("decr"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -359,8 +357,7 @@ module(messages_spec, {
         string_new("5"),
         FM_BINARY,
         string_new("-"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -472,8 +469,7 @@ module(messages_spec, {
         string_new("List"),
         FM_UNARY,
         string_new("new"),
-        FM_BINARY,
-        string_new("="),
+        FM_ASSIGNMENT,
         FM_LOCAL,
         string_new("list"),
         FM_INTEGER,
@@ -492,8 +488,7 @@ module(messages_spec, {
         FM_KEYWORD,
         string_new("get:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("="),
+        FM_ASSIGNMENT,
         FM_LOCAL,
         string_new("x"),
         FM_UNARY,
@@ -723,8 +718,8 @@ module(messages_spec, {
         FM_KEYWORD,
         string_new("if_true:if_false:"),
         string_new("2"),
-        FM_LABEL,
-        string_new("out")
+        FM_LABEL_LOCAL,
+        string_new("::out")
       )
     );
   });
@@ -883,8 +878,7 @@ module(messages_spec, {
         FM_KEYWORD,
         string_new("keyword:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
   });

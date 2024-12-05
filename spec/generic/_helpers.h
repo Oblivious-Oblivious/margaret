@@ -31,13 +31,14 @@
     assert_that_vector(vm->formal_bytecode, expected_result); \
   } while(0)
 
-#define debug(code, expected_result)           \
-  do {                                         \
-    VM *vm     = vm_new("file.marg");          \
-    vm->source = string_new(code);             \
-    lexer_make_tokens(vm);                     \
-    parser_analyze_syntax(vm);                 \
-    vector_display(vm->formal_bytecode, "%s"); \
+#define debug(code, expected_result)                          \
+  do {                                                        \
+    VM *vm     = vm_new("file.marg");                         \
+    vm->source = string_new(code);                            \
+    lexer_make_tokens(vm);                                    \
+    parser_analyze_syntax(vm);                                \
+    vector_display(vm->formal_bytecode, "%s");                \
+    assert_that_vector(vm->formal_bytecode, expected_result); \
   } while(0)
 
 #define error(code, error_message, token)                     \

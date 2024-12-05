@@ -12,6 +12,7 @@ module(LexerSpec, {
       VM *vm = vm_new("file.marg");
       assert_that_charptr(vm->filename equals to "file.marg");
       assert_that_int(vm->lineno equals to 1);
+      assert_that_int(vm->charno equals to 0);
     });
 
     context("on #make_tokens", {
@@ -19,7 +20,7 @@ module(LexerSpec, {
         VM *vm     = vm_new("file.marg");
         vm->source = string_new("(42 factorial\nx = 2 + 3\ny = 5)");
         lexer_make_tokens(vm);
-        assert_that_int(vm->lineno equals to 3);
+        assert_that_int(vm->tokens.linenos[11] equals to 3);
       });
 
       it("tokenizes symbols", {
@@ -36,7 +37,7 @@ module(LexerSpec, {
         lexer_make_tokens(vm);
         assert_that_charptr(vm->tokens.values[1] equals to "42");
         assert_that_int(vm->tokens.types[1] equals to TOKEN_INTEGER);
-        assert_that_int(vm->lineno equals to 1);
+        assert_that_int(vm->tokens.linenos[0] equals to 1);
 
         vm         = vm_new("file.marg");
         vm->source = string_new("4_200");
@@ -55,7 +56,7 @@ module(LexerSpec, {
         lexer_make_tokens(vm);
         assert_that_charptr(vm->tokens.values[1] equals to "0");
         assert_that_int(vm->tokens.types[1] equals to TOKEN_INTEGER);
-        assert_that_int(vm->lineno equals to 1);
+        assert_that_int(vm->tokens.linenos[0] equals to 1);
       });
 
       it("correctly parses code that the parser will drop later", {
@@ -75,21 +76,21 @@ module(LexerSpec, {
         lexer_make_tokens(vm);
         assert_that_charptr(vm->tokens.values[0] equals to "0.0");
         assert_that_int(vm->tokens.types[0] equals to TOKEN_FLOAT);
-        assert_that_int(vm->lineno equals to 1);
+        assert_that_int(vm->tokens.linenos[0] equals to 1);
 
         vm         = vm_new("file.marg");
         vm->source = string_new("(42.7 msg)");
         lexer_make_tokens(vm);
         assert_that_charptr(vm->tokens.values[1] equals to "42.7");
         assert_that_int(vm->tokens.types[1] equals to TOKEN_FLOAT);
-        assert_that_int(vm->lineno equals to 1);
+        assert_that_int(vm->tokens.linenos[0] equals to 1);
 
         vm         = vm_new("file.marg");
         vm->source = string_new("(0.7 msg)");
         lexer_make_tokens(vm);
         assert_that_charptr(vm->tokens.values[1] equals to "0.7");
         assert_that_int(vm->tokens.types[1] equals to TOKEN_FLOAT);
-        assert_that_int(vm->lineno equals to 1);
+        assert_that_int(vm->tokens.linenos[0] equals to 1);
 
         vm         = vm_new("file.marg");
         vm->source = string_new("(0.7+0.5+0.23)");

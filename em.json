@@ -5,7 +5,6 @@
 
   "dependencies": {
     "EmeraldsBool": "The-Fourth-Wall/EmeraldsBool",
-    "EmeraldsFastStack": "The-Fourth-Wall/EmeraldsFastStack",
     "EmeraldsFileHandler": "The-Fourth-Wall/EmeraldsFileHandler",
     "EmeraldsTable": "The-Fourth-Wall/EmeraldsTable",
     "EmeraldsReadline": "The-Fourth-Wall/EmeraldsReadline",
@@ -24,8 +23,8 @@
     "debug": {
       "opt": "-Og",
       "version": "-std=c89",
-      "flags": "-g -fsanitize=address -DMARG_SPEC",
-      "warnings": "-Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic -Wno-unused-function"
+      "flags": "-g -fsanitize=address",
+      "warnings": "-Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic -Wno-unused-function -Wno-gnu-label-as-value"
     },
     "release": {
       "opt": "-O2",
@@ -35,5 +34,5 @@
     }
   },
 
-  "license": "gpl-v3"
+  "license": "mit"
 }

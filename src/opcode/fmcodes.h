@@ -11,12 +11,14 @@
 #define FM_INTEGER           string_new("INTEGER")
 #define FM_FLOAT             string_new("FLOAT")
 #define FM_STRING            string_new("STRING")
-#define FM_LABEL             string_new("LABEL")
+#define FM_LABEL_LOCAL       string_new("LABEL_LOCAL")
+#define FM_LABEL_INSTANCE    string_new("LABEL_INSTANCE")
+#define FM_LABEL_GLOBAL      string_new("LABEL_GLOBAL")
 #define FM_SYMBOL            string_new("SYMBOL")
 #define FM_TENSOR            string_new("TENSOR")
 #define FM_TUPLE             string_new("TUPLE")
 #define FM_BITSTRING         string_new("BITSTRING")
-#define FM_HASH              string_new("HASH")
+#define FM_TABLE             string_new("TABLE")
 #define FM_GLOBAL            string_new("GLOBAL")
 #define FM_INSTANCE          string_new("INSTANCE")
 #define FM_LOCAL             string_new("LOCAL")
@@ -31,5 +33,6 @@
 #define FM_UNARY             string_new("UNARY")
 #define FM_LHS               string_new("LHS")
 #define FM_SUBSCRIPT         string_new("SUBSCRIPT")
+#define FM_ASSIGNMENT        string_new("ASSIGNMENT")
 
 #endif

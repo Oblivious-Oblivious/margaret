@@ -6,4 +6,10 @@
 /** @brief Ex nihilo value */
 typedef size_t MargValue;
 
+/** @brief Instruction size */
+typedef size_t Instruction;
+
+/** @brief Maximum number of registers */
+#define MAX_REGISTERS (1 << 16) /* TODO - Needs to be 1 << 29 */
+
 #endif

@@ -30,8 +30,8 @@
     vm->source = string_new(str);                                       \
     lexer_make_tokens(vm);                                              \
     assert_that_int(vector_size(vm->tokens.values) equals to 2);        \
-    assert_that_int(vm->lineno equals to no_lines);                     \
-    assert_that_int(vm->charno equals to no_chars);                     \
+    assert_that_int(vm->tokens.linenos[0] equals to no_lines);          \
+    assert_that_int(vm->tokens.charnos[0] equals to no_chars);          \
     assert_that_charptr(vm->tokens.values[0] equals to res);            \
   } while(0)
 
@@ -42,8 +42,15 @@ module(token_types_spec, {
       vm->source = string_new("\n12\n");
       lexer_make_tokens(vm);
       assert_that_int(vector_size(vm->tokens.values) equals to 2);
-      assert_that_int(vm->lineno equals to 3);
+      assert_that_int(vm->tokens.linenos[0] equals to 2);
       assert_that_charptr(vm->tokens.values[0] equals to "12");
+
+      vm         = vm_new("file.marg");
+      vm->source = string_new("\n\n12\n13");
+      lexer_make_tokens(vm);
+      assert_that_int(vector_size(vm->tokens.values) equals to 3);
+      assert_that_int(vm->tokens.linenos[1] equals to 4);
+      assert_that_charptr(vm->tokens.values[1] equals to "13");
     });
 
     it("tokenizes around whitespace", {

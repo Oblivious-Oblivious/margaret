@@ -1,13 +1,11 @@
 #ifndef __VM_H_
 #define __VM_H_
 
+#include "../opcode/MargValueType.h"
+
 #define TABLE_UNDEFINED MARG_UNDEFINED
 #include "../../libs/EmeraldsTable/export/EmeraldsTable.h"
-#include "../opcode/MargValueType.h"
 #include "../tokens/Tokens.h"
-#include "byte_conversions.h"
-
-#include <stdint.h> /* uint8_t */
 
 /**
  * @brief Virtual Machine Engine
@@ -22,8 +20,9 @@
  * @param tokens -> List of tokenized values
  * @param formal_bytecode -> Formal bytecode representation
  *
+ * @param global_registers -> Global register array
+ * @param global_index -> Global register index
  * @param global_variables -> Global without namespacing or scoping
- * @param interned_strings -> Stores all strings (variables, messages, etc.)
  * @param current -> Pointer to the currect method-derived proc
  */
 typedef struct VM {
@@ -38,25 +37,13 @@ typedef struct VM {
   Tokens tokens;
   char **formal_bytecode;
 
-  /* TODO - Remove */
-  MargValue stack[65536];
-  MargValue *sp;
-
+  MargValue global_registers[MAX_REGISTERS];
+  uint32_t global_index;
   EmeraldsTable global_variables;
-  EmeraldsTable interned_strings;
-  struct MargProc *current;
+  struct MargMethod *current;
 } VM;
 
-/** @brief Works for any IP pointer no matter what context current is in */
-#define READ_BYTE() (*vm->current->ip++)
-#define READ_WORD() (bytes_to_word(READ_BYTE(), READ_BYTE()))
-#define READ_DWORD() \
-  (bytes_to_dword(READ_BYTE(), READ_BYTE(), READ_BYTE(), READ_BYTE()))
-
-#define READ_TEMPORARY()       (vm->current->bytecode[READ_BYTE()])
-#define READ_TEMPORARY_WORD()  (vm->current->bytecode[READ_WORD()])
-#define READ_TEMPORARY_DWORD() (vm->current->bytecode[READ_DWORD()])
-
+/* TODO - Refactor vm to a stack-bound value with vm_new(&vm, "repl") */
 /**
  * @brief Creates a new VM instance By being an explicit pointer can create
  * multiple of them
@@ -66,45 +53,47 @@ typedef struct VM {
 VM *vm_new(const char *filename);
 
 /**
- * @brief Frees the VM instance.  Most of its values are freed over time by
+ * @brief Resets the VM instance.  Most of its values are freed over time by
  * other parts of the pipeline.  This handles remaining fields
- * @param vm -> The VM to be freed
+ * @param vm -> The VM to be reset
  */
-#define vm_free()                        \
-  do {                                   \
-    vm_free_source();                    \
-    vm_free_tokens();                    \
-    vm_free_formal_bytecode();           \
-    table_deinit(&vm->global_variables); \
-    table_deinit(&vm->interned_strings); \
-    free(vm);                            \
+#define vm_reset()                \
+  do {                            \
+    vm_free_source();             \
+    vm->error       = NULL;       \
+    vm->error_token = NULL;       \
+    vm_free_tokens();             \
+    tokens_init(&vm->tokens);     \
+    vm_free_formal_bytecode();    \
+    vm->current->ip       = -1;   \
+    vm->current->bytecode = NULL; \
   } while(0)
 
 /* TODO - Ensure there are no leaks throughout the pipeline */
-#ifndef MARG_SPEC
-  #define vm_free_source() string_free(vm->source)
+#define vm_free_source()     \
+  do {                       \
+    string_free(vm->source); \
+    vm->source = NULL;       \
+    vm->lineno = 1;          \
+    vm->charno = 0;          \
+  } while(0)
 
-  #define vm_free_tokens()        \
-    do {                          \
-      tokens_deinit(&vm->tokens); \
-      vm->tid = 0;                \
-    } while(0)
+#define vm_free_tokens()        \
+  do {                          \
+    tokens_deinit(&vm->tokens); \
+    vm->tid = 0;                \
+  } while(0)
 
-  #define vm_free_formal_bytecode()                           \
-    do {                                                      \
-      size_t i;                                               \
-      for(i = 0; i < vector_size(vm->formal_bytecode); i++) { \
-        if(!string_equals(vm->formal_bytecode[i], "eof")) {   \
-          string_free(vm->formal_bytecode[i]);                \
-        }                                                     \
-      }                                                       \
-      vector_free(vm->formal_bytecode);                       \
-    } while(0)
-
-#else
-  #define vm_free_source()
-  #define vm_free_tokens()
-  #define vm_free_formal_bytecode()
-#endif
+#define vm_free_formal_bytecode()                           \
+  do {                                                      \
+    size_t i;                                               \
+    for(i = 0; i < vector_size(vm->formal_bytecode); i++) { \
+      if(!string_equals(vm->formal_bytecode[i], "eof")) {   \
+        string_free(vm->formal_bytecode[i]);                \
+      }                                                     \
+    }                                                       \
+    vector_free(vm->formal_bytecode);                       \
+    vm->formal_bytecode = NULL;                             \
+  } while(0)
 
 #endif

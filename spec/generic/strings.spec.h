@@ -49,8 +49,7 @@ module(strings_spec, {
         string_new("s"),
         FM_UNARY,
         string_new("is_empty?"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -62,8 +61,7 @@ module(strings_spec, {
         string_new("s"),
         FM_UNARY,
         string_new("size"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -78,8 +76,7 @@ module(strings_spec, {
         FM_KEYWORD,
         string_new("at:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -96,8 +93,7 @@ module(strings_spec, {
         FM_KEYWORD,
         string_new("copy_from:to:"),
         string_new("2"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -114,8 +110,7 @@ module(strings_spec, {
         FM_KEYWORD,
         string_new("index_of:if_absent:"),
         string_new("2"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -153,20 +148,29 @@ module(strings_spec, {
     parse(
       "s << 'a' << 'b' << 'c' << 'd'",
       vector_new(
+        /* OP_MOV, RA, s */
         FM_LOCAL,
         string_new("s"),
+
+        /* OP_MESSAGE, CONST("<<"), RA, CONST(MARG_TENSOR("a")) */
         FM_STRING,
         string_new("a"),
         FM_BINARY,
         string_new("<<"),
+
+        /* OP_MESSAGE, CONST("<<"), RA, CONST(MARG_TENSOR("b")) */
         FM_STRING,
         string_new("b"),
         FM_BINARY,
         string_new("<<"),
+
+        /* OP_MESSAGE, CONST("<<"), RA, CONST(MARG_TENSOR("c")) */
         FM_STRING,
         string_new("c"),
         FM_BINARY,
         string_new("<<"),
+
+        /* OP_MESSAGE, CONST("<<"), RA, CONST(MARG_TENSOR("d")) */
         FM_STRING,
         string_new("d"),
         FM_BINARY,
@@ -237,8 +241,7 @@ module(strings_spec, {
         FM_KEYWORD,
         string_new("conform:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -261,8 +264,7 @@ module(strings_spec, {
         FM_KEYWORD,
         string_new("select:"),
         string_new("1"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -274,8 +276,7 @@ module(strings_spec, {
         string_new("s"),
         FM_UNARY,
         string_new("to_list"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -287,8 +288,7 @@ module(strings_spec, {
         string_new("s"),
         FM_UNARY,
         string_new("to_symbol"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -300,8 +300,7 @@ module(strings_spec, {
         string_new("abcd"),
         FM_UNARY,
         string_new("to_byte_array"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -313,8 +312,7 @@ module(strings_spec, {
         string_new("s"),
         FM_UNARY,
         string_new("shuffled"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
   });

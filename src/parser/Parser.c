@@ -58,7 +58,7 @@
  * @param message -> The message to display
  * @return Token* -> EOF token
  */
-static char *parser_error(VM *vm, size_t curr_tid, const char *message) {
+p_inline char *parser_error(VM *vm, size_t curr_tid, const char *message) {
   printf(
     "%s:%zu:%zu \033[1;31merror:\033[0m %s  Token: \033[1;31m`%s`\033[0m\n",
     vm->filename,
@@ -75,7 +75,7 @@ static char *parser_error(VM *vm, size_t curr_tid, const char *message) {
   return NULL;
 }
 
-static char *parser_handle_error(VM *vm, const char *error_msg) {
+p_inline char *parser_handle_error(VM *vm, const char *error_msg) {
   if(vm->tid >= vector_size(vm->tokens.values) &&
      vector_size(vm->tokens.values) > 1) {
     return parser_error(vm, vector_size(vm->tokens.values) - 2, error_msg);
@@ -113,8 +113,11 @@ char *parser_unit_list(VM *vm) {
 
   while(!la1value(")") && !la1value("]") && !la1value("}") &&
         !la1type(TOKEN_EOF)) {
+    size_t prev_size = vm->tid;
     unit();
-    no_elements++;
+    if(prev_size < vm->tid) {
+      no_elements++;
+    }
 
     if(!la1value(")") && !la1value("]") && !la1value("}") &&
        !la1type(TOKEN_EOF)) {
@@ -133,11 +136,9 @@ void parser_assignment_message(VM *vm) {
 
   keyword_message();
   if(la1value("=") && prev_size < vm->tid) {
-    char *eq =
-      consume(TOKEN_MESSAGE_SYMBOL, "missing '=' on assignment message.");
+    consume(TOKEN_MESSAGE_SYMBOL, "missing '=' on assignment message.");
     assignment_message();
-    generate(FM_BINARY);
-    generate(eq);
+    generate(FM_ASSIGNMENT);
   }
 }
 
@@ -313,15 +314,15 @@ void parser_literal(VM *vm) {
     generate(number_of_elements);
   } else if(la1value("%") && la2value("{")) {
     char *number_of_elements = NULL;
-    consume(TOKEN_PERCENT, "missing `%` on hash.");
-    consume(TOKEN_LCURLY, "missing opening curly on hash.");
+    consume(TOKEN_PERCENT, "missing `%` on table.");
+    consume(TOKEN_LCURLY, "missing opening curly on table.");
     number_of_elements = association_list();
-    consume(TOKEN_RCURLY, "missing closing curly on hash.");
-    generate(FM_HASH);
+    consume(TOKEN_RCURLY, "missing closing curly on table.");
+    generate(FM_TABLE);
     generate(number_of_elements);
   } else if(la1value("#")) {
     size_t prev_size;
-    consume(TOKEN_HASH, "missing `#` on method definition.");
+    consume(TOKEN_TABLE, "missing `#` on method definition.");
     generate(FM_METHOD_START);
 
     generate(FM_METHOD_RECEIVER);
@@ -374,8 +375,11 @@ char *parser_bit_list(VM *vm) {
   char *number_of_elements = NULL;
 
   while(!la1value(")") && !la1type(TOKEN_EOF)) {
+    size_t prev_size = vm->tid;
     bit();
-    no_elements++;
+    if(prev_size < vm->tid) {
+      no_elements++;
+    }
 
     if(!la1value(")")) {
       consume(TOKEN_COMMA, "missing ',' on bit list.");
@@ -387,6 +391,7 @@ char *parser_bit_list(VM *vm) {
 }
 
 void parser_bit(VM *vm) {
+  size_t prev_size = vm->tid;
   scalar();
 
   if(la1value(":") && la2value(":")) {
@@ -394,7 +399,7 @@ void parser_bit(VM *vm) {
     consume(TOKEN_COLON, "missing '::' on bit.");
     generate(FM_INTEGER);
     generate(consume(TOKEN_INTEGER, "missing integer on bit."));
-  } else {
+  } else if(prev_size < vm->tid) {
     generate(FM_INTEGER);
     generate(string_new("8"));
   }
@@ -405,10 +410,13 @@ char *parser_association_list(VM *vm) {
   char *number_of_elements = NULL;
 
   while(!la1value("}") && !la1type(TOKEN_EOF)) {
+    size_t prev_size = vm->tid;
     key();
-    consume(TOKEN_COLON, "missing ':' on association list.");
-    unit();
-    no_elements++;
+    if(prev_size < vm->tid) {
+      consume(TOKEN_COLON, "missing ':' on association list.");
+      unit();
+      no_elements++;
+    }
 
     if(!la1value("}")) {
       consume(TOKEN_COMMA, "missing ',' on association list.");
@@ -500,11 +508,36 @@ char *parser_keyword_list(VM *vm) {
 }
 
 void parser_scalar(VM *vm) {
-  if(la1value(":") && la2value(":")) {
-    consume(TOKEN_COLON, "expected ':' on label.");
-    consume(TOKEN_COLON, "expected ':' on label.");
-    generate(FM_LABEL);
-    generate(consume(TOKEN_IDENTIFIER, "expected identifier on label."));
+  if(la1value(":") && la2value(":") && la3type(TOKEN_GLOBAL)) {
+    char *label = NULL;
+    consume(TOKEN_COLON, "expected ':' on global label.");
+    consume(TOKEN_COLON, "expected ':' on global label.");
+    label = string_new("::");
+    string_add(
+      label, consume(TOKEN_GLOBAL, "expected identifier on global label.")
+    );
+    generate(FM_LABEL_GLOBAL);
+    generate(label);
+  } else if(la1value(":") && la2value(":") && la3type(TOKEN_INSTANCE)) {
+    char *label = NULL;
+    consume(TOKEN_COLON, "expected ':' on instance label.");
+    consume(TOKEN_COLON, "expected ':' on instance label.");
+    label = string_new("::");
+    string_add(
+      label, consume(TOKEN_INSTANCE, "expected identifier on instance label.")
+    );
+    generate(FM_LABEL_INSTANCE);
+    generate(label);
+  } else if(la1value(":") && la2value(":") && la3type(TOKEN_IDENTIFIER)) {
+    char *label = NULL;
+    consume(TOKEN_COLON, "expected ':' on local label.");
+    consume(TOKEN_COLON, "expected ':' on local label.");
+    label = string_new("::");
+    string_add(
+      label, consume(TOKEN_IDENTIFIER, "expected identifier on local label.")
+    );
+    generate(FM_LABEL_LOCAL);
+    generate(label);
   } else if(la1value(":") && la2type(TOKEN_IDENTIFIER)) {
     consume(TOKEN_COLON, "expected ':' on symbol.");
     generate(FM_SYMBOL);

@@ -160,7 +160,7 @@ module(conditionals_spec, {
         string_new("3"),
         FM_INTEGER,
         string_new("300"),
-        FM_HASH,
+        FM_TABLE,
         string_new("6"),
         FM_KEYWORD,
         string_new("match:"),

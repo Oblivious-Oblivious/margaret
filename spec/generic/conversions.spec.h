@@ -14,8 +14,7 @@ module(conversions_spec, {
         string_new("3.99"),
         FM_UNARY,
         string_new("to_int"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -27,8 +26,7 @@ module(conversions_spec, {
         string_new("3.99"),
         FM_UNARY,
         string_new("to_fraction"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -40,8 +38,7 @@ module(conversions_spec, {
         string_new("3"),
         FM_UNARY,
         string_new("to_float"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -53,8 +50,7 @@ module(conversions_spec, {
         string_new("65"),
         FM_UNARY,
         string_new("to_char"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -66,8 +62,7 @@ module(conversions_spec, {
         string_new("A"),
         FM_UNARY,
         string_new("to_ascii"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
     parse(
@@ -79,8 +74,7 @@ module(conversions_spec, {
         string_new("b"),
         FM_UNARY,
         string_new("to_ascii"),
-        FM_BINARY,
-        string_new("=")
+        FM_ASSIGNMENT
       )
     );
   });
