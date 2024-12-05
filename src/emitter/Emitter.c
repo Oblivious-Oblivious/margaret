@@ -193,6 +193,5 @@ VM *emitter_emit(VM *vm) {
   OP(OP_HALT);
 
 exit:
-  vm_free_formal_bytecode();
   return vm;
 }
