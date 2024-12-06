@@ -218,6 +218,7 @@ MargValue evaluator_evaluate(VM *vm) {
   }
 
   evaluator_run(vm);
+  vm_free_formal_bytecode();
   if(vector_size(vm->current->bytecode) == 1) {
     return MARG_UNDEFINED;
   } else {
