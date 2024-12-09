@@ -143,6 +143,25 @@ _opcode_loop:;
     }
     case_opcode(OP_PRIM) {
       ptrdiff_t argc = AS_INTEGER(KB)->value;
+      MargValue self;
+      MargValue args = MARG_TENSOR();
+      ptrdiff_t i;
+      for(i = 0; i < argc; i++) {
+        MargValue v = KPOP;
+        vector_add(AS_TENSOR(args)->value, v);
+      }
+      self = KPOP;
+
+      MargValue prim_msg = dispatch_primitive_from_delegation_chain(vm, self);
+      if(IS_UNDEFINED(prim_msg)) {
+        SKZ(raise("Error: cannot call because primitive does not exist."));
+      } else {
+        KPUSH(AS_PRIMITIVE(prim_msg)->function(vm, self, args));
+      }
+      next_opcode;
+    }
+    case_opcode(OP_ENUMERABLE) {
+      ptrdiff_t argc = AS_INTEGER(KB)->value;
       MargValue self = KPOP;
 
       MargValue prim_msg = dispatch_primitive_from_delegation_chain(vm, self);

@@ -27,7 +27,7 @@
     size_t number_of_elements;                                 \
     sscanf(formal_bytecode[++ip], "%zu", &number_of_elements); \
     OAB(                                                       \
-      OP_PRIM,                                                 \
+      OP_ENUMERABLE,                                           \
       CONST(MARG_STRING("__PRIM_NEW:")),                       \
       CONST(MARG_INTEGER(number_of_elements))                  \
     );                                                         \
