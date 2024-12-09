@@ -45,6 +45,8 @@
   ))
 #define MARG_PRIMITIVE(name, prim) \
   (QNAN_BOX(marg_primitive_init(vm, (name), (prim))))
+#define MARG_VARIABLE(name, value, type) \
+  (QNAN_BOX(marg_variable_init(vm, (name), (value), (type))))
 #define MARG_OBJECT(proto, name) \
   (QNAN_BOX(marg_object_init(vm, sizeof(MargObject), proto, string_new(name))))
 
@@ -62,6 +64,7 @@
 #define AS_BITSTRING(value) ((MargBitstring *)QNAN_UNBOX(value))
 #define AS_METHOD(value)    ((MargMethod *)QNAN_UNBOX(value))
 #define AS_PRIMITIVE(value) ((MargPrimitive *)QNAN_UNBOX(value))
+#define AS_VARIABLE(value)  ((MargVariable *)QNAN_UNBOX(value))
 #define AS_OBJECT(value)    ((MargObject *)QNAN_UNBOX(value))
 
 #define IS_MARGARET(value) \
@@ -105,6 +108,9 @@
 #define IS_PRIMITIVE(value) \
   (!IS_UNDEFINED(value) &&  \
    AS_OBJECT(value)->proto->name_hash == 5694381430705705196u)
+#define IS_VARIABLE(value) \
+  (!IS_UNDEFINED(value) && \
+   AS_OBJECT(value)->proto->name_hash == 14314061641483853064u)
 
 /**
  * @brief Formats a marg value using QNAN boxing

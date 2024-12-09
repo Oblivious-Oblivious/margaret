@@ -173,6 +173,29 @@ typedef struct MargPrimitive {
   const char *primitive_name;
 } MargPrimitive;
 
+/** @brief Defines the type of a variable */
+typedef enum MargVariableType {
+  VAR_TYPE_LOCAL,
+  VAR_TYPE_INSTANCE,
+  VAR_TYPE_GLOBAL
+} MargVariableType;
+
+/**
+ * @brief Defines a variable as an object
+ * @param _ -> Inherited object properties
+ *
+ * @param name -> Name of the variable
+ * @param value -> Marg Value of the variable
+ * @param type -> Type of the variable
+ */
+typedef struct MargVariable {
+  MargObject _;
+
+  const char *name;
+  MargValue value;
+  MargVariableType type;
+} MargVariable;
+
 /**
  * @brief Creates a new object instance
  * @param vm -> Current VM
@@ -269,8 +292,29 @@ MargMethod *marg_method_init(
   const char *message_name
 );
 
+/**
+ * @brief Creates a new primitive object
+ *
+ * @param vm -> Current VM
+ * @param primitive_name -> Name of the primitive
+ * @param function -> C function pointer
+ * @return MargPrimitive*
+ */
 MargPrimitive *marg_primitive_init(
   VM *vm, const char *primitive_name, MargPrimitiveFunction function
+);
+
+/**
+ * @brief Creates a new variable object
+ *
+ * @param vm -> Current VM
+ * @param name -> Name of the variable
+ * @param value -> Value of the variable
+ * @param type -> Type of the variable
+ * @return MargVariable*
+ */
+MargVariable *marg_variable_init(
+  VM *vm, const char *name, MargValue value, MargVariableType type
 );
 
 #endif

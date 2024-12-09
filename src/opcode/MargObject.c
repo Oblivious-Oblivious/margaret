@@ -1,3 +1,5 @@
+#include "MargObject.h"
+
 #include "instruction.h"
 
 MargObject *
@@ -171,6 +173,21 @@ MargPrimitive *marg_primitive_init(
   obj->instance_index--;
   self->function       = function;
   self->primitive_name = primitive_name;
+
+  return self;
+}
+
+MargVariable *marg_variable_init(
+  VM *vm, const char *name, MargValue value, MargVariableType type
+) {
+  MargObject *obj = (MargObject *)marg_object_init(
+    vm, sizeof(MargVariable), G("Variable"), string_new("")
+  );
+  MargVariable *self = (MargVariable *)obj;
+
+  self->name  = name;
+  self->value = value;
+  self->type  = type;
 
   return self;
 }

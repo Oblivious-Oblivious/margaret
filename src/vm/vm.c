@@ -47,6 +47,7 @@ p_inline void setup_proto_object_chain(VM *vm) {
 
   SG(margaret, "$Method");
   SG(margaret, "Primitive");
+  SG(margaret, "Variable");
 }
 
 /**

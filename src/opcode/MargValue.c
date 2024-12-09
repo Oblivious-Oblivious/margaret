@@ -119,6 +119,10 @@ char *marg_value_format(VM *vm, MargValue self) {
     char *res = string_new("");
     string_addf(&res, "< PRIM#%s >\n", AS_PRIMITIVE(self)->primitive_name);
     return res;
+  } else if(IS_VARIABLE(self)) {
+    char *res = string_new("");
+    string_addf(&res, marg_value_format(vm, AS_VARIABLE(self)->value));
+    return res;
   } else {
     return string_new(AS_OBJECT(self)->name);
   }
