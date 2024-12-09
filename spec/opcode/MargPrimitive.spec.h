@@ -45,7 +45,7 @@ module(MargPrimitiveSpec, {
     MargValue self            = I("@self");
     MargValue super           = I("@super");
     assert_that_charptr(AS_OBJECT(self)->name equals to "");
-    assert_that(super is MARG_NIL);
+    assert_that_charptr(AS_OBJECT(super)->name equals to "Primitive");
   });
 })
 
