@@ -126,13 +126,7 @@ VM *emitter_emit(VM *vm) {
       vm->current->message_name = formal_bytecode[++ip];
     }
 
-    case_fmcode(FM_ASSIGNMENT) {
-      char *assignment_name = formal_bytecode[++ip];
-      /* emit_byte(OP_1);
-      emit_variable_length(OP_SEND);
-      emit_temporary(MARG_STRING(assignment_name)); */
-      (void)assignment_name;
-    }
+    case_fmcode(FM_ASSIGNMENT) { OP(OP_ASSIGN); }
     case_fmcode(FM_SUBSCRIPT) {
       char *subscript_name = formal_bytecode[++ip];
       /* emit_byte(OP_1);

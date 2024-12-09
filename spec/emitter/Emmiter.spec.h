@@ -143,7 +143,9 @@ module(EmmiterSpec, {
           emit(vm, "$newglob");
           vm->current->ip++;
           assert_that(O is OP_STOZG);
-          assert_that_charptr(AS_OBJECT(G("$newglob"))->name equals to "$nil");
+          assert_that_size_t(
+            AS_VARIABLE(G("$newglob"))->value equals to G("$nil")
+          );
           vm->current->ip++;
           assert_that(O is OP_HALT);
         });
@@ -152,7 +154,9 @@ module(EmmiterSpec, {
           emit(vm, "@newinst");
           vm->current->ip++;
           assert_that(O is OP_STOZI);
-          assert_that_size_t(I("@newinst") equals to G("$nil"));
+          assert_that_size_t(
+            AS_VARIABLE(I("@newinst"))->value equals to G("$nil")
+          );
           vm->current->ip++;
           assert_that(O is OP_HALT);
         });
@@ -161,7 +165,9 @@ module(EmmiterSpec, {
           emit(vm, "newlocal");
           vm->current->ip++;
           assert_that(O is OP_STOZL);
-          assert_that_size_t(L("newlocal") equals to G("$nil"));
+          assert_that_size_t(
+            AS_VARIABLE(L("newlocal"))->value equals to G("$nil")
+          );
           vm->current->ip++;
           assert_that(O is OP_HALT);
         });

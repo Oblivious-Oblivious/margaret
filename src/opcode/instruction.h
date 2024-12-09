@@ -25,6 +25,8 @@ p_inline Instruction make_local(VM *vm, const char *var) {
   } else {
     reg_ptr = vm->current->local_index & (MAX_REGISTERS - 1);
     table_add(&vm->current->local_variables, var, reg_ptr);
+    vm->current->local_registers[reg_ptr] =
+      MARG_VARIABLE(var, vm->current->local_registers[reg_ptr], VAR_TYPE_LOCAL);
     vm->current->local_index++;
     return reg_ptr;
   }
@@ -38,12 +40,31 @@ p_inline Instruction make_instance(VM *vm, const char *var) {
   } else {
     reg_ptr = vm->current->bound_object->instance_index & (MAX_REGISTERS - 1);
     table_add(&vm->current->bound_object->instance_variables, var, reg_ptr);
+    vm->current->bound_object->instance_registers[reg_ptr] = MARG_VARIABLE(
+      var,
+      vm->current->bound_object->instance_registers[reg_ptr],
+      VAR_TYPE_INSTANCE
+    );
     vm->current->bound_object->instance_index++;
     return reg_ptr;
   }
 }
 
 p_inline Instruction make_global(VM *vm, const char *var) {
+  Instruction reg_ptr = table_get(&vm->global_variables, var);
+  if(reg_ptr != TABLE_UNDEFINED) {
+    return reg_ptr;
+  } else {
+    reg_ptr = vm->global_index & (MAX_REGISTERS - 1);
+    table_add(&vm->global_variables, var, reg_ptr);
+    vm->global_registers[reg_ptr] =
+      MARG_VARIABLE(var, vm->global_registers[reg_ptr], VAR_TYPE_GLOBAL);
+    vm->global_index++;
+    return reg_ptr;
+  }
+}
+
+p_inline Instruction make_global_singleton(VM *vm, const char *var) {
   Instruction reg_ptr = table_get(&vm->global_variables, var);
   if(reg_ptr != TABLE_UNDEFINED) {
     return reg_ptr;
@@ -57,26 +78,27 @@ p_inline Instruction make_global(VM *vm, const char *var) {
 
 #define READ_BYTECODE() (vm->current->bytecode[vm->current->ip])
 
-#define GET_K(i) (fetch_variable((vm), (i), vm->current->constants))
-#define GET_L(i) (fetch_variable((vm), (i), vm->current->local_registers))
-#define GET_I(i) \
-  (fetch_variable((vm), (i), vm->current->bound_object->instance_registers))
-#define GET_G(i) (fetch_variable((vm), (i), vm->global_registers))
+#define GET_K(i) (vm->current->constants[(i)])
+#define GET_L(i) (vm->current->local_registers[(i)])
+#define GET_I(i) (vm->current->bound_object->instance_registers[(i)])
+#define GET_G(i) (vm->global_registers[(i)])
 
-#define SET_K(i, v) (vm->current->constants[(i)] = (v))
-#define SET_L(i, v) (vm->current->local_registers[(i)] = (v))
-#define SET_I(i, v) (vm->current->bound_object->instance_registers[(i)] = (v))
-#define SET_G(i, v) (vm->global_registers[(i)] = (v))
+#define SET_K(i, v) (GET_K(i) = (v))
+#define SET_L(i, v) (GET_L(i) = (v))
+#define SET_I(i, v) (GET_I(i) = (v))
+#define SET_G(i, v) (GET_G(i) = (v))
 
-#define CONST(value)  (make_constant((vm), (value)))
-#define LOCAL(var)    (make_local((vm), (var)))
-#define INSTANCE(var) (make_instance((vm), (var)))
-#define GLOBAL(var)   (make_global((vm), (var)))
+#define CONST(value)          (make_constant((vm), (value)))
+#define LOCAL(var)            (make_local((vm), (var)))
+#define INSTANCE(var)         (make_instance((vm), (var)))
+#define GLOBAL(var)           (make_global((vm), (var)))
+#define GLOBAL_SINGLETON(var) (make_global_singleton((vm), (var)))
 
 #define O    ((READ_BYTECODE() >> 58) & 0x3f)
 #define A    ((READ_BYTECODE() >> 29) & 0x1fffffff)
 #define B    ((READ_BYTECODE() >> 0) & 0x1fffffff)
 #define Z    (vector_size(vm->current->constants) - 1)
+/* TODO - Probably replace in the future */
 #define K(i) (vm->current->constants[(i + Z + 1) % (Z + 1)])
 #define L(n) GET_L(table_get(&vm->current->local_variables, (n)))
 #define I(n) \
@@ -107,11 +129,6 @@ p_inline Instruction make_global(VM *vm, const char *var) {
 
 #define SKZ(v) SET_K(Z, v)
 
-#define SG(proto, name) SET_G(GLOBAL(name), MARG_OBJECT(proto, name))
-
-/* TODO - Measure performance of this function to maybe replace conditional */
-p_inline MargValue fetch_variable(VM *vm, Instruction i, MargValue *registers) {
-  return (i == TABLE_UNDEFINED || registers == NULL) ? MARG_NIL : registers[i];
-}
+#define SG(proto, name) SET_G(GLOBAL_SINGLETON(name), MARG_OBJECT(proto, name))
 
 #endif

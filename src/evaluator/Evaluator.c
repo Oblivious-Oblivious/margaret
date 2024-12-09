@@ -210,6 +210,27 @@ _opcode_loop:;
       SKZ(ret_value);
       next_opcode;
     }
+    case_opcode(OP_ASSIGN) {
+      MargValue rvalue = KPOP;
+      MargValue self   = KPOP;
+
+      if(IS_VARIABLE(rvalue)) {
+        rvalue = AS_VARIABLE(rvalue)->value;
+      }
+
+      if(IS_VARIABLE(self)) {
+        if(AS_VARIABLE(self)->type == VAR_TYPE_GLOBAL) {
+          AS_VARIABLE(GET_G(GLOBAL(AS_VARIABLE(self)->name)))->value = rvalue;
+        } else if(AS_VARIABLE(self)->type == VAR_TYPE_INSTANCE) {
+          AS_VARIABLE(GET_I(INSTANCE(AS_VARIABLE(self)->name)))->value = rvalue;
+        } else if(AS_VARIABLE(self)->type == VAR_TYPE_LOCAL) {
+          AS_VARIABLE(GET_L(LOCAL(AS_VARIABLE(self)->name)))->value = rvalue;
+        }
+      }
+
+      KPUSH(rvalue);
+      next_opcode;
+    }
     /* case_opcode(OP_INCLUDE) {
       uint8_t *previous_bytecode = vm->current->bytecode;
       uint8_t *previous_position = vm->current->ip;
@@ -237,7 +258,6 @@ MargValue evaluator_evaluate(VM *vm) {
   }
 
   evaluator_run(vm);
-  vm_free_formal_bytecode();
   if(vector_size(vm->current->bytecode) == 1) {
     return MARG_UNDEFINED;
   } else {
