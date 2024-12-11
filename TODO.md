@@ -153,6 +153,7 @@
                 42 / 0,  comment: "static            -> always caught by the multimethod",
                 42 / v1, comment: "deterministic     -> caught if we perform constant folding",
                 42 / v2, comment: "non-deterministic -> cannot be caught",
+    🟥 QOL-10 - Add multiplatform CI/CD at least for linux and x86
 
   🟩 Create an `import/require` Margaret message.
      Probably simple concatenation of files (C-like include), not actual module system.
