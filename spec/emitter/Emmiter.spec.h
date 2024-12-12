@@ -310,7 +310,7 @@ module(EmmiterSpec, {
       assert_that_charptr(AS_OBJECT(GET_G(A))->name equals to "$Bitstring");
       vm->current->ip++;
       assert_that(O is OP_ENUMERABLE);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_NEW:");
+      assert_that_charptr(AS_STRING(K(A))->value equals to "BITSTRING_NEW:");
       assert_that_size_t(AS_INTEGER(K(B))->value equals to 2);
       vm->current->ip++;
       assert_that(O is OP_HALT);
@@ -337,7 +337,7 @@ module(EmmiterSpec, {
       assert_that_charptr(AS_OBJECT(GET_G(A))->name equals to "$Bitstring");
       vm->current->ip++;
       assert_that(O is OP_ENUMERABLE);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_NEW:");
+      assert_that_charptr(AS_STRING(K(A))->value equals to "BITSTRING_NEW:");
       assert_that_size_t(AS_INTEGER(K(B))->value equals to 8);
       vm->current->ip++;
       assert_that(O is OP_HALT);
@@ -433,7 +433,7 @@ module(EmmiterSpec, {
       assert_that_charptr(AS_OBJECT(GET_G(A))->name equals to "$Table");
       vm->current->ip++;
       assert_that(O is OP_ENUMERABLE);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_NEW:");
+      assert_that_charptr(AS_STRING(K(A))->value equals to "TABLE_NEW:");
       assert_that_size_t(AS_INTEGER(K(B))->value equals to 6);
 
       emit(vm, "%{a: %{aa: 1, bb: 2}, b: %{cc: 3, dd: 4}}");
@@ -457,7 +457,7 @@ module(EmmiterSpec, {
       assert_that_charptr(AS_OBJECT(GET_G(A))->name equals to "$Table");
       vm->current->ip++;
       assert_that(O is OP_ENUMERABLE);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_NEW:");
+      assert_that_charptr(AS_STRING(K(A))->value equals to "TABLE_NEW:");
       assert_that_size_t(AS_INTEGER(K(B))->value equals to 4);
       vm->current->ip++;
       assert_that(O is OP_STOZK);
@@ -479,14 +479,14 @@ module(EmmiterSpec, {
       assert_that_charptr(AS_OBJECT(GET_G(A))->name equals to "$Table");
       vm->current->ip++;
       assert_that(O is OP_ENUMERABLE);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_NEW:");
+      assert_that_charptr(AS_STRING(K(A))->value equals to "TABLE_NEW:");
       assert_that_size_t(AS_INTEGER(K(B))->value equals to 4);
       vm->current->ip++;
       assert_that(O is OP_STOZG);
       assert_that_charptr(AS_OBJECT(GET_G(A))->name equals to "$Table");
       vm->current->ip++;
       assert_that(O is OP_ENUMERABLE);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_NEW:");
+      assert_that_charptr(AS_STRING(K(A))->value equals to "TABLE_NEW:");
       assert_that_size_t(AS_INTEGER(K(B))->value equals to 4);
     });
 

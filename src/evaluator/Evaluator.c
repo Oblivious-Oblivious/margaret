@@ -2,7 +2,7 @@
 
 #include "../opcode/instruction.h"
 #include "../opcode/opcodes.h"
-#include "../primitives/Primitives.h"
+#include "../primitives/MargaretPrimitives.h"
 
 #define FETCH() (vm->current->ip++, O)
 
@@ -148,26 +148,7 @@ _opcode_loop:;
       if(IS_UNDEFINED(prim_msg)) {
         SKZ(raise("Error: cannot call because primitive does not exist."));
       } else {
-        /* TODO - Remove MARG_UNDEFINED */
-        KPUSH(AS_PRIMITIVE(prim_msg)->function(vm, MARG_UNDEFINED, args));
-      }
-      next_opcode;
-    }
-    case_opcode(OP_ENUMERABLE) {
-      ptrdiff_t argc = AS_INTEGER(KB)->value;
-      MargValue self = KPOP;
-
-      MargValue prim_msg = table_get(&vm->primitives, AS_STRING(KA)->value);
-      (void)self;
-      if(IS_UNDEFINED(prim_msg)) {
-        SKZ(raise("Error: cannot call because primitive does not exist."));
-      } else {
-        ptrdiff_t i;
-        MargValue args = MARG_TENSOR();
-        for(i = 0; i < argc; i++) {
-          vector_add(AS_TENSOR(args)->value, KPOP);
-        }
-        KPUSH(AS_PRIMITIVE(prim_msg)->function(vm, self, args));
+        KPUSH(AS_PRIMITIVE(prim_msg)->function(vm, args));
       }
       next_opcode;
     }
@@ -194,7 +175,7 @@ _opcode_loop:;
       next_opcode;
     }
     case_opcode(OP_RAISE) {
-      SKZ(__PRIM_RAISE(NULL, KA, MARG_UNDEFINED));
+      SKZ(__PRIM_RAISE(NULL, KA));
       next_opcode;
     }
     case_opcode(OP_EXACTREC) {

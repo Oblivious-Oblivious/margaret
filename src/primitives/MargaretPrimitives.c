@@ -1,18 +1,14 @@
 #include "MargaretPrimitives.h"
 
-#include "Primitives.h"
-
-#include <float.h> /* LDBL_DIG */
 #include <stdio.h> /* fprintf, stdout */
 
-MargValue __PRIM_RAISE(VM *vm, MargValue self, MargValue args_value) {
+MargValue __PRIM_RAISE(VM *vm, MargValue error) {
   (void)vm;
-  (void)args_value;
-  fprintf(stdout, "\033[1;31mraise:\033[0m `%s`\n", AS_STRING(self)->value);
+  fprintf(stdout, "\033[1;31mraise:\033[0m `%s`\n", AS_STRING(error)->value);
   return MARG_UNDEFINED;
 }
 
-/* MargValue primitive_DNU(VM *vm, MargValue self, MargValue args_value) {
+/* MargValue primitive_DNU(VM *vm, MargValue args_value) {
   MargValue message_name = fs_pop(vm->sp);
   MargValue object       = fs_pop(vm->sp);
   fs_pop(vm->sp);
@@ -31,7 +27,7 @@ MargValue __PRIM_RAISE(VM *vm, MargValue self, MargValue args_value) {
   }
 } */
 
-/* MargValue primitive_CLONE(VM *vm, MargValue self, MargValue args_value) {
+/* MargValue primitive_CLONE(VM *vm, MargValue args_value) {
   MargValue new_object_name = fs_pop(vm->sp);
   MargValue parent_object   = fs_pop(vm->sp);
   fs_pop(vm->sp);
@@ -44,9 +40,8 @@ MargValue __PRIM_RAISE(VM *vm, MargValue self, MargValue args_value) {
   }
 } */
 
-MargValue __PRIM_INSPECT(VM *vm, MargValue self, MargValue args_value) {
+MargValue __PRIM_INSPECT(VM *vm, MargValue args_value) {
   MargValue *args = AS_TENSOR(args_value)->value;
-  (void)self;
   printf("%s\n", marg_value_format(vm, args[0]));
   return MARG_UNDEFINED;
 }

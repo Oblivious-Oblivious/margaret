@@ -1,7 +1,13 @@
 #include "vm.h"
 
 #include "../opcode/instruction.h"
-#include "../primitives/Primitives.h"
+#include "../primitives/BitstringPrimitives.h"
+#include "../primitives/MargaretPrimitives.h"
+#include "../primitives/NumericPrimitives.h"
+#include "../primitives/StringPrimitives.h"
+#include "../primitives/TablePrimitives.h"
+#include "../primitives/TensorPrimitives.h"
+#include "../primitives/TuplePrimitives.h"
 
 /**
  * @brief Setup ad-hoc $Margaret object
@@ -63,114 +69,48 @@ p_inline void setup_main(VM *vm) {
   vm->current = AS_METHOD(main_method);
 }
 
+#define define_prim(name, msg) \
+  table_add(&vm->primitives, (name), MARG_PRIMITIVE((name), (msg)))
+
 p_inline void setup_primitives(VM *vm) {
-  define_primitive(
-    vm, "MARGARET_INSPECT:", (MargPrimitiveFunction)__PRIM_INSPECT
-  );
-  define_primitive(vm, "MARGARET_RAISE:", (MargPrimitiveFunction)__PRIM_RAISE);
+  define_prim("MARGARET_INSPECT:", __PRIM_INSPECT);
+  define_prim("MARGARET_RAISE:", __PRIM_RAISE);
 
-  define_primitive(
-    vm, "NUMERIC_ADD:WITH:", (MargPrimitiveFunction)__PRIM_NUMERIC_ADD
-  );
-  define_primitive(
-    vm, "NUMERIC_SUB:WITH:", (MargPrimitiveFunction)__PRIM_NUMERIC_SUB
-  );
-  define_primitive(
-    vm, "NUMERIC_MUL:WITH:", (MargPrimitiveFunction)__PRIM_NUMERIC_MUL
-  );
-  define_primitive(
-    vm, "NUMERIC_DIV:WITH:", (MargPrimitiveFunction)__PRIM_NUMERIC_DIV
-  );
+  define_prim("NUMERIC_ADD:WITH:", __PRIM_NUMERIC_ADD);
+  define_prim("NUMERIC_SUB:WITH:", __PRIM_NUMERIC_SUB);
+  define_prim("NUMERIC_MUL:WITH:", __PRIM_NUMERIC_MUL);
+  define_prim("NUMERIC_DIV:WITH:", __PRIM_NUMERIC_DIV);
 
-  define_primitive(
-    vm, "STRING_ADD:STR:", (MargPrimitiveFunction)__PRIM_STRING_ADD
-  );
-  define_primitive(
-    vm, "STRING_SIZE:", (MargPrimitiveFunction)__PRIM_STRING_SIZE
-  );
-  define_primitive(
-    vm, "STRING_SHORTEN:TO:", (MargPrimitiveFunction)__PRIM_STRING_SHORTEN
-  );
-  define_primitive(
-    vm,
-    "STRING_SKIP_FIRST:CHARS:",
-    (MargPrimitiveFunction)__PRIM_STRING_SKIP_FIRST
-  );
-  define_primitive(
-    vm,
-    "STRING_IGNORE_LAST:CHARS:",
-    (MargPrimitiveFunction)__PRIM_STRING_IGNORE_LAST
-  );
-  define_primitive(
-    vm, "STRING_DELETE:", (MargPrimitiveFunction)__PRIM_STRING_DELETE
-  );
-  define_primitive(
-    vm, "STRING_REMOVE:CHAR:", (MargPrimitiveFunction)__PRIM_STRING_REMOVE
-  );
-  define_primitive(
-    vm, "STRING_EQUALS:OTHER:", (MargPrimitiveFunction)__PRIM_STRING_EQUALS
-  );
+  define_prim("STRING_ADD:STR:", __PRIM_STRING_ADD);
+  define_prim("STRING_SIZE:", __PRIM_STRING_SIZE);
+  define_prim("STRING_SHORTEN:TO:", __PRIM_STRING_SHORTEN);
+  define_prim("STRING_SKIP_FIRST:CHARS:", __PRIM_STRING_SKIP_FIRST);
+  define_prim("STRING_IGNORE_LAST:CHARS:", __PRIM_STRING_IGNORE_LAST);
+  define_prim("STRING_DELETE:", __PRIM_STRING_DELETE);
+  define_prim("STRING_REMOVE:CHAR:", __PRIM_STRING_REMOVE);
+  define_prim("STRING_EQUALS:OTHER:", __PRIM_STRING_EQUALS);
 
-  define_primitive(vm, "TENSOR_NEW:", (MargPrimitiveFunction)__PRIM_TENSOR_NEW);
-  define_primitive(
-    vm, "TENSOR_ADD:ELEMENT:", (MargPrimitiveFunction)__PRIM_TENSOR_ADD
-  );
-  define_primitive(
-    vm, "TENSOR_ADD:TENSOR:", (MargPrimitiveFunction)__PRIM_TENSOR_ADD_TENSOR
-  );
-  define_primitive(
-    vm, "TENSOR_REMOVE:ELEMENT:", (MargPrimitiveFunction)__PRIM_TENSOR_REMOVE
-  );
-  define_primitive(
-    vm, "TENSOR_REMOVE_LAST:", (MargPrimitiveFunction)__PRIM_TENSOR_REMOVE_LAST
-  );
-  define_primitive(
-    vm, "TENSOR_LAST:", (MargPrimitiveFunction)__PRIM_TENSOR_LAST
-  );
-  define_primitive(
-    vm, "TENSOR_SIZE:", (MargPrimitiveFunction)__PRIM_TENSOR_SIZE
-  );
+  define_prim("TENSOR_NEW:", __PRIM_TENSOR_NEW);
+  define_prim("TENSOR_ADD:ELEMENT:", __PRIM_TENSOR_ADD);
+  define_prim("TENSOR_ADD:TENSOR:", __PRIM_TENSOR_ADD_TENSOR);
+  define_prim("TENSOR_REMOVE:ELEMENT:", __PRIM_TENSOR_REMOVE);
+  define_prim("TENSOR_REMOVE_LAST:", __PRIM_TENSOR_REMOVE_LAST);
+  define_prim("TENSOR_LAST:", __PRIM_TENSOR_LAST);
+  define_prim("TENSOR_SIZE:", __PRIM_TENSOR_SIZE);
 
-  define_primitive(vm, "TUPLE_NEW:", (MargPrimitiveFunction)__PRIM_TUPLE_NEW);
-  define_primitive(
-    vm, "TUPLE_ADD:ELEMENT:", (MargPrimitiveFunction)__PRIM_TUPLE_ADD
-  );
-  define_primitive(vm, "TUPLE_SIZE:", (MargPrimitiveFunction)__PRIM_TUPLE_SIZE);
+  define_prim("TUPLE_NEW:", __PRIM_TUPLE_NEW);
+  define_prim("TUPLE_ADD:ELEMENT:", __PRIM_TUPLE_ADD);
+  define_prim("TUPLE_SIZE:", __PRIM_TUPLE_SIZE);
 
-  define_primitive(
-    vm, "__PRIM_NEW:", "$Table", (MargPrimitiveFunction)__PRIM_TABLE_NEW
-  );
-  define_primitive(
-    vm, "__PRIM_TABLE_ADD:", "$Table", (MargPrimitiveFunction)__PRIM_TABLE_ADD
-  );
-  define_primitive(
-    vm, "__PRIM_TABLE_GET:", "$Table", (MargPrimitiveFunction)__PRIM_TABLE_GET
-  );
-  define_primitive(
-    vm,
-    "__PRIM_TABLE_REMOVE:",
-    "$Table",
-    (MargPrimitiveFunction)__PRIM_TABLE_REMOVE
-  );
-  define_primitive(
-    vm, "__PRIM_TABLE_SIZE:", "$Table", (MargPrimitiveFunction)__PRIM_TABLE_SIZE
-  );
+  define_prim("TABLE_NEW:", __PRIM_TABLE_NEW);
+  define_prim("TABLE_ADD:KEY:VALUE:", __PRIM_TABLE_ADD);
+  define_prim("TABLE_GET:KEY:", __PRIM_TABLE_GET);
+  define_prim("TABLE_REMOVE:KEY:", __PRIM_TABLE_REMOVE);
+  define_prim("TABLE_SIZE:", __PRIM_TABLE_SIZE);
 
-  define_primitive(
-    vm, "__PRIM_NEW:", "$Bitstring", (MargPrimitiveFunction)__PRIM_BITSTRING_NEW
-  );
-  define_primitive(
-    vm,
-    "__PRIM_BITSTRING_ADD:",
-    "$Bitstring",
-    (MargPrimitiveFunction)__PRIM_BITSTRING_ADD
-  );
-  define_primitive(
-    vm,
-    "__PRIM_BITSTRING_SIZE:",
-    "$Bitstring",
-    (MargPrimitiveFunction)__PRIM_BITSTRING_SIZE
-  );
+  define_prim("BITSTRING_NEW:", __PRIM_BITSTRING_NEW);
+  define_prim("BITSTRING_ADD:VALUE:BITS:", __PRIM_BITSTRING_ADD);
+  define_prim("BITSTRING_SIZE:", __PRIM_BITSTRING_SIZE);
 }
 
 VM *vm_new(const char *filename) {

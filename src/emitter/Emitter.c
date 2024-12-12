@@ -29,6 +29,15 @@
     CONST(MARG_INTEGER(number_of_parameters)) \
   )
 
+#define enumerable_helper(message_name)                      \
+  size_t number_of_elements;                                 \
+  sscanf(formal_bytecode[++ip], "%zu", &number_of_elements); \
+  OAB(                                                       \
+    OP_PRIM,                                                 \
+    CONST(MARG_STRING(message_name)),                        \
+    CONST(MARG_INTEGER(number_of_elements))                  \
+  )
+
 VM *emitter_emit(VM *vm) {
   size_t ip;
   char **formal_bytecode = vm->formal_bytecode;
@@ -78,34 +87,10 @@ VM *emitter_emit(VM *vm) {
       OA(OP_STOZK, CONST(MARG_SYMBOL(formal_bytecode[++ip])));
     }
 
-    case_fmcode(FM_TENSOR) {
-      OA(OP_STOZG, GLOBAL("$Tensor"));
-      size_t number_of_elements;
-      sscanf(formal_bytecode[++ip], "%zu", &number_of_elements);
-      OAB(
-        OP_ENUMERABLE,
-        CONST(MARG_STRING("TENSOR_NEW:")),
-        CONST(MARG_INTEGER(number_of_elements))
-      );
-    }
-    case_fmcode(FM_TUPLE) {
-      OA(OP_STOZG, GLOBAL("$Tuple"));
-    }
-    case_fmcode(FM_TABLE) {
-      OA(OP_STOZG, GLOBAL("$Table"));
-      emit_enumerable_new();
-    }
-    case_fmcode(FM_BITSTRING) {
-      OA(OP_STOZG, GLOBAL("$Bitstring"));
-      emit_enumerable_new();
-      size_t number_of_elements;
-      sscanf(formal_bytecode[++ip], "%zu", &number_of_elements);
-      OAB(
-        OP_ENUMERABLE,
-        CONST(MARG_STRING("TUPLE_NEW:")),
-        CONST(MARG_INTEGER(number_of_elements))
-      );
-    }
+    case_fmcode(FM_TENSOR) { enumerable_helper("TENSOR_NEW:"); }
+    case_fmcode(FM_TUPLE) { enumerable_helper("TUPLE_NEW:"); }
+    case_fmcode(FM_TABLE) { enumerable_helper("TABLE_NEW:"); }
+    case_fmcode(FM_BITSTRING) { enumerable_helper("BITSTRING_NEW:"); }
 
     case_fmcode(FM_GLOBAL) { OA(OP_STOZG, GLOBAL(formal_bytecode[++ip])); }
     case_fmcode(FM_INSTANCE) { OA(OP_STOZI, INSTANCE(formal_bytecode[++ip])); }
@@ -194,6 +179,14 @@ VM *emitter_emit(VM *vm) {
 
       message_case("TUPLE_ADD:ELEMENT:") { prim_helper(2); }
       message_case("TUPLE_SIZE:") { prim_helper(1); }
+
+      message_case("TABLE_ADD:KEY:VALUE:") { prim_helper(3); }
+      message_case("TABLE_GET:KEY:") { prim_helper(2); }
+      message_case("TABLE_REMOVE:KEY:") { prim_helper(2); }
+      message_case("TABLE_SIZE:") { prim_helper(1); }
+
+      message_case("BITSTRING_ADD:VALUE:BITS:") { prim_helper(3); }
+      message_case("BITSTRING_SIZE:") { prim_helper(1); }
       message_default {
         (void)number_of_parameters;
         /* emit_variable_length(OP_OBJECT);
