@@ -228,15 +228,14 @@ _opcode_loop:;
 }
 
 MargValue evaluator_evaluate(VM *vm) {
-  size_t ip_old;
-
   if(vm->error) {
     return MARG_UNDEFINED;
   }
 
-  ip_old = vm->current->ip;
   evaluator_run(vm);
-  if(ip_old + 1 == 0 || vm->current->ip == ip_old) {
+  vm_free_formal_bytecode();
+
+  if(vector_size(vm->current->bytecode) == 1) {
     return MARG_UNDEFINED;
   } else {
     return KZ;

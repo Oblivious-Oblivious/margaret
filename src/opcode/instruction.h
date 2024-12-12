@@ -18,7 +18,8 @@ p_inline Instruction make_constant(VM *vm, MargValue value) {
   return vector_size(vm->current->constants) - 1;
 }
 
-p_inline Instruction make_local(VM *vm, const char *var) {
+p_inline Instruction make_local(VM *vm, const char *_var) {
+  const char *var     = string_new(_var);
   Instruction reg_ptr = table_get(&vm->current->local_variables, var);
   if(reg_ptr != TABLE_UNDEFINED) {
     return reg_ptr;
@@ -32,7 +33,8 @@ p_inline Instruction make_local(VM *vm, const char *var) {
   }
 }
 
-p_inline Instruction make_instance(VM *vm, const char *var) {
+p_inline Instruction make_instance(VM *vm, const char *_var) {
+  const char *var = string_new(_var);
   Instruction reg_ptr =
     table_get(&vm->current->bound_object->instance_variables, var);
   if(reg_ptr != TABLE_UNDEFINED) {
@@ -50,7 +52,8 @@ p_inline Instruction make_instance(VM *vm, const char *var) {
   }
 }
 
-p_inline Instruction make_global(VM *vm, const char *var) {
+p_inline Instruction make_global(VM *vm, const char *_var) {
+  const char *var     = string_new(_var);
   Instruction reg_ptr = table_get(&vm->global_variables, var);
   if(reg_ptr != TABLE_UNDEFINED) {
     return reg_ptr;
