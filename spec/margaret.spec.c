@@ -70,9 +70,6 @@
 /* parser */
 #include "parser/Parser.spec.h"
 
-/* primitives */
-#include "primitives/Primitives.spec.h"
-
 /* scanner */
 #include "scanner/Scanner.spec.h"
 
@@ -149,8 +146,6 @@ int main(void) {
     ParserSpec();
 
     ScannerSpec();
-
-    PrimitivesSpec();
 
     TokenSpec();
     TypeSpec();
