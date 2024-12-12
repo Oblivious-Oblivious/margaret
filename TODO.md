@@ -51,6 +51,7 @@
 -----------------
   🟥 FT-05 - Separate value representation for small strings that store the characters inline in the value.
   🟥 FT-06 - In the NaN boxing scheme do not reallocate integer and float representations, instead use unboxed values directly.
+  🟥 FT-13 - Add __LINE__ __FILE__ and __DIR__ macros.
   🟥 FT-18 - Add pattern matching and LISP style handling of items
              %[:car, :cdr] = %[1, 2, 3] # car = 1, cdr = %[2, 3]
              %[:car, :cdr] = %[1, 2] # car = 1, cdr = %[2], (flatten), cdr = 2
@@ -72,6 +73,7 @@
   🟥 FT-34 - Keep formal bytecode as an easy to use intermediate for translating to other language VMs.
   🟥 FT-35 - Create an instruction inspector
   🟥 FT-36 - Add liveness analysis for reusing registers.
+  🟥 FT-37 - Store line and char numbers on bytecode instructions.
 
   🟥 QOL-05 - Potentially use any type of local/instance/global variable as labels.  Requires that variables store their ip memory location.
 
@@ -107,7 +109,6 @@
   🟥 FT-11 - Implement `while:` using the `goto:` primitive to avoid endless recursion.
   🟥 FT-12 - Add a `bind:` or `--` message to tensors so we can add tensors of unbound methods.
              $Margaret bind: [m1, m2, m3] binds those methods into $Object.
-  🟥 FT-13 - Add __LINE__ __FILE__ and __DIR__ macros.
   🟥 FT-14 - Add a primitive for raising errors.  The raise: message is the only one that crashes the VM.
              $Numeric -- #/ 0 => raise: "division by zero",
              $Numeric -- #/ other => @self / other,
