@@ -43,18 +43,6 @@ dispatch_method_from_delegation_chain(VM *vm, MargValue self) {
   return msg_value;
 }
 
-p_inline MargValue
-dispatch_primitive_from_delegation_chain(VM *vm, MargValue self) {
-  char *name            = AS_STRING(KA)->value;
-  MargValue curr_object = self;
-  MargValue prim_msg    = table_get(&AS_OBJECT(curr_object)->primitives, name);
-  while(IS_UNDEFINED(prim_msg) && !IS_MARGARET(curr_object)) {
-    curr_object = QNAN_BOX(AS_OBJECT(curr_object)->proto);
-    prim_msg    = table_get(&AS_OBJECT(curr_object)->primitives, name);
-  }
-  return prim_msg;
-}
-
 /**
  * @brief Runs the iterator that evaluates
     the result of the generated opcodes
@@ -142,22 +130,26 @@ _opcode_loop:;
       next_opcode;
     }
     case_opcode(OP_PRIM) {
+      char *name     = AS_STRING(KA)->value;
       ptrdiff_t argc = AS_INTEGER(KB)->value;
-      MargValue self;
       MargValue args = MARG_TENSOR();
       MargValue prim_msg;
       ptrdiff_t i;
-      for(i = 0; i < argc; i++) {
+      vector_initialize_n(AS_TENSOR(args)->value, argc);
+      for(i = argc - 1; i >= 0; i--) {
         MargValue v = KPOP;
-        vector_add(AS_TENSOR(args)->value, v);
+        if(IS_VARIABLE(v)) {
+          v = AS_VARIABLE(v)->value;
+        }
+        AS_TENSOR(args)->value[i] = v;
       }
-      self = KPOP;
 
-      prim_msg = dispatch_primitive_from_delegation_chain(vm, self);
+      prim_msg = table_get(&vm->primitives, name);
       if(IS_UNDEFINED(prim_msg)) {
         SKZ(raise("Error: cannot call because primitive does not exist."));
       } else {
-        KPUSH(AS_PRIMITIVE(prim_msg)->function(vm, self, args));
+        /* TODO - Remove MARG_UNDEFINED */
+        KPUSH(AS_PRIMITIVE(prim_msg)->function(vm, MARG_UNDEFINED, args));
       }
       next_opcode;
     }
@@ -165,7 +157,8 @@ _opcode_loop:;
       ptrdiff_t argc = AS_INTEGER(KB)->value;
       MargValue self = KPOP;
 
-      MargValue prim_msg = dispatch_primitive_from_delegation_chain(vm, self);
+      MargValue prim_msg = table_get(&vm->primitives, AS_STRING(KA)->value);
+      (void)self;
       if(IS_UNDEFINED(prim_msg)) {
         SKZ(raise("Error: cannot call because primitive does not exist."));
       } else {

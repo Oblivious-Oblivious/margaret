@@ -18,7 +18,6 @@ marg_object_init(VM *vm, size_t size, MargValue proto, const char *name) {
   self->instance_index = 0;
   table_init(&self->instance_variables);
   table_init(&self->messages);
-  table_init(&self->primitives);
 
   if(!IS_UNDEFINED(proto)) {
     table_add_all_non_labels(

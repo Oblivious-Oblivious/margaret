@@ -23,6 +23,7 @@
  * @param global_registers -> Global register array
  * @param global_index -> Global register index
  * @param global_variables -> Global without namespacing or scoping
+ * @param primitives -> List of primitives
  * @param current -> Pointer to the currect method-derived proc
  */
 typedef struct VM {
@@ -40,6 +41,7 @@ typedef struct VM {
   MargValue global_registers[MAX_REGISTERS];
   uint32_t global_index;
   EmeraldsTable global_variables;
+  EmeraldsTable primitives;
   struct MargMethod *current;
 } VM;
 

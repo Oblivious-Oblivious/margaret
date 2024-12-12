@@ -8,8 +8,8 @@
 MargValue __PRIM_RAISE(VM *vm, MargValue self, MargValue args_value) {
   (void)vm;
   (void)args_value;
-  fprintf(stdout, "raise: `%s`\n", AS_STRING(self)->value);
-  return self;
+  fprintf(stdout, "\033[1;31mraise:\033[0m `%s`\n", AS_STRING(self)->value);
+  return MARG_UNDEFINED;
 }
 
 /* MargValue primitive_DNU(VM *vm, MargValue self, MargValue args_value) {
@@ -45,8 +45,8 @@ MargValue __PRIM_RAISE(VM *vm, MargValue self, MargValue args_value) {
 } */
 
 MargValue __PRIM_INSPECT(VM *vm, MargValue self, MargValue args_value) {
-  (void)args_value;
-
-  printf("%s\n", marg_value_format(vm, self));
-  return self;
+  MargValue *args = AS_TENSOR(args_value)->value;
+  (void)self;
+  printf("%s\n", marg_value_format(vm, args[0]));
+  return MARG_UNDEFINED;
 }

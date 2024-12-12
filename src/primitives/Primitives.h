@@ -9,8 +9,6 @@
 #include "TensorPrimitives.h"
 #include "TuplePrimitives.h"
 
-void define_primitive(
-  VM *vm, const char *name, const char *object_name, MargPrimitiveFunction msg
-);
+void define_primitive(VM *vm, const char *name, MargPrimitiveFunction msg);
 
 #endif

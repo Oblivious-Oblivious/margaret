@@ -29,7 +29,6 @@ typedef struct MargObject {
   uint32_t instance_index;
   EmeraldsTable instance_variables;
   EmeraldsTable messages;
-  EmeraldsTable primitives;
 } MargObject;
 
 /**

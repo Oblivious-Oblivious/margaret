@@ -3,9 +3,7 @@
 
 #include "MargaretPrimitives.h"
 
-MargValue __PRIM_STRING_ADDN(VM *vm, MargValue self, MargValue args_value);
 MargValue __PRIM_STRING_ADD(VM *vm, MargValue self, MargValue args_value);
-MargValue __PRIM_STRING_ADDI(VM *vm, MargValue self, MargValue args_value);
 MargValue __PRIM_STRING_SIZE(VM *vm, MargValue self, MargValue args_value);
 MargValue __PRIM_STRING_SHORTEN(VM *vm, MargValue self, MargValue args_value);
 MargValue

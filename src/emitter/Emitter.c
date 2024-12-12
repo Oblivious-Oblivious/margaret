@@ -22,16 +22,12 @@
 #define COMP_LABEL_GLOBAL(name) \
   (SET_G(GLOBAL(name), MARG_LABEL(name)), OA(OP_STOZG, GLOBAL(name)))
 
-#define emit_enumerable_new()                                  \
-  do {                                                         \
-    size_t number_of_elements;                                 \
-    sscanf(formal_bytecode[++ip], "%zu", &number_of_elements); \
-    OAB(                                                       \
-      OP_ENUMERABLE,                                           \
-      CONST(MARG_STRING("__PRIM_NEW:")),                       \
-      CONST(MARG_INTEGER(number_of_elements))                  \
-    );                                                         \
-  } while(0)
+#define prim_helper(number_of_parameters)     \
+  OAB(                                        \
+    OP_PRIM,                                  \
+    CONST(MARG_STRING(message_name)),         \
+    CONST(MARG_INTEGER(number_of_parameters)) \
+  )
 
 VM *emitter_emit(VM *vm) {
   size_t ip;
@@ -84,11 +80,16 @@ VM *emitter_emit(VM *vm) {
 
     case_fmcode(FM_TENSOR) {
       OA(OP_STOZG, GLOBAL("$Tensor"));
-      emit_enumerable_new();
+      size_t number_of_elements;
+      sscanf(formal_bytecode[++ip], "%zu", &number_of_elements);
+      OAB(
+        OP_ENUMERABLE,
+        CONST(MARG_STRING("TENSOR_NEW:")),
+        CONST(MARG_INTEGER(number_of_elements))
+      );
     }
     case_fmcode(FM_TUPLE) {
       OA(OP_STOZG, GLOBAL("$Tuple"));
-      emit_enumerable_new();
     }
     case_fmcode(FM_TABLE) {
       OA(OP_STOZG, GLOBAL("$Table"));
@@ -97,6 +98,13 @@ VM *emitter_emit(VM *vm) {
     case_fmcode(FM_BITSTRING) {
       OA(OP_STOZG, GLOBAL("$Bitstring"));
       emit_enumerable_new();
+      size_t number_of_elements;
+      sscanf(formal_bytecode[++ip], "%zu", &number_of_elements);
+      OAB(
+        OP_ENUMERABLE,
+        CONST(MARG_STRING("TUPLE_NEW:")),
+        CONST(MARG_INTEGER(number_of_elements))
+      );
     }
 
     case_fmcode(FM_GLOBAL) { OA(OP_STOZG, GLOBAL(formal_bytecode[++ip])); }
@@ -159,9 +167,33 @@ VM *emitter_emit(VM *vm) {
       char *message_name         = formal_bytecode[++ip];
       char *number_of_parameters = formal_bytecode[++ip];
 
-      switch_message_case("__PRIM_PUTS:") { /* emit_byte(OP_PUTS); */ }
-      message_case("__PRIM_INCLUDE:") { /* emit_byte(OP_INCLUDE); */ }
-      /* message_case("...") { ... } */
+      switch_message_case("MARGARET_INSPECT:") { prim_helper(1); }
+      /* TODO - Should ne 1 argument primitive */
+      message_case("MARGARET_RAISE:") { prim_helper(0); }
+
+      message_case("NUMERIC_ADD:WITH:") { prim_helper(2); }
+      message_case("NUMERIC_SUB:WITH:") { prim_helper(2); }
+      message_case("NUMERIC_MUL:WITH:") { prim_helper(2); }
+      message_case("NUMERIC_DIV:WITH:") { prim_helper(2); }
+
+      message_case("STRING_ADD:STR:") { prim_helper(2); }
+      message_case("STRING_SIZE:") { prim_helper(1); }
+      message_case("STRING_SHORTEN:TO:") { prim_helper(2); }
+      message_case("STRING_SKIP_FIRST:CHARS:") { prim_helper(2); }
+      message_case("STRING_IGNORE_LAST:CHARS:") { prim_helper(2); }
+      message_case("STRING_DELETE:") { prim_helper(1); }
+      message_case("STRING_REMOVE:CHAR:") { prim_helper(2); }
+      message_case("STRING_EQUALS:OTHER:") { prim_helper(2); }
+
+      message_case("TENSOR_ADD:ELEMENT:") { prim_helper(2); }
+      message_case("TENSOR_ADD:TENSOR:") { prim_helper(2); }
+      message_case("TENSOR_REMOVE:ELEMENT:") { prim_helper(2); }
+      message_case("TENSOR_REMOVE_LAST:") { prim_helper(1); }
+      message_case("TENSOR_LAST:") { prim_helper(1); }
+      message_case("TENSOR_SIZE:") { prim_helper(1); }
+
+      message_case("TUPLE_ADD:ELEMENT:") { prim_helper(2); }
+      message_case("TUPLE_SIZE:") { prim_helper(1); }
       message_default {
         (void)number_of_parameters;
         /* emit_variable_length(OP_OBJECT);

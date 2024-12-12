@@ -38,8 +38,10 @@ char *marg_value_format(VM *vm, MargValue self) {
     size_t i;
     char *res          = string_new("[");
     MargTensor *tensor = AS_TENSOR(self);
+    MargValue args     = MARG_TENSOR();
+    vector_add(AS_TENSOR(args)->value, self);
     size_t size =
-      AS_INTEGER(__PRIM_TENSOR_SIZE(vm, self, MARG_UNDEFINED))->value;
+      AS_INTEGER(__PRIM_TENSOR_SIZE(vm, MARG_UNDEFINED, args))->value;
     if(size > 0) {
       for(i = 0; i < size - 1; i++) {
         string_addf(&res, "%s, ", marg_value_format(vm, tensor->value[i]));
@@ -52,8 +54,10 @@ char *marg_value_format(VM *vm, MargValue self) {
     size_t i;
     char *res        = string_new("%[");
     MargTuple *tuple = AS_TUPLE(self);
+    MargValue args   = MARG_TENSOR();
+    vector_add(AS_TENSOR(args)->value, self);
     size_t size =
-      AS_INTEGER(__PRIM_TUPLE_SIZE(vm, self, MARG_UNDEFINED))->value;
+      AS_INTEGER(__PRIM_TUPLE_SIZE(vm, MARG_UNDEFINED, args))->value;
     if(size > 0) {
       for(i = 0; i < size - 1; i++) {
         string_addf(&res, "%s, ", marg_value_format(vm, tuple->value[i]));
