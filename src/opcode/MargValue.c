@@ -41,8 +41,9 @@ char *marg_value_format(VM *vm, MargValue self) {
     char *res          = string_new("[");
     MargTensor *tensor = AS_TENSOR(self);
     MargValue args     = MARG_TENSOR();
+    size_t size;
     vector_add(AS_TENSOR(args)->value, self);
-    size_t size = AS_INTEGER(__PRIM_TENSOR_SIZE(vm, args))->value;
+    size = AS_INTEGER(__PRIM_TENSOR_SIZE(vm, args))->value;
     if(size > 0) {
       for(i = 0; i < size - 1; i++) {
         string_addf(&res, "%s, ", marg_value_format(vm, tensor->value[i]));
@@ -56,8 +57,9 @@ char *marg_value_format(VM *vm, MargValue self) {
     char *res        = string_new("%[");
     MargTuple *tuple = AS_TUPLE(self);
     MargValue args   = MARG_TENSOR();
+    size_t size;
     vector_add(AS_TENSOR(args)->value, self);
-    size_t size = AS_INTEGER(__PRIM_TUPLE_SIZE(vm, args))->value;
+    size = AS_INTEGER(__PRIM_TUPLE_SIZE(vm, args))->value;
     if(size > 0) {
       for(i = 0; i < size - 1; i++) {
         string_addf(&res, "%s, ", marg_value_format(vm, tuple->value[i]));
@@ -87,8 +89,9 @@ char *marg_value_format(VM *vm, MargValue self) {
     size_t i;
     char *res      = string_new("%(");
     MargValue args = MARG_TENSOR();
+    size_t size;
     vector_add(AS_TENSOR(args)->value, self);
-    size_t size = AS_INTEGER(__PRIM_BITSTRING_SIZE(vm, args))->value;
+    size = AS_INTEGER(__PRIM_BITSTRING_SIZE(vm, args))->value;
     if(size > 0) {
       for(i = 0; i < size - 1; i++) {
         string_addf(
