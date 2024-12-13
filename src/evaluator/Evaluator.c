@@ -143,6 +143,7 @@ _opcode_loop:;
         }
         AS_TENSOR(args)->value[i] = v;
       }
+      KPOP;
 
       prim_msg = table_get(&vm->primitives, name);
       if(IS_UNDEFINED(prim_msg)) {
