@@ -1,6 +1,8 @@
 #include "MargValue.h"
 
-#include "../primitives/Primitives.h"
+#include "../primitives/BitstringPrimitives.h"
+#include "../primitives/TensorPrimitives.h"
+#include "../primitives/TuplePrimitives.h"
 
 #include <float.h> /* LDBL_DIG */
 
@@ -38,8 +40,10 @@ char *marg_value_format(VM *vm, MargValue self) {
     size_t i;
     char *res          = string_new("[");
     MargTensor *tensor = AS_TENSOR(self);
-    size_t size =
-      AS_INTEGER(__PRIM_TENSOR_SIZE(vm, self, MARG_UNDEFINED))->value;
+    MargValue args     = MARG_TENSOR();
+    size_t size;
+    vector_add(AS_TENSOR(args)->value, self);
+    size = AS_INTEGER(__PRIM_TENSOR_SIZE(vm, args))->value;
     if(size > 0) {
       for(i = 0; i < size - 1; i++) {
         string_addf(&res, "%s, ", marg_value_format(vm, tensor->value[i]));
@@ -52,8 +56,10 @@ char *marg_value_format(VM *vm, MargValue self) {
     size_t i;
     char *res        = string_new("%[");
     MargTuple *tuple = AS_TUPLE(self);
-    size_t size =
-      AS_INTEGER(__PRIM_TUPLE_SIZE(vm, self, MARG_UNDEFINED))->value;
+    MargValue args   = MARG_TENSOR();
+    size_t size;
+    vector_add(AS_TENSOR(args)->value, self);
+    size = AS_INTEGER(__PRIM_TUPLE_SIZE(vm, args))->value;
     if(size > 0) {
       for(i = 0; i < size - 1; i++) {
         string_addf(&res, "%s, ", marg_value_format(vm, tuple->value[i]));
@@ -81,9 +87,11 @@ char *marg_value_format(VM *vm, MargValue self) {
     return res;
   } else if(IS_BITSTRING(self)) {
     size_t i;
-    char *res = string_new("%(");
-    size_t size =
-      AS_INTEGER(__PRIM_BITSTRING_SIZE(vm, self, MARG_UNDEFINED))->value;
+    char *res      = string_new("%(");
+    MargValue args = MARG_TENSOR();
+    size_t size;
+    vector_add(AS_TENSOR(args)->value, self);
+    size = AS_INTEGER(__PRIM_BITSTRING_SIZE(vm, args))->value;
     if(size > 0) {
       for(i = 0; i < size - 1; i++) {
         string_addf(
@@ -118,6 +126,10 @@ char *marg_value_format(VM *vm, MargValue self) {
   } else if(IS_PRIMITIVE(self)) {
     char *res = string_new("");
     string_addf(&res, "< PRIM#%s >\n", AS_PRIMITIVE(self)->primitive_name);
+    return res;
+  } else if(IS_VARIABLE(self)) {
+    char *res = string_new("");
+    string_addf(&res, marg_value_format(vm, AS_VARIABLE(self)->value));
     return res;
   } else {
     return string_new(AS_OBJECT(self)->name);

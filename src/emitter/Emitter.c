@@ -22,16 +22,21 @@
 #define COMP_LABEL_GLOBAL(name) \
   (SET_G(GLOBAL(name), MARG_LABEL(name)), OA(OP_STOZG, GLOBAL(name)))
 
-#define emit_enumerable_new()                                  \
-  do {                                                         \
-    size_t number_of_elements;                                 \
-    sscanf(formal_bytecode[++ip], "%zu", &number_of_elements); \
-    OAB(                                                       \
-      OP_PRIM,                                                 \
-      CONST(MARG_STRING("__PRIM_NEW:")),                       \
-      CONST(MARG_INTEGER(number_of_elements))                  \
-    );                                                         \
-  } while(0)
+#define prim_helper(number_of_parameters)     \
+  OAB(                                        \
+    OP_PRIM,                                  \
+    CONST(MARG_STRING(message_name)),         \
+    CONST(MARG_INTEGER(number_of_parameters)) \
+  )
+
+#define enumerable_helper(message_name)                      \
+  size_t number_of_elements;                                 \
+  sscanf(formal_bytecode[++ip], "%zu", &number_of_elements); \
+  OAB(                                                       \
+    OP_PRIM,                                                 \
+    CONST(MARG_STRING(message_name)),                        \
+    CONST(MARG_INTEGER(number_of_elements))                  \
+  )
 
 VM *emitter_emit(VM *vm) {
   size_t ip;
@@ -82,40 +87,22 @@ VM *emitter_emit(VM *vm) {
       OA(OP_STOZK, CONST(MARG_SYMBOL(formal_bytecode[++ip])));
     }
 
-    case_fmcode(FM_TENSOR) {
-      OA(OP_STOZG, GLOBAL("$Tensor"));
-      emit_enumerable_new();
-    }
-    case_fmcode(FM_TUPLE) {
-      OA(OP_STOZG, GLOBAL("$Tuple"));
-      emit_enumerable_new();
-    }
-    case_fmcode(FM_TABLE) {
-      OA(OP_STOZG, GLOBAL("$Table"));
-      emit_enumerable_new();
-    }
-    case_fmcode(FM_BITSTRING) {
-      OA(OP_STOZG, GLOBAL("$Bitstring"));
-      emit_enumerable_new();
-    }
+    case_fmcode(FM_TENSOR) { enumerable_helper("TENSOR_NEW:"); }
+    case_fmcode(FM_TUPLE) { enumerable_helper("TUPLE_NEW:"); }
+    case_fmcode(FM_TABLE) { enumerable_helper("TABLE_NEW:"); }
+    case_fmcode(FM_BITSTRING) { enumerable_helper("BITSTRING_NEW:"); }
 
     case_fmcode(FM_GLOBAL) { OA(OP_STOZG, GLOBAL(formal_bytecode[++ip])); }
     case_fmcode(FM_INSTANCE) { OA(OP_STOZI, INSTANCE(formal_bytecode[++ip])); }
     case_fmcode(FM_LOCAL) { OA(OP_STOZL, LOCAL(formal_bytecode[++ip])); }
 
     case_fmcode(FM_METHOD_START) {
-      vm->current = AS_METHOD(MARG_METHOD(NULL, vm->current, NULL));
+      vm->current =
+        AS_METHOD(MARG_METHOD(vm->current->bound_object, vm->current, NULL));
     }
     case_fmcode(FM_METHOD_END) {
       MargValue new_method = QNAN_BOX(vm->current);
       OP(OP_EXACTREC);
-      if(vm->current->bound_object != NULL) {
-        table_add(
-          &vm->current->bound_object->messages,
-          vm->current->message_name,
-          QNAN_BOX(vm->current)
-        );
-      }
       vm->current = vm->current->bound_method;
       OA(OP_STOZK, CONST(new_method));
     }
@@ -124,26 +111,15 @@ VM *emitter_emit(VM *vm) {
       /* TODO - goto the beginning with formal_bytecode[ip + 1] and read the
        * next fmcode pair (like FM_LOCAL, a) and add to method properties */
       (void)formal_bytecode[++ip];
-      (void)formal_bytecode[++ip];
     }
     case_fmcode(FM_METHOD_PARAMETER) {
-      /* TODO - Similar to receiver */
-      (void)formal_bytecode[++ip];
-      (void)formal_bytecode[++ip];
+      OA(OP_STOZL, LOCAL(formal_bytecode[++ip]));
     }
     case_fmcode(FM_METHOD_NAME) {
-      char *method_name = formal_bytecode[++ip];
-      /* TODO - Add to method properties */
-      (void)method_name;
+      vm->current->message_name = formal_bytecode[++ip];
     }
 
-    case_fmcode(FM_ASSIGNMENT) {
-      char *assignment_name = formal_bytecode[++ip];
-      /* emit_byte(OP_1);
-      emit_variable_length(OP_SEND);
-      emit_temporary(MARG_STRING(assignment_name)); */
-      (void)assignment_name;
-    }
+    case_fmcode(FM_ASSIGNMENT) { OP(OP_ASSIGN); }
     case_fmcode(FM_SUBSCRIPT) {
       char *subscript_name = formal_bytecode[++ip];
       /* emit_byte(OP_1);
@@ -176,9 +152,41 @@ VM *emitter_emit(VM *vm) {
       char *message_name         = formal_bytecode[++ip];
       char *number_of_parameters = formal_bytecode[++ip];
 
-      switch_message_case("__PRIM_PUTS:") { /* emit_byte(OP_PUTS); */ }
-      message_case("__PRIM_INCLUDE:") { /* emit_byte(OP_INCLUDE); */ }
-      /* message_case("...") { ... } */
+      switch_message_case("MARGARET_INSPECT:") { prim_helper(1); }
+      /* TODO - Should ne 1 argument primitive */
+      message_case("MARGARET_RAISE:") { prim_helper(0); }
+
+      message_case("NUMERIC_ADD:WITH:") { prim_helper(2); }
+      message_case("NUMERIC_SUB:WITH:") { prim_helper(2); }
+      message_case("NUMERIC_MUL:WITH:") { prim_helper(2); }
+      message_case("NUMERIC_DIV:WITH:") { prim_helper(2); }
+
+      message_case("STRING_ADD:STR:") { prim_helper(2); }
+      message_case("STRING_SIZE:") { prim_helper(1); }
+      message_case("STRING_SHORTEN:TO:") { prim_helper(2); }
+      message_case("STRING_SKIP_FIRST:CHARS:") { prim_helper(2); }
+      message_case("STRING_IGNORE_LAST:CHARS:") { prim_helper(2); }
+      message_case("STRING_DELETE:") { prim_helper(1); }
+      message_case("STRING_REMOVE:CHAR:") { prim_helper(2); }
+      message_case("STRING_EQUALS:OTHER:") { prim_helper(2); }
+
+      message_case("TENSOR_ADD:ELEMENT:") { prim_helper(2); }
+      message_case("TENSOR_ADD:TENSOR:") { prim_helper(2); }
+      message_case("TENSOR_REMOVE:ELEMENT:") { prim_helper(2); }
+      message_case("TENSOR_REMOVE_LAST:") { prim_helper(1); }
+      message_case("TENSOR_LAST:") { prim_helper(1); }
+      message_case("TENSOR_SIZE:") { prim_helper(1); }
+
+      message_case("TUPLE_ADD:ELEMENT:") { prim_helper(2); }
+      message_case("TUPLE_SIZE:") { prim_helper(1); }
+
+      message_case("TABLE_ADD:KEY:VALUE:") { prim_helper(3); }
+      message_case("TABLE_GET:KEY:") { prim_helper(2); }
+      message_case("TABLE_REMOVE:KEY:") { prim_helper(2); }
+      message_case("TABLE_SIZE:") { prim_helper(1); }
+
+      message_case("BITSTRING_ADD:VALUE:BITS:") { prim_helper(3); }
+      message_case("BITSTRING_SIZE:") { prim_helper(1); }
       message_default {
         (void)number_of_parameters;
         /* emit_variable_length(OP_OBJECT);
@@ -193,6 +201,5 @@ VM *emitter_emit(VM *vm) {
   OP(OP_HALT);
 
 exit:
-  vm_free_formal_bytecode();
   return vm;
 }

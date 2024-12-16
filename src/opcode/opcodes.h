@@ -19,43 +19,44 @@
 #define OP_SEND     ((Instruction)0x0f)
 #define OP_RAISE    ((Instruction)0x10)
 #define OP_EXACTREC ((Instruction)0x11)
+#define OP_ASSIGN   ((Instruction)0x12)
 #define OP_NOP      ((Instruction)0x3e)
 #define OP_HALT     ((Instruction)0x3f)
 
-#define dispatch_table()                                     \
-  static void *_computed_gotos[64] = {                       \
-    &&_computed_goto_OP_STOZK, &&_computed_goto_OP_STOZL,    \
-    &&_computed_goto_OP_STOZI, &&_computed_goto_OP_STOZG,    \
-    &&_computed_goto_OP_LODZL, &&_computed_goto_OP_LODZI,    \
-    &&_computed_goto_OP_LODZG, &&_computed_goto_OP_GOTOL,    \
-    &&_computed_goto_OP_GOTOI, &&_computed_goto_OP_GOTOG,    \
-    &&_computed_goto_OP_PROCK, &&_computed_goto_OP_PROCL,    \
-    &&_computed_goto_OP_PROCI, &&_computed_goto_OP_PROCG,    \
-    &&_computed_goto_OP_PRIM,  &&_computed_goto_OP_SEND,     \
-    &&_computed_goto_OP_RAISE, &&_computed_goto_OP_EXACTREC, \
-    &&_computed_goto_ERROR,    &&_computed_goto_ERROR,       \
-    &&_computed_goto_ERROR,    &&_computed_goto_ERROR,       \
-    &&_computed_goto_ERROR,    &&_computed_goto_ERROR,       \
-    &&_computed_goto_ERROR,    &&_computed_goto_ERROR,       \
-    &&_computed_goto_ERROR,    &&_computed_goto_ERROR,       \
-    &&_computed_goto_ERROR,    &&_computed_goto_ERROR,       \
-    &&_computed_goto_ERROR,    &&_computed_goto_ERROR,       \
-    &&_computed_goto_ERROR,    &&_computed_goto_ERROR,       \
-    &&_computed_goto_ERROR,    &&_computed_goto_ERROR,       \
-    &&_computed_goto_ERROR,    &&_computed_goto_ERROR,       \
-    &&_computed_goto_ERROR,    &&_computed_goto_ERROR,       \
-    &&_computed_goto_ERROR,    &&_computed_goto_ERROR,       \
-    &&_computed_goto_ERROR,    &&_computed_goto_ERROR,       \
-    &&_computed_goto_ERROR,    &&_computed_goto_ERROR,       \
-    &&_computed_goto_ERROR,    &&_computed_goto_ERROR,       \
-    &&_computed_goto_ERROR,    &&_computed_goto_ERROR,       \
-    &&_computed_goto_ERROR,    &&_computed_goto_ERROR,       \
-    &&_computed_goto_ERROR,    &&_computed_goto_ERROR,       \
-    &&_computed_goto_ERROR,    &&_computed_goto_ERROR,       \
-    &&_computed_goto_ERROR,    &&_computed_goto_ERROR,       \
-    &&_computed_goto_ERROR,    &&_computed_goto_ERROR,       \
-    &&_computed_goto_ERROR,    &&_computed_goto_ERROR,       \
-    &&_computed_goto_OP_NOP,   &&_computed_goto_OP_HALT      \
+#define dispatch_table()                                      \
+  static void *_computed_gotos[64] = {                        \
+    &&_computed_goto_OP_STOZK,  &&_computed_goto_OP_STOZL,    \
+    &&_computed_goto_OP_STOZI,  &&_computed_goto_OP_STOZG,    \
+    &&_computed_goto_OP_LODZL,  &&_computed_goto_OP_LODZI,    \
+    &&_computed_goto_OP_LODZG,  &&_computed_goto_OP_GOTOL,    \
+    &&_computed_goto_OP_GOTOI,  &&_computed_goto_OP_GOTOG,    \
+    &&_computed_goto_OP_PROCK,  &&_computed_goto_OP_PROCL,    \
+    &&_computed_goto_OP_PROCI,  &&_computed_goto_OP_PROCG,    \
+    &&_computed_goto_OP_PRIM,   &&_computed_goto_OP_SEND,     \
+    &&_computed_goto_OP_RAISE,  &&_computed_goto_OP_EXACTREC, \
+    &&_computed_goto_OP_ASSIGN, &&_computed_goto_ERROR,       \
+    &&_computed_goto_ERROR,     &&_computed_goto_ERROR,       \
+    &&_computed_goto_ERROR,     &&_computed_goto_ERROR,       \
+    &&_computed_goto_ERROR,     &&_computed_goto_ERROR,       \
+    &&_computed_goto_ERROR,     &&_computed_goto_ERROR,       \
+    &&_computed_goto_ERROR,     &&_computed_goto_ERROR,       \
+    &&_computed_goto_ERROR,     &&_computed_goto_ERROR,       \
+    &&_computed_goto_ERROR,     &&_computed_goto_ERROR,       \
+    &&_computed_goto_ERROR,     &&_computed_goto_ERROR,       \
+    &&_computed_goto_ERROR,     &&_computed_goto_ERROR,       \
+    &&_computed_goto_ERROR,     &&_computed_goto_ERROR,       \
+    &&_computed_goto_ERROR,     &&_computed_goto_ERROR,       \
+    &&_computed_goto_ERROR,     &&_computed_goto_ERROR,       \
+    &&_computed_goto_ERROR,     &&_computed_goto_ERROR,       \
+    &&_computed_goto_ERROR,     &&_computed_goto_ERROR,       \
+    &&_computed_goto_ERROR,     &&_computed_goto_ERROR,       \
+    &&_computed_goto_ERROR,     &&_computed_goto_ERROR,       \
+    &&_computed_goto_ERROR,     &&_computed_goto_ERROR,       \
+    &&_computed_goto_ERROR,     &&_computed_goto_ERROR,       \
+    &&_computed_goto_ERROR,     &&_computed_goto_ERROR,       \
+    &&_computed_goto_ERROR,     &&_computed_goto_ERROR,       \
+    &&_computed_goto_ERROR,     &&_computed_goto_ERROR,       \
+    &&_computed_goto_OP_NOP,    &&_computed_goto_OP_HALT      \
   }
 
 #endif

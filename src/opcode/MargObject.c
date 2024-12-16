@@ -1,3 +1,5 @@
+#include "MargObject.h"
+
 #include "instruction.h"
 
 MargObject *
@@ -16,7 +18,6 @@ marg_object_init(VM *vm, size_t size, MargValue proto, const char *name) {
   self->instance_index = 0;
   table_init(&self->instance_variables);
   table_init(&self->messages);
-  table_init(&self->primitives);
 
   if(!IS_UNDEFINED(proto)) {
     table_add_all_non_labels(
@@ -166,11 +167,23 @@ MargPrimitive *marg_primitive_init(
   );
   MargPrimitive *self = (MargPrimitive *)obj;
 
-  obj->instance_registers[1] = MARG_NIL;
-  table_remove(&obj->instance_variables, "@super");
-  obj->instance_index--;
   self->function       = function;
   self->primitive_name = primitive_name;
+
+  return self;
+}
+
+MargVariable *marg_variable_init(
+  VM *vm, const char *name, MargValue value, MargVariableType type
+) {
+  MargObject *obj = (MargObject *)marg_object_init(
+    vm, sizeof(MargVariable), G("Variable"), string_new("")
+  );
+  MargVariable *self = (MargVariable *)obj;
+
+  self->name  = name;
+  self->value = value;
+  self->type  = type;
 
   return self;
 }

@@ -2,7 +2,7 @@
 
 #include "../opcode/instruction.h"
 #include "../opcode/opcodes.h"
-#include "../primitives/Primitives.h"
+#include "../primitives/MargaretPrimitives.h"
 
 #define FETCH() (vm->current->ip++, O)
 
@@ -41,18 +41,6 @@ dispatch_method_from_delegation_chain(VM *vm, MargValue self) {
     msg_value   = table_get(&AS_OBJECT(curr_object)->messages, name);
   }
   return msg_value;
-}
-
-p_inline MargValue
-dispatch_primitive_from_delegation_chain(VM *vm, MargValue self) {
-  char *name            = AS_STRING(KA)->value;
-  MargValue curr_object = self;
-  MargValue prim_msg    = table_get(&AS_OBJECT(curr_object)->primitives, name);
-  while(IS_UNDEFINED(prim_msg) && !IS_MARGARET(curr_object)) {
-    curr_object = QNAN_BOX(AS_OBJECT(curr_object)->proto);
-    prim_msg    = table_get(&AS_OBJECT(curr_object)->primitives, name);
-  }
-  return prim_msg;
 }
 
 /**
@@ -142,19 +130,26 @@ _opcode_loop:;
       next_opcode;
     }
     case_opcode(OP_PRIM) {
+      char *name     = AS_STRING(KA)->value;
       ptrdiff_t argc = AS_INTEGER(KB)->value;
-      MargValue self = KPOP;
+      MargValue args = MARG_TENSOR();
+      MargValue prim_msg;
+      ptrdiff_t i;
+      vector_initialize_n(AS_TENSOR(args)->value, argc);
+      for(i = argc - 1; i >= 0; i--) {
+        MargValue v = KPOP;
+        if(IS_VARIABLE(v)) {
+          v = AS_VARIABLE(v)->value;
+        }
+        AS_TENSOR(args)->value[i] = v;
+      }
+      KPOP;
 
-      MargValue prim_msg = dispatch_primitive_from_delegation_chain(vm, self);
+      prim_msg = table_get(&vm->primitives, name);
       if(IS_UNDEFINED(prim_msg)) {
         SKZ(raise("Error: cannot call because primitive does not exist."));
       } else {
-        ptrdiff_t i;
-        MargValue args = MARG_TENSOR();
-        for(i = 0; i < argc; i++) {
-          vector_add(AS_TENSOR(args)->value, KPOP);
-        }
-        KPUSH(AS_PRIMITIVE(prim_msg)->function(vm, self, args));
+        KPUSH(AS_PRIMITIVE(prim_msg)->function(vm, args));
       }
       next_opcode;
     }
@@ -181,7 +176,7 @@ _opcode_loop:;
       next_opcode;
     }
     case_opcode(OP_RAISE) {
-      SKZ(__PRIM_RAISE(NULL, KA, MARG_UNDEFINED));
+      SKZ(__PRIM_RAISE(NULL, KA));
       next_opcode;
     }
     case_opcode(OP_EXACTREC) {
@@ -189,6 +184,27 @@ _opcode_loop:;
       vm->current         = vm->current->bound_method;
       /* TODO - Check if any memory can be freed */
       SKZ(ret_value);
+      next_opcode;
+    }
+    case_opcode(OP_ASSIGN) {
+      MargValue rvalue = KPOP;
+      MargValue self   = KPOP;
+
+      if(IS_VARIABLE(rvalue)) {
+        rvalue = AS_VARIABLE(rvalue)->value;
+      }
+
+      if(IS_VARIABLE(self)) {
+        if(AS_VARIABLE(self)->type == VAR_TYPE_GLOBAL) {
+          AS_VARIABLE(GET_G(GLOBAL(AS_VARIABLE(self)->name)))->value = rvalue;
+        } else if(AS_VARIABLE(self)->type == VAR_TYPE_INSTANCE) {
+          AS_VARIABLE(GET_I(INSTANCE(AS_VARIABLE(self)->name)))->value = rvalue;
+        } else if(AS_VARIABLE(self)->type == VAR_TYPE_LOCAL) {
+          AS_VARIABLE(GET_L(LOCAL(AS_VARIABLE(self)->name)))->value = rvalue;
+        }
+      }
+
+      KPUSH(rvalue);
       next_opcode;
     }
     /* case_opcode(OP_INCLUDE) {
@@ -218,6 +234,8 @@ MargValue evaluator_evaluate(VM *vm) {
   }
 
   evaluator_run(vm);
+  vm_free_formal_bytecode();
+
   if(vector_size(vm->current->bytecode) == 1) {
     return MARG_UNDEFINED;
   } else {

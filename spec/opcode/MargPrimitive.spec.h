@@ -4,9 +4,8 @@
 #include "../../libs/cSpec/export/cSpec.h"
 #include "../../src/opcode/instruction.h"
 
-static MargValue ret42(VM *vm, MargValue self, MargValue args) {
+static MargValue ret42(VM *vm, MargValue args) {
   (void)vm;
-  (void)self;
   (void)args;
   return MARG_INTEGER(42);
 }
@@ -24,7 +23,7 @@ module(MargPrimitiveSpec, {
     assert_that(AS_PRIMITIVE(prim) isnot NULL);
     assert_that_charptr(AS_PRIMITIVE(prim)->primitive_name equals to "ret42");
 
-    MargValue res = AS_PRIMITIVE(prim)->function(vm, MARG_NIL, MARG_UNDEFINED);
+    MargValue res = AS_PRIMITIVE(prim)->function(vm, MARG_UNDEFINED);
     assert_that_size_t(AS_INTEGER(res)->value equals to 42);
   });
 
@@ -45,7 +44,7 @@ module(MargPrimitiveSpec, {
     MargValue self            = I("@self");
     MargValue super           = I("@super");
     assert_that_charptr(AS_OBJECT(self)->name equals to "");
-    assert_that(super is MARG_NIL);
+    assert_that_charptr(AS_OBJECT(super)->name equals to "Primitive");
   });
 })
 

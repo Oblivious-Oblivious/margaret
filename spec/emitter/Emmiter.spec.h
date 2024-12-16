@@ -143,7 +143,9 @@ module(EmmiterSpec, {
           emit(vm, "$newglob");
           vm->current->ip++;
           assert_that(O is OP_STOZG);
-          assert_that_charptr(AS_OBJECT(G("$newglob"))->name equals to "$nil");
+          assert_that_size_t(
+            AS_VARIABLE(G("$newglob"))->value equals to G("$nil")
+          );
           vm->current->ip++;
           assert_that(O is OP_HALT);
         });
@@ -152,7 +154,9 @@ module(EmmiterSpec, {
           emit(vm, "@newinst");
           vm->current->ip++;
           assert_that(O is OP_STOZI);
-          assert_that_size_t(I("@newinst") equals to G("$nil"));
+          assert_that_size_t(
+            AS_VARIABLE(I("@newinst"))->value equals to G("$nil")
+          );
           vm->current->ip++;
           assert_that(O is OP_HALT);
         });
@@ -161,7 +165,9 @@ module(EmmiterSpec, {
           emit(vm, "newlocal");
           vm->current->ip++;
           assert_that(O is OP_STOZL);
-          assert_that_size_t(L("newlocal") equals to G("$nil"));
+          assert_that_size_t(
+            AS_VARIABLE(L("newlocal"))->value equals to G("$nil")
+          );
           vm->current->ip++;
           assert_that(O is OP_HALT);
         });
@@ -180,11 +186,8 @@ module(EmmiterSpec, {
       assert_that(O is OP_STOZK);
       assert_that(IS_STRING(K(A)));
       vm->current->ip++;
-      assert_that(O is OP_STOZG);
-      assert_that_charptr(AS_OBJECT(GET_G(A))->name equals to "$Tensor");
-      vm->current->ip++;
       assert_that(O is OP_PRIM);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_NEW:");
+      assert_that_charptr(AS_STRING(K(A))->value equals to "TENSOR_NEW:");
       assert_that_ptrdiff_t(AS_INTEGER(K(B))->value equals to 3);
       vm->current->ip++;
       assert_that(O is OP_HALT);
@@ -208,26 +211,20 @@ module(EmmiterSpec, {
       vm->current->ip++;
       assert_that(O is OP_STOZK);
       assert_that_ptrdiff_t(AS_INTEGER(K(A))->value equals to 45);
-      vm->current->ip++;
-      assert_that(O is OP_STOZG);
-      assert_that_charptr(AS_OBJECT(GET_G(A))->name equals to "$Tensor");
+
       vm->current->ip++;
       assert_that(O is OP_PRIM);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_NEW:");
+      assert_that_charptr(AS_STRING(K(A))->value equals to "TENSOR_NEW:");
       assert_that_size_t(AS_INTEGER(K(B))->value equals to 3);
-      vm->current->ip++;
-      assert_that(O is OP_STOZG);
-      assert_that_charptr(AS_OBJECT(GET_G(A))->name equals to "$Tensor");
+
       vm->current->ip++;
       assert_that(O is OP_PRIM);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_NEW:");
+      assert_that_charptr(AS_STRING(K(A))->value equals to "TENSOR_NEW:");
       assert_that_size_t(AS_INTEGER(K(B))->value equals to 3);
-      vm->current->ip++;
-      assert_that(O is OP_STOZG);
-      assert_that_charptr(AS_OBJECT(GET_G(A))->name equals to "$Tensor");
+
       vm->current->ip++;
       assert_that(O is OP_PRIM);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_NEW:");
+      assert_that_charptr(AS_STRING(K(A))->value equals to "TENSOR_NEW:");
       assert_that_size_t(AS_INTEGER(K(B))->value equals to 2);
       vm->current->ip++;
       assert_that(O is OP_HALT);
@@ -250,11 +247,47 @@ module(EmmiterSpec, {
         assert_that(O is OP_HALT);
       });
 
-      xit("emits headless with 1 argument", {});
+      it("emits headless with 1 argument", {
+        emit(vm, "{a | a}");
+        vm->current->ip++;
+        assert_that(O is OP_STOZK);
+        assert_that(IS_METHOD(K(A)));
+        vm->current = AS_METHOD(KZ);
+        vm->current->ip++;
+        assert_that(O is OP_STOZL);
+        vm->current->ip++;
+        assert_that(O is OP_STOZL);
+        vm->current->ip++;
+        assert_that(O is OP_EXACTREC);
+        vm->current = vm->current->bound_method;
+        vm->current->ip++;
+        assert_that(O is OP_HALT);
+      });
 
-      xit("emits headless with 3 arguments", {});
-
-      xit("executes headless and returns result of last instruction", {});
+      it("emits headless with 3 arguments", {
+        emit(vm, "{a, b, c | (a, b, c)}");
+        vm->current->ip++;
+        assert_that(O is OP_STOZK);
+        assert_that(IS_METHOD(K(A)));
+        vm->current = AS_METHOD(KZ);
+        vm->current->ip++;
+        assert_that(O is OP_STOZL);
+        vm->current->ip++;
+        assert_that(O is OP_STOZL);
+        vm->current->ip++;
+        assert_that(O is OP_STOZL);
+        vm->current->ip++;
+        assert_that(O is OP_STOZL);
+        vm->current->ip++;
+        assert_that(O is OP_STOZL);
+        vm->current->ip++;
+        assert_that(O is OP_STOZL);
+        vm->current->ip++;
+        assert_that(O is OP_EXACTREC);
+        vm->current = vm->current->bound_method;
+        vm->current->ip++;
+        assert_that(O is OP_HALT);
+      });
     });
 
     it("emits bitstrings", {
@@ -264,11 +297,7 @@ module(EmmiterSpec, {
       vm->current->ip++;
       assert_that(O is OP_STOZK);
       vm->current->ip++;
-      assert_that(O is OP_STOZG);
-      assert_that_charptr(AS_OBJECT(GET_G(A))->name equals to "$Bitstring");
-      vm->current->ip++;
-      assert_that(O is OP_PRIM);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_NEW:");
+      assert_that_charptr(AS_STRING(K(A))->value equals to "BITSTRING_NEW:");
       assert_that_size_t(AS_INTEGER(K(B))->value equals to 2);
       vm->current->ip++;
       assert_that(O is OP_HALT);
@@ -291,11 +320,7 @@ module(EmmiterSpec, {
       vm->current->ip++;
       assert_that(O is OP_STOZK);
       vm->current->ip++;
-      assert_that(O is OP_STOZG);
-      assert_that_charptr(AS_OBJECT(GET_G(A))->name equals to "$Bitstring");
-      vm->current->ip++;
-      assert_that(O is OP_PRIM);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_NEW:");
+      assert_that_charptr(AS_STRING(K(A))->value equals to "BITSTRING_NEW:");
       assert_that_size_t(AS_INTEGER(K(B))->value equals to 8);
       vm->current->ip++;
       assert_that(O is OP_HALT);
@@ -313,11 +338,8 @@ module(EmmiterSpec, {
       assert_that(O is OP_STOZK);
       assert_that(IS_STRING(K(A)));
       vm->current->ip++;
-      assert_that(O is OP_STOZG);
-      assert_that_charptr(AS_OBJECT(GET_G(A))->name equals to "$Tuple");
-      vm->current->ip++;
       assert_that(O is OP_PRIM);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_NEW:");
+      assert_that_charptr(AS_STRING(K(A))->value equals to "TUPLE_NEW:");
       assert_that_ptrdiff_t(AS_INTEGER(K(B))->value equals to 3);
       vm->current->ip++;
       assert_that(O is OP_HALT);
@@ -342,25 +364,16 @@ module(EmmiterSpec, {
       assert_that(O is OP_STOZK);
       assert_that_ptrdiff_t(AS_INTEGER(K(A))->value equals to 6);
       vm->current->ip++;
-      assert_that(O is OP_STOZG);
-      assert_that_charptr(AS_OBJECT(GET_G(A))->name equals to "$Tuple");
-      vm->current->ip++;
       assert_that(O is OP_PRIM);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_NEW:");
+      assert_that_charptr(AS_STRING(K(A))->value equals to "TUPLE_NEW:");
       assert_that_size_t(AS_INTEGER(K(B))->value equals to 3);
       vm->current->ip++;
-      assert_that(O is OP_STOZG);
-      assert_that_charptr(AS_OBJECT(GET_G(A))->name equals to "$Tuple");
-      vm->current->ip++;
       assert_that(O is OP_PRIM);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_NEW:");
+      assert_that_charptr(AS_STRING(K(A))->value equals to "TUPLE_NEW:");
       assert_that_size_t(AS_INTEGER(K(B))->value equals to 3);
       vm->current->ip++;
-      assert_that(O is OP_STOZG);
-      assert_that_charptr(AS_OBJECT(GET_G(A))->name equals to "$Tuple");
-      vm->current->ip++;
       assert_that(O is OP_PRIM);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_NEW:");
+      assert_that_charptr(AS_STRING(K(A))->value equals to "TUPLE_NEW:");
       assert_that_size_t(AS_INTEGER(K(B))->value equals to 2);
       vm->current->ip++;
       assert_that(O is OP_HALT);
@@ -387,11 +400,8 @@ module(EmmiterSpec, {
       assert_that(O is OP_STOZK);
       assert_that_ptrdiff_t(AS_INTEGER(K(A))->value equals to 3);
       vm->current->ip++;
-      assert_that(O is OP_STOZG);
-      assert_that_charptr(AS_OBJECT(GET_G(A))->name equals to "$Table");
-      vm->current->ip++;
       assert_that(O is OP_PRIM);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_NEW:");
+      assert_that_charptr(AS_STRING(K(A))->value equals to "TABLE_NEW:");
       assert_that_size_t(AS_INTEGER(K(B))->value equals to 6);
 
       emit(vm, "%{a: %{aa: 1, bb: 2}, b: %{cc: 3, dd: 4}}");
@@ -411,11 +421,8 @@ module(EmmiterSpec, {
       assert_that(O is OP_STOZK);
       assert_that_size_t(AS_INTEGER(K(A))->value equals to 2);
       vm->current->ip++;
-      assert_that(O is OP_STOZG);
-      assert_that_charptr(AS_OBJECT(GET_G(A))->name equals to "$Table");
-      vm->current->ip++;
       assert_that(O is OP_PRIM);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_NEW:");
+      assert_that_charptr(AS_STRING(K(A))->value equals to "TABLE_NEW:");
       assert_that_size_t(AS_INTEGER(K(B))->value equals to 4);
       vm->current->ip++;
       assert_that(O is OP_STOZK);
@@ -433,33 +440,118 @@ module(EmmiterSpec, {
       assert_that(O is OP_STOZK);
       assert_that_size_t(AS_INTEGER(K(A))->value equals to 4);
       vm->current->ip++;
-      assert_that(O is OP_STOZG);
-      assert_that_charptr(AS_OBJECT(GET_G(A))->name equals to "$Table");
-      vm->current->ip++;
       assert_that(O is OP_PRIM);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_NEW:");
+      assert_that_charptr(AS_STRING(K(A))->value equals to "TABLE_NEW:");
       assert_that_size_t(AS_INTEGER(K(B))->value equals to 4);
       vm->current->ip++;
-      assert_that(O is OP_STOZG);
-      assert_that_charptr(AS_OBJECT(GET_G(A))->name equals to "$Table");
-      vm->current->ip++;
       assert_that(O is OP_PRIM);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "__PRIM_NEW:");
+      assert_that_charptr(AS_STRING(K(A))->value equals to "TABLE_NEW:");
       assert_that_size_t(AS_INTEGER(K(B))->value equals to 4);
     });
 
     context("on methods", {
-      xit("creates keyword methods", {});
+      it("creates keyword methods", {
+        emit(vm, "#add: element at: position => 17");
+        vm->current->ip++;
+        assert_that(O is OP_STOZK);
+        MargValue method_value    = K(A);
+        MargMethod *method_object = AS_METHOD(K(A));
+        assert_that(IS_METHOD(method_value));
+        assert_that(method_object->bound_object is vm->current->bound_object);
+        assert_that(method_object->bound_method is vm->current);
+        assert_that_charptr(method_object->message_name equals to "add:at:");
+        vm->current->ip++;
+        assert_that(O is OP_HALT);
+      });
 
-      xit("creates binary methods", {});
+      it("creates binary methods", {
+        emit(vm, "# ** a_number => @self raised_to: a_number");
+        vm->current->ip++;
+        assert_that(O is OP_STOZK);
+        MargValue method_value    = K(A);
+        MargMethod *method_object = AS_METHOD(K(A));
+        assert_that(IS_METHOD(method_value));
+        assert_that(method_object->bound_object is vm->current->bound_object);
+        assert_that(method_object->bound_method is vm->current);
+        assert_that_charptr(method_object->message_name equals to "**");
+        vm->current->ip++;
+        assert_that(O is OP_HALT);
+      });
 
-      xit("creates unary methods", {});
+      it("creates unary methods", {
+        emit(vm, "#incr => @self + 1");
+        vm->current->ip++;
+        assert_that(O is OP_STOZK);
+        MargValue method_value    = K(A);
+        MargMethod *method_object = AS_METHOD(K(A));
+        assert_that(IS_METHOD(method_value));
+        assert_that(method_object->bound_object is vm->current->bound_object);
+        assert_that(method_object->bound_method is vm->current);
+        assert_that_charptr(method_object->message_name equals to "incr");
+        vm->current->ip++;
+        assert_that(O is OP_HALT);
+      });
 
-      xit("creates lhs methods", {});
+      it("creates lhs methods", {
+        emit(vm, "# - => 42");
+        vm->current->ip++;
+        assert_that(O is OP_STOZK);
+        MargValue method_value    = K(A);
+        MargMethod *method_object = AS_METHOD(K(A));
+        assert_that(IS_METHOD(method_value));
+        assert_that(method_object->bound_object is vm->current->bound_object);
+        assert_that(method_object->bound_method is vm->current);
+        assert_that_charptr(method_object->message_name equals to "-");
+        vm->current->ip++;
+        assert_that(O is OP_HALT);
+      });
 
-      xit("creates subscript methods", {});
+      it("creates subscript methods", {
+        emit(vm, "#[param] => 42.param");
+        vm->current->ip++;
+        assert_that(O is OP_STOZK);
+        MargValue method_value    = K(A);
+        MargMethod *method_object = AS_METHOD(K(A));
+        assert_that(IS_METHOD(method_value));
+        assert_that(method_object->bound_object is vm->current->bound_object);
+        assert_that(method_object->bound_method is vm->current);
+        assert_that_charptr(method_object->message_name equals to "[]");
+        vm->current->ip++;
+        assert_that(O is OP_HALT);
+      });
 
-      xit("creates assignment methods", {});
+      it("creates assignment methods", {
+        emit(vm, "# = other => 42");
+        vm->current->ip++;
+        assert_that(O is OP_STOZK);
+        MargValue method_value    = K(A);
+        MargMethod *method_object = AS_METHOD(K(A));
+        assert_that(IS_METHOD(method_value));
+        assert_that(method_object->bound_object is vm->current->bound_object);
+        assert_that(method_object->bound_method is vm->current);
+        assert_that_charptr(method_object->message_name equals to "=");
+        vm->current->ip++;
+        assert_that(O is OP_HALT);
+      });
+    });
+
+    context("on multimethods", {
+      xit("creates keyword multimethod", {
+        emit(vm, "# [] add: \"a\" at: 0 => [\"a\"]");
+      });
+
+      xit("creates binary multimethod", {});
+
+      xit("creates unary multimethod", {});
+
+      xit("creates lhs multimethod", {});
+
+      xit("creates subscript multimethod", {});
+
+      xit("creates assignment multimethod", {
+        debug("2 = 3", vector_new(FM_NIL));
+        debug("x = 5 + 7", vector_new(FM_NIL));
+      });
     });
   });
 

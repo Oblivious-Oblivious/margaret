@@ -4,11 +4,11 @@
 #include "../opcode/instruction.h"
 
 /* TODO - Create a raise built-in object */
-#define raise(msg) (__PRIM_RAISE(vm, MARG_STRING(msg), MARG_UNDEFINED))
-MargValue __PRIM_RAISE(VM *vm, MargValue self, MargValue args_value);
-/* MargValue primitive_DNU(VM *vm, MargValue self, MargValue args_value); */
-/* MargValue primitive_CLONE(VM *vm, MargValue self, MargValue args_value); */
-MargValue __PRIM_INSPECT(VM *vm, MargValue self, MargValue args_value);
+#define raise(msg) (__PRIM_RAISE(vm, MARG_STRING(msg)))
+MargValue __PRIM_RAISE(VM *vm, MargValue error);
+/* MargValue primitive_DNU(VM *vm, MargValue args_value); */
+/* MargValue primitive_CLONE(VM *vm, MargValue args_value); */
+MargValue __PRIM_INSPECT(VM *vm, MargValue args_value);
 
 /* TODO - Refactor as a $Margaret message */
 /**
