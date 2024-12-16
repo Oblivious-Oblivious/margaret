@@ -57,6 +57,31 @@
              %[:car, :cdr] = %[1, 2] # car = 1, cdr = %[2], (flatten), cdr = 2
              %[:car, :cdr] = %[1] # car = 1, cdr = %[], (flatten), cdr = nil
              %[:car, :cdr] = %[] # car = nil, cdr = nil
+  🟥 FT-20 - Add multimethod in a first-come-first-serve precedence
+             Numeric bind: # 0 fact => 1
+             Numeric bind: # _ fact => self * (self - 1) fact
+             Numeric bind: # 0 ** a_number => 0
+             Numeric bind: # 0 ** 0 => nil
+             Array bind: # [] add: element at: position => 17
+             Array bind: # [] add: 'a' at 0 => ['a']
+             Array bind: # _ add: 'a' at 0 => ['a'] ++ self
+             0 ** 0 => $nil,
+             0 ** _ => 0,
+             _ ** 0 => 1,
+             ** _ => $true,
+             x = 0,
+             x ** 0,
+             dispatch_multimethod(**, v1, v2) {
+               if(NUMERIC_EQUALS(v1, 0) && NUMERIC_EQUALS(v2, 0)) {
+                 $nil;
+               } else if(NUMERIC_EQUALS(v1, 0)) {
+                 0;
+               } else if(NUMERIC_EQUALS(v2, 0)) {
+                 1;
+               } else {
+                 $true;
+               }
+             }
   🟥 FT-22 - Pattern-match multimethods by hashing receiver and arguments.
              Every multi-method is hashed into a unique value and searched for in the method table of the receiver.
   🟥 FT-23 - Implement storing and loading bytecode from compiled files, similar to Java.
@@ -120,14 +145,6 @@
              LSP can track inlucded files and warn about redefinitions.
   🟥 FT-19 - table = {a: 1, b: 2}, table = table ++ {c: 3}. #{a: 1, b: 2, c: 3}
              l = [1,2,3], [[list, 4], 5] compact!. # [1,2,3,4,5]
-  🟥 FT-20 - Add multimethod in a first-come-first-serve precedence
-             Numeric bind: # 0 fact => 1
-             Numeric bind: # _ fact => self * (self - 1) fact
-             Numeric bind: # 0 ** a_number => 0
-             Numeric bind: # 0 ** 0 => nil
-             Array bind: # [] add: element at: position => 17
-             Array bind: # [] add: 'a' at 0 => ['a']
-             Array bind: # _ add: 'a' at 0 => ['a'] ++ self
   🟥 FT-21 - Add a custom mark and sweep garbage collector.
 
   🟩 QOL-01 - Add a register based vm with a proper PoC.
