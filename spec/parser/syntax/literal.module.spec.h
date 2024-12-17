@@ -72,8 +72,9 @@ module(literal, {
       "{ a | a }",
       vector_new(
         FM_METHOD_START,
-        FM_METHOD_PARAMETER,
+        FM_LOCAL,
         string_new("a"),
+        FM_METHOD_PARAMETER,
         FM_LOCAL,
         string_new("a"),
         FM_METHOD_END

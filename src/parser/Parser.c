@@ -353,17 +353,19 @@ void parser_literal(VM *vm) {
 
 void parser_param_list(VM *vm) {
   if(la2value(",")) {
-    generate(FM_METHOD_PARAMETER);
+    generate(FM_LOCAL);
     generate(consume(
       TOKEN_IDENTIFIER, "missing identifier on headless method parameter."
     ));
+    generate(FM_METHOD_PARAMETER);
     consume(TOKEN_COMMA, "missing ',' on headless method parameter list.");
     param_list();
   } else if(!la1value("#") && la2value("|")) {
-    generate(FM_METHOD_PARAMETER);
+    generate(FM_LOCAL);
     generate(consume(
       TOKEN_IDENTIFIER, "missing identifier on headless method parameter."
     ));
+    generate(FM_METHOD_PARAMETER);
     consume(
       TOKEN_MESSAGE_SYMBOL, "missing '|' on headless method parameter list."
     );
@@ -459,15 +461,13 @@ void parser_method_definition(VM *vm) {
       TOKEN_MESSAGE_SYMBOL,
       "missing message symbol on binary method definition."
     );
-    generate(FM_METHOD_PARAMETER);
     literal();
+    generate(FM_METHOD_PARAMETER);
     consume(TOKEN_ROCKET, "missing '=>' on binary method definition.");
   } else if(la1type(TOKEN_LBRACKET)) {
     consume(TOKEN_LBRACKET, "missing '[' on subscript method definition.");
+    literal();
     generate(FM_METHOD_PARAMETER);
-    generate(consume(
-      TOKEN_IDENTIFIER, "missing identifier on subscript method definition."
-    ));
     consume(TOKEN_RBRACKET, "missing ']' on subscript method definition.");
     consume(TOKEN_ROCKET, "missing '=>' on subscript method definition.");
     name = string_new("[]");
@@ -500,8 +500,8 @@ char *parser_keyword_list(VM *vm) {
       consume(TOKEN_IDENTIFIER, "missing identifier on keyword list."),
       consume(TOKEN_COLON, "missing ':' on keyword list.")
     );
-    generate(FM_METHOD_PARAMETER);
     literal();
+    generate(FM_METHOD_PARAMETER);
   }
 
   return keyword_method_name;

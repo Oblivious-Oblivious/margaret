@@ -80,7 +80,7 @@ method_definition:
   | IDENTIFIER '=>' method_body
   | MESSAGE_SYMBOL '=>' method_body
   | MESSAGE_SYMBOL literal '=>' method_body
-  | '[' IDENTIFIER ']' '=>' method_body
+  | '[' literal ']' '=>' method_body
 
 method_body:
     unit
