@@ -181,9 +181,10 @@ _opcode_loop:;
     }
     case_opcode(OP_EXACTREC) {
       MargValue ret_value = KZ;
+      vm->current->ip     = -1;
       vm->current         = vm->current->bound_method;
       /* TODO - Check if any memory can be freed */
-      SKZ(ret_value);
+      KPUSH(ret_value);
       next_opcode;
     }
     case_opcode(OP_ASSIGN) {
