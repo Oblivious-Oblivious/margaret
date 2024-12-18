@@ -31,6 +31,20 @@
     vector_free(args);                             \
   }
 
+#define assignment_helper(self, rvalue)                                      \
+  if(IS_VARIABLE(rvalue)) {                                                  \
+    rvalue = AS_VARIABLE(rvalue)->value;                                     \
+  }                                                                          \
+  if(IS_VARIABLE(self)) {                                                    \
+    if(AS_VARIABLE(self)->type == VAR_TYPE_GLOBAL) {                         \
+      AS_VARIABLE(GET_G(GLOBAL(AS_VARIABLE(self)->name)))->value = rvalue;   \
+    } else if(AS_VARIABLE(self)->type == VAR_TYPE_INSTANCE) {                \
+      AS_VARIABLE(GET_I(INSTANCE(AS_VARIABLE(self)->name)))->value = rvalue; \
+    } else if(AS_VARIABLE(self)->type == VAR_TYPE_LOCAL) {                   \
+      AS_VARIABLE(GET_L(LOCAL(AS_VARIABLE(self)->name)))->value = rvalue;    \
+    }                                                                        \
+  }
+
 p_inline MargValue
 dispatch_method_from_delegation_chain(VM *vm, MargValue self) {
   char *name            = AS_STRING(KA)->value;
@@ -190,21 +204,7 @@ _opcode_loop:;
     case_opcode(OP_ASSIGN) {
       MargValue rvalue = KPOP;
       MargValue self   = KPOP;
-
-      if(IS_VARIABLE(rvalue)) {
-        rvalue = AS_VARIABLE(rvalue)->value;
-      }
-
-      if(IS_VARIABLE(self)) {
-        if(AS_VARIABLE(self)->type == VAR_TYPE_GLOBAL) {
-          AS_VARIABLE(GET_G(GLOBAL(AS_VARIABLE(self)->name)))->value = rvalue;
-        } else if(AS_VARIABLE(self)->type == VAR_TYPE_INSTANCE) {
-          AS_VARIABLE(GET_I(INSTANCE(AS_VARIABLE(self)->name)))->value = rvalue;
-        } else if(AS_VARIABLE(self)->type == VAR_TYPE_LOCAL) {
-          AS_VARIABLE(GET_L(LOCAL(AS_VARIABLE(self)->name)))->value = rvalue;
-        }
-      }
-
+      assignment_helper(self, rvalue);
       KPUSH(rvalue);
       next_opcode;
     }
