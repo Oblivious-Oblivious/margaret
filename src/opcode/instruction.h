@@ -103,10 +103,21 @@ p_inline Instruction make_global_singleton(VM *vm, const char *var) {
 #define Z    (vector_size(vm->current->constants) - 1)
 /* TODO - Probably replace in the future */
 #define K(i) (vm->current->constants[(i + Z + 1) % (Z + 1)])
-#define L(n) GET_L(table_get(&vm->current->local_variables, (n)))
-#define I(n) \
-  GET_I(table_get(&vm->current->bound_object->instance_variables, (n)))
-#define G(n) GET_G(table_get(&vm->global_variables, (n)))
+
+/* TODO - Optimize by calling only once */
+#define L(n)                                                   \
+  (IS_UNDEFINED(table_get(&vm->current->local_variables, (n))) \
+     ? GET_G(table_get(&vm->global_variables, "$nil"))         \
+     : GET_L(table_get(&vm->current->local_variables, (n))))
+#define I(n)                                                                   \
+  (IS_UNDEFINED(table_get(&vm->current->bound_object->instance_variables, (n)) \
+   )                                                                           \
+     ? GET_G(table_get(&vm->global_variables, "$nil"))                         \
+     : GET_I(table_get(&vm->current->bound_object->instance_variables, (n))))
+#define G(n)                                           \
+  (IS_UNDEFINED(table_get(&vm->global_variables, (n))) \
+     ? GET_G(table_get(&vm->global_variables, "$nil")) \
+     : GET_G(table_get(&vm->global_variables, (n))))
 
 #define KA GET_K(A)
 #define LA GET_L(A)
