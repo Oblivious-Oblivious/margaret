@@ -147,7 +147,8 @@ MargMethod *marg_method_init(
   self->bound_object = bound_object;
   self->bound_method = bound_method;
 
-  self->message_name = message_name;
+  self->message_name   = message_name;
+  self->argument_names = NULL;
 
   self->constants = NULL;
   table_init(&self->local_variables);

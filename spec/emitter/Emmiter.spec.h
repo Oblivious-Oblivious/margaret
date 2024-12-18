@@ -256,8 +256,6 @@ module(EmmiterSpec, {
         vm->current->ip++;
         assert_that(O is OP_STOZL);
         vm->current->ip++;
-        assert_that(O is OP_STOZL);
-        vm->current->ip++;
         assert_that(O is OP_EXACTREC);
         vm->current = vm->current->bound_method;
         vm->current->ip++;
@@ -270,12 +268,6 @@ module(EmmiterSpec, {
         assert_that(O is OP_STOZK);
         assert_that(IS_METHOD(K(A)));
         vm->current = AS_METHOD(KZ);
-        vm->current->ip++;
-        assert_that(O is OP_STOZL);
-        vm->current->ip++;
-        assert_that(O is OP_STOZL);
-        vm->current->ip++;
-        assert_that(O is OP_STOZL);
         vm->current->ip++;
         assert_that(O is OP_STOZL);
         vm->current->ip++;

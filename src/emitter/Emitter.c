@@ -106,17 +106,15 @@ VM *emitter_emit(VM *vm) {
       vm->current = vm->current->bound_method;
       OA(OP_STOZK, CONST(new_method));
     }
-    case_fmcode(FM_METHOD_ANY_OBJECT) { /* TODO - Empty?? */ }
-    case_fmcode(FM_METHOD_RECEIVER) {
-      /* TODO - goto the beginning with formal_bytecode[ip + 1] and read the
-       * next fmcode pair (like FM_LOCAL, a) and add to method properties */
-      (void)formal_bytecode[++ip];
-    }
-    case_fmcode(FM_METHOD_PARAMETER) {
-      OA(OP_STOZL, LOCAL(formal_bytecode[++ip]));
+    case_fmcode(FM_METHOD_ANY_OBJECT) { /* TODO */ }
+    case_fmcode(FM_METHOD_RECEIVER) { /* TODO */ }
+    case_fmcode(FM_METHOD_ARGUMENT) {
+      vector_add(
+        vm->current->argument_names, string_new(formal_bytecode[++ip])
+      );
     }
     case_fmcode(FM_METHOD_NAME) {
-      vm->current->message_name = formal_bytecode[++ip];
+      vm->current->message_name = string_new(formal_bytecode[++ip]);
     }
 
     case_fmcode(FM_ASSIGNMENT) { OP(OP_ASSIGN); }
@@ -149,8 +147,8 @@ VM *emitter_emit(VM *vm) {
       (void)message_name;
     }
     case_fmcode(FM_KEYWORD) {
-      char *message_name         = formal_bytecode[++ip];
-      char *number_of_parameters = formal_bytecode[++ip];
+      char *message_name         = string_new(formal_bytecode[++ip]);
+      char *number_of_parameters = string_new(formal_bytecode[++ip]);
 
       switch_message_case("MARGARET_INSPECT:") { prim_helper(1); }
       /* TODO - Should ne 1 argument primitive */

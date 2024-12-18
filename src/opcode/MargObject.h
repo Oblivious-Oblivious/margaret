@@ -152,6 +152,7 @@ typedef struct MargMethod {
   MargValue *constants;
   EmeraldsTable local_variables;
 
+  const char **argument_names;
   Instruction *bytecode;
   Instruction ip;
 } MargMethod;
