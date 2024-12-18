@@ -26,7 +26,7 @@
 #define FM_METHOD_END        string_new("METHOD_END")
 #define FM_METHOD_ANY_OBJECT string_new("METHOD_ANY_OBJECT")
 #define FM_METHOD_RECEIVER   string_new("METHOD_RECEIVER")
-#define FM_METHOD_PARAMETER  string_new("METHOD_PARAMETER")
+#define FM_METHOD_ARGUMENT   string_new("METHOD_ARGUMENT")
 #define FM_METHOD_NAME       string_new("METHOD_NAME")
 #define FM_KEYWORD           string_new("KEYWORD")
 #define FM_BINARY            string_new("BINARY")
