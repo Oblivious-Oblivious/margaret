@@ -148,5 +148,7 @@ VM *vm_new(const char *filename) {
     vm->current->local_registers[i] = MARG_NIL;
   }
 
+  vm->do_not_display = false;
+
   return vm;
 }

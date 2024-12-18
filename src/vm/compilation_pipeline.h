@@ -18,17 +18,18 @@
 #define EMIT(vm)      emitter_emit((vm))
 #define OPTIMIZE(vm)  optimizer_optimize((vm))
 #define EVAL(vm)      evaluator_evaluate((vm))
-#define PRINT(evaluated)                            \
-  do {                                              \
-    if(vm->error) {                                 \
-      vm_reset();                                   \
-    } else {                                        \
-      MargValue res = (evaluated);                  \
-      if(!IS_UNDEFINED(res)) {                      \
-        printf("%s\n", marg_value_format(vm, res)); \
-      }                                             \
-      vector_free(vm->current->bytecode);           \
-    }                                               \
+#define PRINT(evaluated)                              \
+  do {                                                \
+    if(vm->error) {                                   \
+      vm_reset();                                     \
+    } else {                                          \
+      MargValue res = (evaluated);                    \
+      if(!IS_UNDEFINED(res) && !vm->do_not_display) { \
+        printf("%s\n", marg_value_format(vm, res));   \
+      }                                               \
+      vector_free(vm->current->bytecode);             \
+      vm->do_not_display = false;                     \
+    }                                                 \
   } while(0)
 
 #endif

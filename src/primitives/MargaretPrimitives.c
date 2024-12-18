@@ -43,5 +43,6 @@ MargValue __PRIM_RAISE(VM *vm, MargValue error) {
 MargValue __PRIM_INSPECT(VM *vm, MargValue args_value) {
   MargValue *args = AS_TENSOR(args_value)->value;
   printf("%s\n", marg_value_format(vm, args[0]));
-  return MARG_UNDEFINED;
+  vm->do_not_display = true;
+  return args[0];
 }
