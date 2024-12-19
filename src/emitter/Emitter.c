@@ -106,8 +106,6 @@ VM *emitter_emit(VM *vm) {
       vm->current = vm->current->bound_method;
       OA(OP_STOZK, CONST(new_method));
     }
-    case_fmcode(FM_METHOD_ANY_OBJECT) { /* TODO */ }
-    case_fmcode(FM_METHOD_RECEIVER) { /* TODO */ }
     case_fmcode(FM_METHOD_ARGUMENT) {
       vector_add(
         vm->current->argument_names, string_new(formal_bytecode[++ip])

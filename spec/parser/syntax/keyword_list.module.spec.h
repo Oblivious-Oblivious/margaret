@@ -9,8 +9,6 @@ module(keyword_list, {
       "#add: element at: position => 42",
       vector_new(
         FM_METHOD_START,
-        FM_METHOD_RECEIVER,
-        FM_METHOD_ANY_OBJECT,
         FM_METHOD_ARGUMENT,
         string_new("element"),
         FM_METHOD_ARGUMENT,

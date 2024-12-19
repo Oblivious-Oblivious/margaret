@@ -179,12 +179,9 @@ module(literal, {
 
   it("parses method definitions", {
     parse(
-      "# 0 fact => 1",
+      "# fact => 1",
       vector_new(
         FM_METHOD_START,
-        FM_METHOD_RECEIVER,
-        FM_INTEGER,
-        string_new("0"),
         FM_METHOD_NAME,
         string_new("fact"),
         FM_INTEGER,
