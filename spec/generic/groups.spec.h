@@ -11,8 +11,11 @@ module(groups_spec, {
   it("parses multiple groups as translation units", {
     parse("(())", vector_new(FM_NIL));
     parse("((()))", vector_new(FM_NIL));
-    parse("((), (), (), ())", vector_new(FM_NIL, FM_NIL, FM_NIL, FM_NIL));
-    parse("((()), ())", vector_new(FM_NIL, FM_NIL));
+    parse(
+      "((), (), (), ())",
+      vector_new(FM_NIL, FM_POP, FM_NIL, FM_POP, FM_NIL, FM_POP, FM_NIL)
+    );
+    parse("((()), ())", vector_new(FM_NIL, FM_POP, FM_NIL));
   });
 
   it("parses infinite groups of groups", {
@@ -22,8 +25,10 @@ module(groups_spec, {
       vector_new(
         FM_INTEGER,
         string_new("42"),
+        FM_POP,
         FM_INTEGER,
         string_new("43"),
+        FM_POP,
         FM_INTEGER,
         string_new("44")
       )
@@ -33,9 +38,12 @@ module(groups_spec, {
       vector_new(
         FM_INTEGER,
         string_new("42"),
+        FM_POP,
         FM_NIL,
+        FM_POP,
         FM_INTEGER,
         string_new("43"),
+        FM_POP,
         FM_NIL
       )
     );
@@ -44,10 +52,13 @@ module(groups_spec, {
       vector_new(
         FM_INTEGER,
         string_new("42"),
+        FM_POP,
         FM_INTEGER,
         string_new("43"),
+        FM_POP,
         FM_INTEGER,
         string_new("44"),
+        FM_POP,
         FM_NIL
       )
     );
@@ -57,14 +68,19 @@ module(groups_spec, {
       vector_new(
         FM_INTEGER,
         string_new("1"),
+        FM_POP,
         FM_INTEGER,
         string_new("2"),
+        FM_POP,
         FM_INTEGER,
         string_new("10"),
+        FM_POP,
         FM_INTEGER,
         string_new("20"),
+        FM_POP,
         FM_INTEGER,
         string_new("30"),
+        FM_POP,
         FM_INTEGER,
         string_new("3")
       )
@@ -73,7 +89,7 @@ module(groups_spec, {
 
   it("parses list messages", {
     parse(
-      "(arr = [1, 2, 3, 4])",
+      "arr = [1, 2, 3, 4]",
       vector_new(
         FM_LOCAL,
         string_new("arr"),
@@ -126,7 +142,7 @@ module(groups_spec, {
       )
     );
     parse(
-      "(arr at: 1 put: 5, arr at: 2 put: 6)",
+      "arr at: 1 put: 5, arr at: 2 put: 6",
       vector_new(
         FM_LOCAL,
         string_new("arr"),
@@ -149,7 +165,7 @@ module(groups_spec, {
       )
     );
     parse(
-      "(b = arr is_empty?)",
+      "b = arr is_empty?",
       vector_new(
         FM_LOCAL,
         string_new("b"),
@@ -161,7 +177,7 @@ module(groups_spec, {
       )
     );
     parse(
-      "(x = arr size)",
+      "x = arr size",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -173,7 +189,7 @@ module(groups_spec, {
       )
     );
     parse(
-      "(x = arr at: 4)",
+      "x = arr at: 4",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -188,7 +204,7 @@ module(groups_spec, {
       )
     );
     parse(
-      "(x = arr includes?: 3)",
+      "x = arr includes?: 3",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -203,7 +219,7 @@ module(groups_spec, {
       )
     );
     parse(
-      "(x = arr includes: 3)",
+      "x = arr includes: 3",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -218,7 +234,7 @@ module(groups_spec, {
       )
     );
     parse(
-      "(x = arr copy_from: 2 to: 4)",
+      "x = arr copy_from: 2 to: 4",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -235,7 +251,7 @@ module(groups_spec, {
       )
     );
     parse(
-      "(x = arr index_of: 3 if_absent: -1)",
+      "x = arr index_of: 3 if_absent: -1",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -254,7 +270,7 @@ module(groups_spec, {
       )
     );
     parse(
-      "(x = arr occurrences_of: 3)",
+      "x = arr occurrences_of: 3",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -269,7 +285,7 @@ module(groups_spec, {
       )
     );
     parse(
-      "(arr each: { a | a puts })",
+      "arr each: { a | a puts }",
       vector_new(
         FM_LOCAL,
         string_new("arr"),
@@ -287,7 +303,7 @@ module(groups_spec, {
       )
     );
     parse(
-      "(b = arr conform: { a | (a >= 1) && (a <= 4) })",
+      "b = arr conform: { a | (a >= 1) && (a <= 4) }",
       vector_new(
         FM_LOCAL,
         string_new("b"),
@@ -318,7 +334,7 @@ module(groups_spec, {
       )
     );
     parse(
-      "(x = arr select: { a | a > 2 })",
+      "x = arr select: { a | a > 2 }",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -341,7 +357,7 @@ module(groups_spec, {
       )
     );
     parse(
-      "(x = arr reject: { a | a < 2 })",
+      "x = arr reject: { a | a < 2 }",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -364,7 +380,7 @@ module(groups_spec, {
       )
     );
     parse(
-      "(x = arr collect: { a | a + a })",
+      "x = arr collect: { a | a + a }",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -387,7 +403,7 @@ module(groups_spec, {
       )
     );
     parse(
-      "(x = arr detect: { a | a > 3 } if_none: ())",
+      "x = arr detect: { a | a > 3 } if_none: ()",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -455,7 +471,7 @@ module(groups_spec, {
       )
     );
     parse(
-      "(sum = arr inject: 0 into: { a, c | a + c })",
+      "sum = arr inject: 0 into: { a, c | a + c }",
       vector_new(
         FM_LOCAL,
         string_new("sum"),
@@ -482,7 +498,7 @@ module(groups_spec, {
       )
     );
     parse(
-      "(sum = arr fold: 0 into: { a, c | a + c })",
+      "sum = arr fold: 0 into: { a, c | a + c }",
       vector_new(
         FM_LOCAL,
         string_new("sum"),
@@ -509,13 +525,13 @@ module(groups_spec, {
       )
     );
     parse(
-      "(max = arr \
+      "max = arr \
         inject: 0 \
         into: { a, c | \
           (a > c) if_true: a \
                   if_false: b \
         } \
-      )",
+      ",
       vector_new(
         FM_LOCAL,
         string_new("max"),
@@ -549,7 +565,7 @@ module(groups_spec, {
       )
     );
     parse(
-      "(x = arr shuffled)",
+      "x = arr shuffled",
       vector_new(
         FM_LOCAL,
         string_new("x"),

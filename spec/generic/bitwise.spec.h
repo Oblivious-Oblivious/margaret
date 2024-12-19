@@ -6,7 +6,7 @@
 module(bitwise_spec, {
   it("parses bitwise operations", {
     parse(
-      "(x = 0xff bitand: 0x0f)",
+      "x = 0xff bitand: 0x0f",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -21,7 +21,7 @@ module(bitwise_spec, {
       )
     );
     parse(
-      "(x = 0xf0 bitor: 0x0f)",
+      "x = 0xf0 bitor: 0x0f",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -36,7 +36,7 @@ module(bitwise_spec, {
       )
     );
     parse(
-      "(x = 0xff bitxor: 0x0f)",
+      "x = 0xff bitxor: 0x0f",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -51,7 +51,7 @@ module(bitwise_spec, {
       )
     );
     parse(
-      "(x = 0xff bitinvert)",
+      "x = 0xff bitinvert",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -63,7 +63,7 @@ module(bitwise_spec, {
       )
     );
     parse(
-      "(x = 0x0f bitshift: 4)",
+      "x = 0x0f bitshift: 4",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -78,7 +78,7 @@ module(bitwise_spec, {
       )
     );
     parse(
-      "(x = 0xf0 bitshift: -4)",
+      "x = 0xf0 bitshift: -4",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -95,7 +95,7 @@ module(bitwise_spec, {
       )
     );
     parse(
-      "(x = 0x80 highbit)",
+      "x = 0x80 highbit",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -107,7 +107,7 @@ module(bitwise_spec, {
       )
     );
     parse(
-      "(x = 0xff all_mask: 0x0f)",
+      "x = 0xff all_mask: 0x0f",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -122,7 +122,7 @@ module(bitwise_spec, {
       )
     );
     parse(
-      "(x = 0xff any_mask: 0x0f)",
+      "x = 0xff any_mask: 0x0f",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -137,7 +137,7 @@ module(bitwise_spec, {
       )
     );
     parse(
-      "(x = 0xff no_mask: 0x0f)",
+      "x = 0xff no_mask: 0x0f",
       vector_new(
         FM_LOCAL,
         string_new("x"),

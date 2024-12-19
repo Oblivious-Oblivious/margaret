@@ -6,7 +6,7 @@
 module(intervals_spec, {
   it("parses intervals", {
     parse(
-      "(x = Interval from: 5 to: 10)",
+      "x = Interval from: 5 to: 10",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -23,7 +23,7 @@ module(intervals_spec, {
       )
     );
     parse(
-      "(x = Interval from: 5 to: 10 by: 2)",
+      "x = Interval from: 5 to: 10 by: 2",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -42,7 +42,7 @@ module(intervals_spec, {
       )
     );
     parse(
-      "(x = 5 to: 10)",
+      "x = 5 to: 10",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -57,7 +57,7 @@ module(intervals_spec, {
       )
     );
     parse(
-      "(x = 5 to: 10 by: 2)",
+      "x = 5 to: 10 by: 2",
       vector_new(
         FM_LOCAL,
         string_new("x"),

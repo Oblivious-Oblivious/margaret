@@ -6,7 +6,7 @@
 module(iterations_spec, {
   it("parses iteration statements", {
     parse(
-      "(x > 0 while_true: {x = x - 1, y = y * 2})",
+      "x > 0 while_true: {x = x - 1, y = y * 2}",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -40,7 +40,7 @@ module(iterations_spec, {
       )
     );
     parse(
-      "(x >= 0 while_false: {x = x + 1, y = y * 2})",
+      "x >= 0 while_false: {x = x + 1, y = y * 2}",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -74,7 +74,7 @@ module(iterations_spec, {
       )
     );
     parse(
-      "(x times: {y = y * 2})",
+      "x times: {y = y * 2}",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -95,7 +95,7 @@ module(iterations_spec, {
       )
     );
     parse(
-      "(1 to: 5 do: {y = y * 2})",
+      "1 to: 5 do: {y = y * 2}",
       vector_new(
         FM_INTEGER,
         string_new("1"),
@@ -118,7 +118,7 @@ module(iterations_spec, {
       )
     );
     parse(
-      "(1 to: 5 by: 2 do: {y = y / 2})",
+      "1 to: 5 by: 2 do: {y = y / 2}",
       vector_new(
         FM_INTEGER,
         string_new("1"),

@@ -6,7 +6,7 @@
 module(conditionals_spec, {
   it("parses conditional statements", {
     parse(
-      "(x > 10 + 42)",
+      "x > 10 + 42",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -21,7 +21,7 @@ module(conditionals_spec, {
       )
     );
     parse(
-      "(x > 10 if_true: 42)",
+      "x > 10 if_true: 42",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -37,7 +37,7 @@ module(conditionals_spec, {
       )
     );
     parse(
-      "(x > 10 if_false: 41)",
+      "x > 10 if_false: 41",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -110,11 +110,11 @@ module(conditionals_spec, {
       )
     );
     parse(
-      "(obj match: %[ \
+      "obj match: %[ \
         %[1, 100], \
         %[2, 200], \
         %[3, 300], \
-      ])",
+      ]",
       vector_new(
         FM_LOCAL,
         string_new("obj"),

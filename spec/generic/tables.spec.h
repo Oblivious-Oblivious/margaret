@@ -5,7 +5,7 @@
 
 module(tables_spec, {
   it("parses table literals", {
-    parse("(%{})", vector_new(FM_TABLE, string_new("0")));
+    parse("%{}", vector_new(FM_TABLE, string_new("0")));
     parse(
       "%{a: 2,,,,,,,,,}",
       vector_new(
@@ -18,7 +18,7 @@ module(tables_spec, {
       )
     );
     parse(
-      "(%{a: %{}, b: %{}})",
+      "%{a: %{}, b: %{}}",
       vector_new(
         FM_STRING,
         string_new("a"),
@@ -33,7 +33,7 @@ module(tables_spec, {
       )
     );
     parse(
-      "(%{a: 1, b: 2, c: 3})",
+      "%{a: 1, b: 2, c: 3}",
       vector_new(
         FM_STRING,
         string_new("a"),
@@ -71,7 +71,7 @@ module(tables_spec, {
       )
     );
     parse(
-      "(%{\"k1\": \"v1\", \"k2\": \"v2\", \"k3\": \"v3\"})",
+      "%{\"k1\": \"v1\", \"k2\": \"v2\", \"k3\": \"v3\"}",
       vector_new(
         FM_STRING,
         string_new("k1"),
@@ -154,6 +154,7 @@ module(tables_spec, {
         string_new("incr"),
         FM_UNARY,
         string_new("decr"),
+        FM_POP,
         FM_INTEGER,
         string_new("41"),
         FM_UNARY,
@@ -166,7 +167,7 @@ module(tables_spec, {
 
   it("parses tables", {
     parse(
-      "(x at: 'a' put: 3)",
+      "x at: 'a' put: 3",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -180,15 +181,15 @@ module(tables_spec, {
       )
     );
     parse(
-      "(x is_empty?)",
+      "x is_empty?",
       vector_new(FM_LOCAL, string_new("x"), FM_UNARY, string_new("is_empty?"))
     );
     parse(
-      "(x size)",
+      "x size",
       vector_new(FM_LOCAL, string_new("x"), FM_UNARY, string_new("size"))
     );
     parse(
-      "(x at: \"a\" if_absent: \"\")",
+      "x at: \"a\" if_absent: \"\"",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -202,7 +203,7 @@ module(tables_spec, {
       )
     );
     parse(
-      "(x key_at_value: 3 if_absent: \"\")",
+      "x key_at_value: 3 if_absent: \"\"",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -216,7 +217,7 @@ module(tables_spec, {
       )
     );
     parse(
-      "(x remove_key: \"e\" if_absent: \"\")",
+      "x remove_key: \"e\" if_absent: \"\"",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -230,7 +231,7 @@ module(tables_spec, {
       )
     );
     parse(
-      "(b = x includes_key: \"a\")",
+      "b = x includes_key: \"a\"",
       vector_new(
         FM_LOCAL,
         string_new("b"),
@@ -245,7 +246,7 @@ module(tables_spec, {
       )
     );
     parse(
-      "(x keys puts)",
+      "x keys puts",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -256,7 +257,7 @@ module(tables_spec, {
       )
     );
     parse(
-      "(x values puts)",
+      "x values puts",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -267,7 +268,7 @@ module(tables_spec, {
       )
     );
     parse(
-      "(x each_key: {a | a puts})",
+      "x each_key: {a | a puts}",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -285,7 +286,7 @@ module(tables_spec, {
       )
     );
     parse(
-      "(x each_value: {a | a puts})",
+      "x each_value: {a | a puts}",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -303,7 +304,7 @@ module(tables_spec, {
       )
     );
     parse(
-      "(x each: {a | a puts})",
+      "x each: {a | a puts}",
       vector_new(
         FM_LOCAL,
         string_new("x"),

@@ -6,7 +6,7 @@
 module(conversions_spec, {
   it("parses object conversion", {
     parse(
-      "(x = 3.99 to_int)",
+      "x = 3.99 to_int",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -18,7 +18,7 @@ module(conversions_spec, {
       )
     );
     parse(
-      "(x = 3.99 to_fraction)",
+      "x = 3.99 to_fraction",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -30,7 +30,7 @@ module(conversions_spec, {
       )
     );
     parse(
-      "(x = 3 to_float)",
+      "x = 3 to_float",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -42,7 +42,7 @@ module(conversions_spec, {
       )
     );
     parse(
-      "(x = 65 to_char)",
+      "x = 65 to_char",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -54,7 +54,7 @@ module(conversions_spec, {
       )
     );
     parse(
-      "(x = \"A\" to_ascii)",
+      "x = \"A\" to_ascii",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -66,7 +66,7 @@ module(conversions_spec, {
       )
     );
     parse(
-      "(x = 'b' to_ascii)",
+      "x = 'b' to_ascii",
       vector_new(
         FM_LOCAL,
         string_new("x"),

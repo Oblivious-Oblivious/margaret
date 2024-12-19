@@ -23,7 +23,7 @@ module(meta_evaluation_spec, {
 
   it("parses metaclass messages", {
     parse(
-      "(x = String name)",
+      "x = String name",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -35,7 +35,7 @@ module(meta_evaluation_spec, {
       )
     );
     parse(
-      "(x = String category)",
+      "x = String category",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -47,7 +47,7 @@ module(meta_evaluation_spec, {
       )
     );
     parse(
-      "(x = String description)",
+      "x = String description",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -59,7 +59,7 @@ module(meta_evaluation_spec, {
       )
     );
     parse(
-      "(x = String kind_of_subclass)",
+      "x = String kind_of_subclass",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -71,7 +71,7 @@ module(meta_evaluation_spec, {
       )
     );
     parse(
-      "(x = String definition)",
+      "x = String definition",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -83,7 +83,7 @@ module(meta_evaluation_spec, {
       )
     );
     parse(
-      "(x = String field_names)",
+      "x = String field_names",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -95,7 +95,7 @@ module(meta_evaluation_spec, {
       )
     );
     parse(
-      "(x = String all_field_names)",
+      "x = String all_field_names",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -107,7 +107,7 @@ module(meta_evaluation_spec, {
       )
     );
     parse(
-      "(x = String selectors)",
+      "x = String selectors",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -119,7 +119,7 @@ module(meta_evaluation_spec, {
       )
     );
     parse(
-      "(x = String source_code_at: \"message\")",
+      "x = String source_code_at: \"message\"",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -134,7 +134,7 @@ module(meta_evaluation_spec, {
       )
     );
     parse(
-      "(x = String all_instances)",
+      "x = String all_instances",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -146,7 +146,7 @@ module(meta_evaluation_spec, {
       )
     );
     parse(
-      "(x = String superclass)",
+      "x = String superclass",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -158,7 +158,7 @@ module(meta_evaluation_spec, {
       )
     );
     parse(
-      "(x = String all_superclasses)",
+      "x = String all_superclasses",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -170,7 +170,7 @@ module(meta_evaluation_spec, {
       )
     );
     parse(
-      "(x = String subclasses)",
+      "x = String subclasses",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -182,7 +182,7 @@ module(meta_evaluation_spec, {
       )
     );
     parse(
-      "(x = String all_subclasses)",
+      "x = String all_subclasses",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -194,7 +194,7 @@ module(meta_evaluation_spec, {
       )
     );
     parse(
-      "(x = String number_of_instances)",
+      "x = String number_of_instances",
       vector_new(
         FM_LOCAL,
         string_new("x"),

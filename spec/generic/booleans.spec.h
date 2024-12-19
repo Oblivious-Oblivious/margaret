@@ -6,7 +6,7 @@
 module(booleans_spec, {
   it("parses boolean methods", {
     parse(
-      "(b = 2 == 3)",
+      "b = 2 == 3",
       vector_new(
         FM_LOCAL,
         string_new("b"),
@@ -20,7 +20,7 @@ module(booleans_spec, {
       )
     );
     parse(
-      "(b = 2 dosth!)",
+      "b = 2 dosth!",
       vector_new(
         FM_LOCAL,
         string_new("b"),
@@ -32,7 +32,7 @@ module(booleans_spec, {
       )
     );
     parse(
-      "(b = x != y)",
+      "b = x != y",
       vector_new(
         FM_LOCAL,
         string_new("b"),
@@ -46,7 +46,7 @@ module(booleans_spec, {
       )
     );
     parse(
-      "(b = x === y)",
+      "b = x === y",
       vector_new(
         FM_LOCAL,
         string_new("b"),
@@ -60,7 +60,7 @@ module(booleans_spec, {
       )
     );
     parse(
-      "(b = x !== y)",
+      "b = x !== y",
       vector_new(
         FM_LOCAL,
         string_new("b"),
@@ -74,7 +74,7 @@ module(booleans_spec, {
       )
     );
     parse(
-      "(b = x > y)",
+      "b = x > y",
       vector_new(
         FM_LOCAL,
         string_new("b"),
@@ -88,7 +88,7 @@ module(booleans_spec, {
       )
     );
     parse(
-      "(b = x < y)",
+      "b = x < y",
       vector_new(
         FM_LOCAL,
         string_new("b"),
@@ -102,7 +102,7 @@ module(booleans_spec, {
       )
     );
     parse(
-      "(b = x >= y)",
+      "b = x >= y",
       vector_new(
         FM_LOCAL,
         string_new("b"),
@@ -116,7 +116,7 @@ module(booleans_spec, {
       )
     );
     parse(
-      "(b = x <= y)",
+      "b = x <= y",
       vector_new(
         FM_LOCAL,
         string_new("b"),
@@ -130,7 +130,7 @@ module(booleans_spec, {
       )
     );
     parse(
-      "(b = b not)",
+      "b = b not",
       vector_new(
         FM_LOCAL,
         string_new("b"),
@@ -142,7 +142,7 @@ module(booleans_spec, {
       )
     );
     parse(
-      "(b = (x < 5) && (y > 1))",
+      "b = (x < 5) && (y > 1)",
       vector_new(
         FM_LOCAL,
         string_new("b"),
@@ -164,7 +164,7 @@ module(booleans_spec, {
       )
     );
     parse(
-      "(b = (x < 5) || (y > 1))",
+      "b = (x < 5) || (y > 1)",
       vector_new(
         FM_LOCAL,
         string_new("b"),
@@ -186,7 +186,7 @@ module(booleans_spec, {
       )
     );
     parse(
-      "(b = (x < 5) and: (y > 1))",
+      "b = x < 5 and: y > 1",
       vector_new(
         FM_LOCAL,
         string_new("b"),
@@ -209,7 +209,7 @@ module(booleans_spec, {
       )
     );
     parse(
-      "(b = (x < 5) or: (y > 1))",
+      "b = x < 5 or: y > 1",
       vector_new(
         FM_LOCAL,
         string_new("b"),
@@ -232,7 +232,7 @@ module(booleans_spec, {
       )
     );
     parse(
-      "(b = (x < 5) eqv: (y > 1))",
+      "b = x < 5 eqv: y > 1",
       vector_new(
         FM_LOCAL,
         string_new("b"),
@@ -255,7 +255,7 @@ module(booleans_spec, {
       )
     );
     parse(
-      "(b = (x < 5) xor: (y > 1))",
+      "b = x < 5 xor: y > 1",
       vector_new(
         FM_LOCAL,
         string_new("b"),
@@ -278,7 +278,7 @@ module(booleans_spec, {
       )
     );
     parse(
-      "(b = 5 between: 3 and: 12)",
+      "b = 5 between: 3 and: 12",
       vector_new(
         FM_LOCAL,
         string_new("b"),
@@ -295,7 +295,7 @@ module(booleans_spec, {
       )
     );
     parse(
-      "(b = 123 is_kind_of: Number)",
+      "b = 123 is_kind_of: Number",
       vector_new(
         FM_LOCAL,
         string_new("b"),
@@ -310,7 +310,7 @@ module(booleans_spec, {
       )
     );
     parse(
-      "(b = 123 is_member_of: SmallInteger)",
+      "b = 123 is_member_of: SmallInteger",
       vector_new(
         FM_LOCAL,
         string_new("b"),
@@ -325,7 +325,7 @@ module(booleans_spec, {
       )
     );
     parse(
-      "(b = 123 responds_to: \"sqrt\")",
+      "b = 123 responds_to: \"sqrt\"",
       vector_new(
         FM_LOCAL,
         string_new("b"),
@@ -340,7 +340,7 @@ module(booleans_spec, {
       )
     );
     parse(
-      "(b = x is_nil?)",
+      "b = x is_nil?",
       vector_new(
         FM_LOCAL,
         string_new("b"),
@@ -352,7 +352,7 @@ module(booleans_spec, {
       )
     );
     parse(
-      "(b = x is_zero?)",
+      "b = x is_zero?",
       vector_new(
         FM_LOCAL,
         string_new("b"),
@@ -364,7 +364,7 @@ module(booleans_spec, {
       )
     );
     parse(
-      "(b = x is_positive?)",
+      "b = x is_positive?",
       vector_new(
         FM_LOCAL,
         string_new("b"),
@@ -376,7 +376,7 @@ module(booleans_spec, {
       )
     );
     parse(
-      "(b = x is_negative?)",
+      "b = x is_negative?",
       vector_new(
         FM_LOCAL,
         string_new("b"),
@@ -388,7 +388,7 @@ module(booleans_spec, {
       )
     );
     parse(
-      "(b = x is_even?)",
+      "b = x is_even?",
       vector_new(
         FM_LOCAL,
         string_new("b"),
@@ -400,7 +400,7 @@ module(booleans_spec, {
       )
     );
     parse(
-      "(b = x is_odd?)",
+      "b = x is_odd?",
       vector_new(
         FM_LOCAL,
         string_new("b"),
@@ -412,7 +412,7 @@ module(booleans_spec, {
       )
     );
     parse(
-      "(b = x is_integer?)",
+      "b = x is_integer?",
       vector_new(
         FM_LOCAL,
         string_new("b"),
@@ -424,7 +424,7 @@ module(booleans_spec, {
       )
     );
     parse(
-      "(b = x is_float?)",
+      "b = x is_float?",
       vector_new(
         FM_LOCAL,
         string_new("b"),
@@ -436,7 +436,7 @@ module(booleans_spec, {
       )
     );
     parse(
-      "(b = x is_number?)",
+      "b = x is_number?",
       vector_new(
         FM_LOCAL,
         string_new("b"),
@@ -448,7 +448,7 @@ module(booleans_spec, {
       )
     );
     parse(
-      "(b = 'a' is_uppercase?)",
+      "b = 'a' is_uppercase?",
       vector_new(
         FM_LOCAL,
         string_new("b"),
@@ -460,7 +460,7 @@ module(booleans_spec, {
       )
     );
     parse(
-      "(b = 'a' is_lowercase?)",
+      "b = 'a' is_lowercase?",
       vector_new(
         FM_LOCAL,
         string_new("b"),

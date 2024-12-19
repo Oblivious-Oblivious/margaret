@@ -37,7 +37,6 @@ typedef struct VM {
   size_t tid;
   Tokens tokens;
   char **formal_bytecode;
-  bool in_group;
 
   MargValue global_registers[MAX_REGISTERS];
   uint32_t global_index;
@@ -69,7 +68,6 @@ VM *vm_new(const char *filename);
     vm_free_tokens();              \
     tokens_init(&vm->tokens);      \
     vm_free_formal_bytecode();     \
-    vm->in_group          = false; \
     vm->current->ip       = -1;    \
     vm->current->bytecode = NULL;  \
     vm->do_not_display    = false; \

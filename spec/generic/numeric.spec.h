@@ -6,9 +6,8 @@
 module(numeric_spec, {
   it("parses numeric expressions", {
     parse("0", vector_new(FM_INTEGER, string_new("0")));
-    parse("(0)", vector_new(FM_INTEGER, string_new("0")));
     parse(
-      "(0,0,0)",
+      "0,0,0",
       vector_new(
         FM_INTEGER,
         string_new("0"),
@@ -18,9 +17,9 @@ module(numeric_spec, {
         string_new("0")
       )
     );
-    parse("(42)", vector_new(FM_INTEGER, string_new("42")));
+    parse("42", vector_new(FM_INTEGER, string_new("42")));
     parse(
-      "(41, 42, 43)",
+      "41, 42, 43",
       vector_new(
         FM_INTEGER,
         string_new("41"),
@@ -31,18 +30,7 @@ module(numeric_spec, {
       )
     );
     parse(
-      "(41, (42), 43)",
-      vector_new(
-        FM_INTEGER,
-        string_new("41"),
-        FM_INTEGER,
-        string_new("42"),
-        FM_INTEGER,
-        string_new("43")
-      )
-    );
-    parse(
-      "(-41 - (-42))",
+      "-41 - (-42)",
       vector_new(
         FM_INTEGER,
         string_new("41"),
@@ -57,7 +45,7 @@ module(numeric_spec, {
       )
     );
     parse(
-      "((-41), (-42))",
+      "(-41), (-42)",
       vector_new(
         FM_INTEGER,
         string_new("41"),
@@ -70,7 +58,7 @@ module(numeric_spec, {
       )
     );
     parse(
-      "(42 - 41)",
+      "42 - 41",
       vector_new(
         FM_INTEGER,
         string_new("42"),
@@ -180,10 +168,9 @@ module(numeric_spec, {
       "-0B10", vector_new(FM_INTEGER, string_new("2"), FM_LHS, string_new("-"))
     );
     parse(
-      "( \
-        x = 0b0101 + 0b1011, \
-        x to_int puts, \
-      )",
+      "x = 0b0101 + 0b1011, \
+       x to_int puts, \
+      ",
       vector_new(
         FM_LOCAL,
         string_new("x"),

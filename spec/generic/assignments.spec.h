@@ -6,13 +6,13 @@
 module(assignments_spec, {
   it("parses assignments", {
     parse(
-      "(x = 4)",
+      "x = 4",
       vector_new(
         FM_LOCAL, string_new("x"), FM_INTEGER, string_new("4"), FM_ASSIGNMENT
       )
     );
     parse(
-      "(x = y = z = 6)",
+      "x = y = z = 6",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -28,7 +28,7 @@ module(assignments_spec, {
       )
     );
     parse(
-      "(x = (y = 6) + 1)",
+      "x = (y = 6) + 1",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -45,7 +45,7 @@ module(assignments_spec, {
       )
     );
     parse(
-      "(x = Object new)",
+      "x = Object new",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -147,30 +147,7 @@ module(assignments_spec, {
       )
     );
     parse(
-      "(a = 2, b = 3, c = a = b)",
-      vector_new(
-        FM_LOCAL,
-        string_new("a"),
-        FM_INTEGER,
-        string_new("2"),
-        FM_ASSIGNMENT,
-        FM_LOCAL,
-        string_new("b"),
-        FM_INTEGER,
-        string_new("3"),
-        FM_ASSIGNMENT,
-        FM_LOCAL,
-        string_new("c"),
-        FM_LOCAL,
-        string_new("a"),
-        FM_LOCAL,
-        string_new("b"),
-        FM_ASSIGNMENT,
-        FM_ASSIGNMENT
-      )
-    );
-    parse(
-      "((a = 2), (b = 3), (c = a = b))",
+      "a = 2, b = 3, c = a = b",
       vector_new(
         FM_LOCAL,
         string_new("a"),

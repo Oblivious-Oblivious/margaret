@@ -11,7 +11,7 @@ module(strings_spec, {
 
   it("parses string literals", {
     parse(
-      "(\"hello\" puts)",
+      "\"hello\" puts",
       vector_new(FM_STRING, string_new("hello"), FM_UNARY, string_new("puts"))
     );
     parse(
@@ -41,7 +41,7 @@ module(strings_spec, {
 
   it("parses string messages", {
     parse(
-      "(b = s is_empty?)",
+      "b = s is_empty?",
       vector_new(
         FM_LOCAL,
         string_new("b"),
@@ -53,7 +53,7 @@ module(strings_spec, {
       )
     );
     parse(
-      "(x = s size)",
+      "x = s size",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -65,7 +65,7 @@ module(strings_spec, {
       )
     );
     parse(
-      "(x = s at: 2)",
+      "x = s at: 2",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -80,7 +80,7 @@ module(strings_spec, {
       )
     );
     parse(
-      "(x = s copy_from: 2 to: 4)",
+      "x = s copy_from: 2 to: 4",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -97,7 +97,7 @@ module(strings_spec, {
       )
     );
     parse(
-      "(x = s index_of: 'a' if_absent: 0)",
+      "x = s index_of: 'a' if_absent: 0",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -114,7 +114,7 @@ module(strings_spec, {
       )
     );
     parse(
-      "(s at: 1 put: 'a', s at: 2 put: 'b', s at: 3 put: 'c')",
+      "s at: 1 put: 'a', s at: 2 put: 'b', s at: 3 put: 'c'",
       vector_new(
         FM_LOCAL,
         string_new("s"),
@@ -196,7 +196,7 @@ module(strings_spec, {
       )
     );
     parse(
-      "(s each_char: {a | a puts})",
+      "s each_char: {a | a puts}",
       vector_new(
         FM_LOCAL,
         string_new("s"),
@@ -214,7 +214,7 @@ module(strings_spec, {
       )
     );
     parse(
-      "(b = s conform: {a | (a >= 'a') && (a <= 'z')})",
+      "b = s conform: {a | (a >= 'a') && (a <= 'z')}",
       vector_new(
         FM_LOCAL,
         string_new("b"),
@@ -245,7 +245,7 @@ module(strings_spec, {
       )
     );
     parse(
-      "(x = s select: { a | a > 'a'})",
+      "x = s select: { a | a > 'a'}",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -268,7 +268,7 @@ module(strings_spec, {
       )
     );
     parse(
-      "(x = s to_list)",
+      "x = s to_list",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -280,7 +280,7 @@ module(strings_spec, {
       )
     );
     parse(
-      "(x = s to_symbol)",
+      "x = s to_symbol",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -292,7 +292,7 @@ module(strings_spec, {
       )
     );
     parse(
-      "(x = \"abcd\" to_byte_array)",
+      "x = \"abcd\" to_byte_array",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -304,7 +304,7 @@ module(strings_spec, {
       )
     );
     parse(
-      "(x = s shuffled)",
+      "x = s shuffled",
       vector_new(
         FM_LOCAL,
         string_new("x"),

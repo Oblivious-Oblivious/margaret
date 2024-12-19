@@ -14,15 +14,19 @@ module(literal, {
     parse("(42)", vector_new(FM_INTEGER, string_new("42")));
     parse(
       "(42, 43)",
-      vector_new(FM_INTEGER, string_new("42"), FM_INTEGER, string_new("43"))
+      vector_new(
+        FM_INTEGER, string_new("42"), FM_POP, FM_INTEGER, string_new("43")
+      )
     );
     parse(
       "(42, 43, 44)",
       vector_new(
         FM_INTEGER,
         string_new("42"),
+        FM_POP,
         FM_INTEGER,
         string_new("43"),
+        FM_POP,
         FM_INTEGER,
         string_new("44")
       )

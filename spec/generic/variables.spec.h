@@ -8,7 +8,7 @@ module(variables_spec, {
     parse("x", vector_new(FM_LOCAL, string_new("x")));
     parse("y", vector_new(FM_LOCAL, string_new("y")));
     parse(
-      "(x, y)", vector_new(FM_LOCAL, string_new("x"), FM_LOCAL, string_new("y"))
+      "x, y", vector_new(FM_LOCAL, string_new("x"), FM_LOCAL, string_new("y"))
     );
   });
 
@@ -16,7 +16,7 @@ module(variables_spec, {
     parse("@x", vector_new(FM_INSTANCE, string_new("@x")));
     parse("@y", vector_new(FM_INSTANCE, string_new("@y")));
     parse(
-      "(@x, @y, z)",
+      "@x, @y, z",
       vector_new(
         FM_INSTANCE,
         string_new("@x"),
@@ -32,7 +32,7 @@ module(variables_spec, {
     parse("$x", vector_new(FM_GLOBAL, string_new("$x")));
     parse("$y", vector_new(FM_GLOBAL, string_new("$y")));
     parse(
-      "($x, @y, z)",
+      "$x, @y, z",
       vector_new(
         FM_GLOBAL,
         string_new("$x"),

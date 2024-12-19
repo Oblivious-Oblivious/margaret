@@ -20,7 +20,7 @@ char *parser_consume(VM *vm, Type type, const char *error_msg);
 VM *parser_analyze_syntax(VM *vm);
 
 void parser_first_unit(VM *vm);
-char *parser_unit_list(VM *vm);
+char *parser_unit_list(VM *vm, bool in_group);
 void parser_unit(VM *vm);
 void parser_assignment_message(VM *vm);
 void parser_keyword_message(VM *vm);

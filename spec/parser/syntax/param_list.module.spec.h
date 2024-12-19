@@ -6,7 +6,7 @@
 module(param_list, {
   it("parses param lists", {
     parse(
-      "{ a, b, c | (a, b, c) }",
+      "{ a, b, c | a, b, c }",
       vector_new(
         FM_METHOD_START,
         FM_METHOD_ARGUMENT,

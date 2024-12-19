@@ -27,7 +27,7 @@
 #define generate(value)    vector_add(vm->formal_bytecode, value)
 
 #define first_unit()               parser_first_unit(vm)
-#define unit_list()                parser_unit_list(vm)
+#define unit_list(in_group)        parser_unit_list(vm, in_group)
 #define unit()                     parser_unit(vm)
 #define assignment_message()       parser_assignment_message(vm)
 #define keyword_message()          parser_keyword_message(vm)
@@ -103,15 +103,14 @@ VM *parser_analyze_syntax(VM *vm) {
 }
 
 void parser_first_unit(VM *vm) {
-  unit_list();
+  unit_list(false);
   consume(TOKEN_EOF, "reached end of program.");
 }
 
-char *parser_unit_list(VM *vm) {
+char *parser_unit_list(VM *vm, bool in_group) {
   size_t no_elements       = 0;
   char *number_of_elements = NULL;
 
-  generate(FM_GROUP_START);
   while(!la1value(")") && !la1value("]") && !la1value("}") &&
         !la1type(TOKEN_EOF)) {
     size_t prev_size = vm->tid;
@@ -123,10 +122,11 @@ char *parser_unit_list(VM *vm) {
     if(!la1value(")") && !la1value("]") && !la1value("}") &&
        !la1type(TOKEN_EOF)) {
       consume(TOKEN_COMMA, "grouped items should be separated by commas.");
-      generate(FM_GROUP_POP);
+      if(in_group) {
+        generate(FM_POP);
+      }
     }
   }
-  generate(FM_GROUP_END);
 
   string_addf(&number_of_elements, "%zu", no_elements);
   return number_of_elements;
@@ -258,7 +258,7 @@ void parser_subscript_message(VM *vm) {
 void parser_subscript_selector_chain(VM *vm) {
   while(la1type(TOKEN_LBRACKET)) {
     consume(TOKEN_LBRACKET, "missing opening bracket on subscript.");
-    unit_list();
+    unit_list(false);
     generate(FM_SUBSCRIPT);
     consume(TOKEN_RBRACKET, "missing closing bracket on subscript.");
   }
@@ -273,13 +273,13 @@ void parser_literal(VM *vm) {
     if(la1value(")")) {
       generate(FM_NIL);
     } else {
-      unit_list();
+      unit_list(true);
     }
     consume(TOKEN_RPAREN, "missing closing parenthesis on group.");
   } else if(la1value("[")) {
     char *number_of_elements = NULL;
     consume(TOKEN_LBRACKET, "missing opening bracket on tensor.");
-    number_of_elements = unit_list();
+    number_of_elements = unit_list(false);
     consume(TOKEN_RBRACKET, "missing closing bracket on tensor.");
     generate(FM_TENSOR);
     generate(number_of_elements);
@@ -294,7 +294,7 @@ void parser_literal(VM *vm) {
       generate(FM_NIL);
     } else {
       param_list();
-      unit_list();
+      unit_list(false);
     }
 
     consume(TOKEN_RCURLY, "missing closing curly on headless method.");
@@ -311,7 +311,7 @@ void parser_literal(VM *vm) {
     char *number_of_elements = NULL;
     consume(TOKEN_PERCENT, "missing `%` on tuple.");
     consume(TOKEN_LBRACKET, "missing opening bracket on tuple.");
-    number_of_elements = unit_list();
+    number_of_elements = unit_list(false);
     consume(TOKEN_RBRACKET, "missing closing bracket on tuple.");
     generate(FM_TUPLE);
     generate(number_of_elements);
@@ -480,7 +480,7 @@ void parser_method_definition(VM *vm) {
 void parser_method_body(VM *vm) {
   if(la1value("{")) {
     consume(TOKEN_LCURLY, "missing opening curly on method body.");
-    unit_list();
+    unit_list(false);
     consume(TOKEN_RCURLY, "missing closing curly on method body.");
   } else {
     unit();

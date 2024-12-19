@@ -13,13 +13,22 @@ module(unit_list, {
     parse("()", vector_new(FM_NIL));
     parse("(,)", vector_new(FM_NIL));
     parse("(,),", vector_new(FM_NIL));
-    parse("(,,(),),", vector_new(FM_NIL));
-    parse("(,(),(),),", vector_new(FM_NIL, FM_NIL));
+    parse("(,,(),),", vector_new(FM_NIL, FM_POP));
+    parse("(,(),(),),", vector_new(FM_NIL, FM_POP, FM_NIL, FM_POP));
     parse("(),(),", vector_new(FM_NIL, FM_NIL));
     parse("(), (), (), ()", vector_new(FM_NIL, FM_NIL, FM_NIL, FM_NIL));
     parse(
       "((), (42), (), ())",
-      vector_new(FM_NIL, FM_INTEGER, string_new("42"), FM_NIL, FM_NIL)
+      vector_new(
+        FM_NIL,
+        FM_POP,
+        FM_INTEGER,
+        string_new("42"),
+        FM_POP,
+        FM_NIL,
+        FM_POP,
+        FM_NIL
+      )
     );
   });
 

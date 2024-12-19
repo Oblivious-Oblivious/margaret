@@ -12,7 +12,7 @@ module(characters_spec, {
 
   it("parses character messages", {
     parse(
-      "(x = 'a' is_lowercase?)",
+      "x = 'a' is_lowercase?",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -24,7 +24,7 @@ module(characters_spec, {
       )
     );
     parse(
-      "(x = 'a' is_uppercase?)",
+      "x = 'a' is_uppercase?",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -36,7 +36,7 @@ module(characters_spec, {
       )
     );
     parse(
-      "(x = 'a' is_letter?)",
+      "x = 'a' is_letter?",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -48,7 +48,7 @@ module(characters_spec, {
       )
     );
     parse(
-      "(x = 'a' is_digit?)",
+      "x = 'a' is_digit?",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -60,7 +60,7 @@ module(characters_spec, {
       )
     );
     parse(
-      "(x = 'a' is_alphanumeric?)",
+      "x = 'a' is_alphanumeric?",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -72,7 +72,7 @@ module(characters_spec, {
       )
     );
     parse(
-      "(x = 'a' is_separator?)",
+      "x = 'a' is_separator?",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -84,7 +84,7 @@ module(characters_spec, {
       )
     );
     parse(
-      "(x = 'a' is_vowel?)",
+      "x = 'a' is_vowel?",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -96,7 +96,7 @@ module(characters_spec, {
       )
     );
     parse(
-      "(x = 'a' to_digit)",
+      "x = 'a' to_digit",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -108,7 +108,7 @@ module(characters_spec, {
       )
     );
     parse(
-      "(x = 'a' to_lowercase)",
+      "x = 'a' to_lowercase",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -120,7 +120,7 @@ module(characters_spec, {
       )
     );
     parse(
-      "(x = 'a' to_uppercase)",
+      "x = 'a' to_uppercase",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -132,7 +132,7 @@ module(characters_spec, {
       )
     );
     parse(
-      "(x = 'a' to_ascii)",
+      "x = 'a' to_ascii",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -144,7 +144,7 @@ module(characters_spec, {
       )
     );
     parse(
-      "(x = 'a' <= 'b')",
+      "x = 'a' <= 'b'",
       vector_new(
         FM_LOCAL,
         string_new("x"),

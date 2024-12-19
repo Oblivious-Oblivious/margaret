@@ -6,7 +6,6 @@
 module(tensors_spec, {
   it("parses tensor literals", {
     parse("[]", vector_new(FM_TENSOR, string_new("0")));
-    parse("([])", vector_new(FM_TENSOR, string_new("0")));
     parse(
       "[1,,,,,,[],,,,]",
       vector_new(
@@ -31,17 +30,6 @@ module(tensors_spec, {
     );
     parse(
       "[41, 42]",
-      vector_new(
-        FM_INTEGER,
-        string_new("41"),
-        FM_INTEGER,
-        string_new("42"),
-        FM_TENSOR,
-        string_new("2")
-      )
-    );
-    parse(
-      "([41, 42])",
       vector_new(
         FM_INTEGER,
         string_new("41"),

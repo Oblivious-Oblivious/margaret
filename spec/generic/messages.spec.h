@@ -69,7 +69,7 @@ module(messages_spec, {
       )
     );
     parse(
-      "(obj puts, 42 incr)",
+      "obj puts, 42 incr",
       vector_new(
         FM_LOCAL,
         string_new("obj"),
@@ -82,7 +82,7 @@ module(messages_spec, {
       )
     );
     parse(
-      "((obj puts), (42 incr))",
+      "obj puts, 42 incr",
       vector_new(
         FM_LOCAL,
         string_new("obj"),
@@ -136,7 +136,7 @@ module(messages_spec, {
       vector_new(FM_LOCAL, string_new("x"), FM_UNARY, string_new("is_empty?"))
     );
     parse(
-      "(42 one, 43 two, 44 three, 45, 46 four)",
+      "42 one, 43 two, 44 three, 45, 46 four",
       vector_new(
         FM_INTEGER,
         string_new("42"),
@@ -293,7 +293,7 @@ module(messages_spec, {
       )
     );
     parse(
-      "(41 + 1, 42 + 0, 43 - 1)",
+      "41 + 1, 42 + 0, 43 - 1",
       vector_new(
         FM_INTEGER,
         string_new("41"),
@@ -316,7 +316,7 @@ module(messages_spec, {
       )
     );
     parse(
-      "((41 + 1), (42 + 0), (43 - 1))",
+      "41 + 1, 42 + 0, 43 - 1",
       vector_new(
         FM_INTEGER,
         string_new("41"),
@@ -456,12 +456,10 @@ module(messages_spec, {
       )
     );
     parse(
-      "( \
-        list = List new, \
-        list put: 42 at: 5, \
-        x = list get: 2, \
-        x puts \
-      )",
+      "list = List new, \
+       list put: 42 at: 5, \
+       x = list get: 2, \
+       x puts",
       vector_new(
         FM_LOCAL,
         string_new("list"),
@@ -514,13 +512,15 @@ module(messages_spec, {
       )
     );
     parse(
-      "(1, 2, 3) reverse!: $true",
+      "[1, 2, 3] reverse!: $true",
       vector_new(
         FM_INTEGER,
         string_new("1"),
         FM_INTEGER,
         string_new("2"),
         FM_INTEGER,
+        string_new("3"),
+        FM_TENSOR,
         string_new("3"),
         FM_TRUE,
         FM_KEYWORD,
@@ -691,12 +691,11 @@ module(messages_spec, {
       )
     );
     parse(
-      "( \
-        origin <= point \
-          if_true: { out goto } \
-          if_false: { $false return }, \
-        ::out \
-      )",
+      "origin <= point \
+         if_true: { out goto } \
+         if_false: { $false return }, \
+         ::out \
+      ",
       vector_new(
         FM_LOCAL,
         string_new("origin"),

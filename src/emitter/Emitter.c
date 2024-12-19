@@ -96,13 +96,7 @@ VM *emitter_emit(VM *vm) {
     case_fmcode(FM_INSTANCE) { OA(OP_STOZI, INSTANCE(formal_bytecode[++ip])); }
     case_fmcode(FM_LOCAL) { OA(OP_STOZL, LOCAL(formal_bytecode[++ip])); }
 
-    case_fmcode(FM_GROUP_START) { vm->in_group = true; }
-    case_fmcode(FM_GROUP_POP) {
-      if(vm->in_group) {
-        OP(OP_POP);
-      }
-    }
-    case_fmcode(FM_GROUP_END) { vm->in_group = false; }
+    case_fmcode(FM_POP) { OP(OP_POP); }
 
     case_fmcode(FM_METHOD_START) {
       vm->current =

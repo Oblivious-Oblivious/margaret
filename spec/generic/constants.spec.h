@@ -6,15 +6,14 @@
 module(constants_spec, {
   it("parses constants", {
     parse(
-      "(b = $true)",
-      vector_new(FM_LOCAL, string_new("b"), FM_TRUE, FM_ASSIGNMENT)
+      "b = $true", vector_new(FM_LOCAL, string_new("b"), FM_TRUE, FM_ASSIGNMENT)
     );
     parse(
-      "(b = $false)",
+      "b = $false",
       vector_new(FM_LOCAL, string_new("b"), FM_FALSE, FM_ASSIGNMENT)
     );
     parse(
-      "(x = $nil)", vector_new(FM_LOCAL, string_new("x"), FM_NIL, FM_ASSIGNMENT)
+      "x = $nil", vector_new(FM_LOCAL, string_new("x"), FM_NIL, FM_ASSIGNMENT)
     );
     parse(
       "true = 123",
@@ -48,13 +47,13 @@ module(constants_spec, {
     );
 
     parse(
-      "(x = 1)",
+      "x = 1",
       vector_new(
         FM_LOCAL, string_new("x"), FM_INTEGER, string_new("1"), FM_ASSIGNMENT
       )
     );
     parse(
-      "(x = -1)",
+      "x = -1",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -66,7 +65,7 @@ module(constants_spec, {
       )
     );
     parse(
-      "(x = 3.14159)",
+      "x = 3.14159",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -76,13 +75,13 @@ module(constants_spec, {
       )
     );
     parse(
-      "(x = 0.42)",
+      "x = 0.42",
       vector_new(
         FM_LOCAL, string_new("x"), FM_FLOAT, string_new("0.42"), FM_ASSIGNMENT
       )
     );
     parse(
-      "(x = 0xbeef)",
+      "x = 0xbeef",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -92,20 +91,20 @@ module(constants_spec, {
       )
     );
     parse(
-      "(x = 0b0101)",
+      "x = 0b0101",
       vector_new(
         FM_LOCAL, string_new("x"), FM_INTEGER, string_new("5"), FM_ASSIGNMENT
       )
     );
     parse(
-      "(x = 0o741)",
+      "x = 0o741",
       vector_new(
         FM_LOCAL, string_new("x"), FM_INTEGER, string_new("481"), FM_ASSIGNMENT
       )
     );
 
     parse(
-      "(x = \"Hello\")",
+      "x = \"Hello\"",
       vector_new(
         FM_LOCAL, string_new("x"), FM_STRING, string_new("Hello"), FM_ASSIGNMENT
       )

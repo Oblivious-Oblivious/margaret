@@ -25,7 +25,7 @@ module(errors_spec, {
     error("###", "grouped items should be separated by commas.", "#");
     error("#x", "missing method body.", "#");
     error("##x", "missing method body.", "#");
-    /* error("##x=>", "missing method body.", "=>"); */
+    error("##x=>", "grouped items should be separated by commas.", "x");
     error(":", "grouped items should be separated by commas.", ":");
     error("::", "missing lhs message parameter.", ":");
     error(":::", "grouped items should be separated by commas.", ":");

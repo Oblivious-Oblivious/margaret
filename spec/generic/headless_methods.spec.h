@@ -16,6 +16,7 @@ module(headless_methods_spec, {
         FM_INTEGER,
         string_new("1"),
         FM_ASSIGNMENT,
+        FM_POP,
         FM_LOCAL,
         string_new("y"),
         FM_INTEGER,
@@ -27,11 +28,10 @@ module(headless_methods_spec, {
     );
     parse(
       "x = { \
-        v1, v2 | ( \
+        v1, v2 | \
           v1 += 1, \
           v1 += 2, \
           v1 * v2 \
-        ) \
       }",
       vector_new(
         FM_LOCAL,
@@ -98,7 +98,7 @@ module(headless_methods_spec, {
       )
     );
     parse(
-      "{ (x = 1, y = 2, x + y) }",
+      "{ x = 1, y = 2, x + y }",
       vector_new(
         FM_METHOD_START,
         FM_LOCAL,

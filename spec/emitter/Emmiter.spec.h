@@ -263,7 +263,7 @@ module(EmmiterSpec, {
       });
 
       it("emits headless with 3 arguments", {
-        emit(vm, "{a, b, c | (a, b, c)}");
+        emit(vm, "{a, b, c | a, b, c}");
         vm->current->ip++;
         assert_that(O is OP_STOZK);
         assert_that(IS_METHOD(K(A)));

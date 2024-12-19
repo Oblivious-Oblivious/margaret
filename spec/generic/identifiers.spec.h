@@ -6,7 +6,7 @@
 module(identifiers_spec, {
   it("parses identifiers", {
     parse(
-      "(ident, 42, another)",
+      "ident, 42, another",
       vector_new(
         FM_LOCAL,
         string_new("ident"),
@@ -17,7 +17,7 @@ module(identifiers_spec, {
       )
     );
     parse(
-      "(stuff,ident2)",
+      "stuff,ident2",
       vector_new(FM_LOCAL, string_new("stuff"), FM_LOCAL, string_new("ident2"))
     );
   });

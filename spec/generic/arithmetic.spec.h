@@ -6,7 +6,7 @@
 module(arithmetic_spec, {
   it("parses arithmetic expressions", {
     parse(
-      "(x = 6 + 3)",
+      "x = 6 + 3",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -20,7 +20,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = 6 - 3)",
+      "x = 6 - 3",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -34,7 +34,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = 6 * 3)",
+      "x = 6 * 3",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -48,7 +48,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = 1 + 2 * 3)",
+      "x = 1 + 2 * 3",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -66,7 +66,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = 5 / 3)",
+      "x = 5 / 3",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -80,7 +80,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = 5.0 / 3.0)",
+      "x = 5.0 / 3.0",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -94,7 +94,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = 5.0 // 3.0)",
+      "x = 5.0 // 3.0",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -108,7 +108,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = 5.0 rem: 3.0)",
+      "x = 5.0 rem: 3.0",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -123,7 +123,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = -5)",
+      "x = -5",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -135,7 +135,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = 5 sign)",
+      "x = 5 sign",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -147,7 +147,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = 5 negated)",
+      "x = 5 negated",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -159,7 +159,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = 1.2 integer_part)",
+      "x = 1.2 integer_part",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -171,7 +171,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = 1.2 fraction_part)",
+      "x = 1.2 fraction_part",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -183,7 +183,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = 5 reciprocal)",
+      "x = 5 reciprocal",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -195,7 +195,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = 6 * 3.1)",
+      "x = 6 * 3.1",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -209,7 +209,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = 5 squared)",
+      "x = 5 squared",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -221,7 +221,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = 25 sqrt)",
+      "x = 25 sqrt",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -233,7 +233,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = 5 raised_to: 2)",
+      "x = 5 raised_to: 2",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -248,7 +248,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = 5 raised_to_integer: 2)",
+      "x = 5 raised_to_integer: 2",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -263,7 +263,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = 5 exp)",
+      "x = 5 exp",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -275,7 +275,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = -5 abs)",
+      "x = -5 abs",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -289,7 +289,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = 3.99 rounded)",
+      "x = 3.99 rounded",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -301,7 +301,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = 3.99 truncated)",
+      "x = 3.99 truncated",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -313,7 +313,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = 3.99 round_to: 1)",
+      "x = 3.99 round_to: 1",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -328,7 +328,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = 3.99 truncate_to: 1)",
+      "x = 3.99 truncate_to: 1",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -343,7 +343,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = 3.99 floor)",
+      "x = 3.99 floor",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -355,7 +355,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = 3.99 ceiling)",
+      "x = 3.99 ceiling",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -367,7 +367,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = 5 factorial)",
+      "x = 5 factorial",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -379,7 +379,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = -5 quotient: 3)",
+      "x = -5 quotient: 3",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -396,7 +396,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = -5 rem: 3)",
+      "x = -5 rem: 3",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -413,7 +413,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = 28 gcd: 12)",
+      "x = 28 gcd: 12",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -428,7 +428,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = 28 lcm: 12)",
+      "x = 28 lcm: 12",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -443,7 +443,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = 100 ln)",
+      "x = 100 ln",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -455,7 +455,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = 100 log)",
+      "x = 100 log",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -467,7 +467,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = 100 log: 10)",
+      "x = 100 log: 10",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -482,7 +482,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = 180 deg_to_rad)",
+      "x = 180 deg_to_rad",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -494,7 +494,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = 3.14 rad_to_deg)",
+      "x = 3.14 rad_to_deg",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -506,7 +506,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = 0.7 sin)",
+      "x = 0.7 sin",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -518,7 +518,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = 0.7 cos)",
+      "x = 0.7 cos",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -530,7 +530,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = 0.7 tan)",
+      "x = 0.7 tan",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -542,7 +542,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = 0.7 arcsin)",
+      "x = 0.7 arcsin",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -554,7 +554,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = 0.7 arccos)",
+      "x = 0.7 arccos",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -566,7 +566,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = 0.7 arctan)",
+      "x = 0.7 arctan",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -578,7 +578,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = %[10, 20] max)",
+      "x = %[10, 20] max",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -594,7 +594,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = %[10, 20] min)",
+      "x = %[10, 20] min",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -610,7 +610,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = %[0, 100] random)",
+      "x = %[0, 100] random",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -627,7 +627,7 @@ module(arithmetic_spec, {
     );
 
     parse(
-      "(x = Float PI)",
+      "x = Float PI",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -639,7 +639,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = Float E)",
+      "x = Float E",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -651,7 +651,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = Float INF)",
+      "x = Float INF",
       vector_new(
         FM_LOCAL,
         string_new("x"),
@@ -663,7 +663,7 @@ module(arithmetic_spec, {
       )
     );
     parse(
-      "(x = Float NAN)",
+      "x = Float NAN",
       vector_new(
         FM_LOCAL,
         string_new("x"),
