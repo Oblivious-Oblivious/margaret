@@ -10,26 +10,7 @@ module(method_definition, {
     parse(
       "# ! => @self",
       vector_new(
-        FM_METHOD_START,
-        FM_METHOD_RECEIVER,
-        FM_METHOD_ANY_OBJECT,
-        FM_METHOD_NAME,
-        string_new("!"),
-        FM_SELF,
-        FM_METHOD_END
-      )
-    );
-
-    parse(
-      "# $false ! => $true",
-      vector_new(
-        FM_METHOD_START,
-        FM_METHOD_RECEIVER,
-        FM_FALSE,
-        FM_METHOD_NAME,
-        string_new("!"),
-        FM_TRUE,
-        FM_METHOD_END
+        FM_METHOD_START, FM_METHOD_NAME, string_new("!"), FM_SELF, FM_METHOD_END
       )
     );
 
@@ -37,59 +18,10 @@ module(method_definition, {
       "# fact => 0",
       vector_new(
         FM_METHOD_START,
-        FM_METHOD_RECEIVER,
-        FM_METHOD_ANY_OBJECT,
         FM_METHOD_NAME,
         string_new("fact"),
         FM_INTEGER,
         string_new("0"),
-        FM_METHOD_END
-      )
-    );
-
-    parse(
-      "# 0 fact => 1",
-      vector_new(
-        FM_METHOD_START,
-        FM_METHOD_RECEIVER,
-        FM_INTEGER,
-        string_new("0"),
-        FM_METHOD_NAME,
-        string_new("fact"),
-        FM_INTEGER,
-        string_new("1"),
-        FM_METHOD_END
-      )
-    );
-
-    parse(
-      "# ** 0 => 1",
-      vector_new(
-        FM_METHOD_START,
-        FM_METHOD_RECEIVER,
-        FM_METHOD_ANY_OBJECT,
-        FM_INTEGER,
-        string_new("0"),
-        FM_METHOD_NAME,
-        string_new("**"),
-        FM_INTEGER,
-        string_new("1"),
-        FM_METHOD_END
-      )
-    );
-
-    parse(
-      "# 0 ** 0 => $nil",
-      vector_new(
-        FM_METHOD_START,
-        FM_METHOD_RECEIVER,
-        FM_INTEGER,
-        string_new("0"),
-        FM_INTEGER,
-        string_new("0"),
-        FM_METHOD_NAME,
-        string_new("**"),
-        FM_NIL,
         FM_METHOD_END
       )
     );
@@ -98,8 +30,6 @@ module(method_definition, {
       "#add: element at: position => 42",
       vector_new(
         FM_METHOD_START,
-        FM_METHOD_RECEIVER,
-        FM_METHOD_ANY_OBJECT,
         FM_METHOD_ARGUMENT,
         string_new("element"),
         FM_METHOD_ARGUMENT,
@@ -108,24 +38,6 @@ module(method_definition, {
         string_new("add:at:"),
         FM_INTEGER,
         string_new("42"),
-        FM_METHOD_END
-      )
-    );
-
-    parse(
-      "#%{} add: 42 at: 'a' => $true",
-      vector_new(
-        FM_METHOD_START,
-        FM_METHOD_RECEIVER,
-        FM_TABLE,
-        string_new("0"),
-        FM_INTEGER,
-        string_new("42"),
-        FM_STRING,
-        string_new("a"),
-        FM_METHOD_NAME,
-        string_new("add:at:"),
-        FM_TRUE,
         FM_METHOD_END
       )
     );

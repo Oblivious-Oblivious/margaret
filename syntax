@@ -53,7 +53,7 @@ literal:
   | '%' '(' bit_list ')'
   | '%' '[' unit_list ']'
   | '%' '{' association_list '}'
-  | '#' literal method_definition
+  | '#' method_definition
 
 param_list:
     IDENTIFIER '|'
@@ -79,16 +79,16 @@ method_definition:
     keyword_list '=>' method_body
   | IDENTIFIER '=>' method_body
   | MESSAGE_SYMBOL '=>' method_body
-  | MESSAGE_SYMBOL literal '=>' method_body
-  | '[' literal ']' '=>' method_body
+  | MESSAGE_SYMBOL IDENTIFIER '=>' method_body
+  | '[' IDENTIFIER ']' '=>' method_body
 
 method_body:
     unit
   | { unit_list }
 
 keyword_list:
-    IDENTIFIER ':' literal
-  | IDENTIFIER ':' literal keyword_list
+    IDENTIFIER ':' IDENTIFIER
+  | IDENTIFIER ':' IDENTIFIER keyword_list
 
 scalar:
     ':' ':' GLOBAL

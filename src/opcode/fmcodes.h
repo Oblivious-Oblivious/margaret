@@ -24,8 +24,6 @@
 #define FM_LOCAL             string_new("LOCAL")
 #define FM_METHOD_START      string_new("METHOD_START")
 #define FM_METHOD_END        string_new("METHOD_END")
-#define FM_METHOD_ANY_OBJECT string_new("METHOD_ANY_OBJECT")
-#define FM_METHOD_RECEIVER   string_new("METHOD_RECEIVER")
 #define FM_METHOD_ARGUMENT   string_new("METHOD_ARGUMENT")
 #define FM_METHOD_NAME       string_new("METHOD_NAME")
 #define FM_KEYWORD           string_new("KEYWORD")

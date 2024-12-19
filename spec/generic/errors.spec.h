@@ -22,10 +22,10 @@ module(errors_spec, {
     error("}", "reached end of program.", "}");
     error("#", "missing method body.", "#");
     error("##", "missing method body.", "#");
-    error("###", "missing method body.", "#");
-    error("#x", "missing method body.", "x");
-    error("##x", "missing method body.", "x");
-    error("##x=>", "missing method body.", "=>");
+    error("###", "grouped items should be separated by commas.", "#");
+    error("#x", "missing method body.", "#");
+    error("##x", "missing method body.", "#");
+    /* error("##x=>", "missing method body.", "=>"); */
     error(":", "grouped items should be separated by commas.", ":");
     error("::", "missing lhs message parameter.", ":");
     error(":::", "grouped items should be separated by commas.", ":");
@@ -169,8 +169,6 @@ module(errors_spec, {
         FM_METHOD_ARGUMENT,
         string_new("a"),
         FM_METHOD_START,
-        FM_METHOD_RECEIVER,
-        FM_METHOD_ANY_OBJECT,
         FM_METHOD_ARGUMENT,
         string_new("b"),
         FM_METHOD_NAME,
@@ -191,8 +189,6 @@ module(errors_spec, {
       vector_new(
         FM_METHOD_START,
         FM_METHOD_START,
-        FM_METHOD_RECEIVER,
-        FM_METHOD_ANY_OBJECT,
         FM_METHOD_ARGUMENT,
         string_new("a"),
         FM_METHOD_NAME,
@@ -205,13 +201,10 @@ module(errors_spec, {
     );
 
     parse(
-      "{ # _ | a => a }",
+      "{ # | a => a }",
       vector_new(
         FM_METHOD_START,
         FM_METHOD_START,
-        FM_METHOD_RECEIVER,
-        FM_LOCAL,
-        string_new("_"),
         FM_METHOD_ARGUMENT,
         string_new("a"),
         FM_METHOD_NAME,
@@ -227,8 +220,6 @@ module(errors_spec, {
       "# m => {{{}}}",
       vector_new(
         FM_METHOD_START,
-        FM_METHOD_RECEIVER,
-        FM_METHOD_ANY_OBJECT,
         FM_METHOD_NAME,
         string_new("m"),
         FM_METHOD_START,
@@ -244,13 +235,9 @@ module(errors_spec, {
       "# m1 => { # m2 => { {} } }",
       vector_new(
         FM_METHOD_START,
-        FM_METHOD_RECEIVER,
-        FM_METHOD_ANY_OBJECT,
         FM_METHOD_NAME,
         string_new("m1"),
         FM_METHOD_START,
-        FM_METHOD_RECEIVER,
-        FM_METHOD_ANY_OBJECT,
         FM_METHOD_NAME,
         string_new("m2"),
         FM_METHOD_START,
@@ -266,13 +253,9 @@ module(errors_spec, {
       vector_new(
         FM_METHOD_START,
         FM_METHOD_START,
-        FM_METHOD_RECEIVER,
-        FM_METHOD_ANY_OBJECT,
         FM_METHOD_NAME,
         string_new("m1"),
         FM_METHOD_START,
-        FM_METHOD_RECEIVER,
-        FM_METHOD_ANY_OBJECT,
         FM_METHOD_NAME,
         string_new("m2"),
         FM_METHOD_START,

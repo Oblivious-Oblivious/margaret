@@ -324,22 +324,6 @@ void parser_literal(VM *vm) {
     size_t prev_size;
     consume(TOKEN_TABLE, "missing `#` on method definition.");
     generate(FM_METHOD_START);
-
-    generate(FM_METHOD_RECEIVER);
-    prev_size = vm->tid;
-
-    if(!((la1type(TOKEN_MESSAGE_SYMBOL) && la2value("=>")) ||
-         (la1type(TOKEN_IDENTIFIER) && la2value("=>")) ||
-         (la1type(TOKEN_MESSAGE_SYMBOL) && la3value("=>")) ||
-         (la1type(TOKEN_IDENTIFIER) && la2value(":")) ||
-         (la1type(TOKEN_LBRACKET) && la2type(TOKEN_IDENTIFIER) &&
-          la3type(TOKEN_RBRACKET) && la4value("=>")))) {
-      literal();
-    }
-    if(vm->tid == prev_size) {
-      generate(FM_METHOD_ANY_OBJECT);
-    }
-
     prev_size = vm->tid;
     method_definition();
     if(prev_size == vm->tid) {
@@ -511,14 +495,10 @@ char *parser_keyword_list(VM *vm) {
       consume(TOKEN_COLON, "missing ':' on keyword list.")
     );
 
-    if(la1type(TOKEN_IDENTIFIER)) {
-      generate(FM_METHOD_ARGUMENT);
-      generate(consume(
-        TOKEN_IDENTIFIER, "missing identifier on keyword list parameter."
-      ));
-    } else {
-      literal();
-    }
+    generate(FM_METHOD_ARGUMENT);
+    generate(
+      consume(TOKEN_IDENTIFIER, "missing identifier on keyword list parameter.")
+    );
   }
 
   return keyword_method_name;

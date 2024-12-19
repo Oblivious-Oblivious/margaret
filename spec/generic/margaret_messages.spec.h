@@ -53,8 +53,6 @@ module(margaret_messages_spec, {
         FM_GLOBAL,
         string_new("$Margaret"),
         FM_METHOD_START,
-        FM_METHOD_RECEIVER,
-        FM_METHOD_ANY_OBJECT,
         FM_METHOD_ARGUMENT,
         string_new("condition_block"),
         FM_METHOD_ARGUMENT,
