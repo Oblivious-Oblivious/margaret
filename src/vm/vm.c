@@ -128,6 +128,7 @@ VM *vm_new(const char *filename) {
   vm->tid = 0;
   tokens_init(&vm->tokens);
   vm->formal_bytecode = NULL;
+  vm->in_group        = false;
 
   vm->global_index = 0;
   table_init(&vm->global_variables);

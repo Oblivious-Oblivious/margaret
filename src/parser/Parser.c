@@ -111,6 +111,7 @@ char *parser_unit_list(VM *vm) {
   size_t no_elements       = 0;
   char *number_of_elements = NULL;
 
+  generate(FM_GROUP_START);
   while(!la1value(")") && !la1value("]") && !la1value("}") &&
         !la1type(TOKEN_EOF)) {
     size_t prev_size = vm->tid;
@@ -122,8 +123,10 @@ char *parser_unit_list(VM *vm) {
     if(!la1value(")") && !la1value("]") && !la1value("}") &&
        !la1type(TOKEN_EOF)) {
       consume(TOKEN_COMMA, "grouped items should be separated by commas.");
+      generate(FM_GROUP_POP);
     }
   }
+  generate(FM_GROUP_END);
 
   string_addf(&number_of_elements, "%zu", no_elements);
   return number_of_elements;

@@ -143,6 +143,10 @@ _opcode_loop:;
       proc_helper(GA);
       next_opcode;
     }
+    case_opcode(OP_POP) {
+      KPOP;
+      next_opcode;
+    }
     case_opcode(OP_PRIM) {
       char *name     = AS_STRING(KA)->value;
       ptrdiff_t argc = AS_INTEGER(KB)->value;
