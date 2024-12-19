@@ -108,9 +108,10 @@
 
 ## (✗) ver. 0.0.1
 -----------------
-  🟥 BUG-01 - Fix headless method bytecode definitions and add tests.
+  🟩 BUG-01 - Fix headless method bytecode definitions and add tests.
   🟥 BUG-02 - Double check that vm works on 16-bit word machines with 32-bit pointers/doubles.
   🟥 BUG-03 - Disallow rebinding/reassigning the assignment message (=).
+  🟥 BUG-04 - Temporarily remove multimethods from the parser.
 
   🟩 FT-01 - Proposal for cc0-v1 license.
   🟥 FT-02 - Add lexically removed comments.
