@@ -45,18 +45,6 @@
     }                                                                        \
   }
 
-p_inline MargValue
-dispatch_method_from_delegation_chain(VM *vm, MargValue self) {
-  char *name            = AS_STRING(KA)->value;
-  MargValue curr_object = self;
-  MargValue msg_value   = table_get(&AS_OBJECT(curr_object)->messages, name);
-  while(IS_UNDEFINED(msg_value) && !IS_MARGARET(self)) {
-    curr_object = QNAN_BOX(AS_OBJECT(curr_object)->proto);
-    msg_value   = table_get(&AS_OBJECT(curr_object)->messages, name);
-  }
-  return msg_value;
-}
-
 /**
  * @brief Runs the iterator that evaluates
     the result of the generated opcodes
@@ -153,13 +141,16 @@ _opcode_loop:;
       MargValue args = MARG_TENSOR();
       MargValue prim_msg;
       ptrdiff_t i;
-      vector_initialize_n(AS_TENSOR(args)->value, argc);
-      for(i = argc - 1; i >= 0; i--) {
-        MargValue v = KPOP;
-        if(IS_VARIABLE(v)) {
-          v = AS_VARIABLE(v)->value;
+
+      if(argc > 0) {
+        vector_initialize_n(AS_TENSOR(args)->value, argc);
+        for(i = argc - 1; i >= 0; i--) {
+          MargValue v = KPOP;
+          if(IS_VARIABLE(v)) {
+            v = AS_VARIABLE(v)->value;
+          }
+          AS_TENSOR(args)->value[i] = v;
         }
-        AS_TENSOR(args)->value[i] = v;
       }
       KPOP;
 
@@ -172,24 +163,52 @@ _opcode_loop:;
       next_opcode;
     }
     case_opcode(OP_SEND) {
-      ptrdiff_t argc = AS_INTEGER(KB)->value;
-      MargValue self = K(-1 - argc);
+      char *name      = AS_STRING(KA)->value;
+      ptrdiff_t argc  = AS_INTEGER(KB)->value;
+      MargValue self  = K(-argc - 1);
+      MargValue *args = NULL;
+      MargValue msg_value;
 
-      MargValue msg_value = dispatch_method_from_delegation_chain(vm, self);
+      /* NOTE - Dispatch method from delegation chain */
+      MargValue curr_object = self;
+      if(IS_VARIABLE(curr_object)) {
+        curr_object = AS_VARIABLE(curr_object)->value;
+      }
+      msg_value = table_get(&AS_OBJECT(curr_object)->messages, name);
+      while(IS_UNDEFINED(msg_value) && !IS_MARGARET(curr_object)) {
+        curr_object = QNAN_BOX(AS_OBJECT(curr_object)->proto);
+        msg_value   = table_get(&AS_OBJECT(curr_object)->messages, name);
+      }
+
       if(IS_UNDEFINED(msg_value)) {
         raise("Error: cannot send because message does not exist.");
       } else {
+        MargValue l, r;
         ptrdiff_t i;
-        MargValue *args = NULL;
-        for(i = 1; i <= argc; i++) {
-          /* TODO - Probably also should be a MARG_TENSOR */
-          vector_add(args, K(-i));
+
+        /* NOTE - Grab arguments from caller */
+        if(argc > 0) {
+          vector_initialize_n(args, argc);
+          for(i = argc; i >= 0; i--) {
+            args[i] = KPOP;
+          }
         }
-        vm->current = AS_METHOD(msg_value);
+
+        /* NOTE - Store current method as bound for return */
+        AS_METHOD(msg_value)->bound_method = vm->current;
+        /* NOTE - Switch to method called */
+        vm->current                        = AS_METHOD(msg_value);
+        /* NOTE - Carry self from caller and mask on method */
+        SET_I(INSTANCE("@self"), self);
+        /* NOTE - Assign arguments to method locals */
         for(i = 0; i < argc; i++) {
-          SET_L(i, args[i]);
+          if((size_t)i < vector_size(vm->current->argument_names) &&
+             vm->current->argument_names[i] != NULL) {
+            l = L(vm->current->argument_names[i]);
+            r = args[i + 1];
+            assignment_helper(l, r);
+          }
         }
-        vector_free(args);
       }
       next_opcode;
     }
@@ -198,7 +217,7 @@ _opcode_loop:;
       next_opcode;
     }
     case_opcode(OP_EXACTREC) {
-      MargValue ret_value = KZ;
+      MargValue ret_value = KPOP;
       vm->current->ip     = -1;
       vm->current         = vm->current->bound_method;
       /* TODO - Check if any memory can be freed */

@@ -119,36 +119,35 @@ VM *emitter_emit(VM *vm) {
 
     case_fmcode(FM_ASSIGNMENT) { OP(OP_ASSIGN); }
     case_fmcode(FM_SUBSCRIPT) {
-      char *subscript_name = formal_bytecode[++ip];
-      /* emit_byte(OP_1);
-      emit_variable_length(OP_SEND);
-      emit_temporary(MARG_STRING(subscript_name)); */
-      (void)subscript_name;
+      OAB(
+        OP_SEND, CONST(MARG_STRING(string_new("[]"))), CONST(MARG_INTEGER(1))
+      );
     }
     case_fmcode(FM_LHS) {
-      char *lhs_name = formal_bytecode[++ip];
-      /* emit_byte(OP_1);
-      emit_variable_length(OP_SEND);
-      emit_temporary(MARG_STRING(lhs_name)); */
-      (void)lhs_name;
+      OAB(
+        OP_SEND,
+        CONST(MARG_STRING(string_new(formal_bytecode[++ip]))),
+        CONST(MARG_INTEGER(0))
+      );
     }
     case_fmcode(FM_UNARY) {
-      char *message_name = formal_bytecode[++ip];
-      /* emit_byte(OP_1);
-      emit_variable_length(OP_SEND);
-      emit_temporary(MARG_STRING(unary_name)); */
-      (void)message_name;
+      OAB(
+        OP_SEND,
+        CONST(MARG_STRING(string_new(formal_bytecode[++ip]))),
+        CONST(MARG_INTEGER(0))
+      );
     }
     case_fmcode(FM_BINARY) {
-      char *message_name = formal_bytecode[++ip];
-      /* emit_byte(OP_1);
-      emit_variable_length(OP_SEND);
-      emit_temporary(MARG_STRING(binary_name)); */
-      (void)message_name;
+      OAB(
+        OP_SEND,
+        CONST(MARG_STRING(string_new(formal_bytecode[++ip]))),
+        CONST(MARG_INTEGER(1))
+      );
     }
     case_fmcode(FM_KEYWORD) {
-      char *message_name         = string_new(formal_bytecode[++ip]);
-      char *number_of_parameters = string_new(formal_bytecode[++ip]);
+      char *message_name = string_new(formal_bytecode[++ip]);
+      size_t number_of_parameters;
+      sscanf(formal_bytecode[++ip], "%zu", &number_of_parameters);
 
       switch_message_case("MARGARET_INSPECT:") { prim_helper(1); }
       message_case("MARGARET_BIND:TO:") { prim_helper(2); }
@@ -187,12 +186,11 @@ VM *emitter_emit(VM *vm) {
       message_case("BITSTRING_ADD:VALUE:BITS:") { prim_helper(3); }
       message_case("BITSTRING_SIZE:") { prim_helper(1); }
       message_default {
-        (void)number_of_parameters;
-        /* emit_variable_length(OP_OBJECT);
-        emit_temporary(MARG_INTEGER(number_of_parameters)); */
-
-        /* emit_variable_length(OP_SEND);
-        emit_temporary(MARG_STRING(message_name)); */
+        OAB(
+          OP_SEND,
+          CONST(MARG_STRING(message_name)),
+          CONST(MARG_INTEGER(number_of_parameters))
+        );
       }
     }
   }
