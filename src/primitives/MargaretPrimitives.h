@@ -9,6 +9,8 @@ MargValue __PRIM_RAISE(VM *vm, MargValue error);
 /* MargValue primitive_DNU(VM *vm, MargValue args_value); */
 /* MargValue primitive_CLONE(VM *vm, MargValue args_value); */
 MargValue __PRIM_INSPECT(VM *vm, MargValue args_value);
+MargValue __PRIM_BIND(VM *vm, MargValue args_value);
+MargValue __PRIM_MARGARET_MESSAGES(VM *vm, MargValue args_value);
 
 /* TODO - Refactor as a $Margaret message */
 /**

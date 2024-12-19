@@ -75,6 +75,8 @@ p_inline void setup_main(VM *vm) {
 p_inline void setup_primitives(VM *vm) {
   define_prim("MARGARET_INSPECT:", __PRIM_INSPECT);
   define_prim("MARGARET_RAISE:", __PRIM_RAISE);
+  define_prim("MARGARET_BIND:TO:", __PRIM_BIND);
+  define_prim("MARGARET_MESSAGES:", __PRIM_MARGARET_MESSAGES);
 
   define_prim("NUMERIC_ADD:WITH:", __PRIM_NUMERIC_ADD);
   define_prim("NUMERIC_SUB:WITH:", __PRIM_NUMERIC_SUB);

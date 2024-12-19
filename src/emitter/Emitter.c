@@ -157,8 +157,9 @@ VM *emitter_emit(VM *vm) {
       char *number_of_parameters = string_new(formal_bytecode[++ip]);
 
       switch_message_case("MARGARET_INSPECT:") { prim_helper(1); }
-      /* TODO - Should ne 1 argument primitive */
-      message_case("MARGARET_RAISE:") { prim_helper(0); }
+      message_case("MARGARET_BIND:TO:") { prim_helper(2); }
+      message_case("MARGARET_MESSAGES:") { prim_helper(1); }
+      /* message_case("MARGARET_RAISE:") { prim_helper(0); } */
 
       message_case("NUMERIC_ADD:WITH:") { prim_helper(2); }
       message_case("NUMERIC_SUB:WITH:") { prim_helper(2); }
