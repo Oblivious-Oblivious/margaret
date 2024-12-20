@@ -8,8 +8,7 @@
 
 char *marg_value_format(VM *vm, MargValue self) {
   if(IS_UNDEFINED(self)) {
-    /* TODO - Eventually replace <unbound> with '' */
-    return string_new("<unbound>");
+    return string_new("");
   } else if(IS_NIL(self)) {
     return string_new("$nil");
   } else if(IS_FALSE(self)) {

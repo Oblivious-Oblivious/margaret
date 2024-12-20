@@ -46,7 +46,6 @@ typedef struct VM {
   bool do_not_display;
 } VM;
 
-/* TODO - Refactor vm to a stack-bound value with vm_new(&vm, "repl") */
 /**
  * @brief Creates a new VM instance By being an explicit pointer can create
  * multiple of them

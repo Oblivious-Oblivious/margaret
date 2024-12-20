@@ -279,7 +279,6 @@ _opcode_loop:;
       MargValue ret_value = KPOP;
       vm->current->ip     = -1;
       vm->current         = vm->current->bound_method;
-      /* TODO - Check if any memory can be freed */
       KPUSH(ret_value);
       next_opcode;
     }

@@ -113,7 +113,6 @@ p_inline void setup_primitives(VM *vm) {
 
 VM *vm_new(const char *filename) {
   size_t i;
-  /* TODO - Maybe convert to initializer */
   VM *vm = (VM *)malloc(sizeof(VM));
 
   vm->filename    = string_new(filename);

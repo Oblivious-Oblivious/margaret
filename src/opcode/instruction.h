@@ -101,9 +101,7 @@ p_inline Instruction make_global_singleton(VM *vm, const char *var) {
 #define A    ((READ_BYTECODE() >> 29) & 0x1fffffff)
 #define B    ((READ_BYTECODE() >> 0) & 0x1fffffff)
 #define Z    (vector_size(vm->current->constants) - 1)
-/* TODO - Probably replace in the future */
 #define K(i) (vm->current->constants[(i + Z + 1) % (Z + 1)])
-
 /* TODO - Optimize by calling only once */
 #define L(n)                                                   \
   (IS_UNDEFINED(table_get(&vm->current->local_variables, (n))) \
