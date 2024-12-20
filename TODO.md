@@ -114,6 +114,8 @@
   🟩 BUG-04 - Temporarily remove multimethods from the parser.
   🟥 BUG-05 - Add a prefix to all messages to avoid name clashes.
               e.g. "-_LHS", "-_BINARY" for clear separation.
+  🟥 BUG-06 - Fix REPL return value that ignores format strings for enumerables.
+              e.g. %[] returns [] and %() returns ().  inspect works correctly.
 
   🟩 FT-01 - Proposal for cc0-v1 license.
   🟥 FT-02 - Add lexically removed comments.

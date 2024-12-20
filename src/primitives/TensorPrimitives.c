@@ -1,17 +1,5 @@
 #include "TensorPrimitives.h"
 
-MargValue __PRIM_TENSOR_NEW(VM *vm, MargValue args_value) {
-  size_t i;
-  MargValue tensor = MARG_TENSOR();
-  MargValue *args  = AS_TENSOR(args_value)->value;
-
-  for(i = 0; i < vector_size(args); i++) {
-    vector_add(AS_TENSOR(tensor)->value, args[i]);
-  }
-
-  return tensor;
-}
-
 MargValue __PRIM_TENSOR_ADD(VM *vm, MargValue args_value) {
   MargValue *args = AS_TENSOR(args_value)->value;
   (void)vm;

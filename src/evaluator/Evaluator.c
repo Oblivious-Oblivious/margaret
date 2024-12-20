@@ -135,6 +135,65 @@ _opcode_loop:;
       KPOP;
       next_opcode;
     }
+    case_opcode(OP_TENSOR) {
+      ptrdiff_t i;
+      ptrdiff_t number_of_elements = AS_INTEGER(KA)->value;
+      MargValue tensor             = MARG_TENSOR();
+
+      vector_initialize_n(AS_TENSOR(tensor)->value, number_of_elements);
+      for(i = number_of_elements - 1; i >= 0; i--) {
+        AS_TENSOR(tensor)->value[i] = KPOP;
+      }
+
+      KPUSH(tensor);
+      next_opcode;
+    }
+    case_opcode(OP_TUPLE) {
+      ptrdiff_t i;
+      ptrdiff_t number_of_elements = AS_INTEGER(KA)->value;
+      MargValue tuple              = MARG_TUPLE();
+
+      vector_initialize_n(AS_TUPLE(tuple)->value, number_of_elements);
+      for(i = number_of_elements - 1; i >= 0; i--) {
+        AS_TUPLE(tuple)->value[i] = KPOP;
+      }
+
+      KPUSH(tuple);
+      next_opcode;
+    }
+    case_opcode(OP_TABLE) {
+      ptrdiff_t i;
+      ptrdiff_t number_of_elements = AS_INTEGER(KA)->value;
+      MargValue table              = MARG_TABLE();
+
+      for(i = 0; i < number_of_elements; i += 2) {
+        MargValue value = KPOP;
+        MargValue key   = KPOP;
+        table_add(&AS_TABLE(table)->value, AS_STRING(key)->value, value);
+      }
+
+      KPUSH(table);
+      next_opcode;
+    }
+    case_opcode(OP_BITSTRING) {
+      ptrdiff_t i;
+      ptrdiff_t number_of_elements = AS_INTEGER(KA)->value;
+      MargValue bitstring          = MARG_BITSTRING();
+
+      MargValue *pairs = AS_TENSOR(MARG_TENSOR())->value;
+      for(i = 0; i < number_of_elements; i += 2) {
+        vector_add(pairs, KPOP);
+        vector_add(pairs, KPOP);
+      }
+
+      for(i = vector_size_signed(pairs) - 1; i >= 0; i -= 2) {
+        vector_add(AS_BITSTRING(bitstring)->bits->value, pairs[i]);
+        vector_add(AS_BITSTRING(bitstring)->sizes->value, pairs[i - 1]);
+      }
+
+      KPUSH(bitstring);
+      next_opcode;
+    }
     case_opcode(OP_PRIM) {
       char *name     = AS_STRING(KA)->value;
       ptrdiff_t argc = AS_INTEGER(KB)->value;

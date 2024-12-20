@@ -40,10 +40,7 @@ char *marg_value_format(VM *vm, MargValue self) {
     size_t i;
     char *res          = string_new("[");
     MargTensor *tensor = AS_TENSOR(self);
-    MargValue args     = MARG_TENSOR();
-    size_t size;
-    vector_add(AS_TENSOR(args)->value, self);
-    size = AS_INTEGER(__PRIM_TENSOR_SIZE(vm, args))->value;
+    size_t size        = vector_size(tensor->value);
     if(size > 0) {
       for(i = 0; i < size - 1; i++) {
         string_addf(&res, "%s, ", marg_value_format(vm, tensor->value[i]));
@@ -56,10 +53,7 @@ char *marg_value_format(VM *vm, MargValue self) {
     size_t i;
     char *res        = string_new("%[");
     MargTuple *tuple = AS_TUPLE(self);
-    MargValue args   = MARG_TENSOR();
-    size_t size;
-    vector_add(AS_TENSOR(args)->value, self);
-    size = AS_INTEGER(__PRIM_TUPLE_SIZE(vm, args))->value;
+    size_t size      = vector_size(tuple->value);
     if(size > 0) {
       for(i = 0; i < size - 1; i++) {
         string_addf(&res, "%s, ", marg_value_format(vm, tuple->value[i]));
@@ -87,25 +81,23 @@ char *marg_value_format(VM *vm, MargValue self) {
     return res;
   } else if(IS_BITSTRING(self)) {
     size_t i;
-    char *res      = string_new("%(");
-    MargValue args = MARG_TENSOR();
-    size_t size;
-    vector_add(AS_TENSOR(args)->value, self);
-    size = AS_INTEGER(__PRIM_BITSTRING_SIZE(vm, args))->value;
+    char *res                = string_new("%(");
+    MargBitstring *bitstring = AS_BITSTRING(self);
+    size_t size              = vector_size(bitstring->sizes->value);
     if(size > 0) {
       for(i = 0; i < size - 1; i++) {
         string_addf(
           &res,
           "%s::%s, ",
-          marg_value_format(vm, AS_BITSTRING(self)->bits->value[i]),
-          marg_value_format(vm, AS_BITSTRING(self)->sizes->value[i])
+          marg_value_format(vm, bitstring->bits->value[i]),
+          marg_value_format(vm, bitstring->sizes->value[i])
         );
       }
       string_addf(
         &res,
         "%s::%s",
-        marg_value_format(vm, AS_BITSTRING(self)->bits->value[size - 1]),
-        marg_value_format(vm, AS_BITSTRING(self)->sizes->value[size - 1])
+        marg_value_format(vm, bitstring->bits->value[size - 1]),
+        marg_value_format(vm, bitstring->sizes->value[size - 1])
       );
     }
     string_add(res, ")");

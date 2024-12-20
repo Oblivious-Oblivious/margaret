@@ -3,7 +3,6 @@
 
 #include "MargaretPrimitives.h"
 
-MargValue __PRIM_TENSOR_NEW(VM *vm, MargValue args_value);
 MargValue __PRIM_TENSOR_ADD(VM *vm, MargValue args_value);
 MargValue __PRIM_TENSOR_ADD_TENSOR(VM *vm, MargValue args_value);
 MargValue __PRIM_TENSOR_REMOVE(VM *vm, MargValue args_value);

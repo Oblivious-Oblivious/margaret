@@ -92,7 +92,6 @@ p_inline void setup_primitives(VM *vm) {
   define_prim("STRING_REMOVE:CHAR:", __PRIM_STRING_REMOVE);
   define_prim("STRING_EQUALS:OTHER:", __PRIM_STRING_EQUALS);
 
-  define_prim("TENSOR_NEW:", __PRIM_TENSOR_NEW);
   define_prim("TENSOR_ADD:ELEMENT:", __PRIM_TENSOR_ADD);
   define_prim("TENSOR_ADD:TENSOR:", __PRIM_TENSOR_ADD_TENSOR);
   define_prim("TENSOR_REMOVE:ELEMENT:", __PRIM_TENSOR_REMOVE);
@@ -100,17 +99,14 @@ p_inline void setup_primitives(VM *vm) {
   define_prim("TENSOR_LAST:", __PRIM_TENSOR_LAST);
   define_prim("TENSOR_SIZE:", __PRIM_TENSOR_SIZE);
 
-  define_prim("TUPLE_NEW:", __PRIM_TUPLE_NEW);
   define_prim("TUPLE_ADD:ELEMENT:", __PRIM_TUPLE_ADD);
   define_prim("TUPLE_SIZE:", __PRIM_TUPLE_SIZE);
 
-  define_prim("TABLE_NEW:", __PRIM_TABLE_NEW);
   define_prim("TABLE_ADD:KEY:VALUE:", __PRIM_TABLE_ADD);
   define_prim("TABLE_GET:KEY:", __PRIM_TABLE_GET);
   define_prim("TABLE_REMOVE:KEY:", __PRIM_TABLE_REMOVE);
   define_prim("TABLE_SIZE:", __PRIM_TABLE_SIZE);
 
-  define_prim("BITSTRING_NEW:", __PRIM_BITSTRING_NEW);
   define_prim("BITSTRING_ADD:VALUE:BITS:", __PRIM_BITSTRING_ADD);
   define_prim("BITSTRING_SIZE:", __PRIM_BITSTRING_SIZE);
 }

@@ -29,15 +29,6 @@
     CONST(MARG_INTEGER(number_of_parameters)) \
   )
 
-#define enumerable_helper(message_name)                      \
-  size_t number_of_elements;                                 \
-  sscanf(formal_bytecode[++ip], "%zu", &number_of_elements); \
-  OAB(                                                       \
-    OP_PRIM,                                                 \
-    CONST(MARG_STRING(message_name)),                        \
-    CONST(MARG_INTEGER(number_of_elements))                  \
-  )
-
 VM *emitter_emit(VM *vm) {
   size_t ip;
   char **formal_bytecode = vm->formal_bytecode;
@@ -87,10 +78,26 @@ VM *emitter_emit(VM *vm) {
       OA(OP_STOZK, CONST(MARG_SYMBOL(formal_bytecode[++ip])));
     }
 
-    case_fmcode(FM_TENSOR) { enumerable_helper("TENSOR_NEW:"); }
-    case_fmcode(FM_TUPLE) { enumerable_helper("TUPLE_NEW:"); }
-    case_fmcode(FM_TABLE) { enumerable_helper("TABLE_NEW:"); }
-    case_fmcode(FM_BITSTRING) { enumerable_helper("BITSTRING_NEW:"); }
+    case_fmcode(FM_TENSOR) {
+      size_t number_of_elements;
+      sscanf(formal_bytecode[++ip], "%zu", &number_of_elements);
+      OA(OP_TENSOR, CONST(MARG_INTEGER(number_of_elements)));
+    }
+    case_fmcode(FM_TUPLE) {
+      size_t number_of_elements;
+      sscanf(formal_bytecode[++ip], "%zu", &number_of_elements);
+      OA(OP_TUPLE, CONST(MARG_INTEGER(number_of_elements)));
+    }
+    case_fmcode(FM_TABLE) {
+      size_t number_of_elements;
+      sscanf(formal_bytecode[++ip], "%zu", &number_of_elements);
+      OA(OP_TABLE, CONST(MARG_INTEGER(number_of_elements)));
+    }
+    case_fmcode(FM_BITSTRING) {
+      size_t number_of_elements;
+      sscanf(formal_bytecode[++ip], "%zu", &number_of_elements);
+      OA(OP_BITSTRING, CONST(MARG_INTEGER(number_of_elements)));
+    }
 
     case_fmcode(FM_GLOBAL) { OA(OP_STOZG, GLOBAL(formal_bytecode[++ip])); }
     case_fmcode(FM_INSTANCE) { OA(OP_STOZI, INSTANCE(formal_bytecode[++ip])); }
