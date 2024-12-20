@@ -160,6 +160,7 @@ VM *emitter_emit(VM *vm) {
       message_case("MARGARET_BIND:TO:") { prim_helper(2); }
       message_case("MARGARET_MESSAGES:") { prim_helper(1); }
       /* message_case("MARGARET_RAISE:") { prim_helper(0); } */
+      message_case("MARGARET_GOTO:") { OP(OP_GOTO); }
 
       message_case("PROC_CALL:") { OP(OP_PCALL); }
       message_case("PROC_CALL:ARGS:") { OP(OP_PCALLARGS); }

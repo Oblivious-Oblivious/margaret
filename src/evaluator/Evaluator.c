@@ -79,22 +79,21 @@ _opcode_loop:;
       SGA(KZ);
       next_opcode;
     }
-    case_opcode(OP_GOTOL) {
-      MargValue label =
-        GET_L(table_get(&vm->current->local_variables, AS_STRING(KA)->value));
-      goto_helper(label);
-      next_opcode;
-    }
-    case_opcode(OP_GOTOI) {
-      MargValue label = GET_I(table_get(
-        &vm->current->bound_object->instance_variables, AS_STRING(KA)->value
-      ));
-      goto_helper(label);
-      next_opcode;
-    }
-    case_opcode(OP_GOTOG) {
-      MargValue label =
-        GET_G(table_get(&vm->global_variables, AS_STRING(KA)->value));
+    case_opcode(OP_GOTO) {
+      MargValue label  = MARG_NIL;
+      char *label_name = AS_STRING(KPOP)->value;
+      KPOP;
+
+      if(label_name[0] == '\0') {
+      } else if(label_name[0] == '$') {
+        label = GET_G(table_get(&vm->global_variables, label_name));
+      } else if(label_name[0] == '@') {
+        label = GET_I(
+          table_get(&vm->current->bound_object->instance_variables, label_name)
+        );
+      } else if(label_name[0] == ':') {
+        label = GET_L(table_get(&vm->current->local_variables, label_name));
+      }
       goto_helper(label);
       next_opcode;
     }
