@@ -14,23 +14,6 @@
     SKZ(raise("Error: cannot goto to a non-label."));      \
   }
 
-#define proc_helper(proc_value)                    \
-  ptrdiff_t argc = AS_INTEGER(KB)->value;          \
-  if(IS_UNDEFINED(proc_value)) {                   \
-    raise("Error: cannot call a non-proc value."); \
-  } else {                                         \
-    ptrdiff_t i;                                   \
-    MargValue *args = NULL;                        \
-    for(i = 1; i <= argc; i++) {                   \
-      vector_add(args, K(-i));                     \
-    }                                              \
-    vm->current = AS_METHOD(proc_value);           \
-    for(i = 0; i < argc; i++) {                    \
-      SET_L(i, args[i]);                           \
-    }                                              \
-    vector_free(args);                             \
-  }
-
 #define assignment_helper(self, rvalue)                                      \
   if(IS_VARIABLE(rvalue)) {                                                  \
     rvalue = AS_VARIABLE(rvalue)->value;                                     \
@@ -113,22 +96,6 @@ _opcode_loop:;
       MargValue label =
         GET_G(table_get(&vm->global_variables, AS_STRING(KA)->value));
       goto_helper(label);
-      next_opcode;
-    }
-    case_opcode(OP_PROCK) {
-      proc_helper(KA);
-      next_opcode;
-    }
-    case_opcode(OP_PROCL) {
-      proc_helper(LA);
-      next_opcode;
-    }
-    case_opcode(OP_PROCI) {
-      proc_helper(IA);
-      next_opcode;
-    }
-    case_opcode(OP_PROCG) {
-      proc_helper(GA);
       next_opcode;
     }
     case_opcode(OP_POP) {
@@ -265,6 +232,41 @@ _opcode_loop:;
              vm->current->argument_names[i] != NULL) {
             l = L(vm->current->argument_names[i]);
             r = args[i + 1];
+            assignment_helper(l, r);
+          }
+        }
+      }
+      next_opcode;
+    }
+    case_opcode(OP_PCALL) {
+      MargValue proc = KPOP;
+      /* NOTE - Pops margaret object since it derives from a keyword message */
+      KPOP;
+      if(!IS_METHOD(proc)) {
+        raise("Error: cannot call a non-proc value.");
+      } else {
+        AS_METHOD(proc)->bound_method = vm->current;
+        vm->current                   = AS_METHOD(proc);
+      }
+      next_opcode;
+    }
+    case_opcode(OP_PCALLARGS) {
+      MargValue args_value = KPOP;
+      MargValue proc       = KPOP;
+      MargValue *args      = AS_TENSOR(args_value)->value;
+      KPOP;
+
+      if(IS_METHOD(proc)) {
+        MargValue l, r;
+        size_t i;
+        size_t argc                   = vector_size(args);
+        AS_METHOD(proc)->bound_method = vm->current;
+        vm->current                   = AS_METHOD(proc);
+        for(i = 0; i < argc; i++) {
+          if((size_t)i < vector_size(vm->current->argument_names) &&
+             vm->current->argument_names[i] != NULL) {
+            l = L(vm->current->argument_names[i]);
+            r = args[i];
             assignment_helper(l, r);
           }
         }

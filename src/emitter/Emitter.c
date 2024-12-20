@@ -161,6 +161,9 @@ VM *emitter_emit(VM *vm) {
       message_case("MARGARET_MESSAGES:") { prim_helper(1); }
       /* message_case("MARGARET_RAISE:") { prim_helper(0); } */
 
+      message_case("PROC_CALL:") { OP(OP_PCALL); }
+      message_case("PROC_CALL:ARGS:") { OP(OP_PCALLARGS); }
+
       message_case("NUMERIC_ADD:WITH:") { prim_helper(2); }
       message_case("NUMERIC_SUB:WITH:") { prim_helper(2); }
       message_case("NUMERIC_MUL:WITH:") { prim_helper(2); }
