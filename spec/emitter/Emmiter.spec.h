@@ -186,9 +186,8 @@ module(EmmiterSpec, {
       assert_that(O is OP_STOZK);
       assert_that(IS_STRING(K(A)));
       vm->current->ip++;
-      assert_that(O is OP_PRIM);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "TENSOR_NEW:");
-      assert_that_ptrdiff_t(AS_INTEGER(K(B))->value equals to 3);
+      assert_that(O is OP_TENSOR);
+      assert_that_ptrdiff_t(AS_INTEGER(K(A))->value equals to 3);
       vm->current->ip++;
       assert_that(O is OP_HALT);
 
@@ -213,19 +212,16 @@ module(EmmiterSpec, {
       assert_that_ptrdiff_t(AS_INTEGER(K(A))->value equals to 45);
 
       vm->current->ip++;
-      assert_that(O is OP_PRIM);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "TENSOR_NEW:");
-      assert_that_size_t(AS_INTEGER(K(B))->value equals to 3);
+      assert_that(O is OP_TENSOR);
+      assert_that_size_t(AS_INTEGER(K(A))->value equals to 3);
 
       vm->current->ip++;
-      assert_that(O is OP_PRIM);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "TENSOR_NEW:");
-      assert_that_size_t(AS_INTEGER(K(B))->value equals to 3);
+      assert_that(O is OP_TENSOR);
+      assert_that_size_t(AS_INTEGER(K(A))->value equals to 3);
 
       vm->current->ip++;
-      assert_that(O is OP_PRIM);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "TENSOR_NEW:");
-      assert_that_size_t(AS_INTEGER(K(B))->value equals to 2);
+      assert_that(O is OP_TENSOR);
+      assert_that_size_t(AS_INTEGER(K(A))->value equals to 2);
       vm->current->ip++;
       assert_that(O is OP_HALT);
     });
@@ -289,8 +285,8 @@ module(EmmiterSpec, {
       vm->current->ip++;
       assert_that(O is OP_STOZK);
       vm->current->ip++;
-      assert_that_charptr(AS_STRING(K(A))->value equals to "BITSTRING_NEW:");
-      assert_that_size_t(AS_INTEGER(K(B))->value equals to 2);
+      assert_that(O is OP_BITSTRING);
+      assert_that_size_t(AS_INTEGER(K(A))->value equals to 2);
       vm->current->ip++;
       assert_that(O is OP_HALT);
 
@@ -312,8 +308,8 @@ module(EmmiterSpec, {
       vm->current->ip++;
       assert_that(O is OP_STOZK);
       vm->current->ip++;
-      assert_that_charptr(AS_STRING(K(A))->value equals to "BITSTRING_NEW:");
-      assert_that_size_t(AS_INTEGER(K(B))->value equals to 8);
+      assert_that(O is OP_BITSTRING);
+      assert_that_size_t(AS_INTEGER(K(A))->value equals to 8);
       vm->current->ip++;
       assert_that(O is OP_HALT);
     });
@@ -330,9 +326,8 @@ module(EmmiterSpec, {
       assert_that(O is OP_STOZK);
       assert_that(IS_STRING(K(A)));
       vm->current->ip++;
-      assert_that(O is OP_PRIM);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "TUPLE_NEW:");
-      assert_that_ptrdiff_t(AS_INTEGER(K(B))->value equals to 3);
+      assert_that(O is OP_TUPLE);
+      assert_that_ptrdiff_t(AS_INTEGER(K(A))->value equals to 3);
       vm->current->ip++;
       assert_that(O is OP_HALT);
 
@@ -356,17 +351,14 @@ module(EmmiterSpec, {
       assert_that(O is OP_STOZK);
       assert_that_ptrdiff_t(AS_INTEGER(K(A))->value equals to 6);
       vm->current->ip++;
-      assert_that(O is OP_PRIM);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "TUPLE_NEW:");
-      assert_that_size_t(AS_INTEGER(K(B))->value equals to 3);
+      assert_that(O is OP_TUPLE);
+      assert_that_size_t(AS_INTEGER(K(A))->value equals to 3);
       vm->current->ip++;
-      assert_that(O is OP_PRIM);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "TUPLE_NEW:");
-      assert_that_size_t(AS_INTEGER(K(B))->value equals to 3);
+      assert_that(O is OP_TUPLE);
+      assert_that_size_t(AS_INTEGER(K(A))->value equals to 3);
       vm->current->ip++;
-      assert_that(O is OP_PRIM);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "TUPLE_NEW:");
-      assert_that_size_t(AS_INTEGER(K(B))->value equals to 2);
+      assert_that(O is OP_TUPLE);
+      assert_that_size_t(AS_INTEGER(K(A))->value equals to 2);
       vm->current->ip++;
       assert_that(O is OP_HALT);
     });
@@ -392,9 +384,8 @@ module(EmmiterSpec, {
       assert_that(O is OP_STOZK);
       assert_that_ptrdiff_t(AS_INTEGER(K(A))->value equals to 3);
       vm->current->ip++;
-      assert_that(O is OP_PRIM);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "TABLE_NEW:");
-      assert_that_size_t(AS_INTEGER(K(B))->value equals to 6);
+      assert_that(O is OP_TABLE);
+      assert_that_size_t(AS_INTEGER(K(A))->value equals to 6);
 
       emit(vm, "%{a: %{aa: 1, bb: 2}, b: %{cc: 3, dd: 4}}");
       vm->current->ip++;
@@ -413,9 +404,8 @@ module(EmmiterSpec, {
       assert_that(O is OP_STOZK);
       assert_that_size_t(AS_INTEGER(K(A))->value equals to 2);
       vm->current->ip++;
-      assert_that(O is OP_PRIM);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "TABLE_NEW:");
-      assert_that_size_t(AS_INTEGER(K(B))->value equals to 4);
+      assert_that(O is OP_TABLE);
+      assert_that_size_t(AS_INTEGER(K(A))->value equals to 4);
       vm->current->ip++;
       assert_that(O is OP_STOZK);
       assert_that_charptr(AS_STRING(K(A))->value equals to "b");
@@ -432,13 +422,11 @@ module(EmmiterSpec, {
       assert_that(O is OP_STOZK);
       assert_that_size_t(AS_INTEGER(K(A))->value equals to 4);
       vm->current->ip++;
-      assert_that(O is OP_PRIM);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "TABLE_NEW:");
-      assert_that_size_t(AS_INTEGER(K(B))->value equals to 4);
+      assert_that(O is OP_TABLE);
+      assert_that_size_t(AS_INTEGER(K(A))->value equals to 4);
       vm->current->ip++;
-      assert_that(O is OP_PRIM);
-      assert_that_charptr(AS_STRING(K(A))->value equals to "TABLE_NEW:");
-      assert_that_size_t(AS_INTEGER(K(B))->value equals to 4);
+      assert_that(O is OP_TABLE);
+      assert_that_size_t(AS_INTEGER(K(A))->value equals to 4);
     });
 
     context("on methods", {
