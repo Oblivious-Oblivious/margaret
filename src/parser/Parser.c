@@ -430,22 +430,26 @@ void parser_method_definition(VM *vm) {
 
   if(la1type(TOKEN_IDENTIFIER) && la2value(":")) {
     name = keyword_list();
+    string_add(name, "_KEYWORD");
     consume(TOKEN_ROCKET, "missing '=>' on keyword keyword method definition.");
   } else if(la1type(TOKEN_IDENTIFIER) && la2value("=>")) {
     name = consume(
       TOKEN_IDENTIFIER, "missing identifier on unary method definition."
     );
+    string_add(name, "_UNARY");
     consume(TOKEN_ROCKET, "missing '=>' on unary method definition.");
   } else if(la1type(TOKEN_MESSAGE_SYMBOL) && la2value("=>")) {
     name = consume(
       TOKEN_MESSAGE_SYMBOL, "missing message symbol on lhs method definition."
     );
+    string_add(name, "_LHS");
     consume(TOKEN_ROCKET, "missing '=>' on lhs method definition.");
   } else if(la1type(TOKEN_MESSAGE_SYMBOL)) {
     name = consume(
       TOKEN_MESSAGE_SYMBOL,
       "missing message symbol on binary method definition."
     );
+    string_add(name, "_BINARY");
     if(la1type(TOKEN_IDENTIFIER)) {
       generate(FM_METHOD_ARGUMENT);
       generate(consume(
@@ -467,7 +471,7 @@ void parser_method_definition(VM *vm) {
     }
     consume(TOKEN_RBRACKET, "missing ']' on subscript method definition.");
     consume(TOKEN_ROCKET, "missing '=>' on subscript method definition.");
-    name = string_new("[]");
+    name = string_new("[]_SUBSCRIPT");
   }
 
   if(prev_size < vm->tid) {

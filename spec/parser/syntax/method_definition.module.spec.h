@@ -10,7 +10,11 @@ module(method_definition, {
     parse(
       "# ! => @self",
       vector_new(
-        FM_METHOD_START, FM_METHOD_NAME, string_new("!"), FM_SELF, FM_METHOD_END
+        FM_METHOD_START,
+        FM_METHOD_NAME,
+        string_new("!_LHS"),
+        FM_SELF,
+        FM_METHOD_END
       )
     );
 
@@ -19,7 +23,7 @@ module(method_definition, {
       vector_new(
         FM_METHOD_START,
         FM_METHOD_NAME,
-        string_new("fact"),
+        string_new("fact_UNARY"),
         FM_INTEGER,
         string_new("0"),
         FM_METHOD_END
@@ -35,7 +39,7 @@ module(method_definition, {
         FM_METHOD_ARGUMENT,
         string_new("position"),
         FM_METHOD_NAME,
-        string_new("add:at:"),
+        string_new("add:at:_KEYWORD"),
         FM_INTEGER,
         string_new("42"),
         FM_METHOD_END

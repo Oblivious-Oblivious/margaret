@@ -3,6 +3,7 @@
 #include "../opcode/instruction.h"
 #include "../opcode/opcodes.h"
 #include "../primitives/MargaretPrimitives.h"
+#include "../vm/compilation_pipeline.h"
 
 #define FETCH() (vm->current->ip++, O)
 
@@ -276,6 +277,9 @@ _opcode_loop:;
       MargValue self   = KPOP;
       assignment_helper(self, rvalue);
       KPUSH(rvalue);
+      next_opcode;
+    }
+    case_opcode(OP_INCLUDE) {
       next_opcode;
     }
     /* case_opcode(OP_INCLUDE) {

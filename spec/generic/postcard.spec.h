@@ -19,7 +19,7 @@ module(postcard_spec, {
         FM_METHOD_ARGUMENT,
         string_new("x"),
         FM_METHOD_NAME,
-        string_new("ultimate_answer:"),
+        string_new("ultimate_answer:_KEYWORD"),
         FM_TRUE,
         FM_FALSE,
         FM_LHS,

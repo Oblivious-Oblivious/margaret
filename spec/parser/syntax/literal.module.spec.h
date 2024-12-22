@@ -187,7 +187,7 @@ module(literal, {
       vector_new(
         FM_METHOD_START,
         FM_METHOD_NAME,
-        string_new("fact"),
+        string_new("fact_UNARY"),
         FM_INTEGER,
         string_new("1"),
         FM_METHOD_END

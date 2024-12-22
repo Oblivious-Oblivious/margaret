@@ -439,7 +439,8 @@ module(EmmiterSpec, {
         assert_that(IS_METHOD(method_value));
         assert_that(method_object->bound_object is vm->current->bound_object);
         assert_that(method_object->bound_method is vm->current);
-        assert_that_charptr(method_object->message_name equals to "add:at:");
+        assert_that_charptr(method_object->message_name equals to
+                            "add:at:_KEYWORD");
         vm->current->ip++;
         assert_that(O is OP_HALT);
       });
@@ -453,7 +454,7 @@ module(EmmiterSpec, {
         assert_that(IS_METHOD(method_value));
         assert_that(method_object->bound_object is vm->current->bound_object);
         assert_that(method_object->bound_method is vm->current);
-        assert_that_charptr(method_object->message_name equals to "**");
+        assert_that_charptr(method_object->message_name equals to "**_BINARY");
         vm->current->ip++;
         assert_that(O is OP_HALT);
       });
@@ -467,7 +468,7 @@ module(EmmiterSpec, {
         assert_that(IS_METHOD(method_value));
         assert_that(method_object->bound_object is vm->current->bound_object);
         assert_that(method_object->bound_method is vm->current);
-        assert_that_charptr(method_object->message_name equals to "incr");
+        assert_that_charptr(method_object->message_name equals to "incr_UNARY");
         vm->current->ip++;
         assert_that(O is OP_HALT);
       });
@@ -481,7 +482,7 @@ module(EmmiterSpec, {
         assert_that(IS_METHOD(method_value));
         assert_that(method_object->bound_object is vm->current->bound_object);
         assert_that(method_object->bound_method is vm->current);
-        assert_that_charptr(method_object->message_name equals to "-");
+        assert_that_charptr(method_object->message_name equals to "-_LHS");
         vm->current->ip++;
         assert_that(O is OP_HALT);
       });
@@ -495,7 +496,8 @@ module(EmmiterSpec, {
         assert_that(IS_METHOD(method_value));
         assert_that(method_object->bound_object is vm->current->bound_object);
         assert_that(method_object->bound_method is vm->current);
-        assert_that_charptr(method_object->message_name equals to "[]");
+        assert_that_charptr(method_object->message_name equals to "[]_SUBSCRIPT"
+        );
         vm->current->ip++;
         assert_that(O is OP_HALT);
       });
@@ -509,7 +511,7 @@ module(EmmiterSpec, {
         assert_that(IS_METHOD(method_value));
         assert_that(method_object->bound_object is vm->current->bound_object);
         assert_that(method_object->bound_method is vm->current);
-        assert_that_charptr(method_object->message_name equals to "=");
+        assert_that_charptr(method_object->message_name equals to "=_BINARY");
         vm->current->ip++;
         assert_that(O is OP_HALT);
       });

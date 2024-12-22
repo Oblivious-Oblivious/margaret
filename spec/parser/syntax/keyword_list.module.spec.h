@@ -14,7 +14,7 @@ module(keyword_list, {
         FM_METHOD_ARGUMENT,
         string_new("position"),
         FM_METHOD_NAME,
-        string_new("add:at:"),
+        string_new("add:at:_KEYWORD"),
         FM_INTEGER,
         string_new("42"),
         FM_METHOD_END

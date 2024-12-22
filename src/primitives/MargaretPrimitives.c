@@ -71,9 +71,21 @@ MargValue __PRIM_MARGARET_MESSAGES(VM *vm, MargValue args_value) {
     for(i = 0; i < capacity; i++) {
       if(marg_msg_table.states[i] == TABLE_STATE_FILLED &&
          marg_msg_table.keys[i][0] != '\0') {
-        MargValue args = MARG_TENSOR();
+        char *message_name = (char *)marg_msg_table.keys[i];
+        MargValue args     = MARG_TENSOR();
+
+        size_t index = -1;
+        size_t i;
+        for(i = 0; i < string_size(message_name); i++) {
+          if(message_name[i] == '_') {
+            index = i;
+          }
+        }
+        if(index + 1 != 0) {
+          message_name = string_substring(message_name, 0, index);
+        }
         vector_add(AS_TENSOR(args)->value, messages);
-        vector_add(AS_TENSOR(args)->value, MARG_STRING(marg_msg_table.keys[i]));
+        vector_add(AS_TENSOR(args)->value, MARG_STRING(message_name));
         __PRIM_TENSOR_ADD(NULL, args);
       }
     }

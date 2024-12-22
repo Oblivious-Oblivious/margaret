@@ -126,30 +126,23 @@ VM *emitter_emit(VM *vm) {
 
     case_fmcode(FM_ASSIGNMENT) { OP(OP_ASSIGN); }
     case_fmcode(FM_SUBSCRIPT) {
-      OAB(
-        OP_SEND, CONST(MARG_STRING(string_new("[]"))), CONST(MARG_INTEGER(1))
-      );
+      char *message_name = string_new("[]_SUBSCRIPT");
+      OAB(OP_SEND, CONST(MARG_STRING(message_name)), CONST(MARG_INTEGER(1)));
     }
     case_fmcode(FM_LHS) {
-      OAB(
-        OP_SEND,
-        CONST(MARG_STRING(string_new(formal_bytecode[++ip]))),
-        CONST(MARG_INTEGER(0))
-      );
+      char *message_name = string_new(formal_bytecode[++ip]);
+      string_add(message_name, "_LHS");
+      OAB(OP_SEND, CONST(MARG_STRING(message_name)), CONST(MARG_INTEGER(0)));
     }
     case_fmcode(FM_UNARY) {
-      OAB(
-        OP_SEND,
-        CONST(MARG_STRING(string_new(formal_bytecode[++ip]))),
-        CONST(MARG_INTEGER(0))
-      );
+      char *message_name = string_new(formal_bytecode[++ip]);
+      string_add(message_name, "_UNARY");
+      OAB(OP_SEND, CONST(MARG_STRING(message_name)), CONST(MARG_INTEGER(0)));
     }
     case_fmcode(FM_BINARY) {
-      OAB(
-        OP_SEND,
-        CONST(MARG_STRING(string_new(formal_bytecode[++ip]))),
-        CONST(MARG_INTEGER(1))
-      );
+      char *message_name = string_new(formal_bytecode[++ip]);
+      string_add(message_name, "_BINARY");
+      OAB(OP_SEND, CONST(MARG_STRING(message_name)), CONST(MARG_INTEGER(1)));
     }
     case_fmcode(FM_KEYWORD) {
       char *message_name = string_new(formal_bytecode[++ip]);
@@ -197,6 +190,7 @@ VM *emitter_emit(VM *vm) {
       message_case("BITSTRING_ADD:VALUE:BITS:") { prim_helper(3); }
       message_case("BITSTRING_SIZE:") { prim_helper(1); }
       message_default {
+        string_add(message_name, "_KEYWORD");
         OAB(
           OP_SEND,
           CONST(MARG_STRING(message_name)),

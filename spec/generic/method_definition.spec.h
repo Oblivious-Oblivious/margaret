@@ -12,7 +12,7 @@ module(method_definition_spec, {
         FM_METHOD_ARGUMENT,
         string_new("param"),
         FM_METHOD_NAME,
-        string_new("[]"),
+        string_new("[]_SUBSCRIPT"),
         FM_INTEGER,
         string_new("42"),
         FM_LOCAL,
@@ -30,7 +30,7 @@ module(method_definition_spec, {
       vector_new(
         FM_METHOD_START,
         FM_METHOD_NAME,
-        string_new("-"),
+        string_new("-_LHS"),
         FM_INTEGER,
         string_new("42"),
         FM_METHOD_END
@@ -44,7 +44,7 @@ module(method_definition_spec, {
       vector_new(
         FM_METHOD_START,
         FM_METHOD_NAME,
-        string_new("incr"),
+        string_new("incr_UNARY"),
         FM_SELF,
         FM_INTEGER,
         string_new("1"),
@@ -58,7 +58,7 @@ module(method_definition_spec, {
       vector_new(
         FM_METHOD_START,
         FM_METHOD_NAME,
-        string_new("incr"),
+        string_new("incr_UNARY"),
         FM_SELF,
         FM_INTEGER,
         string_new("1"),
@@ -72,7 +72,7 @@ module(method_definition_spec, {
       vector_new(
         FM_METHOD_START,
         FM_METHOD_NAME,
-        string_new("is_empty?"),
+        string_new("is_empty?_UNARY"),
         FM_TRUE,
         FM_METHOD_END
       )
@@ -87,7 +87,7 @@ module(method_definition_spec, {
         FM_METHOD_ARGUMENT,
         string_new("a_number"),
         FM_METHOD_NAME,
-        string_new("**"),
+        string_new("**_BINARY"),
         FM_SELF,
         FM_LOCAL,
         string_new("a_number"),
@@ -109,7 +109,7 @@ module(method_definition_spec, {
         FM_METHOD_ARGUMENT,
         string_new("position"),
         FM_METHOD_NAME,
-        string_new("add:at:"),
+        string_new("add:at:_KEYWORD"),
         FM_INTEGER,
         string_new("42"),
         FM_METHOD_END
@@ -125,7 +125,7 @@ module(method_definition_spec, {
         FM_METHOD_ARGUMENT,
         string_new("value2"),
         FM_METHOD_NAME,
-        string_new("ok?:otherwise!:"),
+        string_new("ok?:otherwise!:_KEYWORD"),
         FM_INTEGER,
         string_new("17"),
         FM_METHOD_END
@@ -141,7 +141,7 @@ module(method_definition_spec, {
         FM_METHOD_ARGUMENT,
         string_new("position"),
         FM_METHOD_NAME,
-        string_new("add:at:"),
+        string_new("add:at:_KEYWORD"),
         FM_INTEGER,
         string_new("17"),
         FM_METHOD_END
@@ -158,7 +158,7 @@ module(method_definition_spec, {
         FM_METHOD_ARGUMENT,
         string_new("a_block"),
         FM_METHOD_NAME,
-        string_new("times:"),
+        string_new("times:_KEYWORD"),
         FM_LOCAL,
         string_new("remaining"),
         FM_SELF,

@@ -58,7 +58,7 @@ module(margaret_messages_spec, {
         FM_METHOD_ARGUMENT,
         string_new("block"),
         FM_METHOD_NAME,
-        string_new("while:do:"),
+        string_new("while:do:_KEYWORD"),
         FM_GLOBAL,
         string_new("$Margaret"),
         FM_LOCAL,
