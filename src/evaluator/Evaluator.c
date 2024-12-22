@@ -290,7 +290,7 @@ _opcode_loop:;
       fs_pop(vm->sp);
       vm->filename = AS_STRING(filename)->value;
 
-      EVAL(OPTIMIZE(EMIT(FORMALIZE(READ(LOAD(vm))))));
+      EVAL(EMIT(OPTIMIZE(FORMALIZE(READ(LOAD(vm))))));
 
       vm->current->bytecode = previous_bytecode;
       vm->current->ip       = previous_position;

@@ -39,12 +39,12 @@ p_inline void margaret_repl(VM *vm) {
     MARGARET_CITY
   );
   while(true) {
-    PRINT(EVAL(OPTIMIZE(EMIT(FORMALIZE(READ(SCAN("> ")))))));
+    PRINT(EVAL(EMIT(OPTIMIZE(FORMALIZE(READ(SCAN("> ")))))));
   }
 }
 
 p_inline void margaret_run_file(VM *vm) {
-  EVAL(OPTIMIZE(EMIT(FORMALIZE(READ(LOAD(vm))))));
+  EVAL(EMIT(OPTIMIZE(FORMALIZE(READ(LOAD(vm))))));
 }
 
 int main(int argc, char **argv) {
