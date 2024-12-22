@@ -515,23 +515,13 @@ module(EmmiterSpec, {
       });
     });
 
-    context("on multimethods", {
-      xit("creates keyword multimethod", {
-        emit(vm, "# [] add: \"a\" at: 0 => [\"a\"]");
-      });
-
-      xit("creates binary multimethod", {});
-
-      xit("creates unary multimethod", {});
-
-      xit("creates lhs multimethod", {});
-
-      xit("creates subscript multimethod", {});
-
-      xit("creates assignment multimethod", {
-        debug("2 = 3", vector_new(FM_NIL));
-        debug("x = 5 + 7", vector_new(FM_NIL));
-      });
+    xcontext("on multimethods", {
+      it("creates keyword multimethod", {});
+      it("creates binary multimethod", {});
+      it("creates unary multimethod", {});
+      it("creates lhs multimethod", {});
+      it("creates subscript multimethod", {});
+      it("creates assignment multimethod", {});
     });
   });
 

@@ -131,16 +131,6 @@ p_inline Instruction make_global_singleton(VM *vm, const char *var) {
 #define KPOP     (vector_pop(vm->current->constants))
 #define KZ       (vector_peek(vm->current->constants))
 
-#define SLA(v) SET_L(A, v)
-#define SIA(v) SET_I(A, v)
-#define SGA(v) SET_G(A, v)
-
-#define SLB(v) SET_L(B, v)
-#define SIB(v) SET_I(B, v)
-#define SGB(v) SET_G(B, v)
-
-#define SKZ(v) SET_K(Z, v)
-
 #define SG(proto, name) SET_G(GLOBAL_SINGLETON(name), MARG_OBJECT(proto, name))
 
 #endif

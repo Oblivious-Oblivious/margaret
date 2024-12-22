@@ -4,9 +4,6 @@
 /* emitter */
 #include "emitter/Emmiter.spec.h"
 
-/* evaluator */
-#include "evaluator/Evaluator.spec.h"
-
 /* generic */
 #include "generic/arithmetic.spec.h"
 #include "generic/assignments.spec.h"
@@ -85,8 +82,6 @@ int main(void) {
     VersionSpec();
 
     EmmiterSpec();
-
-    EvaluatorSpec();
 
     arithmetic_spec();
     assignments_spec();

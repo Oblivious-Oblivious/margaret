@@ -11,7 +11,7 @@
     vm->current     = AS_OBJECT(label)->bound_vm->current; \
     vm->current->ip = AS_LABEL(label)->value;              \
   } else {                                                 \
-    SKZ(raise("Error: cannot goto to a non-label."));      \
+    KPUSH(raise("Error: cannot goto to a non-label."));    \
   }
 
 #define assignment_helper(self, rvalue)                                      \
@@ -65,18 +65,6 @@ _opcode_loop:;
     }
     case_opcode(OP_STOZG) {
       CONST(GA);
-      next_opcode;
-    }
-    case_opcode(OP_LODZL) {
-      SLA(KZ);
-      next_opcode;
-    }
-    case_opcode(OP_LODZI) {
-      SIA(KZ);
-      next_opcode;
-    }
-    case_opcode(OP_LODZG) {
-      SGA(KZ);
       next_opcode;
     }
     case_opcode(OP_GOTO) {
@@ -181,7 +169,7 @@ _opcode_loop:;
 
       prim_msg = table_get(&vm->primitives, name);
       if(IS_UNDEFINED(prim_msg)) {
-        SKZ(raise("Error: cannot call because primitive does not exist."));
+        KPUSH(raise("Error: cannot call because primitive does not exist."));
       } else {
         KPUSH(AS_PRIMITIVE(prim_msg)->function(vm, args));
       }
@@ -206,7 +194,7 @@ _opcode_loop:;
       }
 
       if(IS_UNDEFINED(msg_value)) {
-        raise("Error: cannot send because message does not exist.");
+        KPUSH(raise("Error: cannot send because message does not exist."));
       } else {
         MargValue l, r;
         ptrdiff_t i;
@@ -273,7 +261,7 @@ _opcode_loop:;
       next_opcode;
     }
     case_opcode(OP_RAISE) {
-      SKZ(__PRIM_RAISE(NULL, KA));
+      KPUSH(__PRIM_RAISE(NULL, KA));
       next_opcode;
     }
     case_opcode(OP_EXACTREC) {
