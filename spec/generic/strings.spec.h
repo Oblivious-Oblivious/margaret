@@ -148,29 +148,20 @@ module(strings_spec, {
     parse(
       "s << 'a' << 'b' << 'c' << 'd'",
       vector_new(
-        /* OP_MOV, RA, s */
         FM_LOCAL,
         string_new("s"),
-
-        /* OP_MESSAGE, CONST("<<"), RA, CONST(MARG_TENSOR("a")) */
         FM_STRING,
         string_new("a"),
         FM_BINARY,
         string_new("<<"),
-
-        /* OP_MESSAGE, CONST("<<"), RA, CONST(MARG_TENSOR("b")) */
         FM_STRING,
         string_new("b"),
         FM_BINARY,
         string_new("<<"),
-
-        /* OP_MESSAGE, CONST("<<"), RA, CONST(MARG_TENSOR("c")) */
         FM_STRING,
         string_new("c"),
         FM_BINARY,
         string_new("<<"),
-
-        /* OP_MESSAGE, CONST("<<"), RA, CONST(MARG_TENSOR("d")) */
         FM_STRING,
         string_new("d"),
         FM_BINARY,

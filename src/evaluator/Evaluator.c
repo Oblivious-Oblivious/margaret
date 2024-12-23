@@ -84,6 +84,7 @@ _opcode_loop:;
         label = GET_L(table_get(&vm->current->local_variables, label_name));
       }
       goto_helper(label);
+      KPUSH(MARG_NIL);
       next_opcode;
     }
     case_opcode(OP_POP) {
@@ -206,6 +207,9 @@ _opcode_loop:;
           for(i = argc; i >= 0; i--) {
             args[i] = KPOP;
           }
+        } else {
+          /* NOTE - Only pop @self */
+          KPOP;
         }
 
         /* NOTE - Store current method as bound for return */
@@ -230,6 +234,11 @@ _opcode_loop:;
       MargValue proc = KPOP;
       /* NOTE - Pops margaret object since it derives from a keyword message */
       KPOP;
+
+      if(IS_VARIABLE(proc)) {
+        proc = AS_VARIABLE(proc)->value;
+      }
+
       if(!IS_METHOD(proc)) {
         raise("Error: cannot call a non-proc value.");
       } else {
@@ -243,6 +252,10 @@ _opcode_loop:;
       MargValue proc       = KPOP;
       MargValue *args      = AS_TENSOR(args_value)->value;
       KPOP;
+
+      if(IS_VARIABLE(proc)) {
+        proc = AS_VARIABLE(proc)->value;
+      }
 
       if(IS_METHOD(proc)) {
         MargValue l, r;
@@ -276,7 +289,7 @@ _opcode_loop:;
       MargValue rvalue = KPOP;
       MargValue self   = KPOP;
       assignment_helper(self, rvalue);
-      KPUSH(rvalue);
+      KPUSH(self);
       next_opcode;
     }
     case_opcode(OP_INCLUDE) {
