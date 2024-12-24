@@ -250,8 +250,13 @@ _opcode_loop:;
     case_opcode(OP_PCALLARGS) {
       MargValue args_value = KPOP;
       MargValue proc       = KPOP;
-      MargValue *args      = AS_TENSOR(args_value)->value;
+      MargValue *args;
       KPOP;
+
+      if(IS_VARIABLE(args_value)) {
+        args_value = AS_VARIABLE(args_value)->value;
+      }
+      args = AS_TENSOR(args_value)->value;
 
       if(IS_VARIABLE(proc)) {
         proc = AS_VARIABLE(proc)->value;
