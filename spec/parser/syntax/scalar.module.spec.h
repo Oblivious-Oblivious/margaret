@@ -6,13 +6,9 @@
 
 module(scalar, {
   it("parses labels", {
-    parse("::ab", vector_new(FM_LABEL_LOCAL, string_new("::ab")));
-    parse("::@ab", vector_new(FM_LABEL_INSTANCE, string_new("::@ab")));
-    parse("::$ab", vector_new(FM_LABEL_GLOBAL, string_new("::$ab")));
-  });
-
-  it("parses symbols", {
-    parse(":ab", vector_new(FM_SYMBOL, string_new("ab")));
+    parse(":ab", vector_new(FM_LABEL_LOCAL, string_new(":ab")));
+    parse(":@ab", vector_new(FM_LABEL_INSTANCE, string_new(":@ab")));
+    parse(":$ab", vector_new(FM_LABEL_GLOBAL, string_new(":$ab")));
   });
 
   it("parses integers", {

@@ -6,8 +6,7 @@
     🟩 $false                                                -> ($FalseProto clone) -> singleton
     🟩 42, 4_200, 0b0110, 0B10, 0xbeef, 0X0427, 0o741, 0O210 -> ($IntegerProto clone)
     🟩 42.0, 42_42.42_42                                     -> ($FloatProto clone)
-    🟩 :some_symbol                                          -> ($SymbolProto clone)
-    🟩 ::label                                               -> ($LabelProto clone)
+    🟩 :label                                                -> ($LabelProto clone)
     🟩 "foo\tbar"                                            -> ($StringProto clone)
     🟩 [42, "Hello", false]                                  -> ($TensorProto clone)
     🟩 %[1, 2]                                               -> ($TupleProto clone)

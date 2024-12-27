@@ -54,17 +54,6 @@ MargFloat *marg_float_init(VM *vm, double value) {
   return self;
 }
 
-MargSymbol *marg_symbol_init(VM *vm, char *value) {
-  MargObject *obj = (MargObject *)marg_object_init(
-    vm, sizeof(MargSymbol), G("$Symbol"), string_new("")
-  );
-  MargSymbol *self = (MargSymbol *)obj;
-
-  self->value = string_new(value);
-
-  return self;
-}
-
 MargLabel *marg_label_init(VM *vm, const char *name) {
   MargObject *obj = (MargObject *)marg_object_init(
     vm, sizeof(MargLabel), G("$Label"), string_new("")

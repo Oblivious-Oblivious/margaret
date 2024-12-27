@@ -43,7 +43,6 @@ p_inline void setup_proto_object_chain(VM *vm) {
 
   string = SG(margaret, "$String");
   SG(string, "$Label");
-  SG(string, "$Symbol");
 
   enumerable = SG(margaret, "$Enumerable");
   tensor     = SG(enumerable, "$Tensor");

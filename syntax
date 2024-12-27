@@ -91,10 +91,9 @@ keyword_list:
   | IDENTIFIER ':' IDENTIFIER keyword_list
 
 scalar:
-    ':' ':' GLOBAL
-    ':' ':' INSTANCE
-    ':' ':' IDENTIFIER
-  | ':' IDENTIFIER
+    ':' GLOBAL
+    ':' INSTANCE
+    ':' IDENTIFIER
   | INTEGER
   | FLOAT
   | STRING

@@ -27,10 +27,6 @@ char *marg_value_format(VM *vm, MargValue self) {
     char *res = string_new("");
     string_addf(&res, "<%s#%zu>", AS_LABEL(self)->name, AS_LABEL(self)->value);
     return res;
-  } else if(IS_SYMBOL(self)) {
-    char *res = string_new("");
-    string_addf(&res, ":%s", AS_SYMBOL(self)->value);
-    return res;
   } else if(IS_STRING(self)) {
     char *res = string_new("");
     string_addf(&res, "\"%s\"", AS_STRING(self)->value);

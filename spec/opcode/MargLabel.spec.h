@@ -23,7 +23,7 @@ module(MargLabelSpec, {
 
   it("ensures that self and super are set correctly", {
     VM *vm                    = vm_new("file.marg");
-    MargValue x               = MARG_LABEL("::l");
+    MargValue x               = MARG_LABEL(":l");
     vm->current->bound_object = AS_OBJECT(x);
     MargValue self            = I("@self");
     MargValue super           = I("@super");

@@ -694,7 +694,7 @@ module(messages_spec, {
       "origin <= point \
          if_true: { out goto } \
          if_false: { $false return }, \
-         ::out \
+         :out \
       ",
       vector_new(
         FM_LOCAL,
@@ -718,7 +718,7 @@ module(messages_spec, {
         string_new("if_true:if_false:"),
         string_new("2"),
         FM_LABEL_LOCAL,
-        string_new("::out")
+        string_new(":out")
       )
     );
   });

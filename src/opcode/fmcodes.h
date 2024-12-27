@@ -14,7 +14,6 @@
 #define FM_LABEL_LOCAL     string_new("LABEL_LOCAL")
 #define FM_LABEL_INSTANCE  string_new("LABEL_INSTANCE")
 #define FM_LABEL_GLOBAL    string_new("LABEL_GLOBAL")
-#define FM_SYMBOL          string_new("SYMBOL")
 #define FM_TENSOR          string_new("TENSOR")
 #define FM_TUPLE           string_new("TUPLE")
 #define FM_BITSTRING       string_new("BITSTRING")

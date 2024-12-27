@@ -51,16 +51,6 @@ typedef struct MargFloat {
 } MargFloat;
 
 /**
- * @brief An object representation of MARG_SYMBOL
- * @param _ -> Inherited object properties
- * ...
- */
-typedef struct MargSymbol {
-  MargObject _;
-  char *value;
-} MargSymbol;
-
-/**
  * @brief An object representation of MARG_LABEL
  * @param _ -> Inherited object properties
  * @param value -> The string representation of the label
@@ -222,14 +212,6 @@ MargInteger *marg_integer_init(VM *vm, ptrdiff_t value);
  * @return MargFloat*
  */
 MargFloat *marg_float_init(VM *vm, double value);
-
-/**
- * @brief Constructs a new symbol object
- * @param vm -> A pointer to the current VM
- * @param value -> The identifier representation of the symbol
- * @return MargSymbol*
- */
-MargSymbol *marg_symbol_init(VM *vm, char *value);
 
 /**
  * @brief Constructs a new label object

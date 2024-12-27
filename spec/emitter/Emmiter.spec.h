@@ -22,36 +22,26 @@ module(EmmiterSpec, {
   describe("literals", {
     context("on scalars", {
       it("emits labels", {
-        emit(vm, "::l");
+        emit(vm, ":l");
         vm->current->ip++;
         assert_that(O is OP_STOZL);
         vm->current->ip++;
         assert_that(O is OP_HALT);
-        assert_that(IS_LABEL(L("::l")));
+        assert_that(IS_LABEL(L(":l")));
 
-        emit(vm, "::@l");
+        emit(vm, ":@l");
         vm->current->ip++;
         assert_that(O is OP_STOZI);
         vm->current->ip++;
         assert_that(O is OP_HALT);
-        assert_that(IS_LABEL(I("::@l")));
+        assert_that(IS_LABEL(I(":@l")));
 
-        emit(vm, "::$l");
+        emit(vm, ":$l");
         vm->current->ip++;
         assert_that(O is OP_STOZG);
         vm->current->ip++;
         assert_that(O is OP_HALT);
-        assert_that(IS_LABEL(G("::$l")));
-      });
-
-      it("emits symbols", {
-        emit(vm, ":s");
-        vm->current->ip++;
-        assert_that(O is OP_STOZK);
-        assert_that(IS_SYMBOL(KZ));
-        assert_that_charptr(AS_SYMBOL(KZ)->value equals to "s");
-        vm->current->ip++;
-        assert_that(O is OP_HALT);
+        assert_that(IS_LABEL(G(":$l")));
       });
 
       it("emits integers", {

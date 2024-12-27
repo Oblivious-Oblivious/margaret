@@ -55,7 +55,6 @@
 #include "opcode/MargPrimitive.spec.h"
 #include "opcode/MargSingletons.spec.h"
 #include "opcode/MargString.spec.h"
-#include "opcode/MargSymbol.spec.h"
 #include "opcode/MargTable.spec.h"
 #include "opcode/MargTensor.spec.h"
 #include "opcode/MargTuple.spec.h"
@@ -130,7 +129,6 @@ int main(void) {
     MargPrimitiveSpec();
     MargSingletonsSpec();
     MargStringSpec();
-    MargSymbolSpec();
     MargTableSpec();
     MargTensorSpec();
     MargTupleSpec();

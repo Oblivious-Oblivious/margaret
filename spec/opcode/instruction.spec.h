@@ -23,21 +23,21 @@ module(instruction_spec, {
     assert_that_size_t(i2 equals to 3);
 
     Instruction g1 = GLOBAL("$g1");
-    assert_that_size_t(g1 equals to 18);
+    assert_that_size_t(g1 equals to 17);
     Instruction g2 = GLOBAL("$g2");
-    assert_that_size_t(g2 equals to 19);
+    assert_that_size_t(g2 equals to 18);
 
     Instruction i3 = INSTANCE("@i3");
     Instruction g3 = GLOBAL("$g3");
     Instruction i4 = INSTANCE("@i4");
     assert_that_size_t(i3 equals to 4);
-    assert_that_size_t(g3 equals to 20);
+    assert_that_size_t(g3 equals to 19);
     assert_that_size_t(i4 equals to 5);
 
     Instruction l3 = LOCAL("l3");
     assert_that_size_t(l3 equals to 2);
     Instruction g4 = GLOBAL("$g4");
-    assert_that_size_t(g4 equals to 21);
+    assert_that_size_t(g4 equals to 20);
   });
 })
 

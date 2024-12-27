@@ -43,10 +43,10 @@ module(MargValueSpec, {
         AS_OBJECT(marg)->name_hash equals to 4789181502764186150
       );
       table_add(
-        &AS_OBJECT(marg)->instance_variables, "@::l1", MARG_LABEL("@::l1")
+        &AS_OBJECT(marg)->instance_variables, ":@l1", MARG_LABEL(":@l1")
       );
       table_add(
-        &AS_OBJECT(marg)->instance_variables, "@::l2", MARG_LABEL("@::l2")
+        &AS_OBJECT(marg)->instance_variables, ":@l2", MARG_LABEL(":@l2")
       );
 
       assert_that_size_t(table_size(&AS_OBJECT(marg)->instance_variables)
@@ -63,7 +63,7 @@ module(MargValueSpec, {
         AS_OBJECT(clone)->proto->name_hash equals to 4789181502764186150
       );
       assert_that_size_t(table_size(&AS_OBJECT(clone)->instance_variables)
-                           equals to 2);
+                           equals to 4);
     });
 
     it("ensures @self and @super are setup correctly", {

@@ -74,9 +74,6 @@ VM *emitter_emit(VM *vm) {
       ip++;
       COMP_LABEL_GLOBAL(formal_bytecode[ip]);
     }
-    case_fmcode(FM_SYMBOL) {
-      OA(OP_STOZK, CONST(MARG_SYMBOL(formal_bytecode[++ip])));
-    }
 
     case_fmcode(FM_TENSOR) {
       size_t number_of_elements;

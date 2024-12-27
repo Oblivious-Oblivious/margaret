@@ -10,7 +10,7 @@ module(VmSpec, {
 
   describe("built-in objects", {
     it("has 17 built-in objects", {
-      assert_that_size_t(table_size(&vm->global_variables) equals to 18);
+      assert_that_size_t(table_size(&vm->global_variables) equals to 17);
     });
 
     context("on singletons", {

@@ -512,40 +512,33 @@ char *parser_keyword_list(VM *vm) {
 }
 
 void parser_scalar(VM *vm) {
-  if(la1value(":") && la2value(":") && la3type(TOKEN_GLOBAL)) {
+  if(la1value(":") && la2type(TOKEN_GLOBAL)) {
     char *label = NULL;
     consume(TOKEN_COLON, "expected ':' on global label.");
-    consume(TOKEN_COLON, "expected ':' on global label.");
-    label = string_new("::");
+    label = string_new(":");
     string_add(
       label, consume(TOKEN_GLOBAL, "expected identifier on global label.")
     );
     generate(FM_LABEL_GLOBAL);
     generate(label);
-  } else if(la1value(":") && la2value(":") && la3type(TOKEN_INSTANCE)) {
+  } else if(la1value(":") && la2type(TOKEN_INSTANCE)) {
     char *label = NULL;
     consume(TOKEN_COLON, "expected ':' on instance label.");
-    consume(TOKEN_COLON, "expected ':' on instance label.");
-    label = string_new("::");
+    label = string_new(":");
     string_add(
       label, consume(TOKEN_INSTANCE, "expected identifier on instance label.")
     );
     generate(FM_LABEL_INSTANCE);
     generate(label);
-  } else if(la1value(":") && la2value(":") && la3type(TOKEN_IDENTIFIER)) {
+  } else if(la1value(":") && la2type(TOKEN_IDENTIFIER)) {
     char *label = NULL;
     consume(TOKEN_COLON, "expected ':' on local label.");
-    consume(TOKEN_COLON, "expected ':' on local label.");
-    label = string_new("::");
+    label = string_new(":");
     string_add(
       label, consume(TOKEN_IDENTIFIER, "expected identifier on local label.")
     );
     generate(FM_LABEL_LOCAL);
     generate(label);
-  } else if(la1value(":") && la2type(TOKEN_IDENTIFIER)) {
-    consume(TOKEN_COLON, "expected ':' on symbol.");
-    generate(FM_SYMBOL);
-    generate(consume(TOKEN_IDENTIFIER, "expected identifier on symbol."));
   } else if(la1type(TOKEN_INTEGER)) {
     generate(FM_INTEGER);
     generate(consume(TOKEN_INTEGER, "expected integer literal."));

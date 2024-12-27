@@ -271,18 +271,6 @@ module(strings_spec, {
       )
     );
     parse(
-      "x = s to_symbol",
-      vector_new(
-        FM_LOCAL,
-        string_new("x"),
-        FM_LOCAL,
-        string_new("s"),
-        FM_UNARY,
-        string_new("to_symbol"),
-        FM_ASSIGNMENT
-      )
-    );
-    parse(
       "x = \"abcd\" to_byte_array",
       vector_new(
         FM_LOCAL,
