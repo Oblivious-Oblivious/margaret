@@ -7,7 +7,6 @@
     "EmeraldsBool": "The-Fourth-Wall/EmeraldsBool",
     "EmeraldsFileHandler": "The-Fourth-Wall/EmeraldsFileHandler",
     "EmeraldsTable": "The-Fourth-Wall/EmeraldsTable",
-    "EmeraldsReadline": "The-Fourth-Wall/EmeraldsReadline",
     "EmeraldsString": "The-Fourth-Wall/EmeraldsString",
     "EmeraldsVector": "The-Fourth-Wall/EmeraldsVector"
   },
@@ -29,7 +28,7 @@
     "release": {
       "opt": "-O2",
       "version": "-std=c89",
-      "flags": "",
+      "flags": "-finline-functions -ffast-math -flto -DMARG_USE_READLINE -lreadline",
       "warnings": ""
     }
   },
