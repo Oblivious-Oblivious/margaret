@@ -115,6 +115,7 @@
               e.g. "-_LHS", "-_BINARY" for clear separation.
   🟥 BUG-06 - Fix REPL return value that ignores format strings for enumerables.
               e.g. %[] returns [] and %() returns ().  inspect works correctly.
+  🟥 BUG-07 - Add warning for resuing instance labels (latest one will override the others).
 
   🟩 FT-01 - Proposal for cc0-v1 license.
   🟥 FT-02 - Add lexically removed comments.
