@@ -24,17 +24,10 @@ module(EmmiterSpec, {
       it("emits labels", {
         emit(vm, ":l");
         vm->current->ip++;
-        assert_that(O is OP_STOZL);
-        vm->current->ip++;
-        assert_that(O is OP_HALT);
-        assert_that(IS_LABEL(L(":l")));
-
-        emit(vm, ":@l");
-        vm->current->ip++;
         assert_that(O is OP_STOZI);
         vm->current->ip++;
         assert_that(O is OP_HALT);
-        assert_that(IS_LABEL(I(":@l")));
+        assert_that(IS_LABEL(I(":l")));
 
         emit(vm, ":$l");
         vm->current->ip++;

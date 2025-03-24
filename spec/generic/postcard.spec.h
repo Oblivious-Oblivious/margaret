@@ -66,7 +66,7 @@ module(postcard_spec, {
         FM_BINARY,
         string_new("*"),
         FM_ASSIGNMENT,
-        FM_LABEL_LOCAL,
+        FM_LABEL,
         string_new(":label"),
         FM_INTEGER,
         string_new("42"),

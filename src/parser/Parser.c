@@ -521,23 +521,14 @@ void parser_scalar(VM *vm) {
     );
     generate(FM_LABEL_GLOBAL);
     generate(label);
-  } else if(la1value(":") && la2type(TOKEN_INSTANCE)) {
-    char *label = NULL;
-    consume(TOKEN_COLON, "expected ':' on instance label.");
-    label = string_new(":");
-    string_add(
-      label, consume(TOKEN_INSTANCE, "expected identifier on instance label.")
-    );
-    generate(FM_LABEL_INSTANCE);
-    generate(label);
   } else if(la1value(":") && la2type(TOKEN_IDENTIFIER)) {
     char *label = NULL;
-    consume(TOKEN_COLON, "expected ':' on local label.");
+    consume(TOKEN_COLON, "expected ':' on label.");
     label = string_new(":");
     string_add(
-      label, consume(TOKEN_IDENTIFIER, "expected identifier on local label.")
+      label, consume(TOKEN_IDENTIFIER, "expected identifier on label.")
     );
-    generate(FM_LABEL_LOCAL);
+    generate(FM_LABEL);
     generate(label);
   } else if(la1type(TOKEN_INTEGER)) {
     generate(FM_INTEGER);

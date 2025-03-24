@@ -42,12 +42,8 @@ module(MargValueSpec, {
       assert_that_size_t(
         AS_OBJECT(marg)->name_hash equals to 4789181502764186150
       );
-      table_add(
-        &AS_OBJECT(marg)->instance_variables, ":@l1", MARG_LABEL(":@l1")
-      );
-      table_add(
-        &AS_OBJECT(marg)->instance_variables, ":@l2", MARG_LABEL(":@l2")
-      );
+      table_add(&AS_OBJECT(marg)->instance_variables, ":l1", MARG_LABEL(":l1"));
+      table_add(&AS_OBJECT(marg)->instance_variables, ":l2", MARG_LABEL(":l2"));
 
       assert_that_size_t(table_size(&AS_OBJECT(marg)->instance_variables)
                            equals to 4);

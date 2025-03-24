@@ -15,9 +15,7 @@
 #define message_case(message)        else if(string_equals(message_name, message))
 #define message_default              else
 
-#define COMP_LABEL_LOCAL(name) \
-  (SET_L(LOCAL(name), MARG_LABEL(name)), OA(OP_STOZL, LOCAL(name)))
-#define COMP_LABEL_INSTANCE(name) \
+#define COMP_LABEL(name) \
   (SET_I(INSTANCE(name), MARG_LABEL(name)), OA(OP_STOZI, INSTANCE(name)))
 #define COMP_LABEL_GLOBAL(name) \
   (SET_G(GLOBAL(name), MARG_LABEL(name)), OA(OP_STOZG, GLOBAL(name)))
@@ -62,13 +60,9 @@ VM *emitter_emit(VM *vm) {
     case_fmcode(FM_STRING) {
       OA(OP_STOZK, CONST(MARG_STRING(formal_bytecode[++ip])));
     }
-    case_fmcode(FM_LABEL_LOCAL) {
+    case_fmcode(FM_LABEL) {
       ip++;
-      COMP_LABEL_LOCAL(formal_bytecode[ip]);
-    }
-    case_fmcode(FM_LABEL_INSTANCE) {
-      ip++;
-      COMP_LABEL_INSTANCE(formal_bytecode[ip]);
+      COMP_LABEL(formal_bytecode[ip]);
     }
     case_fmcode(FM_LABEL_GLOBAL) {
       ip++;
