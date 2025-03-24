@@ -10,6 +10,6 @@ typedef size_t MargValue;
 typedef size_t Instruction;
 
 /** @brief Maximum number of registers */
-#define MAX_REGISTERS (1 << 16) /* TODO - Needs to be 1 << 29 */
+#define MAX_REGISTERS (1 << 16)
 
 #endif

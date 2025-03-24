@@ -21,6 +21,7 @@
 ## (✗) ver. 0.0.4
 -----------------
   🟥 FT-33 - Add syntax for using user defined inferred objects -> Inferred start_using: MyObject, one: 1 two: 2   -> (MyObject one: 1 two: 2) Inferred stop_using: MyObject
+  🟥 BUG-08 - Figure out why the charno is off by 3 on Lexer.c line 223.
 
 ## (✗) ver. 0.0.3
 -----------------
@@ -100,6 +101,9 @@
   🟥 FT-37 - Store line and char numbers on bytecode instructions.
 
   🟥 QOL-05 - Potentially use any type of local/instance/global variable as labels.  Requires that variables store their ip memory location.
+  🟥 QOL-10 - Ensure there are no leaks throughout the pipeline on vm_free_source.
+  🟥 QOL-11 - Typecheck all primitives before casting.
+  🟥 QOL-12 - Optimize `L` macro by calling `table_get(&vm->current->local_variables)` only once
 
   🟩 Add UTF8 and Unicode support.
   🟩 Optimize the design Table to be data-oriented (separate keys from values for locality).
@@ -151,6 +155,7 @@
   🟥 FT-19 - table = {a: 1, b: 2}, table = table ++ {c: 3}. #{a: 1, b: 2, c: 3}
              l = [1,2,3], [[list, 4], 5] compact!. # [1,2,3,4,5]
   🟥 FT-21 - Add a custom mark and sweep garbage collector.
+  🟥 FT-38 - Create a $Raise built-in object and primitives for the $Margaret object.
 
   🟩 QOL-01 - Add a register based vm with a proper PoC.
   🟩 QOL-02 - Rename `Hash` to `Table`.

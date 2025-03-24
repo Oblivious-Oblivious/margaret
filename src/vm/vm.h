@@ -72,7 +72,6 @@ VM *vm_new(const char *filename);
     vm->do_not_display    = false; \
   } while(0)
 
-/* TODO - Ensure there are no leaks throughout the pipeline */
 #define vm_free_source()     \
   do {                       \
     string_free(vm->source); \

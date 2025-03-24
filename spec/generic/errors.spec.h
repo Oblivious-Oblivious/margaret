@@ -41,7 +41,6 @@ module(errors_spec, {
     error("\"\"\"", "grouped items should be separated by commas.", "");
     error("'''", "grouped items should be separated by commas.", "");
 
-    /* TODO - Figure out why strings are in reverse */
     error("\"'", "grouped items should be separated by commas.", "'\"");
     error("'\"", "grouped items should be separated by commas.", "\"'");
   });

@@ -3,7 +3,6 @@
 
 #include "../opcode/instruction.h"
 
-/* TODO - Create a raise built-in object */
 #define raise(msg) (__PRIM_RAISE(vm, MARG_STRING(msg)))
 MargValue __PRIM_RAISE(VM *vm, MargValue error);
 /* MargValue primitive_DNU(VM *vm, MargValue args_value); */
@@ -12,7 +11,6 @@ MargValue __PRIM_INSPECT(VM *vm, MargValue args_value);
 MargValue __PRIM_BIND(VM *vm, MargValue args_value);
 MargValue __PRIM_MARGARET_MESSAGES(VM *vm, MargValue args_value);
 
-/* TODO - Refactor as a $Margaret message */
 /**
  * @brief String representation for object literals in the Java style
  * @param object -> The `object` object as a MargValue

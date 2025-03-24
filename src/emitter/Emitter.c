@@ -1,7 +1,5 @@
 #include "Emitter.h"
 
-/* TODO - Discern between normal numbers and big numbers */
-
 #include "../opcode/fmcodes.h"
 #include "../opcode/instruction.h"
 #include "../opcode/opcodes.h"

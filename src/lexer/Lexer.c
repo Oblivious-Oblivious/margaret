@@ -220,7 +220,6 @@ VM *lexer_make_tokens(VM *vm) {
     generate_token(token_value, token_type, vm->lineno, vm->charno);
   }
 
-  /* TODO - Figure out why the charno is off by 3 */
   generate_token(NULL, TOKEN_EOF, vm->lineno, vm->charno + 3);
 
   vm_free_source();

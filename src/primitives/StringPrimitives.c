@@ -1,7 +1,5 @@
 #include "StringPrimitives.h"
 
-/* TODO - Typecheck all primitives before casting */
-
 MargValue __PRIM_STRING_ADD(VM *vm, MargValue args_value) {
   MargValue *args = AS_TENSOR(args_value)->value;
   (void)vm;
