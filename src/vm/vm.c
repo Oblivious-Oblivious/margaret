@@ -81,6 +81,8 @@ p_inline void setup_primitives(VM *vm) {
   define_prim("NUMERIC_SUB:WITH:", __PRIM_NUMERIC_SUB);
   define_prim("NUMERIC_MUL:WITH:", __PRIM_NUMERIC_MUL);
   define_prim("NUMERIC_DIV:WITH:", __PRIM_NUMERIC_DIV);
+  define_prim("NUMERIC_GREATER:THAN:", __PRIM_NUMERIC_GREATER);
+  define_prim("NUMERIC_LESS:THAN:", __PRIM_NUMERIC_LESS);
 
   define_prim("STRING_ADD:STR:", __PRIM_STRING_ADD);
   define_prim("STRING_SIZE:", __PRIM_STRING_SIZE);

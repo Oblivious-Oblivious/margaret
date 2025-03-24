@@ -71,3 +71,65 @@ MargValue __PRIM_NUMERIC_DIV(VM *vm, MargValue args_value) {
     return raise("TypeError: cannot divide non-numeric values.");
   }
 }
+
+MargValue __PRIM_NUMERIC_GREATER(VM *vm, MargValue args_value) {
+  MargValue *args = AS_TENSOR(args_value)->value;
+  if(IS_INTEGER(args[0]) && IS_INTEGER(args[1])) {
+    if(AS_INTEGER(args[0])->value > AS_INTEGER(args[1])->value) {
+      return MARG_TRUE;
+    } else {
+      return MARG_FALSE;
+    }
+  } else if(IS_FLOAT(args[0]) && IS_FLOAT(args[1])) {
+    if(AS_FLOAT(args[0])->value > AS_FLOAT(args[1])->value) {
+      return MARG_TRUE;
+    } else {
+      return MARG_FALSE;
+    }
+  } else if(IS_INTEGER(args[0]) && IS_FLOAT(args[1])) {
+    if(AS_INTEGER(args[0])->value > AS_FLOAT(args[1])->value) {
+      return MARG_TRUE;
+    } else {
+      return MARG_FALSE;
+    }
+  } else if(IS_FLOAT(args[0]) && IS_INTEGER(args[1])) {
+    if(AS_FLOAT(args[0])->value > AS_INTEGER(args[1])->value) {
+      return MARG_TRUE;
+    } else {
+      return MARG_FALSE;
+    }
+  } else {
+    return raise("TypeError: cannot compare non-numeric values.");
+  }
+}
+
+MargValue __PRIM_NUMERIC_LESS(VM *vm, MargValue args_value) {
+  MargValue *args = AS_TENSOR(args_value)->value;
+  if(IS_INTEGER(args[0]) && IS_INTEGER(args[1])) {
+    if(AS_INTEGER(args[0])->value < AS_INTEGER(args[1])->value) {
+      return MARG_TRUE;
+    } else {
+      return MARG_FALSE;
+    }
+  } else if(IS_FLOAT(args[0]) && IS_FLOAT(args[1])) {
+    if(AS_FLOAT(args[0])->value < AS_FLOAT(args[1])->value) {
+      return MARG_TRUE;
+    } else {
+      return MARG_FALSE;
+    }
+  } else if(IS_INTEGER(args[0]) && IS_FLOAT(args[1])) {
+    if(AS_INTEGER(args[0])->value < AS_FLOAT(args[1])->value) {
+      return MARG_TRUE;
+    } else {
+      return MARG_FALSE;
+    }
+  } else if(IS_FLOAT(args[0]) && IS_INTEGER(args[1])) {
+    if(AS_FLOAT(args[0])->value < AS_INTEGER(args[1])->value) {
+      return MARG_TRUE;
+    } else {
+      return MARG_FALSE;
+    }
+  } else {
+    return raise("TypeError: cannot compare non-numeric values.");
+  }
+}

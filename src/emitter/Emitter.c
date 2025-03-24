@@ -159,6 +159,8 @@ VM *emitter_emit(VM *vm) {
       message_case("NUMERIC_SUB:WITH:") { prim_helper(2); }
       message_case("NUMERIC_MUL:WITH:") { prim_helper(2); }
       message_case("NUMERIC_DIV:WITH:") { prim_helper(2); }
+      message_case("NUMERIC_GREATER:THAN:") { prim_helper(2); }
+      message_case("NUMERIC_LESS:THAN:") { prim_helper(2); }
 
       message_case("STRING_ADD:STR:") { prim_helper(2); }
       message_case("STRING_SIZE:") { prim_helper(1); }
