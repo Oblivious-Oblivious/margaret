@@ -1,0 +1,39 @@
+MARGARET_BIND: #-- method => { MARGARET_BIND: method TO: @self } TO: $Margaret,
+
+$Margaret -- #inspect => MARGARET_INSPECT: @self,
+$Margaret -- #inspect: item => item inspect,
+$Margaret -- #messages => MARGARET_MESSAGES: @self,
+
+$Numeric -- #+ other => NUMERIC_ADD: @self WITH: other,
+$Numeric -- #- other => NUMERIC_SUB: @self WITH: other,
+$Numeric -- #* other => NUMERIC_MUL: @self WITH: other,
+$Numeric -- #/ other => NUMERIC_DIV: @self WITH: other,
+
+$Method -- #call => { PROC_CALL: @self },
+$Method -- #<- args => {PROC_CALL: @self ARGS: args},
+
+x = [1, 2, 3],
+inspect: x,
+
+x = %[4, 5, 6],
+inspect: x,
+
+x = %{a: %{aa: 7}, b: %{bb: 8}},
+inspect: x,
+
+x = %(9,10,11::5,12::3),
+inspect: x,
+
+x = {1 * 13} call,
+inspect: x,
+
+p = {a, b | a + b - 10},
+
+x = PROC_CALL: p ARGS: [11,13],
+inspect: x,
+
+x = p <- [11, 14],
+inspect: x,
+
+x = PROC_CALL: {a, b | a * b} ARGS: [5, 3],
+inspect: x + 1,

@@ -1,0 +1,10 @@
+MARGARET_BIND: #-- method => { MARGARET_BIND: method TO: @self } TO: $Margaret,
+
+$Margaret -- #inspect => MARGARET_INSPECT: @self,
+$Margaret -- #inspect: item => item inspect,
+$Margaret -- #messages => MARGARET_MESSAGES: @self,
+
+$Numeric -- #+ other => NUMERIC_ADD: @self WITH: other,
+$Numeric -- #- other => NUMERIC_SUB: @self WITH: other,
+$Numeric -- #* other => NUMERIC_MUL: @self WITH: other,
+$Numeric -- #/ other => NUMERIC_DIV: @self WITH: other,

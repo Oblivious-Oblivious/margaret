@@ -1,0 +1,62 @@
+MARGARET_BIND: #-- method => { MARGARET_BIND: method TO: @self } TO: $Margaret,
+
+$Margaret -- #inspect => MARGARET_INSPECT: @self,
+$Margaret -- #inspect: item => item inspect,
+
+$Method -- #call => { PROC_CALL: @self },
+$Method -- #<- args => { PROC_CALL: @self ARGS: args },
+
+$Numeric -- #+ other => NUMERIC_ADD: @self WITH: other,
+$Numeric -- #- other => NUMERIC_SUB: @self WITH: other,
+$Numeric -- #* other => NUMERIC_MUL: @self WITH: other,
+$Numeric -- #/ other => NUMERIC_DIV: @self WITH: other,
+$Numeric -- #- => @self - (2 * @self),
+$Numeric -- #> other => NUMERIC_GREATER: @self THAN: other,
+$Numeric -- #< other => NUMERIC_LESS: @self THAN: other,
+
+$true -- #if_false: proc => $nil,
+$true -- #if_false: false_proc if_true: true_proc => true_proc call,
+$true -- #if_true: proc => proc call,
+$true -- #if_true: true_proc if_false: false_proc => true_proc call,
+
+$false -- #if_false: proc => proc call,
+$false -- #if_false: false_proc if_true: true_proc => false_proc call,
+$false -- #if_true: proc => $nil,
+$false -- #if_true: true_proc if_false: false_proc => false_proc call,
+
+$Margaret -- #if: condition then: proc => {
+  condition
+    if_true: proc
+    if_false: {},
+},
+$Margaret -- #if: condition then: true_proc else: false_proc => {
+  condition
+    if_true: true_proc
+    if_false: false_proc,
+},
+
+$true if_true: {
+  inspect: "if_true executing on $true",
+},
+$true if_false: {
+  inspect: "if_false NOT executing on $true",
+},
+$false if_false: {
+  inspect: "if_false executing on $false",
+},
+$false if_true: {
+  inspect: "if_true NOT executing on $false",
+},
+
+if: $false then: {
+  inspect: "NOT PRINTING FALSE",
+},
+if: $true then: {
+  inspect: "PRINTING TRUE",
+},
+
+if: $true then: {
+  inspect: "true",
+} else: {
+  inspect: "false",
+},

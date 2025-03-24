@@ -1,0 +1,12 @@
+goto: ":l2",
+
+:l1,
+MARGARET_INSPECT: "2nd jump to :l1",
+goto: ":l3",
+
+:l2,
+MARGARET_INSPECT: "1st jump to :l2",
+goto: ":l1",
+
+:l3,
+MARGARET_INSPECT: "3rd jump to :l3",

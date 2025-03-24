@@ -1,0 +1,7 @@
+MARGARET_BIND: #<- args => {PROC_CALL: @self ARGS: args} TO: $Method,
+
+p = {a, b | NUMERIC_SUB: (NUMERIC_ADD: a WITH: b) WITH: 10},
+
+MARGARET_INSPECT: p,
+x = p <- [11, 13],
+MARGARET_INSPECT: (NUMERIC_ADD: x WITH: 1),
