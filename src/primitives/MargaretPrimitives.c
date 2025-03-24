@@ -7,6 +7,7 @@
 MargValue __PRIM_RAISE(VM *vm, MargValue error) {
   (void)vm;
   fprintf(stdout, "\033[1;31mraise:\033[0m `%s`\n", AS_STRING(error)->value);
+  exit(1);
   return MARG_UNDEFINED;
 }
 

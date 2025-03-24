@@ -19,8 +19,6 @@ $Point3D -- #z => @z,
 
 $Point3D -- #x: x y: y z: z => {
   @super x: x y: y,
-  @x = x,
-  @y = y,
   @z = z,
   @self,
 },

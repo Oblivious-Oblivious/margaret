@@ -30,7 +30,7 @@ MargValue __PRIM_NUMERIC_SUB(VM *vm, MargValue args_value) {
   } else if(IS_FLOAT(args[0]) && IS_FLOAT(args[1])) {
     return MARG_FLOAT(AS_FLOAT(args[0])->value - AS_FLOAT(args[1])->value);
   } else {
-    return raise("TypeError: cannot subtract non-number values.");
+    return raise("TypeError: cannot subtract non-numeric values.");
   }
 }
 
@@ -47,7 +47,7 @@ MargValue __PRIM_NUMERIC_MUL(VM *vm, MargValue args_value) {
   } else if(IS_FLOAT(args[0]) && IS_FLOAT(args[1])) {
     return MARG_FLOAT(AS_FLOAT(args[0])->value * AS_FLOAT(args[1])->value);
   } else {
-    return raise("TypeError: cannot multiply non-number values.");
+    return raise("TypeError: cannot multiply non-numeric values.");
   }
 }
 
@@ -68,6 +68,6 @@ MargValue __PRIM_NUMERIC_DIV(VM *vm, MargValue args_value) {
   } else if(IS_FLOAT(args[0]) && IS_FLOAT(args[1])) {
     return MARG_FLOAT(AS_FLOAT(args[0])->value / AS_FLOAT(args[1])->value);
   } else {
-    return raise("TypeError: cannot divide non-number values.");
+    return raise("TypeError: cannot divide non-numeric values.");
   }
 }
