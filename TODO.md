@@ -101,9 +101,9 @@
   🟥 FT-37 - Store line and char numbers on bytecode instructions.
 
   🟥 QOL-05 - Potentially use any type of local/instance/global variable as labels.  Requires that variables store their ip memory location.
-  🟥 QOL-10 - Ensure there are no leaks throughout the pipeline on vm_free_source.
-  🟥 QOL-11 - Typecheck all primitives before casting.
-  🟥 QOL-12 - Optimize `L` macro by calling `table_get(&vm->current->local_variables)` only once
+  🟥 QOL-11 - Ensure there are no leaks throughout the pipeline on vm_free_source.
+  🟥 QOL-12 - Typecheck all primitives before casting.
+  🟥 QOL-13 - Optimize `L` macro by calling `table_get(&vm->current->local_variables)` only once
 
   🟩 Add UTF8 and Unicode support.
   🟩 Optimize the design Table to be data-oriented (separate keys from values for locality).
