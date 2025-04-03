@@ -2,11 +2,11 @@
 
 #include "../../libs/EmeraldsString/export/EmeraldsString.h"
 
+#include <stdio.h> /* fgets, fputs, fflush */
+
 #if defined(MARG_USE_READLINE)
   #include <readline/history.h>  /* add_history, get_history */
   #include <readline/readline.h> /* readline */
-#else
-  #include <stdio.h> /* fgets, fputs, fflush */
 #endif
 
 VM *scanner_scan(VM *vm, char *prompt) {
