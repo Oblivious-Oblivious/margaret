@@ -1,8 +1,29 @@
 {
+  "$schema": "https://raw.githubusercontent.com/Oblivious-Oblivious/Emeralds/master/schema/em.schema.json",
   "name": "margaret",
-
   "version": "0.0.1",
-
+  "license": "mit",
+  "locignore": {
+    "extensions": [".erl", ".hrl"],
+    "directories": ["libs"]
+  },
+  "compile-flags": {
+    "darwin": {
+      "cc": "clang",
+      "debug": {
+        "opt": "-Og",
+        "version": "-std=c89",
+        "flags": "-g",
+        "warnings": "-Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic -Wno-unused-function -Wno-gnu-label-as-value -Wno-declaration-after-statement -Wno-comment"
+      },
+      "release": {
+        "opt": "-O2",
+        "version": "-std=c89",
+        "flags": "-finline-functions -ffast-math -flto -DMARG_USE_READLINE -lreadline",
+        "warnings": ""
+      }
+    }
+  },
   "dependencies": {
     "EmeraldsBool": "The-Fourth-Wall/EmeraldsBool",
     "EmeraldsFileHandler": "The-Fourth-Wall/EmeraldsFileHandler",
@@ -10,28 +31,7 @@
     "EmeraldsString": "The-Fourth-Wall/EmeraldsString",
     "EmeraldsVector": "The-Fourth-Wall/EmeraldsVector"
   },
-
   "dev-dependencies": {
     "cSpec": "Oblivious-Oblivious/cSpec"
-  },
-
-  "build": "",
-
-  "compile-flags": {
-    "cc": "clang",
-    "debug": {
-      "opt": "-Og",
-      "version": "-std=c89",
-      "flags": "-g -fsanitize=address",
-      "warnings": "-Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic -Wno-unused-function -Wno-gnu-label-as-value"
-    },
-    "release": {
-      "opt": "-O2",
-      "version": "-std=c89",
-      "flags": "-finline-functions -ffast-math -flto -DMARG_USE_READLINE -lreadline",
-      "warnings": ""
-    }
-  },
-
-  "license": "mit"
+  }
 }
