@@ -27,8 +27,8 @@ typedef struct MargObject {
   struct MargObject *proto;
   MargValue instance_registers[MAX_REGISTERS];
   uint32_t instance_index;
-  EmeraldsTable instance_variables;
-  EmeraldsTable messages;
+  EdsaTable instance_variables;
+  EdsaTable messages;
 } MargObject;
 
 /**
@@ -65,7 +65,7 @@ typedef struct MargLabel {
 /**
  * @brief Defines a string representation for Margaret
  * @param _ -> Inherited object properties
- * @param value -> Actual character array (stored as an EmeraldsString)
+ * @param value -> Actual character array (stored as an edsa string)
  */
 typedef struct MargString {
   MargObject _;
@@ -99,7 +99,7 @@ typedef struct MargTuple {
  */
 typedef struct MargTable {
   MargObject _;
-  EmeraldsTable value;
+  EdsaTable value;
 } MargTable;
 
 /**
@@ -140,7 +140,7 @@ typedef struct MargMethod {
   MargValue local_registers[MAX_REGISTERS];
   uint32_t local_index;
   MargValue *constants;
-  EmeraldsTable local_variables;
+  EdsaTable local_variables;
 
   const char **argument_names;
   Instruction *bytecode;

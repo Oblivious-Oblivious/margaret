@@ -1,6 +1,6 @@
 #include "Scanner.h"
 
-#include "../../libs/EmeraldsString/export/EmeraldsString.h"
+#include "../../libs/edsa/export/edsa.h"
 
 #include <stdio.h> /* fgets, fputs, fflush */
 

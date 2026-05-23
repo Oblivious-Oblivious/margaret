@@ -62,16 +62,18 @@ MargValue __PRIM_BIND(VM *vm, MargValue args_value) {
 
 MargValue __PRIM_MARGARET_MESSAGES(VM *vm, MargValue args_value) {
   size_t i;
-  MargValue *args              = AS_TENSOR(args_value)->value;
-  EmeraldsTable marg_msg_table = AS_OBJECT(args[0])->messages;
-  size_t capacity              = vector_capacity(marg_msg_table.keys);
-  MargValue messages           = MARG_TENSOR();
+  MargValue *args          = AS_TENSOR(args_value)->value;
+  EdsaTable marg_msg_table = AS_OBJECT(args[0])->messages;
+  size_t capacity          = vector_capacity(marg_msg_table.keys);
+  MargValue messages       = MARG_TENSOR();
   (void)vm;
 
   if(table_size(&marg_msg_table) > 0) {
     for(i = 0; i < capacity; i++) {
-      if(marg_msg_table.states[i] == TABLE_STATE_FILLED &&
-         marg_msg_table.keys[i][0] != '\0') {
+      if(
+        marg_msg_table.states[i] == TABLE_STATE_FILLED &&
+        marg_msg_table.keys[i][0] != '\0'
+      ) {
         char *message_name = (char *)marg_msg_table.keys[i];
         MargValue args     = MARG_TENSOR();
 

@@ -1,6 +1,6 @@
 #include "Parser.h"
 
-#include "../../libs/EmeraldsVector/export/EmeraldsVector.h"
+#include "../../libs/edsa/export/edsa.h"
 #include "../opcode/fmcodes.h"
 
 #include <stdio.h> /* printf */
@@ -14,10 +14,10 @@
                                               : TOKEN_EOF)
 
 /* NOTE - Lookaheads */
-#define la1value(token)        (string_equals(token_get_value(vm->tid), token))
-#define la2value(token)        (string_equals(token_get_value(vm->tid + 1), token))
-#define la3value(token)        (string_equals(token_get_value(vm->tid + 2), token))
-#define la4value(token)        (string_equals(token_get_value(vm->tid + 3), token))
+#define la1value(token) (string_equals(token_get_value(vm->tid), token))
+#define la2value(token) (string_equals(token_get_value(vm->tid + 1), token))
+#define la3value(token) (string_equals(token_get_value(vm->tid + 2), token))
+#define la4value(token) (string_equals(token_get_value(vm->tid + 3), token))
 #define la1type(expected_type) (token_get_type(vm->tid) == (expected_type))
 #define la2type(expected_type) (token_get_type(vm->tid + 1) == (expected_type))
 #define la3type(expected_type) (token_get_type(vm->tid + 2) == (expected_type))
@@ -76,8 +76,10 @@ p_inline char *parser_error(VM *vm, size_t curr_tid, const char *message) {
 }
 
 p_inline char *parser_handle_error(VM *vm, const char *error_msg) {
-  if(vm->tid >= vector_size(vm->tokens.values) &&
-     vector_size(vm->tokens.values) > 1) {
+  if(
+    vm->tid >= vector_size(vm->tokens.values) &&
+    vector_size(vm->tokens.values) > 1
+  ) {
     return parser_error(vm, vector_size(vm->tokens.values) - 2, error_msg);
   } else if(vm->tid > 0) {
     return parser_error(vm, vm->tid - 1, error_msg);
@@ -119,8 +121,9 @@ char *parser_unit_list(VM *vm, bool in_group) {
       no_elements++;
     }
 
-    if(!la1value(")") && !la1value("]") && !la1value("}") &&
-       !la1type(TOKEN_EOF)) {
+    if(
+      !la1value(")") && !la1value("]") && !la1value("}") && !la1type(TOKEN_EOF)
+    ) {
       consume(TOKEN_COMMA, "grouped items should be separated by commas.");
       if(in_group) {
         generate(FM_POP);
@@ -218,7 +221,8 @@ void parser_unary_message(VM *vm) {
 void parser_unary_selector_chain(VM *vm) {
   while(la1type(TOKEN_IDENTIFIER) && !la2value(":")) {
     generate(FM_UNARY);
-    generate(consume(TOKEN_IDENTIFIER, "missing identifier on unary selector.")
+    generate(
+      consume(TOKEN_IDENTIFIER, "missing identifier on unary selector.")
     );
   }
 }

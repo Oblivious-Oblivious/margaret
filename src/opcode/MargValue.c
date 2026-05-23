@@ -60,7 +60,7 @@ char *marg_value_format(VM *vm, MargValue self) {
   } else if(IS_TABLE(self)) {
     size_t i;
     char *res       = string_new("%{");
-    EmeraldsTable h = AS_TABLE(self)->value;
+    EdsaTable h     = AS_TABLE(self)->value;
     size_t capacity = vector_capacity(h.keys);
     if(table_size(&h) > 0) {
       for(i = 0; i < capacity; i++) {

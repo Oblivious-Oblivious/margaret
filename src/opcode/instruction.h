@@ -106,10 +106,11 @@ p_inline Instruction make_global_singleton(VM *vm, const char *var) {
   (IS_UNDEFINED(table_get(&vm->current->local_variables, (n))) \
      ? GET_G(table_get(&vm->global_variables, "$nil"))         \
      : GET_L(table_get(&vm->current->local_variables, (n))))
-#define I(n)                                                                   \
-  (IS_UNDEFINED(table_get(&vm->current->bound_object->instance_variables, (n)) \
-   )                                                                           \
-     ? GET_G(table_get(&vm->global_variables, "$nil"))                         \
+#define I(n)                                                        \
+  (IS_UNDEFINED(                                                    \
+     table_get(&vm->current->bound_object->instance_variables, (n)) \
+   )                                                                \
+     ? GET_G(table_get(&vm->global_variables, "$nil"))              \
      : GET_I(table_get(&vm->current->bound_object->instance_variables, (n))))
 #define G(n)                                           \
   (IS_UNDEFINED(table_get(&vm->global_variables, (n))) \

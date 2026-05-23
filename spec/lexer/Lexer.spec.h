@@ -2,7 +2,7 @@
 #define __LEXER_SPEC_H_
 
 #include "../../libs/cSpec/export/cSpec.h"
-#include "../../libs/EmeraldsString/export/EmeraldsString.h"
+#include "../../libs/edsa/export/edsa.h"
 #include "../../src/lexer/Lexer.h"
 #include "../../src/loader/Loader.h"
 
@@ -176,8 +176,8 @@ module(LexerSpec, {
         vm         = vm_new("file.marg");
         vm->source = string_new("(\"multi\nline\nstring\" puts)");
         lexer_make_tokens(vm);
-        assert_that_charptr(vm->tokens.values[1] equals to "multi\nline\nstring"
-        );
+        assert_that_charptr(vm->tokens.values[1] equals to
+                            "multi\nline\nstring");
       });
 
       it("tokenizes identifiers", {

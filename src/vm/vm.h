@@ -3,8 +3,11 @@
 
 #include "../opcode/MargValueType.h"
 
-#define TABLE_UNDEFINED MARG_UNDEFINED
-#include "../../libs/EmeraldsTable/export/EmeraldsTable.h"
+#ifndef TABLE_UNDEFINED
+  #define TABLE_UNDEFINED MARG_UNDEFINED
+  #include "../../libs/edsa/export/edsa.h"
+#endif
+
 #include "../tokens/Tokens.h"
 
 /**
@@ -40,8 +43,8 @@ typedef struct VM {
 
   MargValue global_registers[MAX_REGISTERS];
   uint32_t global_index;
-  EmeraldsTable global_variables;
-  EmeraldsTable primitives;
+  EdsaTable global_variables;
+  EdsaTable primitives;
   struct MargMethod *current;
   bool do_not_display;
 } VM;

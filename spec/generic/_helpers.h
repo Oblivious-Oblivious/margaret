@@ -2,8 +2,7 @@
 #define ___HELPERS_H_
 
 #include "../../libs/cSpec/export/cSpec.h"
-#include "../../libs/EmeraldsString/export/EmeraldsString.h"
-#include "../../libs/EmeraldsVector/export/EmeraldsVector.h"
+#include "../../libs/edsa/export/edsa.h"
 #include "../../src/lexer/Lexer.h"
 #include "../../src/opcode/fmcodes.h"
 #include "../../src/parser/Parser.h"

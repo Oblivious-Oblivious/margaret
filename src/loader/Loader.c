@@ -1,6 +1,6 @@
 #include "Loader.h"
 
-#include "../../libs/EmeraldsFileHandler/export/EmeraldsFileHandler.h"
+#include "../../libs/edsa/export/edsa.h"
 #include "../errors.h"
 
 /**

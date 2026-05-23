@@ -1,7 +1,7 @@
 #ifndef __FMCODES_H_
 #define __FMCODES_H_
 
-#include "../../libs/EmeraldsString/export/EmeraldsString.h"
+#include "../../libs/edsa/export/edsa.h"
 
 #define FM_NIL             string_new("NIL")
 #define FM_FALSE           string_new("FALSE")

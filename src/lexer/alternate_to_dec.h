@@ -1,7 +1,7 @@
 #ifndef __ALTERNATE_TO_DEC_H_
 #define __ALTERNATE_TO_DEC_H_
 
-#include "../../libs/EmeraldsString/export/EmeraldsString.h"
+#include "../../libs/edsa/export/edsa.h"
 
 #define convert_to_dec(str, base)              \
   do {                                         \

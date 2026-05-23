@@ -2,7 +2,7 @@
 #define __TOKEN_SPEC_H_
 
 #include "../../libs/cSpec/export/cSpec.h"
-#include "../../libs/EmeraldsString/export/EmeraldsString.h"
+#include "../../libs/edsa/export/edsa.h"
 #include "../../src/tokens/Tokens.h"
 
 module(TokenSpec, {

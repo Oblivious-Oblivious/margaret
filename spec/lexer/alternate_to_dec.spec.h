@@ -2,7 +2,7 @@
 #define __ALTERNATE_TO_DEC_SPEC_H_
 
 #include "../../libs/cSpec/export/cSpec.h"
-#include "../../libs/EmeraldsString/export/EmeraldsString.h"
+#include "../../libs/edsa/export/edsa.h"
 #include "../../src/lexer/alternate_to_dec.h"
 
 module(alternate_to_dec_spec, {

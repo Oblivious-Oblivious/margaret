@@ -1,7 +1,7 @@
 #ifndef __MARG_VALUE_H_
 #define __MARG_VALUE_H_
 
-#include "../../libs/EmeraldsString/export/EmeraldsString.h"
+#include "../../libs/edsa/export/edsa.h"
 #include "MargObject.h"
 #include "MargValueType.h"
 

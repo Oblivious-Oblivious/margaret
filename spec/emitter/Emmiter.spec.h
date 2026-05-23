@@ -2,7 +2,7 @@
 #define __EMMITER_SPEC_H_
 
 #include "../../libs/cSpec/export/cSpec.h"
-#include "../../libs/EmeraldsString/export/EmeraldsString.h"
+#include "../../libs/edsa/export/edsa.h"
 #include "../../src/emitter/Emitter.h"
 #include "../../src/lexer/Lexer.h"
 #include "../../src/opcode/instruction.h"
@@ -479,8 +479,8 @@ module(EmmiterSpec, {
         assert_that(IS_METHOD(method_value));
         assert_that(method_object->bound_object is vm->current->bound_object);
         assert_that(method_object->bound_method is vm->current);
-        assert_that_charptr(method_object->message_name equals to "[]_SUBSCRIPT"
-        );
+        assert_that_charptr(method_object->message_name equals to
+                            "[]_SUBSCRIPT");
         vm->current->ip++;
         assert_that(O is OP_HALT);
       });

@@ -218,8 +218,10 @@ _opcode_loop:;
         SET_I(INSTANCE("@self"), self);
         /* NOTE - Assign arguments to method locals */
         for(i = 0; i < argc; i++) {
-          if((size_t)i < vector_size(vm->current->argument_names) &&
-             vm->current->argument_names[i] != NULL) {
+          if(
+            (size_t)i < vector_size(vm->current->argument_names) &&
+            vm->current->argument_names[i] != NULL
+          ) {
             l = L(vm->current->argument_names[i]);
             r = args[i + 1];
             assignment_helper(l, r);
@@ -267,8 +269,10 @@ _opcode_loop:;
         AS_METHOD(proc)->bound_method = vm->current;
         vm->current                   = AS_METHOD(proc);
         for(i = 0; i < argc; i++) {
-          if((size_t)i < vector_size(vm->current->argument_names) &&
-             vm->current->argument_names[i] != NULL) {
+          if(
+            (size_t)i < vector_size(vm->current->argument_names) &&
+            vm->current->argument_names[i] != NULL
+          ) {
             l = L(vm->current->argument_names[i]);
             r = args[i];
             assignment_helper(l, r);

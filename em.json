@@ -7,6 +7,9 @@
     "extensions": [".erl", ".hrl"],
     "directories": ["libs"]
   },
+  "lintignore": {
+    "directories": ["libs"]
+  },
   "compile-flags": {
     "darwin": {
       "cc": "clang",
@@ -25,11 +28,7 @@
     }
   },
   "dependencies": {
-    "EmeraldsBool": "The-Fourth-Wall/EmeraldsBool",
-    "EmeraldsFileHandler": "The-Fourth-Wall/EmeraldsFileHandler",
-    "EmeraldsTable": "The-Fourth-Wall/EmeraldsTable",
-    "EmeraldsString": "The-Fourth-Wall/EmeraldsString",
-    "EmeraldsVector": "The-Fourth-Wall/EmeraldsVector"
+    "edsa": "Oblivious-Oblivious/edsa"
   },
   "dev-dependencies": {
     "cSpec": "Oblivious-Oblivious/cSpec"

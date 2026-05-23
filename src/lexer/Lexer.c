@@ -1,7 +1,6 @@
 #include "Lexer.h"
 
-#include "../../libs/EmeraldsBool/export/EmeraldsBool.h"
-#include "../../libs/EmeraldsString/export/EmeraldsString.h"
+#include "../../libs/edsa/export/edsa.h"
 #include "alternate_to_dec.h"
 
 #define utf8_char_length(input)        \
@@ -32,25 +31,25 @@ bool is_included_in(const char *s, const char *c) {
   (string_size(input) > 2 && *input == '0' && \
    is_included_in(char_set, input + 1) && check(input + 2))
 
-#define is_newline(c)            ((*c) == '\n')
-#define is_ascii(c)              (is_ascii_start(c) || is_numeric(c))
-#define is_numeric(c)            (is_numeric_start(c) || (*c) == '_')
-#define is_binary(c)             (is_included_in("01_", (c)))
-#define is_octal(c)              (is_included_in("01234567_", (c)))
-#define is_hex(c)                (is_included_in("0123456789abcdefABCDEF_", (c)))
+#define is_newline(c) ((*c) == '\n')
+#define is_ascii(c)   (is_ascii_start(c) || is_numeric(c))
+#define is_numeric(c) (is_numeric_start(c) || (*c) == '_')
+#define is_binary(c)  (is_included_in("01_", (c)))
+#define is_octal(c)   (is_included_in("01234567_", (c)))
+#define is_hex(c)     (is_included_in("0123456789abcdefABCDEF_", (c)))
 #define is_special_identifier(c) (is_included_in("!?", (c)))
-#define is_math_symbol1(c)                                                                                                                                                                                                     \
-  (is_included_in(                                                                                                                                                                                                             \
+#define is_math_symbol1(c)                                                     \
+  (is_included_in(                                                             \
     "∀∁∂∃∄∅∆∇∈∉∊∋∌∍∎∏∐∑−∓∔∕∖∗∘∙√∛∜∝∞∟∠∡∢∣∤∥∦∧∨∩∪∫∬∭∮∯∰∱∲∳∴∵∶∷∸∹∺∻∼∽∾∿≀≁≂≃≄≅≆≇" \
-    "≈≉≊≋≌≍≎≏≐≑≒≓≔≕≖≗",                                                                                                                                                                                                        \
-    (c)                                                                                                                                                                                                                        \
+    "≈≉≊≋≌≍≎≏≐≑≒≓≔≕≖≗",                                                        \
+    (c)                                                                        \
   ))
-#define is_math_symbol2(c)                                                                                                                                                                                                     \
-  (is_included_in(                                                                                                                                                                                                             \
+#define is_math_symbol2(c)                                                     \
+  (is_included_in(                                                             \
     "≘≙≚≛≜≝≞≟≠≡≢≣≤≥≦≧≨≩≪≫≬≭≮≯≰≱≲≳≴≵≶≷≸≹≺≻≼≽≾≿⊀⊁⊂⊃⊄⊅⊆⊇⊈⊉⊊⊋⊌⊍⊎⊏⊐⊑⊒⊓⊔⊕⊖⊗⊘⊙⊚⊛⊜⊝⊞⊟" \
     "⊠⊡⊢⊣⊤⊥⊦⊧⊨⊩⊪⊫⊬⊭⊮⊯⊰⊱⊲⊳⊴⊵⊶⊷⊸⊹⊺⊻⊼⊽⊾⊿⋀⋁⋂⋃⋄⋅⋆⋇⋈⋉⋊⋋⋌⋍⋎⋏⋐⋑⋒⋓⋔⋕⋖⋗⋘⋙⋚⋛⋜⋝⋞⋟⋠⋡⋢⋣⋤⋥⋦⋧" \
-    "⋨⋩⋪⋫⋬⋭⋮⋯⋰⋱⋲⋳⋴⋵⋶⋷⋸⋹⋺⋻⋼⋽⋾⋿",                                                                                                                                                                                                \
-    (c)                                                                                                                                                                                                                        \
+    "⋨⋩⋪⋫⋬⋭⋮⋯⋰⋱⋲⋳⋴⋵⋶⋷⋸⋹⋺⋻⋼⋽⋾⋿",                                                \
+    (c)                                                                        \
   ))
 #define is_ascii_message_symbol(c) (is_included_in("!?+\\-*/~<>=|&^;.`", (c)))
 #define is_unicode_message_symbol(c)                                \
@@ -199,13 +198,15 @@ VM *lexer_make_tokens(VM *vm) {
         string_addf(&token_value, "%c", quote);
         token_type = -1;
       }
-    } else if(string_size(input) > 1 && *input == '@' &&
-              (is_identfier_start(input + 1))) {
+    } else if(
+      string_size(input) > 1 && *input == '@' && (is_identfier_start(input + 1))
+    ) {
       append_char();
       append_identifier_part();
       token_type = TOKEN_INSTANCE;
-    } else if(string_size(input) > 1 && *input == '$' &&
-              (is_identfier_start(input + 1))) {
+    } else if(
+      string_size(input) > 1 && *input == '$' && (is_identfier_start(input + 1))
+    ) {
       append_char();
       append_identifier_part();
       token_type = TOKEN_GLOBAL;
