@@ -22,7 +22,7 @@ MargValue __PRIM_MARGARET_MESSAGES(VM *vm, MargValue args_value);
     &res,
     "%s@0x%zx",
     AS_OBJECT(object)->name,
-    komihash_hash(AS_OBJECT(object), sizeof(MargObject))
+    hash_komihash(AS_OBJECT(object), sizeof(MargObject))
   );
   return res;
 } */

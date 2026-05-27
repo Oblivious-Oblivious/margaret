@@ -12,7 +12,7 @@ marg_object_init(VM *vm, size_t size, MargValue proto, const char *name) {
   self->bound_vm = vm;
 
   self->name      = name;
-  self->name_hash = komihash_hash(name, string_size(name));
+  self->name_hash = hash_komihash(name, string_size(name));
   self->proto     = AS_OBJECT(proto);
 
   self->instance_index = 0;

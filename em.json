@@ -16,7 +16,7 @@
       "debug": {
         "opt": "-Og",
         "version": "-std=c89",
-        "flags": "-g",
+        "flags": "-g -fsanitize=address",
         "warnings": "-Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic -Wno-unused-function -Wno-gnu-label-as-value -Wno-declaration-after-statement -Wno-comment"
       },
       "release": {
